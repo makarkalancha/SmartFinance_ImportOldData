@@ -10,6 +10,6 @@ D 3.0//EN"
         <property name="hibernate.connection.username">root</property>
         <property name="hibernate.connection.password">root</property>
         <property name="hibernate.show_sql">true</property>
-        <mapping class="com.smartfinance.entities.FamilyMember"/>
+        <mapping class="java.com.smartfinance.db.entities.FamilyMember"/>
     </session-factory>
 </hibernate-configuration>

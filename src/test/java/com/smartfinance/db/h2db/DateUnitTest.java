@@ -1,4 +1,4 @@
-package com.smartfinance.h2db;
+package com.smartfinance.db.h2db;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
