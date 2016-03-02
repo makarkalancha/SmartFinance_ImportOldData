@@ -17,7 +17,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name="FAMILY_MEMBER")
-public class FamilyMember /*extends DeletableEntity*/ implements Serializable{
+public class FamilyMember implements Serializable,Deletable{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "FAMILY_MEMBER_SEQUENCE_GENERATOR")
     @SequenceGenerator(name = "FAMILY_MEMBER_SEQUENCE_GENERATOR", sequenceName = "SEQ_FAMILY_MEMBER", allocationSize=1)
@@ -32,14 +32,11 @@ public class FamilyMember /*extends DeletableEntity*/ implements Serializable{
 
     @Column(name="ISDELETED")
     protected boolean isDeleted = false;
-//        @Temporal(TemporalType.TIMESTAMP)
-//    @Column(name="T_CREATEDON", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", insertable = false, updatable = false)
-//    @Column(name="T_CREATEDON", insertable = false, updatable = false)
+
     @Column(name="T_CREATEDON")
     protected LocalDateTime createdOn;
-//        @Temporal(TemporalType.TIMESTAMP)
+
     @Column(name="T_UPDATEDON")
-//    @Column(name="T_UPDATEDON", insertable = false, updatable = false)
     protected LocalDateTime updatedOn;
 
     public FamilyMember(){
