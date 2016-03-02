@@ -1,6 +1,6 @@
 package com.smartfinance.db.entities;
 
-import com.smartfinance.db.utils.FinancePersistenceManager;
+import com.smartfinance.db.utils.TestPersistenceManager;
 import javax.persistence.EntityManager;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -18,13 +18,13 @@ public class FamilyMemberTest {
 
     @BeforeClass
     public static void setUpClass() throws Exception {
-        em = FinancePersistenceManager.INSTANCE.getEntityManager();
+        em = TestPersistenceManager.INSTANCE.getEntityManager();
     }
 
     @AfterClass
     public static void tearDownClass() throws Exception {
         em.close();
-        FinancePersistenceManager.INSTANCE.close();
+        TestPersistenceManager.INSTANCE.close();
     }
 
     @Before
@@ -65,7 +65,7 @@ public class FamilyMemberTest {
 
     @Test
     public void testUpdate() throws Exception {
-        FamilyMember husband = em.getReference(FamilyMember.class, 18L);
+        FamilyMember husband = em.getReference(FamilyMember.class, 1L);
         husband.setName("Freddy18");
         husband.setDescription("husband18");
 
