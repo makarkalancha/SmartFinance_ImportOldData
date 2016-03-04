@@ -1,4 +1,4 @@
-package com.smartfinance.db.h2db;
+package com.makco.smartfinance.h2db;
 
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;

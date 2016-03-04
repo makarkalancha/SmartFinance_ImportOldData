@@ -1,0 +1,17 @@
+https://en.wikipedia.org/wiki/Classpath_%28Java%29
+
+D:\SRC\Java_work_dir\JavaTests\src\everything\JDBC\h2_tests\trigger_run>
+--with trigger
+java -cp h2-1.4.191.jar;everything.JDBC.TriggerInvoiceSum org.h2.tools.Server
+--just server
+java -cp ./* org.h2.tools.Server
+
+
+C:\svn\qa\DatabaseScripts>java -jar "C:\svn\SRC\h2db_withTriggers\out\artifacts\h2db_withTriggers_jar\h2db_withTriggers.jar"
+TCP server running at tcp://10.30.163.78:9092 (only local connections)
+PG server running at pg://10.30.163.78:5435 (only local connections)
+Web Console server running at http://10.30.163.78:8082 (only local connections)
+
+in intellij:
+-project structure -> modules: add jars or directories -> h2.jar
+-project structure -> artifacts -> add 'jar' from module with dependencies -> main class 'org.h2.tools.Server' and then check 'build on make' (so to update jar Build->make)
