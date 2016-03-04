@@ -1,0 +1,16 @@
+//apply plugin: 'java'
+//group = 'com.makco.smartfinance'
+version = '1.0'
+//repositories {
+//    mavenCentral()
+//}
+
+project(':import_old_data') {
+    dependencies {
+        compile project(':database')
+        compile 'org.hibernate:hibernate-entitymanager:'+hibernate_version //JPA
+        compile 'org.hibernate:hibernate-java8:'+hibernate_version //Java8 specific data-types such as any of the JSR 310 Date/Time types in domain model
+        compile 'org.hibernate:hibernate-c3p0:'+hibernate_version //For connection pooling
+        testCompile 'junit:junit:4.8.2'
+    }
+}

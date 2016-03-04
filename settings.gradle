@@ -1,2 +1,3 @@
-rootProject.name = 'java.com.smartfinance.importolddata'
+rootProject.name = 'com.makco.smartfinance'
+include 'database', 'import_old_data'
 //showStandardStreams = true

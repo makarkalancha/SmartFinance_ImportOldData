@@ -1,6 +1,6 @@
 apply plugin: 'java'
 
-sourceCompatibility = 1.8
+sourceCompatibility = java_version
 version = 1.0
 
 description ="""
@@ -12,25 +12,74 @@ More detailed information here...
 
 """
 
-repositories{
-    mavenCentral()
+allprojects {
+    apply plugin: 'java'
+    group = 'org.gradle.sample'
+    version = '1.0'
 }
 
-dependencies{
-//    compile group: 'org.hibernate', name: 'hibernate-core', version: hibernate_version
-    compile 'org.hibernate:hibernate-entitymanager:'+hibernate_version //JPA
-    compile 'org.hibernate:hibernate-java8:'+hibernate_version //Java8 specific data-types such as any of the JSR 310 Date/Time types in domain model
-    compile 'org.hibernate:hibernate-c3p0:'+hibernate_version //For connection pooling
-    compile 'com.h2database:h2:1.4.191' //Database
-    testCompile 'junit:junit:4.8.2'
-}
-
-test {
-    testLogging {
-        //http://mrhaki.blogspot.ca/2014/10/gradle-goodness-show-standard-out-or.html
-        // Make sure output from
-        // standard out or error is shown
-        // in Gradle output.
-        showStandardStreams = true
+subprojects {
+    apply plugin: 'java'
+    group = 'com.makco.smartfinance'
+//    version = '1.0'
+    repositories {
+        mavenCentral()
     }
+
+    dependencies{
+        testCompile 'junit:junit:4.8.2'
+    }
+
+    test {
+        testLogging {
+            //http://mrhaki.blogspot.ca/2014/10/gradle-goodness-show-standard-out-or.html
+            // Make sure output from
+            // standard out or error is shown
+            // in Gradle output.
+            showStandardStreams = true
+        }
+    }
+
+//
+//    project(':database') {
+//        dependencies {
+//            compile 'com.h2database:h2:1.4.191' //Database
+//        }
+//    }
+//
+//    project(':import_old_data') {
+//        dependencies {
+//            compile project(':database')
+//            compile 'org.hibernate:hibernate-entitymanager:'+hibernate_version //JPA
+//            compile 'org.hibernate:hibernate-java8:'+hibernate_version //Java8 specific data-types such as any of the JSR 310 Date/Time types in domain model
+//            compile 'org.hibernate:hibernate-c3p0:'+hibernate_version //For connection pooling
+//        }
+//    }
+//
 }
+
+
+
+
+//test {
+//    testLogging {
+//        //http://mrhaki.blogspot.ca/2014/10/gradle-goodness-show-standard-out-or.html
+//        // Make sure output from
+//        // standard out or error is shown
+//        // in Gradle output.
+//        showStandardStreams = true
+//    }
+////    dependencies{
+//////    compile group: 'org.hibernate', name: 'hibernate-core', version: hibernate_version
+////
+////        testCompile 'junit:junit:4.8.2'
+////        test project(':database')
+////        test project(':import_old_data')
+////    }
+//}
+
+//dependencies{
+////    compile group: 'org.hibernate', name: 'hibernate-core', version: hibernate_version
+//
+//    testCompile 'junit:junit:4.8.2'
+//}

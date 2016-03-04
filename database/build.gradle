@@ -1,0 +1,12 @@
+//apply plugin: 'java'
+//sourceCompatibility = java_version
+//group = 'com.makco.smartfinance'
+version = '1.0'
+//repositories {
+//    mavenCentral()
+//}
+
+dependencies {
+    compile 'com.h2database:h2:1.4.191' //Database
+    testCompile 'junit:junit:4.8.2'
+}
