@@ -5,13 +5,7 @@
       <GradleProjectSettings>
         <option name="distributionType" value="LOCAL" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="gradleHome" value="$PROJECT_DIR$/../../apps/gradle-2.11/bin" />
-        <option name="gradleJvm" value="#JAVA_HOME" />
-        <option name="modules">
-          <set>
-            <option value="$PROJECT_DIR$" />
-          </set>
-        </option>
+        <option name="gradleHome" value="$PROJECT_DIR$/../../apps_web/gradle-2.11bin" />
       </GradleProjectSettings>
     </option>
   </component>
