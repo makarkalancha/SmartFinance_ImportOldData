@@ -1,4 +1,4 @@
-package com.makco.smartfinance.h2db;
+package com.makco.smartfinance.h2db.functions;
 
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
@@ -7,6 +7,8 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import com.makco.smartfinance.h2db.functions.DateUnitFunctions;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,7 +17,7 @@ import static org.junit.Assert.assertEquals;
 /**
  * Created by mcalancea on 2016-02-26.
  */
-public class FunctionsTest {
+public class DateUnitFunctionsTest {
     private static final String DB_DIR = "~/smart_finance";
     private static final String DB_NAME = "finance";
     private static final String DB_SCHEMA = "TEST";
@@ -51,7 +53,7 @@ public class FunctionsTest {
 
     public void dropTable(String tableName) throws Exception {
         try(Statement statement = connection.createStatement()) {
-            statement.execute("DROP TABLE " + tableName);
+            statement.execute("DROP TABLE IF EXISTS " + tableName);
         }
     }
 
@@ -108,7 +110,7 @@ public class FunctionsTest {
         }
 
         if(!checkIfTableExists(DB_SCHEMA, TABLE_DATEUNIT)) {
-            Functions.createDateUnitTable(connection);
+            DateUnitFunctions.createDateUnitTable(connection);
             assert (checkIfTableExists(DB_SCHEMA, TABLE_DATEUNIT));
 
             testInsertSelectDateSinceEpochDate_insert();
@@ -121,13 +123,13 @@ public class FunctionsTest {
 
     //    @Test: junit doesn't support order in test (http://stackoverflow.com/questions/3693626/how-to-run-test-methods-in-specific-order-in-junit4)
     public void testInsertSelectDateSinceEpochDate_insert() throws Exception {
-        insertedDateId = Functions.insertSelectDate(connection, dateToInsert);
+        insertedDateId = DateUnitFunctions.insertSelectDate(connection, dateToInsert);
         assert (insertedDateId > 0);
     }
 
     //    @Test: junit doesn't support order in test (http://stackoverflow.com/questions/3693626/how-to-run-test-methods-in-specific-order-in-junit4)
     public void testInsertSelectDateSinceEpochDate_select() throws Exception {
-        long selectedDateId = Functions.insertSelectDate(connection, dateToInsert);
+        long selectedDateId = DateUnitFunctions.insertSelectDate(connection, dateToInsert);
         assertEquals(insertedDateId, selectedDateId);
     }
 }

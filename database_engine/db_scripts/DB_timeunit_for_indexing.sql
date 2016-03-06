@@ -5,10 +5,20 @@ CREATE SCHEMA FINANCE1;
 
 SET SCHEMA FINANCE1;
 
-CREATE ALIAS CREATE_DATE_UNIT_TABLE FOR "com.everything.JDBC.h2.Functions.createDateUnitTable";
-CREATE ALIAS INSERT_SELECT_DATE FOR "com.everything.JDBC.h2.Functions.insertSelectDate";
+CREATE ALIAS CREATE_DATE_UNIT_TABLE FOR "com.makco.smartfinance.h2db.Functions.createDateUnitTable";
+CREATE ALIAS INSERT_SELECT_DATE FOR "com.makco.smartfinance.h2db.Functions.insertSelectDate";
 
 CALL CREATE_DATE_UNIT_TABLE();
+
+select @date := PARSEDATETIME('Sat, 3 Feb 2001 03:05:06 GMT', 'EEE, d MMM yyyy HH:mm:ss z', 'en', 'GMT');
+CALL INSERT_SELECT_DATE(@date);
+
+CALL INSERT_SELECT_DATE(@date);
+select @date := PARSEDATETIME('3 Feb 2016 03:05:06 GMT', 'd MMM yyyy HH:mm:ss z', 'en', 'GMT');
+
+select @date :=  PARSEDATETIME('2016-03-06', 'yyyy-MM-dd', 'en', 'GMT');
+select @dateid :=  INSERT_SELECT_DATE(@date);
+
 
 CREATE SEQUENCE SEQ_FAMILY_MEMBER;
 CREATE TABLE FAMILY_MEMBER(

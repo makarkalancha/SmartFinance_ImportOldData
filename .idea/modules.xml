@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/SmartFinance.iml" filepath="$PROJECT_DIR$/SmartFinance.iml" />
+      <module fileurl="file://$PROJECT_DIR$/com.makco.smartfinance.iml" filepath="$PROJECT_DIR$/com.makco.smartfinance.iml" />
       <module fileurl="file://$PROJECT_DIR$/database_engine/database_engine.iml" filepath="$PROJECT_DIR$/database_engine/database_engine.iml" />
       <module fileurl="file://$PROJECT_DIR$/database_layer/database_layer.iml" filepath="$PROJECT_DIR$/database_layer/database_layer.iml" />
     </modules>

@@ -1,0 +1,60 @@
+//        tasks.withType(Jar) {
+//            doFirst{
+//                manifest {
+//                    attributes(
+//                            'Class-Path': configurations.compile.collect { it.getName() }.join(' '),
+//                            'Main-Class': 'org.h2.tools.Server'
+//                    )
+//                }
+//                from {
+//                    configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+//                }
+//            }
+//        }
+        // configurations {
+            // custom config of files we want to include in our fat jar that we send to hadoop
+            // includeInJar
+        // }
+
+//        task copyToLib( type: Copy ) {
+//            into "$buildDir/libs/lib"
+//            from configurations.runtime
+//        }
+//
+//        jar { dependsOn copyToLib }
+
+        // dependencies {
+         //  // compile  'com.h2database:h2:1.4.191' //Database
+            // includeInJar 'com.h2database:h2:1.4.191'
+
+            // configurations.compile.extendsFrom(configurations.includeInJar)
+        // }
+
+        // jar {
+            // into('lib') {
+                // println "includeInJar: " + configurations.includeInJar.collect { File file -> file }
+                // from configurations.includeInJar
+            // }
+
+        // }
+              		configurations {
+              			libraries
+              		}
+
+              		dependencies {
+              			libraries 'com.h2database:h2:1.4.191@jar'
+
+              			configurations.compile.extendsFrom(configurations.libraries)
+              		}
+
+              		jar {
+              			into('lib') {
+              				from configurations.libraries
+              			}
+                          manifest {
+                                  attributes(
+              //                            'Class-Path': configurations.compile.collect { it.getName() }.join(' '),
+                                          'Main-Class': 'org.h2.tools.Server'
+                                  )
+                              }
+              		}

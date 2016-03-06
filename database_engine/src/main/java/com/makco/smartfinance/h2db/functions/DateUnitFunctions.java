@@ -1,4 +1,6 @@
-package com.makco.smartfinance.h2db;
+package com.makco.smartfinance.h2db.functions;
+
+import com.makco.smartfinance.h2db.tables.DateUnit;
 
 import java.sql.*;
 import java.util.Date;
@@ -6,7 +8,7 @@ import java.util.Date;
 /**
  * Created by mcalancea on 2016-02-16.
  */
-public class Functions{
+public class DateUnitFunctions {
 
     public static void createDateUnitTable(Connection connection) throws SQLException{
         final StringBuilder createDateUnitTable = new StringBuilder();

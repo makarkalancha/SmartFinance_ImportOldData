@@ -1,7 +1,9 @@
-package com.makco.smartfinance.h2db;
+package com.makco.smartfinance.h2db.tables;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import com.makco.smartfinance.h2db.tables.DateUnit;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
