@@ -16,7 +16,13 @@ CALL INSERT_SELECT_DATE(@date);
 CALL INSERT_SELECT_DATE(@date);
 select @date := PARSEDATETIME('3 Feb 2016 03:05:06 GMT', 'd MMM yyyy HH:mm:ss z', 'en', 'GMT');
 
-select @date :=  PARSEDATETIME('2016-03-06', 'yyyy-MM-dd', 'en', 'GMT');
+
+--select @date :=  PARSEDATETIME('2016-03-06', 'yyyy-MM-dd', 'en', 'GMT');
+--GMT -4
+--=> select @date :=  PARSEDATETIME('2016-03-06', 'yyyy-MM-dd', 'en', 'GMT');
+--return '2016-03-05 20:00:00'
+--don't use time zone
+select @date :=  PARSEDATETIME('2016-03-06');
 select @dateid :=  INSERT_SELECT_DATE(@date);
 
 
