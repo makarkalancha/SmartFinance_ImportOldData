@@ -23,7 +23,7 @@ public class DateUnitFunctions {
             createDateUnitTable.append("UNITDAYOFWEEK INT NOT NULL,");
             createDateUnitTable.append("WEEKDAY BOOLEAN NOT NULL,");//if weekend false
             createDateUnitTable.append("T_CREATEDON TIMESTAMP,");
-            createDateUnitTable.append("T_UPDATEDON TIMESTAMP AS NOW(),");
+            createDateUnitTable.append("T_UPDATEDON TIMESTAMP,");
             createDateUnitTable.append("PRIMARY KEY(ID,UNITTIMESTAMP),");
         //there is no weekofyear, because if you change first day of the week, week of year is changed and all reports need to re-calculated
         //there is no unitweek, because if you change first day of the week, unit week is changed and all reports need to re-calculated

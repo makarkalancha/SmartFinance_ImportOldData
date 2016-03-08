@@ -11,7 +11,7 @@ import org.h2.api.Trigger;
  * Date: 06/03/2016
  * Time: 18:05
  */
-public class TriggerInvoiceSum implements Trigger {
+public class TriggerDateUnit implements Trigger {
 
     @Override
     public void close() throws SQLException {
