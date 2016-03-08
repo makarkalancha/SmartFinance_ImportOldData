@@ -19,7 +19,6 @@ allprojects {
 subprojects {
     apply plugin: 'java'
     group = 'SmartFinance'
-//    version = '1.0'
     repositories {
         mavenCentral()
     }
@@ -37,53 +36,6 @@ subprojects {
             showStandardStreams = true
         }
     }
-
-//    project(':database_engine') {
-//
-//        configurations {
-//            h2
-//        }
-//
-//		dependencies {
-//            h2 'com.h2database:h2:1.4.191@jar'
-//
-////            configurations.compile.extendsFrom(configurations.h2)
-////            compile 'com.h2database:h2:1.4.191'
-//		}
-//        task MyallFiles << {
-//            configurations.h2.files.each { file ->
-//                println file.name
-//            }
-//        }
-//
-////        def installDir = "${buildDir}/install"
-////        def extractDir = "${buildDir}/extract"
-////
-////        // task to copy dependencies
-////        task copyDependencies(type: Copy) {
-////            from configurations.h2
-////            into installDir
-////        }
-////
-////        // task to extract dependencies
-////        task extractDependencies(type: Copy) {
-////            from configurations.h2.collect{zipTree (it)}
-////            into extractDir
-////        }
-//
-//
-////		jar {
-////            processResources{
-////                from(zipTree(configurations.h2))
-////            }
-////            manifest {
-////                    attributes(
-//////                            'Class-Path': configurations.compile.collect { it.getName() }.join(' '),
-////                            'Main-Class': 'org.h2.tools.Server'
-////                    )
-////            }
-////		}
-//    }
 
     project(':database_layer') {
         dependencies {

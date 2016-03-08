@@ -1,5 +1,9 @@
 package com.makco.smartfinance.h2db.triggers;
 
+import java.math.BigDecimal;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import org.h2.api.Trigger;
 
 /**
