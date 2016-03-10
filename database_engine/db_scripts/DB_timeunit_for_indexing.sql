@@ -5,8 +5,8 @@ CREATE SCHEMA FINANCE1;
 
 SET SCHEMA FINANCE1;
 
-CREATE ALIAS CREATE_DATE_UNIT_TABLE FOR "com.makco.smartfinance.h2db.Functions.createDateUnitTable";
-CREATE ALIAS INSERT_SELECT_DATE FOR "com.makco.smartfinance.h2db.Functions.insertSelectDate";
+CREATE ALIAS CREATE_DATE_UNIT_TABLE FOR "com.makco.smartfinance.h2db.functions.Functions.createDateUnitTable";
+CREATE ALIAS INSERT_SELECT_DATE FOR "com.makco.smartfinance.h2db.functions.Functions.insertSelectDate";
 
 CALL CREATE_DATE_UNIT_TABLE();
 
