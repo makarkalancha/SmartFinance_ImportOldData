@@ -1,12 +1,8 @@
 package com.makco.smartfinance.h2db.triggers;
 
-import java.math.BigDecimal;
 import java.sql.Connection;
-import java.sql.Date;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
-
 import org.h2.api.Trigger;
 
 /**
@@ -30,24 +26,12 @@ public class TriggerDateUnit implements Trigger {
     @Override
     public void fire(Connection connection, Object[] oldRow, Object[] newRow) throws SQLException {
         java.util.Date now = new java.util.Date();
-        Long dateUnitId = (Long) newRow[1];
 
-        PreparedStatement preparedStatement = null;
         if(Trigger.INSERT == type) {
-            preparedStatement = connection.prepareStatement(
-                    "UPDATE DATEUNIT SET T_CREATEDON = ?, T_UPDATEDON = ? WHERE ID = ?"
-            );
-            preparedStatement.setDate(1,new java.sql.Date(now.getTime()));
-            preparedStatement.setDate(2,new java.sql.Date(now.getTime()));
-            preparedStatement.setLong(3, dateUnitId);
-            preparedStatement.executeUpdate();
+            newRow[8] = new java.sql.Timestamp(now.getTime());
+            newRow[9] = new java.sql.Timestamp(now.getTime());
         } else if(Trigger.UPDATE == type) {
-            preparedStatement = connection.prepareStatement(
-                    "UPDATE DATEUNIT SET T_UPDATEDON = ? WHERE ID = ?"
-            );
-            preparedStatement.setDate(1,new java.sql.Date(now.getTime()));
-            preparedStatement.setLong(2, dateUnitId);
-            preparedStatement.executeUpdate();
+            newRow[9] = new java.sql.Timestamp(now.getTime());
         }
     }
 
@@ -56,7 +40,7 @@ public class TriggerDateUnit implements Trigger {
 
     }
 
-    public static void createDateUnitTable(Connection connection) throws SQLException{
+    public static void createDateUnitInsertUpdateTriggers(Connection connection) throws SQLException{
         final StringBuilder createDateUnitTrigger = new StringBuilder();
         createDateUnitTrigger.append("CREATE TRIGGER T_DATEUNIT_INS ");
         createDateUnitTrigger.append("BEFORE INSERT ");

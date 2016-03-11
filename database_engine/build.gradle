@@ -19,7 +19,7 @@ jar {
     }
 }
 
-test {
-    includes = ['**/H2DbTestSuite*'] as Set
+//test {
+//    includes = ['**/H2DbTestSuite*'] as Set
     //excludes other tests, executes only tests from "includes" clause
-}
+//}

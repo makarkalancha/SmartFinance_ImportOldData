@@ -5,6 +5,6 @@ package com.makco.smartfinance.h2db.utils;
  * Date: 11/03/2016
  * Time: 00:44
  */
-public enum ObjectType {
-    TABLE,TRIGGER;
+public enum DBObjectType {
+    SCHEMA, TABLE, TRIGGER;
 }
