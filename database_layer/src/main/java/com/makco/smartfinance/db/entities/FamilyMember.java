@@ -7,8 +7,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -99,14 +97,14 @@ public class FamilyMember implements Serializable,Deletable{
                 '}';
     }
 
-    @PrePersist
-    @PreUpdate
-    private void onCreate() {
-        if(this.createdOn == null){
-            this.createdOn = LocalDateTime.now();
-        }
-        this.updatedOn = LocalDateTime.now();
-    }
+//    @PrePersist
+//    @PreUpdate
+//    private void onCreate() {
+//        if(this.createdOn == null){
+//            this.createdOn = LocalDateTime.now();
+//        }
+//        this.updatedOn = LocalDateTime.now();
+//    }
 
     public LocalDateTime getCreatedOn() {
         return createdOn;

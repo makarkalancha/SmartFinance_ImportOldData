@@ -16,6 +16,9 @@ public class FamilyMemberTest {
 
     private static EntityManager em;
 
+//    @ClassRule
+//    public static DBConnectionResource dbConnectionResource = new DBConnectionResource();
+
     @BeforeClass
     public static void setUpClass() throws Exception {
         em = TestPersistenceManager.INSTANCE.getEntityManager();

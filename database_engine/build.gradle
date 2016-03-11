@@ -23,3 +23,13 @@ jar {
 //    includes = ['**/H2DbTestSuite*'] as Set
     //excludes other tests, executes only tests from "includes" clause
 //}
+
+task copyDbCreateScriptTask(type: Copy) {
+    description 'Copies the resource directory to the target directory.'
+    println "--->copy start"
+    from 'src/main/resources/DB_SCRIPT_CREATE.sql'
+    into 'build/resources/test'
+
+    println "--->copy end"
+}
+processTestResources.dependsOn copyDbCreateScriptTask

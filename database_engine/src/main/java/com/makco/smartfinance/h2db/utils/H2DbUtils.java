@@ -68,4 +68,22 @@ public class H2DbUtils {
         }
     }
 
+    public static void createDB(Connection connection, String schemaName) throws Exception{
+//        //snippet reads the attributes from one file and creates a new file, assigning the attributes from the original file to the new file:
+//        Path srcPath = Paths.get(Context.INSTANCE.DB_SCRIPT_CREATE());
+//        PosixFileAttributes srcAttrs =
+//                Files.readAttributes(srcPath, PosixFileAttributes.class);
+//        FileAttribute<Set<PosixFilePermission>> dstAttr =
+//                PosixFilePermissions.asFileAttribute(srcAttrs.permissions());
+//        Path directory = Paths.get(Context.INSTANCE.DB_SCRIPT_CREATE()).getParent();
+//        System.out.println("directory:" + directory);
+//        Path dstPath = Files.createTempFile(directory, "prefix_", "_suffix", dstAttr);
+//        System.out.println("srcPath:" + srcPath);
+//        System.out.println("dstPath:" + dstPath);
+//
+//        Files.copy(srcPath, dstPath, StandardCopyOption.COPY_ATTRIBUTES);
+//
+//        RunScript.execute(connection,  new InputStreamReader(H2DbUtils.class.getClassLoader().getResourceAsStream(Context.INSTANCE.DB_SCRIPT_CREATE())));
+    }
+
 }

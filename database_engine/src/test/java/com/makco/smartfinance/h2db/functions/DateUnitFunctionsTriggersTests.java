@@ -25,8 +25,6 @@ public class DateUnitFunctionsTriggersTests {
     private Date dateToInsert;
     private long insertedDateId;
 
-//    @ClassRule
-//    public static dbConnectionResource dbConnectionResource = new dbConnectionResource();
     @ClassRule
     public static DBConnectionResource dbConnectionResource = new DBConnectionResource();
 
@@ -41,13 +39,20 @@ public class DateUnitFunctionsTriggersTests {
 
     @AfterClass
     public static void tearDownClass() throws Exception {
+        //first remove schema test
 //        System.out.println("Test->AfterClass");
 //        H2DbUtils.setSchema(dbConnectionResource.getConnection(), TestContext.INSTANCE.DB_SCHEMA());
 //        H2DbUtils.dropDBObject(dbConnectionResource.getConnection(), DBObjectType.TABLE, TestContext.INSTANCE.TABLE_DATEUNIT());
 //        if (H2DbUtils.checkIfSchemaExists(dbConnectionResource.getConnection(), TestContext.INSTANCE.DB_SCHEMA())) {
 //            H2DbUtils.dropDBObject(dbConnectionResource.getConnection(), DBObjectType.SCHEMA, TestContext.INSTANCE.DB_SCHEMA());
 //        }
-
+        //second create full db but in test schema
+        if(H2DbUtils.checkIfSchemaExists(dbConnectionResource.getConnection(), TestContext.INSTANCE.DB_SCHEMA())){
+            H2DbUtils.dropDBObject(dbConnectionResource.getConnection(), DBObjectType.SCHEMA, TestContext.INSTANCE.DB_SCHEMA());
+        }
+        H2DbUtils.createSchema(dbConnectionResource.getConnection(), TestContext.INSTANCE.DB_SCHEMA());
+        H2DbUtils.setSchema(dbConnectionResource.getConnection(), TestContext.INSTANCE.DB_SCHEMA());
+        H2DbUtils.createDB(dbConnectionResource.getConnection(), TestContext.INSTANCE.DB_SCHEMA());
     }
 
     @Before

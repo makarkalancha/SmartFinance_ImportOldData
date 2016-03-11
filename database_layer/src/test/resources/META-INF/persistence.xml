@@ -6,12 +6,14 @@
                                   http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd"
         version="1.0"
         >
-    <!-- "RESOURCE_LOCAL" for Java SE application and to "JTA" for Java EE application -->
-    <persistence-unit name="finance" transaction-type="RESOURCE_LOCAL">
+    <persistence-unit name="test" transaction-type="RESOURCE_LOCAL">
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
-        <class>com.smartfinance.db.entities.FamilyMember</class>
+        <class>com.makco.smartfinance.db.entities.FamilyMember</class>
         <properties>
-            <property name="javax.persistence.jdbc.url" value="jdbc:h2:~/smart_finance/finance;IFEXISTS=TRUE"/>
+            <!--http://stackoverflow.com/questions/5225700/can-i-have-h2-autocreate-a-schema-in-an-in-memory-database-->
+            <!--http://www.h2database.com/html/grammar.html#set_schema-->
+            <property name="javax.persistence.jdbc.url" value="jdbc:h2:~/smart_finance/finance"/>
+            <!--<property name="javax.persistence.jdbc.url" value="jdbc:h2:~/smart_finance;IFEXISTS=TRUE"/>-->
             <property name="javax.persistence.jdbc.user" value="root"/>
             <property name="javax.persistence.jdbc.password" value="root"/>
             <property name="javax.persistence.jdbc.driver" value="org.h2.Driver"/>
@@ -20,7 +22,7 @@
             <property name="hibernate.format_sql" value="true"/>
             <property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect"/>
             <property name="hibernate.hbm2ddl.auto" value="validate"/>
-            <property name="hibernate.default_schema" value="FINANCE"/>
+            <property name="hibernate.default_schema" value="TEST"/>
 
             <!-- Configuring Connection Pool -->
             <property name="hibernate.c3p0.min_size" value="5"/>
