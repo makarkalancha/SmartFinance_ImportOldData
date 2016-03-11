@@ -36,18 +36,19 @@ public class H2DbUtils {
         }
     }
 
-    public static boolean checkIfTableExists(Connection connection, String dbSchemaName, String tableName) throws SQLException{
+    public static boolean checkIfObjectExists(Connection connection, String dbSchemaName, String tableName, ObjectType objectType) throws SQLException{
         boolean result = false;
         ResultSet rs = null;
         try{
             DatabaseMetaData metaData = connection.getMetaData();
-            rs = metaData.getTables(null, dbSchemaName, tableName, new String[] {"TABLE"});
+            rs = metaData.getTables(null, dbSchemaName, tableName, new String[] {objectType.toString()});
             result = rs.next();
         }finally {
             if(rs != null) rs.close();
         }
         return result;
     }
+
 
     public static void dropTestSchema(Connection connection, String dbSchemaName) throws Exception {
         try(Statement statement = connection.createStatement()) {

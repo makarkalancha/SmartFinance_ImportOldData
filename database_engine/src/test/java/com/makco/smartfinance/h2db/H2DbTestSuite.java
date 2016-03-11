@@ -39,6 +39,7 @@ public class H2DbTestSuite {
     @AfterClass
     public static void tearDown() throws Exception {
         System.out.println("Suite->AfterClass");
+        H2DbUtils.setSchema(dbConnectionResource.getConnection(),TestContext.INSTANCE.DB_SCHEMA());
         H2DbUtils.dropTable(dbConnectionResource.getConnection(), TestContext.INSTANCE.TABLE_DATEUNIT());
         if (H2DbUtils.checkIfSchemaExists(dbConnectionResource.getConnection(), TestContext.INSTANCE.DB_SCHEMA())) {
             H2DbUtils.dropTestSchema(dbConnectionResource.getConnection(), TestContext.INSTANCE.DB_SCHEMA());

@@ -5,10 +5,23 @@ CREATE SCHEMA FINANCE1;
 
 SET SCHEMA FINANCE1;
 
-CREATE ALIAS CREATE_DATE_UNIT_TABLE FOR "com.makco.smartfinance.h2db.functions.Functions.createDateUnitTable";
-CREATE ALIAS INSERT_SELECT_DATE FOR "com.makco.smartfinance.h2db.functions.Functions.insertSelectDate";
+CREATE ALIAS CREATE_DATE_UNIT_TABLE FOR "com.makco.smartfinance.h2db.functions.DateUnitFunctions.createDateUnitTable";
+CREATE ALIAS INSERT_SELECT_DATE FOR "com.makco.smartfinance.h2db.functions.DateUnitFunctions.insertSelectDate";
 
 CALL CREATE_DATE_UNIT_TABLE();
+
+CREATE TRIGGER T_DATEUNIT_INS
+BEFORE INSERT
+ON DATEUNIT
+FOR EACH ROW
+CALL "com.makco.smartfinance.h2db.triggers.TriggerDateUnit";
+
+CREATE TRIGGER T_DATEUNIT_UPD
+BEFORE UPDATE
+ON DATEUNIT
+FOR EACH ROW
+CALL "com.makco.smartfinance.h2db.triggers.TriggerDateUnit";
+
 
 select @date := PARSEDATETIME('Sat, 3 Feb 2001 03:05:06 GMT', 'EEE, d MMM yyyy HH:mm:ss z', 'en', 'GMT');
 CALL INSERT_SELECT_DATE(@date);

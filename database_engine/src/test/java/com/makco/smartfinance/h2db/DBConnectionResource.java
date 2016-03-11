@@ -10,7 +10,8 @@ import org.junit.rules.ExternalResource;
  */
 public class DBConnectionResource extends ExternalResource {
     private static Connection connection;
-    private static final String DB_CONNECTION_IF_EXISTS = "jdbc:h2:" + TestContext.INSTANCE.DB_DIR() + "/" + TestContext.INSTANCE.DB_NAME() + ";IFEXISTS=TRUE";
+    //http://www.h2database.com/html/grammar.html#set_schema
+    private static final String DB_CONNECTION_IF_EXISTS = "jdbc:h2:" + TestContext.INSTANCE.DB_DIR() + "/" + TestContext.INSTANCE.DB_NAME() + ";IFEXISTS=TRUE;";
 
     @Override
     protected void before() throws SQLException {
@@ -22,6 +23,7 @@ public class DBConnectionResource extends ExternalResource {
     protected void after() {
         System.out.println("ExternalResource->after");
         try{
+            System.out.println("ExternalResource->after: isClosed=" + connection.isClosed());
             if (connection != null) {
                 connection.close();
             }
