@@ -1,11 +1,23 @@
 package com.makco.smartfinance.h2db.utils;
 
+import org.h2.tools.RunScript;
+
+import java.io.InputStreamReader;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.nio.file.attribute.FileAttribute;
+import java.nio.file.attribute.PosixFileAttributes;
+import java.nio.file.attribute.PosixFilePermission;
+import java.nio.file.attribute.PosixFilePermissions;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Set;
 
 /**
  * Created by mcalancea on 2016-03-08.
@@ -69,20 +81,22 @@ public class H2DbUtils {
     }
 
     public static void createDB(Connection connection, String schemaName) throws Exception{
-//        //snippet reads the attributes from one file and creates a new file, assigning the attributes from the original file to the new file:
-//        Path srcPath = Paths.get(Context.INSTANCE.DB_SCRIPT_CREATE());
+        //snippet reads the attributes from one file and creates a new file, assigning the attributes from the original file to the new file:
+        H2DbUtils.class.getClassLoader().getResourceAsStream(Context.INSTANCE.DB_SCRIPT_CREATE());
+//        Path srcPath = Paths.get();
 //        PosixFileAttributes srcAttrs =
 //                Files.readAttributes(srcPath, PosixFileAttributes.class);
 //        FileAttribute<Set<PosixFilePermission>> dstAttr =
 //                PosixFilePermissions.asFileAttribute(srcAttrs.permissions());
-//        Path directory = Paths.get(Context.INSTANCE.DB_SCRIPT_CREATE()).getParent();
-//        System.out.println("directory:" + directory);
+        Path directory = Paths.get(Context.INSTANCE.DB_SCRIPT_CREATE()).toAbsolutePath().getParent();
+        System.out.println("directory:" + directory);
 //        Path dstPath = Files.createTempFile(directory, "prefix_", "_suffix", dstAttr);
-//        System.out.println("srcPath:" + srcPath);
-//        System.out.println("dstPath:" + dstPath);
-//
-//        Files.copy(srcPath, dstPath, StandardCopyOption.COPY_ATTRIBUTES);
-//
+        Path dstPath = Files.createTempFile(directory, "prefix_", "_suffix");
+        System.out.println("srcPath:" + srcPath);
+        System.out.println("dstPath:" + dstPath);
+
+        Files.copy(srcPath, dstPath, StandardCopyOption.COPY_ATTRIBUTES);
+
 //        RunScript.execute(connection,  new InputStreamReader(H2DbUtils.class.getClassLoader().getResourceAsStream(Context.INSTANCE.DB_SCRIPT_CREATE())));
     }
 

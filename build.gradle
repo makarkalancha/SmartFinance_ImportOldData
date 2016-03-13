@@ -26,6 +26,7 @@ subprojects {
     dependencies{
         //testCompile 'junit:junit:4.8.2'
         testCompile 'junit:junit:4.11'
+        compile 'log4j:log4j:1.2.17'
     }
 
     test {
@@ -45,7 +46,7 @@ subprojects {
 
     project(':database_layer') {
         dependencies {
-            compile project(':database_engine') {changing = true}
+            compile project(':database_engine') /*{changing = true}*/
             compile 'org.hibernate:hibernate-entitymanager:'+hibernate_version //JPA
             compile 'org.hibernate:hibernate-java8:'+hibernate_version //Java8 specific data-types such as any of the JSR 310 Date/Time types in domain model
             compile 'org.hibernate:hibernate-c3p0:'+hibernate_version //For connection pooling
