@@ -15,9 +15,8 @@ import static org.junit.Assert.assertEquals;
 public class FamilyMemberTest {
 
     private static EntityManager em;
+    private Long id = null;
 
-//    @ClassRule
-//    public static DBConnectionResource dbConnectionResource = new DBConnectionResource();
 
     @BeforeClass
     public static void setUpClass() throws Exception {
@@ -54,21 +53,25 @@ public class FamilyMemberTest {
 
 
         em.persist(husband);
+        em.flush();
 
 
-        System.out.println("husband.getId()=" + husband.getId());
-        System.out.println("husband.getCreatedOn()=" + husband.getCreatedOn());
-        System.out.println("husband.getUpdatedOn()=" + husband.getUpdatedOn());
+        id = husband.getId();
+
+        FamilyMember husbandJustInserted = em.getReference(FamilyMember.class, id);
+        System.out.println("husband.getId()=" + husbandJustInserted.getId());
+        System.out.println("husband.getCreatedOn()=" + husbandJustInserted.getCreatedOn());
+        System.out.println("husband.getUpdatedOn()=" + husbandJustInserted.getUpdatedOn());
         System.out.println(husband);
 
-        assertEquals(husband.getCreatedOn() != null, true);
-        assertEquals(husband.getUpdatedOn() != null, true);
+        assertEquals(husbandJustInserted.getCreatedOn() != null, true);
+        assertEquals(husbandJustInserted.getUpdatedOn() != null, true);
     }
 
 
     @Test
     public void testUpdate() throws Exception {
-        FamilyMember husband = em.getReference(FamilyMember.class, 1L);
+        FamilyMember husband = em.getReference(FamilyMember.class, id);
         husband.setName("Freddy18");
         husband.setDescription("husband18");
 
