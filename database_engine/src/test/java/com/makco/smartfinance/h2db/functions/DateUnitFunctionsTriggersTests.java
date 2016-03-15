@@ -5,10 +5,12 @@ import com.makco.smartfinance.h2db.TestContext;
 import com.makco.smartfinance.h2db.triggers.TriggerDateUnit;
 import com.makco.smartfinance.h2db.utils.DBObjectType;
 import com.makco.smartfinance.h2db.utils.H2DbUtils;
+import java.io.InputStreamReader;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import org.h2.tools.RunScript;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -33,26 +35,32 @@ public class DateUnitFunctionsTriggersTests {
         System.out.println("Test->BeforeClass");
         if(!H2DbUtils.checkIfSchemaExists(dbConnectionResource.getConnection(), TestContext.INSTANCE.DB_SCHEMA())){
             H2DbUtils.createSchema(dbConnectionResource.getConnection(), TestContext.INSTANCE.DB_SCHEMA());
+            H2DbUtils.setSchema(dbConnectionResource.getConnection(), TestContext.INSTANCE.DB_SCHEMA());
+            RunScript.execute(dbConnectionResource.getConnection(),
+                    new InputStreamReader(H2DbUtils.getCreateDBScript()));
+        } else {
+            H2DbUtils.setSchema(dbConnectionResource.getConnection(), TestContext.INSTANCE.DB_SCHEMA());
         }
-        H2DbUtils.setSchema(dbConnectionResource.getConnection(), TestContext.INSTANCE.DB_SCHEMA());
+
     }
 
     @AfterClass
     public static void tearDownClass() throws Exception {
         //first remove schema test
-//        System.out.println("Test->AfterClass");
+        System.out.println("Test->AfterClass");
 //        H2DbUtils.setSchema(dbConnectionResource.getConnection(), TestContext.INSTANCE.DB_SCHEMA());
 //        H2DbUtils.dropDBObject(dbConnectionResource.getConnection(), DBObjectType.TABLE, TestContext.INSTANCE.TABLE_DATEUNIT());
 //        if (H2DbUtils.checkIfSchemaExists(dbConnectionResource.getConnection(), TestContext.INSTANCE.DB_SCHEMA())) {
 //            H2DbUtils.dropDBObject(dbConnectionResource.getConnection(), DBObjectType.SCHEMA, TestContext.INSTANCE.DB_SCHEMA());
 //        }
-        //second create full db but in test schema
-        if(H2DbUtils.checkIfSchemaExists(dbConnectionResource.getConnection(), TestContext.INSTANCE.DB_SCHEMA())){
-            H2DbUtils.dropDBObject(dbConnectionResource.getConnection(), DBObjectType.SCHEMA, TestContext.INSTANCE.DB_SCHEMA());
-        }
-        H2DbUtils.createSchema(dbConnectionResource.getConnection(), TestContext.INSTANCE.DB_SCHEMA());
-        H2DbUtils.setSchema(dbConnectionResource.getConnection(), TestContext.INSTANCE.DB_SCHEMA());
-        H2DbUtils.createDB(dbConnectionResource.getConnection(), TestContext.INSTANCE.DB_SCHEMA());
+//        /////////////////////////////////////
+//        //second create full db but in test schema
+//        if(H2DbUtils.checkIfSchemaExists(dbConnectionResource.getConnection(), TestContext.INSTANCE.DB_SCHEMA())){
+//            H2DbUtils.dropDBObject(dbConnectionResource.getConnection(), DBObjectType.SCHEMA, TestContext.INSTANCE.DB_SCHEMA());
+//        }
+//        H2DbUtils.createSchema(dbConnectionResource.getConnection(), TestContext.INSTANCE.DB_SCHEMA());
+//        H2DbUtils.setSchema(dbConnectionResource.getConnection(), TestContext.INSTANCE.DB_SCHEMA());
+//        H2DbUtils.createDB(dbConnectionResource.getConnection(), TestContext.INSTANCE.DB_SCHEMA());
     }
 
     @Before
