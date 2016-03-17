@@ -2,6 +2,8 @@ package com.makco.smartfinance.db.entities;
 
 import com.makco.smartfinance.db.utils.TestPersistenceManager;
 import javax.persistence.EntityManager;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -13,7 +15,7 @@ import static org.junit.Assert.assertEquals;
  * Created by mcalancea on 2016-03-02.
  */
 public class FamilyMemberTest {
-
+    private final static Logger LOG = LogManager.getLogger(FamilyMemberTest.class);
     private static EntityManager em;
     private Long id = null;
 
@@ -42,7 +44,7 @@ public class FamilyMemberTest {
 
     @Test
     public void testPersist() throws Exception{
-
+        LOG.fatal("start->testPersist");
         FamilyMember husband = new FamilyMember();
         husband.setName("Freddy");
         husband.setDescription("husband");
@@ -66,6 +68,7 @@ public class FamilyMemberTest {
 
         assertEquals(husbandJustInserted.getCreatedOn() != null, true);
         assertEquals(husbandJustInserted.getUpdatedOn() != null, true);
+        LOG.fatal("end->testPersist");
     }
 
 
