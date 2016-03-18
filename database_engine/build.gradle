@@ -5,7 +5,7 @@ configurations {
 dependencies {
     h2 'com.h2database:h2:1.4.191@jar'
     compile 'com.h2database:h2:1.4.191'
-//    project ':utils'
+//    compile project (':utils')
 }
 
 jar {

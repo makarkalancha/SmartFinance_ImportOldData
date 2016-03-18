@@ -1,13 +1,13 @@
-package com.makco.utils;
-
-import org.apache.log4j.Logger;
+package com.makco.smartfinance.utils;
+//package com.makco.smartfinance.utils;
 
 import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
 import java.util.Iterator;
 import java.util.LinkedList;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * User: Makar Kalancha
@@ -15,7 +15,7 @@ import java.util.LinkedList;
  * Time: 01:57
  */
 public class ReplaceInputStream extends FilterInputStream{
-    private final Logger LOG = Logger.getLogger(ReplaceInputStream.class);
+    private final static Logger LOG = LogManager.getLogger(ReplaceInputStream.class);
     private final LinkedList<Integer> inQueue = new LinkedList<Integer>();
     private final LinkedList<Integer> outQueue = new LinkedList<Integer>();
     private final byte[] needle;

@@ -11,37 +11,59 @@ More detailed information here...
 
 allprojects {
     apply plugin: 'java'
-    group = 'org.gradle.sample'
-    version = '1.0'
+    apply plugin: 'idea'
     sourceCompatibility = java_version
+    group = 'SmartFinance'
+    version = '1.0'
 
 //    dependencies{
 //        testCompile 'junit:junit:4.11'
-//        //compile 'log4j:log4j:1.2.17'
 //        compile 'org.apache.logging.log4j:log4j-api:2.5'
 //        compile 'org.apache.logging.log4j:log4j-core:2.5'
 //    }
 }
 
 subprojects {
-    apply plugin: 'java'
-    group = 'SmartFinance'
+//    apply plugin: 'java'
+//    group = 'SmartFinance'
     repositories {
         mavenCentral()
     }
 
     dependencies{
         //testCompile 'junit:junit:4.8.2'
+//        compile project (':shared_resources')
+//        runtime fileTree(dir: 'shared_resouces', include: '*.jar')
+//        runtime fileTree(dir: '../src/test/resources', include: '*.properties')
+
         testCompile 'junit:junit:4.11'
-//        compile 'log4j:log4j:1.2.17'
         compile 'org.apache.logging.log4j:log4j-api:2.5'
-        compile 'org.apache.logging.log4j:log4j-core:2.5'
+        testCompile 'org.apache.logging.log4j:log4j-api:2.5'
+//        compile 'org.apache.logging.log4j:log4j-core:2.5'
     }
 
-    //http://stackoverflow.com/questions/20136214/gradle-common-resource-dependency-for-multiple-java-projects
-    sourceSets.main.resources.srcDir "../src/main/resources";
-//    sourceSets.test.resources.srcDir "../src/test/resources"
-    sourceSets.test.resources.srcDir "../src/main/resources"
+
+//    task copyExtractorResources(type: Copy) {
+//        from 'shared_resources/src/main/resources/'
+//        into 'build/'
+//        //into 'build/test/resources'
+//    }
+//
+//    processResources.dependsOn copyExtractorResources
+
+
+    println "before main->$sourceSets.main.resources.srcDirs"
+    println "before main.all->$sourceSets.main.resources.srcDirs.files.name"
+    println "before test->$sourceSets.test.resources.srcDirs"
+    println "before test.all->$sourceSets.test.resources.srcDirs.files.name"
+//    //http://stackoverflow.com/questions/20136214/gradle-common-resource-dependency-for-multiple-java-projects
+//    sourceSets.main.resources.srcDirs "../src/main/resources"
+//        sourceSets.main.resources.srcDirs "../shared_resources/src/main/resources"
+//////    sourceSets.test.resources.srcDir "../src/test/resources"
+////    sourceSets.test.resources.srcDirs "../src/main/resources"
+//    println "after main->$sourceSets.main.resources.srcDirs"
+//    println "after test->$sourceSets.test.resources.srcDirs"
+
 
     test {
         testLogging {
@@ -53,10 +75,10 @@ subprojects {
         }
     }
 
-    configurations.all {
-        // Check for updates every build
-        resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
-    }
+//    configurations.all {
+//        // Check for updates every build
+//        resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+//    }
 
     project(':database_layer') {
         dependencies {
@@ -64,6 +86,7 @@ subprojects {
             compile 'org.hibernate:hibernate-entitymanager:'+hibernate_version //JPA
             compile 'org.hibernate:hibernate-java8:'+hibernate_version //Java8 specific data-types such as any of the JSR 310 Date/Time types in domain model
             compile 'org.hibernate:hibernate-c3p0:'+hibernate_version //For connection pooling
+            compile 'javax.validation:validation-api:1.0.0.GA' //javax.validation.constraints
         }
     }
 }

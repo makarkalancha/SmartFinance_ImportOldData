@@ -9,13 +9,15 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 /**
  * Created by mcalancea on 2016-03-01.
  */
 @Entity
 @Table(name="FAMILY_MEMBER")
-public class FamilyMember implements Serializable,Deletable{
+public class FamilyMember implements Serializable, Deletable{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "FAMILY_MEMBER_SEQUENCE_GENERATOR")
     @SequenceGenerator(name = "FAMILY_MEMBER_SEQUENCE_GENERATOR", sequenceName = "SEQ_FAMILY_MEMBER", allocationSize=1)
@@ -23,9 +25,20 @@ public class FamilyMember implements Serializable,Deletable{
     private long id;
 
     @Column(name="NAME")
+    @NotNull
+    @Size(
+        min = 2,
+        max = 65,
+        message = "Name is required, maximum 65 characters."
+    )
     private String name;
 
     @Column(name="DESCRIPTION")
+    @Size(
+            min = 0,
+            max = 1024,
+            message = "Description length is 1024 characters."
+    )
     private String description;
 
     @Column(name="ISDELETED")
