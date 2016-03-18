@@ -51,11 +51,14 @@ subprojects {
 //
 //    processResources.dependsOn copyExtractorResources
 
-
+    //https://docs.gradle.org/current/userguide/working_with_files.html
+    collection = files { srcDir.listFiles() }
     println "before main->$sourceSets.main.resources.srcDirs"
-    println "before main.all->$sourceSets.main.resources.srcDirs.files.name"
-    println "before test->$sourceSets.test.resources.srcDirs"
-    println "before test.all->$sourceSets.test.resources.srcDirs.files.name"
+    srcDir = file(sourceSets.main.resources.srcDirs)
+//    println "Contents of $srcDir.name"
+//    collection.collect { relativePath(it) }.sort().each { println it }
+//    println "before test->$sourceSets.test.resources.srcDirs"
+//    println "before test.all->$sourceSets.test.allSource"
 //    //http://stackoverflow.com/questions/20136214/gradle-common-resource-dependency-for-multiple-java-projects
 //    sourceSets.main.resources.srcDirs "../src/main/resources"
 //        sourceSets.main.resources.srcDirs "../shared_resources/src/main/resources"
