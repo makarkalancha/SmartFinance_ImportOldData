@@ -9,64 +9,40 @@ More detailed information here...
 
 """
 
+File log4j2ConfigFile
+configure(allprojects.findAll {it.name == rootProject.name}) {
+    log4j2ConfigFile = file('src/main/resources/log4j2.xml')
+// Using an absolute path
+    log4j2ConfigFile = file(log4j2ConfigFile.absolutePath)
+}
+
 allprojects {
     apply plugin: 'java'
     apply plugin: 'idea'
     sourceCompatibility = java_version
-    group = 'SmartFinance'
+    group = 'com.makco.smartfinance'
     version = '1.0'
 
-//    dependencies{
-//        testCompile 'junit:junit:4.11'
-//        compile 'org.apache.logging.log4j:log4j-api:2.5'
-//        compile 'org.apache.logging.log4j:log4j-core:2.5'
-//    }
 }
 
 subprojects {
-//    apply plugin: 'java'
-//    group = 'SmartFinance'
     repositories {
         mavenCentral()
     }
 
     dependencies{
-        //testCompile 'junit:junit:4.8.2'
-//        compile project (':shared_resources')
-//        runtime fileTree(dir: 'shared_resouces', include: '*.jar')
-//        runtime fileTree(dir: '../src/test/resources', include: '*.properties')
-
         testCompile 'junit:junit:4.11'
         compile 'org.apache.logging.log4j:log4j-api:2.5'
-        testCompile 'org.apache.logging.log4j:log4j-api:2.5'
-//        compile 'org.apache.logging.log4j:log4j-core:2.5'
+        compile 'org.apache.logging.log4j:log4j-core:2.5'
     }
 
+    processResources {
+        from log4j2ConfigFile
+    }
 
-//    task copyExtractorResources(type: Copy) {
-//        from 'shared_resources/src/main/resources/'
-//        into 'build/'
-//        //into 'build/test/resources'
-//    }
-//
-//    processResources.dependsOn copyExtractorResources
-
-    //https://docs.gradle.org/current/userguide/working_with_files.html
-    collection = files { srcDir.listFiles() }
-    println "before main->$sourceSets.main.resources.srcDirs"
-    srcDir = file(sourceSets.main.resources.srcDirs)
-//    println "Contents of $srcDir.name"
-//    collection.collect { relativePath(it) }.sort().each { println it }
-//    println "before test->$sourceSets.test.resources.srcDirs"
-//    println "before test.all->$sourceSets.test.allSource"
-//    //http://stackoverflow.com/questions/20136214/gradle-common-resource-dependency-for-multiple-java-projects
-//    sourceSets.main.resources.srcDirs "../src/main/resources"
-//        sourceSets.main.resources.srcDirs "../shared_resources/src/main/resources"
-//////    sourceSets.test.resources.srcDir "../src/test/resources"
-////    sourceSets.test.resources.srcDirs "../src/main/resources"
-//    println "after main->$sourceSets.main.resources.srcDirs"
-//    println "after test->$sourceSets.test.resources.srcDirs"
-
+    processTestResources {
+        from log4j2ConfigFile
+    }
 
     test {
         testLogging {
@@ -78,11 +54,6 @@ subprojects {
         }
     }
 
-//    configurations.all {
-//        // Check for updates every build
-//        resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
-//    }
-
     project(':database_layer') {
         dependencies {
             compile project(':database_engine') /*{changing = true}*/
@@ -93,29 +64,3 @@ subprojects {
         }
     }
 }
-
-
-
-
-//test {
-//    testLogging {
-//        //http://mrhaki.blogspot.ca/2014/10/gradle-goodness-show-standard-out-or.html
-//        // Make sure output from
-//        // standard out or error is shown
-//        // in Gradle output.
-//        showStandardStreams = true
-//    }
-////    dependencies{
-//////    compile group: 'org.hibernate', name: 'hibernate-core', version: hibernate_version
-////
-////        testCompile 'junit:junit:4.8.2'
-////        test project(':database')
-////        test project(':import_old_data')
-////    }
-//}
-
-//dependencies{
-////    compile group: 'org.hibernate', name: 'hibernate-core', version: hibernate_version
-//
-//    testCompile 'junit:junit:4.8.2'
-//}
