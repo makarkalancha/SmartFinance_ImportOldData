@@ -1,3 +1,30 @@
+//buildscript {
+//    dependencies {
+//        classpath 'com.h2database:h2:1.4.191'
+//    }
+//}
+
+plugins {
+//    id "org.flywaydb.flyway" version "4.0"
+    id "org.flywaydb.flyway" version "3.2.1"
+}
+
+//flyway {
+//    url = 'jdbc:h2:file:~/smart_finance/foobar'
+//    user = 'root'
+//}
+
+
+//gradle flywayBaseline -i
+//gradle flywayMigrate -i
+flyway {
+    url = 'jdbc:h2:file:~/smart_finance/finance'
+    user = 'root'
+    password = 'root'
+    schemas = [/*,'FINANCE','TEST'*/ 'FOOBAR']
+    table = '_SCHEMA_VERSION'
+}
+
 configurations {
     h2
 }
