@@ -33,18 +33,18 @@ public class FamilyMemberTest {
 
     @Before
     public void setUp() throws Exception {
-        em.getTransaction().begin();
+//        em.getTransaction().begin();
 
     }
 
     @After
     public void tearDown() throws Exception {
-        em.getTransaction().commit();
+//        em.getTransaction().commit();
     }
 
     @Test
     public void testPersist() throws Exception{
-        LOG.fatal("start->testPersist");
+        LOG.info("start->testPersist");
         FamilyMember husband = new FamilyMember();
         husband.setName("Freddy");
         husband.setDescription("husband");
@@ -55,12 +55,14 @@ public class FamilyMemberTest {
 
 
         em.persist(husband);
-        em.flush();
+//        em.flush();
+        em.getTransaction().commit();
 
 
         id = husband.getId();
 
-        FamilyMember husbandJustInserted = em.getReference(FamilyMember.class, id);
+        FamilyMember husbandJustInserted = em.find(FamilyMember.class, id);
+        em.refresh(husbandJustInserted);
         System.out.println("husband.getId()=" + husbandJustInserted.getId());
         System.out.println("husband.getCreatedOn()=" + husbandJustInserted.getCreatedOn());
         System.out.println("husband.getUpdatedOn()=" + husbandJustInserted.getUpdatedOn());
@@ -68,7 +70,7 @@ public class FamilyMemberTest {
 
         assertEquals(husbandJustInserted.getCreatedOn() != null, true);
         assertEquals(husbandJustInserted.getUpdatedOn() != null, true);
-        LOG.fatal("end->testPersist");
+        LOG.info("end->testPersist");
     }
 
 
