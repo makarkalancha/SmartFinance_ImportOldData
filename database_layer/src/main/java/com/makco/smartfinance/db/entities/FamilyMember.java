@@ -17,6 +17,8 @@ import javax.validation.constraints.Size;
  */
 @Entity
 @Table(name="FAMILY_MEMBER")
+@org.hibernate.annotations.DynamicInsert
+@org.hibernate.annotations.DynamicUpdate
 public class FamilyMember implements Serializable, Deletable{
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "FAMILY_MEMBER_SEQUENCE_GENERATOR")
