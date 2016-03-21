@@ -2,6 +2,7 @@ package com.makco.smartfinance.db.entities;
 
 import com.makco.smartfinance.db.utils.TestPersistenceManager;
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.After;
@@ -17,8 +18,7 @@ import static org.junit.Assert.assertEquals;
 public class FamilyMemberTest {
     private final static Logger LOG = LogManager.getLogger(FamilyMemberTest.class);
     private static EntityManager em;
-    private Long id = null;
-
+    private String familyMemberName = "Freddy";
 
     @BeforeClass
     public static void setUpClass() throws Exception {
@@ -44,9 +44,10 @@ public class FamilyMemberTest {
 
     @Test
     public void testPersist() throws Exception{
+        em.getTransaction().begin();
         LOG.info("start->testPersist");
         FamilyMember husband = new FamilyMember();
-        husband.setName("Freddy");
+        husband.setName(familyMemberName);
         husband.setDescription("husband");
 
 //        SessionFactory sf = new conf
@@ -59,8 +60,7 @@ public class FamilyMemberTest {
         em.getTransaction().commit();
 
 
-        id = husband.getId();
-
+        Long id = husband.getId();
         FamilyMember husbandJustInserted = em.find(FamilyMember.class, id);
         em.refresh(husbandJustInserted);
         System.out.println("husband.getId()=" + husbandJustInserted.getId());
@@ -76,23 +76,45 @@ public class FamilyMemberTest {
 
     @Test
     public void testUpdate() throws Exception {
-        FamilyMember husband = em.getReference(FamilyMember.class, id);
+        em.getTransaction().begin();
+//        //http://stackoverflow.com/questions/3574029/what-does-jpa-entitymanager-getsingleresult-return-for-a-count-query
+//        NB : there's a difference between JQPL and Native query
+//        Query query = em.createQuery("SELECT COUNT(p) FROM PersonEntity p " );
+//        query.getSingleResult().getClass().getCanonicalName() --> java.lang.Long
+//        Query query = em.createNativeQuery("SELECT COUNT(*) FROM PERSON " );
+//        query.getSingleResult().getClass().getCanonicalName() --> java.math.BigInteger
+
+
+//        Query qId = em.createNativeQuery("SELECT CURRVAL('TEST.SEQ_FAMILY_MEMBER') as num");
+        Query qId = em.createQuery("SELECT max(f.id) as num from FamilyMember f");
+        Long id = ((Long) qId.getSingleResult());
+
+        System.out.println("seq curr num = " + id);
+
+        FamilyMember husband = em.find(FamilyMember.class, id);
+////OR
+//        FamilyMember husband = (FamilyMember) em.createQuery("from FamilyMember as f where f.name = :familyMemberName")
+//                .setParameter("familyMemberName", familyMemberName)
+//                .setMaxResults(1) //I have multiple Freddy in table, so getSingleResult returns javax.persistence.NonUniqueResultException: result returns more than one elements
+//                .getSingleResult();
+//        Long id = husband.getId();
         husband.setName("Freddy18");
         husband.setDescription("husband18");
 
-//        SessionFactory sf = new conf
-//        Session session =
-//        session.getTransaction().begin();
-
         em.persist(husband);
+        em.getTransaction().commit();
 
-        System.out.println("husband.getId()=" + husband.getId());
-        System.out.println("husband.getCreatedOn()=" + husband.getCreatedOn());
-        System.out.println("husband.getUpdatedOn()=" + husband.getUpdatedOn());
+        FamilyMember husbandJustUpdated = em.find(FamilyMember.class, id);
+        em.refresh(husbandJustUpdated);
+
+        System.out.println(">>>husband.getId()=" + husbandJustUpdated.getId());
+        System.out.println(">>>husband.getCreatedOn()=" + husbandJustUpdated.getCreatedOn());
+        System.out.println(">>>husband.getUpdatedOn()=" + husbandJustUpdated.getUpdatedOn());
         System.out.println(husband);
 
-        assertEquals(husband.getCreatedOn() != null, true);
-        assertEquals(husband.getUpdatedOn() != null, true);
+        assertEquals(husbandJustUpdated.getCreatedOn() != null, true);
+        assertEquals(husbandJustUpdated.getUpdatedOn() != null, true);
+        assertEquals(husbandJustUpdated.getCreatedOn() != husband.getUpdatedOn(), true);
     }
 
 //    @Test

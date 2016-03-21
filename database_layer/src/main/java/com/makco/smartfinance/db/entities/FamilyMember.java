@@ -19,10 +19,10 @@ import javax.validation.constraints.Size;
 @Table(name="FAMILY_MEMBER")
 public class FamilyMember implements Serializable, Deletable{
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = "FAMILY_MEMBER_SEQUENCE_GENERATOR")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "FAMILY_MEMBER_SEQUENCE_GENERATOR")
     @SequenceGenerator(name = "FAMILY_MEMBER_SEQUENCE_GENERATOR", sequenceName = "SEQ_FAMILY_MEMBER", allocationSize=1)
     @Column(name="ID")
-    private long id;
+    private Long id;
 
     @Column(name="NAME")
     @NotNull
@@ -63,13 +63,11 @@ public class FamilyMember implements Serializable, Deletable{
         this.description = description;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
-        this.id = id;
-    }
+    //no setId method
 
     public String getName() {
         return name;
@@ -90,12 +88,12 @@ public class FamilyMember implements Serializable, Deletable{
 
         FamilyMember that = (FamilyMember) o;
 
-        return id == that.id;
+        return id.equals(that.id);
     }
 
     @Override
     public int hashCode() {
-        return (int) (id ^ (id >>> 32));
+        return id.hashCode();
     }
 
     @Override
