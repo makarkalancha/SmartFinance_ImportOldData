@@ -5,9 +5,7 @@ import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -21,8 +19,23 @@ import javax.validation.constraints.Size;
 @org.hibernate.annotations.DynamicUpdate
 public class FamilyMember implements Serializable, Deletable{
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "FAMILY_MEMBER_SEQUENCE_GENERATOR")
-    @SequenceGenerator(name = "FAMILY_MEMBER_SEQUENCE_GENERATOR", sequenceName = "SEQ_FAMILY_MEMBER", allocationSize=1)
+//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "FAMILY_MEMBER_SEQUENCE_GENERATOR")
+//    @SequenceGenerator(name = "FAMILY_MEMBER_SEQUENCE_GENERATOR", sequenceName = "SEQ_FAMILY_MEMBER", allocationSize=1)
+    @org.hibernate.annotations.GenericGenerator(
+            name = "FAMILY_MEMBER_SEQUENCE_GENERATOR",
+            strategy = "enhanced-sequence",
+            parameters = {
+                    @org.hibernate.annotations.Parameter(
+                            name = "sequence_name",
+                            value = "SEQ_FAMILY_MEMBER"
+                    ),
+                    @org.hibernate.annotations.Parameter(
+                            name = "initial_value",
+                            value = "1"
+                    )
+            }
+    )
+    @GeneratedValue(generator = "FAMILY_MEMBER_SEQUENCE_GENERATOR")
     @Column(name="ID")
     private Long id;
 
