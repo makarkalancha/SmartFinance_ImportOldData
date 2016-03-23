@@ -26,7 +26,7 @@
                 <TimeBasedTriggeringPolicy />
                 <SizeBasedTriggeringPolicy size="10 MB"/>
             </Policies>
-            <DefaultRolloverStrategy max="20"/>
+            <DefaultRolloverStrategy max="30"/>
         </RollingFile>
         <RollingFile name="Hibernate" fileName="${log-path}\hibernate.log" filePattern="$${log-path}/logs_$${date:yyyy-MM}/hibernate-%d{MM-dd-yyyy}-%i.log.gz">
             <PatternLayout>
@@ -36,7 +36,7 @@
                 <TimeBasedTriggeringPolicy />
                 <SizeBasedTriggeringPolicy size="10 MB"/>
             </Policies>
-            <DefaultRolloverStrategy max="20"/>
+            <DefaultRolloverStrategy max="30"/>
         </RollingFile>
     </Appenders>
     <Loggers>
