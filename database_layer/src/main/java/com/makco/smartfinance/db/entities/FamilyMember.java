@@ -1,17 +1,8 @@
 package com.makco.smartfinance.db.entities;
 
-import org.hibernate.annotations.GenerationTime;
-import org.hibernate.annotations.NamedNativeQueries;
-import org.hibernate.annotations.NamedNativeQuery;
-import org.hibernate.annotations.NamedQueries;
-import org.hibernate.annotations.NamedQuery;
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
-
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.Calendar;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -22,32 +13,42 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 /**
  * Created by mcalancea on 2016-03-01.
  */
 
-//@NamedQueries({
-//        @NamedQuery(
-//                name = "deteleFamilyMember",
-//                query = "UPDATE FamilyMember SET isDeleted = true WHERE ID = :id"
+//http://howtodoinjava.com/jpa/jpa-native-delete-sql-query-example/
+//@SqlResultSetMapping(name="deleteResult",
+//        columns = { @ColumnResult(name = "count")}
+////        entities=@EntityResult(entityClass=Long.class)
 //        )
-//})
-
 //@NamedNativeQueries({
 //        @NamedNativeQuery(
 //                name = "deteleFamilyMemberNative",
-//                query = "UPDATE FAMILY_MEMBER SET ISDELETED = true WHERE ID = ? "
+//                query = "UPDATE {h-schema}FAMILY_MEMBER SET ISDELETED = true WHERE ID = ? "
+////                , resultClass = FamilyMember.class //Caused by: org.h2.jdbc.JdbcSQLException: Method is only allowed for a query. Use execute or executeUpdate instead of executeQuery; SQL statement:                 UPDATE TEST.FAMILY_MEMBER SET ISDELETED = true WHERE ID = ? [90002-191]
+////                , resultSetMapping = "deleteResult" //org.h2.jdbc.JdbcSQLException: Method is only allowed for a query. Use execute or executeUpdate instead of executeQuery; SQL statement:                 UPDATE TEST.FAMILY_MEMBER SET ISDELETED = true WHERE ID = ? [90002-191]
 //        )
 //})
+//
+//@org.hibernate.annotations.Loader(
+//        namedQuery = "deteleFamilyMemberNative"
+//)
+
+
 
 @Entity
 @Table(name="FAMILY_MEMBER")
 //@org.hibernate.annotations.DynamicInsert
 //@org.hibernate.annotations.DynamicUpdate
 //Override the default Hibernation delete and set the deleted flag rather than deleting the record from the db.
-@SQLDelete(sql="UPDATE {h-schema}FAMILY_MEMBER SET ISDELETED = true WHERE ID = ? ")
-//@SQLDelete(sql="deteleFamilyMember")
+//@SQLDelete(sql="UPDATE {h-schema}FAMILY_MEMBER SET ISDELETED = true WHERE ID = ? ")
+@SQLDelete(sql="UPDATE FAMILY_MEMBER SET ISDELETED = true WHERE ID = ? ")
+//@SQLDelete(sql="deteleFamilyMemberNative")
+//@SQLDelete(sql="deteleFamilyMemberNative; UPDATE FAMILY_MEMBER SET ISDELETED = true WHERE ID = ? ")
 //Filter added to retrieve only records that have not been soft deleted.
 //impossible to select records with field isdeleted
 @Where(clause="ISDELETED <> true")
@@ -149,6 +150,8 @@ public class FamilyMember implements Serializable, Deletable{
     public int hashCode() {
         return id.hashCode();
     }
+
+    @prer
 
     @Override
     public String toString() {

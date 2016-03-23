@@ -37,6 +37,8 @@
             <property name="hibernate.c3p0.timeout" value="500"/>
             <property name="hibernate.c3p0.max_statements" value="50"/>
             <property name="hibernate.c3p0.idle_test_period" value="2000"/>
+
+            <!--<property name="hibernate.physical_naming_strategy" value="com.makco.smartfinance.db.entities.MyNamingStrategy"/>-->
         </properties>
     </persistence-unit>
 </persistence>
