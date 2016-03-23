@@ -1,6 +1,10 @@
 package com.makco.smartfinance.db.entities;
 
 import org.hibernate.annotations.GenerationTime;
+import org.hibernate.annotations.NamedNativeQueries;
+import org.hibernate.annotations.NamedNativeQuery;
+import org.hibernate.annotations.NamedQueries;
+import org.hibernate.annotations.NamedQuery;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
@@ -22,13 +26,30 @@ import javax.validation.constraints.Size;
 /**
  * Created by mcalancea on 2016-03-01.
  */
+
+//@NamedQueries({
+//        @NamedQuery(
+//                name = "deteleFamilyMember",
+//                query = "UPDATE FamilyMember SET isDeleted = true WHERE ID = :id"
+//        )
+//})
+
+//@NamedNativeQueries({
+//        @NamedNativeQuery(
+//                name = "deteleFamilyMemberNative",
+//                query = "UPDATE FAMILY_MEMBER SET ISDELETED = true WHERE ID = ? "
+//        )
+//})
+
 @Entity
 @Table(name="FAMILY_MEMBER")
-@org.hibernate.annotations.DynamicInsert
-@org.hibernate.annotations.DynamicUpdate
+//@org.hibernate.annotations.DynamicInsert
+//@org.hibernate.annotations.DynamicUpdate
 //Override the default Hibernation delete and set the deleted flag rather than deleting the record from the db.
-@SQLDelete(sql="UPDATE TEST.FAMILY_MEMBER SET ISDELETED = true WHERE ID = ? ")
+@SQLDelete(sql="UPDATE {h-schema}FAMILY_MEMBER SET ISDELETED = true WHERE ID = ? ")
+//@SQLDelete(sql="deteleFamilyMember")
 //Filter added to retrieve only records that have not been soft deleted.
+//impossible to select records with field isdeleted
 @Where(clause="ISDELETED <> true")
 public class FamilyMember implements Serializable, Deletable{
     @Id
