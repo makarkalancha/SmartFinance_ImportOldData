@@ -1,12 +1,21 @@
 package com.makco.smartfinance.db.entities;
 
+import org.hibernate.annotations.GenerationTime;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
+
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Calendar;
+import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -17,10 +26,12 @@ import javax.validation.constraints.Size;
 @Table(name="FAMILY_MEMBER")
 @org.hibernate.annotations.DynamicInsert
 @org.hibernate.annotations.DynamicUpdate
+//Override the default Hibernation delete and set the deleted flag rather than deleting the record from the db.
+@SQLDelete(sql="UPDATE TEST.FAMILY_MEMBER SET ISDELETED = true WHERE ID = ? ")
+//Filter added to retrieve only records that have not been soft deleted.
+@Where(clause="ISDELETED <> true")
 public class FamilyMember implements Serializable, Deletable{
     @Id
-//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "FAMILY_MEMBER_SEQUENCE_GENERATOR")
-//    @SequenceGenerator(name = "FAMILY_MEMBER_SEQUENCE_GENERATOR", sequenceName = "SEQ_FAMILY_MEMBER", allocationSize=1)
     @org.hibernate.annotations.GenericGenerator(
             name = "FAMILY_MEMBER_SEQUENCE_GENERATOR",
             strategy = "enhanced-sequence",
@@ -59,16 +70,23 @@ public class FamilyMember implements Serializable, Deletable{
     @Column(name="ISDELETED")
     protected boolean isDeleted = false;
 
-    @Column(name="T_CREATEDON")
-    protected LocalDateTime createdOn;
+    @Temporal(TemporalType.TIMESTAMP)
+    @org.hibernate.annotations.Generated(
+            org.hibernate.annotations.GenerationTime.INSERT
+    )
+    @Column(name="T_CREATEDON",insertable = false, updatable = false)
+    protected Date createdOn;
 
-    @Column(name="T_UPDATEDON")
-    protected LocalDateTime updatedOn;
+    @Temporal(TemporalType.TIMESTAMP)
+    @org.hibernate.annotations.Generated(
+            org.hibernate.annotations.GenerationTime.ALWAYS
+    )
+    @Column(name="T_UPDATEDON",insertable = false, updatable = false)
+    protected Date updatedOn;
 
     public FamilyMember(){
 
     }
-
 
     public String getDescription() {
         return description;
@@ -123,37 +141,15 @@ public class FamilyMember implements Serializable, Deletable{
                 '}';
     }
 
-//    @PrePersist
-//    @PreUpdate
-//    private void onCreate() {
-//        if(this.createdOn == null){
-//            this.createdOn = LocalDateTime.now();
-//        }
-//        this.updatedOn = LocalDateTime.now();
-//    }
-
     public LocalDateTime getCreatedOn() {
-        return createdOn;
-    }
-
-    public void setCreatedOn(LocalDateTime createdOn) {
-        this.createdOn = createdOn;
+        return createdOn.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
     }
 
     public LocalDateTime getUpdatedOn() {
-        return updatedOn;
-    }
-
-    public void setUpdatedOn(LocalDateTime updatedOn) {
-        this.updatedOn = updatedOn;
+        return updatedOn.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
     }
 
     public boolean isDeleted() {
         return this.isDeleted;
     }
-
-    public void setIsDeleted(boolean isDeleted) {
-        this.isDeleted = isDeleted;
-    }
-
 }

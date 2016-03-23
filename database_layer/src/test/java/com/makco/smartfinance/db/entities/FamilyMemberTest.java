@@ -10,6 +10,9 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import java.util.Random;
+
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -33,132 +36,81 @@ public class FamilyMemberTest {
 
     @Before
     public void setUp() throws Exception {
-//        em.getTransaction().begin();
-
     }
 
     @After
     public void tearDown() throws Exception {
-//        em.getTransaction().commit();
     }
 
     @Test
     public void testPersist() throws Exception{
-        em.getTransaction().begin();
         LOG.info("start->testPersist");
+        em.getTransaction().begin();
         FamilyMember husband = new FamilyMember();
         husband.setName(familyMemberName);
         husband.setDescription("husband");
 
-//        SessionFactory sf = new conf
-//        Session session =
-//        session.getTransaction().begin();
-
-
         em.persist(husband);
 //        em.flush();
         em.getTransaction().commit();
+        LOG.debug("husband.getId()=" + husband.getId());
+        LOG.debug("husband.getCreatedOn()=" + husband.getCreatedOn());
+        LOG.debug("husband.getUpdatedOn()=" + husband.getUpdatedOn());
 
-
-        Long id = husband.getId();
-        FamilyMember husbandJustInserted = em.find(FamilyMember.class, id);
-        em.refresh(husbandJustInserted);
-        System.out.println("husband.getId()=" + husbandJustInserted.getId());
-        System.out.println("husband.getCreatedOn()=" + husbandJustInserted.getCreatedOn());
-        System.out.println("husband.getUpdatedOn()=" + husbandJustInserted.getUpdatedOn());
-        System.out.println(husband);
-
-        assertEquals(husbandJustInserted.getCreatedOn() != null, true);
-        assertEquals(husbandJustInserted.getUpdatedOn() != null, true);
+        assertEquals(true, husband.getCreatedOn() != null);
+        assertEquals(true, husband.getUpdatedOn() != null);
         LOG.info("end->testPersist");
     }
 
-
     @Test
     public void testUpdate() throws Exception {
+        LOG.info("start->testUpdate");
         em.getTransaction().begin();
-//        //http://stackoverflow.com/questions/3574029/what-does-jpa-entitymanager-getsingleresult-return-for-a-count-query
-//        NB : there's a difference between JQPL and Native query
-//        Query query = em.createQuery("SELECT COUNT(p) FROM PersonEntity p " );
-//        query.getSingleResult().getClass().getCanonicalName() --> java.lang.Long
-//        Query query = em.createNativeQuery("SELECT COUNT(*) FROM PERSON " );
-//        query.getSingleResult().getClass().getCanonicalName() --> java.math.BigInteger
-
-
-//        Query qId = em.createNativeQuery("SELECT CURRVAL('TEST.SEQ_FAMILY_MEMBER') as num");
         Query qId = em.createQuery("SELECT max(f.id) as num from FamilyMember f");
         Long id = ((Long) qId.getSingleResult());
 
-        System.out.println("seq curr num = " + id);
+        LOG.debug("max num = " + id);
 
         FamilyMember husband = em.find(FamilyMember.class, id);
-////OR
-//        FamilyMember husband = (FamilyMember) em.createQuery("from FamilyMember as f where f.name = :familyMemberName")
-//                .setParameter("familyMemberName", familyMemberName)
-//                .setMaxResults(1) //I have multiple Freddy in table, so getSingleResult returns javax.persistence.NonUniqueResultException: result returns more than one elements
-//                .getSingleResult();
-//        Long id = husband.getId();
-        husband.setName("Freddy18");
-        husband.setDescription("husband18");
+        Random random = new Random();
+        //min 0 and max 100
+        int randomInt = random.nextInt((100 - 0) + 1 + 0);
+        husband.setName("Freddy" + randomInt);
+        husband.setDescription("husband" + randomInt);
 
         em.persist(husband);
         em.getTransaction().commit();
 
-        FamilyMember husbandJustUpdated = em.find(FamilyMember.class, id);
-        em.refresh(husbandJustUpdated);
+        LOG.debug(">>>husband.getId()=" + husband.getId());
+        LOG.debug(">>>husband.getCreatedOn()=" + husband.getCreatedOn());
+        LOG.debug(">>>husband.getUpdatedOn()=" + husband.getUpdatedOn());
+        LOG.debug(husband);
 
-        System.out.println(">>>husband.getId()=" + husbandJustUpdated.getId());
-        System.out.println(">>>husband.getCreatedOn()=" + husbandJustUpdated.getCreatedOn());
-        System.out.println(">>>husband.getUpdatedOn()=" + husbandJustUpdated.getUpdatedOn());
-        System.out.println(husband);
-
-        assertEquals(husbandJustUpdated.getCreatedOn() != null, true);
-        assertEquals(husbandJustUpdated.getUpdatedOn() != null, true);
-        assertEquals(husbandJustUpdated.getCreatedOn() != husband.getUpdatedOn(), true);
+        assertEquals(true, husband.getCreatedOn() != null);
+        assertEquals(true, husband.getUpdatedOn() != null);
+        assertEquals(true, !husband.getCreatedOn().equals(husband.getUpdatedOn()));
+        LOG.info("end->testUpdate");
     }
 
-//    @Test
-//    public void testGetDescription() throws Exception {
-//
-//    }
-//
-//    @Test
-//    public void testSetDescription() throws Exception {
-//
-//    }
-//
-//    @Test
-//    public void testGetId() throws Exception {
-//
-//    }
-//
-//    @Test
-//    public void testSetId() throws Exception {
-//
-//    }
-//
-//    @Test
-//    public void testGetName() throws Exception {
-//
-//    }
-//
-//    @Test
-//    public void testSetName() throws Exception {
-//
-//    }
-//
-//    @Test
-//    public void testEquals() throws Exception {
-//
-//    }
-//
-//    @Test
-//    public void testHashCode() throws Exception {
-//
-//    }
-//
-//    @Test
-//    public void testToString() throws Exception {
-//
-//    }
+    @Test
+    public void testDelete() throws Exception {
+        LOG.info("start->testDelete");
+        em.getTransaction().begin();
+        Query qId = em.createQuery("SELECT min(f.id) as num from FamilyMember f where f.isDeleted = false");
+        Long id = ((Long) qId.getSingleResult());
+
+        LOG.debug("min id = " + id);
+
+        FamilyMember husband = em.find(FamilyMember.class, id);
+
+        em.remove(husband);
+        em.getTransaction().commit();
+
+        FamilyMember husbandJustDeleted = em.find(FamilyMember.class, id);
+        LOG.debug(">>>husband=" + husbandJustDeleted);
+        LOG.debug(husband);
+
+        assertEquals(null, husbandJustDeleted);
+        LOG.info("end->testDelete");
+    }
 }

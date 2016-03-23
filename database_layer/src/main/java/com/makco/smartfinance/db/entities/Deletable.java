@@ -8,5 +8,5 @@ public interface Deletable {
         return false;
     }
 
-    void setIsDeleted(boolean isDeleted);
+//    void setIsDeleted(boolean isDeleted);
 }
