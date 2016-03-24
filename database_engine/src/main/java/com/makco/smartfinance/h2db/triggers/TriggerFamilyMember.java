@@ -1,5 +1,8 @@
 package com.makco.smartfinance.h2db.triggers;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.makco.smartfinance.h2db.utils.tables.Table;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Arrays;
@@ -35,10 +38,15 @@ public class TriggerFamilyMember implements Trigger {
         java.util.Date now = new java.util.Date();
 
         if (Trigger.INSERT == type) {
-            newRow[3] = new java.sql.Timestamp(now.getTime());
-            newRow[4] = new java.sql.Timestamp(now.getTime());
+            newRow[Table.FAMILY_MEMBER.T_CREATEDON.getColumnIndex()] = new java.sql.Timestamp(now.getTime());
+            newRow[Table.FAMILY_MEMBER.T_UPDATEDON.getColumnIndex()] = new java.sql.Timestamp(now.getTime());
         } else if (Trigger.UPDATE == type) {
-            newRow[4] = new java.sql.Timestamp(now.getTime());
+            newRow[Table.FAMILY_MEMBER.T_UPDATEDON.getColumnIndex()] = new java.sql.Timestamp(now.getTime());
+        } else if (Trigger.DELETE == type) {
+            Gson gson = new Gson();
+            JsonElement
+            gson.toJson()
+            newRow[Table.FAMILY_MEMBER.T_UPDATEDON.getColumnIndex()] = new java.sql.Timestamp(now.getTime());
         }
         LOG.debug("after oldRow:" + Arrays.toString(oldRow));
         LOG.debug("after newRow:" + Arrays.toString(newRow));
