@@ -13,8 +13,6 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
 
 /**
  * Created by mcalancea on 2016-03-01.
@@ -46,12 +44,12 @@ import org.hibernate.annotations.Where;
 //@org.hibernate.annotations.DynamicUpdate
 //Override the default Hibernation delete and set the deleted flag rather than deleting the record from the db.
 //@SQLDelete(sql="UPDATE {h-schema}FAMILY_MEMBER SET ISDELETED = true WHERE ID = ? ")
-@SQLDelete(sql="UPDATE FAMILY_MEMBER SET ISDELETED = true WHERE ID = ? ")
+//@SQLDelete(sql="UPDATE FAMILY_MEMBER SET ISDELETED = true WHERE ID = ? ")
 //@SQLDelete(sql="deteleFamilyMemberNative")
 //@SQLDelete(sql="deteleFamilyMemberNative; UPDATE FAMILY_MEMBER SET ISDELETED = true WHERE ID = ? ")
 //Filter added to retrieve only records that have not been soft deleted.
 //impossible to select records with field isdeleted
-@Where(clause="ISDELETED <> true")
+//@Where(clause="ISDELETED <> true")
 public class FamilyMember implements Serializable, Deletable{
     @Id
     @org.hibernate.annotations.GenericGenerator(
@@ -89,8 +87,8 @@ public class FamilyMember implements Serializable, Deletable{
     )
     private String description;
 
-    @Column(name="ISDELETED")
-    protected boolean isDeleted = false;
+//    @Column(name="ISDELETED")
+//    protected boolean isDeleted = false;
 
     @Temporal(TemporalType.TIMESTAMP)
     @org.hibernate.annotations.Generated(
@@ -151,8 +149,6 @@ public class FamilyMember implements Serializable, Deletable{
         return id.hashCode();
     }
 
-    @prer
-
     @Override
     public String toString() {
         return "FamilyMember{" +
@@ -161,7 +157,7 @@ public class FamilyMember implements Serializable, Deletable{
                 ", description='" + description + '\'' +
                 ", createdOn='" + createdOn + '\'' +
                 ", updatedOn='" + updatedOn + '\'' +
-                ", isDeleted='" + isDeleted + '\'' +
+//                ", isDeleted='" + isDeleted + '\'' +
                 '}';
     }
 
@@ -173,7 +169,7 @@ public class FamilyMember implements Serializable, Deletable{
         return updatedOn.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
     }
 
-    public boolean isDeleted() {
-        return this.isDeleted;
-    }
+//    public boolean isDeleted() {
+//        return this.isDeleted;
+//    }
 }

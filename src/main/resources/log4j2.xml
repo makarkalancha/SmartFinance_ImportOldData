@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
         <!--http://stackoverflow.com/questions/35927682/why-does-log4j2-not-log-to-a-file-after-packaging-as-a-jar-in-eclipse-->
-<Configuration status="info" name="com.makco.smartfinance" packages="">
+<Configuration status="all" name="com.makco.smartfinance" packages="">
     <Properties>
         <Property name="log-path">${env:USERPROFILE}\smart_finance\logs</Property>
         <Property name="username">${env:USERNAME}</Property>

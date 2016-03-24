@@ -1,6 +1,7 @@
 package com.makco.smartfinance.db.entities;
 
 import com.makco.smartfinance.db.utils.TestPersistenceManager;
+import java.util.Random;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import org.apache.logging.log4j.LogManager;
@@ -10,10 +11,6 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-
-import java.util.Collections;
-import java.util.Random;
-
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -93,25 +90,25 @@ public class FamilyMemberTest {
         LOG.info("end->testUpdate");
     }
 
-    @Test
-    public void testDelete() throws Exception {
-        LOG.info("start->testDelete");
-        em.getTransaction().begin();
-        Query qId = em.createQuery("SELECT min(f.id) as num from FamilyMember f where f.isDeleted = false");
-        Long id = ((Long) qId.getSingleResult());
-
-        LOG.debug("min id = " + id);
-
-        FamilyMember husband = em.find(FamilyMember.class, id);
-
-        em.remove(husband);
-        em.getTransaction().commit();
-
-        FamilyMember husbandJustDeleted = em.find(FamilyMember.class, id);
-        LOG.debug(">>>husband=" + husbandJustDeleted);
-        LOG.debug(husband);
-
-        assertEquals(null, husbandJustDeleted);
-        LOG.info("end->testDelete");
-    }
+//    @Test
+//    public void testDelete() throws Exception {
+//        LOG.info("start->testDelete");
+//        em.getTransaction().begin();
+//        Query qId = em.createQuery("SELECT min(f.id) as num from FamilyMember f where f.isDeleted = false");
+//        Long id = ((Long) qId.getSingleResult());
+//
+//        LOG.debug("min id = " + id);
+//
+//        FamilyMember husband = em.find(FamilyMember.class, id);
+//
+//        em.remove(husband);
+//        em.getTransaction().commit();
+//
+//        FamilyMember husbandJustDeleted = em.find(FamilyMember.class, id);
+//        LOG.debug(">>>husband=" + husbandJustDeleted);
+//        LOG.debug(husband);
+//
+//        assertEquals(null, husbandJustDeleted);
+//        LOG.info("end->testDelete");
+//    }
 }
