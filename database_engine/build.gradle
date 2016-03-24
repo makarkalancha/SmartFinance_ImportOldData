@@ -9,12 +9,6 @@ plugins {
     id "org.flywaydb.flyway" version "3.2.1"
 }
 
-//flyway {
-//    url = 'jdbc:h2:file:~/smart_finance/foobar'
-//    user = 'root'
-//}
-
-
 //gradle flywayBaseline -i
 //gradle flywayMigrate -i
 flyway {
@@ -27,22 +21,27 @@ flyway {
 
 configurations {
     h2
+    log4j2api
+    log4j2core
 }
 
 dependencies {
     h2 'com.h2database:h2:1.4.191@jar'
     compile 'com.h2database:h2:1.4.191'
-//    compile project (':utils')
+    log4j2api 'org.apache.logging.log4j:log4j-api:2.5'
+    log4j2core 'org.apache.logging.log4j:log4j-core:2.5'
 }
 
 jar {
     processResources {
         from(zipTree(configurations.h2.asPath))
-//        from(zipTree(configurations.compile.asPath))
+        from(zipTree(configurations.log4j2api.asPath))
+        files(configurations.log4j2core.asPath.split(";")).each{from(zipTree(it.path))}
     }
     manifest {
         attributes(
-                'Main-Class': 'org.h2.tools.Server'
+                'Main-Class': 'org.h2.tools.Server',
+                'Class-Path': 'log4j2.xml'
         )
     }
     from('<path-to-props-file>') {
@@ -51,18 +50,3 @@ jar {
         into('<target-path>')
     }
 }
-
-//test {
-//    includes = ['**/H2DbTestSuite*'] as Set
-    //excludes other tests, executes only tests from "includes" clause
-//}
-
-//task copyDbCreateScriptTask(type: Copy) {
-//    description 'Copies the resource directory to the target directory.'
-//    println "--->copy start"
-//    from 'src/main/resources/DB_SCRIPT_CREATE.sql'
-//    into 'build/resources/test'
-//
-//    println "--->copy end"
-//}
-//processTestResources.dependsOn copyDbCreateScriptTask
