@@ -18,39 +18,31 @@ import java.util.Date;
  * Date: 06/03/2016
  * Time: 18:05
  */
-public class TriggerDeleteRows implements Trigger {
-
+public class TriggerDeleteRows extends AbstractTrigger {
     private final static Logger LOG = LogManager.getLogger(TriggerDeleteRows.class);
-    private int type;
-    private String schemaName;
 
     @Override
-    public void close() throws SQLException {
-
+    protected String logTriggerName() {
+        return Table.Names._DELETED_ROWS.toString();
     }
 
     @Override
-    public void init(Connection connection, String s, String s1, String s2, boolean b, int i) throws SQLException {
-        this.type = i;
-        this.schemaName = s;
+    protected void insert(Connection connection, Object[] oldRow, Object[] newRow) throws SQLException {
+        newRow[Table._DELETED_ROWS.T_CREATEDON.getColumnIndex()] = new java.sql.Timestamp(now.getTime());
     }
 
     @Override
-    public void fire(Connection connection, Object[] oldRow, Object[] newRow) throws SQLException {
-        LOG.debug("operation type:" + type);
-        LOG.debug("before oldRow:" + Arrays.toString(oldRow));
-        LOG.debug("before newRow:" + Arrays.toString(newRow));
-        Date now = new Date();
-
-        if (Trigger.INSERT == type) {
-            newRow[Table._DELETED_ROWS.T_CREATEDON.getColumnIndex()] = new java.sql.Timestamp(now.getTime());
-        }
-        LOG.debug("after oldRow:" + Arrays.toString(oldRow));
-        LOG.debug("after newRow:" + Arrays.toString(newRow));
+    protected void update(Connection connection, Object[] oldRow, Object[] newRow) throws SQLException {
+        //no update
     }
 
     @Override
-    public void remove() throws SQLException {
+    protected void prepareJsonForDeletion(Object[] newRow) {
+        //no delete
+    }
 
+    @Override
+    protected void delete(Connection connection, Object[] oldRow, Object[] newRow) throws SQLException {
+        //no delete
     }
 }
