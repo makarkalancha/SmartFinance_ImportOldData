@@ -35,15 +35,23 @@ dependencies {
 
 jar {
     doFirst {
-        for(file in configurations.compile) {
-            jar.merge(file)
-        }
+//        for(file in configurations.compile) {
+//            jar.merge(file)
+//        }
+//        from { configurations.compile.collect {
+//            println it
+//            it.isDirectory() ? it : zipTree(it)
+//        } }
+//        with jar
     }
 
     processResources {
         from(zipTree(configurations.h2.asPath))
         from(zipTree(configurations.log4j2api.asPath))
         files(configurations.log4j2core.asPath.split(";")).each{from(zipTree(it.path))}
+        files(configurations.compile.asPath.split(";")).each{from(zipTree(it.path))}
+//        from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+//        with jar
     }
     manifest {
         attributes(
