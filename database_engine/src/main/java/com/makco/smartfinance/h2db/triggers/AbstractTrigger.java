@@ -113,10 +113,10 @@ public abstract class AbstractTrigger implements Trigger {
     protected abstract String logTriggerName();
     protected abstract void insert(Connection connection, Object[] oldRow, Object[] newRow) throws SQLException;
     protected abstract void update(Connection connection, Object[] oldRow, Object[] newRow) throws SQLException;
-    protected abstract void prepareJsonForDeletion(Object[] newRow);
+    protected abstract void prepareJsonForDeletion(Object[] oldRow);
 
     protected void delete(Connection connection, Object[] oldRow, Object[] newRow) throws SQLException{
-        prepareJsonForDeletion(newRow);
+        prepareJsonForDeletion(oldRow);
         LOG.debug("rowJson: " + rowJson);
         insertIntoDeletedRowsTable(connection);
     }

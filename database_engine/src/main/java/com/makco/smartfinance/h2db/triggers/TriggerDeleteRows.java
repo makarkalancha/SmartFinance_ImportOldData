@@ -37,7 +37,7 @@ public class TriggerDeleteRows extends AbstractTrigger {
     }
 
     @Override
-    protected void prepareJsonForDeletion(Object[] newRow) {
+    protected void prepareJsonForDeletion(Object[] oldRow) {
         //no delete
     }
 

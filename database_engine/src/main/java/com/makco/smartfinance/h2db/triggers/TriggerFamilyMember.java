@@ -36,14 +36,14 @@ public class TriggerFamilyMember extends AbstractTrigger {
     }
 
     @Override
-    protected void prepareJsonForDeletion(Object[] newRow) {
-        rowJson.addProperty(Table.FAMILY_MEMBER.ID.toString(), (Long) newRow[Table.FAMILY_MEMBER.ID.getColumnIndex()]);
-        rowJson.addProperty(Table.FAMILY_MEMBER.NAME.toString(), (String) newRow[Table.FAMILY_MEMBER.NAME.getColumnIndex()]);
-        rowJson.addProperty(Table.FAMILY_MEMBER.DESCRIPTION.toString(), (String) newRow[Table.FAMILY_MEMBER.DESCRIPTION.getColumnIndex()]);
+    protected void prepareJsonForDeletion(Object[] oldRow) {
+        rowJson.addProperty(Table.FAMILY_MEMBER.ID.toString(), (Long) oldRow[Table.FAMILY_MEMBER.ID.getColumnIndex()]);
+        rowJson.addProperty(Table.FAMILY_MEMBER.NAME.toString(), (String) oldRow[Table.FAMILY_MEMBER.NAME.getColumnIndex()]);
+        rowJson.addProperty(Table.FAMILY_MEMBER.DESCRIPTION.toString(), (String) oldRow[Table.FAMILY_MEMBER.DESCRIPTION.getColumnIndex()]);
         rowJson.addProperty(Table.FAMILY_MEMBER.T_CREATEDON.toString(), JsonUtils.getSimpleDateFormat()
-                .format((Date) newRow[Table.FAMILY_MEMBER.T_CREATEDON.getColumnIndex()]));
+                .format((Date) oldRow[Table.FAMILY_MEMBER.T_CREATEDON.getColumnIndex()]));
         rowJson.addProperty(Table.FAMILY_MEMBER.T_UPDATEDON.toString(), JsonUtils.getSimpleDateFormat()
-                .format((Date) newRow[Table.FAMILY_MEMBER.T_UPDATEDON.getColumnIndex()]));
+                .format((Date) oldRow[Table.FAMILY_MEMBER.T_UPDATEDON.getColumnIndex()]));
     }
 
     @Override

@@ -57,12 +57,12 @@ public class DateUnitFunctions {
         ResultSet rs = null;
         try (
                 PreparedStatement selectPS = connection.prepareStatement(selectQuery.toString());
-                PreparedStatement insertPS = connection.prepareStatement(insertQuery.toString(),Statement.RETURN_GENERATED_KEYS);
+                PreparedStatement insertPS = connection.prepareStatement(insertQuery.toString(), Statement.RETURN_GENERATED_KEYS);
         ) {
             selectPS.setDate(1, du.getUnitTimeStamp());
             selectPS.execute();
             rs = selectPS.getResultSet();
-            if(rs.next()) {
+            if (rs.next()) {
                 result = rs.getLong(1);
             } else {
                 insertPS.setDate(1, du.getUnitTimeStamp());
@@ -80,8 +80,8 @@ public class DateUnitFunctions {
             }
 
             return result;
-        }finally {
-            if(rs != null) rs.close();
+        } finally {
+            if (rs != null) rs.close();
         }
     }
 }

@@ -35,14 +35,14 @@ public class TriggerCurrency extends AbstractTrigger {
     }
 
     @Override
-    protected void prepareJsonForDeletion(Object[] newRow) {
-        rowJson.addProperty(Table.CURRENCY.ID.toString(), (Long) newRow[Table.CURRENCY.ID.getColumnIndex()]);
-        rowJson.addProperty(Table.CURRENCY.CODE.toString(), (String) newRow[Table.CURRENCY.CODE.getColumnIndex()]);
-        rowJson.addProperty(Table.CURRENCY.NAME.toString(), (String) newRow[Table.CURRENCY.NAME.getColumnIndex()]);
-        rowJson.addProperty(Table.CURRENCY.DESCRIPTION.toString(), (String) newRow[Table.CURRENCY.DESCRIPTION.getColumnIndex()]);
+    protected void prepareJsonForDeletion(Object[] oldRow) {
+        rowJson.addProperty(Table.CURRENCY.ID.toString(), (Long) oldRow[Table.CURRENCY.ID.getColumnIndex()]);
+        rowJson.addProperty(Table.CURRENCY.CODE.toString(), (String) oldRow[Table.CURRENCY.CODE.getColumnIndex()]);
+        rowJson.addProperty(Table.CURRENCY.NAME.toString(), (String) oldRow[Table.CURRENCY.NAME.getColumnIndex()]);
+        rowJson.addProperty(Table.CURRENCY.DESCRIPTION.toString(), (String) oldRow[Table.CURRENCY.DESCRIPTION.getColumnIndex()]);
         rowJson.addProperty(Table.CURRENCY.T_CREATEDON.toString(), JsonUtils.getSimpleDateFormat()
-                .format((Date) newRow[Table.CURRENCY.T_CREATEDON.getColumnIndex()]));
+                .format((Date) oldRow[Table.CURRENCY.T_CREATEDON.getColumnIndex()]));
         rowJson.addProperty(Table.CURRENCY.T_UPDATEDON.toString(), JsonUtils.getSimpleDateFormat()
-                .format((Date) newRow[Table.CURRENCY.T_UPDATEDON.getColumnIndex()]));
+                .format((Date) oldRow[Table.CURRENCY.T_UPDATEDON.getColumnIndex()]));
     }
 }
