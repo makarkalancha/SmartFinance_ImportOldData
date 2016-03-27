@@ -13,7 +13,7 @@ import java.text.SimpleDateFormat;
 public class JsonUtils {
 
     public static SimpleDateFormat getSimpleDateFormat(){
-        return new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     }
 
     public static String getNullableFromJsonElementAsString(JsonElement jsonElement){

@@ -35,7 +35,7 @@ import static org.junit.Assert.assertEquals;
  */
 public class TriggerFamilyMemberTest {
     private static final Logger LOG = LogManager.getLogger(TriggerFamilyMemberTest.class);
-    private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+    private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     @ClassRule
     public static DBConnectionResource dbConnectionResource = new DBConnectionResource();
@@ -232,7 +232,7 @@ public class TriggerFamilyMemberTest {
         row[0] = 1L;
         row[1] = "Fred";
         row[2] = null;
-        row[3] = sdf.parse("2001-02-03 04:05:06");
+        row[3] = sdf.parse("2001-02-03 14:05:06");
         row[4] = sdf.parse("2006-05-04 03:02:01");
         JsonObject rowJson = new JsonObject();
         rowJson.addProperty(Table.FAMILY_MEMBER.ID.toString(), (Long) row[0]);
@@ -251,7 +251,7 @@ public class TriggerFamilyMemberTest {
     @Test
     public void testDeleteToJsonObject() throws Exception{
         JsonObject tableJson = createJsonObject();
-        String expectedJsonString = "{\"tableName\":\"TEST.FAMILY_MEMBER\",\"row\":{\"ID\":1,\"NAME\":\"Fred\",\"DESCRIPTION\":null,\"T_CREATEDON\":\"2001-02-03 04:05:06\",\"T_UPDATEDON\":\"2006-05-04 03:02:01\"}}";
+        String expectedJsonString = "{\"tableName\":\"TEST.FAMILY_MEMBER\",\"row\":{\"ID\":1,\"NAME\":\"Fred\",\"DESCRIPTION\":null,\"T_CREATEDON\":\"2001-02-03 14:05:06\",\"T_UPDATEDON\":\"2006-05-04 03:02:01\"}}";
 
         LOG.debug("testDeleteToJsonObject.expectedJsonString:" + expectedJsonString);
         LOG.debug("testDeleteToJsonObject.actualJsonString:" + tableJson.toString());
@@ -279,7 +279,7 @@ public class TriggerFamilyMemberTest {
         String description = JsonUtils.getNullableFromJsonElementAsString(jsonElement);
         assertEquals(null, description);
         Date createdOn = sdf.parse(rowJsonObject.get(Table.FAMILY_MEMBER.T_CREATEDON.toString()).getAsString());
-        assertEquals(sdf.parse("2001-02-03 04:05:06"), createdOn);
+        assertEquals(sdf.parse("2001-02-03 14:05:06"), createdOn);
         Date updatedOn = sdf.parse(rowJsonObject.get(Table.FAMILY_MEMBER.T_UPDATEDON.toString()).getAsString());
         assertEquals(sdf.parse("2006-05-04 03:02:01"), updatedOn);
     }
