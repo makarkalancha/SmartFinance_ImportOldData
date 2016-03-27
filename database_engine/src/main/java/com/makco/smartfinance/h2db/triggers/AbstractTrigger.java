@@ -38,19 +38,13 @@ public abstract class AbstractTrigger implements Trigger {
         queryStrB.append(") VALUES(?,?,?)");
     }
 
-    protected final java.util.Date now = new java.util.Date();
+    protected java.util.Date now;
     private int type;
     private String schemaName;
     private String tableName;
     protected JsonObject rowJson = new JsonObject();
 
-
-
-
-
     private final JsonObject tableJson = new JsonObject();
-
-    
 
     @Override
     public void close() throws SQLException {
@@ -63,7 +57,6 @@ public abstract class AbstractTrigger implements Trigger {
         this.type = type;
         this.schemaName = schemaName;
         this.tableName = tableName;
-
         this.schemaNameAndTable.append(schemaName);
         this.schemaNameAndTable.append(".");
         this.schemaNameAndTable.append(tableName);
@@ -74,6 +67,8 @@ public abstract class AbstractTrigger implements Trigger {
         LOG.debug(logTriggerName());
         LOG.debug("before oldRow:" + Arrays.toString(oldRow));
         LOG.debug("before newRow:" + Arrays.toString(newRow));
+        now = new java.util.Date();
+        LOG.debug("now: " + now);
         if (Trigger.INSERT == type) {
             LOG.debug("operation type: Trigger.INSERT." + type);
             insert(connection, oldRow, newRow);
