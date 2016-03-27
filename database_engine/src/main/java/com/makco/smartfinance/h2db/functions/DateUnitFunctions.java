@@ -1,6 +1,8 @@
 package com.makco.smartfinance.h2db.functions;
 
 import com.makco.smartfinance.h2db.tables.DateUnit;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.sql.*;
 import java.util.Date;
@@ -9,7 +11,9 @@ import java.util.Date;
  * Created by mcalancea on 2016-02-16.
  */
 public class DateUnitFunctions {
-
+    private static final Logger LOG = LogManager.getLogger(DateUnitFunctions.class);
+    //TODO try to make UNITDATE a PK;
+    //TODO create table from sql script, not a function
     public static void createDateUnitTable(Connection connection) throws SQLException{
         final StringBuilder createDateUnitTable = new StringBuilder();
         createDateUnitTable.append("CREATE SEQUENCE IF NOT EXISTS SEQ_DATEUNIT;");
@@ -34,6 +38,8 @@ public class DateUnitFunctions {
         createDateUnitTable.append("CREATE INDEX IF NOT EXISTS IDXUNITDATE ON DATEUNIT(UNITDATE);");
         createDateUnitTable.append("CREATE INDEX IF NOT EXISTS IDXUNITDAYOFWEEK ON DATEUNIT(UNITDAYOFWEEK);");
         createDateUnitTable.append("CREATE INDEX IF NOT EXISTS IDXWEEKDAY ON DATEUNIT(WEEKDAY);");
+
+        LOG.debug(createDateUnitTable.toString());
         try (Statement statement = connection.createStatement()){
             statement.execute(createDateUnitTable.toString());
         }
@@ -54,6 +60,9 @@ public class DateUnitFunctions {
         insertQuery.append("INSERT INTO DATEUNIT ");
         insertQuery.append("(UNITTIMESTAMP,UNITYEAR,UNITMONTHOFYEAR,UNITMONTH,UNITDATE,UNITDAYOFWEEK,WEEKDAY) ");
         insertQuery.append("VALUES (?,?,?,?,?,?,?); ");
+
+        LOG.debug(selectQuery.toString());
+        LOG.debug(insertQuery.toString());
         ResultSet rs = null;
         try (
                 PreparedStatement selectPS = connection.prepareStatement(selectQuery.toString());
