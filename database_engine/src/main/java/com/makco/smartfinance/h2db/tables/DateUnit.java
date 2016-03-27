@@ -34,6 +34,10 @@ public class DateUnit {
         return ChronoUnit.MONTHS.between(EPOCH, localDate);
     }
 
+    public long getUnitDateOfMonth() {
+        return localDate.getDayOfMonth();
+    }
+
     public long getUnitDate() {
         return ChronoUnit.DAYS.between(EPOCH, localDate);
     }

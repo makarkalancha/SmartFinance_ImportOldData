@@ -16,9 +16,6 @@ public enum TestContext {
     private String DB_SCHEMA;
     private String DB_USER;
     private String DB_PASSWORD;
-    private String TABLE_DATEUNIT;
-    private String TRIGGER_INS;
-    private String TRIGGER_UPD;
 
     private boolean isFirstRun = true;
 
@@ -42,18 +39,6 @@ public enum TestContext {
         return DB_USER;
     }
 
-    public String TABLE_DATEUNIT() {
-        return TABLE_DATEUNIT;
-    }
-
-    public String TRIGGER_INS() {
-        return TRIGGER_INS;
-    }
-
-    public String TRIGGER_UPD() {
-        return TRIGGER_UPD;
-    }
-
     private TestContext() {
         if (isFirstRun) {
 
@@ -73,9 +58,6 @@ public enum TestContext {
                 DB_SCHEMA = prop.getProperty("DB_SCHEMA");
                 DB_USER = prop.getProperty("DB_USER");
                 DB_PASSWORD = prop.getProperty("DB_PASSWORD");
-                TABLE_DATEUNIT = prop.getProperty("TABLE_DATEUNIT");
-                TRIGGER_INS = prop.getProperty("TRIGGER_INS");
-                TRIGGER_UPD = prop.getProperty("TRIGGER_UPD");
 
                 isFirstRun = false;
             } catch (IOException ex) {

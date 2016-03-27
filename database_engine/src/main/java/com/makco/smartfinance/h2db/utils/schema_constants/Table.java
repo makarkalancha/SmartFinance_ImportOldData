@@ -1,9 +1,4 @@
-package com.makco.smartfinance.h2db.utils.tables;
-
-import com.google.gson.JsonObject;
-import com.makco.smartfinance.h2db.utils.JsonUtils;
-
-import java.util.Date;
+package com.makco.smartfinance.h2db.utils.schema_constants;
 
 /**
  * Created by mcalancea on 2016-03-24.
@@ -28,10 +23,8 @@ public class Table {
         T_CREATEDON(4);
 
         private int columnIndex;
-        private boolean isNullable;
         private _DELETED_ROWS(int columnIndex) {
             this.columnIndex = columnIndex;
-            this.isNullable = isNullable;
         }
 
         @Override
@@ -54,10 +47,8 @@ public class Table {
         T_UPDATEDON(9);
 
         private int columnIndex;
-        private boolean isNullable;
         private CURRENCY(int columnIndex) {
             this.columnIndex = columnIndex;
-            this.isNullable = isNullable;
         }
 
         @Override
@@ -72,22 +63,19 @@ public class Table {
     };
     
     public enum DATEUNIT implements IEnumRow {
-        ID(0),
-        UNITTIMESTAMP(1),
-        UNITYEAR(2),
+        UNITDATE(0),
+        UNITDATEOFMONTH(1),
+        UNITMONTH(2),
         UNITMONTHOFYEAR(3),
-        UNITMONTH(4),
-        UNITDATE(5),
-        UNITDAYOFWEEK(6),
-        WEEKDAY(7),
-        T_CREATEDON(8),
-        T_UPDATEDON(9);
+        UNITYEAR(4),
+        UNITDAYOFWEEK(5),
+        WEEKDAY(6),
+        UNITTIMESTAMP(7),
+        T_CREATEDON(8);
 
         private int columnIndex;
-        private boolean isNullable;
         private DATEUNIT(int columnIndex) {
             this.columnIndex = columnIndex;
-            this.isNullable = isNullable;
         }
 
         @Override

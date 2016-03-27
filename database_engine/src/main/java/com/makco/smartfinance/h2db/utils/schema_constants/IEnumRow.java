@@ -1,6 +1,4 @@
-package com.makco.smartfinance.h2db.utils.tables;
-
-import com.google.gson.JsonObject;
+package com.makco.smartfinance.h2db.utils.schema_constants;
 
 /**
  * User: Makar Kalancha

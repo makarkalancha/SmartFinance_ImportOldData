@@ -35,4 +35,8 @@ public class DBConnectionResource extends ExternalResource {
     public static Connection getConnection() {
         return connection;
     }
+
+    public static String getDbConnectionUrl() {
+        return DB_CONNECTION_IF_EXISTS;
+    }
 }

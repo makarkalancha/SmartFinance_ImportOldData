@@ -13,10 +13,16 @@ CREATE TRIGGER T_CURRENCY_INS
 BEFORE INSERT
 ON CURRENCY
 FOR EACH ROW
-CALL "com.makco.smartfinance.h2db.triggers.TriggerFamilyMember";
+CALL "com.makco.smartfinance.h2db.triggers.TriggerCurrency";
 
 CREATE TRIGGER T_CURRENCY_UPD
 BEFORE UPDATE
-ON FAMILY_MEMBER
+ON CURRENCY
 FOR EACH ROW
-CALL "com.makco.smartfinance.h2db.triggers.TriggerFamilyMember";
+CALL "com.makco.smartfinance.h2db.triggers.TriggerCurrency";
+
+CREATE TRIGGER T_CURRENCY_DEL
+BEFORE DELETE
+ON CURRENCY
+FOR EACH ROW
+CALL "com.makco.smartfinance.h2db.triggers.TriggerCurrency";

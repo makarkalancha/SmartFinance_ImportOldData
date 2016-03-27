@@ -1,6 +1,7 @@
 package com.makco.smartfinance.h2db.functions;
 
 import com.makco.smartfinance.h2db.tables.DateUnit;
+import com.makco.smartfinance.h2db.utils.schema_constants.Table;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -14,36 +15,36 @@ public class DateUnitFunctions {
     private static final Logger LOG = LogManager.getLogger(DateUnitFunctions.class);
     //TODO try to make UNITDATE a PK;
     //TODO create table from sql script, not a function
-    public static void createDateUnitTable(Connection connection) throws SQLException{
-        final StringBuilder createDateUnitTable = new StringBuilder();
-        createDateUnitTable.append("CREATE SEQUENCE IF NOT EXISTS SEQ_DATEUNIT;");
-        createDateUnitTable.append("CREATE TABLE IF NOT EXISTS DATEUNIT(");
-            createDateUnitTable.append("ID BIGINT DEFAULT SEQ_DATEUNIT.NEXTVAL,");
-            createDateUnitTable.append("UNITTIMESTAMP DATE UNIQUE NOT NULL,");
-            createDateUnitTable.append("UNITYEAR INT NOT NULL,");
-            createDateUnitTable.append("UNITMONTHOFYEAR INT NOT NULL,");
-            createDateUnitTable.append("UNITMONTH BIGINT NOT NULL,");
-            createDateUnitTable.append("UNITDATE BIGINT NOT NULL,");
-            createDateUnitTable.append("UNITDAYOFWEEK INT NOT NULL,");
-            createDateUnitTable.append("WEEKDAY BOOLEAN NOT NULL,");//if weekend false
-            createDateUnitTable.append("T_CREATEDON TIMESTAMP,");
-            createDateUnitTable.append("T_UPDATEDON TIMESTAMP,");
-            createDateUnitTable.append("PRIMARY KEY(ID,UNITTIMESTAMP),");
-        //there is no weekofyear, because if you change first day of the week, week of year is changed and all reports need to re-calculated
-        //there is no unitweek, because if you change first day of the week, unit week is changed and all reports need to re-calculated
-        createDateUnitTable.append(");");
-        createDateUnitTable.append("CREATE INDEX IF NOT EXISTS IDXUNITYEAR ON DATEUNIT(UNITYEAR);");
-        createDateUnitTable.append("CREATE INDEX IF NOT EXISTS IDXUNITMONTHOFYEAR ON DATEUNIT(UNITMONTHOFYEAR);");
-        createDateUnitTable.append("CREATE INDEX IF NOT EXISTS IDXUNITMONTH ON DATEUNIT(UNITMONTH);");
-        createDateUnitTable.append("CREATE INDEX IF NOT EXISTS IDXUNITDATE ON DATEUNIT(UNITDATE);");
-        createDateUnitTable.append("CREATE INDEX IF NOT EXISTS IDXUNITDAYOFWEEK ON DATEUNIT(UNITDAYOFWEEK);");
-        createDateUnitTable.append("CREATE INDEX IF NOT EXISTS IDXWEEKDAY ON DATEUNIT(WEEKDAY);");
-
-        LOG.debug(createDateUnitTable.toString());
-        try (Statement statement = connection.createStatement()){
-            statement.execute(createDateUnitTable.toString());
-        }
-    }
+//    public static void createDateUnitTable(Connection connection) throws SQLException{
+//        final StringBuilder createDateUnitTable = new StringBuilder();
+//        createDateUnitTable.append("CREATE SEQUENCE IF NOT EXISTS SEQ_DATEUNIT;");
+//        createDateUnitTable.append("CREATE TABLE IF NOT EXISTS DATEUNIT(");
+//            createDateUnitTable.append("ID BIGINT DEFAULT SEQ_DATEUNIT.NEXTVAL,");
+//            createDateUnitTable.append("UNITTIMESTAMP DATE UNIQUE NOT NULL,");
+//            createDateUnitTable.append("UNITYEAR INT NOT NULL,");
+//            createDateUnitTable.append("UNITMONTHOFYEAR INT NOT NULL,");
+//            createDateUnitTable.append("UNITMONTH BIGINT NOT NULL,");
+//            createDateUnitTable.append("UNITDATE BIGINT NOT NULL,");
+//            createDateUnitTable.append("UNITDAYOFWEEK INT NOT NULL,");
+//            createDateUnitTable.append("WEEKDAY BOOLEAN NOT NULL,");//if weekend false
+//            createDateUnitTable.append("T_CREATEDON TIMESTAMP,");
+//            createDateUnitTable.append("T_UPDATEDON TIMESTAMP,");
+//            createDateUnitTable.append("PRIMARY KEY(ID,UNITTIMESTAMP),");
+//        //there is no weekofyear, because if you change first day of the week, week of year is changed and all reports need to re-calculated
+//        //there is no unitweek, because if you change first day of the week, unit week is changed and all reports need to re-calculated
+//        createDateUnitTable.append(");");
+//        createDateUnitTable.append("CREATE INDEX IF NOT EXISTS IDXUNITYEAR ON DATEUNIT(UNITYEAR);");
+//        createDateUnitTable.append("CREATE INDEX IF NOT EXISTS IDXUNITMONTHOFYEAR ON DATEUNIT(UNITMONTHOFYEAR);");
+//        createDateUnitTable.append("CREATE INDEX IF NOT EXISTS IDXUNITMONTH ON DATEUNIT(UNITMONTH);");
+//        createDateUnitTable.append("CREATE INDEX IF NOT EXISTS IDXUNITDATE ON DATEUNIT(UNITDATE);");
+//        createDateUnitTable.append("CREATE INDEX IF NOT EXISTS IDXUNITDAYOFWEEK ON DATEUNIT(UNITDAYOFWEEK);");
+//        createDateUnitTable.append("CREATE INDEX IF NOT EXISTS IDXWEEKDAY ON DATEUNIT(WEEKDAY);");
+//
+//        LOG.debug(createDateUnitTable.toString());
+//        try (Statement statement = connection.createStatement()){
+//            statement.execute(createDateUnitTable.toString());
+//        }
+//    }
 
 
 
@@ -53,13 +54,22 @@ public class DateUnitFunctions {
         DateUnit du = new DateUnit(date);
 
         StringBuilder selectQuery = new StringBuilder();
-        selectQuery.append("SELECT ID FROM DATEUNIT ");
-        selectQuery.append("WHERE UNITTIMESTAMP = ?");
+        selectQuery.append("SELECT " + Table.DATEUNIT.UNITDATE + " FROM " + Table.Names.DATEUNIT);
+        selectQuery.append(" WHERE " + Table.DATEUNIT.UNITTIMESTAMP + " = ?");
 
         StringBuilder insertQuery = new StringBuilder();
-        insertQuery.append("INSERT INTO DATEUNIT ");
-        insertQuery.append("(UNITTIMESTAMP,UNITYEAR,UNITMONTHOFYEAR,UNITMONTH,UNITDATE,UNITDAYOFWEEK,WEEKDAY) ");
-        insertQuery.append("VALUES (?,?,?,?,?,?,?); ");
+        insertQuery.append("INSERT INTO ");
+        insertQuery.append(Table.Names.DATEUNIT);
+        insertQuery.append("(");
+        insertQuery.append(Table.DATEUNIT.UNITTIMESTAMP + ", ");
+        insertQuery.append(Table.DATEUNIT.UNITYEAR + ", ");
+        insertQuery.append(Table.DATEUNIT.UNITMONTHOFYEAR + ", ");
+        insertQuery.append(Table.DATEUNIT.UNITMONTH + ", ");
+        insertQuery.append(Table.DATEUNIT.UNITDATE + ", ");
+        insertQuery.append(Table.DATEUNIT.UNITDAYOFWEEK + ", ");
+        insertQuery.append(Table.DATEUNIT.WEEKDAY + ", ");
+        insertQuery.append(Table.DATEUNIT.UNITDATEOFMONTH + ") ");
+        insertQuery.append("VALUES (?,?,?,?,?,?,?,?); ");
 
         LOG.debug(selectQuery.toString());
         LOG.debug(insertQuery.toString());
@@ -81,11 +91,13 @@ public class DateUnitFunctions {
                 insertPS.setLong(5, du.getUnitDate());
                 insertPS.setInt(6, du.getUnitDayOfWeek());
                 insertPS.setBoolean(7, du.getWeekDay());
+                insertPS.setLong(8, du.getUnitDateOfMonth());
 
                 insertPS.executeUpdate();
-                rs = insertPS.getGeneratedKeys();
-                rs.next();
-                result = rs.getLong(1);
+//                rs = insertPS.getGeneratedKeys();
+//                rs.next();
+//                result = rs.getLong(1);
+                result = du.getUnitDate();
             }
 
             return result;

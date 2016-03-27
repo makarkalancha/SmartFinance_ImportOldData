@@ -3,19 +3,16 @@ package com.makco.smartfinance.h2db.utils;
 import com.makco.smartfinance.h2db.DBConnectionResource;
 import com.makco.smartfinance.h2db.TestContext;
 import com.makco.smartfinance.h2db.tables.DateUnit;
-import com.makco.smartfinance.h2db.utils.tables.Table;
+import com.makco.smartfinance.h2db.utils.schema_constants.Table;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.ClassRule;
 import org.junit.Test;
 
 import java.sql.PreparedStatement;
-import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.time.Period;
-import java.time.temporal.ChronoField;
 import java.time.temporal.ChronoUnit;
 import java.util.Calendar;
 import java.util.Date;
@@ -55,8 +52,9 @@ public class H2DbUtilsTest {
         insertDU.append(Table.DATEUNIT.UNITMONTH + ", ");
         insertDU.append(Table.DATEUNIT.UNITDATE + ", ");
         insertDU.append(Table.DATEUNIT.UNITDAYOFWEEK + ", ");
-        insertDU.append(Table.DATEUNIT.WEEKDAY + ") ");
-        insertDU.append("VALUES (?,?,?,?,?,?,?); ");
+        insertDU.append(Table.DATEUNIT.WEEKDAY + ", ");
+        insertDU.append(Table.DATEUNIT.UNITDATEOFMONTH + ") ");
+        insertDU.append("VALUES (?,?,?,?,?,?,?,?); ");
 
         Date todaysDate = new Date();
         Date lastDate = sdf.parse("2000-01-01");
@@ -88,6 +86,7 @@ public class H2DbUtilsTest {
                 insertPS.setLong(5, du.getUnitDate());
                 insertPS.setInt(6, du.getUnitDayOfWeek());
                 insertPS.setBoolean(7, du.getWeekDay());
+                insertPS.setLong(8, du.getUnitDateOfMonth());
                 insertPS.addBatch();
 
                 ++count;

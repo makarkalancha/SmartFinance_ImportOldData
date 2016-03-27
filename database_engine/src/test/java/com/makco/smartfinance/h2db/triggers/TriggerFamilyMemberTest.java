@@ -8,7 +8,7 @@ import com.makco.smartfinance.h2db.TestContext;
 import com.makco.smartfinance.h2db.utils.DBObjectType;
 import com.makco.smartfinance.h2db.utils.H2DbUtils;
 import com.makco.smartfinance.h2db.utils.JsonUtils;
-import com.makco.smartfinance.h2db.utils.tables.Table;
+import com.makco.smartfinance.h2db.utils.schema_constants.Table;
 import org.h2.tools.RunScript;
 import org.junit.After;
 import org.junit.AfterClass;

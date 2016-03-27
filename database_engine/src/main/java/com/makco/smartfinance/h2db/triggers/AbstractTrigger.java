@@ -1,7 +1,7 @@
 package com.makco.smartfinance.h2db.triggers;
 
 import com.google.gson.JsonObject;
-import com.makco.smartfinance.h2db.utils.tables.Table;
+import com.makco.smartfinance.h2db.utils.schema_constants.Table;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.h2.api.Trigger;
@@ -10,7 +10,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Arrays;
-import java.util.Date;
 
 /**
  * User: Makar Kalancha
