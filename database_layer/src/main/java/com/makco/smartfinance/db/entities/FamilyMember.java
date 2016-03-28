@@ -3,7 +3,7 @@ package com.makco.smartfinance.db.entities;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.Date;
+import java.util.Calendar;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -90,12 +90,12 @@ public class FamilyMember implements Serializable{
     @Temporal(TemporalType.TIMESTAMP)
     @org.hibernate.annotations.CreationTimestamp
     @Column(name="T_CREATEDON",insertable = false, updatable = false)
-    protected Date createdOn;
+    protected Calendar createdOn;
 
     @Temporal(TemporalType.TIMESTAMP)
     @org.hibernate.annotations.UpdateTimestamp
     @Column(name="T_UPDATEDON",insertable = false, updatable = false)
-    protected Date updatedOn;
+    protected Calendar updatedOn;
 
     public FamilyMember(){
 
@@ -150,8 +150,7 @@ public class FamilyMember implements Serializable{
                 ", description='" + description + '\'' +
                 ", createdOn='" + createdOn + '\'' +
                 ", updatedOn='" + updatedOn + '\'' +
-//                ", isDeleted='" + isDeleted + '\'' +
-                '}';
+            '}';
     }
 
     public LocalDateTime getCreatedOn() {
