@@ -50,7 +50,7 @@ import javax.validation.constraints.Size;
 //Filter added to retrieve only records that have not been soft deleted.
 //impossible to select records with field isdeleted
 //@Where(clause="ISDELETED <> true")
-public class FamilyMember implements Serializable, Deletable{
+public class FamilyMember implements Serializable{
     @Id
     @org.hibernate.annotations.GenericGenerator(
             name = "FAMILY_MEMBER_SEQUENCE_GENERATOR",
@@ -87,20 +87,13 @@ public class FamilyMember implements Serializable, Deletable{
     )
     private String description;
 
-//    @Column(name="ISDELETED")
-//    protected boolean isDeleted = false;
-
     @Temporal(TemporalType.TIMESTAMP)
-    @org.hibernate.annotations.Generated(
-            org.hibernate.annotations.GenerationTime.INSERT
-    )
+    @org.hibernate.annotations.CreationTimestamp
     @Column(name="T_CREATEDON",insertable = false, updatable = false)
     protected Date createdOn;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @org.hibernate.annotations.Generated(
-            org.hibernate.annotations.GenerationTime.ALWAYS
-    )
+    @org.hibernate.annotations.UpdateTimestamp
     @Column(name="T_UPDATEDON",insertable = false, updatable = false)
     protected Date updatedOn;
 
