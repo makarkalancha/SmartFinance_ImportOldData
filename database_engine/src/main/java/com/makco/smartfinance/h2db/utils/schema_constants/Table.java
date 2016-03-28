@@ -43,8 +43,8 @@ public class Table {
         CODE(1),
         NAME(2),
         DESCRIPTION(3),
-        T_CREATEDON(8),
-        T_UPDATEDON(9);
+        T_CREATEDON(4),
+        T_UPDATEDON(5);
 
         private int columnIndex;
         private CURRENCY(int columnIndex) {

@@ -28,8 +28,8 @@ public class FamilyMemberTest {
 
     @AfterClass
     public static void tearDownClass() throws Exception {
-        em.close();
-        TestPersistenceManager.INSTANCE.close();
+//        em.close();
+//        TestPersistenceManager.INSTANCE.close();
     }
 
     @Before

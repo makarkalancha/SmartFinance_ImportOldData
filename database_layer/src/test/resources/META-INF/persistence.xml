@@ -9,6 +9,7 @@
     <persistence-unit name="test" transaction-type="RESOURCE_LOCAL">
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
         <class>com.makco.smartfinance.db.entities.FamilyMember</class>
+        <class>com.makco.smartfinance.db.entities.Currency</class>
         <properties>
             <!--http://stackoverflow.com/questions/5225700/can-i-have-h2-autocreate-a-schema-in-an-in-memory-database-->
             <!--http://www.h2database.com/html/grammar.html#set_schema-->
