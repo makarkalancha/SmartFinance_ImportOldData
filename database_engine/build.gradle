@@ -50,9 +50,10 @@ jar {
     manifest {
         attributes(
                 'Main-Class': 'org.h2.tools.Server',
-                'Class-Path': 'log4j2.xml'
+                'Class-Path': 'log4j2.xml ' + configurations.compile.collect { it.getName() }.join(' ')
         )
     }
+
     from('<path-to-props-file>') {
 //        include 'database.properties'
         include '**/*'

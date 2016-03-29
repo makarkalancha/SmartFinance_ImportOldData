@@ -77,9 +77,10 @@ sourceSets {
     }
 }
 
+//https://discuss.gradle.org/t/how-to-jar-all-class-output-from-all-sub-projects-into-one-jar/7049
+
 dependencies {
-//    compile project(':database_layer')
-    compile project(':database_engine') /*{changing = true}*/
+    compile project(':database_engine')
     compile 'org.hibernate:hibernate-entitymanager:'+hibernate_version //JPA
     compile 'org.hibernate:hibernate-java8:'+hibernate_version //Java8 specific data-types such as any of the JSR 310 Date/Time types in domain model
     compile 'org.hibernate:hibernate-c3p0:'+hibernate_version //For connection pooling
@@ -89,7 +90,17 @@ dependencies {
 jar {
     manifest {
         attributes(
-                'Main-Class': 'com.makco.smartfinance.Main'
+                'Main-Class': 'com.makco.smartfinance.Main',
+                'Class-Path': 'log4j2.xml ' + configurations.compile.collect { it.getName() }.join(' ')
         )
     }
+
+    from {
+        configurations.compile.collect {
+            println ">>>$it.absolutePath"
+//            println ">>>"
+            it.isDirectory() ? it : zipTree(it)
+        }
+    }
+    with jar
 }
