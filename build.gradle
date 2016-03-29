@@ -25,9 +25,6 @@ allprojects {
     group = 'com.makco.smartfinance'
     version = '1.0'
 
-}
-
-subprojects {
     repositories {
         mavenCentral()
     }
@@ -37,6 +34,10 @@ subprojects {
         compile 'org.apache.logging.log4j:log4j-api:2.5'
         compile 'org.apache.logging.log4j:log4j-core:2.5'
     }
+
+}
+
+subprojects {
 
     processResources {
         from log4j2ConfigFile
@@ -56,15 +57,15 @@ subprojects {
         }
     }
 
-    project(':database_layer') {
-        dependencies {
-            compile project(':database_engine') /*{changing = true}*/
-            compile 'org.hibernate:hibernate-entitymanager:'+hibernate_version //JPA
-            compile 'org.hibernate:hibernate-java8:'+hibernate_version //Java8 specific data-types such as any of the JSR 310 Date/Time types in domain model
-            compile 'org.hibernate:hibernate-c3p0:'+hibernate_version //For connection pooling
-            compile 'javax.validation:validation-api:1.0.0.GA' //javax.validation.constraints
-        }
-    }
+//    project(':database_layer') {
+//        dependencies {
+//            compile project(':database_engine') /*{changing = true}*/
+//            compile 'org.hibernate:hibernate-entitymanager:'+hibernate_version //JPA
+//            compile 'org.hibernate:hibernate-java8:'+hibernate_version //Java8 specific data-types such as any of the JSR 310 Date/Time types in domain model
+//            compile 'org.hibernate:hibernate-c3p0:'+hibernate_version //For connection pooling
+//            compile 'javax.validation:validation-api:1.0.0.GA' //javax.validation.constraints
+//        }
+//    }
 }
 
 sourceSets {
@@ -74,6 +75,15 @@ sourceSets {
             includes = ["**/*.fxml"]
         }
     }
+}
+
+dependencies {
+//    compile project(':database_layer')
+    compile project(':database_engine') /*{changing = true}*/
+    compile 'org.hibernate:hibernate-entitymanager:'+hibernate_version //JPA
+    compile 'org.hibernate:hibernate-java8:'+hibernate_version //Java8 specific data-types such as any of the JSR 310 Date/Time types in domain model
+    compile 'org.hibernate:hibernate-c3p0:'+hibernate_version //For connection pooling
+    compile 'javax.validation:validation-api:1.0.0.GA' //javax.validation.constraints
 }
 
 jar {
