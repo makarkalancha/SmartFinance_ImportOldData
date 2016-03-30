@@ -45,9 +45,4 @@ jar {
                 'Class-Path': 'log4j2.xml ' + configurations.compile.collect { it.getName() }.join(' ')
         )
     }
-
-    from('<path-to-props-file>') {
-        include '**/*'
-        into('<target-path>')
-    }
 }
