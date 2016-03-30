@@ -154,8 +154,9 @@ dependencies {
 ////    }
 ////    with jar
 //}
-
+//project.tasks.remove(jar)
 task fatJar(type: Jar) {
+//task jar(type: Jar, overwrite: true) {
     manifest {
         attributes(
                 'Main-Class': 'com.makco.smartfinance.Main',
@@ -164,7 +165,8 @@ task fatJar(type: Jar) {
         )
     }
 
-    baseName = project.name + '-all'
+//    baseName = project.name + '-all'
+    baseName = project.name
     from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
     with jar
 }
