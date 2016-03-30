@@ -1,9 +1,3 @@
-//buildscript {
-//    dependencies {
-//        classpath 'com.h2database:h2:1.4.191'
-//    }
-//}
-
 plugins {
 //    id "org.flywaydb.flyway" version "4.0"
     id "org.flywaydb.flyway" version "3.2.1"
@@ -38,15 +32,13 @@ dependencies {
 }
 
 jar {
-
     processResources {
         from(zipTree(configurations.h2.asPath))
         from(zipTree(configurations.log4j2api.asPath))
         files(configurations.log4j2core.asPath.split(";")).each{from(zipTree(it.path))}
         files(configurations.compile.asPath.split(";")).each{from(zipTree(it.path))}
-//        from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
-//        with jar
     }
+
     manifest {
         attributes(
                 'Main-Class': 'org.h2.tools.Server',
@@ -55,7 +47,6 @@ jar {
     }
 
     from('<path-to-props-file>') {
-//        include 'database.properties'
         include '**/*'
         into('<target-path>')
     }
