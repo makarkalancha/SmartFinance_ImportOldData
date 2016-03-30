@@ -1,5 +1,7 @@
 package com.makco.smartfinance;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -10,6 +12,7 @@ import javafx.stage.Stage;
  * Created by mcalancea on 2016-03-28.
  */
 public class Main extends Application{
+    private final static Logger LOG = LogManager.getLogger(Main.class);
 
     private Stage primaryStage;
 
@@ -25,6 +28,7 @@ public class Main extends Application{
         Parent root = FXMLLoader.load(getClass().getResource("main.fxml"));
         Scene scene = new Scene(root);
 
+        LOG.debug("hello: start");
 
         primaryStage.setScene(scene);
         primaryStage.show();
