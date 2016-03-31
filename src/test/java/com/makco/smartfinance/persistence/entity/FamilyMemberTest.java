@@ -1,10 +1,10 @@
 package com.makco.smartfinance.persistence.entity;
 
-
 import com.makco.smartfinance.persistence.utils.TestPersistenceManager;
 import java.util.Random;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import javax.persistence.RollbackException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.After;
@@ -21,6 +21,12 @@ public class FamilyMemberTest {
     private final static Logger LOG = LogManager.getLogger(FamilyMemberTest.class);
     private static EntityManager em;
     private String familyMemberName = "Freddy";
+    private String dublicateName = "Twin";
+    private String defaultDescription = "husband";
+    private Random random = new Random();
+
+    private static int MIN = 1;
+    private static int MAX = 1_000_000;
 
     @BeforeClass
     public static void setUpClass() throws Exception {
@@ -47,7 +53,7 @@ public class FamilyMemberTest {
         em.getTransaction().begin();
         FamilyMember husband = new FamilyMember();
         husband.setName(familyMemberName);
-        husband.setDescription("husband");
+        husband.setDescription(defaultDescription);
 
         em.persist(husband);
 //        em.flush();
@@ -61,6 +67,25 @@ public class FamilyMemberTest {
         LOG.info("end->testPersist");
     }
 
+    @Test(expected=RollbackException.class)
+    public void testPersistDuplicateName() throws Exception {
+        LOG.info("start->testPersistDuplicateName");
+        int randomInt = random.nextInt((MAX - 0) + MIN + 0);
+        em.getTransaction().begin();
+        FamilyMember husband1 = new FamilyMember();
+        husband1.setName(dublicateName + randomInt);
+        husband1.setDescription(defaultDescription);
+        em.persist(husband1);
+
+        FamilyMember husband2 = new FamilyMember();
+        husband2.setName(dublicateName + randomInt);
+        husband2.setDescription(defaultDescription);
+        em.persist(husband2);
+
+        em.getTransaction().commit();
+    }
+
+
     @Test
     public void testUpdate() throws Exception {
         LOG.info("start->testUpdate");
@@ -71,11 +96,11 @@ public class FamilyMemberTest {
         LOG.debug("max num = " + id);
 
         FamilyMember husband = em.find(FamilyMember.class, id);
-        Random random = new Random();
+
         //min 0 and max 100
-        int randomInt = random.nextInt((100 - 0) + 1 + 0);
-        husband.setName("Freddy" + randomInt);
-        husband.setDescription("husband" + randomInt);
+        int randomInt = random.nextInt((MAX - 0) + MIN + 0);
+        husband.setName(familyMemberName + randomInt);
+        husband.setDescription(defaultDescription + randomInt);
 
         em.persist(husband);
         em.getTransaction().commit();

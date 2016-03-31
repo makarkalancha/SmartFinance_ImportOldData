@@ -70,12 +70,12 @@ public class FamilyMember implements Serializable{
     @Column(name="ID")
     private Long id;
 
-    @Column(name="NAME")
+    @Column(name = "NAME", unique = true)
     @NotNull
     @Size(
-        min = 2,
-        max = 65,
-        message = "Name is required, maximum 65 characters."
+            min = 2,
+            max = 65,
+            message = "Name is required, maximum 65 characters."
     )
     private String name;
 
