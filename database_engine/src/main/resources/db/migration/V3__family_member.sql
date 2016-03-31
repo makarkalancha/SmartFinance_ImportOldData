@@ -6,6 +6,9 @@ DESCRIPTION VARCHAR(1024),
 T_CREATEDON TIMESTAMP,
 T_UPDATEDON TIMESTAMP
 );
+--http://dba.stackexchange.com/questions/144/when-should-i-use-a-unique-constraint-instead-of-a-unique-index
+--prefere unique index instead unique constraint, because of searching/sorting/filtering on that field to be quick
+CREATE UNIQUE INDEX IF NOT EXISTS IDX_UNQ_FMLMMBR_NM ON FAMILY_MEMBER(NAME);--because we order by code
 
 CREATE TRIGGER T_FAMILY_MEMBER_INS 
 BEFORE INSERT 
