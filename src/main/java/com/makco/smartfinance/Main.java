@@ -20,6 +20,7 @@ public class Main extends Application{
         Application.launch(args);
     }
 //http://stackoverflow.com/questions/24055897/same-stage-different-fxml-javafx
+//http://www.devx.com/Java/Article/48193/0/page/2
     @Override
     public void start(Stage primaryStage) throws Exception {
         this.primaryStage = primaryStage;
