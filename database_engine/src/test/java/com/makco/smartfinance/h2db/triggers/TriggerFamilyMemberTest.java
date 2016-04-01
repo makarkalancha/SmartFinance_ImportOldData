@@ -9,6 +9,14 @@ import com.makco.smartfinance.h2db.utils.DBObjectType;
 import com.makco.smartfinance.h2db.utils.H2DbUtils;
 import com.makco.smartfinance.h2db.utils.JsonUtils;
 import com.makco.smartfinance.h2db.utils.schema_constants.Table;
+import java.io.InputStreamReader;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.h2.tools.RunScript;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -16,16 +24,6 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Test;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-import java.io.InputStreamReader;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -35,7 +33,8 @@ import static org.junit.Assert.assertEquals;
  */
 public class TriggerFamilyMemberTest {
     private static final Logger LOG = LogManager.getLogger(TriggerFamilyMemberTest.class);
-    private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+    private static final SimpleDateFormat sdfJson = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     @ClassRule
     public static DBConnectionResource dbConnectionResource = new DBConnectionResource();
@@ -126,13 +125,17 @@ public class TriggerFamilyMemberTest {
             insertPS.executeUpdate();
             rs = insertPS.getGeneratedKeys();
             rs.next();
-            Long idJustInserted = rs.getLong(1);
+            long idJustInserted = rs.getLong(1);
+            LOG.debug("idJustInserted > 0: idJustInserted=" + idJustInserted);
             assert (idJustInserted > 0);
-
             selectDatesPS.setLong(1, idJustInserted);
             rs = selectDatesPS.executeQuery();
             rs.next();
-            Long idWithDates = rs.getLong(1);
+            long idWithDates = rs.getLong(1);
+            LOG.debug("idWithDates > 0: idWithDates=" + idWithDates);
+            LOG.debug("idJustInserted == idWithDates: " + (idJustInserted == idWithDates) +
+                    "; idJustInserted=" + idJustInserted +
+                    "; idWithDates=" + idWithDates);
             assert (idWithDates > 0);
             assert (idJustInserted == idWithDates);
         } finally {
@@ -155,8 +158,8 @@ public class TriggerFamilyMemberTest {
         LOG.debug(queryUpdate);
         LOG.debug(queryDates);
         ResultSet rs = null;
-        Long idMax = 0L;
-        Long idNewMin = 0L;
+        long idMax = 0L;
+        long idNewMin = 0L;
         try (
                 PreparedStatement selectPS = dbConnectionResource.getConnection().prepareStatement(querySelect);
                 PreparedStatement updatePS = dbConnectionResource.getConnection().prepareStatement(queryUpdate);
@@ -166,14 +169,14 @@ public class TriggerFamilyMemberTest {
             rs.next();
             idMax = rs.getLong(1);
 
-            updatePS.setString(1, "Barney");
+            updatePS.setString(1, "Barney" + (sdf.format(new Date())));
             updatePS.setLong(2, idMax);
             updatePS.executeUpdate();
 
             selectDatesPS.setLong(1, idMax);
             rs = selectDatesPS.executeQuery();
             rs.next();
-            Long idWithDates = rs.getLong(1);
+            long idWithDates = rs.getLong(1);
             assert (idWithDates > 0);
             assert (idMax == idWithDates);
         } finally {
@@ -191,8 +194,8 @@ public class TriggerFamilyMemberTest {
         LOG.debug(queryDelete);
         LOG.debug(querySelectDeletedRow);
         ResultSet rs = null;
-        Long idMin = 0L;
-        Long idNewMin = 0L;
+        long idMin = 0L;
+        long idNewMin = 0L;
         try (
                 PreparedStatement selectPS = dbConnectionResource.getConnection().prepareStatement(querySelect);
                 PreparedStatement deletePS = dbConnectionResource.getConnection().prepareStatement(queryDelete);
@@ -232,14 +235,14 @@ public class TriggerFamilyMemberTest {
         row[0] = 1L;
         row[1] = "Fred";
         row[2] = null;
-        row[3] = sdf.parse("2001-02-03 14:05:06");
-        row[4] = sdf.parse("2006-05-04 03:02:01");
+        row[3] = sdfJson.parse("2001-02-03 14:05:06");
+        row[4] = sdfJson.parse("2006-05-04 03:02:01");
         JsonObject rowJson = new JsonObject();
         rowJson.addProperty(Table.FAMILY_MEMBER.ID.toString(), (Long) row[0]);
         rowJson.addProperty(Table.FAMILY_MEMBER.NAME.toString(), (String) row[1]);
         rowJson.addProperty(Table.FAMILY_MEMBER.DESCRIPTION.toString(), (String) row[2]);
-        rowJson.addProperty(Table.FAMILY_MEMBER.T_CREATEDON.toString(), sdf.format((Date) row[3]));
-        rowJson.addProperty(Table.FAMILY_MEMBER.T_UPDATEDON.toString(), sdf.format((Date) row[4]));
+        rowJson.addProperty(Table.FAMILY_MEMBER.T_CREATEDON.toString(), sdfJson.format((Date) row[3]));
+        rowJson.addProperty(Table.FAMILY_MEMBER.T_UPDATEDON.toString(), sdfJson.format((Date) row[4]));
 
         JsonObject tableJson = new JsonObject();
         tableJson.addProperty(Table.Elements.tableName.toString(), schemaName + "." + Table.Names.FAMILY_MEMBER);
@@ -278,10 +281,10 @@ public class TriggerFamilyMemberTest {
         JsonElement jsonElement = rowJsonObject.get(Table.FAMILY_MEMBER.DESCRIPTION.toString());
         String description = JsonUtils.getNullableFromJsonElementAsString(jsonElement);
         assertEquals(null, description);
-        Date createdOn = sdf.parse(rowJsonObject.get(Table.FAMILY_MEMBER.T_CREATEDON.toString()).getAsString());
-        assertEquals(sdf.parse("2001-02-03 14:05:06"), createdOn);
-        Date updatedOn = sdf.parse(rowJsonObject.get(Table.FAMILY_MEMBER.T_UPDATEDON.toString()).getAsString());
-        assertEquals(sdf.parse("2006-05-04 03:02:01"), updatedOn);
+        Date createdOn = sdfJson.parse(rowJsonObject.get(Table.FAMILY_MEMBER.T_CREATEDON.toString()).getAsString());
+        assertEquals(sdfJson.parse("2001-02-03 14:05:06"), createdOn);
+        Date updatedOn = sdfJson.parse(rowJsonObject.get(Table.FAMILY_MEMBER.T_UPDATEDON.toString()).getAsString());
+        assertEquals(sdfJson.parse("2006-05-04 03:02:01"), updatedOn);
     }
 
 }

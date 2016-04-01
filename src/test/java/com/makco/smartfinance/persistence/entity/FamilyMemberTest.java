@@ -4,7 +4,6 @@ import com.makco.smartfinance.persistence.utils.TestPersistenceManager;
 import java.util.Random;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
-import javax.persistence.RollbackException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.After;
@@ -18,12 +17,12 @@ import static org.junit.Assert.assertEquals;
  * Created by mcalancea on 2016-03-02.
  */
 public class FamilyMemberTest {
+
     private final static Logger LOG = LogManager.getLogger(FamilyMemberTest.class);
     private static EntityManager em;
     private String familyMemberName = "Freddy";
     private String dublicateName = "Twin";
     private String defaultDescription = "husband";
-    private Random random = new Random();
 
     private static int MIN = 1;
     private static int MAX = 1_000_000;
@@ -48,11 +47,14 @@ public class FamilyMemberTest {
     }
 
     @Test
-    public void testPersist() throws Exception{
+    public void testPersist() throws Exception {
         LOG.info("start->testPersist");
         em.getTransaction().begin();
         FamilyMember husband = new FamilyMember();
-        husband.setName(familyMemberName);
+        Random random = new Random();
+        int randomInt = random.nextInt((MAX - 0) + MIN + 0);
+        LOG.debug("testPersist.randomInt=" + randomInt);
+        husband.setName(familyMemberName + randomInt);
         husband.setDescription(defaultDescription);
 
         em.persist(husband);
@@ -67,10 +69,12 @@ public class FamilyMemberTest {
         LOG.info("end->testPersist");
     }
 
-    @Test(expected=RollbackException.class)
+    //    @Test(expected=RollbackException.class)
     public void testPersistDuplicateName() throws Exception {
         LOG.info("start->testPersistDuplicateName");
+        Random random = new Random();
         int randomInt = random.nextInt((MAX - 0) + MIN + 0);
+        LOG.debug("testPersistDuplicateName.randomInt=" + randomInt);
         em.getTransaction().begin();
         FamilyMember husband1 = new FamilyMember();
         husband1.setName(dublicateName + randomInt);
@@ -85,20 +89,21 @@ public class FamilyMemberTest {
         em.getTransaction().commit();
     }
 
-
-    @Test
+//    @Test
     public void testUpdate() throws Exception {
         LOG.info("start->testUpdate");
         em.getTransaction().begin();
-        Query qId = em.createQuery("SELECT max(f.id) as num from FamilyMember f");
+        Query qId = em.createQuery("SELECT min(f.id) from FamilyMember f");
         Long id = ((Long) qId.getSingleResult());
 
-        LOG.debug("max num = " + id);
+        LOG.debug("min num = " + id);
 
         FamilyMember husband = em.find(FamilyMember.class, id);
 
         //min 0 and max 100
+        Random random = new Random();
         int randomInt = random.nextInt((MAX - 0) + MIN + 0);
+        LOG.debug("testUpdate.randomInt=" + randomInt);
         husband.setName(familyMemberName + randomInt);
         husband.setDescription(defaultDescription + randomInt);
 
@@ -116,25 +121,25 @@ public class FamilyMemberTest {
         LOG.info("end->testUpdate");
     }
 
-//    @Test
-//    public void testDelete() throws Exception {
-//        LOG.info("start->testDelete");
-//        em.getTransaction().begin();
-//        Query qId = em.createQuery("SELECT min(f.id) as num from FamilyMember f where f.isDeleted = false");
-//        Long id = ((Long) qId.getSingleResult());
-//
-//        LOG.debug("min id = " + id);
-//
-//        FamilyMember husband = em.find(FamilyMember.class, id);
-//
-//        em.remove(husband);
-//        em.getTransaction().commit();
-//
-//        FamilyMember husbandJustDeleted = em.find(FamilyMember.class, id);
-//        LOG.debug(">>>husband=" + husbandJustDeleted);
-//        LOG.debug(husband);
-//
-//        assertEquals(null, husbandJustDeleted);
-//        LOG.info("end->testDelete");
-//    }
+    @Test
+    public void testDelete() throws Exception {
+        LOG.info("start->testDelete");
+        em.getTransaction().begin();
+        Query qId = em.createQuery("SELECT min(f.id) as num from FamilyMember f");
+        Long id = ((Long) qId.getSingleResult());
+
+        LOG.debug("min id = " + id);
+
+        FamilyMember husband = em.find(FamilyMember.class, id);
+
+        em.remove(husband);
+        em.getTransaction().commit();
+
+        FamilyMember husbandJustDeleted = em.find(FamilyMember.class, id);
+        LOG.debug(">>>husband=" + husbandJustDeleted);
+        LOG.debug(husband);
+
+        assertEquals(null, husbandJustDeleted);
+        LOG.info("end->testDelete");
+    }
 }
