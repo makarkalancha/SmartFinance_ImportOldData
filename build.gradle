@@ -43,13 +43,9 @@ allprojects {
     processTestResources {
         from log4j2ConfigFile
     }
-
 }
 
 subprojects {
-
-
-
     test {
         testLogging {
             //http://mrhaki.blogspot.ca/2014/10/gradle-goodness-show-standard-out-or.html
@@ -59,32 +55,12 @@ subprojects {
             showStandardStreams = true
         }
     }
-
-//    project(':database_layer') {
-//        dependencies {
-//            compile project(':database_engine') /*{changing = true}*/
-//            compile 'org.hibernate:hibernate-entitymanager:'+hibernate_version //JPA
-//            compile 'org.hibernate:hibernate-java8:'+hibernate_version //Java8 specific data-types such as any of the JSR 310 Date/Time types in domain model
-//            compile 'org.hibernate:hibernate-c3p0:'+hibernate_version //For connection pooling
-//            compile 'javax.validation:validation-api:1.0.0.GA' //javax.validation.constraints
-//        }
-//    }
-}
-
-sourceSets {
-    main {
-        resources {
-            srcDirs = ["src/main/java"]
-            includes = ["**/*.fxml"]
-        }
-    }
 }
 
 //https://discuss.gradle.org/t/how-to-jar-all-class-output-from-all-sub-projects-into-one-jar/7049
 
 dependencies {
     compile project(':database_engine')
-//    compile { project(path: ':database_engine', configuration: 'jar') }
     compile 'org.hibernate:hibernate-entitymanager:' + hibernate_version //JPA
     compile 'org.hibernate:hibernate-java8:' + hibernate_version
     //Java8 specific data-types such as any of the JSR 310 Date/Time types in domain model
@@ -92,38 +68,38 @@ dependencies {
     compile 'javax.validation:validation-api:1.0.0.GA' //javax.validation.constraints
 }
 
-////1st approach: dependent jars are in separate folder $libsDir\\$lib_folder
-//task copyLibDependecies(type: Copy) {
-//    println ">>>path to store dependencies: $libsDir\\$lib_folder"
-//    println ">>>Depenedency list:"
-//    configurations.compile.collect {
-//        println ">>>$it.absolutePath"
-//    }
-//    from configurations.compile
-//    into "$libsDir\\$lib_folder"
-//}
-//jar.dependsOn copyLibDependecies
-//
-//jar {
-//    manifest {
-//        attributes(
-//                'Main-Class': 'com.makco.smartfinance.Main',
-//                'Class-Path': 'log4j2.xml ' + configurations.compile.collect { "$lib_folder/"+it.getName() }.join(' ')
-//        )
-//    }
-//}
+//1st approach: dependent jars are in separate folder $libsDir\\$lib_folder
+task copyLibDependecies(type: Copy) {
+    println ">>>path to store dependencies: $libsDir\\$lib_folder"
+    println ">>>Depenedency list:"
+    configurations.compile.collect {
+        println ">>>$it.absolutePath"
+    }
+    from configurations.compile
+    into "$libsDir\\$lib_folder"
+}
+jar.dependsOn copyLibDependecies
 
-////2nd approach
-task fatJar(type: Jar) {
+jar {
     manifest {
         attributes(
                 'Main-Class': 'com.makco.smartfinance.Main',
-                'Class-Path': 'log4j2.xml '
+                'Class-Path': 'log4j2.xml ' + configurations.compile.collect { "$lib_folder/"+it.getName() }.join(' ')
         )
     }
-
-    baseName = project.name
-    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
-    with jar
 }
-build.dependsOn fatJar
+
+//////2nd approach
+//task fatJar(type: Jar) {
+//    manifest {
+//        attributes(
+//                'Main-Class': 'com.makco.smartfinance.Main',
+//                'Class-Path': 'log4j2.xml '
+//        )
+//    }
+//
+//    baseName = project.name
+//    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+//    with jar
+//}
+//build.dependsOn fatJar
