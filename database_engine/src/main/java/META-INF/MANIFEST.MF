@@ -1,3 +1,0 @@
-Manifest-Version: 1.0
-Main-Class: org.h2.tools.Server
-
