@@ -1,6 +1,8 @@
 package com.makco.smartfinance.user_interface;
 
 import java.util.HashMap;
+
+import javafx.scene.layout.VBox;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import javafx.animation.KeyFrame;
@@ -19,15 +21,18 @@ import javafx.util.Duration;
  * Created by mcalancea on 2016-04-01.
  */
 public class ScreensController extends StackPane {
+//public class ScreensController extends VBox {
     private final static Logger LOG = LogManager.getLogger(ScreensController.class);
     private HashMap<String, Node> screens = new HashMap<>();
 
     public ScreensController(){
         super();
+        LOG.debug("ScreensController.constr");
     }
 
     public void addScreen(final String name, final Node screen) {
         screens.put(name, screen);
+        LOG.debug(String.format("ScreensController.addScreen: name=%s; Node.screen=%s", name, screen.toString()));
     }
 
     public Node getScreen(final String name) {
@@ -37,6 +42,7 @@ public class ScreensController extends StackPane {
     //loads the fxml file, add teh screen to the screens collection and
     //finally injects the screenPane to the contoller
     public boolean loadScreen(final String name, final String resource){
+        LOG.debug(String.format("ScreensController.loadScreen: name=%s; resource=%s", name, resource));
         try{
             FXMLLoader myLoader = new FXMLLoader(getClass().getResource(resource));
             Parent loadScreen = (Parent) myLoader.load();
@@ -55,6 +61,7 @@ public class ScreensController extends StackPane {
     //one screen the new screen is been added second, and then the current screen is removed.
     //If there isn't any screen being desplayed, the new screen is just added to the root.
     public boolean setScreen(final String name) {
+        LOG.debug(String.format("ScreensController.setScreen: name=%s", name));
         if (screens.get(name) != null) {
             final DoubleProperty opacity = opacityProperty();
             if (!getChildren().isEmpty()) {
@@ -106,6 +113,7 @@ public class ScreensController extends StackPane {
 
     //this method will remove the screen with the given name from the collection of screens
     public boolean unloadScreen(final String name){
+        LOG.debug(String.format("ScreensController.unloadScreen: name=%s", name));
         if(screens.remove(name) == null) {
             LOG.error(name + "->screen didn't exist");
             return false;

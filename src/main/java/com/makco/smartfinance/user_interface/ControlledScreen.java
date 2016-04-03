@@ -5,5 +5,5 @@ package com.makco.smartfinance.user_interface;
  */
 public interface ControlledScreen {
 
-    public void setScreenParent(ScreensController screenPage);
+    void setScreenParent(ScreensController screenPage);
 }
