@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.VBox?>
 
 
-<MenuBar fx:controller="com.makco.smartfinance.user_interface.MenuController" VBox.vgrow="NEVER" xmlns:fx="http://javafx.com/fxml/1" >
+<MenuBar fx:controller="com.makco.smartfinance.user_interface.controllers.MenuController" VBox.vgrow="NEVER" xmlns:fx="http://javafx.com/fxml/1" >
     <menus>
         <Menu mnemonicParsing="false" text="File">
             <items>

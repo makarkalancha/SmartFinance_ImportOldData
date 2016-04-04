@@ -1,5 +1,7 @@
-package com.makco.smartfinance.user_interface;
+package com.makco.smartfinance.user_interface.controllers;
 
+import com.makco.smartfinance.user_interface.ControlledScreen;
+import com.makco.smartfinance.user_interface.ScreensController;
 import com.makco.smartfinance.user_interface.constants.Screens;
 import java.net.URL;
 import java.util.ResourceBundle;
