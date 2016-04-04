@@ -20,7 +20,7 @@ public class H2DbUtils {
         try(Statement statement = connection.createStatement()) {
             statement.execute("CREATE SCHEMA IF NOT EXISTS "+dbSchemaName);
         }catch (SQLException e){
-            LOG.error(e);
+            LOG.error(e, e);
             throw e;
         }
     }
@@ -29,7 +29,7 @@ public class H2DbUtils {
         try(Statement statement = connection.createStatement()) {
             statement.execute("SET SCHEMA "+dbSchemaName);
         }catch (SQLException e){
-            LOG.error(e);
+            LOG.error(e, e);
             throw e;
         }
     }
@@ -38,7 +38,7 @@ public class H2DbUtils {
         try{
             return checkIfDBObjectExists(connection, dbSchemaName, DBObjectType.SCHEMA, null);
         } catch (SQLException e){
-            LOG.error(e);
+            LOG.error(e, e);
             throw e;
         }
     }
@@ -67,7 +67,7 @@ public class H2DbUtils {
             }
             result = rs.next();
         } catch (SQLException e){
-            LOG.error(e);
+            LOG.error(e, e);
             throw e;
         } finally {
             if (preparedStatement != null) {
@@ -84,7 +84,7 @@ public class H2DbUtils {
         try (Statement statement = connection.createStatement()) {
             statement.execute("DROP " + dbObjectType + " IF EXISTS " + dbObjectName);
         } catch (SQLException e) {
-            LOG.error(e);
+            LOG.error(e, e);
             throw e;
         }
     }

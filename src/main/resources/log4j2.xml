@@ -39,12 +39,23 @@
             <DefaultRolloverStrategy max="30"/>
         </RollingFile>
     </Appenders>
+    <OutputStreamAppender name="Misc" fileName="${log-path}\misc.log" filePattern="$${log-path}/logs_$${date:yyyy-MM}/misc-%d{MM-dd-yyyy}-%i.log.gz">
+        <PatternLayout>
+            <Pattern>%d %p %c{1.} [%t] %m%n</Pattern>
+        </PatternLayout>
+        <Policies>
+            <TimeBasedTriggeringPolicy />
+            <SizeBasedTriggeringPolicy size="10 MB"/>
+        </Policies>
+        <DefaultRolloverStrategy max="30"/>
+    </OutputStreamAppender>
     <Loggers>
-        <!--
+
         <Root level="TRACE">
-            <AppenderRef ref="Root"/>
+        <!--<AppenderRef ref="Root"/>-->
+            <AppenderRef ref="Misc"/>
         </Root>
-        -->
+
         <logger name="com.makco.smartfinance" level="TRACE">
             <AppenderRef ref="RollingFile"/>
         </logger>

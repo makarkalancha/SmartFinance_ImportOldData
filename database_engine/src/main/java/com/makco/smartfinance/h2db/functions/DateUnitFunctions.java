@@ -108,8 +108,8 @@ public class DateUnitFunctions {
             } finally {
                 if (rs != null) rs.close();
             }
-        }catch (SQLException e){
-            LOG.error(e);
+        }catch (SQLException e) {
+            LOG.error(e, e);
             throw e;
         }
     }

@@ -52,7 +52,7 @@ public class Main extends Application{
             LOG.debug("hello: start");
             primaryStage.show();
         }catch (Exception e){
-            LOG.error(e);
+            LOG.error(e, e);
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Exception Dialog");
             alert.setHeaderText("Look, an Exception Dialog");

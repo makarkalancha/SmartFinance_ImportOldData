@@ -63,14 +63,14 @@ public enum TestContext {
 
                 isFirstRun = false;
             } catch (IOException ex) {
-                LOG.error(ex);
+                LOG.error(ex, ex);
                 ex.printStackTrace();
             } finally {
                 if (input != null) {
                     try {
                         input.close();
                     } catch (IOException e) {
-                        LOG.error(e);
+                        LOG.error(e, e);
                         e.printStackTrace();
                     }
                 }

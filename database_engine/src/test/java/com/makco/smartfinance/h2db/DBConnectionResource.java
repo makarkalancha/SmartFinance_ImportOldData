@@ -30,8 +30,8 @@ public class DBConnectionResource extends ExternalResource {
             if (connection != null) {
                 connection.close();
             }
-        }catch (SQLException e){
-            LOG.error(e);
+        }catch (SQLException e) {
+            LOG.error(e, e);
         }
     }
 
