@@ -96,11 +96,17 @@ public abstract class AbstractTrigger implements Trigger {
     protected int insertIntoDeletedRowsTable(Connection connection) throws SQLException{
         String query = queryStrB.toString().replace(SCHEMA_NAME_PLACEHOLDER, schemaName);
         LOG.debug("query:" + query);
-        PreparedStatement preparedStatement = connection.prepareStatement(query);
-        preparedStatement.setString(1, schemaName);
-        preparedStatement.setString(2, tableName);
-        preparedStatement.setString(3, fillTableJson(rowJson));
-        return preparedStatement.executeUpdate();
+        try (
+                PreparedStatement preparedStatement = connection.prepareStatement(query);
+        ) {
+            preparedStatement.setString(1, schemaName);
+            preparedStatement.setString(2, tableName);
+            preparedStatement.setString(3, fillTableJson(rowJson));
+            return preparedStatement.executeUpdate();
+        } catch (SQLException e){
+            LOG.error(e);
+            throw e;
+        }
     }
 
     protected abstract String logTriggerName();

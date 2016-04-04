@@ -7,26 +7,40 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Created by mcalancea on 2016-03-08.
  */
 public class H2DbUtils {
+    private final static Logger LOG = LogManager.getLogger(H2DbUtils.class);
 
     public static void createSchema(Connection connection, String dbSchemaName) throws SQLException{
         try(Statement statement = connection.createStatement()) {
             statement.execute("CREATE SCHEMA IF NOT EXISTS "+dbSchemaName);
+        }catch (SQLException e){
+            LOG.error(e);
+            throw e;
         }
     }
 
     public static void setSchema(Connection connection, String dbSchemaName) throws SQLException{
         try(Statement statement = connection.createStatement()) {
             statement.execute("SET SCHEMA "+dbSchemaName);
+        }catch (SQLException e){
+            LOG.error(e);
+            throw e;
         }
     }
 
     public static boolean checkIfSchemaExists(Connection connection, String dbSchemaName)throws SQLException {
-        return checkIfDBObjectExists(connection, dbSchemaName, DBObjectType.SCHEMA, null);
+        try{
+            return checkIfDBObjectExists(connection, dbSchemaName, DBObjectType.SCHEMA, null);
+        } catch (SQLException e){
+            LOG.error(e);
+            throw e;
+        }
     }
 
     public static boolean checkIfDBObjectExists(Connection connection, String dbSchemaName, DBObjectType dbObjectType, String dbObjectName)
@@ -52,6 +66,9 @@ public class H2DbUtils {
                 }
             }
             result = rs.next();
+        } catch (SQLException e){
+            LOG.error(e);
+            throw e;
         } finally {
             if (preparedStatement != null) {
                 preparedStatement.close();
@@ -64,8 +81,11 @@ public class H2DbUtils {
     }
 
     public static void dropDBObject(Connection connection, DBObjectType dbObjectType, String dbObjectName) throws Exception {
-        try(Statement statement = connection.createStatement()) {
+        try (Statement statement = connection.createStatement()) {
             statement.execute("DROP " + dbObjectType + " IF EXISTS " + dbObjectName);
+        } catch (SQLException e) {
+            LOG.error(e);
+            throw e;
         }
     }
 

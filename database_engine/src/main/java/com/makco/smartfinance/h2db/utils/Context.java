@@ -3,12 +3,13 @@ package com.makco.smartfinance.h2db.utils;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Created by mcalancea on 2016-03-10.
  */
 public enum Context {
-
     INSTANCE;
 
     private String DB_NAME;
@@ -17,6 +18,7 @@ public enum Context {
     private String DB_USER;
     private String DB_PASSWORD;
     private String DB_SCRIPT_CREATE;
+    private final Logger LOG = LogManager.getLogger(Context.class);
 
     private boolean isFirstRun = true;
 
@@ -67,12 +69,14 @@ public enum Context {
 
                 isFirstRun = false;
             } catch (IOException ex) {
+                LOG.error(ex);
                 ex.printStackTrace();
             } finally {
                 if (input != null) {
                     try {
                         input.close();
                     } catch (IOException e) {
+                        LOG.error(e);
                         e.printStackTrace();
                     }
                 }

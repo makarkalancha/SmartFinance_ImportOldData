@@ -2,11 +2,14 @@ package com.makco.smartfinance.h2db.functions;
 
 import com.makco.smartfinance.h2db.tables.DateUnit;
 import com.makco.smartfinance.h2db.utils.schema_constants.Table;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Date;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import java.sql.*;
-import java.util.Date;
 
 /**
  * Created by mcalancea on 2016-02-16.
@@ -50,59 +53,64 @@ public class DateUnitFunctions {
 
     //h2 accepts java.UTIL.Date, not only java.SQL.Date
     public static Long insertSelectDate(Connection connection, Date date) throws SQLException {
-        Long result = null;
-        DateUnit du = new DateUnit(date);
+        try {
+            Long result = null;
+            DateUnit du = new DateUnit(date);
 
-        StringBuilder selectQuery = new StringBuilder();
-        selectQuery.append("SELECT " + Table.DATEUNIT.UNITDATE + " FROM " + Table.Names.DATEUNIT);
-        selectQuery.append(" WHERE " + Table.DATEUNIT.UNITTIMESTAMP + " = ?");
+            StringBuilder selectQuery = new StringBuilder();
+            selectQuery.append("SELECT " + Table.DATEUNIT.UNITDATE + " FROM " + Table.Names.DATEUNIT);
+            selectQuery.append(" WHERE " + Table.DATEUNIT.UNITTIMESTAMP + " = ?");
 
-        StringBuilder insertQuery = new StringBuilder();
-        insertQuery.append("INSERT INTO ");
-        insertQuery.append(Table.Names.DATEUNIT);
-        insertQuery.append("(");
-        insertQuery.append(Table.DATEUNIT.UNITTIMESTAMP + ", ");
-        insertQuery.append(Table.DATEUNIT.UNITYEAR + ", ");
-        insertQuery.append(Table.DATEUNIT.UNITMONTHOFYEAR + ", ");
-        insertQuery.append(Table.DATEUNIT.UNITMONTH + ", ");
-        insertQuery.append(Table.DATEUNIT.UNITDATE + ", ");
-        insertQuery.append(Table.DATEUNIT.UNITDAYOFWEEK + ", ");
-        insertQuery.append(Table.DATEUNIT.WEEKDAY + ", ");
-        insertQuery.append(Table.DATEUNIT.UNITDATEOFMONTH + ") ");
-        insertQuery.append("VALUES (?,?,?,?,?,?,?,?); ");
+            StringBuilder insertQuery = new StringBuilder();
+            insertQuery.append("INSERT INTO ");
+            insertQuery.append(Table.Names.DATEUNIT);
+            insertQuery.append("(");
+            insertQuery.append(Table.DATEUNIT.UNITTIMESTAMP + ", ");
+            insertQuery.append(Table.DATEUNIT.UNITYEAR + ", ");
+            insertQuery.append(Table.DATEUNIT.UNITMONTHOFYEAR + ", ");
+            insertQuery.append(Table.DATEUNIT.UNITMONTH + ", ");
+            insertQuery.append(Table.DATEUNIT.UNITDATE + ", ");
+            insertQuery.append(Table.DATEUNIT.UNITDAYOFWEEK + ", ");
+            insertQuery.append(Table.DATEUNIT.WEEKDAY + ", ");
+            insertQuery.append(Table.DATEUNIT.UNITDATEOFMONTH + ") ");
+            insertQuery.append("VALUES (?,?,?,?,?,?,?,?); ");
 
-        LOG.debug(selectQuery.toString());
-        LOG.debug(insertQuery.toString());
-        ResultSet rs = null;
-        try (
-                PreparedStatement selectPS = connection.prepareStatement(selectQuery.toString());
-                PreparedStatement insertPS = connection.prepareStatement(insertQuery.toString(), Statement.RETURN_GENERATED_KEYS);
-        ) {
-            selectPS.setDate(1, du.getUnitTimeStamp());
-            selectPS.execute();
-            rs = selectPS.getResultSet();
-            if (rs.next()) {
-                result = rs.getLong(1);
-            } else {
-                insertPS.setDate(1, du.getUnitTimeStamp());
-                insertPS.setInt(2, du.getUnitYear());
-                insertPS.setInt(3, du.getUnitMonthOfYear());
-                insertPS.setLong(4, du.getUnitMonth());
-                insertPS.setLong(5, du.getUnitDate());
-                insertPS.setInt(6, du.getUnitDayOfWeek());
-                insertPS.setBoolean(7, du.getWeekDay());
-                insertPS.setLong(8, du.getUnitDateOfMonth());
+            LOG.debug(selectQuery.toString());
+            LOG.debug(insertQuery.toString());
+            ResultSet rs = null;
+            try (
+                    PreparedStatement selectPS = connection.prepareStatement(selectQuery.toString());
+                    PreparedStatement insertPS = connection.prepareStatement(insertQuery.toString(), Statement.RETURN_GENERATED_KEYS);
+            ) {
+                selectPS.setDate(1, du.getUnitTimeStamp());
+                selectPS.execute();
+                rs = selectPS.getResultSet();
+                if (rs.next()) {
+                    result = rs.getLong(1);
+                } else {
+                    insertPS.setDate(1, du.getUnitTimeStamp());
+                    insertPS.setInt(2, du.getUnitYear());
+                    insertPS.setInt(3, du.getUnitMonthOfYear());
+                    insertPS.setLong(4, du.getUnitMonth());
+                    insertPS.setLong(5, du.getUnitDate());
+                    insertPS.setInt(6, du.getUnitDayOfWeek());
+                    insertPS.setBoolean(7, du.getWeekDay());
+                    insertPS.setLong(8, du.getUnitDateOfMonth());
 
-                insertPS.executeUpdate();
+                    insertPS.executeUpdate();
 //                rs = insertPS.getGeneratedKeys();
 //                rs.next();
 //                result = rs.getLong(1);
-                result = du.getUnitDate();
-            }
+                    result = du.getUnitDate();
+                }
 
-            return result;
-        } finally {
-            if (rs != null) rs.close();
+                return result;
+            } finally {
+                if (rs != null) rs.close();
+            }
+        }catch (SQLException e){
+            LOG.error(e);
+            throw e;
         }
     }
 }
