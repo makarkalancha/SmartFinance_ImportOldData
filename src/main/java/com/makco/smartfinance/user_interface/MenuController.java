@@ -3,6 +3,7 @@ package com.makco.smartfinance.user_interface;
 import com.makco.smartfinance.user_interface.constants.Screens;
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -10,7 +11,7 @@ import javafx.fxml.Initializable;
 /**
  * Created by mcalancea on 2016-04-01.
  */
-public class Screen2Controller implements Initializable, ControlledScreen {
+public class MenuController implements Initializable, ControlledScreen {
     ScreensController myController;
 
     @Override
@@ -24,12 +25,23 @@ public class Screen2Controller implements Initializable, ControlledScreen {
     }
 
     @FXML
-    public void handleButtonAction(ActionEvent event){
+    public void toScene1(ActionEvent event){
         myController.setScreen(Screens.SCREEN1);
+    }
+
+    @FXML
+    public void toScene2(ActionEvent event){
+        myController.setScreen(Screens.SCREEN2);
     }
 
     @FXML
     public void toMain(ActionEvent event){
         myController.setScreen(Screens.MAIN);
+    }
+
+    @FXML
+    public void quit(ActionEvent event){
+        Platform.exit();
+        System.exit(0);
     }
 }

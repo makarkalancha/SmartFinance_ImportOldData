@@ -1,38 +1,32 @@
 package com.makco.smartfinance.user_interface;
 
-import java.util.HashMap;
-
-import javafx.scene.layout.VBox;
+import com.makco.smartfinance.user_interface.constants.Screens;
+import java.util.EnumMap;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
-import javafx.animation.Timeline;
-import javafx.beans.property.DoubleProperty;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.layout.StackPane;
-import javafx.util.Duration;
+import javafx.scene.layout.VBox;
 
 /**
  * Created by mcalancea on 2016-04-01.
  */
-public class ScreensController extends StackPane {
-//public class ScreensController extends VBox {
+public class ScreensController extends VBox {
     private final static Logger LOG = LogManager.getLogger(ScreensController.class);
-    private HashMap<String, Node> screens = new HashMap<>();
+    EnumMap<Screens, Node> screens = new EnumMap<>(Screens.class);
 
     public ScreensController(){
         super();
+        setPrefWidth(400f);
+        setPrefWidth(640f);
+        loadMenuBar();
         LOG.debug("ScreensController.constr");
     }
 
-    public void addScreen(final String name, final Node screen) {
-        screens.put(name, screen);
-        LOG.debug(String.format("ScreensController.addScreen: name=%s; Node.screen=%s", name, screen.toString()));
+    public void addScreen(final Screens screen, final Node screenNode) {
+        screens.put(screen, screenNode);
+        LOG.debug(String.format("ScreensController.addScreen: name=%s; Node.screen=%s", screen.toString(), screenNode.toString()));
     }
 
     public Node getScreen(final String name) {
@@ -41,14 +35,32 @@ public class ScreensController extends StackPane {
 
     //loads the fxml file, add teh screen to the screens collection and
     //finally injects the screenPane to the contoller
-    public boolean loadScreen(final String name, final String resource){
-        LOG.debug(String.format("ScreensController.loadScreen: name=%s; resource=%s", name, resource));
+    public boolean loadMenuBar(){
+        LOG.debug("ScreensController.loadMenuBar");
         try{
-            FXMLLoader myLoader = new FXMLLoader(getClass().getResource(resource));
+            FXMLLoader myLoader = new FXMLLoader(getClass().getResource("menu_bar.fxml"));
             Parent loadScreen = (Parent) myLoader.load();
             ControlledScreen controlledScreen = ((ControlledScreen) myLoader.getController());
             controlledScreen.setScreenParent(this);
-            addScreen(name, loadScreen);
+            getChildren().add(loadScreen);
+            return true;
+        } catch (Exception e){
+            LOG.error("!>>>ScreensController.loadScreen:",e);
+            return false;
+        }
+    }
+
+    //loads the fxml file, add teh screen to the screens collection and
+    //finally injects the screenPane to the contoller
+//    public boolean loadScreen(final String name, final String resource){
+    public boolean loadScreen(final Screens screen){
+        LOG.debug(String.format("ScreensController.loadScreen: name=%s; resource=%s", screen, screen.getFxmlFilePath()));
+        try{
+            FXMLLoader myLoader = new FXMLLoader(getClass().getResource(screen.getFxmlFilePath()));
+            Parent loadScreen = (Parent) myLoader.load();
+            ControlledScreen controlledScreen = ((ControlledScreen) myLoader.getController());
+            controlledScreen.setScreenParent(this);
+            addScreen(screen, loadScreen);
             return true;
         } catch (Exception e){
             LOG.error("!>>>ScreensController.loadScreen:",e);
@@ -60,40 +72,21 @@ public class ScreensController extends StackPane {
     //First it makes sure the screen has been already loaded. Then if there is more than
     //one screen the new screen is been added second, and then the current screen is removed.
     //If there isn't any screen being desplayed, the new screen is just added to the root.
-    public boolean setScreen(final String name) {
-        LOG.debug(String.format("ScreensController.setScreen: name=%s", name));
-        if (screens.get(name) != null) {
-            final DoubleProperty opacity = opacityProperty();
-            if (!getChildren().isEmpty()) {
-                Timeline fade = new Timeline(
-                        new KeyFrame(Duration.ZERO, new KeyValue(opacity, 1.0)),
-                        new KeyFrame(new Duration(1_000), new EventHandler<ActionEvent>() {
-                            @Override
-                            public void handle(ActionEvent event) {
-                                getChildren().remove(0);
-                                getChildren().add(0, screens.get(name));
-                                Timeline fadeIn = new Timeline(
-                                        new KeyFrame(Duration.ZERO, new KeyValue(opacity, 0.0)),
-                                        new KeyFrame(new Duration(800), new KeyValue(opacity, 1.0))
-                                );
-                                fadeIn.play();
-                            }
-                        },
-                                new KeyValue(opacity, 0.0)
-                        ));
-                fade.play();
+    public boolean setScreen(final Screens screen) {
+        LOG.debug(String.format("ScreensController.setScreen: name=%s", screen.toString()));
+        LOG.debug(String.format("getChildren().size()=%d", getChildren().size()));
+        if (screens.get(screen) != null) {
+            if (!getChildren().isEmpty() && getChildren().size() > 1) {
+                LOG.debug("getChildren() is greater than 1");
+                getChildren().remove(1);
+                getChildren().add(1, screens.get(screen));
             } else {
-                setOpacity(0.0);
-                getChildren().add(screens.get(name));
-                Timeline fadeIn = new Timeline(
-                        new KeyFrame(Duration.ZERO, new KeyValue(opacity, 0.0)),
-                        new KeyFrame(new Duration(2_500), new KeyValue(opacity, 1.0))
-                );
-                fadeIn.play();
+                LOG.debug("getChildren() is less or equal than 1");
+                getChildren().add(screens.get(screen));
             }
             return true;
         } else {
-            LOG.error(name+" -> screen hasn't been loaded!!!");
+            LOG.error(screen+" -> screen hasn't been loaded!!!");
             return false;
         }
 
@@ -112,10 +105,10 @@ public class ScreensController extends StackPane {
     }
 
     //this method will remove the screen with the given name from the collection of screens
-    public boolean unloadScreen(final String name){
-        LOG.debug(String.format("ScreensController.unloadScreen: name=%s", name));
-        if(screens.remove(name) == null) {
-            LOG.error(name + "->screen didn't exist");
+    public boolean unloadScreen(final Screens screen){
+        LOG.debug(String.format("ScreensController.unloadScreen: name=%s", screen.toString()));
+        if(screens.remove(screen) == null) {
+            LOG.error(screen.toString() + "->screen didn't exist");
             return false;
         } else {
             return true;

@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.VBox?>
 
 
-<MenuBar VBox.vgrow="NEVER">
+<MenuBar fx:controller="com.makco.smartfinance.user_interface.MenuController" VBox.vgrow="NEVER" xmlns:fx="http://javafx.com/fxml/1" >
     <menus>
         <Menu mnemonicParsing="false" text="File">
             <items>
@@ -23,7 +23,7 @@
                 <SeparatorMenuItem mnemonicParsing="false" />
                 <MenuItem mnemonicParsing="false" text="Preferences…" />
                 <SeparatorMenuItem mnemonicParsing="false" />
-                <MenuItem mnemonicParsing="false" text="Quit" />
+                <MenuItem onAction="#quit"  mnemonicParsing="false" text="Quit" />
             </items>
         </Menu>
         <Menu mnemonicParsing="false" text="Edit">
@@ -38,6 +38,13 @@
                 <SeparatorMenuItem mnemonicParsing="false" />
                 <MenuItem mnemonicParsing="false" text="Select All" />
                 <MenuItem mnemonicParsing="false" text="Unselect All" />
+            </items>
+        </Menu>
+        <Menu mnemonicParsing="false" text="Navigate">
+            <items>
+                <MenuItem onAction="#toMain" mnemonicParsing="false" text="Main" />
+                <MenuItem onAction="#toScene1" mnemonicParsing="false" text="Scene 1" />
+                <MenuItem onAction="#toScene2" mnemonicParsing="false" text="Scene 2" />
             </items>
         </Menu>
         <Menu mnemonicParsing="false" text="Help">
