@@ -35,7 +35,6 @@ public class Main extends Application{
     @Override
     public void start(Stage primaryStage){
         System.setErr(Logs.createLoggingProxy(System.err));
-//        System.out.println(100 / 0);
         try {
             this.primaryStage = primaryStage;
 
