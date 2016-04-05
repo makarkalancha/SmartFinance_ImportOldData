@@ -2,6 +2,7 @@ package com.makco.smartfinance;
 
 import com.makco.smartfinance.user_interface.ScreensController;
 import com.makco.smartfinance.user_interface.constants.Screens;
+import com.makco.smartfinance.utils.Logs;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import org.apache.logging.log4j.LogManager;
@@ -33,6 +34,8 @@ public class Main extends Application{
     //http://www.devx.com/Java/Article/48193/0/page/2
     @Override
     public void start(Stage primaryStage){
+        System.setErr(Logs.createLoggingProxy(System.err));
+//        System.out.println(100 / 0);
         try {
             this.primaryStage = primaryStage;
 

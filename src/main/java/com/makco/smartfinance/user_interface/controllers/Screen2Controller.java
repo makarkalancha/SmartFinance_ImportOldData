@@ -28,7 +28,7 @@ public class Screen2Controller implements Initializable, ControlledScreen {
     @FXML
     public void handleButtonAction(ActionEvent event){
         myController.setScreen(Screens.SCREEN1);
-        throw new IllegalArgumentException("hello bitch");
+//        throw new IllegalArgumentException("hello bitch");
     }
 
     @FXML
