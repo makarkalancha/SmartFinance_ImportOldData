@@ -3,6 +3,7 @@ package com.makco.smartfinance.h2db.utils;
 import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
+import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -94,9 +95,24 @@ public class H2DbUtils {
         return H2DbUtils.class.getClassLoader().getResourceAsStream(Context.INSTANCE.DB_SCRIPT_CREATE());
     }
 
-    public static int migrate() {
+    public static int migrate(String schemaName) {
         Flyway flyway = new Flyway();
         flyway.setDataSource("jdbc:h2:" + Context.INSTANCE.DB_DIR() + "/" + Context.INSTANCE.DB_NAME() + ";IFEXISTS=TRUE;",Context.INSTANCE.DB_USER(),Context.INSTANCE.DB_PASSWORD());
+        flyway.setTable("_SCHEMA_VERSION");
+        flyway.setSchemas(schemaName);
+        flyway.setBaselineOnMigrate(true);
         return flyway.migrate();
+    }
+
+
+    public static boolean checkIfSchemaExists(String dbSchemaName)throws SQLException {
+        try {
+            Connection connection = DriverManager.getConnection("jdbc:h2:" + Context.INSTANCE.DB_DIR() + "/" + Context.INSTANCE.DB_NAME() + ";IFEXISTS=TRUE;",
+                    Context.INSTANCE.DB_USER(), Context.INSTANCE.DB_PASSWORD());
+            return checkIfSchemaExists(connection, "FINANCE");
+        } catch (SQLException e) {
+            LOG.error(e, e);
+            return false;
+        }
     }
 }

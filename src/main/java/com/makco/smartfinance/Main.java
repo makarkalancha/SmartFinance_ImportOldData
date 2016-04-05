@@ -1,5 +1,7 @@
 package com.makco.smartfinance;
 
+import com.makco.smartfinance.h2db.utils.H2DbUtils;
+import com.makco.smartfinance.persistence.contants.DataBaseConstants;
 import com.makco.smartfinance.user_interface.ScreensController;
 import com.makco.smartfinance.user_interface.constants.Screens;
 import com.makco.smartfinance.utils.Logs;
@@ -37,9 +39,16 @@ public class Main extends Application{
         System.setErr(Logs.createLoggingProxy(System.err));
         try {
 //            H2DbUtils.checkIfSchemaExists(ApplicationConstants.DB_SCHEMA_NAME);
+//http://www.hascode.com/2013/04/easy-database-migrations-using-flyway-java-ee-6-and-glassfish/
 //            Flyway flyway = new Flyway();
 //            flyway.setDataSource(DBConnectionResource.getDbConnectionUrl(),TestContext.INSTANCE.DB_USER(),TestContext.INSTANCE.DB_PASSWORD());
 //            flyway.migrate();
+            if(H2DbUtils.checkIfSchemaExists(DataBaseConstants.SCHEMA)){
+                LOG.debug("db exists");
+            } else {
+                LOG.debug("db DOESN'T exist");
+                H2DbUtils.migrate(DataBaseConstants.SCHEMA);
+            }
 
             this.primaryStage = primaryStage;
 

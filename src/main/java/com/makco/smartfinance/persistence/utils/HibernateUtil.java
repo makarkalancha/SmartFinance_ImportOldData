@@ -1,5 +1,6 @@
 package com.makco.smartfinance.persistence.utils;
 
+import com.makco.smartfinance.persistence.contants.DataBaseConstants;
 import com.makco.smartfinance.persistence.entity.FamilyMember;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -46,9 +47,9 @@ public class HibernateUtil {
         Configuration cfg = new Configuration();
         cfg.addAnnotatedClass(FamilyMember.class);
         cfg.setProperty("hibernate.connection.driver_class", "org.h2.Driver");
-        cfg.setProperty("hibernate.connection.url", "jdbc:h2:~/smart_finance/finance;IFEXISTS=TRUE");
-        cfg.setProperty("hibernate.connection.username", "client");
-        cfg.setProperty("hibernate.connection.password", "qwerty1234");
+        cfg.setProperty("hibernate.connection.url", DataBaseConstants.URL);
+        cfg.setProperty("hibernate.connection.username", DataBaseConstants.USERNAME);
+        cfg.setProperty("hibernate.connection.password", DataBaseConstants.PASSWORD);
         cfg.setProperty("hibernate.show_sql", "true");
         cfg.setProperty("hibernate.dialect", "org.hibernate.dialect.H2Dialect");
         cfg.setProperty("hibernate.hbm2ddl.auto", "validate");
