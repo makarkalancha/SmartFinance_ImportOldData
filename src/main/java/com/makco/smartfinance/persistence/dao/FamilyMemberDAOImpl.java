@@ -49,4 +49,15 @@ public class FamilyMemberDAOImpl implements FamilyMemberDAO {
         session.getTransaction().commit();
         session.close();
     }
+
+    @Override
+    public FamilyMember getFamilyMemberById(Long id) {
+        FamilyMember familyMember = null;
+        Session session = HibernateUtil.openSession();
+        session.beginTransaction();
+        familyMember = (FamilyMember) session.load(FamilyMember.class, id);
+        session.getTransaction().commit();
+        session.close();
+        return familyMember;
+    }
 }

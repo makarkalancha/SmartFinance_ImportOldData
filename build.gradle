@@ -57,7 +57,6 @@ subprojects {
 }
 
 //https://discuss.gradle.org/t/how-to-jar-all-class-output-from-all-sub-projects-into-one-jar/7049
-
 dependencies {
     compile project(':database_engine')
     compile 'org.hibernate:hibernate-entitymanager:' + hibernate_version //JPA

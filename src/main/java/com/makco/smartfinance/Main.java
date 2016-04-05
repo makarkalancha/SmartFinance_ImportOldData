@@ -36,6 +36,11 @@ public class Main extends Application{
     public void start(Stage primaryStage){
         System.setErr(Logs.createLoggingProxy(System.err));
         try {
+//            H2DbUtils.checkIfSchemaExists(ApplicationConstants.DB_SCHEMA_NAME);
+//            Flyway flyway = new Flyway();
+//            flyway.setDataSource(DBConnectionResource.getDbConnectionUrl(),TestContext.INSTANCE.DB_USER(),TestContext.INSTANCE.DB_PASSWORD());
+//            flyway.migrate();
+
             this.primaryStage = primaryStage;
 
             ScreensController mainContainer = new ScreensController();

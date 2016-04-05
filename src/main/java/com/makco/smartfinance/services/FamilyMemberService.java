@@ -9,6 +9,7 @@ import java.util.List;
 public interface FamilyMemberService {
     void addFamilyMember(FamilyMember familyMember);
     List<FamilyMember> listFamilyMembers();
+    FamilyMember getFamilyMemberById(Long id);
     void removeFamilyMember(Long id);
     void updateFamilyMember(FamilyMember familyMember);
 }

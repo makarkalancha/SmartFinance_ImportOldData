@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.flywaydb.core.Flyway;
 
 /**
  * Created by mcalancea on 2016-03-08.
@@ -91,5 +92,11 @@ public class H2DbUtils {
 
     public static InputStream getCreateDBScript() {
         return H2DbUtils.class.getClassLoader().getResourceAsStream(Context.INSTANCE.DB_SCRIPT_CREATE());
+    }
+
+    public static int migrate() {
+        Flyway flyway = new Flyway();
+        flyway.setDataSource("jdbc:h2:" + Context.INSTANCE.DB_DIR() + "/" + Context.INSTANCE.DB_NAME() + ";IFEXISTS=TRUE;",Context.INSTANCE.DB_USER(),Context.INSTANCE.DB_PASSWORD());
+        return flyway.migrate();
     }
 }
