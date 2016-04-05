@@ -13,7 +13,7 @@ import javafx.fxml.Initializable;
  * Created by mcalancea on 2016-04-01.
  */
 public class Screen1Controller implements Initializable, ControlledScreen {
-    ScreensController myController;
+    private ScreensController myController;
 
     @Override
     public void setScreenParent(ScreensController screenPage) {

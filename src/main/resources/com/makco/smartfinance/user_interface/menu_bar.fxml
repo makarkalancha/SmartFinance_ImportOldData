@@ -43,6 +43,7 @@
         <Menu mnemonicParsing="false" text="Navigate">
             <items>
                 <MenuItem onAction="#toMain" mnemonicParsing="false" text="Main" />
+                <MenuItem onAction="#toFamilyMember" mnemonicParsing="false" text="Family Members" />
                 <MenuItem onAction="#toScene1" mnemonicParsing="false" text="Scene 1" />
                 <MenuItem onAction="#toScene2" mnemonicParsing="false" text="Scene 2" />
             </items>

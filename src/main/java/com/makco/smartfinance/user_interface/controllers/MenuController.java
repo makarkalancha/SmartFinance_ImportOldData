@@ -14,7 +14,7 @@ import javafx.fxml.Initializable;
  * Created by mcalancea on 2016-04-01.
  */
 public class MenuController implements Initializable, ControlledScreen {
-    ScreensController myController;
+    private ScreensController myController;
 
     @Override
     public void setScreenParent(ScreensController screenPage) {
@@ -39,6 +39,11 @@ public class MenuController implements Initializable, ControlledScreen {
     @FXML
     public void toMain(ActionEvent event){
         myController.setScreen(Screens.MAIN);
+    }
+
+    @FXML
+    public void toFamilyMember(ActionEvent event){
+        myController.setScreen(Screens.FAMILY_MEMBER);
     }
 
     @FXML

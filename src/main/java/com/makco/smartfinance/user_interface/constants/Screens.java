@@ -4,6 +4,7 @@ package com.makco.smartfinance.user_interface.constants;
  * Created by mcalancea on 2016-04-04.
  */
 public enum Screens {
+    FAMILY_MEMBER("family_member.fxml"),
     MAIN("main.fxml"),
     SCREEN1("scene1.fxml"),
     SCREEN2("scene2.fxml");
