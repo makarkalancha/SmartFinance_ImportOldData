@@ -105,7 +105,7 @@ public class H2DbUtils {
     }
 
 
-    public static boolean checkIfSchemaExists(String dbSchemaName)throws SQLException {
+    public static boolean checkIfSchemaExists(String dbSchemaName) {
         try {
             Connection connection = DriverManager.getConnection("jdbc:h2:" + Context.INSTANCE.DB_DIR() + "/" + Context.INSTANCE.DB_NAME() + ";IFEXISTS=TRUE;",
                     Context.INSTANCE.DB_USER(), Context.INSTANCE.DB_PASSWORD());
