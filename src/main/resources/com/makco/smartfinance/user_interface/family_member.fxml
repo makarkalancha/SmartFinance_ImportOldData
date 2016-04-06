@@ -84,19 +84,19 @@
             <Label text="Description" GridPane.rowIndex="2" />
             <Label text="Created on" GridPane.rowIndex="3" />
             <Label text="Updated on" GridPane.rowIndex="4" />
-            <TextField fx:id="idTx" editable="false" promptText="id" GridPane.columnIndex="1">
+            <TextField fx:id="idTx" disable="true" editable="false" promptText="id" GridPane.columnIndex="1">
                <tooltip>
                   <Tooltip text="This field is automatically generated hence not editable" />
                </tooltip>
             </TextField>
             <TextField fx:id="nameTx" promptText="name..." GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <TextArea fx:id="descTx" prefHeight="58.0" prefWidth="211.0" promptText="description..." GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <TextField fx:id="createdOnTx" editable="false" promptText="created on" GridPane.columnIndex="1" GridPane.rowIndex="3">
+            <TextField fx:id="createdOnTx" disable="true" editable="false" promptText="created on" GridPane.columnIndex="1" GridPane.rowIndex="3">
                <tooltip>
                   <Tooltip text="This field is automatically generated hence not editable" />
                </tooltip>
             </TextField>
-            <TextField fx:id="updatedOnTx" editable="false" promptText="updated on" GridPane.columnIndex="1" GridPane.rowIndex="4">
+            <TextField fx:id="updatedOnTx" disable="true" editable="false" promptText="updated on" GridPane.columnIndex="1" GridPane.rowIndex="4">
                <tooltip>
                   <Tooltip text="This field is automatically generated hence not editable" />
                </tooltip>
