@@ -53,13 +53,13 @@
    </top>
    <bottom>
       <TableView fx:id="table" prefHeight="390.0" prefWidth="800.0" BorderPane.alignment="CENTER">
-        <columns>
+        <!--<columns>
           <TableColumn prefWidth="75.0" text="ID" />
           <TableColumn prefWidth="168.0" text="Name" />
             <TableColumn prefWidth="334.0" text="Description" />
             <TableColumn prefWidth="109.0" text="Created on" />
             <TableColumn prefWidth="113.0" text="Updated on" />
-        </columns>
+        </columns>-->
       </TableView>
    </bottom>
    <center>

@@ -9,6 +9,8 @@ import java.net.URL;
 import java.util.Calendar;
 import java.util.List;
 import java.util.ResourceBundle;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -25,6 +27,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
  */
 //http://www.devx.com/Java/Article/48193/0/page/2
 public class FamilyMemberController implements Initializable, ControlledScreen {
+    private final static Logger LOG = LogManager.getLogger(FamilyMemberController.class);
     private ScreensController myController;
     private FamilyMemberService familyMemberService = new FamilyMemberServiceImpl();
     private ObservableList<FamilyMember> familyMembers = FXCollections.observableArrayList();
@@ -64,7 +67,7 @@ public class FamilyMemberController implements Initializable, ControlledScreen {
 
     @FXML
     public void udpate(ActionEvent event) {
-        FamilyMember familyMember = familyMemberService.getFamilyMemberById(Long.parseLong(idTx.getId()));
+        FamilyMember familyMember = familyMemberService.getFamilyMemberById(Long.parseLong(idTx.getText()));
         familyMember.setName(nameTx.getText());
         familyMember.setDescription(descTx.getText());
         familyMemberService.updateFamilyMember(familyMember);
@@ -73,7 +76,7 @@ public class FamilyMemberController implements Initializable, ControlledScreen {
 
     @FXML
     public void delete(ActionEvent event) {
-        familyMemberService.removeFamilyMember(Long.parseLong(idTx.getId()));
+        familyMemberService.removeFamilyMember(Long.parseLong(idTx.getText()));
         populateTable();
     }
 
@@ -81,6 +84,7 @@ public class FamilyMemberController implements Initializable, ControlledScreen {
     public void first(ActionEvent event){
         index = 0;
         populateForm(index);
+        populateTable();
     }
 
     @FXML
@@ -91,22 +95,25 @@ public class FamilyMemberController implements Initializable, ControlledScreen {
             event.consume();
         }
         populateForm(index);
+        populateTable();
     }
 
     @FXML
     public void oneDown(ActionEvent event){
-        if(index < (familyMembers.size() - 1) ){
+        if(index < (getFamilyMembers().size() - 1) ){
             index++;
         }else {
             event.consume();
         }
         populateForm(index);
+        populateTable();
     }
 
     @FXML
     public void last(ActionEvent event){
-        index = familyMembers.size() - 1;
+        index = getFamilyMembers().size() - 1;
         populateForm(index);
+        populateTable();
     }
 
     public ObservableList<FamilyMember> getFamilyMembers() {
@@ -114,15 +121,16 @@ public class FamilyMemberController implements Initializable, ControlledScreen {
             familyMembers.clear();
         }
         familyMembers = FXCollections.observableArrayList((List<FamilyMember>) familyMemberService.listFamilyMembers());
+        LOG.debug("familyMember.size: " + familyMembers.size());
         return familyMembers;
     }
 
     private void populateForm(int index){
-        if(familyMembers.isEmpty()){
+        if(getFamilyMembers().isEmpty()){
             return;
         }
 
-        FamilyMember familyMember = familyMembers.get(index);
+        FamilyMember familyMember = getFamilyMembers().get(index);
         idTx.setText(familyMember.getId().toString());
         nameTx.setText(familyMember.getName());
         descTx.setText(familyMember.getDescription());
@@ -132,10 +140,10 @@ public class FamilyMemberController implements Initializable, ControlledScreen {
 
     private void populateTable(){
         table.getItems().clear();
-        table.setItems(familyMembers);
+        table.setItems(getFamilyMembers());
 
-        TableColumn<FamilyMember, Integer> familyMemberIdCol = new TableColumn<>("ID");
-        familyMemberIdCol.setCellValueFactory(new PropertyValueFactory<FamilyMember, Integer>("id"));
+        TableColumn<FamilyMember, Long> familyMemberIdCol = new TableColumn<>("ID");
+        familyMemberIdCol.setCellValueFactory(new PropertyValueFactory<FamilyMember, Long>("id"));
 
         TableColumn<FamilyMember, String> familyMemberNameCol = new TableColumn<>("Name");
         familyMemberNameCol.setCellValueFactory(new PropertyValueFactory<FamilyMember, String>("name"));
@@ -146,8 +154,11 @@ public class FamilyMemberController implements Initializable, ControlledScreen {
         TableColumn<FamilyMember, Calendar> familyMemberCreatedCol = new TableColumn<>("Created on");
         familyMemberCreatedCol.setCellValueFactory(new PropertyValueFactory<FamilyMember, Calendar>("createdOn"));
 
-        TableColumn<FamilyMember, Calendar> familyMemberUpdatedCol = new TableColumn<>("ID");
+        TableColumn<FamilyMember, Calendar> familyMemberUpdatedCol = new TableColumn<>("Updated on");
         familyMemberUpdatedCol.setCellValueFactory(new PropertyValueFactory<FamilyMember, Calendar>("updatedOn"));
+
+        table.getColumns().setAll(familyMemberIdCol, familyMemberNameCol, familyMemberDescCol, familyMemberCreatedCol, familyMemberUpdatedCol);
+
     }
 
 //    public void removeFamilyMember(Long id) {

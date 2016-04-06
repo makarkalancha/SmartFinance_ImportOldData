@@ -56,7 +56,8 @@ public class Main extends Application{
             for (Screens scr : Screens.values()) {
                 mainContainer.loadScreen(scr);
             }
-            mainContainer.setScreen(Screens.MAIN);
+//            mainContainer.setScreen(Screens.MAIN);
+            mainContainer.setScreen(Screens.FAMILY_MEMBER);
 
             this.primaryStage.setTitle("Hello");
             ////http://stackoverflow.com/questions/19602727/how-to-reference-javafx-fxml-files-in-resource-folder
