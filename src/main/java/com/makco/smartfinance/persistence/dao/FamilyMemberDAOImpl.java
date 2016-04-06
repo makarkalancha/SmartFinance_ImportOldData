@@ -1,9 +1,11 @@
 package com.makco.smartfinance.persistence.dao;
 
 import com.makco.smartfinance.persistence.entity.FamilyMember;
+import com.makco.smartfinance.persistence.utils.FinancePersistenceManager;
 import com.makco.smartfinance.persistence.utils.HibernateUtil;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.EntityManager;
 import org.hibernate.Session;
 
 /**
@@ -13,18 +15,18 @@ public class FamilyMemberDAOImpl implements FamilyMemberDAO {
 
     @Override
     public void addFamilyMember(FamilyMember familyMember) {
-        Session session = HibernateUtil.openSession();
-        session.beginTransaction();
-        session.save(familyMember);
-        session.getTransaction().commit();
-        session.close();
+//        Session session = HibernateUtil.openSession();
+//        session.beginTransaction();
+//        session.save(familyMember);
+//        session.getTransaction().commit();
+//        session.close();
 
-//        EntityManager em = FinancePersistenceManager.INSTANCE.getEntityManager();
-//        em.getTransaction().begin();
-//        em.persist(familyMember);
-////        em.flush();
-//        em.getTransaction().commit();
-//        em.close();
+        EntityManager em = FinancePersistenceManager.INSTANCE.getEntityManager();
+        em.getTransaction().begin();
+        em.persist(familyMember);
+//        em.flush();
+        em.getTransaction().commit();
+        em.close();
     }
 
     @Override
