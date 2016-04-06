@@ -107,7 +107,7 @@ public class H2DbUtils {
 
     public static boolean checkIfSchemaExists(String dbSchemaName) {
         try {
-            Connection connection = DriverManager.getConnection("jdbc:h2:" + Context.INSTANCE.DB_DIR() + "/" + Context.INSTANCE.DB_NAME() + ";IFEXISTS=TRUE;",
+            Connection connection = DriverManager.getConnection("jdbc:h2:" + Context.INSTANCE.DB_DIR() + "/" + Context.INSTANCE.DB_NAME(),
                     Context.INSTANCE.DB_USER(), Context.INSTANCE.DB_PASSWORD());
             return checkIfSchemaExists(connection, "FINANCE");
         } catch (SQLException e) {

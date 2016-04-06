@@ -18,6 +18,13 @@ public class FamilyMemberDAOImpl implements FamilyMemberDAO {
         session.save(familyMember);
         session.getTransaction().commit();
         session.close();
+
+//        EntityManager em = FinancePersistenceManager.INSTANCE.getEntityManager();
+//        em.getTransaction().begin();
+//        em.persist(familyMember);
+////        em.flush();
+//        em.getTransaction().commit();
+//        em.close();
     }
 
     @Override

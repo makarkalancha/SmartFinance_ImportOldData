@@ -46,7 +46,8 @@ public class HibernateUtil {
     private static Configuration getConfiguration() {
         Configuration cfg = new Configuration();
         cfg.addAnnotatedClass(FamilyMember.class);
-        cfg.setProperty("hibernate.connection.driver_class", "org.h2.Driver");
+//        cfg.setProperty("hibernate.connection.driver_class", "org.h2.Driver");
+        cfg.setProperty("javax.persistence.jdbc.driver", "org.h2.Driver");
         cfg.setProperty("hibernate.connection.url", DataBaseConstants.URL);
         cfg.setProperty("hibernate.connection.username", DataBaseConstants.USERNAME);
         cfg.setProperty("hibernate.connection.password", DataBaseConstants.PASSWORD);
