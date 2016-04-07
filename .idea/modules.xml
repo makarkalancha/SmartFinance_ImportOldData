@@ -4,8 +4,6 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/SmartFinance.iml" filepath="$PROJECT_DIR$/SmartFinance.iml" />
       <module fileurl="file://$PROJECT_DIR$/database_engine/database_engine.iml" filepath="$PROJECT_DIR$/database_engine/database_engine.iml" />
-      <module fileurl="file://$PROJECT_DIR$/database_layer/database_layer.iml" filepath="$PROJECT_DIR$/database_layer/database_layer.iml" />
-      <module fileurl="file://$PROJECT_DIR$/utils/utils.iml" filepath="$PROJECT_DIR$/utils/utils.iml" />
     </modules>
   </component>
 </project>
