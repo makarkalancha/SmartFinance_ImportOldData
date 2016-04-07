@@ -85,11 +85,11 @@ public class FamilyMemberDAOImpl implements FamilyMemberDAO {
     @Override
     public void updateFamilyMember(FamilyMember familyMember) {
         try{
-        Session session = HibernateUtil.openSession();
-        session.beginTransaction();
-        session.update(familyMember);
-        session.getTransaction().commit();
-        session.close();
+            Session session = HibernateUtil.openSession();
+            session.beginTransaction();
+            session.update(familyMember);
+            session.getTransaction().commit();
+            session.close();
 
 //        EntityManager em = FinancePersistenceManager.INSTANCE.getEntityManager();
 //        em.getTransaction().begin();
@@ -109,7 +109,7 @@ public class FamilyMemberDAOImpl implements FamilyMemberDAO {
             FamilyMember familyMember = null;
             Session session = HibernateUtil.openSession();
             session.beginTransaction();
-            familyMember = (FamilyMember) session.load(FamilyMember.class, id);
+            familyMember = (FamilyMember) session.get(FamilyMember.class, id);
             session.getTransaction().commit();
             session.close();
             return familyMember;

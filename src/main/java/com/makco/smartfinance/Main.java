@@ -3,6 +3,7 @@ package com.makco.smartfinance;
 import com.makco.smartfinance.h2db.utils.H2DbUtils;
 import com.makco.smartfinance.persistence.contants.DataBaseConstants;
 import com.makco.smartfinance.user_interface.ScreensController;
+import com.makco.smartfinance.user_interface.constants.ErrorMessage;
 import com.makco.smartfinance.user_interface.constants.Screens;
 import com.makco.smartfinance.utils.Logs;
 import java.io.PrintWriter;
@@ -37,6 +38,7 @@ public class Main extends Application{
     @Override
     public void start(Stage primaryStage){
         System.setErr(Logs.createLoggingProxy(System.err));
+        System.setOut(Logs.createLoggingProxy(System.out));
         try {
 //            H2DbUtils.checkIfSchemaExists(ApplicationConstants.DB_SCHEMA_NAME);
 //http://www.hascode.com/2013/04/easy-database-migrations-using-flyway-java-ee-6-and-glassfish/
@@ -69,40 +71,7 @@ public class Main extends Application{
             LOG.debug("hello: start");
             primaryStage.show();
         }catch (Exception e){
-            LOG.error(e, e);
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Exception Dialog");
-            alert.setHeaderText("Look, an Exception Dialog");
-            alert.setContentText(e.getMessage());
-
-//            Exception ex = new FileNotFoundException("Could not find file blabla.txt");
-
-// Create expandable Exception.
-            StringWriter sw = new StringWriter();
-            PrintWriter pw = new PrintWriter(sw);
-            e.printStackTrace(pw);
-            String exceptionText = sw.toString();
-
-            Label label = new Label("The exception stacktrace was:");
-
-            TextArea textArea = new TextArea(exceptionText);
-            textArea.setEditable(false);
-            textArea.setWrapText(true);
-
-            textArea.setMaxWidth(Double.MAX_VALUE);
-            textArea.setMaxHeight(Double.MAX_VALUE);
-            GridPane.setVgrow(textArea, Priority.ALWAYS);
-            GridPane.setHgrow(textArea, Priority.ALWAYS);
-
-            GridPane expContent = new GridPane();
-            expContent.setMaxWidth(Double.MAX_VALUE);
-            expContent.add(label, 0, 0);
-            expContent.add(textArea, 0, 1);
-
-// Set expandable Exception into the dialog pane.
-            alert.getDialogPane().setExpandableContent(expContent);
-
-            alert.showAndWait();
+            ErrorMessage.showAlert(e);
         }
 
     }

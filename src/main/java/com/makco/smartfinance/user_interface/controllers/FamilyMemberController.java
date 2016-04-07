@@ -9,6 +9,8 @@ import java.net.URL;
 import java.util.Calendar;
 import java.util.List;
 import java.util.ResourceBundle;
+
+import com.makco.smartfinance.user_interface.constants.ErrorMessage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import javafx.collections.FXCollections;
@@ -47,128 +49,176 @@ public class FamilyMemberController implements Initializable, ControlledScreen {
 
     @Override
     public void setScreenParent(ScreensController screenPage) {
-        myController = screenPage;
+        try{
+            myController = screenPage;
+        }catch (Exception e){
+            ErrorMessage.showAlert(e);
+        }
     }
 
     @Override
-    public void initialize(URL location, ResourceBundle resources) {
-//        populateTable();
-//        populateForm(0);
+    public void initialize(URL location, ResourceBundle resources){
+        try {
+            getFamilyMembers();
+            populateTable();
+            populateForm(0);
+        }catch (Exception e){
+            ErrorMessage.showAlert(e);
+        }
     }
 
     @FXML
     public void addNew(ActionEvent event){
-        FamilyMember familyMember = new FamilyMember();
-        familyMember.setName(nameTx.getText());
-        familyMember.setDescription(descTx.getText());
-        familyMemberService.addFamilyMember(familyMember);
-        getFamilyMembers();
-        populateTable();
+        try{
+            FamilyMember familyMember = new FamilyMember();
+            familyMember.setName(nameTx.getText());
+            familyMember.setDescription(descTx.getText());
+            familyMemberService.addFamilyMember(familyMember);
+            getFamilyMembers();
+            populateTable();
+        }catch (Exception e){
+            ErrorMessage.showAlert(e);
+        }
     }
 
     @FXML
-    public void udpate(ActionEvent event) {
-        FamilyMember familyMember = familyMemberService.getFamilyMemberById(Long.parseLong(idTx.getText()));
-        familyMember.setName(nameTx.getText());
-        familyMember.setDescription(descTx.getText());
-        familyMemberService.updateFamilyMember(familyMember);
-        getFamilyMembers();
-        populateTable();
+    public void udpate(ActionEvent event){
+        try{
+            FamilyMember familyMember = familyMemberService.getFamilyMemberById(Long.parseLong(idTx.getText()));
+            familyMember.setName(nameTx.getText());
+            familyMember.setDescription(descTx.getText());
+            familyMemberService.updateFamilyMember(familyMember);
+            getFamilyMembers();
+            populateTable();
+        }catch (Exception e){
+            ErrorMessage.showAlert(e);
+        }
     }
 
     @FXML
-    public void delete(ActionEvent event) {
-        familyMemberService.removeFamilyMember(Long.parseLong(idTx.getText()));
-        getFamilyMembers();
-        populateTable();
+    public void delete(ActionEvent event){
+        try{
+            familyMemberService.removeFamilyMember(Long.parseLong(idTx.getText()));
+            getFamilyMembers();
+            populateTable();
+        }catch (Exception e){
+            ErrorMessage.showAlert(e);
+        }
     }
 
     @FXML
     public void first(ActionEvent event){
-        index = 0;
-        populateForm(index);
-        populateTable();
+        try{
+            index = 0;
+            populateForm(index);
+            populateTable();
+        }catch (Exception e){
+            ErrorMessage.showAlert(e);
+        }
     }
 
     @FXML
     public void oneUp(ActionEvent event){
-        if(index > 0){
-            index--;
-        }else {
-            event.consume();
+        try{
+            if(index > 0){
+                index--;
+            }else {
+                event.consume();
+            }
+            populateForm(index);
+            populateTable();
+        }catch (Exception e){
+            ErrorMessage.showAlert(e);
         }
-        populateForm(index);
-        populateTable();
     }
 
     @FXML
     public void oneDown(ActionEvent event){
-        if(index < (familyMembers.size() - 1) ){
-            index++;
-        }else {
-            event.consume();
+        try{
+            if(index < (familyMembers.size() - 1) ){
+                index++;
+            }else {
+                event.consume();
+            }
+            populateForm(index);
+            populateTable();
+        }catch (Exception e){
+            ErrorMessage.showAlert(e);
         }
-        populateForm(index);
-        populateTable();
     }
 
     @FXML
     public void last(ActionEvent event){
-        index = familyMembers.size() - 1;
-        populateForm(index);
-        populateTable();
+        try{
+            index = familyMembers.size() - 1;
+            populateForm(index);
+            populateTable();
+        }catch (Exception e){
+            ErrorMessage.showAlert(e);
+        }
     }
 
-    public ObservableList<FamilyMember> getFamilyMembers() {
-        if(!familyMembers.isEmpty()){
-            familyMembers.clear();
+    public ObservableList<FamilyMember> getFamilyMembers(){
+        try{
+            if (!familyMembers.isEmpty()) {
+                familyMembers.clear();
+            }
+            familyMembers = FXCollections.observableArrayList((List<FamilyMember>) familyMemberService.listFamilyMembers());
+            LOG.debug("familyMember.size: " + familyMembers.size());
+        }catch (Exception e){
+            ErrorMessage.showAlert(e);
         }
-        familyMembers = FXCollections.observableArrayList((List<FamilyMember>) familyMemberService.listFamilyMembers());
-        LOG.debug("familyMember.size: " + familyMembers.size());
         return familyMembers;
     }
 
     private void populateForm(int index){
-        if(familyMembers.isEmpty()){
-            return;
-        }
+        try{
+            if(familyMembers.isEmpty()){
+                return;
+            }
 
-        FamilyMember familyMember = familyMembers.get(index);
-        idTx.setText(familyMember.getId().toString());
-        nameTx.setText(familyMember.getName());
-        descTx.setText(familyMember.getDescription());
-        createdOnTx.setText(familyMember.getCreatedOn().toString());
-        updatedOnTx.setText(familyMember.getUpdatedOn().toString());
+            FamilyMember familyMember = familyMembers.get(index);
+            idTx.setText(familyMember.getId().toString());
+            nameTx.setText(familyMember.getName());
+            descTx.setText(familyMember.getDescription());
+            createdOnTx.setText(familyMember.getCreatedOn().toString());
+            updatedOnTx.setText(familyMember.getUpdatedOn().toString());
+        }catch (Exception e){
+            ErrorMessage.showAlert(e);
+        }
     }
 
     private void populateTable(){
-        table.getItems().clear();
-        table.setItems(familyMembers);
+        try{
+            table.getItems().clear();
+            table.setItems(familyMembers);
 
-        TableColumn<FamilyMember, Long> familyMemberIdCol = new TableColumn<>("ID");
-        familyMemberIdCol.setCellValueFactory(new PropertyValueFactory<FamilyMember, Long>("id"));
+            TableColumn<FamilyMember, Long> familyMemberIdCol = new TableColumn<>("ID");
+            familyMemberIdCol.setCellValueFactory(new PropertyValueFactory<FamilyMember, Long>("id"));
 
-        TableColumn<FamilyMember, String> familyMemberNameCol = new TableColumn<>("Name");
-        familyMemberNameCol.setCellValueFactory(new PropertyValueFactory<FamilyMember, String>("name"));
+            TableColumn<FamilyMember, String> familyMemberNameCol = new TableColumn<>("Name");
+            familyMemberNameCol.setCellValueFactory(new PropertyValueFactory<FamilyMember, String>("name"));
 
-        TableColumn<FamilyMember, String> familyMemberDescCol = new TableColumn<>("Description");
-        familyMemberDescCol.setCellValueFactory(new PropertyValueFactory<FamilyMember, String>("description"));
+            TableColumn<FamilyMember, String> familyMemberDescCol = new TableColumn<>("Description");
+            familyMemberDescCol.setCellValueFactory(new PropertyValueFactory<FamilyMember, String>("description"));
 
-        TableColumn<FamilyMember, Calendar> familyMemberCreatedCol = new TableColumn<>("Created on");
-        familyMemberCreatedCol.setCellValueFactory(new PropertyValueFactory<FamilyMember, Calendar>("createdOn"));
+            TableColumn<FamilyMember, Calendar> familyMemberCreatedCol = new TableColumn<>("Created on");
+            familyMemberCreatedCol.setCellValueFactory(new PropertyValueFactory<FamilyMember, Calendar>("createdOn"));
 
-        TableColumn<FamilyMember, Calendar> familyMemberUpdatedCol = new TableColumn<>("Updated on");
-        familyMemberUpdatedCol.setCellValueFactory(new PropertyValueFactory<FamilyMember, Calendar>("updatedOn"));
+            TableColumn<FamilyMember, Calendar> familyMemberUpdatedCol = new TableColumn<>("Updated on");
+            familyMemberUpdatedCol.setCellValueFactory(new PropertyValueFactory<FamilyMember, Calendar>("updatedOn"));
 
-        table.getColumns().setAll(familyMemberIdCol, familyMemberNameCol, familyMemberDescCol, familyMemberCreatedCol, familyMemberUpdatedCol);
-
+            table.getColumns().setAll(familyMemberIdCol, familyMemberNameCol, familyMemberDescCol, familyMemberCreatedCol, familyMemberUpdatedCol);
+        }catch (Exception e){
+            ErrorMessage.showAlert(e);
+        }
     }
 
-//    public void removeFamilyMember(Long id) {
+//    public void removeFamilyMember(Long id){
 //        familyMemberService.removeFamilyMember(id);
 //    }
 //
-//    public void updateFamilyMember(FamilyMember familyMember) {
+//    public void updateFamilyMember(FamilyMember familyMember){
 //        familyMemberService.updateFamilyMember(familyMember);
 //    }
 }
