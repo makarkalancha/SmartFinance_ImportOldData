@@ -5,12 +5,11 @@ import com.makco.smartfinance.services.FamilyMemberService;
 import com.makco.smartfinance.services.FamilyMemberServiceImpl;
 import com.makco.smartfinance.user_interface.ControlledScreen;
 import com.makco.smartfinance.user_interface.ScreensController;
+import com.makco.smartfinance.user_interface.constants.ErrorMessage;
 import java.net.URL;
 import java.util.Calendar;
 import java.util.List;
 import java.util.ResourceBundle;
-
-import com.makco.smartfinance.user_interface.constants.ErrorMessage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import javafx.collections.FXCollections;
@@ -33,19 +32,19 @@ public class FamilyMemberController implements Initializable, ControlledScreen {
     private ScreensController myController;
     private FamilyMemberService familyMemberService = new FamilyMemberServiceImpl();
     private ObservableList<FamilyMember> familyMembers = FXCollections.observableArrayList();
-    private int index;
+//    private int index;
     @FXML
     private TableView<FamilyMember> table;
-    @FXML
-    private TextField idTx;
+//    @FXML
+//    private TextField idTx;
     @FXML
     private TextField nameTx;
     @FXML
     private TextArea descTx;
-    @FXML
-    private TextField createdOnTx;
-    @FXML
-    private TextField updatedOnTx;
+//    @FXML
+//    private TextField createdOnTx;
+//    @FXML
+//    private TextField updatedOnTx;
 
     @Override
     public void setScreenParent(ScreensController screenPage) {
@@ -69,25 +68,29 @@ public class FamilyMemberController implements Initializable, ControlledScreen {
 
     @FXML
     public void addNew(ActionEvent event){
-        try{
-            FamilyMember familyMember = new FamilyMember();
-            familyMember.setName(nameTx.getText());
-            familyMember.setDescription(descTx.getText());
-            familyMemberService.addFamilyMember(familyMember);
-            getFamilyMembers();
-            populateTable();
-        }catch (Exception e){
-            ErrorMessage.showAlert(e);
-        }
+        nameTx.clear();
+        descTx.clear();
+//        try{
+//            FamilyMember familyMember = new FamilyMember();
+//            familyMember.setName(nameTx.getText());
+//            familyMember.setDescription(descTx.getText());
+//            familyMemberService.addFamilyMember(familyMember);
+//            getFamilyMembers();
+//            populateTable();
+//        }catch (Exception e){
+//            ErrorMessage.showAlert(e);
+//        }
     }
+    @FXML
+    public void saveNew(ActionEvent event){
 
     @FXML
     public void udpate(ActionEvent event){
         try{
-            FamilyMember familyMember = familyMemberService.getFamilyMemberById(Long.parseLong(idTx.getText()));
-            familyMember.setName(nameTx.getText());
-            familyMember.setDescription(descTx.getText());
-            familyMemberService.updateFamilyMember(familyMember);
+//            FamilyMember familyMember = familyMemberService.getFamilyMemberById(Long.parseLong(idTx.getText()));
+//            familyMember.setName(nameTx.getText());
+//            familyMember.setDescription(descTx.getText());
+//            familyMemberService.updateFamilyMember(familyMember);
             getFamilyMembers();
             populateTable();
         }catch (Exception e){
@@ -98,7 +101,7 @@ public class FamilyMemberController implements Initializable, ControlledScreen {
     @FXML
     public void delete(ActionEvent event){
         try{
-            familyMemberService.removeFamilyMember(Long.parseLong(idTx.getText()));
+//            familyMemberService.removeFamilyMember(Long.parseLong(idTx.getText()));
             getFamilyMembers();
             populateTable();
         }catch (Exception e){
@@ -106,57 +109,57 @@ public class FamilyMemberController implements Initializable, ControlledScreen {
         }
     }
 
-    @FXML
-    public void first(ActionEvent event){
-        try{
-            index = 0;
-            populateForm(index);
-            populateTable();
-        }catch (Exception e){
-            ErrorMessage.showAlert(e);
-        }
-    }
+//    @FXML
+//    public void first(ActionEvent event){
+//        try{
+//            index = 0;
+//            populateForm(index);
+//            populateTable();
+//        }catch (Exception e){
+//            ErrorMessage.showAlert(e);
+//        }
+//    }
 
-    @FXML
-    public void oneUp(ActionEvent event){
-        try{
-            if(index > 0){
-                index--;
-            }else {
-                event.consume();
-            }
-            populateForm(index);
-            populateTable();
-        }catch (Exception e){
-            ErrorMessage.showAlert(e);
-        }
-    }
+//    @FXML
+//    public void oneUp(ActionEvent event){
+//        try{
+//            if(index > 0){
+//                index--;
+//            }else {
+//                event.consume();
+//            }
+//            populateForm(index);
+//            populateTable();
+//        }catch (Exception e){
+//            ErrorMessage.showAlert(e);
+//        }
+//    }
 
-    @FXML
-    public void oneDown(ActionEvent event){
-        try{
-            if(index < (familyMembers.size() - 1) ){
-                index++;
-            }else {
-                event.consume();
-            }
-            populateForm(index);
-            populateTable();
-        }catch (Exception e){
-            ErrorMessage.showAlert(e);
-        }
-    }
-
-    @FXML
-    public void last(ActionEvent event){
-        try{
-            index = familyMembers.size() - 1;
-            populateForm(index);
-            populateTable();
-        }catch (Exception e){
-            ErrorMessage.showAlert(e);
-        }
-    }
+//    @FXML
+//    public void oneDown(ActionEvent event){
+//        try{
+//            if(index < (familyMembers.size() - 1) ){
+//                index++;
+//            }else {
+//                event.consume();
+//            }
+//            populateForm(index);
+//            populateTable();
+//        }catch (Exception e){
+//            ErrorMessage.showAlert(e);
+//        }
+//    }
+//
+//    @FXML
+//    public void last(ActionEvent event){
+//        try{
+//            index = familyMembers.size() - 1;
+//            populateForm(index);
+//            populateTable();
+//        }catch (Exception e){
+//            ErrorMessage.showAlert(e);
+//        }
+//    }
 
     public ObservableList<FamilyMember> getFamilyMembers(){
         try{
@@ -177,12 +180,12 @@ public class FamilyMemberController implements Initializable, ControlledScreen {
                 return;
             }
 
-            FamilyMember familyMember = familyMembers.get(index);
-            idTx.setText(familyMember.getId().toString());
+            FamilyMember familyMember = table.getSelectionModel().getSelectedItem().get;
+//            idTx.setText(familyMember.getId().toString());
             nameTx.setText(familyMember.getName());
             descTx.setText(familyMember.getDescription());
-            createdOnTx.setText(familyMember.getCreatedOn().toString());
-            updatedOnTx.setText(familyMember.getUpdatedOn().toString());
+//            createdOnTx.setText(familyMember.getCreatedOn().toString());
+//            updatedOnTx.setText(familyMember.getUpdatedOn().toString());
         }catch (Exception e){
             ErrorMessage.showAlert(e);
         }
