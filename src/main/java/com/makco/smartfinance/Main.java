@@ -3,22 +3,18 @@ package com.makco.smartfinance;
 import com.makco.smartfinance.h2db.utils.H2DbUtils;
 import com.makco.smartfinance.persistence.contants.DataBaseConstants;
 import com.makco.smartfinance.user_interface.ScreensController;
+import com.makco.smartfinance.user_interface.constants.ApplicationUtililities;
 import com.makco.smartfinance.user_interface.constants.ErrorMessage;
 import com.makco.smartfinance.user_interface.constants.Screens;
 import com.makco.smartfinance.utils.Logs;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Priority;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 /**
  * Created by mcalancea on 2016-03-28.
@@ -40,7 +36,7 @@ public class Main extends Application{
         System.setErr(Logs.createLoggingProxy(System.err));
         System.setOut(Logs.createLoggingProxy(System.out));
         try {
-//            H2DbUtils.checkIfSchemaExists(ApplicationConstants.DB_SCHEMA_NAME);
+//            H2DbUtils.checkIfSchemaExists(ApplicationUtililities.DB_SCHEMA_NAME);
 //http://www.hascode.com/2013/04/easy-database-migrations-using-flyway-java-ee-6-and-glassfish/
 //            Flyway flyway = new Flyway();
 //            flyway.setDataSource(DBConnectionResource.getDbConnectionUrl(),TestContext.INSTANCE.DB_USER(),TestContext.INSTANCE.DB_PASSWORD());
@@ -53,6 +49,13 @@ public class Main extends Application{
             }
 
             this.primaryStage = primaryStage;
+
+            primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+                @Override
+                public void handle(WindowEvent event) {
+                    ApplicationUtililities.quit(event);
+                }
+            });
 
             ScreensController mainContainer = new ScreensController();
             for (Screens scr : Screens.values()) {
@@ -73,6 +76,5 @@ public class Main extends Application{
         }catch (Exception e){
             ErrorMessage.showAlert(e);
         }
-
     }
 }
