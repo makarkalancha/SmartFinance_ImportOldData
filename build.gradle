@@ -101,3 +101,7 @@ jar {
 //    with jar
 //}
 //build.dependsOn fatJar
+
+////JAVA NATIVE PACKAGE
+//https://jaxenter.com/tutorial-a-guide-to-the-gradle-javafx-plugin-105730.html
+//https://github.com/bmuschko/gradle-javafx-hello-world/blob/master/build.gradle
