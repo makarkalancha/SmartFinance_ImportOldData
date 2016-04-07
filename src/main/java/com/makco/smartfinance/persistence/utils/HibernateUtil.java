@@ -57,6 +57,8 @@ public class HibernateUtil {
         //http://www.tutorialspoint.com/hibernate/hibernate_caching.htm
 //        cfg.setProperty("hibernate.cache.provider_class", "org.hibernate.cache.NoCacheProvider");
         cfg.setProperty("hibernate.current_session_context_class", "thread");
+
+        cfg.setProperty("hibernate.default_schema", "FINANCE");
         return cfg;
     }
 
