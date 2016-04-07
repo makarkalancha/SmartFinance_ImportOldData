@@ -52,8 +52,8 @@ public class FamilyMemberController implements Initializable, ControlledScreen {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        populateTable();
-        populateForm(0);
+//        populateTable();
+//        populateForm(0);
     }
 
     @FXML
@@ -62,6 +62,7 @@ public class FamilyMemberController implements Initializable, ControlledScreen {
         familyMember.setName(nameTx.getText());
         familyMember.setDescription(descTx.getText());
         familyMemberService.addFamilyMember(familyMember);
+        getFamilyMembers();
         populateTable();
     }
 
@@ -71,12 +72,14 @@ public class FamilyMemberController implements Initializable, ControlledScreen {
         familyMember.setName(nameTx.getText());
         familyMember.setDescription(descTx.getText());
         familyMemberService.updateFamilyMember(familyMember);
+        getFamilyMembers();
         populateTable();
     }
 
     @FXML
     public void delete(ActionEvent event) {
         familyMemberService.removeFamilyMember(Long.parseLong(idTx.getText()));
+        getFamilyMembers();
         populateTable();
     }
 
@@ -100,7 +103,7 @@ public class FamilyMemberController implements Initializable, ControlledScreen {
 
     @FXML
     public void oneDown(ActionEvent event){
-        if(index < (getFamilyMembers().size() - 1) ){
+        if(index < (familyMembers.size() - 1) ){
             index++;
         }else {
             event.consume();
@@ -111,7 +114,7 @@ public class FamilyMemberController implements Initializable, ControlledScreen {
 
     @FXML
     public void last(ActionEvent event){
-        index = getFamilyMembers().size() - 1;
+        index = familyMembers.size() - 1;
         populateForm(index);
         populateTable();
     }
@@ -126,11 +129,11 @@ public class FamilyMemberController implements Initializable, ControlledScreen {
     }
 
     private void populateForm(int index){
-        if(getFamilyMembers().isEmpty()){
+        if(familyMembers.isEmpty()){
             return;
         }
 
-        FamilyMember familyMember = getFamilyMembers().get(index);
+        FamilyMember familyMember = familyMembers.get(index);
         idTx.setText(familyMember.getId().toString());
         nameTx.setText(familyMember.getName());
         descTx.setText(familyMember.getDescription());
@@ -140,7 +143,7 @@ public class FamilyMemberController implements Initializable, ControlledScreen {
 
     private void populateTable(){
         table.getItems().clear();
-        table.setItems(getFamilyMembers());
+        table.setItems(familyMembers);
 
         TableColumn<FamilyMember, Long> familyMemberIdCol = new TableColumn<>("ID");
         familyMemberIdCol.setCellValueFactory(new PropertyValueFactory<FamilyMember, Long>("id"));
