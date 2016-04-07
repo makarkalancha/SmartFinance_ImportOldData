@@ -6,8 +6,7 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-
-<ScrollPane prefHeight="554.0" prefWidth="458.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<ScrollPane prefHeight="554.0" prefWidth="458.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.makco.smartfinance.user_interface.controllers.FamilyMemberController">
    <content>
       <VBox fx:id="vBox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="550.0" prefWidth="450.0">
          <children>
@@ -22,7 +21,7 @@
                 <TableColumn prefWidth="75.0" text="C2" />
               </columns>
             </TableView>
-            <TextField id="name" promptText="Name...">
+            <TextField id="nameTF" promptText="Name...">
                <VBox.margin>
                   <Insets bottom="5.0" left="50.0" right="50.0" top="10.0" />
                </VBox.margin>
@@ -30,7 +29,7 @@
                   <Tooltip text="Enter name" />
                </tooltip>
             </TextField>
-            <TextArea id="desc" prefHeight="102.0" prefWidth="383.0" promptText="Description...">
+            <TextArea id="descTA" prefHeight="102.0" prefWidth="383.0" promptText="Description...">
                <VBox.margin>
                   <Insets bottom="5.0" left="50.0" right="50.0" />
                </VBox.margin>
@@ -40,12 +39,12 @@
             </TextArea>
             <HBox prefHeight="49.0" prefWidth="384.0">
                <children>
-                  <Button id="new" mnemonicParsing="false" prefWidth="50.0" text="New">
+                  <Button id="new" mnemonicParsing="false" onAction="#onNew" prefWidth="50.0" text="New">
                      <HBox.margin>
                         <Insets left="50.0" right="5.0" />
                      </HBox.margin>
                   </Button>
-                  <Button id="save" mnemonicParsing="false" prefWidth="50.0" text="Save" />
+                  <Button id="save" mnemonicParsing="false" onAction="#onSave" prefWidth="50.0" text="Save" />
                </children>
             </HBox>
          </children>
