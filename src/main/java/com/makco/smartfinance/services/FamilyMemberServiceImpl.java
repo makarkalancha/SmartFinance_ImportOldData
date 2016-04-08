@@ -36,4 +36,9 @@ public class FamilyMemberServiceImpl implements FamilyMemberService {
     public FamilyMember getFamilyMemberById(Long id) {
         return familyMemberDAO.getFamilyMemberById(id);
     }
+
+    @Override
+    public void saveOrUpdateFamilyMember(FamilyMember familyMember) {
+        familyMemberDAO.saveOrUpdateFamilyMember(familyMember);
+    }
 }

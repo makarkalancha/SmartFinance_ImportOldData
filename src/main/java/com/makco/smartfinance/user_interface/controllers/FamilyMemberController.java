@@ -1,27 +1,25 @@
 package com.makco.smartfinance.user_interface.controllers;
 
 import com.makco.smartfinance.persistence.entity.FamilyMember;
-import com.makco.smartfinance.services.FamilyMemberService;
-import com.makco.smartfinance.services.FamilyMemberServiceImpl;
 import com.makco.smartfinance.user_interface.ControlledScreen;
 import com.makco.smartfinance.user_interface.ScreensController;
 import com.makco.smartfinance.user_interface.constants.ErrorMessage;
-import java.net.URL;
-import java.util.Calendar;
-import java.util.List;
-import java.util.ResourceBundle;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import com.makco.smartfinance.user_interface.models.FamilyMemberModel;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import java.net.URL;
+import java.util.Calendar;
+import java.util.ResourceBundle;
 
 /**
  * Created by mcalancea on 2016-04-01.
@@ -30,21 +28,20 @@ import javafx.scene.control.cell.PropertyValueFactory;
 public class FamilyMemberController implements Initializable, ControlledScreen {
     private final static Logger LOG = LogManager.getLogger(FamilyMemberController.class);
     private ScreensController myController;
-    private FamilyMemberService familyMemberService = new FamilyMemberServiceImpl();
-    private ObservableList<FamilyMember> familyMembers = FXCollections.observableArrayList();
-//    private int index;
+    private FamilyMemberModel familyMemberModel = new FamilyMemberModel();
+
     @FXML
     private TableView<FamilyMember> table;
-//    @FXML
-//    private TextField idTx;
     @FXML
     private TextField nameTF;
     @FXML
     private TextArea descTA;
-//    @FXML
-//    private TextField createdOnTx;
-//    @FXML
-//    private TextField updatedOnTx;
+    @FXML
+    private Button clearBtn;
+    @FXML
+    private Button saveBtn;
+    @FXML
+    private Button deleteBtn;
 
     @Override
     public void setScreenParent(ScreensController screenPage) {
@@ -58,141 +55,65 @@ public class FamilyMemberController implements Initializable, ControlledScreen {
     @Override
     public void initialize(URL location, ResourceBundle resources){
         try {
-            table.setOnMouseClicked(event -> {
-                populateForm();
-            });
-            getFamilyMembers();
+            familyMemberModel.refreshFamilyMembers();
             populateTable();
-            populateForm();
+            table.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+                if(newSelection != null){
+                    populateForm();
+                }
+            });
+            clearBtn.setDisable(true);
+            saveBtn.setDisable(false);
+            deleteBtn.setDisable(true);
         }catch (Exception e){
             ErrorMessage.showAlert(e);
         }
     }
 
     @FXML
-    public void onNew(ActionEvent event){
-        nameTF.clear();
-        descTA.clear();
-//        try{
-//            FamilyMember familyMember = new FamilyMember();
-//            familyMember.setName(nameTF.getText());
-//            familyMember.setDescription(descTA.getText());
-//            familyMemberService.addFamilyMember(familyMember);
-//            getFamilyMembers();
-//            populateTable();
-//        }catch (Exception e){
-//            ErrorMessage.showAlert(e);
-//        }
+    public void onClear(ActionEvent event){
+        try{
+            nameTF.clear();
+            descTA.clear();
+            clearBtn.setDisable(false);
+            saveBtn.setDisable(false);
+            deleteBtn.setDisable(true);
+        }catch (Exception e){
+            ErrorMessage.showAlert(e);
+        }
     }
+
     @FXML
     public void onSave(ActionEvent event){
-
-    }
-
-//    @FXML
-//    public void udpate(ActionEvent event){
-//        try{
-////            FamilyMember familyMember = familyMemberService.getFamilyMemberById(Long.parseLong(idTx.getText()));
-////            familyMember.setName(nameTF.getText());
-////            familyMember.setDescription(descTA.getText());
-////            familyMemberService.updateFamilyMember(familyMember);
-//            getFamilyMembers();
-//            populateTable();
-//        }catch (Exception e){
-//            ErrorMessage.showAlert(e);
-//        }
-//    }
-
-//    @FXML
-//    public void delete(ActionEvent event){
-//        try{
-////            familyMemberService.removeFamilyMember(Long.parseLong(idTx.getText()));
-//            getFamilyMembers();
-//            populateTable();
-//        }catch (Exception e){
-//            ErrorMessage.showAlert(e);
-//        }
-//    }
-
-//    @FXML
-//    public void first(ActionEvent event){
-//        try{
-//            index = 0;
-//            populateForm(index);
-//            populateTable();
-//        }catch (Exception e){
-//            ErrorMessage.showAlert(e);
-//        }
-//    }
-
-//    @FXML
-//    public void oneUp(ActionEvent event){
-//        try{
-//            if(index > 0){
-//                index--;
-//            }else {
-//                event.consume();
-//            }
-//            populateForm(index);
-//            populateTable();
-//        }catch (Exception e){
-//            ErrorMessage.showAlert(e);
-//        }
-//    }
-
-//    @FXML
-//    public void oneDown(ActionEvent event){
-//        try{
-//            if(index < (familyMembers.size() - 1) ){
-//                index++;
-//            }else {
-//                event.consume();
-//            }
-//            populateForm(index);
-//            populateTable();
-//        }catch (Exception e){
-//            ErrorMessage.showAlert(e);
-//        }
-//    }
-//
-//    @FXML
-//    public void last(ActionEvent event){
-//        try{
-//            index = familyMembers.size() - 1;
-//            populateForm(index);
-//            populateTable();
-//        }catch (Exception e){
-//            ErrorMessage.showAlert(e);
-//        }
-//    }
-
-    public ObservableList<FamilyMember> getFamilyMembers(){
-        try{
-            if (!familyMembers.isEmpty()) {
-                familyMembers.clear();
-            }
-            familyMembers = FXCollections.observableArrayList((List<FamilyMember>) familyMemberService.listFamilyMembers());
-            LOG.debug("familyMember.size: " + familyMembers.size());
-        }catch (Exception e){
+        try {
+            familyMemberModel.savePendingFamilyMember(nameTF.getText(), descTA.getText());
+            populateTable();
+            onClear(event);
+        } catch (Exception e) {
             ErrorMessage.showAlert(e);
         }
-        return familyMembers;
+    }
+
+    @FXML
+    public void onDelete(ActionEvent event){
+        try {
+            familyMemberModel.deletePendingFamilyMember();
+            populateTable();
+            onClear(event);
+        } catch (Exception e) {
+            ErrorMessage.showAlert(e);
+        }
     }
 
     private void populateForm(){
         try{
-            FamilyMember familyMember = table.getSelectionModel().getSelectedItem();
+            clearBtn.setDisable(false);
+            saveBtn.setDisable(false);
+            deleteBtn.setDisable(false);
+            familyMemberModel.setPendingFamilyMemberProperty(table.getSelectionModel().getSelectedItem());
 
-//            if(familyMembers.isEmpty()){
-//                return;
-//            }
-//
-//            FamilyMember familyMember = table.getSelectionModel().getSelectedItem().get;
-////            idTx.setText(familyMember.getId().toString());
-            nameTF.setText(familyMember.getName());
-            descTA.setText(familyMember.getDescription());
-////            createdOnTx.setText(familyMember.getCreatedOn().toString());
-////            updatedOnTx.setText(familyMember.getUpdatedOn().toString());
+            nameTF.setText(familyMemberModel.getPendingFamilyMember().getName());
+            descTA.setText(familyMemberModel.getPendingFamilyMember().getDescription());
         }catch (Exception e){
             ErrorMessage.showAlert(e);
         }
@@ -200,8 +121,9 @@ public class FamilyMemberController implements Initializable, ControlledScreen {
 
     private void populateTable(){
         try{
+            LOG.debug("familyMemberModel.getFamilyMembers().size():"+familyMemberModel.getFamilyMembers().size());
             table.getItems().clear();
-            table.setItems(familyMembers);
+            table.setItems(familyMemberModel.getFamilyMembers());
 
             TableColumn<FamilyMember, Long> familyMemberIdCol = new TableColumn<>("ID");
             familyMemberIdCol.setCellValueFactory(new PropertyValueFactory<FamilyMember, Long>("id"));
@@ -223,12 +145,4 @@ public class FamilyMemberController implements Initializable, ControlledScreen {
             ErrorMessage.showAlert(e);
         }
     }
-
-//    public void removeFamilyMember(Long id){
-//        familyMemberService.removeFamilyMember(id);
-//    }
-//
-//    public void updateFamilyMember(FamilyMember familyMember){
-//        familyMemberService.updateFamilyMember(familyMember);
-//    }
 }

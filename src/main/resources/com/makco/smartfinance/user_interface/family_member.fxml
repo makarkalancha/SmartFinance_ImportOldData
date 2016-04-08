@@ -21,7 +21,7 @@
                 <TableColumn prefWidth="75.0" text="C2" />
               </columns>
             </TableView>
-            <TextField id="nameTF" promptText="Name...">
+            <TextField id="nameTF" fx:id="nameTF" promptText="Name...">
                <VBox.margin>
                   <Insets bottom="5.0" left="50.0" right="50.0" top="10.0" />
                </VBox.margin>
@@ -29,7 +29,7 @@
                   <Tooltip text="Enter name" />
                </tooltip>
             </TextField>
-            <TextArea id="descTA" prefHeight="102.0" prefWidth="383.0" promptText="Description...">
+            <TextArea id="descTA" fx:id="descTA" prefHeight="102.0" prefWidth="383.0" promptText="Description...">
                <VBox.margin>
                   <Insets bottom="5.0" left="50.0" right="50.0" />
                </VBox.margin>
@@ -37,14 +37,22 @@
                   <Tooltip text="Enter Description" />
                </tooltip>
             </TextArea>
-            <HBox prefHeight="49.0" prefWidth="384.0">
+            <HBox prefHeight="25.0" prefWidth="299.0">
                <children>
-                  <Button id="new" mnemonicParsing="false" onAction="#onNew" prefWidth="50.0" text="New">
+                  <Button id="save" fx:id="saveBtn" mnemonicParsing="false" onAction="#onSave" prefWidth="60.0" text="Save">
                      <HBox.margin>
                         <Insets left="50.0" right="5.0" />
+                     </HBox.margin></Button>
+                  <Button id="save" fx:id="deleteBtn" mnemonicParsing="false" onAction="#onDelete" prefWidth="60.0" text="Delete">
+                     <HBox.margin>
+                        <Insets right="5.0" />
                      </HBox.margin>
                   </Button>
-                  <Button id="save" mnemonicParsing="false" onAction="#onSave" prefWidth="50.0" text="Save" />
+                  <Button id="new" fx:id="clearBtn" mnemonicParsing="false" onAction="#onClear" prefWidth="60.0" text="Clear">
+                     <HBox.margin>
+                        <Insets right="5.0" />
+                     </HBox.margin>
+                  </Button>
                </children>
             </HBox>
          </children>

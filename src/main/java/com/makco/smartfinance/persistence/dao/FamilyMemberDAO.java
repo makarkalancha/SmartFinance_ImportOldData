@@ -7,9 +7,11 @@ import java.util.List;
  * Created by mcalancea on 2016-04-05.
  */
 public interface FamilyMemberDAO {
-    void addFamilyMember(FamilyMember familyMember);
     List<FamilyMember> listFamilyMembers();
     FamilyMember getFamilyMemberById(Long id);
+
+    void addFamilyMember(FamilyMember familyMember);
     void removeFamilyMember(Long id);
+    void saveOrUpdateFamilyMember(FamilyMember familyMember);
     void updateFamilyMember(FamilyMember familyMember);
 }

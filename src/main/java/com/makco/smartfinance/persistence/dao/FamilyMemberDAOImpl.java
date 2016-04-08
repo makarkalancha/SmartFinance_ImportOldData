@@ -1,7 +1,6 @@
 package com.makco.smartfinance.persistence.dao;
 
 import com.makco.smartfinance.persistence.entity.FamilyMember;
-import com.makco.smartfinance.persistence.utils.FinancePersistenceManager;
 import com.makco.smartfinance.persistence.utils.HibernateUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -9,7 +8,6 @@ import org.hibernate.Session;
 
 import java.util.ArrayList;
 import java.util.List;
-import javax.persistence.EntityManager;
 
 /**
  * Created by mcalancea on 2016-04-05.
@@ -121,6 +119,20 @@ public class FamilyMemberDAOImpl implements FamilyMemberDAO {
 //        em.getTransaction().commit();
 //        em.close();
 //        return familyMember;
+        } catch (Exception e) {
+            LOG.error(e, e);
+            throw e;
+        }
+    }
+
+    @Override
+    public void saveOrUpdateFamilyMember(FamilyMember familyMember) {
+        try {
+            Session session = HibernateUtil.openSession();
+            session.beginTransaction();
+            session.saveOrUpdate(familyMember);
+            session.getTransaction().commit();
+            session.close();
         } catch (Exception e) {
             LOG.error(e, e);
             throw e;

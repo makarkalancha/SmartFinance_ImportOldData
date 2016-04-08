@@ -1,12 +1,79 @@
 package com.makco.smartfinance.user_interface.models;
 
+import com.makco.smartfinance.persistence.entity.FamilyMember;
+import com.makco.smartfinance.services.FamilyMemberService;
+import com.makco.smartfinance.services.FamilyMemberServiceImpl;
+import com.makco.smartfinance.user_interface.constants.ErrorMessage;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import java.util.List;
+
 /**
  * Created by mcalancea on 2016-04-05.
  */
 public class FamilyMemberModel {
-//    private IntegerProperty id;
-//    private StringProperty name;
-//    private StringProperty description;
-//    private dateProperty createdOn;
+    private final static Logger LOG = LogManager.getLogger(FamilyMemberModel.class);
+    private FamilyMemberService familyMemberService = new FamilyMemberServiceImpl();
+    private ObservableList<FamilyMember> familyMembers = FXCollections.observableArrayList();
+    private FamilyMember pendingFamilyMember;
 
+    public FamilyMemberModel(){
+
+    }
+
+    public void refreshFamilyMembers(){
+        try{
+            if (!familyMembers.isEmpty()) {
+                familyMembers.clear();
+            }
+            familyMembers = FXCollections.observableArrayList((List<FamilyMember>) familyMemberService.listFamilyMembers());
+            LOG.debug("familyMember.size: " + familyMembers.size());
+        }catch (Exception e){
+            ErrorMessage.showAlert(e);
+        }
+    }
+
+    public ObservableList<FamilyMember> getFamilyMembers() {
+        return familyMembers;
+    }
+
+    public void savePendingFamilyMember(String name, String description){
+        try{
+            if(pendingFamilyMember != null){
+                pendingFamilyMember.setName(name);
+                pendingFamilyMember.setDescription(description);
+                familyMemberService.saveOrUpdateFamilyMember(pendingFamilyMember);
+                pendingFamilyMember = null;
+            } else {
+                FamilyMember tmpFamilyMember = new FamilyMember(name, description);
+                familyMemberService.saveOrUpdateFamilyMember(tmpFamilyMember);
+            }
+            refreshFamilyMembers();
+        } catch (Exception e){
+            ErrorMessage.showAlert(e);
+        }
+    }
+
+    public void deletePendingFamilyMember(){
+        try{
+            if (pendingFamilyMember != null && pendingFamilyMember.getId() != null) {
+                familyMemberService.removeFamilyMember(pendingFamilyMember.getId());
+                pendingFamilyMember = null;
+            }
+            refreshFamilyMembers();
+        } catch (Exception e){
+            ErrorMessage.showAlert(e);
+        }
+    }
+
+    public FamilyMember getPendingFamilyMember() {
+        return pendingFamilyMember;
+    }
+
+    public void setPendingFamilyMemberProperty(FamilyMember familyMember) {
+        pendingFamilyMember = familyMember;
+    }
 }

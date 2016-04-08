@@ -109,6 +109,11 @@ public class FamilyMember implements Serializable{
 
     }
 
+    public FamilyMember(String name, String description){
+        this.name = name;
+        this.description = description;
+    }
+
     public String getDescription() {
         return description;
     }
@@ -168,8 +173,4 @@ public class FamilyMember implements Serializable{
     public LocalDateTime getUpdatedOn() {
         return updatedOn.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
     }
-
-//    public boolean isDeleted() {
-//        return this.isDeleted;
-//    }
 }
