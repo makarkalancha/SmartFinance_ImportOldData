@@ -64,6 +64,7 @@ dependencies {
     //Java8 specific data-types such as any of the JSR 310 Date/Time types in domain model
     compile 'org.hibernate:hibernate-c3p0:' + hibernate_version //For connection pooling
     compile 'javax.validation:validation-api:1.0.0.GA' //javax.validation.constraints
+    compile 'org.apache.commons:commons-lang3:3.4'
 }
 
 //1st approach: dependent jars are in separate folder $libsDir\\$lib_folder
