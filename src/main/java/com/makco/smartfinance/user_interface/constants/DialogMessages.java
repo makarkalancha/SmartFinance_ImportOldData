@@ -1,23 +1,52 @@
 package com.makco.smartfinance.user_interface.constants;
 
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
+import javafx.stage.Stage;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.Optional;
 
 /**
  * User: Makar Kalancha
  * Date: 06/04/2016
  * Time: 23:37
  */
-public class ErrorMessage {
-    private final static Logger LOG = LogManager.getLogger(ErrorMessage.class);
+public class DialogMessages {
+    private final static Logger LOG = LogManager.getLogger(DialogMessages.class);
+
+    public static boolean showConfirmationDialog(String title, String headerText, String contentText, String ico){
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
+        ico = (StringUtils.isBlank(ico)) ? ApplicationUtililities.MAIN_WINDOW_ICO : ico;
+        alertStage.getIcons().add(new Image(ico));
+
+        if(!StringUtils.isBlank(title)){
+            alert.setTitle(title);
+        }
+        if(!StringUtils.isBlank(headerText)){
+            alert.setHeaderText(headerText);
+        }
+        if(!StringUtils.isBlank(contentText)){
+            alert.setContentText(contentText);
+        }
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK){
+            return true;
+        } else {
+            return false;
+        }
+    }
 
     public static void showAlert(Throwable t){
         LOG.error(t, t);

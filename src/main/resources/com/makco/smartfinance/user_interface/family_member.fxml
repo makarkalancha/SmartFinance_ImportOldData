@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.paint.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
@@ -21,15 +22,27 @@
                 <TableColumn prefWidth="75.0" text="C2" />
               </columns>
             </TableView>
-            <TextField id="nameTF" fx:id="nameTF" promptText="Name...">
-               <VBox.margin>
-                  <Insets bottom="5.0" left="50.0" right="50.0" top="10.0" />
-               </VBox.margin>
-               <tooltip>
-                  <Tooltip text="Enter name" />
-               </tooltip>
-            </TextField>
-            <TextArea id="descTA" fx:id="descTA" prefHeight="102.0" prefWidth="383.0" promptText="Description...">
+            <HBox>
+               <children>
+                  <TextField id="nameTF" fx:id="nameTF" prefHeight="25.0" prefWidth="330.0" promptText="Name...">
+                     <VBox.margin>
+                        <Insets bottom="5.0" left="50.0" right="50.0" top="10.0" />
+                     </VBox.margin>
+                     <tooltip>
+                        <Tooltip text="Enter name" />
+                     </tooltip>
+                     <HBox.margin>
+                        <Insets bottom="5.0" left="50.0" top="5.0" />
+                     </HBox.margin>
+                  </TextField>
+                  <Label text="*" textFill="RED">
+                     <tooltip>
+                        <Tooltip text="Required" />
+                     </tooltip>
+                  </Label>
+               </children>
+            </HBox>
+            <TextArea id="descTA" fx:id="descTA" promptText="Description...">
                <VBox.margin>
                   <Insets bottom="5.0" left="50.0" right="50.0" />
                </VBox.margin>

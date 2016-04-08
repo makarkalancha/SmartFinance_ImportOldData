@@ -4,9 +4,10 @@ import com.makco.smartfinance.h2db.utils.H2DbUtils;
 import com.makco.smartfinance.persistence.contants.DataBaseConstants;
 import com.makco.smartfinance.user_interface.ScreensController;
 import com.makco.smartfinance.user_interface.constants.ApplicationUtililities;
-import com.makco.smartfinance.user_interface.constants.ErrorMessage;
+import com.makco.smartfinance.user_interface.constants.DialogMessages;
 import com.makco.smartfinance.user_interface.constants.Screens;
 import com.makco.smartfinance.utils.Logs;
+import javafx.scene.image.Image;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import javafx.application.Application;
@@ -64,7 +65,8 @@ public class Main extends Application{
 //            mainContainer.setScreen(Screens.MAIN);
             mainContainer.setScreen(Screens.FAMILY_MEMBER);
 
-            this.primaryStage.setTitle("Hello");
+            this.primaryStage.getIcons().add(new Image(ApplicationUtililities.MAIN_WINDOW_ICO));
+            this.primaryStage.setTitle(ApplicationUtililities.MAIN_WINDOW_TITLE);
             ////http://stackoverflow.com/questions/19602727/how-to-reference-javafx-fxml-files-in-resource-folder
             Group root = new Group();
             root.getChildren().addAll(mainContainer);
@@ -74,7 +76,7 @@ public class Main extends Application{
             LOG.debug("hello: start");
             primaryStage.show();
         }catch (Exception e){
-            ErrorMessage.showAlert(e);
+            DialogMessages.showAlert(e);
         }
     }
 }

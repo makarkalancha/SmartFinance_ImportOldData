@@ -3,7 +3,8 @@ package com.makco.smartfinance.user_interface.controllers;
 import com.makco.smartfinance.persistence.entity.FamilyMember;
 import com.makco.smartfinance.user_interface.ControlledScreen;
 import com.makco.smartfinance.user_interface.ScreensController;
-import com.makco.smartfinance.user_interface.constants.ErrorMessage;
+import com.makco.smartfinance.user_interface.constants.ApplicationUtililities;
+import com.makco.smartfinance.user_interface.constants.DialogMessages;
 import com.makco.smartfinance.user_interface.models.FamilyMemberModel;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -48,7 +49,7 @@ public class FamilyMemberController implements Initializable, ControlledScreen {
         try{
             myController = screenPage;
         }catch (Exception e){
-            ErrorMessage.showAlert(e);
+            DialogMessages.showAlert(e);
         }
     }
 
@@ -66,7 +67,7 @@ public class FamilyMemberController implements Initializable, ControlledScreen {
             saveBtn.setDisable(false);
             deleteBtn.setDisable(true);
         }catch (Exception e){
-            ErrorMessage.showAlert(e);
+            DialogMessages.showAlert(e);
         }
     }
 
@@ -79,7 +80,7 @@ public class FamilyMemberController implements Initializable, ControlledScreen {
             saveBtn.setDisable(false);
             deleteBtn.setDisable(true);
         }catch (Exception e){
-            ErrorMessage.showAlert(e);
+            DialogMessages.showAlert(e);
         }
     }
 
@@ -90,18 +91,26 @@ public class FamilyMemberController implements Initializable, ControlledScreen {
             populateTable();
             onClear(event);
         } catch (Exception e) {
-            ErrorMessage.showAlert(e);
+            DialogMessages.showAlert(e);
         }
     }
 
     @FXML
     public void onDelete(ActionEvent event){
         try {
-            familyMemberModel.deletePendingFamilyMember();
-            populateTable();
-            onClear(event);
+            String title = ApplicationUtililities.FAMILY_MEMBER_WINDOW_TITLE;
+            String headerText = "Family Member Deletion";
+            StringBuilder contentText = new StringBuilder("Are you sure you want to delete family member ");
+            contentText.append("\"");
+            contentText.append(nameTF.getText());
+            contentText.append("\"?");
+            if (DialogMessages.showConfirmationDialog(title, headerText, contentText.toString(), null)) {
+                familyMemberModel.deletePendingFamilyMember();
+                populateTable();
+                onClear(event);
+            }
         } catch (Exception e) {
-            ErrorMessage.showAlert(e);
+            DialogMessages.showAlert(e);
         }
     }
 
@@ -115,7 +124,7 @@ public class FamilyMemberController implements Initializable, ControlledScreen {
             nameTF.setText(familyMemberModel.getPendingFamilyMember().getName());
             descTA.setText(familyMemberModel.getPendingFamilyMember().getDescription());
         }catch (Exception e){
-            ErrorMessage.showAlert(e);
+            DialogMessages.showAlert(e);
         }
     }
 
@@ -142,7 +151,7 @@ public class FamilyMemberController implements Initializable, ControlledScreen {
 
             table.getColumns().setAll(familyMemberIdCol, familyMemberNameCol, familyMemberDescCol, familyMemberCreatedCol, familyMemberUpdatedCol);
         }catch (Exception e){
-            ErrorMessage.showAlert(e);
+            DialogMessages.showAlert(e);
         }
     }
 }

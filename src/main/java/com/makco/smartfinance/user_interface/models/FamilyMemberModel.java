@@ -3,7 +3,7 @@ package com.makco.smartfinance.user_interface.models;
 import com.makco.smartfinance.persistence.entity.FamilyMember;
 import com.makco.smartfinance.services.FamilyMemberService;
 import com.makco.smartfinance.services.FamilyMemberServiceImpl;
-import com.makco.smartfinance.user_interface.constants.ErrorMessage;
+import com.makco.smartfinance.user_interface.constants.DialogMessages;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.apache.logging.log4j.LogManager;
@@ -32,7 +32,7 @@ public class FamilyMemberModel {
             familyMembers = FXCollections.observableArrayList((List<FamilyMember>) familyMemberService.listFamilyMembers());
             LOG.debug("familyMember.size: " + familyMembers.size());
         }catch (Exception e){
-            ErrorMessage.showAlert(e);
+            DialogMessages.showAlert(e);
         }
     }
 
@@ -53,7 +53,7 @@ public class FamilyMemberModel {
             }
             refreshFamilyMembers();
         } catch (Exception e){
-            ErrorMessage.showAlert(e);
+            DialogMessages.showAlert(e);
         }
     }
 
@@ -65,7 +65,7 @@ public class FamilyMemberModel {
             }
             refreshFamilyMembers();
         } catch (Exception e){
-            ErrorMessage.showAlert(e);
+            DialogMessages.showAlert(e);
         }
     }
 
