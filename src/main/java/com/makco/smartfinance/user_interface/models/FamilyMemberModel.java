@@ -4,6 +4,10 @@ import com.makco.smartfinance.persistence.entity.FamilyMember;
 import com.makco.smartfinance.services.FamilyMemberService;
 import com.makco.smartfinance.services.FamilyMemberServiceImpl;
 import com.makco.smartfinance.user_interface.constants.DialogMessages;
+import com.makco.smartfinance.user_interface.validation.ErrorEnum;
+import com.makco.smartfinance.user_interface.validation.RuleSet;
+import com.makco.smartfinance.user_interface.validation.rule_sets.FamilyMemberRuleSet;
+import java.util.EnumSet;
 import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -31,7 +35,7 @@ public class FamilyMemberModel {
             familyMembers = FXCollections.observableArrayList((List<FamilyMember>) familyMemberService.listFamilyMembers());
             LOG.debug("familyMember.size: " + familyMembers.size());
         }catch (Exception e){
-            DialogMessages.showAlert(e);
+            DialogMessages.showExceptionAlert(e);
         }
     }
 
@@ -41,17 +45,25 @@ public class FamilyMemberModel {
 
     public void savePendingFamilyMember(String name, String description){
         try{
+            FamilyMember tmpFamilyMember;
             if(pendingFamilyMember != null){
                 pendingFamilyMember.setName(name);
                 pendingFamilyMember.setDescription(description);
-                familyMemberService.saveOrUpdateFamilyMember(pendingFamilyMember);
+                tmpFamilyMember = pendingFamilyMember;
                 pendingFamilyMember = null;
             } else {
-                FamilyMember tmpFamilyMember = new FamilyMember(name, description);
+                tmpFamilyMember = new FamilyMember(name, description);
+            }
+
+            RuleSet ruleSet = new FamilyMemberRuleSet();
+            EnumSet<ErrorEnum> errors = ruleSet.validate(tmpFamilyMember);
+            if(!errors.isEmpty()) {
+                DialogMessages.showErrorDialog("Error while saving Family Member: " + tmpFamilyMember.getName(), errors, null);
+            } else {
                 familyMemberService.saveOrUpdateFamilyMember(tmpFamilyMember);
             }
         } catch (Exception e){
-            DialogMessages.showAlert(e);
+            DialogMessages.showExceptionAlert(e);
         }finally {
             refreshFamilyMembers();
         }
@@ -65,7 +77,7 @@ public class FamilyMemberModel {
             }
             refreshFamilyMembers();
         } catch (Exception e){
-            DialogMessages.showAlert(e);
+            DialogMessages.showExceptionAlert(e);
         }finally {
             refreshFamilyMembers();
         }

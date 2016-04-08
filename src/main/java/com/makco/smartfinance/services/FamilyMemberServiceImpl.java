@@ -3,7 +3,7 @@ package com.makco.smartfinance.services;
 import com.makco.smartfinance.persistence.dao.FamilyMemberDAO;
 import com.makco.smartfinance.persistence.dao.FamilyMemberDAOImpl;
 import com.makco.smartfinance.persistence.entity.FamilyMember;
-import com.makco.smartfinance.utils.Errors;
+import com.makco.smartfinance.user_interface.validation.ErrorEnum;
 import java.util.EnumSet;
 import java.util.List;
 
@@ -35,6 +35,11 @@ public class FamilyMemberServiceImpl implements FamilyMemberService {
     }
 
     @Override
+    public List<FamilyMember> getFamilyMemberByName(String name) {
+        return familyMemberDAO.getFamilyMemberByName(name);
+    }
+
+    @Override
     public FamilyMember getFamilyMemberById(Long id) {
         return familyMemberDAO.getFamilyMemberById(id);
     }
@@ -45,8 +50,8 @@ public class FamilyMemberServiceImpl implements FamilyMemberService {
     }
 
     @Override
-    public EnumSet<Errors> validate(FamilyMember familyMember){
-        EnumSet<Errors> errorsList = EnumSet.noneOf(Errors.class);
+    public EnumSet<ErrorEnum> validate(FamilyMember familyMember){
+        EnumSet<ErrorEnum> errorsList = EnumSet.noneOf(ErrorEnum.class);
 //        if(StringUtils.isBlank(familyMember.getName())
         return errorsList;
     }

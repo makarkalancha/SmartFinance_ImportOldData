@@ -48,7 +48,7 @@ public class FamilyMemberController implements Initializable, ControlledScreen {
         try{
             myController = screenPage;
         }catch (Exception e){
-            DialogMessages.showAlert(e);
+            DialogMessages.showExceptionAlert(e);
         }
     }
 
@@ -57,8 +57,8 @@ public class FamilyMemberController implements Initializable, ControlledScreen {
         try {
             familyMemberModel.refreshFamilyMembers();
             populateTable();
-            table.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-                if(newSelection != null){
+            table.getSelectionModel().selectedItemProperty().addListener((observable, oldSelection, newSelection) -> {
+                if (newSelection != null) {
                     populateForm();
                 }
             });
@@ -68,7 +68,7 @@ public class FamilyMemberController implements Initializable, ControlledScreen {
         }catch (Exception e){
             //not in finally because refreshFamilyMembers must run before populateTable
             familyMemberModel.refreshFamilyMembers();
-            DialogMessages.showAlert(e);
+            DialogMessages.showExceptionAlert(e);
         }
     }
 
@@ -82,7 +82,7 @@ public class FamilyMemberController implements Initializable, ControlledScreen {
             deleteBtn.setDisable(true);
         }catch (Exception e){
             familyMemberModel.refreshFamilyMembers();
-            DialogMessages.showAlert(e);
+            DialogMessages.showExceptionAlert(e);
         }
     }
 
@@ -94,7 +94,7 @@ public class FamilyMemberController implements Initializable, ControlledScreen {
             onClear(event);
         } catch (Exception e) {
             //no refreshFamilyMembers() because there are in deletePendingFamilyMember, populateTable, onClear
-            DialogMessages.showAlert(e);
+            DialogMessages.showExceptionAlert(e);
         }
     }
 
@@ -114,7 +114,7 @@ public class FamilyMemberController implements Initializable, ControlledScreen {
             }
         } catch (Exception e) {
             //no refreshFamilyMembers() because there are in deletePendingFamilyMember, populateTable, onClear
-            DialogMessages.showAlert(e);
+            DialogMessages.showExceptionAlert(e);
         }
     }
 
@@ -129,7 +129,7 @@ public class FamilyMemberController implements Initializable, ControlledScreen {
             descTA.setText(familyMemberModel.getPendingFamilyMember().getDescription());
         }catch (Exception e){
             familyMemberModel.refreshFamilyMembers();
-            DialogMessages.showAlert(e);
+            DialogMessages.showExceptionAlert(e);
         }
     }
 
@@ -157,7 +157,7 @@ public class FamilyMemberController implements Initializable, ControlledScreen {
             table.getColumns().setAll(familyMemberIdCol, familyMemberNameCol, familyMemberDescCol, familyMemberCreatedCol, familyMemberUpdatedCol);
         }catch (Exception e){
             familyMemberModel.refreshFamilyMembers();
-            DialogMessages.showAlert(e);
+            DialogMessages.showExceptionAlert(e);
         }
     }
 }

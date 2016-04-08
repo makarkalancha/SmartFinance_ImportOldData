@@ -2,16 +2,17 @@ package com.makco.smartfinance.persistence.dao;
 
 import com.makco.smartfinance.persistence.entity.FamilyMember;
 import com.makco.smartfinance.persistence.utils.HibernateUtil;
+import com.makco.smartfinance.user_interface.constants.DialogMessages;
+import java.util.ArrayList;
+import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Created by mcalancea on 2016-04-05.
  */
+//http://programmers.stackexchange.com/questions/220909/service-layer-vs-dao-why-both
 public class FamilyMemberDAOImpl implements FamilyMemberDAO {
     private final static Logger LOG = LogManager.getLogger(FamilyMemberDAOImpl.class);
     @Override
@@ -30,21 +31,20 @@ public class FamilyMemberDAOImpl implements FamilyMemberDAO {
 //        em.getTransaction().commit();
 //        em.close();
         } catch (Exception e) {
-            LOG.error(e, e);
-            throw e;
+            DialogMessages.showExceptionAlert(e);
         }
     }
 
     @Override
     public List<FamilyMember> listFamilyMembers() {
+        List<FamilyMember> list = new ArrayList<>();
         try{
-            List<FamilyMember> list = new ArrayList<>();
             Session session = HibernateUtil.openSession();
             session.beginTransaction();
             list = session.createQuery("FROM FamilyMember AS f ORDER BY f.name").list();
             session.getTransaction().commit();
             session.close();
-            return list;
+
 //        List<FamilyMember> list = new ArrayList<>();
 //        EntityManager em = FinancePersistenceManager.INSTANCE.getEntityManager();
 //        em.getTransaction().begin();
@@ -53,9 +53,9 @@ public class FamilyMemberDAOImpl implements FamilyMemberDAO {
 //        em.close();
 //        return list;
         } catch (Exception e) {
-            LOG.error(e, e);
-            throw e;
+            DialogMessages.showExceptionAlert(e);
         }
+        return list;
     }
 
     @Override
@@ -75,8 +75,7 @@ public class FamilyMemberDAOImpl implements FamilyMemberDAO {
 //        em.getTransaction().commit();
 //        em.close();
         } catch (Exception e) {
-            LOG.error(e, e);
-            throw e;
+            DialogMessages.showExceptionAlert(e);
         }
     }
 
@@ -96,21 +95,20 @@ public class FamilyMemberDAOImpl implements FamilyMemberDAO {
 //        em.getTransaction().commit();
 //        em.close();
         } catch (Exception e) {
-            LOG.error(e, e);
-            throw e;
+            DialogMessages.showExceptionAlert(e);
         }
     }
 
     @Override
     public FamilyMember getFamilyMemberById(Long id) {
+        FamilyMember familyMember = null;
         try{
-            FamilyMember familyMember = null;
             Session session = HibernateUtil.openSession();
             session.beginTransaction();
             familyMember = (FamilyMember) session.get(FamilyMember.class, id);
             session.getTransaction().commit();
             session.close();
-            return familyMember;
+
 
 //        FamilyMember familyMember = null;
 //        EntityManager em = FinancePersistenceManager.INSTANCE.getEntityManager();
@@ -120,9 +118,34 @@ public class FamilyMemberDAOImpl implements FamilyMemberDAO {
 //        em.close();
 //        return familyMember;
         } catch (Exception e) {
-            LOG.error(e, e);
-            throw e;
+            DialogMessages.showExceptionAlert(e);
         }
+        return familyMember;
+    }
+
+    @Override
+    public List<FamilyMember> getFamilyMemberByName(String name) {
+        List<FamilyMember> familyMembers = new ArrayList<>();
+        try {
+            Session session = HibernateUtil.openSession();
+            session.beginTransaction();
+            familyMembers = session.createQuery("FROM FamilyMember AS f WHERE name = :name ORDER BY f.name")
+                    .setString("name", name)
+                    .list();
+            session.getTransaction().commit();
+            session.close();
+
+//        FamilyMember familyMember = null;
+//        EntityManager em = FinancePersistenceManager.INSTANCE.getEntityManager();
+//        em.getTransaction().begin();
+//        familyMember = (FamilyMember) em.find(FamilyMember.class, id);
+//        em.getTransaction().commit();
+//        em.close();
+//        return familyMember;
+        } catch (Exception e) {
+            DialogMessages.showExceptionAlert(e);
+        }
+        return familyMembers;
     }
 
     @Override
@@ -134,8 +157,7 @@ public class FamilyMemberDAOImpl implements FamilyMemberDAO {
             session.getTransaction().commit();
             session.close();
         } catch (Exception e) {
-            LOG.error(e, e);
-            throw e;
+            DialogMessages.showExceptionAlert(e);
         }
     }
 }

@@ -7,13 +7,13 @@ import com.makco.smartfinance.user_interface.constants.ApplicationUtililities;
 import com.makco.smartfinance.user_interface.constants.DialogMessages;
 import com.makco.smartfinance.user_interface.constants.Screens;
 import com.makco.smartfinance.utils.Logs;
-import javafx.scene.image.Image;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
@@ -76,7 +76,7 @@ public class Main extends Application{
             LOG.debug("hello: start");
             primaryStage.show();
         }catch (Exception e){
-            DialogMessages.showAlert(e);
+            DialogMessages.showExceptionAlert(e);
         }
     }
 }

@@ -1,5 +1,15 @@
 package com.makco.smartfinance.user_interface.constants;
 
+import com.makco.smartfinance.user_interface.validation.ErrorEnum;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
@@ -8,13 +18,6 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.stage.Stage;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.util.Optional;
 
 /**
  * User: Makar Kalancha
@@ -48,7 +51,38 @@ public class DialogMessages {
         }
     }
 
-    public static void showAlert(Throwable t){
+    public static void showErrorDialog(String headerText, EnumSet<ErrorEnum> errors, String ico){
+        //http://stackoverflow.com/questions/27877547/styling-a-dialog-from-javafx-openjfx-dialogs-project
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
+        ico = (StringUtils.isBlank(ico)) ? ApplicationUtililities.MAIN_WINDOW_ICO : ico;
+        alertStage.getIcons().add(new Image(ico));
+        alert.setTitle("Errors");
+        if(!StringUtils.isBlank(headerText)){
+            alert.setHeaderText(headerText);
+        }
+
+        if(!errors.isEmpty()) {
+//            DialogPane dialogPane = alert.getDialogPane();
+//            Text text = new Text();
+//            errors.forEach(error -> {
+//                text.apperror.getMessage();
+//            });
+//            TextFlow textFlow = new TextFlow();
+////            textFlow.
+//            dialogPane.setContent(textFlow);
+            String message = StringUtils.join(
+                    errors.stream()
+                            .map(error -> error.getMessage())
+                            .collect(Collectors.toCollection(ArrayList::new)).toArray(),
+                    "\n"
+            );
+            alert.setContentText(message);
+        }
+        alert.showAndWait();
+    }
+
+    public static void showExceptionAlert(Throwable t){
         LOG.error(t, t);
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Exception Dialog");
