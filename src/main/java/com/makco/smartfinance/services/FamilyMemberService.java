@@ -1,6 +1,9 @@
 package com.makco.smartfinance.services;
 
 import com.makco.smartfinance.persistence.entity.FamilyMember;
+import com.makco.smartfinance.utils.Errors;
+
+import java.util.EnumSet;
 import java.util.List;
 
 /**
@@ -14,4 +17,5 @@ public interface FamilyMemberService {
     void removeFamilyMember(Long id);
     void saveOrUpdateFamilyMember(FamilyMember familyMember);
     void updateFamilyMember(FamilyMember familyMember);
+    EnumSet<Errors> validate(FamilyMember familyMember);
 }
