@@ -6,6 +6,11 @@ import com.makco.smartfinance.user_interface.ScreensController;
 import com.makco.smartfinance.user_interface.constants.ApplicationUtililities;
 import com.makco.smartfinance.user_interface.constants.DialogMessages;
 import com.makco.smartfinance.user_interface.models.FamilyMemberModel;
+import java.net.URL;
+import java.util.Calendar;
+import java.util.ResourceBundle;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -15,12 +20,6 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-import java.net.URL;
-import java.util.Calendar;
-import java.util.ResourceBundle;
 
 /**
  * Created by mcalancea on 2016-04-01.
@@ -67,6 +66,8 @@ public class FamilyMemberController implements Initializable, ControlledScreen {
             saveBtn.setDisable(false);
             deleteBtn.setDisable(true);
         }catch (Exception e){
+            //not in finally because refreshFamilyMembers must run before populateTable
+            familyMemberModel.refreshFamilyMembers();
             DialogMessages.showAlert(e);
         }
     }
@@ -80,6 +81,7 @@ public class FamilyMemberController implements Initializable, ControlledScreen {
             saveBtn.setDisable(false);
             deleteBtn.setDisable(true);
         }catch (Exception e){
+            familyMemberModel.refreshFamilyMembers();
             DialogMessages.showAlert(e);
         }
     }
@@ -91,6 +93,7 @@ public class FamilyMemberController implements Initializable, ControlledScreen {
             populateTable();
             onClear(event);
         } catch (Exception e) {
+            //no refreshFamilyMembers() because there are in deletePendingFamilyMember, populateTable, onClear
             DialogMessages.showAlert(e);
         }
     }
@@ -110,6 +113,7 @@ public class FamilyMemberController implements Initializable, ControlledScreen {
                 onClear(event);
             }
         } catch (Exception e) {
+            //no refreshFamilyMembers() because there are in deletePendingFamilyMember, populateTable, onClear
             DialogMessages.showAlert(e);
         }
     }
@@ -124,6 +128,7 @@ public class FamilyMemberController implements Initializable, ControlledScreen {
             nameTF.setText(familyMemberModel.getPendingFamilyMember().getName());
             descTA.setText(familyMemberModel.getPendingFamilyMember().getDescription());
         }catch (Exception e){
+            familyMemberModel.refreshFamilyMembers();
             DialogMessages.showAlert(e);
         }
     }
@@ -151,6 +156,7 @@ public class FamilyMemberController implements Initializable, ControlledScreen {
 
             table.getColumns().setAll(familyMemberIdCol, familyMemberNameCol, familyMemberDescCol, familyMemberCreatedCol, familyMemberUpdatedCol);
         }catch (Exception e){
+            familyMemberModel.refreshFamilyMembers();
             DialogMessages.showAlert(e);
         }
     }

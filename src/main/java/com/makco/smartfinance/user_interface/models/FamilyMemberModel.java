@@ -4,12 +4,11 @@ import com.makco.smartfinance.persistence.entity.FamilyMember;
 import com.makco.smartfinance.services.FamilyMemberService;
 import com.makco.smartfinance.services.FamilyMemberServiceImpl;
 import com.makco.smartfinance.user_interface.constants.DialogMessages;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import java.util.List;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 /**
  * Created by mcalancea on 2016-04-05.
@@ -51,9 +50,10 @@ public class FamilyMemberModel {
                 FamilyMember tmpFamilyMember = new FamilyMember(name, description);
                 familyMemberService.saveOrUpdateFamilyMember(tmpFamilyMember);
             }
-            refreshFamilyMembers();
         } catch (Exception e){
             DialogMessages.showAlert(e);
+        }finally {
+            refreshFamilyMembers();
         }
     }
 
@@ -66,6 +66,8 @@ public class FamilyMemberModel {
             refreshFamilyMembers();
         } catch (Exception e){
             DialogMessages.showAlert(e);
+        }finally {
+            refreshFamilyMembers();
         }
     }
 
