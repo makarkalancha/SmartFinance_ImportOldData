@@ -9,6 +9,10 @@ import com.makco.smartfinance.user_interface.models.FamilyMemberModel;
 import java.net.URL;
 import java.util.Calendar;
 import java.util.ResourceBundle;
+import java.util.concurrent.ExecutorService;
+
+import javafx.concurrent.Task;
+import javafx.concurrent.Worker;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import javafx.event.ActionEvent;
@@ -101,17 +105,30 @@ public class FamilyMemberController implements Initializable, ControlledScreen {
     @FXML
     public void onDelete(ActionEvent event){
         try {
-            String title = ApplicationUtililities.FAMILY_MEMBER_WINDOW_TITLE;
-            String headerText = "Family Member Deletion";
-            StringBuilder contentText = new StringBuilder("Are you sure you want to delete family member ");
-            contentText.append("\"");
-            contentText.append(nameTF.getText());
-            contentText.append("\"?");
-            if (DialogMessages.showConfirmationDialog(title, headerText, contentText.toString(), null)) {
-                familyMemberModel.deletePendingFamilyMember();
-                populateTable();
-                onClear(event);
-            }
+//            http://stackoverflow.com/questions/22098288/javafx-how-can-i-use-correctly-a-progressindicator-in-javafx
+//            http://stackoverflow.com/questions/30249493/using-threads-to-make-database-requests
+            Task taskToDelete = new Task<Void>() {
+                @Override
+                protected Void call() throws Exception {
+                    String title = ApplicationUtililities.FAMILY_MEMBER_WINDOW_TITLE;
+                    String headerText = "Family Member Deletion";
+                    StringBuilder contentText = new StringBuilder("Are you sure you want to delete family member ");
+                    contentText.append("\"");
+                    contentText.append(nameTF.getText());
+                    contentText.append("\"?");
+                    if(DialogMessages.showConfirmationDialog(title,headerText,contentText.toString(),null))
+
+                    {
+                        familyMemberModel.deletePendingFamilyMember();
+                        populateTable();
+                        onClear(event);
+                    }
+                    return null;
+                }
+            };
+            Thread backGroundT = new Thread(taskToDelete);
+            backGroundT.setDaemon(true);
+            backGroundT.start();
         } catch (Exception e) {
             //no refreshFamilyMembers() because there are in deletePendingFamilyMember, populateTable, onClear
             DialogMessages.showExceptionAlert(e);

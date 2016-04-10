@@ -5,14 +5,13 @@ import com.makco.smartfinance.services.FamilyMemberService;
 import com.makco.smartfinance.services.FamilyMemberServiceImpl;
 import com.makco.smartfinance.user_interface.constants.DialogMessages;
 import com.makco.smartfinance.user_interface.validation.ErrorEnum;
-import com.makco.smartfinance.user_interface.validation.RuleSet;
-import com.makco.smartfinance.user_interface.validation.rule_sets.FamilyMemberRuleSet;
-import java.util.EnumSet;
-import java.util.List;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import java.util.EnumSet;
+import java.util.List;
 
 /**
  * Created by mcalancea on 2016-04-05.
@@ -55,8 +54,7 @@ public class FamilyMemberModel {
                 tmpFamilyMember = new FamilyMember(name, description);
             }
 
-            RuleSet ruleSet = new FamilyMemberRuleSet();
-            EnumSet<ErrorEnum> errors = ruleSet.validate(tmpFamilyMember);
+            EnumSet<ErrorEnum> errors = familyMemberService.validate(tmpFamilyMember);
             if(!errors.isEmpty()) {
                 DialogMessages.showErrorDialog("Error while saving Family Member: " + tmpFamilyMember.getName(), errors, null);
             } else {

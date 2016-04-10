@@ -42,12 +42,12 @@ public class Main extends Application{
 //            Flyway flyway = new Flyway();
 //            flyway.setDataSource(DBConnectionResource.getDbConnectionUrl(),TestContext.INSTANCE.DB_USER(),TestContext.INSTANCE.DB_PASSWORD());
 //            flyway.migrate();
-            if(H2DbUtils.checkIfSchemaExists(DataBaseConstants.SCHEMA)){
-                LOG.debug("db exists");
-            } else {
+//            if(H2DbUtils.checkIfSchemaExists(DataBaseConstants.SCHEMA)){
+//                LOG.debug("db exists");
+//            } else {
                 LOG.debug("db DOESN'T exist");
                 H2DbUtils.migrate(DataBaseConstants.SCHEMA);
-            }
+//            }
 
             this.primaryStage = primaryStage;
 
