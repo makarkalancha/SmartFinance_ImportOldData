@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.*?>
 
 
-<VBox fx:id="vBox" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.makco.smartfinance.user_interface.controllers.FamilyMemberController">
+<VBox fx:id="vBox" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.makco.smartfinance.user_interface.controllers.FamilyMemberController">
    <children>
       <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="30.0" prefWidth="441.0" text="Family Members">
          <font>
