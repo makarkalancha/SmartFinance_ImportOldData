@@ -1,15 +1,6 @@
 package com.makco.smartfinance.user_interface.constants;
 
 import com.makco.smartfinance.user_interface.validation.ErrorEnum;
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.Optional;
-import java.util.stream.Collectors;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
@@ -18,6 +9,16 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.stage.Stage;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * User: Makar Kalancha
@@ -63,14 +64,6 @@ public class DialogMessages {
         }
 
         if(!errors.isEmpty()) {
-//            DialogPane dialogPane = alert.getDialogPane();
-//            Text text = new Text();
-//            errors.forEach(error -> {
-//                text.apperror.getMessage();
-//            });
-//            TextFlow textFlow = new TextFlow();
-////            textFlow.
-//            dialogPane.setContent(textFlow);
             String message = StringUtils.join(
                     errors.stream()
                             .map(error -> error.getMessage())

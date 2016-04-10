@@ -68,12 +68,14 @@ public class Main extends Application{
             this.primaryStage.getIcons().add(new Image(ApplicationUtililities.MAIN_WINDOW_ICO));
             this.primaryStage.setTitle(ApplicationUtililities.MAIN_WINDOW_TITLE);
             ////http://stackoverflow.com/questions/19602727/how-to-reference-javafx-fxml-files-in-resource-folder
-            Group root = new Group();
-            root.getChildren().addAll(mainContainer);
-            Scene scene = new Scene(root);
+//            Group root = new Group();
+//            root.getChildren().addAll(mainContainer);
+//            Scene scene = new Scene(root);
+            Scene scene = new Scene(mainContainer);
             primaryStage.setScene(scene);
 
             LOG.debug("hello: start");
+            primaryStage.setMaximized(true);
             primaryStage.show();
         }catch (Exception e){
             DialogMessages.showExceptionAlert(e);

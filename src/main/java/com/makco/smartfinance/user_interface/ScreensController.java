@@ -2,6 +2,11 @@ package com.makco.smartfinance.user_interface;
 
 import com.makco.smartfinance.user_interface.constants.Screens;
 import java.util.EnumMap;
+
+import javafx.geometry.Pos;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Priority;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import javafx.fxml.FXMLLoader;
@@ -12,15 +17,21 @@ import javafx.scene.layout.VBox;
 /**
  * Created by mcalancea on 2016-04-01.
  */
-public class ScreensController extends VBox {
+//public class ScreensController extends VBox {
+public class ScreensController extends BorderPane {
     private final static Logger LOG = LogManager.getLogger(ScreensController.class);
     EnumMap<Screens, Node> screens = new EnumMap<>(Screens.class);
 
     public ScreensController(){
         super();
-        setPrefWidth(400f);
-        setPrefWidth(640f);
+        setPrefHeight(USE_COMPUTED_SIZE);
+        setPrefWidth(USE_COMPUTED_SIZE);
+//        setStyle("-fx-background-color: #336699;");
+//        setPrefWidth(400f);
+//        setPrefHeight(640f);
+//        setAlignment(Pos.CENTER);
         loadMenuBar();
+//        setVgrow(getChildren().get(0), Priority.ALWAYS);
         LOG.debug("ScreensController.constr");
     }
 
@@ -39,10 +50,12 @@ public class ScreensController extends VBox {
         LOG.debug("ScreensController.loadMenuBar");
         try{
             FXMLLoader myLoader = new FXMLLoader(getClass().getResource("menu_bar.fxml"));
-            Parent loadScreen = (Parent) myLoader.load();
+            Parent menuBar = (Parent) myLoader.load();
             ControlledScreen controlledScreen = ((ControlledScreen) myLoader.getController());
             controlledScreen.setScreenParent(this);
-            getChildren().add(loadScreen);
+            setTop(menuBar);
+//            getChildren().add(menuBar);
+//            setTopAnchor(menuBar, );
             return true;
         } catch (Exception e){
             LOG.error("!>>>ScreensController.loadScreen:",e);
@@ -57,10 +70,10 @@ public class ScreensController extends VBox {
         LOG.debug(String.format("ScreensController.loadScreen: name=%s; resource=%s", screen, screen.getFxmlFilePath()));
         try{
             FXMLLoader myLoader = new FXMLLoader(getClass().getResource(screen.getFxmlFilePath()));
-            Parent loadScreen = (Parent) myLoader.load();
+            Parent childScreenNode = (Parent) myLoader.load();
             ControlledScreen controlledScreen = ((ControlledScreen) myLoader.getController());
             controlledScreen.setScreenParent(this);
-            addScreen(screen, loadScreen);
+            addScreen(screen, childScreenNode);
             return true;
         } catch (Exception e){
             LOG.error("!>>>ScreensController.loadScreen:",e);
@@ -75,15 +88,22 @@ public class ScreensController extends VBox {
     public boolean setScreen(final Screens screen) {
         LOG.debug(String.format("ScreensController.setScreen: name=%s", screen.toString()));
         LOG.debug(String.format("getChildren().size()=%d", getChildren().size()));
-        if (screens.get(screen) != null) {
+        Node child = screens.get(screen);
+        if (child != null) {
             if (!getChildren().isEmpty() && getChildren().size() > 1) {
                 LOG.debug("getChildren() is greater than 1");
+
+                LOG.debug("children:"+getChildren().size());
                 getChildren().remove(1);
-                getChildren().add(1, screens.get(screen));
+//                getChildren().add(1, child);
+
+//                setVgrow(child,Priority.ALWAYS);
             } else {
                 LOG.debug("getChildren() is less or equal than 1");
-                getChildren().add(screens.get(screen));
+//                getChildren().add(screens.get(screen));
+//                getChildren().add(child);
             }
+            setCenter(child);
             return true;
         } else {
             LOG.error(screen+" -> screen hasn't been loaded!!!");
