@@ -107,6 +107,8 @@ public class FamilyMemberController implements Initializable, ControlledScreen {
         try {
 //            http://stackoverflow.com/questions/22098288/javafx-how-can-i-use-correctly-a-progressindicator-in-javafx
 //            http://stackoverflow.com/questions/30249493/using-threads-to-make-database-requests
+//            http://stackoverflow.com/questions/29625170/display-popup-with-progressbar-in-javafx
+            //use service as it can be reused
             Task taskToDelete = new Task<Void>() {
                 @Override
                 protected Void call() throws Exception {
