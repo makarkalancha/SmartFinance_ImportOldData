@@ -12,6 +12,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.EnumSet;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Created by mcalancea on 2016-04-05.
@@ -42,7 +43,8 @@ public class FamilyMemberModel {
         return familyMembers;
     }
 
-    public void savePendingFamilyMember(String name, String description){
+    public AtomicBoolean savePendingFamilyMember(String name, String description){
+        AtomicBoolean isSaved = new AtomicBoolean(false);
         try{
             FamilyMember tmpFamilyMember;
             if(pendingFamilyMember != null){
@@ -59,12 +61,14 @@ public class FamilyMemberModel {
                 DialogMessages.showErrorDialog("Error while saving Family Member: " + tmpFamilyMember.getName(), errors, null);
             } else {
                 familyMemberService.saveOrUpdateFamilyMember(tmpFamilyMember);
+                isSaved.getAndSet(true);
             }
         } catch (Exception e){
             DialogMessages.showExceptionAlert(e);
         }finally {
             refreshFamilyMembers();
         }
+        return isSaved;
     }
 
     public void deletePendingFamilyMember(){

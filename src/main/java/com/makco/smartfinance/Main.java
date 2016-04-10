@@ -75,7 +75,7 @@ public class Main extends Application{
             primaryStage.setScene(scene);
 
             LOG.debug("hello: start");
-            primaryStage.setMaximized(true);
+//            primaryStage.setMaximized(true);
             primaryStage.show();
         }catch (Exception e){
             DialogMessages.showExceptionAlert(e);

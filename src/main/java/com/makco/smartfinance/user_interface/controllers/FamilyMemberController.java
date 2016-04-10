@@ -13,6 +13,7 @@ import java.util.ResourceBundle;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
@@ -41,11 +42,9 @@ public class FamilyMemberController implements Initializable, ControlledScreen {
     private Executor executor;
     private ActionEvent actionEvent;
     private String globalTest;
-    private Worker<Void> onClearWorker;
     private Worker<Void> onDeleteWorker;
     private Worker<Void> onSaveWorker;
-    private Worker<Void> onPopulateFormWorker;
-    private Worker<Void> onPopulateTableWorker;
+    private Worker<Void> onRefreshFamilyMembersWorker;
     private ProgressForm pForm = new ProgressForm();
 
     @FXML
@@ -69,27 +68,6 @@ public class FamilyMemberController implements Initializable, ControlledScreen {
                 return t;
 
             });
-            onClearWorker = new Service<Void>() {
-                @Override
-                protected Task<Void> createTask() {
-                    return new Task<Void>() {
-                        @Override
-                        protected Void call() throws Exception {
-                            LOG.debug("globalTest:" + globalTest);
-                            nameTF.clear();
-                            descTA.clear();
-                            clearBtn.setDisable(false);
-                            saveBtn.setDisable(false);
-                            deleteBtn.setDisable(true);
-                            return null;
-                        }
-                    };
-                }
-            };
-            ((Service) onClearWorker).setOnSucceeded(event -> {
-                pForm.getDialogStage().close();
-//                startButton.setDisable(false);
-            });
 
             onDeleteWorker = new Service<Void>() {
                 @Override
@@ -98,24 +76,16 @@ public class FamilyMemberController implements Initializable, ControlledScreen {
                         @Override
                         protected Void call() throws Exception {
                             LOG.debug("globalTest:" + globalTest);
-                            String title = ApplicationUtililities.FAMILY_MEMBER_WINDOW_TITLE;
-                            String headerText = "Family Member Deletion";
-                            StringBuilder contentText = new StringBuilder("Are you sure you want to delete family member ");
-                            contentText.append("\"");
-                            contentText.append(nameTF.getText());
-                            contentText.append("\"?");
-                            if(DialogMessages.showConfirmationDialog(title,headerText,contentText.toString(),null)) {
-                                familyMemberModel.deletePendingFamilyMember();
-                                populateTable();
-                                onClear(actionEvent);
-                            }
+                            familyMemberModel.deletePendingFamilyMember();
                             return null;
                         }
                     };
                 }
             };
             ((Service) onDeleteWorker).setOnSucceeded(event -> {
+                LOG.debug("onDeleteWorker->setOnSucceeded");
                 pForm.getDialogStage().close();
+                populateTable();
     //                startButton.setDisable(false);
             });
             onSaveWorker = new Service<Void>() {
@@ -126,81 +96,46 @@ public class FamilyMemberController implements Initializable, ControlledScreen {
                         protected Void call() throws Exception {
                             LOG.debug("globalTest:" + globalTest);
                             familyMemberModel.savePendingFamilyMember(nameTF.getText(), descTA.getText());
-                            populateTable();
-                            onClear(actionEvent);
                             return null;
                         }
                     };
                 }
             };
             ((Service) onSaveWorker).setOnSucceeded(event -> {
+                LOG.debug("onSaveWorker->setOnSucceeded");
                 pForm.getDialogStage().close();
+                populateTable();
+                onClear(actionEvent);
 //                startButton.setDisable(false);
             });
-
-            onPopulateFormWorker = new Service<Void>() {
+//            ((Service) onSaveWorker).setOnFailed(event -> {
+//                pForm.getDialogStage().close();
+////                populateTable();
+////                onClear(actionEvent);
+////                startButton.setDisable(false);
+//            });
+            onRefreshFamilyMembersWorker = new Service<Void>() {
                 @Override
                 protected Task<Void> createTask() {
                     return new Task<Void>() {
                         @Override
                         protected Void call() throws Exception {
                             LOG.debug("globalTest:" + globalTest);
-                            clearBtn.setDisable(false);
-                            saveBtn.setDisable(false);
-                            deleteBtn.setDisable(false);
-                            familyMemberModel.setPendingFamilyMemberProperty(table.getSelectionModel().getSelectedItem());
-
-                            nameTF.setText(familyMemberModel.getPendingFamilyMember().getName());
-                            descTA.setText(familyMemberModel.getPendingFamilyMember().getDescription());
+                            familyMemberModel.refreshFamilyMembers();
                             return null;
                         }
                     };
                 }
             };
-            ((Service) onSaveWorker).setOnSucceeded(event -> {
+            ((Service) onRefreshFamilyMembersWorker).setOnSucceeded(event -> {
+                LOG.debug("onRefreshFamilyMembersWorker->setOnSucceeded");
                 pForm.getDialogStage().close();
-//                startButton.setDisable(false);
-            });
-            onPopulateTableWorker = new Service<Void>() {
-                @Override
-                protected Task<Void> createTask() {
-                    return new Task<Void>() {
-                        @Override
-                        protected Void call() throws Exception {
-                            LOG.debug("globalTest:" + globalTest);
-
-                            LOG.debug("familyMemberModel.getFamilyMembers().size():"+familyMemberModel.getFamilyMembers().size());
-                            table.getItems().clear();
-                            table.setItems(familyMemberModel.getFamilyMembers());
-
-                            TableColumn<FamilyMember, Long> familyMemberIdCol = new TableColumn<>("ID");
-                            familyMemberIdCol.setCellValueFactory(new PropertyValueFactory<FamilyMember, Long>("id"));
-
-                            TableColumn<FamilyMember, String> familyMemberNameCol = new TableColumn<>("Name");
-                            familyMemberNameCol.setCellValueFactory(new PropertyValueFactory<FamilyMember, String>("name"));
-
-                            TableColumn<FamilyMember, String> familyMemberDescCol = new TableColumn<>("Description");
-                            familyMemberDescCol.setCellValueFactory(new PropertyValueFactory<FamilyMember, String>("description"));
-
-                            TableColumn<FamilyMember, Calendar> familyMemberCreatedCol = new TableColumn<>("Created on");
-                            familyMemberCreatedCol.setCellValueFactory(new PropertyValueFactory<FamilyMember, Calendar>("createdOn"));
-
-                            TableColumn<FamilyMember, Calendar> familyMemberUpdatedCol = new TableColumn<>("Updated on");
-                            familyMemberUpdatedCol.setCellValueFactory(new PropertyValueFactory<FamilyMember, Calendar>("updatedOn"));
-
-                            table.getColumns().setAll(familyMemberIdCol, familyMemberNameCol, familyMemberDescCol, familyMemberCreatedCol, familyMemberUpdatedCol);
-                            return null;
-                        }
-                    };
-                }
-            };
-            ((Service) onSaveWorker).setOnSucceeded(event -> {
-                pForm.getDialogStage().close();
+                populateTable();
 //                startButton.setDisable(false);
             });
         }catch (Exception e){
             //not in finally because refreshFamilyMembers must run before populateTable
-            familyMemberModel.refreshFamilyMembers();
+            startService(onRefreshFamilyMembersWorker,null,"from initializeServices: catch exception");
             DialogMessages.showExceptionAlert(e);
         }
     }
@@ -209,9 +144,9 @@ public class FamilyMemberController implements Initializable, ControlledScreen {
         actionEvent = event;
         globalTest = test;
         pForm.activateProgressBar(worker);
-        ((Service<V>)worker).setOnSucceeded(succeededEevent -> {
-            pForm.getDialogStage().close();
-        });
+//        ((Service<V>)worker).setOnSucceeded(succeededEevent -> {
+//            pForm.getDialogStage().close();
+//        });
         Service<V> service = ((Service<V>)worker);
         if(service == null){
             LOG.debug("service IS NULL");
@@ -236,8 +171,7 @@ public class FamilyMemberController implements Initializable, ControlledScreen {
     public void initialize(URL location, ResourceBundle resources){
         try {
             initializeServices();
-            familyMemberModel.refreshFamilyMembers();
-            populateTable();
+            startService(onRefreshFamilyMembersWorker, null, "from initialize");
             table.getSelectionModel().selectedItemProperty().addListener((observable, oldSelection, newSelection) -> {
                 if (newSelection != null) {
                     populateForm();
@@ -246,9 +180,9 @@ public class FamilyMemberController implements Initializable, ControlledScreen {
             clearBtn.setDisable(true);
             saveBtn.setDisable(false);
             deleteBtn.setDisable(true);
-        }catch (Exception e){
+        } catch (Exception e) {
             //not in finally because refreshFamilyMembers must run before populateTable
-            familyMemberModel.refreshFamilyMembers();
+            startService(onRefreshFamilyMembersWorker, null, "from initialize: catch exception");
             DialogMessages.showExceptionAlert(e);
         }
     }
@@ -256,9 +190,13 @@ public class FamilyMemberController implements Initializable, ControlledScreen {
     @FXML
     public void onClear(ActionEvent event){
         try{
-            startService(onClearWorker, event, "from onClear");
+            nameTF.clear();
+            descTA.clear();
+            clearBtn.setDisable(false);
+            saveBtn.setDisable(false);
+            deleteBtn.setDisable(true);
         }catch (Exception e){
-            familyMemberModel.refreshFamilyMembers();
+            startService(onRefreshFamilyMembersWorker,null,"from onClear: catch exception");
             DialogMessages.showExceptionAlert(e);
         }
     }
@@ -267,6 +205,15 @@ public class FamilyMemberController implements Initializable, ControlledScreen {
     public void onSave(ActionEvent event){
         try {
             startService(onSaveWorker, event, "from onSave");
+        } catch (Exception e) {
+            //no refreshFamilyMembers() because there are in deletePendingFamilyMember, populateTable, onClear
+            DialogMessages.showExceptionAlert(e);
+        }
+    }
+
+    private void save(ActionEvent event){
+        try{
+
         } catch (Exception e) {
             //no refreshFamilyMembers() because there are in deletePendingFamilyMember, populateTable, onClear
             DialogMessages.showExceptionAlert(e);
@@ -290,7 +237,28 @@ public class FamilyMemberController implements Initializable, ControlledScreen {
 //            Thread backGroundT = new Thread(taskToDelete);
 //            backGroundT.setDaemon(true);
 //            backGroundT.start();
-            startService(onDeleteWorker, event, "from onDelete");
+            String title = ApplicationUtililities.FAMILY_MEMBER_WINDOW_TITLE;
+            String headerText = "Family Member Deletion";
+            StringBuilder contentText = new StringBuilder("Are you sure you want to delete family member ");
+            contentText.append("\"");
+            contentText.append(nameTF.getText());
+            contentText.append("\"?");
+            if(DialogMessages.showConfirmationDialog(title,headerText,contentText.toString(),null)) {
+                startService(onDeleteWorker, event, "from onDelete");
+                populateTable();
+                onClear(actionEvent);
+            }
+
+
+        } catch (Exception e) {
+            //no refreshFamilyMembers() because there are in deletePendingFamilyMember, populateTable, onClear
+            DialogMessages.showExceptionAlert(e);
+        }
+    }
+
+    private void delete(ActionEvent event){
+        try{
+
         } catch (Exception e) {
             //no refreshFamilyMembers() because there are in deletePendingFamilyMember, populateTable, onClear
             DialogMessages.showExceptionAlert(e);
@@ -299,18 +267,43 @@ public class FamilyMemberController implements Initializable, ControlledScreen {
 
     private void populateForm(){
         try{
-            startService(onPopulateFormWorker, null, "from populateForm");
+            clearBtn.setDisable(false);
+            saveBtn.setDisable(false);
+            deleteBtn.setDisable(false);
+            familyMemberModel.setPendingFamilyMemberProperty(table.getSelectionModel().getSelectedItem());
+
+            nameTF.setText(familyMemberModel.getPendingFamilyMember().getName());
+            descTA.setText(familyMemberModel.getPendingFamilyMember().getDescription());
         }catch (Exception e){
-            familyMemberModel.refreshFamilyMembers();
+            startService(onRefreshFamilyMembersWorker,null,"from populateForm: catch exception");
             DialogMessages.showExceptionAlert(e);
         }
     }
 
     private void populateTable(){
         try{
-            startService(onPopulateTableWorker, null, "from populateTable");
+            LOG.debug("familyMemberModel.getFamilyMembers().size():"+familyMemberModel.getFamilyMembers().size());
+            table.getItems().clear();
+            table.setItems(familyMemberModel.getFamilyMembers());
+
+            TableColumn<FamilyMember, Long> familyMemberIdCol = new TableColumn<>("ID");
+            familyMemberIdCol.setCellValueFactory(new PropertyValueFactory<FamilyMember, Long>("id"));
+
+            TableColumn<FamilyMember, String> familyMemberNameCol = new TableColumn<>("Name");
+            familyMemberNameCol.setCellValueFactory(new PropertyValueFactory<FamilyMember, String>("name"));
+
+            TableColumn<FamilyMember, String> familyMemberDescCol = new TableColumn<>("Description");
+            familyMemberDescCol.setCellValueFactory(new PropertyValueFactory<FamilyMember, String>("description"));
+
+            TableColumn<FamilyMember, Calendar> familyMemberCreatedCol = new TableColumn<>("Created on");
+            familyMemberCreatedCol.setCellValueFactory(new PropertyValueFactory<FamilyMember, Calendar>("createdOn"));
+
+            TableColumn<FamilyMember, Calendar> familyMemberUpdatedCol = new TableColumn<>("Updated on");
+            familyMemberUpdatedCol.setCellValueFactory(new PropertyValueFactory<FamilyMember, Calendar>("updatedOn"));
+
+            table.getColumns().setAll(familyMemberIdCol, familyMemberNameCol, familyMemberDescCol, familyMemberCreatedCol, familyMemberUpdatedCol);
         }catch (Exception e){
-            familyMemberModel.refreshFamilyMembers();
+            startService(onRefreshFamilyMembersWorker,null,"from populateTable: catch exception");
             DialogMessages.showExceptionAlert(e);
         }
     }
