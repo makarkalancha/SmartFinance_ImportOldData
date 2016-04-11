@@ -42,6 +42,7 @@ public class ProgressForm {
         dialogStage.setScene(scene);
 
 
+        //https://assylias.wordpress.com/2013/12/08/383/
         //this is where the transparency is achieved:
         //the three layers must be made transparent
         //(i)  make the VBox transparent (the 4th parameter is the alpha)
