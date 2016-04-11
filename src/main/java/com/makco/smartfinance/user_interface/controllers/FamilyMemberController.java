@@ -79,14 +79,14 @@ public class FamilyMemberController implements Initializable, ControlledScreen {
                     };
                 }
             };
-            ((Service) onDeleteWorker).setOnSucceeded(event -> {
+            ((Service<Void>) onDeleteWorker).setOnSucceeded(event -> {
                 LOG.debug("onDeleteWorker->setOnSucceeded");
                 LOG.debug(">>>>>>>>onDeleteWorker->setOnSucceeded: pForm.getDialogStage().close()");
                 pForm.getDialogStage().close();
                 populateTable();
     //                startButton.setDisable(false);
             });
-            ((Service) onDeleteWorker).setOnFailed(event -> {
+            ((Service<Void>) onDeleteWorker).setOnFailed(event -> {
                 LOG.debug("onDeleteWorker->setOnFailed");
                 LOG.debug(">>>>>>>>onDeleteWorker->setOnFailed: pForm.getDialogStage().close()");
                 pForm.getDialogStage().close();
@@ -108,12 +108,12 @@ public class FamilyMemberController implements Initializable, ControlledScreen {
                     };
                 }
             };
-            ((Service) onSaveWorker).setOnSucceeded(event -> {
+            ((Service<EnumSet<ErrorEnum>>) onSaveWorker).setOnSucceeded(event -> {
                 LOG.debug("onSaveWorker->setOnSucceeded");
                 LOG.debug(">>>>>>>>onSaveWorker->setOnSucceeded: pForm.getDialogStage().close()");
                 pForm.getDialogStage().close();
                 populateTable();
-                EnumSet<ErrorEnum> errors = (EnumSet<ErrorEnum>)((Service) onSaveWorker).getValue();
+                EnumSet<ErrorEnum> errors = ((Service<EnumSet<ErrorEnum>>) onSaveWorker).getValue();
                 if(!errors.isEmpty()) {
                     DialogMessages.showErrorDialog("Error while saving Family Member: " + nameTF.getText(),
                             (EnumSet<ErrorEnum>) ((Service) onSaveWorker).getValue(), null);
@@ -121,7 +121,7 @@ public class FamilyMemberController implements Initializable, ControlledScreen {
                 onClear(actionEvent);
 //                startButton.setDisable(false);
             });
-            ((Service) onSaveWorker).setOnFailed(event -> {
+            ((Service<EnumSet<ErrorEnum>>) onSaveWorker).setOnFailed(event -> {
                 LOG.debug("onSaveWorker->setOnFailed");
                 LOG.debug(">>>>>>>>onSaveWorker->setOnFailed: pForm.getDialogStage().close()");
                 pForm.getDialogStage().close();
@@ -142,14 +142,14 @@ public class FamilyMemberController implements Initializable, ControlledScreen {
                     };
                 }
             };
-            ((Service) onRefreshFamilyMembersWorker).setOnSucceeded(event -> {
+            ((Service<Void>) onRefreshFamilyMembersWorker).setOnSucceeded(event -> {
                 LOG.debug("onRefreshFamilyMembersWorker->setOnSucceeded");
                 LOG.debug(">>>>>>>>onRefreshFamilyMembersWorker->setOnSucceeded: pForm.getDialogStage().close()");
                 pForm.getDialogStage().close();
                 populateTable();
 //                startButton.setDisable(false);
             });
-            ((Service) onRefreshFamilyMembersWorker).setOnFailed(event -> {
+            ((Service<Void>) onRefreshFamilyMembersWorker).setOnFailed(event -> {
                 LOG.debug("onRefreshFamilyMembersWorker->setOnFailed");
                 LOG.debug(">>>>>>>>onRefreshFamilyMembersWorker->setOnFailed: pForm.getDialogStage().close()");
                 pForm.getDialogStage().close();
