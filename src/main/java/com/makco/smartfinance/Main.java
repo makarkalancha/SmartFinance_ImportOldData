@@ -5,11 +5,17 @@ import com.makco.smartfinance.persistence.contants.DataBaseConstants;
 import com.makco.smartfinance.user_interface.ScreensController;
 import com.makco.smartfinance.user_interface.constants.ApplicationUtililities;
 import com.makco.smartfinance.user_interface.constants.DialogMessages;
+import com.makco.smartfinance.user_interface.constants.ProgressForm;
 import com.makco.smartfinance.user_interface.constants.Screens;
 import com.makco.smartfinance.utils.Logs;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import javafx.application.Application;
+import javafx.concurrent.Service;
+import javafx.concurrent.Task;
+import javafx.concurrent.Worker;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -23,6 +29,41 @@ public class Main extends Application{
     private final static Logger LOG = LogManager.getLogger(Main.class);
 
     private Stage primaryStage;
+    private Executor executor;
+    private Worker<Void> migrateWorker;
+    private ProgressForm pForm = new ProgressForm();
+
+    public Main(){
+        executor = Executors.newCachedThreadPool(runnable -> {
+            Thread t = new Thread(runnable);
+            t.setDaemon(true);
+            return t;
+        });
+
+        migrateWorker = new Task<Void>() {
+            @Override
+            protected Void call() throws Exception {
+                LOG.debug("Main:migrate");
+                H2DbUtils.migrate(DataBaseConstants.SCHEMA);
+                return null;
+            }
+        };
+        ((Task<Void>) migrateWorker).setOnSucceeded(event -> {
+            LOG.debug("onDeleteWorker->setOnSucceeded");
+            LOG.debug(">>>>>>>>onDeleteWorker->setOnSucceeded: pForm.getDialogStage().close()");
+            pForm.getDialogStage().close();
+            //                startButton.setDisable(false);
+        });
+        ((Task<Void>) migrateWorker).setOnFailed(event -> {
+            LOG.debug("onDeleteWorker->setOnFailed");
+            LOG.debug(">>>>>>>>onDeleteWorker->setOnFailed: pForm.getDialogStage().close()");
+            pForm.getDialogStage().close();
+//                onClear(actionEvent);
+//                startButton.setDisable(false);
+        });
+        pForm.activateProgressBar(migrateWorker);
+        pForm.getDialogStage().setAlwaysOnTop(true);
+    }
 
     //https://www.youtube.com/watch?v=5GsdaZWDcdY
     //https://github.com/acaicedo/JFX-MultiScreen/tree/master/ScreensFramework/src/screensframework
@@ -36,17 +77,20 @@ public class Main extends Application{
         System.setErr(Logs.createLoggingProxy(System.err));
         System.setOut(Logs.createLoggingProxy(System.out));
         try {
-//            H2DbUtils.checkIfSchemaExists(ApplicationUtililities.DB_SCHEMA_NAME);
-//http://www.hascode.com/2013/04/easy-database-migrations-using-flyway-java-ee-6-and-glassfish/
-//            Flyway flyway = new Flyway();
-//            flyway.setDataSource(DBConnectionResource.getDbConnectionUrl(),TestContext.INSTANCE.DB_USER(),TestContext.INSTANCE.DB_PASSWORD());
-//            flyway.migrate();
-//            if(H2DbUtils.checkIfSchemaExists(DataBaseConstants.SCHEMA)){
-//                LOG.debug("db exists");
-//            } else {
-                LOG.debug("db DOESN'T exist");
-                H2DbUtils.migrate(DataBaseConstants.SCHEMA);
-//            }
+////            H2DbUtils.checkIfSchemaExists(ApplicationUtililities.DB_SCHEMA_NAME);
+////http://www.hascode.com/2013/04/easy-database-migrations-using-flyway-java-ee-6-and-glassfish/
+////            Flyway flyway = new Flyway();
+////            flyway.setDataSource(DBConnectionResource.getDbConnectionUrl(),TestContext.INSTANCE.DB_USER(),TestContext.INSTANCE.DB_PASSWORD());
+////            flyway.migrate();
+////            if(H2DbUtils.checkIfSchemaExists(DataBaseConstants.SCHEMA)){
+////                LOG.debug("db exists");
+////            } else {
+////                LOG.debug("db DOESN'T exist");
+//
+//            H2DbUtils.migrate(DataBaseConstants.SCHEMA);
+            pForm.getDialogStage().show();
+            executor.execute(migrateWorker);
+////            }
 
             this.primaryStage = primaryStage;
 
