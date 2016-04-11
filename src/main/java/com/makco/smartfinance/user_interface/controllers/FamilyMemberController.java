@@ -7,19 +7,16 @@ import com.makco.smartfinance.user_interface.constants.ApplicationUtililities;
 import com.makco.smartfinance.user_interface.constants.DialogMessages;
 import com.makco.smartfinance.user_interface.constants.ProgressForm;
 import com.makco.smartfinance.user_interface.models.FamilyMemberModel;
+import com.makco.smartfinance.user_interface.validation.ErrorEnum;
 import java.net.URL;
 import java.util.Calendar;
+import java.util.EnumSet;
 import java.util.ResourceBundle;
-import java.util.concurrent.Executor;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.atomic.AtomicBoolean;
-
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javafx.concurrent.Worker;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -39,11 +36,11 @@ public class FamilyMemberController implements Initializable, ControlledScreen {
     private ScreensController myController;
     private FamilyMemberModel familyMemberModel = new FamilyMemberModel();
 
-    private Executor executor;
+//    private Executor executor;
     private ActionEvent actionEvent;
     private String globalTest;
     private Worker<Void> onDeleteWorker;
-    private Worker<Void> onSaveWorker;
+    private Worker<EnumSet<ErrorEnum>> onSaveWorker;
     private Worker<Void> onRefreshFamilyMembersWorker;
     private ProgressForm pForm = new ProgressForm();
 
@@ -62,12 +59,12 @@ public class FamilyMemberController implements Initializable, ControlledScreen {
 
     public void initializeServices(){
         try{
-            executor = Executors.newCachedThreadPool(runnable -> {
-                Thread t = new Thread(runnable);
-                t.setDaemon(true);
-                return t;
-
-            });
+//            executor = Executors.newCachedThreadPool(runnable -> {
+//                Thread t = new Thread(runnable);
+//                t.setDaemon(true);
+//                return t;
+//
+//            });
 
             onDeleteWorker = new Service<Void>() {
                 @Override
@@ -84,36 +81,55 @@ public class FamilyMemberController implements Initializable, ControlledScreen {
             };
             ((Service) onDeleteWorker).setOnSucceeded(event -> {
                 LOG.debug("onDeleteWorker->setOnSucceeded");
+                LOG.debug(">>>>>>>>onDeleteWorker->setOnSucceeded: pForm.getDialogStage().close()");
                 pForm.getDialogStage().close();
                 populateTable();
     //                startButton.setDisable(false);
             });
-            onSaveWorker = new Service<Void>() {
+            ((Service) onDeleteWorker).setOnFailed(event -> {
+                LOG.debug("onDeleteWorker->setOnFailed");
+                LOG.debug(">>>>>>>>onDeleteWorker->setOnFailed: pForm.getDialogStage().close()");
+                pForm.getDialogStage().close();
+                populateTable();
+//                onClear(actionEvent);
+//                startButton.setDisable(false);
+            });
+            onSaveWorker = new Service<EnumSet<ErrorEnum>>() {
                 @Override
-                protected Task<Void> createTask() {
-                    return new Task<Void>() {
+                protected Task<EnumSet<ErrorEnum>> createTask() {
+                    return new Task<EnumSet<ErrorEnum>>() {
                         @Override
-                        protected Void call() throws Exception {
+                        protected EnumSet<ErrorEnum> call() throws Exception {
                             LOG.debug("globalTest:" + globalTest);
-                            familyMemberModel.savePendingFamilyMember(nameTF.getText(), descTA.getText());
-                            return null;
+//                            familyMemberModel.savePendingFamilyMember(nameTF.getText(), descTA.getText());
+//                            return null;
+                            return familyMemberModel.savePendingFamilyMember(nameTF.getText(), descTA.getText());
                         }
                     };
                 }
             };
             ((Service) onSaveWorker).setOnSucceeded(event -> {
                 LOG.debug("onSaveWorker->setOnSucceeded");
+                LOG.debug(">>>>>>>>onSaveWorker->setOnSucceeded: pForm.getDialogStage().close()");
                 pForm.getDialogStage().close();
                 populateTable();
-                onClear(actionEvent);
+                EnumSet<ErrorEnum> errors = (EnumSet<ErrorEnum>)((Service) onSaveWorker).getValue();
+                if(!errors.isEmpty()) {
+                    DialogMessages.showErrorDialog("Error while saving Family Member: " + nameTF.getText(),
+                            (EnumSet<ErrorEnum>) ((Service) onSaveWorker).getValue(), null);
+                } else {
+                    onClear(actionEvent);
+                }
 //                startButton.setDisable(false);
             });
-//            ((Service) onSaveWorker).setOnFailed(event -> {
-//                pForm.getDialogStage().close();
-////                populateTable();
-////                onClear(actionEvent);
-////                startButton.setDisable(false);
-//            });
+            ((Service) onSaveWorker).setOnFailed(event -> {
+                LOG.debug("onSaveWorker->setOnFailed");
+                LOG.debug(">>>>>>>>onSaveWorker->setOnFailed: pForm.getDialogStage().close()");
+                pForm.getDialogStage().close();
+                populateTable();
+//                onClear(actionEvent);
+//                startButton.setDisable(false);
+            });
             onRefreshFamilyMembersWorker = new Service<Void>() {
                 @Override
                 protected Task<Void> createTask() {
@@ -129,8 +145,17 @@ public class FamilyMemberController implements Initializable, ControlledScreen {
             };
             ((Service) onRefreshFamilyMembersWorker).setOnSucceeded(event -> {
                 LOG.debug("onRefreshFamilyMembersWorker->setOnSucceeded");
+                LOG.debug(">>>>>>>>onRefreshFamilyMembersWorker->setOnSucceeded: pForm.getDialogStage().close()");
                 pForm.getDialogStage().close();
                 populateTable();
+//                startButton.setDisable(false);
+            });
+            ((Service) onRefreshFamilyMembersWorker).setOnFailed(event -> {
+                LOG.debug("onRefreshFamilyMembersWorker->setOnFailed");
+                LOG.debug(">>>>>>>>onRefreshFamilyMembersWorker->setOnFailed: pForm.getDialogStage().close()");
+                pForm.getDialogStage().close();
+                populateTable();
+//                onClear(actionEvent);
 //                startButton.setDisable(false);
             });
         }catch (Exception e){
@@ -141,9 +166,12 @@ public class FamilyMemberController implements Initializable, ControlledScreen {
     }
 
     private <V> void startService(Worker<V> worker, ActionEvent event, String test){
+        pForm.activateProgressBar(worker);
+        LOG.debug(">>>>>>>>pForm.getDialogStage().show()");
+        pForm.getDialogStage().show();
         actionEvent = event;
         globalTest = test;
-        pForm.activateProgressBar(worker);
+
 //        ((Service<V>)worker).setOnSucceeded(succeededEevent -> {
 //            pForm.getDialogStage().close();
 //        });
@@ -154,8 +182,6 @@ public class FamilyMemberController implements Initializable, ControlledScreen {
             LOG.debug("service IS NOT NULL");
             ((Service<V>)worker).restart();
         }
-
-        pForm.getDialogStage().show();
     }
 
     @Override

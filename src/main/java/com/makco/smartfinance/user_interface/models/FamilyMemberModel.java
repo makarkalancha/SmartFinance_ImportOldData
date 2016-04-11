@@ -5,14 +5,12 @@ import com.makco.smartfinance.services.FamilyMemberService;
 import com.makco.smartfinance.services.FamilyMemberServiceImpl;
 import com.makco.smartfinance.user_interface.constants.DialogMessages;
 import com.makco.smartfinance.user_interface.validation.ErrorEnum;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import java.util.EnumSet;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 /**
  * Created by mcalancea on 2016-04-05.
@@ -43,11 +41,11 @@ public class FamilyMemberModel {
         return familyMembers;
     }
 
-    public AtomicBoolean savePendingFamilyMember(String name, String description){
-        AtomicBoolean isSaved = new AtomicBoolean(false);
-        try{
+    public EnumSet<ErrorEnum> savePendingFamilyMember(String name, String description) {
+        EnumSet<ErrorEnum> errors = EnumSet.noneOf(ErrorEnum.class);
+        try {
             FamilyMember tmpFamilyMember;
-            if(pendingFamilyMember != null){
+            if (pendingFamilyMember != null) {
                 pendingFamilyMember.setName(name);
                 pendingFamilyMember.setDescription(description);
                 tmpFamilyMember = pendingFamilyMember;
@@ -56,19 +54,18 @@ public class FamilyMemberModel {
                 tmpFamilyMember = new FamilyMember(name, description);
             }
 
-            EnumSet<ErrorEnum> errors = familyMemberService.validate(tmpFamilyMember);
-            if(!errors.isEmpty()) {
-                DialogMessages.showErrorDialog("Error while saving Family Member: " + tmpFamilyMember.getName(), errors, null);
+            errors = familyMemberService.validate(tmpFamilyMember);
+            if (!errors.isEmpty()) {
+
             } else {
                 familyMemberService.saveOrUpdateFamilyMember(tmpFamilyMember);
-                isSaved.getAndSet(true);
             }
-        } catch (Exception e){
+        } catch (Exception e) {
             DialogMessages.showExceptionAlert(e);
-        }finally {
+        } finally {
             refreshFamilyMembers();
         }
-        return isSaved;
+        return errors;
     }
 
     public void deletePendingFamilyMember(){
@@ -77,7 +74,6 @@ public class FamilyMemberModel {
                 familyMemberService.removeFamilyMember(pendingFamilyMember.getId());
                 pendingFamilyMember = null;
             }
-            refreshFamilyMembers();
         } catch (Exception e){
             DialogMessages.showExceptionAlert(e);
         }finally {
