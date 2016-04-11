@@ -117,9 +117,8 @@ public class FamilyMemberController implements Initializable, ControlledScreen {
                 if(!errors.isEmpty()) {
                     DialogMessages.showErrorDialog("Error while saving Family Member: " + nameTF.getText(),
                             (EnumSet<ErrorEnum>) ((Service) onSaveWorker).getValue(), null);
-                } else {
-                    onClear(actionEvent);
                 }
+                onClear(actionEvent);
 //                startButton.setDisable(false);
             });
             ((Service) onSaveWorker).setOnFailed(event -> {
@@ -169,6 +168,8 @@ public class FamilyMemberController implements Initializable, ControlledScreen {
         pForm.activateProgressBar(worker);
         LOG.debug(">>>>>>>>pForm.getDialogStage().show()");
         pForm.getDialogStage().show();
+//        pForm.getDialogStage().toFront();
+        pForm.getDialogStage().setAlwaysOnTop(true);
         actionEvent = event;
         globalTest = test;
 

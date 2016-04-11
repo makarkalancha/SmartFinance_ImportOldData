@@ -11,7 +11,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import javafx.application.Application;
 import javafx.event.EventHandler;
-import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
@@ -74,7 +73,7 @@ public class Main extends Application{
             Scene scene = new Scene(mainContainer);
             primaryStage.setScene(scene);
 
-            LOG.debug("hello: start");
+            LOG.debug(">>>>primaryStage.show()->hello: start");
 //            primaryStage.setMaximized(true);
             primaryStage.show();
         }catch (Exception e){
