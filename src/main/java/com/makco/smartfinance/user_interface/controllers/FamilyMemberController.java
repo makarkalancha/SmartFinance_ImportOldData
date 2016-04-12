@@ -3,7 +3,7 @@ package com.makco.smartfinance.user_interface.controllers;
 import com.makco.smartfinance.persistence.entity.FamilyMember;
 import com.makco.smartfinance.user_interface.ControlledScreen;
 import com.makco.smartfinance.user_interface.ScreensController;
-import com.makco.smartfinance.user_interface.constants.ApplicationUtililities;
+import com.makco.smartfinance.user_interface.constants.ApplicationConstants;
 import com.makco.smartfinance.user_interface.constants.DialogMessages;
 import com.makco.smartfinance.user_interface.constants.ProgressForm;
 import com.makco.smartfinance.user_interface.models.FamilyMemberModel;
@@ -266,7 +266,7 @@ public class FamilyMemberController implements Initializable, ControlledScreen {
 //            Thread backGroundT = new Thread(taskToDelete);
 //            backGroundT.setDaemon(true);
 //            backGroundT.start();
-            String title = ApplicationUtililities.FAMILY_MEMBER_WINDOW_TITLE;
+            String title = ApplicationConstants.FAMILY_MEMBER_WINDOW_TITLE;
             String headerText = "Family Member Deletion";
             StringBuilder contentText = new StringBuilder("Are you sure you want to delete family member ");
             contentText.append("\"");

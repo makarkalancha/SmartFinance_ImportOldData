@@ -31,7 +31,7 @@ public class DialogMessages {
     public static boolean showConfirmationDialog(String title, String headerText, String contentText, String ico){
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
-        ico = (StringUtils.isBlank(ico)) ? ApplicationUtililities.MAIN_WINDOW_ICO : ico;
+        ico = (StringUtils.isBlank(ico)) ? ApplicationConstants.MAIN_WINDOW_ICO : ico;
         alertStage.getIcons().add(new Image(ico));
 
         if(!StringUtils.isBlank(title)){
@@ -56,7 +56,7 @@ public class DialogMessages {
         //http://stackoverflow.com/questions/27877547/styling-a-dialog-from-javafx-openjfx-dialogs-project
         Alert alert = new Alert(Alert.AlertType.ERROR);
         Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
-        ico = (StringUtils.isBlank(ico)) ? ApplicationUtililities.MAIN_WINDOW_ICO : ico;
+        ico = (StringUtils.isBlank(ico)) ? ApplicationConstants.MAIN_WINDOW_ICO : ico;
         alertStage.getIcons().add(new Image(ico));
         alert.setTitle("Errors");
         if(!StringUtils.isBlank(headerText)){

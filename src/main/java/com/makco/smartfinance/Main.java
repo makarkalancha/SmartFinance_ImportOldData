@@ -3,11 +3,12 @@ package com.makco.smartfinance;
 import com.makco.smartfinance.h2db.utils.H2DbUtils;
 import com.makco.smartfinance.persistence.contants.DataBaseConstants;
 import com.makco.smartfinance.user_interface.ScreensController;
-import com.makco.smartfinance.user_interface.constants.ApplicationUtililities;
+import com.makco.smartfinance.user_interface.constants.ApplicationConstants;
 import com.makco.smartfinance.user_interface.constants.DialogMessages;
 import com.makco.smartfinance.user_interface.constants.ProgressForm;
 import com.makco.smartfinance.user_interface.constants.Screens;
 import com.makco.smartfinance.user_interface.validation.ErrorEnum;
+import com.makco.smartfinance.utils.ApplicationUtililities;
 import com.makco.smartfinance.utils.Logs;
 
 import java.util.EnumSet;
@@ -16,7 +17,6 @@ import java.util.concurrent.Executors;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import javafx.application.Application;
-import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javafx.concurrent.Worker;
 import javafx.event.EventHandler;
@@ -67,7 +67,7 @@ public class Main extends Application{
         System.setErr(Logs.createLoggingProxy(System.err));
         System.setOut(Logs.createLoggingProxy(System.out));
         try {
-////            H2DbUtils.checkIfSchemaExists(ApplicationUtililities.DB_SCHEMA_NAME);
+////            H2DbUtils.checkIfSchemaExists(ApplicationConstants.DB_SCHEMA_NAME);
 ////http://www.hascode.com/2013/04/easy-database-migrations-using-flyway-java-ee-6-and-glassfish/
 ////            Flyway flyway = new Flyway();
 ////            flyway.setDataSource(DBConnectionResource.getDbConnectionUrl(),TestContext.INSTANCE.DB_USER(),TestContext.INSTANCE.DB_PASSWORD());
@@ -98,8 +98,8 @@ public class Main extends Application{
 //            mainContainer.setScreen(Screens.MAIN);
                 mainContainer.setScreen(Screens.FAMILY_MEMBER);
 
-                this.primaryStage.getIcons().add(new Image(ApplicationUtililities.MAIN_WINDOW_ICO));
-                this.primaryStage.setTitle(ApplicationUtililities.MAIN_WINDOW_TITLE);
+                this.primaryStage.getIcons().add(new Image(ApplicationConstants.MAIN_WINDOW_ICO));
+                this.primaryStage.setTitle(ApplicationConstants.MAIN_WINDOW_TITLE);
                 ////http://stackoverflow.com/questions/19602727/how-to-reference-javafx-fxml-files-in-resource-folder
 //            Group root = new Group();
 //            root.getChildren().addAll(mainContainer);

@@ -2,7 +2,7 @@ package com.makco.smartfinance.user_interface.controllers;
 
 import com.makco.smartfinance.user_interface.ControlledScreen;
 import com.makco.smartfinance.user_interface.ScreensController;
-import com.makco.smartfinance.user_interface.constants.ApplicationUtililities;
+import com.makco.smartfinance.user_interface.constants.ApplicationConstants;
 import com.makco.smartfinance.user_interface.constants.Screens;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -48,6 +48,6 @@ public class MenuController implements Initializable, ControlledScreen {
 
     @FXML
     public void quit(ActionEvent event) {
-        ApplicationUtililities.quit(event);
+        ApplicationConstants.quit(event);
     }
 }
