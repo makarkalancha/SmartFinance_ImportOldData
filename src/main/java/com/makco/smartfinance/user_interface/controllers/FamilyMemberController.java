@@ -197,6 +197,8 @@ public class FamilyMemberController implements Initializable, ControlledScreen {
     @Override
     public void initialize(URL location, ResourceBundle resources){
         try {
+            nameTF.setPrefColumnCount(64);
+            descTA.setPrefColumnCount(128);
             initializeServices();
             startService(onRefreshFamilyMembersWorker, null, "from initialize");
             table.getSelectionModel().selectedItemProperty().addListener((observable, oldSelection, newSelection) -> {

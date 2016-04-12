@@ -82,7 +82,7 @@ public class FamilyMember implements Serializable{
     @NotNull
     @Size(
             min = 2,
-            max = 65,
+            max = 64,
             message = "Name is required, maximum 65 characters."
     )
     private String name;
@@ -90,7 +90,7 @@ public class FamilyMember implements Serializable{
     @Column(name="DESCRIPTION")
     @Size(
             min = 0,
-            max = 1024,
+            max = 128,
             message = "Description length is 1024 characters."
     )
     private String description;
