@@ -13,7 +13,7 @@ public class MainController implements Initializable, ControlledScreen {
     private ScreensController myController;
 
     @Override
-    public void setScreenParent(ScreensController screenPage) {
+    public void setScreenPage(ScreensController screenPage) {
         myController = screenPage;
     }
 

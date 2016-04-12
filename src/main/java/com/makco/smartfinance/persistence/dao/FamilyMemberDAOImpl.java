@@ -36,7 +36,7 @@ public class FamilyMemberDAOImpl implements FamilyMemberDAO {
     }
 
     @Override
-    public List<FamilyMember> listFamilyMembers() {
+    public List<FamilyMember> familyMemberList() {
         List<FamilyMember> list = new ArrayList<>();
         try{
             Session session = HibernateUtil.openSession();

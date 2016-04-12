@@ -11,15 +11,23 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
- * Created by mcalancea on 2016-03-01.
+ * Created by mcalancea on 2016-04-12.
  */
 
 @Entity
-@Table(name="CURRENCY")
+@Table(
+        name="CURRENCY",
+        uniqueConstraints =
+        @UniqueConstraint(
+                name="IDX_UNQ_CRRNC_CD",
+                columnNames = {"CODE"}
+        )
+)
 public class Currency implements Serializable{
     @Id
     @org.hibernate.annotations.GenericGenerator(
@@ -45,23 +53,23 @@ public class Currency implements Serializable{
     @Size(
         min = 2,
         max = 3,
-        message = "Currency code taken from "
+        message = "Currency code"
     )
     private String code;
 
     @Column(name="NAME")
     @Size(
             min = 0,
-            max = 65,
-            message = "Full name of the currency"
+            max = 64,
+            message = "Full name of the currency, length is 64 characters."
     )
     private String name;
 
     @Column(name="DESCRIPTION")
     @Size(
             min = 0,
-            max = 1024,
-            message = "Description length is 1024 characters."
+            max = 128,
+            message = "Description length is 128 characters."
     )
     private String description;
 
@@ -77,6 +85,12 @@ public class Currency implements Serializable{
 
     public Currency(){
 
+    }
+
+    public Currency(String code, String name, String description){
+        this.code = code;
+        this.name = name;
+        this.description = description;
     }
 
     public Long getId() {

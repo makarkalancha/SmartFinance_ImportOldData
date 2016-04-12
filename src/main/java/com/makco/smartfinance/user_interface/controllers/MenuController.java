@@ -2,8 +2,8 @@ package com.makco.smartfinance.user_interface.controllers;
 
 import com.makco.smartfinance.user_interface.ControlledScreen;
 import com.makco.smartfinance.user_interface.ScreensController;
-import com.makco.smartfinance.user_interface.constants.ApplicationConstants;
 import com.makco.smartfinance.user_interface.constants.Screens;
+import com.makco.smartfinance.utils.ApplicationUtililities;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
@@ -17,7 +17,7 @@ public class MenuController implements Initializable, ControlledScreen {
     private ScreensController myController;
 
     @Override
-    public void setScreenParent(ScreensController screenPage) {
+    public void setScreenPage(ScreensController screenPage) {
         myController = screenPage;
     }
 
@@ -42,12 +42,17 @@ public class MenuController implements Initializable, ControlledScreen {
     }
 
     @FXML
+    public void toCurrency(ActionEvent event){
+        myController.setScreen(Screens.CURRENCY);
+    }
+
+    @FXML
     public void toFamilyMember(ActionEvent event){
         myController.setScreen(Screens.FAMILY_MEMBER);
     }
 
     @FXML
     public void quit(ActionEvent event) {
-        ApplicationConstants.quit(event);
+        ApplicationUtililities.quit(event);
     }
 }

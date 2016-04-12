@@ -12,7 +12,7 @@ import java.util.List;
 //http://programmers.stackexchange.com/questions/220909/service-layer-vs-dao-why-both
 //http://programmers.stackexchange.com/questions/162399/how-essential-is-it-to-make-a-service-layer
 public interface FamilyMemberService {
-    List<FamilyMember> listFamilyMembers();
+    List<FamilyMember> familyMemberList();
     FamilyMember getFamilyMemberById(Long id);
     List<FamilyMember> getFamilyMemberByName(String name);
 

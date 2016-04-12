@@ -8,7 +8,7 @@ import java.util.List;
  */
 //https://howtoprogramwithjava.com/hibernate-creating-data-access-objects-daos/
 public interface FamilyMemberDAO {
-    List<FamilyMember> listFamilyMembers();
+    List<FamilyMember> familyMemberList();
     FamilyMember getFamilyMemberById(Long id);
     List<FamilyMember> getFamilyMemberByName(String name);
 

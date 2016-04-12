@@ -13,6 +13,7 @@ public class ApplicationConstants {
 
     public static final String MAIN_WINDOW_TITLE = "Hello";
     public static final String MAIN_WINDOW_ICO = "wallet.png";
+    public static final String CURRENCY_WINDOW_TITLE = "Currency";
     public static final String FAMILY_MEMBER_WINDOW_TITLE = "Family Member";
     public static final String FAMILY_MEMBER_WINDOW_ICO = "wallet.png";
 }

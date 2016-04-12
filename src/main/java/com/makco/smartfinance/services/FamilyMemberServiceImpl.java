@@ -7,12 +7,11 @@ import com.makco.smartfinance.user_interface.constants.DialogMessages;
 import com.makco.smartfinance.user_interface.validation.ErrorEnum;
 import com.makco.smartfinance.user_interface.validation.RuleSet;
 import com.makco.smartfinance.user_interface.validation.rule_sets.FamilyMemberRuleSet;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Created by mcalancea on 2016-04-05.
@@ -34,13 +33,13 @@ public class FamilyMemberServiceImpl implements FamilyMemberService {
     }
 
     @Override
-    public List<FamilyMember> listFamilyMembers() {
+    public List<FamilyMember> familyMemberList() {
         List<FamilyMember> familyMemberList = new ArrayList<>();
         try {
-            familyMemberList = familyMemberDAO.listFamilyMembers();
-            LOG.debug("listFamilyMembers: before 5 sec");
+            familyMemberList = familyMemberDAO.familyMemberList();
+            LOG.debug("familyMemberList: before 5 sec");
             Thread.sleep(5000);
-            LOG.debug("listFamilyMembers: after 5 sec");
+            LOG.debug("familyMemberList: after 5 sec");
         } catch (Exception e) {
             DialogMessages.showExceptionAlert(e);
         }

@@ -186,7 +186,7 @@ public class FamilyMemberController implements Initializable, ControlledScreen {
     }
 
     @Override
-    public void setScreenParent(ScreensController screenPage) {
+    public void setScreenPage(ScreensController screenPage) {
         try{
             myController = screenPage;
         }catch (Exception e){

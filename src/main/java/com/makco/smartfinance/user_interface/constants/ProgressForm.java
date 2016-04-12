@@ -3,7 +3,6 @@ package com.makco.smartfinance.user_interface.constants;
 import javafx.concurrent.Worker;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.ProgressBar;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
@@ -17,7 +16,7 @@ import javafx.stage.StageStyle;
  */
 public class ProgressForm {
     private final Stage dialogStage;
-    private final ProgressBar pb = new ProgressBar();
+//    private final ProgressBar pb = new ProgressBar();
     private final ProgressIndicator pin = new ProgressIndicator();
 
     public ProgressForm() {
@@ -30,13 +29,14 @@ public class ProgressForm {
 //        final Label label = new Label();
 //        label.setText("alerto");
 
-        pb.setProgress(-1F);
+//        pb.setProgress(-1F);
         pin.setProgress(-1F);
 
         final HBox hb = new HBox();
         hb.setSpacing(5);
         hb.setAlignment(Pos.CENTER);
-        hb.getChildren().addAll(pb, pin);
+//        hb.getChildren().addAll(pb, pin);
+        hb.getChildren().addAll(pin);
 
         Scene scene = new Scene(hb);
         dialogStage.setScene(scene);
@@ -55,7 +55,7 @@ public class ProgressForm {
     }
 
     public void activateProgressBar(final Worker<?> task)  {
-        pb.progressProperty().bind(task.progressProperty());
+//        pb.progressProperty().bind(task.progressProperty());
         pin.progressProperty().bind(task.progressProperty());
         dialogStage.show();
     }

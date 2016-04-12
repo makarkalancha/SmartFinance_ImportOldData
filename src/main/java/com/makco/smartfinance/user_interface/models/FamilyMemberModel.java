@@ -30,7 +30,7 @@ public class FamilyMemberModel {
             if (!familyMembers.isEmpty()) {
                 familyMembers.clear();
             }
-            familyMembers = FXCollections.observableArrayList((List<FamilyMember>) familyMemberService.listFamilyMembers());
+            familyMembers = FXCollections.observableArrayList((List<FamilyMember>) familyMemberService.familyMemberList());
             LOG.debug("familyMember.size: " + familyMembers.size());
         }catch (Exception e){
             DialogMessages.showExceptionAlert(e);

@@ -2,17 +2,12 @@ package com.makco.smartfinance.user_interface;
 
 import com.makco.smartfinance.user_interface.constants.Screens;
 import java.util.EnumMap;
-
-import javafx.geometry.Pos;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Priority;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.BorderPane;
 
 /**
  * Created by mcalancea on 2016-04-01.
@@ -52,7 +47,7 @@ public class ScreensController extends BorderPane {
             FXMLLoader myLoader = new FXMLLoader(getClass().getResource("menu_bar.fxml"));
             Parent menuBar = (Parent) myLoader.load();
             ControlledScreen controlledScreen = ((ControlledScreen) myLoader.getController());
-            controlledScreen.setScreenParent(this);
+            controlledScreen.setScreenPage(this);
             setTop(menuBar);
 //            getChildren().add(menuBar);
 //            setTopAnchor(menuBar, );
@@ -72,7 +67,7 @@ public class ScreensController extends BorderPane {
             FXMLLoader myLoader = new FXMLLoader(getClass().getResource(screen.getFxmlFilePath()));
             Parent childScreenNode = (Parent) myLoader.load();
             ControlledScreen controlledScreen = ((ControlledScreen) myLoader.getController());
-            controlledScreen.setScreenParent(this);
+            controlledScreen.setScreenPage(this);
             addScreen(screen, childScreenNode);
             return true;
         } catch (Exception e){
