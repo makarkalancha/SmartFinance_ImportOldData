@@ -7,7 +7,10 @@ import com.makco.smartfinance.user_interface.constants.ApplicationUtililities;
 import com.makco.smartfinance.user_interface.constants.DialogMessages;
 import com.makco.smartfinance.user_interface.constants.ProgressForm;
 import com.makco.smartfinance.user_interface.constants.Screens;
+import com.makco.smartfinance.user_interface.validation.ErrorEnum;
 import com.makco.smartfinance.utils.Logs;
+
+import java.util.EnumSet;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import org.apache.logging.log4j.LogManager;
@@ -48,19 +51,6 @@ public class Main extends Application{
                 return null;
             }
         };
-        ((Task<Void>) migrateWorker).setOnSucceeded(event -> {
-            LOG.debug("onDeleteWorker->setOnSucceeded");
-            LOG.debug(">>>>>>>>onDeleteWorker->setOnSucceeded: pForm.getDialogStage().close()");
-            pForm.getDialogStage().close();
-            //                startButton.setDisable(false);
-        });
-        ((Task<Void>) migrateWorker).setOnFailed(event -> {
-            LOG.debug("onDeleteWorker->setOnFailed");
-            LOG.debug(">>>>>>>>onDeleteWorker->setOnFailed: pForm.getDialogStage().close()");
-            pForm.getDialogStage().close();
-//                onClear(actionEvent);
-//                startButton.setDisable(false);
-        });
         pForm.activateProgressBar(migrateWorker);
         pForm.getDialogStage().setAlwaysOnTop(true);
     }
@@ -88,38 +78,57 @@ public class Main extends Application{
 ////                LOG.debug("db DOESN'T exist");
 //
 //            H2DbUtils.migrate(DataBaseConstants.SCHEMA);
-            pForm.getDialogStage().show();
-            executor.execute(migrateWorker);
-////            }
+            ((Task<Void>) migrateWorker).setOnSucceeded(event -> {
+                LOG.debug("migrateWorker->setOnSucceeded");
+                LOG.debug(">>>>>>>>migrateWorker->setOnSucceeded: pForm.getDialogStage().close()");
 
-            this.primaryStage = primaryStage;
+                this.primaryStage = primaryStage;
 
-            primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-                @Override
-                public void handle(WindowEvent event) {
-                    ApplicationUtililities.quit(event);
+                primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+                    @Override
+                    public void handle(WindowEvent event) {
+                        ApplicationUtililities.quit(event);
+                    }
+                });
+
+                ScreensController mainContainer = new ScreensController();
+                for (Screens scr : Screens.values()) {
+                    mainContainer.loadScreen(scr);
                 }
-            });
-
-            ScreensController mainContainer = new ScreensController();
-            for (Screens scr : Screens.values()) {
-                mainContainer.loadScreen(scr);
-            }
 //            mainContainer.setScreen(Screens.MAIN);
-            mainContainer.setScreen(Screens.FAMILY_MEMBER);
+                mainContainer.setScreen(Screens.FAMILY_MEMBER);
 
-            this.primaryStage.getIcons().add(new Image(ApplicationUtililities.MAIN_WINDOW_ICO));
-            this.primaryStage.setTitle(ApplicationUtililities.MAIN_WINDOW_TITLE);
-            ////http://stackoverflow.com/questions/19602727/how-to-reference-javafx-fxml-files-in-resource-folder
+                this.primaryStage.getIcons().add(new Image(ApplicationUtililities.MAIN_WINDOW_ICO));
+                this.primaryStage.setTitle(ApplicationUtililities.MAIN_WINDOW_TITLE);
+                ////http://stackoverflow.com/questions/19602727/how-to-reference-javafx-fxml-files-in-resource-folder
 //            Group root = new Group();
 //            root.getChildren().addAll(mainContainer);
 //            Scene scene = new Scene(root);
-            Scene scene = new Scene(mainContainer);
-            primaryStage.setScene(scene);
+                Scene scene = new Scene(mainContainer);
+                primaryStage.setScene(scene);
 
-            LOG.debug(">>>>primaryStage.show()->hello: start");
+                LOG.debug(">>>>primaryStage.show()->hello: start");
 //            primaryStage.setMaximized(true);
-            primaryStage.show();
+                primaryStage.show();
+
+                pForm.getDialogStage().close();
+                //                startButton.setDisable(false);
+            });
+            ((Task<Void>) migrateWorker).setOnFailed(event -> {
+                LOG.debug("migrateWorker->setOnFailed");
+                LOG.debug(">>>>>>>>migrateWorker->setOnFailed: pForm.getDialogStage().close()");
+
+                DialogMessages.showErrorDialog("Error", EnumSet.of(ErrorEnum.MAIN_ERROR), null);
+
+                pForm.getDialogStage().close();
+//                onClear(actionEvent);
+//                startButton.setDisable(false);
+            });
+            pForm.getDialogStage().show();
+            executor.execute((Task<Void>)migrateWorker);
+////            }
+
+
         }catch (Exception e){
             DialogMessages.showExceptionAlert(e);
         }

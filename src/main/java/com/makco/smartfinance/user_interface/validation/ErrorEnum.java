@@ -8,6 +8,7 @@ package com.makco.smartfinance.user_interface.validation;
 public enum ErrorEnum {
     FM_NAME_DUPLICATE("Family Member with this name already exists")
     , FM_NAME_NULL("Family Member name cannot be empty.")
+    , MAIN_ERROR("Error while opening the application")
     ;
     String message;
     private ErrorEnum(String mess){
