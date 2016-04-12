@@ -5,8 +5,10 @@ import com.makco.smartfinance.user_interface.constants.DialogMessages;
 import com.makco.smartfinance.user_interface.validation.ErrorEnum;
 import com.makco.smartfinance.user_interface.validation.Rule;
 import com.makco.smartfinance.user_interface.validation.RuleSet;
+import com.makco.smartfinance.user_interface.validation.family_member_rules.FM_DescLength;
 import com.makco.smartfinance.user_interface.validation.family_member_rules.FM_DuplicateName;
 import com.makco.smartfinance.user_interface.validation.family_member_rules.FM_EmptyName;
+import com.makco.smartfinance.user_interface.validation.family_member_rules.FM_NameLength;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
@@ -20,7 +22,9 @@ public class FamilyMemberRuleSet implements RuleSet<FamilyMember>{
     public List<Rule> getRuleSet() {
         List<Rule> rules = new ArrayList<>();
         rules.add(new FM_EmptyName());
-        rules.add(new FM_DuplicateName());
+        rules.add(new FM_NameLength());
+        rules.add(new FM_DescLength());
+        rules.add(new FM_DuplicateName());//DB call so last
         return new ArrayList<>(rules);
     }
 
