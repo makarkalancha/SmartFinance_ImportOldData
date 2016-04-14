@@ -18,6 +18,9 @@ import javafx.scene.layout.VBox;
 public class ScreensController extends BorderPane {
     private final static Logger LOG = LogManager.getLogger(ScreensController.class);
     EnumMap<Screens, Node> screens = new EnumMap<>(Screens.class);
+    //communitcate between controllers
+    //http://stackoverflow.com/questions/14187963/passing-parameters-javafx-fxml
+    //http://docs.oracle.com/javafx/2/api/javafx/fxml/doc-files/introduction_to_fxml.html#nested_controllers
 
     public ScreensController(){
         super();
