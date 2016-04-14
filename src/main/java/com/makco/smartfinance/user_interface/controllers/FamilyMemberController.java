@@ -57,15 +57,8 @@ public class FamilyMemberController implements Initializable, ControlledScreen {
     @FXML
     private Button deleteBtn;
 
-    public void initializeServices(){
+    public FamilyMemberController(){
         try{
-//            executor = Executors.newCachedThreadPool(runnable -> {
-//                Thread t = new Thread(runnable);
-//                t.setDaemon(true);
-//                return t;
-//
-//            });
-
             onDeleteWorker = new Service<Void>() {
                 @Override
                 protected Task<Void> createTask() {
@@ -79,6 +72,42 @@ public class FamilyMemberController implements Initializable, ControlledScreen {
                     };
                 }
             };
+            onSaveWorker = new Service<EnumSet<ErrorEnum>>() {
+                @Override
+                protected Task<EnumSet<ErrorEnum>> createTask() {
+                    return new Task<EnumSet<ErrorEnum>>() {
+                        @Override
+                        protected EnumSet<ErrorEnum> call() throws Exception {
+                            LOG.debug("globalTest:" + globalTest);
+//                            familyMemberModel.savePendingFamilyMember(nameTF.getText(), descTA.getText());
+//                            return null;
+                            return familyMemberModel.savePendingFamilyMember(nameTF.getText(), descTA.getText());
+                        }
+                    };
+                }
+            };
+            onRefreshFamilyMembersWorker = new Service<Void>() {
+                @Override
+                protected Task<Void> createTask() {
+                    return new Task<Void>() {
+                        @Override
+                        protected Void call() throws Exception {
+                            LOG.debug("globalTest:" + globalTest);
+                            familyMemberModel.refreshFamilyMembers();
+                            return null;
+                        }
+                    };
+                }
+            };
+        }catch (Exception e){
+            //not in finally because refreshFamilyMembers must run before populateTable
+            startService(onRefreshFamilyMembersWorker,null,"from initializeServices: catch exception");
+            DialogMessages.showExceptionAlert(e);
+        }
+    }
+
+    public void initializeServices(){
+        try{
             ((Service<Void>) onDeleteWorker).setOnSucceeded(event -> {
                 LOG.debug("onDeleteWorker->setOnSucceeded");
                 LOG.debug(">>>>>>>>onDeleteWorker->setOnSucceeded: pForm.getDialogStage().close()");
@@ -94,20 +123,6 @@ public class FamilyMemberController implements Initializable, ControlledScreen {
 //                onClear(actionEvent);
 //                startButton.setDisable(false);
             });
-            onSaveWorker = new Service<EnumSet<ErrorEnum>>() {
-                @Override
-                protected Task<EnumSet<ErrorEnum>> createTask() {
-                    return new Task<EnumSet<ErrorEnum>>() {
-                        @Override
-                        protected EnumSet<ErrorEnum> call() throws Exception {
-                            LOG.debug("globalTest:" + globalTest);
-//                            familyMemberModel.savePendingFamilyMember(nameTF.getText(), descTA.getText());
-//                            return null;
-                            return familyMemberModel.savePendingFamilyMember(nameTF.getText(), descTA.getText());
-                        }
-                    };
-                }
-            };
             ((Service<EnumSet<ErrorEnum>>) onSaveWorker).setOnSucceeded(event -> {
                 LOG.debug("onSaveWorker->setOnSucceeded");
                 LOG.debug(">>>>>>>>onSaveWorker->setOnSucceeded: pForm.getDialogStage().close()");
@@ -129,19 +144,6 @@ public class FamilyMemberController implements Initializable, ControlledScreen {
 //                onClear(actionEvent);
 //                startButton.setDisable(false);
             });
-            onRefreshFamilyMembersWorker = new Service<Void>() {
-                @Override
-                protected Task<Void> createTask() {
-                    return new Task<Void>() {
-                        @Override
-                        protected Void call() throws Exception {
-                            LOG.debug("globalTest:" + globalTest);
-                            familyMemberModel.refreshFamilyMembers();
-                            return null;
-                        }
-                    };
-                }
-            };
             ((Service<Void>) onRefreshFamilyMembersWorker).setOnSucceeded(event -> {
                 LOG.debug("onRefreshFamilyMembersWorker->setOnSucceeded");
                 LOG.debug(">>>>>>>>onRefreshFamilyMembersWorker->setOnSucceeded: pForm.getDialogStage().close()");
@@ -181,15 +183,15 @@ public class FamilyMemberController implements Initializable, ControlledScreen {
             LOG.debug("service IS NULL");
         } else {
             LOG.debug("service IS NOT NULL");
-            ((Service<V>)worker).restart();
+            ((Service<V>) worker).restart();
         }
     }
 
     @Override
     public void setScreenPage(ScreensController screenPage) {
-        try{
+        try {
             myController = screenPage;
-        }catch (Exception e){
+        } catch (Exception e) {
             DialogMessages.showExceptionAlert(e);
         }
     }

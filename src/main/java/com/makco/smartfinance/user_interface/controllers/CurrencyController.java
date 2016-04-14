@@ -56,7 +56,7 @@ public class CurrencyController implements Initializable, ControlledScreen {
     @FXML
     private Button deleteBtn;
 
-    public void initializeServices(){
+    public CurrencyController(){
         try{
             onDeleteWorker = new Service<Void>() {
                 @Override
@@ -70,6 +70,38 @@ public class CurrencyController implements Initializable, ControlledScreen {
                     };
                 }
             };
+            onSaveWorker = new Service<EnumSet<ErrorEnum>>() {
+                @Override
+                protected Task<EnumSet<ErrorEnum>> createTask() {
+                    return new Task<EnumSet<ErrorEnum>>() {
+                        @Override
+                        protected EnumSet<ErrorEnum> call() throws Exception {
+                            return currencyModel.savePendingCurrency(codeTF.getText(), nameTF.getText(), descTA.getText());
+                        }
+                    };
+                }
+            };
+            onRefreshCurrencyWorker = new Service<Void>() {
+                @Override
+                protected Task<Void> createTask() {
+                    return new Task<Void>() {
+                        @Override
+                        protected Void call() throws Exception {
+                            currencyModel.refreshCurrency();
+                            return null;
+                        }
+                    };
+                }
+            };
+        }catch (Exception e){
+            //not in finally because refreshCurrency must run before populateTable
+            startService(onRefreshCurrencyWorker,null);
+            DialogMessages.showExceptionAlert(e);
+        }
+    }
+
+    public void initializeServices(){
+        try{
             ((Service<Void>) onDeleteWorker).setOnSucceeded(event -> {
                 LOG.debug("onDeleteWorker->setOnSucceeded");
                 LOG.debug(">>>>>>>>onDeleteWorker->setOnSucceeded: pForm.getDialogStage().close()");
@@ -82,17 +114,6 @@ public class CurrencyController implements Initializable, ControlledScreen {
                 pForm.getDialogStage().close();
                 populateTable();
             });
-            onSaveWorker = new Service<EnumSet<ErrorEnum>>() {
-                @Override
-                protected Task<EnumSet<ErrorEnum>> createTask() {
-                    return new Task<EnumSet<ErrorEnum>>() {
-                        @Override
-                        protected EnumSet<ErrorEnum> call() throws Exception {
-                            return currencyModel.savePendingCurrency(codeTF.getText(), nameTF.getText(), descTA.getText());
-                        }
-                    };
-                }
-            };
             ((Service<EnumSet<ErrorEnum>>) onSaveWorker).setOnSucceeded(event -> {
                 LOG.debug("onSaveWorker->setOnSucceeded");
                 LOG.debug(">>>>>>>>onSaveWorker->setOnSucceeded: pForm.getDialogStage().close()");
@@ -111,18 +132,6 @@ public class CurrencyController implements Initializable, ControlledScreen {
                 pForm.getDialogStage().close();
                 populateTable();
             });
-            onRefreshCurrencyWorker = new Service<Void>() {
-                @Override
-                protected Task<Void> createTask() {
-                    return new Task<Void>() {
-                        @Override
-                        protected Void call() throws Exception {
-                            currencyModel.refreshCurrency();
-                            return null;
-                        }
-                    };
-                }
-            };
             ((Service<Void>) onRefreshCurrencyWorker).setOnSucceeded(event -> {
                 LOG.debug("onRefreshCurrencyWorker->setOnSucceeded");
                 LOG.debug(">>>>>>>>onRefreshCurrencyWorker->setOnSucceeded: pForm.getDialogStage().close()");
