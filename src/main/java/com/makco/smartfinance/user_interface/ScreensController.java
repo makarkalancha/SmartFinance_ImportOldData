@@ -3,6 +3,7 @@ package com.makco.smartfinance.user_interface;
 import com.makco.smartfinance.user_interface.constants.DialogMessages;
 import com.makco.smartfinance.user_interface.constants.Screens;
 import java.util.EnumMap;
+import java.util.Optional;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import javafx.fxml.FXMLLoader;
@@ -17,7 +18,8 @@ import javafx.scene.layout.VBox;
 //public class ScreensController extends VBox {
 public class ScreensController extends BorderPane {
     private final static Logger LOG = LogManager.getLogger(ScreensController.class);
-    EnumMap<Screens, Node> screens = new EnumMap<>(Screens.class);
+//    EnumMap<Screens, Node> screens = new EnumMap<>(Screens.class);
+    EnumMap<Screens, NodeControllerBundle> screens = new EnumMap<>(Screens.class);
     //communitcate between controllers
     //http://stackoverflow.com/questions/14187963/passing-parameters-javafx-fxml
     //http://docs.oracle.com/javafx/2/api/javafx/fxml/doc-files/introduction_to_fxml.html#nested_controllers
@@ -35,13 +37,21 @@ public class ScreensController extends BorderPane {
         LOG.debug("ScreensController.constr");
     }
 
-    public void addScreen(final Screens screen, final Node screenNode) {
-        screens.put(screen, screenNode);
-        LOG.debug(String.format("ScreensController.addScreen: name=%s; Node.screen=%s", screen.toString(), screenNode.toString()));
+//    public void addScreen(final Screens screen, final Node screenNode) {
+//        screens.put(screen, screenNode);
+//        LOG.debug(String.format("ScreensController.addScreen: name=%s; Node.screen=%s", screen.toString(), screenNode.toString()));
+//    }
+
+    public void addScreen(final Screens screen, final NodeControllerBundle nodeControllerBundle) {
+        screens.put(screen, nodeControllerBundle);
+        LOG.debug(String.format("ScreensController.addScreen: name=%s; Node.screen=%s", screen.toString(), nodeControllerBundle.toString()));
     }
 
+//    public Node getScreen(final String name) {
+//        return screens.get(name);
+//    }
     public Node getScreen(final String name) {
-        return screens.get(name);
+        return screens.get(name).getNode();
     }
 
 
@@ -112,7 +122,10 @@ public class ScreensController extends BorderPane {
             Parent childScreenNode = (Parent) myLoader.load();
             ControlledScreen controlledScreen = ((ControlledScreen) myLoader.getController());
             controlledScreen.setScreenPage(this);
-            addScreen(screen, childScreenNode);
+//            addScreen(screen, childScreenNode);
+
+            RefreshableScreen refreshableScreen = ((RefreshableScreen) myLoader.getController());
+            addScreen(screen, new NodeControllerBundle(childScreenNode, refreshableScreen));
             return true;
         } catch (Exception e){
             DialogMessages.showExceptionAlert(e);
@@ -127,13 +140,14 @@ public class ScreensController extends BorderPane {
     public boolean setScreen(final Screens screen) {
         LOG.debug(String.format("ScreensController.setScreen: name=%s", screen.toString()));
         LOG.debug(String.format("getChildren().size()=%d", getChildren().size()));
-        Node child = screens.get(screen);
+//        Node child = screens.get(screen);
+        NodeControllerBundle child = screens.get(screen);
         if (child != null) {
             if (!getChildren().isEmpty() && getChildren().size() > 1) {
                 LOG.debug("getChildren() is greater than 1");
 
-                LOG.debug("children:"+getChildren().size());
-                getChildren().remove(1);
+                LOG.debug("children:" + getChildren().size());
+//                getChildren().remove(1);
 //                getChildren().add(1, child);
 
 //                setVgrow(child,Priority.ALWAYS);
@@ -142,7 +156,8 @@ public class ScreensController extends BorderPane {
 //                getChildren().add(screens.get(screen));
 //                getChildren().add(child);
             }
-            setCenter(child);
+            setCenter(child.getNode());
+            child.getRefreshableScreen().refresh();
             return true;
         } else {
             DialogMessages.showExceptionAlert(new Exception(screen+" -> screen hasn't been loaded!!!"));
@@ -171,6 +186,24 @@ public class ScreensController extends BorderPane {
             return false;
         } else {
             return true;
+        }
+    }
+
+    //http://www.nurkiewicz.com/2013/08/optional-in-java-8-cheat-sheet.html
+    private static class NodeControllerBundle{
+        private final Optional<Node> node;
+        private final Optional<RefreshableScreen> refreshableScreen;
+        public NodeControllerBundle(Node node, RefreshableScreen refreshableScreen){
+            this.node = Optional.of(node);
+            this.refreshableScreen = Optional.of(refreshableScreen);
+        }
+
+        public Node getNode() {
+            return node.get();
+        }
+
+        public RefreshableScreen getRefreshableScreen() {
+            return refreshableScreen.get();
         }
     }
 }

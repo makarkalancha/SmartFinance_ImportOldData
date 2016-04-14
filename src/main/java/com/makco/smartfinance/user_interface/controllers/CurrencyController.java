@@ -2,6 +2,7 @@ package com.makco.smartfinance.user_interface.controllers;
 
 import com.makco.smartfinance.persistence.entity.Currency;
 import com.makco.smartfinance.user_interface.ControlledScreen;
+import com.makco.smartfinance.user_interface.RefreshableScreen;
 import com.makco.smartfinance.user_interface.ScreensController;
 import com.makco.smartfinance.user_interface.constants.ApplicationConstants;
 import com.makco.smartfinance.user_interface.constants.DialogMessages;
@@ -30,7 +31,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 /**
  * Created by mcalancea on 2016-04-12.
  */
-public class CurrencyController implements Initializable, ControlledScreen {
+public class CurrencyController implements Initializable, ControlledScreen, RefreshableScreen {
     private final static Logger LOG = LogManager.getLogger(CurrencyController.class);
     private ScreensController myController;
     private CurrencyModel currencyModel = new CurrencyModel();
@@ -179,13 +180,13 @@ public class CurrencyController implements Initializable, ControlledScreen {
             codeTF.setPrefColumnCount(3);
             nameTF.setPrefColumnCount(64);
             descTA.setPrefColumnCount(128);
-            initializeServices();
-            startService(onRefreshCurrencyWorker, null);
-            table.getSelectionModel().selectedItemProperty().addListener((observable, oldSelection, newSelection) -> {
-                if (newSelection != null) {
-                    populateForm();
-                }
-            });
+//            initializeServices();
+//            startService(onRefreshCurrencyWorker, null);
+//            table.getSelectionModel().selectedItemProperty().addListener((observable, oldSelection, newSelection) -> {
+//                if (newSelection != null) {
+//                    populateForm();
+//                }
+//            });
             clearBtn.setDisable(true);
             saveBtn.setDisable(false);
             deleteBtn.setDisable(true);
@@ -282,6 +283,22 @@ public class CurrencyController implements Initializable, ControlledScreen {
             currencyUpdatedCol.setCellValueFactory(new PropertyValueFactory<Currency, Calendar>("updatedOn"));
 
             table.getColumns().setAll(currencyIdCol, currencyCodeCol, currencyNameCol, currencyDescCol, currencyCreatedCol, currencyUpdatedCol);
+        }catch (Exception e){
+            startService(onRefreshCurrencyWorker,null);
+            DialogMessages.showExceptionAlert(e);
+        }
+    }
+
+    @Override
+    public void refresh() {
+        try{
+            initializeServices();
+            startService(onRefreshCurrencyWorker, null);
+            table.getSelectionModel().selectedItemProperty().addListener((observable, oldSelection, newSelection) -> {
+                if (newSelection != null) {
+                    populateForm();
+                }
+            });
         }catch (Exception e){
             startService(onRefreshCurrencyWorker,null);
             DialogMessages.showExceptionAlert(e);

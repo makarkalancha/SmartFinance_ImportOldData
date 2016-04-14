@@ -1,6 +1,7 @@
 package com.makco.smartfinance.user_interface.controllers;
 
 import com.makco.smartfinance.user_interface.ControlledScreen;
+import com.makco.smartfinance.user_interface.RefreshableScreen;
 import com.makco.smartfinance.user_interface.ScreensController;
 import com.makco.smartfinance.user_interface.constants.ApplicationConstants;
 import java.net.URL;
@@ -16,7 +17,7 @@ import javafx.scene.image.ImageView;
 /**
  * Created by mcalancea on 2016-04-01.
  */
-public class ToolbarController implements Initializable, ControlledScreen {
+public class ToolbarController implements Initializable, ControlledScreen, RefreshableScreen {
     private final static Logger LOG = LogManager.getLogger(ToolbarController.class);
     private ScreensController myController;
 
@@ -76,4 +77,9 @@ public class ToolbarController implements Initializable, ControlledScreen {
 //    public void quit(ActionEvent event) {
 //        ApplicationUtililities.quit(event);
 //    }
+
+    @Override
+    public void refresh() {
+
+    }
 }

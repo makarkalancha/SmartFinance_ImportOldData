@@ -2,6 +2,7 @@ package com.makco.smartfinance.user_interface.controllers;
 
 import com.makco.smartfinance.persistence.entity.FamilyMember;
 import com.makco.smartfinance.user_interface.ControlledScreen;
+import com.makco.smartfinance.user_interface.RefreshableScreen;
 import com.makco.smartfinance.user_interface.ScreensController;
 import com.makco.smartfinance.user_interface.constants.ApplicationConstants;
 import com.makco.smartfinance.user_interface.constants.DialogMessages;
@@ -31,12 +32,12 @@ import javafx.scene.control.cell.PropertyValueFactory;
  * Created by mcalancea on 2016-04-01.
  */
 //http://www.devx.com/Java/Article/48193/0/page/2
-public class FamilyMemberController implements Initializable, ControlledScreen {
+public class FamilyMemberController implements Initializable, ControlledScreen, RefreshableScreen {
     private final static Logger LOG = LogManager.getLogger(FamilyMemberController.class);
     private ScreensController myController;
     private FamilyMemberModel familyMemberModel = new FamilyMemberModel();
 
-//    private Executor executor;
+    //    private Executor executor;
     private ActionEvent actionEvent;
     private String globalTest;
     private Worker<Void> onDeleteWorker;
@@ -57,8 +58,8 @@ public class FamilyMemberController implements Initializable, ControlledScreen {
     @FXML
     private Button deleteBtn;
 
-    public FamilyMemberController(){
-        try{
+    public FamilyMemberController() {
+        try {
             onDeleteWorker = new Service<Void>() {
                 @Override
                 protected Task<Void> createTask() {
@@ -99,21 +100,21 @@ public class FamilyMemberController implements Initializable, ControlledScreen {
                     };
                 }
             };
-        }catch (Exception e){
+        } catch (Exception e) {
             //not in finally because refreshFamilyMembers must run before populateTable
-            startService(onRefreshFamilyMembersWorker,null,"from initializeServices: catch exception");
+            startService(onRefreshFamilyMembersWorker, null, "from initializeServices: catch exception");
             DialogMessages.showExceptionAlert(e);
         }
     }
 
-    public void initializeServices(){
-        try{
+    public void initializeServices() {
+        try {
             ((Service<Void>) onDeleteWorker).setOnSucceeded(event -> {
                 LOG.debug("onDeleteWorker->setOnSucceeded");
                 LOG.debug(">>>>>>>>onDeleteWorker->setOnSucceeded: pForm.getDialogStage().close()");
                 pForm.getDialogStage().close();
                 populateTable();
-    //                startButton.setDisable(false);
+                //                startButton.setDisable(false);
             });
             ((Service<Void>) onDeleteWorker).setOnFailed(event -> {
                 LOG.debug("onDeleteWorker->setOnFailed");
@@ -129,7 +130,7 @@ public class FamilyMemberController implements Initializable, ControlledScreen {
                 pForm.getDialogStage().close();
                 populateTable();
                 EnumSet<ErrorEnum> errors = ((Service<EnumSet<ErrorEnum>>) onSaveWorker).getValue();
-                if(!errors.isEmpty()) {
+                if (!errors.isEmpty()) {
                     DialogMessages.showErrorDialog("Error while saving Family Member: " + nameTF.getText(),
                             (EnumSet<ErrorEnum>) ((Service) onSaveWorker).getValue(), null);
                 }
@@ -159,14 +160,14 @@ public class FamilyMemberController implements Initializable, ControlledScreen {
 //                onClear(actionEvent);
 //                startButton.setDisable(false);
             });
-        }catch (Exception e){
+        } catch (Exception e) {
             //not in finally because refreshFamilyMembers must run before populateTable
-            startService(onRefreshFamilyMembersWorker,null,"from initializeServices: catch exception");
+            startService(onRefreshFamilyMembersWorker, null, "from initializeServices: catch exception");
             DialogMessages.showExceptionAlert(e);
         }
     }
 
-    private <V> void startService(Worker<V> worker, ActionEvent event, String test){
+    private <V> void startService(Worker<V> worker, ActionEvent event, String test) {
         pForm.activateProgressBar(worker);
         LOG.debug(">>>>>>>>pForm.getDialogStage().show()");
         pForm.getDialogStage().show();
@@ -178,8 +179,8 @@ public class FamilyMemberController implements Initializable, ControlledScreen {
 //        ((Service<V>)worker).setOnSucceeded(succeededEevent -> {
 //            pForm.getDialogStage().close();
 //        });
-        Service<V> service = ((Service<V>)worker);
-        if(service == null){
+        Service<V> service = ((Service<V>) worker);
+        if (service == null) {
             LOG.debug("service IS NULL");
         } else {
             LOG.debug("service IS NOT NULL");
@@ -197,10 +198,8 @@ public class FamilyMemberController implements Initializable, ControlledScreen {
     }
 
     @Override
-    public void initialize(URL location, ResourceBundle resources){
+    public void refresh() {
         try {
-            nameTF.setPrefColumnCount(64);
-            descTA.setPrefColumnCount(128);
             initializeServices();
             startService(onRefreshFamilyMembersWorker, null, "from initialize");
             table.getSelectionModel().selectedItemProperty().addListener((observable, oldSelection, newSelection) -> {
@@ -208,6 +207,23 @@ public class FamilyMemberController implements Initializable, ControlledScreen {
                     populateForm();
                 }
             });
+        } catch (Exception e) {
+            DialogMessages.showExceptionAlert(e);
+        }
+    }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        try {
+            nameTF.setPrefColumnCount(64);
+            descTA.setPrefColumnCount(128);
+//            initializeServices();
+//            startService(onRefreshFamilyMembersWorker, null, "from initialize");
+//            table.getSelectionModel().selectedItemProperty().addListener((observable, oldSelection, newSelection) -> {
+//                if (newSelection != null) {
+//                    populateForm();
+//                }
+//            });
             clearBtn.setDisable(true);
             saveBtn.setDisable(false);
             deleteBtn.setDisable(true);
@@ -219,21 +235,21 @@ public class FamilyMemberController implements Initializable, ControlledScreen {
     }
 
     @FXML
-    public void onClear(ActionEvent event){
-        try{
+    public void onClear(ActionEvent event) {
+        try {
             nameTF.clear();
             descTA.clear();
             clearBtn.setDisable(false);
             saveBtn.setDisable(false);
             deleteBtn.setDisable(true);
-        }catch (Exception e){
-            startService(onRefreshFamilyMembersWorker,null,"from onClear: catch exception");
+        } catch (Exception e) {
+            startService(onRefreshFamilyMembersWorker, null, "from onClear: catch exception");
             DialogMessages.showExceptionAlert(e);
         }
     }
 
     @FXML
-    public void onSave(ActionEvent event){
+    public void onSave(ActionEvent event) {
         try {
             LOG.debug("FamilyMemberController->onSave");
             startService(onSaveWorker, event, "from onSave");
@@ -243,8 +259,8 @@ public class FamilyMemberController implements Initializable, ControlledScreen {
         }
     }
 
-    private void save(ActionEvent event){
-        try{
+    private void save(ActionEvent event) {
+        try {
 
         } catch (Exception e) {
             //no refreshFamilyMembers() because there are in deletePendingFamilyMember, populateTable, onClear
@@ -253,7 +269,7 @@ public class FamilyMemberController implements Initializable, ControlledScreen {
     }
 
     @FXML
-    public void onDelete(ActionEvent event){
+    public void onDelete(ActionEvent event) {
         try {
 //            http://stackoverflow.com/questions/22098288/javafx-how-can-i-use-correctly-a-progressindicator-in-javafx
 //            http://stackoverflow.com/questions/30249493/using-threads-to-make-database-requests
@@ -275,12 +291,19 @@ public class FamilyMemberController implements Initializable, ControlledScreen {
             contentText.append("\"");
             contentText.append(nameTF.getText());
             contentText.append("\"?");
-            if(DialogMessages.showConfirmationDialog(title,headerText,contentText.toString(),null)) {
+            if (DialogMessages.showConfirmationDialog(title, headerText, contentText.toString(), null)) {
                 startService(onDeleteWorker, event, "from onDelete");
                 populateTable();
                 onClear(actionEvent);
             }
+        } catch (Exception e) {
+            //no refreshFamilyMembers() because there are in deletePendingFamilyMember, populateTable, onClear
+            DialogMessages.showExceptionAlert(e);
+        }
+    }
 
+    private void delete(ActionEvent event) {
+        try {
 
         } catch (Exception e) {
             //no refreshFamilyMembers() because there are in deletePendingFamilyMember, populateTable, onClear
@@ -288,17 +311,8 @@ public class FamilyMemberController implements Initializable, ControlledScreen {
         }
     }
 
-    private void delete(ActionEvent event){
-        try{
-
-        } catch (Exception e) {
-            //no refreshFamilyMembers() because there are in deletePendingFamilyMember, populateTable, onClear
-            DialogMessages.showExceptionAlert(e);
-        }
-    }
-
-    private void populateForm(){
-        try{
+    private void populateForm() {
+        try {
             clearBtn.setDisable(false);
             saveBtn.setDisable(false);
             deleteBtn.setDisable(false);
@@ -306,15 +320,15 @@ public class FamilyMemberController implements Initializable, ControlledScreen {
 
             nameTF.setText(familyMemberModel.getPendingFamilyMember().getName());
             descTA.setText(familyMemberModel.getPendingFamilyMember().getDescription());
-        }catch (Exception e){
-            startService(onRefreshFamilyMembersWorker,null,"from populateForm: catch exception");
+        } catch (Exception e) {
+            startService(onRefreshFamilyMembersWorker, null, "from populateForm: catch exception");
             DialogMessages.showExceptionAlert(e);
         }
     }
 
-    private void populateTable(){
-        try{
-            LOG.debug("familyMemberModel.getFamilyMembers().size():"+familyMemberModel.getFamilyMembers().size());
+    private void populateTable() {
+        try {
+            LOG.debug("familyMemberModel.getFamilyMembers().size():" + familyMemberModel.getFamilyMembers().size());
             table.getItems().clear();
             table.setItems(familyMemberModel.getFamilyMembers());
 
@@ -334,8 +348,8 @@ public class FamilyMemberController implements Initializable, ControlledScreen {
             familyMemberUpdatedCol.setCellValueFactory(new PropertyValueFactory<FamilyMember, Calendar>("updatedOn"));
 
             table.getColumns().setAll(familyMemberIdCol, familyMemberNameCol, familyMemberDescCol, familyMemberCreatedCol, familyMemberUpdatedCol);
-        }catch (Exception e){
-            startService(onRefreshFamilyMembersWorker,null,"from populateTable: catch exception");
+        } catch (Exception e) {
+            startService(onRefreshFamilyMembersWorker, null, "from populateTable: catch exception");
             DialogMessages.showExceptionAlert(e);
         }
     }

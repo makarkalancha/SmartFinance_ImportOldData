@@ -1,6 +1,7 @@
 package com.makco.smartfinance.user_interface.controllers;
 
 import com.makco.smartfinance.user_interface.ControlledScreen;
+import com.makco.smartfinance.user_interface.RefreshableScreen;
 import com.makco.smartfinance.user_interface.ScreensController;
 import com.makco.smartfinance.user_interface.constants.ApplicationConstants;
 import com.makco.smartfinance.user_interface.constants.Screens;
@@ -17,7 +18,7 @@ import javafx.scene.control.MenuItem;
 /**
  * Created by mcalancea on 2016-04-01.
  */
-public class MenuController implements Initializable, ControlledScreen {
+public class MenuController implements Initializable, ControlledScreen, RefreshableScreen {
     private final static Logger LOG = LogManager.getLogger(MenuController.class);
     private ScreensController myController;
 
@@ -70,5 +71,10 @@ public class MenuController implements Initializable, ControlledScreen {
     @FXML
     public void quit(ActionEvent event) {
         ApplicationUtililities.quit(event);
+    }
+
+    @Override
+    public void refresh() {
+
     }
 }

@@ -1,6 +1,7 @@
 package com.makco.smartfinance.user_interface.controllers;
 
 import com.makco.smartfinance.user_interface.ControlledScreen;
+import com.makco.smartfinance.user_interface.RefreshableScreen;
 import com.makco.smartfinance.user_interface.ScreensController;
 import com.makco.smartfinance.user_interface.constants.Screens;
 import java.net.URL;
@@ -12,7 +13,7 @@ import javafx.fxml.Initializable;
 /**
  * Created by mcalancea on 2016-04-01.
  */
-public class Screen2Controller implements Initializable, ControlledScreen {
+public class Screen2Controller implements Initializable, ControlledScreen, RefreshableScreen {
     private ScreensController myController;
 
     @Override
@@ -33,5 +34,10 @@ public class Screen2Controller implements Initializable, ControlledScreen {
     @FXML
     public void toMain(ActionEvent event){
         myController.setScreen(Screens.MAIN);
+    }
+
+    @Override
+    public void refresh() {
+
     }
 }
