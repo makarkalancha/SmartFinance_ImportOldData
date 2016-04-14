@@ -233,6 +233,7 @@ public class FamilyMemberController implements Initializable, ControlledScreen {
     @FXML
     public void onSave(ActionEvent event){
         try {
+            LOG.debug("FamilyMemberController->onSave");
             startService(onSaveWorker, event, "from onSave");
         } catch (Exception e) {
             //no refreshFamilyMembers() because there are in deletePendingFamilyMember, populateTable, onClear

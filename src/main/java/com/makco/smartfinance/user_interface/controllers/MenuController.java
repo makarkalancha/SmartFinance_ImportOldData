@@ -23,6 +23,8 @@ public class MenuController implements Initializable, ControlledScreen {
 
     @FXML
     private MenuItem saveMenuItem;
+    @FXML
+    private MenuItem quitMenuItem;
 
     @Override
     public void setScreenPage(ScreensController screenPage) {
@@ -32,6 +34,12 @@ public class MenuController implements Initializable, ControlledScreen {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         saveMenuItem.setAccelerator(ApplicationConstants.SAVE_KC);
+        quitMenuItem.setAccelerator(ApplicationConstants.QUIT_KC);
+    }
+
+    @FXML
+    public void toSave(ActionEvent event){
+        LOG.debug("MenuController->toSave");
     }
 
     @FXML

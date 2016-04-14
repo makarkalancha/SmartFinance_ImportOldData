@@ -18,13 +18,13 @@
                 <Menu mnemonicParsing="false" text="Open Recent" />
                 <SeparatorMenuItem mnemonicParsing="false" />
                 <MenuItem mnemonicParsing="false" text="Close" />
-                <MenuItem fx:id="saveMenuItem" text="_Save" />
+                <MenuItem fx:id="saveMenuItem" onAction="#toSave" text="_Save" />
                 <MenuItem mnemonicParsing="false" text="Save As…" />
                 <MenuItem mnemonicParsing="false" text="Revert" />
                 <SeparatorMenuItem mnemonicParsing="false" />
                 <MenuItem mnemonicParsing="false" text="Preferences…" />
                 <SeparatorMenuItem mnemonicParsing="false" />
-                <MenuItem mnemonicParsing="false" onAction="#quit" text="Quit" />
+                <MenuItem fx:id="quitMenuItem" mnemonicParsing="false" onAction="#quit" text="_Quit" />
             </items>
         </Menu>
         <Menu mnemonicParsing="false" text="Edit">
