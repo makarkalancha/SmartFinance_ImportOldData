@@ -2,6 +2,7 @@ package com.makco.smartfinance.user_interface.controllers;
 
 import com.makco.smartfinance.user_interface.ControlledScreen;
 import com.makco.smartfinance.user_interface.ScreensController;
+import com.makco.smartfinance.user_interface.constants.ApplicationConstants;
 import com.makco.smartfinance.user_interface.constants.Screens;
 import com.makco.smartfinance.utils.ApplicationUtililities;
 import java.net.URL;
@@ -11,6 +12,7 @@ import org.apache.logging.log4j.Logger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.MenuItem;
 
 /**
  * Created by mcalancea on 2016-04-01.
@@ -19,6 +21,9 @@ public class MenuController implements Initializable, ControlledScreen {
     private final static Logger LOG = LogManager.getLogger(MenuController.class);
     private ScreensController myController;
 
+    @FXML
+    private MenuItem saveMenuItem;
+
     @Override
     public void setScreenPage(ScreensController screenPage) {
         myController = screenPage;
@@ -26,7 +31,7 @@ public class MenuController implements Initializable, ControlledScreen {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        //TODO
+        saveMenuItem.setAccelerator(ApplicationConstants.SAVE_KC);
     }
 
     @FXML

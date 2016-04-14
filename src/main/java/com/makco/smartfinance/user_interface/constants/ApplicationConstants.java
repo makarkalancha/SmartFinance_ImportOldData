@@ -2,6 +2,9 @@ package com.makco.smartfinance.user_interface.constants;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
 
 /**
  * Created by mcalancea on 2016-04-05.
@@ -24,4 +27,8 @@ public class ApplicationConstants {
     public static final String UNDO_ICO = IMG_RESOURCE_FOLDER+"/1460658987_arrow-undo_16x16_w.png";
     public static final String REDO_ICO = IMG_RESOURCE_FOLDER+"/1460658987_arrow-redo_16x16_w.png";
     public static final String FAMILY_MEMBER_WINDOW_ICO = IMG_RESOURCE_FOLDER+"/wallet.png";
+
+    //key shortcut
+    public static final KeyCombination SAVE_KC = new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN);
+    public static final KeyCombination QUIT_KC = new KeyCodeCombination(KeyCode.Q, KeyCombination.CONTROL_DOWN);
 }

@@ -9,7 +9,7 @@
 <?import javafx.scene.control.SeparatorMenuItem?>
 <?import javafx.scene.layout.VBox?>
 
-<MenuBar maxWidth="1.7976931348623157E308" prefHeight="25.0" VBox.vgrow="NEVER" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="com.makco.smartfinance.user_interface.controllers.MenuController">
+<MenuBar maxWidth="1.7976931348623157E308" prefHeight="25.0" VBox.vgrow="NEVER" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.makco.smartfinance.user_interface.controllers.MenuController">
     <menus>
         <Menu mnemonicParsing="false" text="File">
             <items>
@@ -18,7 +18,7 @@
                 <Menu mnemonicParsing="false" text="Open Recent" />
                 <SeparatorMenuItem mnemonicParsing="false" />
                 <MenuItem mnemonicParsing="false" text="Close" />
-                <MenuItem mnemonicParsing="false" text="Save" />
+                <MenuItem fx:id="saveMenuItem" text="_Save" />
                 <MenuItem mnemonicParsing="false" text="Save As…" />
                 <MenuItem mnemonicParsing="false" text="Revert" />
                 <SeparatorMenuItem mnemonicParsing="false" />
