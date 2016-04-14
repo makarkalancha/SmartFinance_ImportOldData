@@ -95,8 +95,8 @@ public class Main extends Application{
                 for (Screens scr : Screens.values()) {
                     mainContainer.loadScreen(scr);
                 }
-//            mainContainer.setScreen(Screens.MAIN);
-                mainContainer.setScreen(Screens.FAMILY_MEMBER);
+                mainContainer.setScreen(Screens.MAIN);
+//                mainContainer.setScreen(Screens.FAMILY_MEMBER);
 
                 this.primaryStage.getIcons().add(new Image(ApplicationConstants.MAIN_WINDOW_ICO));
                 this.primaryStage.setTitle(ApplicationConstants.MAIN_WINDOW_TITLE);

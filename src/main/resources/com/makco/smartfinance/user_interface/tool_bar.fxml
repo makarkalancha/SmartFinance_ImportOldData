@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.layout.VBox?>
+
+<ToolBar prefHeight="40.0" prefWidth="200.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="com.makco.smartfinance.user_interface.controllers.ToolbarController">
+  <items>
+    <Button fx:id="tbSaveBtn" mnemonicParsing="false" prefHeight="20.0" prefWidth="20.0" text="Save">
+         <tooltip>
+            <Tooltip text="Save..." />
+         </tooltip></Button>
+      <Button fx:id="tbUndoBtn" mnemonicParsing="false" prefHeight="20.0" prefWidth="20.0" text="undo">
+         <tooltip>
+            <Tooltip text="Undo..." />
+         </tooltip>
+      </Button>
+      <Button fx:id="tbRedoBtn" mnemonicParsing="false" prefHeight="20.0" prefWidth="20.0" text="Redo">
+         <tooltip>
+            <Tooltip text="Redo..." />
+         </tooltip>
+      </Button>
+  </items>
+</ToolBar>

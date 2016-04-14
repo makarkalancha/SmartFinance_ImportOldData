@@ -11,9 +11,17 @@ public class ApplicationConstants {
 
     public static final String DB_SCHEMA_NAME = "FINANCE";
 
+    public static final String IMG_RESOURCE_FOLDER = "images";
+
+    //titles
     public static final String MAIN_WINDOW_TITLE = "Hello";
-    public static final String MAIN_WINDOW_ICO = "wallet.png";
     public static final String CURRENCY_WINDOW_TITLE = "Currency";
     public static final String FAMILY_MEMBER_WINDOW_TITLE = "Family Member";
-    public static final String FAMILY_MEMBER_WINDOW_ICO = "wallet.png";
+
+    //ico
+    public static final String MAIN_WINDOW_ICO = IMG_RESOURCE_FOLDER+"/wallet.png";
+    public static final String SAVE_ICO = IMG_RESOURCE_FOLDER+"/1460658953_floppy_disk_save_16x16.png";
+    public static final String UNDO_ICO = IMG_RESOURCE_FOLDER+"/1460658987_arrow-undo_16x16_w.png";
+    public static final String REDO_ICO = IMG_RESOURCE_FOLDER+"/1460658987_arrow-redo_16x16_w.png";
+    public static final String FAMILY_MEMBER_WINDOW_ICO = IMG_RESOURCE_FOLDER+"/wallet.png";
 }

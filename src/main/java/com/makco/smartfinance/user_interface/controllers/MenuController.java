@@ -6,6 +6,8 @@ import com.makco.smartfinance.user_interface.constants.Screens;
 import com.makco.smartfinance.utils.ApplicationUtililities;
 import java.net.URL;
 import java.util.ResourceBundle;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -14,6 +16,7 @@ import javafx.fxml.Initializable;
  * Created by mcalancea on 2016-04-01.
  */
 public class MenuController implements Initializable, ControlledScreen {
+    private final static Logger LOG = LogManager.getLogger(MenuController.class);
     private ScreensController myController;
 
     @Override
