@@ -7,5 +7,6 @@ public interface ControlledScreen {
 
     void setScreenPage(ScreensController screenPage);
     void refresh();
-    boolean isCloseAllowed();
+    boolean askPermissionToClose();
+    void close();
 }

@@ -1,16 +1,24 @@
 package com.makco.smartfinance.user_interface.controllers;
 
 import com.makco.smartfinance.persistence.entity.FamilyMember;
+import com.makco.smartfinance.user_interface.Action;
 import com.makco.smartfinance.user_interface.ControlledScreen;
 import com.makco.smartfinance.user_interface.ScreensController;
-import com.makco.smartfinance.user_interface.unredo.UndoRedoScreen;
 import com.makco.smartfinance.user_interface.constants.ApplicationConstants;
 import com.makco.smartfinance.user_interface.constants.DialogMessages;
 import com.makco.smartfinance.user_interface.constants.ProgressForm;
 import com.makco.smartfinance.user_interface.models.FamilyMemberModel;
 import com.makco.smartfinance.user_interface.unredo.CareTaker;
 import com.makco.smartfinance.user_interface.unredo.Memento;
+import com.makco.smartfinance.user_interface.unredo.UndoRedoScreen;
 import com.makco.smartfinance.user_interface.validation.ErrorEnum;
+import java.net.URL;
+import java.util.Calendar;
+import java.util.EnumSet;
+import java.util.ResourceBundle;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.concurrent.Service;
@@ -25,20 +33,13 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-import java.net.URL;
-import java.util.Calendar;
-import java.util.EnumSet;
-import java.util.ResourceBundle;
 
 /**
  * Created by mcalancea on 2016-04-01.
  */
 //http://www.devx.com/Java/Article/48193/0/page/2
 public class FamilyMemberController implements Initializable, ControlledScreen, UndoRedoScreen {
+
     private final static Logger LOG = LogManager.getLogger(FamilyMemberController.class);
     private ScreensController myController;
     private FamilyMemberModel familyMemberModel = new FamilyMemberModel();
@@ -130,6 +131,7 @@ public class FamilyMemberController implements Initializable, ControlledScreen, 
             ((Service<Void>) onDeleteWorker).setOnFailed(event -> {
                 LOG.debug("onDeleteWorker->setOnFailed");
                 LOG.debug(">>>>>>>>onDeleteWorker->setOnFailed: pForm.getDialogStage().close()");
+                DialogMessages.showExceptionAlert(onDeleteWorker.getException());
                 pForm.getDialogStage().close();
                 populateTable();
 //                onClear(actionEvent);
@@ -151,6 +153,7 @@ public class FamilyMemberController implements Initializable, ControlledScreen, 
             ((Service<EnumSet<ErrorEnum>>) onSaveWorker).setOnFailed(event -> {
                 LOG.debug("onSaveWorker->setOnFailed");
                 LOG.debug(">>>>>>>>onSaveWorker->setOnFailed: pForm.getDialogStage().close()");
+                DialogMessages.showExceptionAlert(onSaveWorker.getException());
                 pForm.getDialogStage().close();
                 populateTable();
 //                onClear(actionEvent);
@@ -166,6 +169,7 @@ public class FamilyMemberController implements Initializable, ControlledScreen, 
             ((Service<Void>) onRefreshFamilyMembersWorker).setOnFailed(event -> {
                 LOG.debug("onRefreshFamilyMembersWorker->setOnFailed");
                 LOG.debug(">>>>>>>>onRefreshFamilyMembersWorker->setOnFailed: pForm.getDialogStage().close()");
+                DialogMessages.showExceptionAlert(onRefreshFamilyMembersWorker.getException());
                 pForm.getDialogStage().close();
                 populateTable();
 //                onClear(actionEvent);
@@ -220,6 +224,31 @@ public class FamilyMemberController implements Initializable, ControlledScreen, 
                     populateForm();
                 }
             });
+
+            myController.setToolbar_Save(new Action() {
+                @Override
+                public void execute() {
+                    try {
+                        LOG.debug("FamilyMemberController->onSave");
+                        startService(onSaveWorker, new ActionEvent(), "from onSave");
+                    } catch (Exception e) {
+                        //no refreshFamilyMembers() because there are in deletePendingFamilyMember, populateTable, onClear
+                        DialogMessages.showExceptionAlert(e);
+                    }
+                }
+            });
+            myController.setToolbar_Undo(new Action() {
+                @Override
+                public void execute() {
+                    isNotUndo.setValue(false);
+                    restoreFormState(careTaker.undoState());
+                }
+            });
+            myController.setToolbar_Redo(() -> {
+                        isNotUndo.setValue(false);
+                        restoreFormState(careTaker.redoState());
+                    }
+            );
         } catch (Exception e) {
             DialogMessages.showExceptionAlert(e);
         }
@@ -287,14 +316,14 @@ public class FamilyMemberController implements Initializable, ControlledScreen, 
         }
     }
 
-    private void save(ActionEvent event) {
-        try {
-
-        } catch (Exception e) {
-            //no refreshFamilyMembers() because there are in deletePendingFamilyMember, populateTable, onClear
-            DialogMessages.showExceptionAlert(e);
-        }
-    }
+//    private void save(ActionEvent event) {
+//        try {
+//
+//        } catch (Exception e) {
+//            //no refreshFamilyMembers() because there are in deletePendingFamilyMember, populateTable, onClear
+//            DialogMessages.showExceptionAlert(e);
+//        }
+//    }
 
     @FXML
     public void onDelete(ActionEvent event) {
@@ -384,11 +413,11 @@ public class FamilyMemberController implements Initializable, ControlledScreen, 
 
     @Override
     public void saveForm() {
-        try{
+        try {
             careTaker.saveState(new FamilyMemberFormState(nameTF.getText(), descTA.getText()));
             isUndoEmpty.setValue(careTaker.isUndoEmpty());
             isRedoEmpty.setValue(careTaker.isRedoEmpty());
-        }catch (Exception e){
+        } catch (Exception e) {
             DialogMessages.showExceptionAlert(e);
         }
     }
@@ -401,13 +430,41 @@ public class FamilyMemberController implements Initializable, ControlledScreen, 
             descTA.setText(formState.getDescTA());
             isUndoEmpty.setValue(careTaker.isUndoEmpty());
             isRedoEmpty.setValue(careTaker.isRedoEmpty());
-        }catch (Exception e){
+        } catch (Exception e) {
             DialogMessages.showExceptionAlert(e);
         }
     }
 
     @Override
-    public boolean isCloseAllowed() {
+    public void close(){
+        try {
+            myController.setToolbar_Save(new Action(){
+                @Override
+                public void execute() {
+                    try {
+                        LOG.debug("FamilyMemberController->onSave");
+                        startService(onSaveWorker, new ActionEvent(), "from onSave");
+                    } catch (Exception e) {
+                        //no refreshFamilyMembers() because there are in deletePendingFamilyMember, populateTable, onClear
+                        DialogMessages.showExceptionAlert(e);
+
+                    }
+                }
+            });
+            myController.setToolbar_Undo(new Action(){
+                @Override
+                public void execute() {
+                    restoreFormState(careTaker.undoState());
+                }
+            });
+            myController.setToolbar_Redo(() -> restoreFormState(careTaker.redoState()));
+        } catch (Exception e) {
+            DialogMessages.showExceptionAlert(e);
+        }
+    }
+
+    @Override
+    public boolean askPermissionToClose() {
         boolean result = true;
         try{
             StringBuilder contentText = new StringBuilder();

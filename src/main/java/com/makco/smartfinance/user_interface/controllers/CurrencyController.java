@@ -8,6 +8,12 @@ import com.makco.smartfinance.user_interface.constants.DialogMessages;
 import com.makco.smartfinance.user_interface.constants.ProgressForm;
 import com.makco.smartfinance.user_interface.models.CurrencyModel;
 import com.makco.smartfinance.user_interface.validation.ErrorEnum;
+import java.net.URL;
+import java.util.Calendar;
+import java.util.EnumSet;
+import java.util.ResourceBundle;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javafx.concurrent.Worker;
@@ -20,13 +26,6 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-import java.net.URL;
-import java.util.Calendar;
-import java.util.EnumSet;
-import java.util.ResourceBundle;
 
 /**
  * Created by mcalancea on 2016-04-12.
@@ -112,6 +111,7 @@ public class CurrencyController implements Initializable, ControlledScreen {
             ((Service<Void>) onDeleteWorker).setOnFailed(event -> {
                 LOG.debug("onDeleteWorker->setOnFailed");
                 LOG.debug(">>>>>>>>onDeleteWorker->setOnFailed: pForm.getDialogStage().close()");
+                DialogMessages.showExceptionAlert(onDeleteWorker.getException());
                 pForm.getDialogStage().close();
                 populateTable();
             });
@@ -130,6 +130,7 @@ public class CurrencyController implements Initializable, ControlledScreen {
             ((Service<EnumSet<ErrorEnum>>) onSaveWorker).setOnFailed(event -> {
                 LOG.debug("onSaveWorker->setOnFailed");
                 LOG.debug(">>>>>>>>onSaveWorker->setOnFailed: pForm.getDialogStage().close()");
+                DialogMessages.showExceptionAlert(onSaveWorker.getException());
                 pForm.getDialogStage().close();
                 populateTable();
             });
@@ -142,6 +143,7 @@ public class CurrencyController implements Initializable, ControlledScreen {
             ((Service<Void>) onRefreshCurrencyWorker).setOnFailed(event -> {
                 LOG.debug("onRefreshCurrencyWorker->setOnFailed");
                 LOG.debug(">>>>>>>>onRefreshCurrencyWorker->setOnFailed: pForm.getDialogStage().close()");
+                DialogMessages.showExceptionAlert(onRefreshCurrencyWorker.getException());
                 pForm.getDialogStage().close();
                 populateTable();
             });
@@ -306,7 +308,12 @@ public class CurrencyController implements Initializable, ControlledScreen {
     }
 
     @Override
-    public boolean isCloseAllowed() {
+    public boolean askPermissionToClose() {
         return false;
+    }
+
+    @Override
+    public void close() {
+
     }
 }

@@ -2,6 +2,8 @@ package com.makco.smartfinance.user_interface.unredo;
 
 import com.makco.smartfinance.utils.collection.DequeStack;
 import com.makco.smartfinance.utils.collection.Stack;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * User: Makar Kalancha
@@ -9,6 +11,7 @@ import com.makco.smartfinance.utils.collection.Stack;
  * Time: 23:30
  */
 public class CareTaker{
+    private final static Logger LOG = LogManager.getLogger(CareTaker.class);
     private Stack<Memento> undoStates = new DequeStack<>(3);
     private Stack<Memento> redoStates = new DequeStack<>(3);
 
@@ -44,22 +47,22 @@ public class CareTaker{
 
     public boolean isUndoEmpty() {
         boolean a = undoStates.isEmpty();
-        System.out.println("isUndoEmpty:" + a);
+        LOG.debug("isUndoEmpty:" + a);
         return undoStates.isEmpty();
     }
 
     public boolean isRedoEmpty() {
         boolean a = redoStates.isEmpty();
-        System.out.println("isRedoEmpty:" + a);
+        LOG.debug("isRedoEmpty:" + a);
         return redoStates.isEmpty();
     }
 
     private void log(String source){
-        System.out.println("======================================================");
-        System.out.println("UndoCakeTaker." + source + "->currentState:" + currentState);
-        System.out.println("UndoCakeTaker." + source + "->undoStates:" + undoStates);
-        System.out.println("UndoCakeTaker." + source + "->redoStates:" + redoStates);
-        System.out.println("======================================================");
+        LOG.debug("======================================================");
+        LOG.debug("UndoCakeTaker." + source + "->currentState:" + currentState);
+        LOG.debug("UndoCakeTaker." + source + "->undoStates:" + undoStates);
+        LOG.debug("UndoCakeTaker." + source + "->redoStates:" + redoStates);
+        LOG.debug("======================================================");
     }
 
     public void saveState(Memento state){
@@ -81,7 +84,7 @@ public class CareTaker{
         if(!undoStates.isEmpty()){
             redoStates.push(currentState);
             currentState = undoStates.pop();
-            System.out.println("getState from UndoCakeTaker.undoState");
+            LOG.debug("getState from UndoCakeTaker.undoState");
 //            result = currentState;
         }
 // else {
@@ -101,7 +104,7 @@ public class CareTaker{
                 undoStates.push(currentState);
 //            }
             currentState = redoStates.pop();
-            System.out.println("getState from UndoCakeTaker.redoState");
+            LOG.debug("getState from UndoCakeTaker.redoState");
 //            result = currentState.getState();
         }
         log("redoState: after if");

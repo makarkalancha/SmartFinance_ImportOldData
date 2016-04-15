@@ -2,11 +2,9 @@ package com.makco.smartfinance.user_interface;
 
 import com.makco.smartfinance.user_interface.constants.DialogMessages;
 import com.makco.smartfinance.user_interface.constants.Screens;
+import com.makco.smartfinance.user_interface.unredo.CareTaker;
 import java.util.EnumMap;
 import java.util.Optional;
-
-import com.makco.smartfinance.user_interface.unredo.CareTaker;
-import com.makco.smartfinance.user_interface.unredo.UndoRedoScreen;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import javafx.fxml.FXMLLoader;
@@ -25,6 +23,14 @@ public class ScreensController extends BorderPane {
     private final EnumMap<Screens, NodeControlledScrBundle> screens = new EnumMap<>(Screens.class);
     private Screens currentScreen = Screens.MAIN;
     private final CareTaker careTaker = new CareTaker();
+
+    private ControlledScreen menubar;
+    private ControlledScreen toolbar;
+
+    private Action toolbar_Save;
+    private Action toolbar_Undo;
+    private Action toolbar_Redo;
+
     //communitcate between controllers
     //http://stackoverflow.com/questions/14187963/passing-parameters-javafx-fxml
     //http://docs.oracle.com/javafx/2/api/javafx/fxml/doc-files/introduction_to_fxml.html#nested_controllers
@@ -63,14 +69,15 @@ public class ScreensController extends BorderPane {
     private boolean loadVbox(){
         LOG.debug("ScreensController.loadVbox");
         try {
+
             VBox vbox = new VBox();
 //            vbox.setStyle("-fx-background-color: red;");
 //            vbox.setPadding(new Insets(10));
 //            vbox.setSpacing(8);
             setTop(vbox);
             vbox.getChildren().addAll(
-                    loadMenuBar(),
-                    loadToolBar()
+                    menubarLoadAndSetController(),
+                    toolbarLoadAndSetController()
             );
 
             return true;
@@ -79,41 +86,35 @@ public class ScreensController extends BorderPane {
             return false;
         }
     }
+
     //loads the fxml file, add teh screen to the screens collection and
     //finally injects the screenPane to the contoller
-    private Parent loadMenuBar(){
-        LOG.debug("ScreensController.loadMenuBar");
-        Parent menuBar = null;
+    private Parent menubarLoadAndSetController(){
+        LOG.debug("ScreensController.menubarLoadAndSetController");
+        Parent menubarParent = null;
         try{
-            FXMLLoader myLoader = new FXMLLoader(getClass().getResource("menu_bar.fxml"));
-            menuBar = (Parent) myLoader.load();
-            ControlledScreen controlledScreen = ((ControlledScreen) myLoader.getController());
-            controlledScreen.setScreenPage(this);
-//            setTop(menuBar);
-//            getChildren().add(menuBar);
-//            setTopAnchor(menuBar, );
-            return menuBar;
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("menu_bar.fxml"));
+            menubarParent = (Parent) fxmlLoader.load();
+            menubar = ((ControlledScreen) fxmlLoader.getController());
+            menubar.setScreenPage(this);
         } catch (Exception e){
             DialogMessages.showExceptionAlert(e);
         }
-        return menuBar;
+        return menubarParent;
     }
 
-    private Parent loadToolBar(){
-        LOG.debug("ScreensController.loadToolBar");
-        Parent toolBar = null;
+    private Parent toolbarLoadAndSetController(){
+        LOG.debug("ScreensController.toolbarLoadAndSetController");
+        Parent toolbarParent = null;
         try{
-            FXMLLoader myLoader = new FXMLLoader(getClass().getResource("tool_bar.fxml"));
-            toolBar = (Parent) myLoader.load();
-            ControlledScreen controlledScreen = ((ControlledScreen) myLoader.getController());
-            controlledScreen.setScreenPage(this);
-//            setTop(toolBar);
-//            getChildren().add(menuBar);
-//            setTopAnchor(menuBar, );
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("tool_bar.fxml"));
+            toolbarParent = (Parent) fxmlLoader.load();
+            toolbar = ((ControlledScreen) fxmlLoader.getController());
+            toolbar.setScreenPage(this);
         } catch (Exception e){
             DialogMessages.showExceptionAlert(e);
         }
-        return toolBar;
+        return toolbarParent;
     }
 
     //loads the fxml file, add teh screen to the screens collection and
@@ -147,13 +148,22 @@ public class ScreensController extends BorderPane {
 //        Node child = screens.get(screen);
         NodeControlledScrBundle ncToOpen = screens.get(screen);
         NodeControlledScrBundle ncCurrent = screens.get(currentScreen);
-        if (ncToOpen != null &&
-                (ncCurrent == null || ncCurrent.getControlledScreen().isCloseAllowed())) {
+//        boolean a = ncToOpen != null;
+//        boolean b = ncCurrent == null;
+//        boolean c = ncCurrent.getControlledScreen().askPermissionToClose();
+//        boolean d = b || c;
+//        boolean e = a && d;
+        if (ncToOpen != null){
+            if(ncCurrent == null || ncCurrent.getControlledScreen().askPermissionToClose()) {
 
-            careTaker.clear();
-            setCenter(ncToOpen.getNode());
-            ncToOpen.getControlledScreen().refresh();
-            result = true;
+                //is always -> BorderPane.getChildre.size:2 {getChildren().size()}
+                currentScreen = screen;
+                careTaker.clear();
+                setCenter(ncToOpen.getNode());
+                ncToOpen.getControlledScreen().refresh();
+                menubar.refresh();
+                toolbar.refresh();
+                result = true;
 //            if (!getChildren().isEmpty() && getChildren().size() > 1) {
 //                LOG.debug("getChildren() is greater than 1");
 //
@@ -169,6 +179,7 @@ public class ScreensController extends BorderPane {
 //            }
 //                setCenter(ncToOpen.getNode());
 //                ncToOpen.getControlledScreen().refresh();
+            }
         } else {
             DialogMessages.showExceptionAlert(new Exception(screen+" -> screen hasn't been loaded!!!"));
         }
@@ -223,5 +234,29 @@ public class ScreensController extends BorderPane {
 
     public CareTaker getCareTaker() {
         return careTaker;
+    }
+
+    public Action getToolbar_Redo() {
+        return toolbar_Redo;
+    }
+
+    public void setToolbar_Redo(Action toolbar_Redo) {
+        this.toolbar_Redo = toolbar_Redo;
+    }
+
+    public Action getToolbar_Save() {
+        return toolbar_Save;
+    }
+
+    public void setToolbar_Save(Action toolbar_Save) {
+        this.toolbar_Save = toolbar_Save;
+    }
+
+    public Action getToolbar_Undo() {
+        return toolbar_Undo;
+    }
+
+    public void setToolbar_Undo(Action toolbar_Undo) {
+        this.toolbar_Undo = toolbar_Undo;
     }
 }

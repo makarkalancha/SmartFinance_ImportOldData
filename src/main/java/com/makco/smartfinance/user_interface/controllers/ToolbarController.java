@@ -1,11 +1,16 @@
 package com.makco.smartfinance.user_interface.controllers;
 
+import com.makco.smartfinance.user_interface.Action;
 import com.makco.smartfinance.user_interface.ControlledScreen;
 import com.makco.smartfinance.user_interface.ScreensController;
 import com.makco.smartfinance.user_interface.constants.ApplicationConstants;
 import com.makco.smartfinance.user_interface.constants.DialogMessages;
 import com.makco.smartfinance.user_interface.unredo.CareTaker;
 import com.makco.smartfinance.user_interface.unredo.UndoRedoScreen;
+import java.net.URL;
+import java.util.ResourceBundle;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXML;
@@ -13,11 +18,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-import java.net.URL;
-import java.util.ResourceBundle;
 
 /**
  * Created by mcalancea on 2016-04-01.
@@ -32,6 +32,10 @@ public class ToolbarController implements Initializable, ControlledScreen {
     public BooleanProperty isUndoEmpty = new SimpleBooleanProperty(true);
     public BooleanProperty isRedoEmpty = new SimpleBooleanProperty(true);
 
+    private Action toolbar_Save;
+    private Action toolbar_Undo;
+    private Action toolbar_Redo;
+
     @FXML
     private Button tbSaveBtn;
     @FXML
@@ -44,6 +48,9 @@ public class ToolbarController implements Initializable, ControlledScreen {
         try {
             myController = screenPage;
             careTaker = myController.getCareTaker();
+            toolbar_Save = myController.getToolbar_Save();
+            toolbar_Undo = myController.getToolbar_Undo();
+            toolbar_Redo = myController.getToolbar_Redo();
         } catch (Exception e) {
             DialogMessages.showExceptionAlert(e);
         }
@@ -78,7 +85,8 @@ public class ToolbarController implements Initializable, ControlledScreen {
 //            }
 
 //            restoreForm();
-            myController.getNodeControllerBundle().reFormState(cakeTaker.undoState());
+//            restoreFormState(cakeTaker.undoState());//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+            toolbar_Undo.execute();
 //            FormSnapshot fs = cakeTaker.undoState();
 //            mapProperty.forEach((k, v) -> {
 //                        System.out.println(k + "->" + v);
@@ -94,9 +102,10 @@ public class ToolbarController implements Initializable, ControlledScreen {
         tbRedoBtn.setOnAction((event) -> {
             isNotUndo.setValue(false);
             LOG.debug("\n\n>>>>>>>>click redo");
+            toolbar_Redo.execute();
 //            myTextFieldProperty.set((String) cakeTaker.redoState());
 //            restoreForm();
-            restoreFormState(cakeTaker.redoState());
+//            restoreFormState(cakeTaker.redoState());//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
         });
     }
 
@@ -132,11 +141,34 @@ public class ToolbarController implements Initializable, ControlledScreen {
 
     @Override
     public void refresh() {
+        toolbar_Save = myController.getToolbar_Save();
+        toolbar_Undo = myController.getToolbar_Undo();
+        toolbar_Redo = myController.getToolbar_Redo();
+        tbSaveBtn.setDisable(toolbar_Save == null);
+        tbUndoBtn.setDisable(toolbar_Undo == null);
+        tbRedoBtn.setDisable(toolbar_Redo == null);
 
+
+//        if(toolbar_Save == null){
+//            tbSaveBtn.setDisable(true);
+//        }
+//
+//        if(toolbar_Undo == null){
+//            tbUndoBtn.setDisable(true);
+//        }
+//
+//        if(toolbar_Redo == null){
+//            tbRedoBtn.setDisable(true);
+//        }
     }
 
     @Override
-    public boolean isCloseAllowed() {
+    public boolean askPermissionToClose() {
         return false;
+    }
+
+    @Override
+    public void close() {
+
     }
 }

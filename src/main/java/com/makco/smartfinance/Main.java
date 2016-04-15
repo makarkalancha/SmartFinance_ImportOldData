@@ -7,11 +7,8 @@ import com.makco.smartfinance.user_interface.constants.ApplicationConstants;
 import com.makco.smartfinance.user_interface.constants.DialogMessages;
 import com.makco.smartfinance.user_interface.constants.ProgressForm;
 import com.makco.smartfinance.user_interface.constants.Screens;
-import com.makco.smartfinance.user_interface.validation.ErrorEnum;
 import com.makco.smartfinance.utils.ApplicationUtililities;
 import com.makco.smartfinance.utils.Logs;
-
-import java.util.EnumSet;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import org.apache.logging.log4j.LogManager;
@@ -95,8 +92,8 @@ public class Main extends Application{
                 for (Screens scr : Screens.values()) {
                     mainContainer.loadScreen(scr);
                 }
-                mainContainer.setScreen(Screens.MAIN);
-//                mainContainer.setScreen(Screens.FAMILY_MEMBER);
+//                mainContainer.setScreen(Screens.MAIN);
+                mainContainer.setScreen(Screens.FAMILY_MEMBER);
 
                 this.primaryStage.getIcons().add(new Image(ApplicationConstants.MAIN_WINDOW_ICO));
                 this.primaryStage.setTitle(ApplicationConstants.MAIN_WINDOW_TITLE);
@@ -118,7 +115,7 @@ public class Main extends Application{
                 LOG.debug("migrateWorker->setOnFailed");
                 LOG.debug(">>>>>>>>migrateWorker->setOnFailed: pForm.getDialogStage().close()");
 
-                DialogMessages.showErrorDialog("Error", EnumSet.of(ErrorEnum.MAIN_ERROR), null);
+                DialogMessages.showExceptionAlert(migrateWorker.getException());
 
                 pForm.getDialogStage().close();
 //                onClear(actionEvent);

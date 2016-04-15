@@ -87,4 +87,6 @@ public class CurrencyModel {
     public void setPendingCurrencyProperty(Currency currency) {
         pendingCurrency = currency;
     }
+
+
 }

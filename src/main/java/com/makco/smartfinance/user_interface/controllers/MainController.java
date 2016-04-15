@@ -2,10 +2,9 @@ package com.makco.smartfinance.user_interface.controllers;
 
 import com.makco.smartfinance.user_interface.ControlledScreen;
 import com.makco.smartfinance.user_interface.ScreensController;
-import javafx.fxml.Initializable;
-
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.fxml.Initializable;
 
 /**
  * Created by mcalancea on 2016-04-01.
@@ -29,7 +28,12 @@ public class MainController implements Initializable, ControlledScreen {
     }
 
     @Override
-    public boolean isCloseAllowed() {
-        return false;
+    public boolean askPermissionToClose() {
+        return true;
+    }
+
+    @Override
+    public void close() {
+
     }
 }
