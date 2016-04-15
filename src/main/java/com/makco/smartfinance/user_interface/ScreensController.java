@@ -4,6 +4,9 @@ import com.makco.smartfinance.user_interface.constants.DialogMessages;
 import com.makco.smartfinance.user_interface.constants.Screens;
 import java.util.EnumMap;
 import java.util.Optional;
+
+import com.makco.smartfinance.user_interface.unredo.CareTaker;
+import com.makco.smartfinance.user_interface.unredo.UndoRedoScreen;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import javafx.fxml.FXMLLoader;
@@ -19,7 +22,9 @@ import javafx.scene.layout.VBox;
 public class ScreensController extends BorderPane {
     private final static Logger LOG = LogManager.getLogger(ScreensController.class);
 //    EnumMap<Screens, Node> screens = new EnumMap<>(Screens.class);
-    EnumMap<Screens, NodeControllerBundle> screens = new EnumMap<>(Screens.class);
+    private final EnumMap<Screens, NodeControlledScrBundle> screens = new EnumMap<>(Screens.class);
+    private Screens currentScreen = Screens.MAIN;
+    private final CareTaker careTaker = new CareTaker();
     //communitcate between controllers
     //http://stackoverflow.com/questions/14187963/passing-parameters-javafx-fxml
     //http://docs.oracle.com/javafx/2/api/javafx/fxml/doc-files/introduction_to_fxml.html#nested_controllers
@@ -42,21 +47,20 @@ public class ScreensController extends BorderPane {
 //        LOG.debug(String.format("ScreensController.addScreen: name=%s; Node.screen=%s", screen.toString(), screenNode.toString()));
 //    }
 
-    public void addScreen(final Screens screen, final NodeControllerBundle nodeControllerBundle) {
-        screens.put(screen, nodeControllerBundle);
-        LOG.debug(String.format("ScreensController.addScreen: name=%s; Node.screen=%s", screen.toString(), nodeControllerBundle.toString()));
+    private void addScreen(final Screens screen, final NodeControlledScrBundle nodeControlledScrBundle) {
+        screens.put(screen, nodeControlledScrBundle);
+        LOG.debug(String.format("ScreensController.addScreen: name=%s; Node.screen=%s", screen.toString(), nodeControlledScrBundle.toString()));
     }
 
 //    public Node getScreen(final String name) {
 //        return screens.get(name);
 //    }
-    public Node getScreen(final String name) {
-        return screens.get(name).getNode();
+
+    public ControlledScreen getCurrentControlledScreen() {
+        return screens.get(currentScreen).getControlledScreen();
     }
 
-
-    public boolean loadVbox(){
-
+    private boolean loadVbox(){
         LOG.debug("ScreensController.loadVbox");
         try {
             VBox vbox = new VBox();
@@ -77,7 +81,7 @@ public class ScreensController extends BorderPane {
     }
     //loads the fxml file, add teh screen to the screens collection and
     //finally injects the screenPane to the contoller
-    public Parent loadMenuBar(){
+    private Parent loadMenuBar(){
         LOG.debug("ScreensController.loadMenuBar");
         Parent menuBar = null;
         try{
@@ -95,7 +99,7 @@ public class ScreensController extends BorderPane {
         return menuBar;
     }
 
-    public Parent loadToolBar(){
+    private Parent loadToolBar(){
         LOG.debug("ScreensController.loadToolBar");
         Parent toolBar = null;
         try{
@@ -124,8 +128,7 @@ public class ScreensController extends BorderPane {
             controlledScreen.setScreenPage(this);
 //            addScreen(screen, childScreenNode);
 
-            RefreshableScreen refreshableScreen = ((RefreshableScreen) myLoader.getController());
-            addScreen(screen, new NodeControllerBundle(childScreenNode, refreshableScreen));
+            addScreen(screen, new NodeControlledScrBundle(childScreenNode, controlledScreen));
             return true;
         } catch (Exception e){
             DialogMessages.showExceptionAlert(e);
@@ -136,33 +139,40 @@ public class ScreensController extends BorderPane {
     //This method tries to display the screen with a predefined name.
     //First it makes sure the screen has been already loaded. Then if there is more than
     //one screen the new screen is been added second, and then the current screen is removed.
-    //If there isn't any screen being desplayed, the new screen is just added to the root.
+    //If there isn't any screen being displayed, the new screen is just added to the root.
     public boolean setScreen(final Screens screen) {
+        boolean result = false;
         LOG.debug(String.format("ScreensController.setScreen: name=%s", screen.toString()));
         LOG.debug(String.format("getChildren().size()=%d", getChildren().size()));
 //        Node child = screens.get(screen);
-        NodeControllerBundle child = screens.get(screen);
-        if (child != null) {
-            if (!getChildren().isEmpty() && getChildren().size() > 1) {
-                LOG.debug("getChildren() is greater than 1");
+        NodeControlledScrBundle ncToOpen = screens.get(screen);
+        NodeControlledScrBundle ncCurrent = screens.get(currentScreen);
+        if (ncToOpen != null &&
+                (ncCurrent == null || ncCurrent.getControlledScreen().isCloseAllowed())) {
 
-                LOG.debug("children:" + getChildren().size());
-//                getChildren().remove(1);
-//                getChildren().add(1, child);
-
-//                setVgrow(child,Priority.ALWAYS);
-            } else {
-                LOG.debug("getChildren() is less or equal than 1");
-//                getChildren().add(screens.get(screen));
-//                getChildren().add(child);
-            }
-            setCenter(child.getNode());
-            child.getRefreshableScreen().refresh();
-            return true;
+            careTaker.clear();
+            setCenter(ncToOpen.getNode());
+            ncToOpen.getControlledScreen().refresh();
+            result = true;
+//            if (!getChildren().isEmpty() && getChildren().size() > 1) {
+//                LOG.debug("getChildren() is greater than 1");
+//
+//                LOG.debug("children:" + getChildren().size());
+////                getChildren().remove(1);
+////                getChildren().add(1, child);
+//
+////                setVgrow(child,Priority.ALWAYS);
+//            } else {
+//                LOG.debug("getChildren() is less or equal than 1");
+////                getChildren().add(screens.get(screen));
+////                getChildren().add(child);
+//            }
+//                setCenter(ncToOpen.getNode());
+//                ncToOpen.getControlledScreen().refresh();
         } else {
             DialogMessages.showExceptionAlert(new Exception(screen+" -> screen hasn't been loaded!!!"));
-            return false;
         }
+        return result;
 
         /*
         Node screenToRemove;
@@ -189,21 +199,29 @@ public class ScreensController extends BorderPane {
         }
     }
 
+//    public UndoRedoScreen getUndoRedoScreen() {
+//        return screens.get
+//    }
+
     //http://www.nurkiewicz.com/2013/08/optional-in-java-8-cheat-sheet.html
-    private static class NodeControllerBundle{
+    private static class NodeControlledScrBundle {
         private final Optional<Node> node;
-        private final Optional<RefreshableScreen> refreshableScreen;
-        public NodeControllerBundle(Node node, RefreshableScreen refreshableScreen){
+        private final Optional<ControlledScreen> controlledScreen;
+        public NodeControlledScrBundle(Node node, ControlledScreen controlledScreen){
             this.node = Optional.of(node);
-            this.refreshableScreen = Optional.of(refreshableScreen);
+            this.controlledScreen = Optional.of(controlledScreen);
         }
 
         public Node getNode() {
             return node.get();
         }
 
-        public RefreshableScreen getRefreshableScreen() {
-            return refreshableScreen.get();
+        public ControlledScreen getControlledScreen() {
+            return controlledScreen.get();
         }
+    }
+
+    public CareTaker getCareTaker() {
+        return careTaker;
     }
 }

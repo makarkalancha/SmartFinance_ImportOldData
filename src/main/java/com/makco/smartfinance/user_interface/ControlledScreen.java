@@ -6,4 +6,6 @@ package com.makco.smartfinance.user_interface;
 public interface ControlledScreen {
 
     void setScreenPage(ScreensController screenPage);
+    void refresh();
+    boolean isCloseAllowed();
 }

@@ -2,19 +2,12 @@ package com.makco.smartfinance.user_interface.controllers;
 
 import com.makco.smartfinance.persistence.entity.Currency;
 import com.makco.smartfinance.user_interface.ControlledScreen;
-import com.makco.smartfinance.user_interface.RefreshableScreen;
 import com.makco.smartfinance.user_interface.ScreensController;
 import com.makco.smartfinance.user_interface.constants.ApplicationConstants;
 import com.makco.smartfinance.user_interface.constants.DialogMessages;
 import com.makco.smartfinance.user_interface.constants.ProgressForm;
 import com.makco.smartfinance.user_interface.models.CurrencyModel;
 import com.makco.smartfinance.user_interface.validation.ErrorEnum;
-import java.net.URL;
-import java.util.Calendar;
-import java.util.EnumSet;
-import java.util.ResourceBundle;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javafx.concurrent.Worker;
@@ -27,11 +20,18 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import java.net.URL;
+import java.util.Calendar;
+import java.util.EnumSet;
+import java.util.ResourceBundle;
 
 /**
  * Created by mcalancea on 2016-04-12.
  */
-public class CurrencyController implements Initializable, ControlledScreen, RefreshableScreen {
+public class CurrencyController implements Initializable, ControlledScreen {
     private final static Logger LOG = LogManager.getLogger(CurrencyController.class);
     private ScreensController myController;
     private CurrencyModel currencyModel = new CurrencyModel();
@@ -303,5 +303,10 @@ public class CurrencyController implements Initializable, ControlledScreen, Refr
             startService(onRefreshCurrencyWorker,null);
             DialogMessages.showExceptionAlert(e);
         }
+    }
+
+    @Override
+    public boolean isCloseAllowed() {
+        return false;
     }
 }

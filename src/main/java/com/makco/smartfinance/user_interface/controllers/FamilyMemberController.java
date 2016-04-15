@@ -2,19 +2,17 @@ package com.makco.smartfinance.user_interface.controllers;
 
 import com.makco.smartfinance.persistence.entity.FamilyMember;
 import com.makco.smartfinance.user_interface.ControlledScreen;
-import com.makco.smartfinance.user_interface.RefreshableScreen;
 import com.makco.smartfinance.user_interface.ScreensController;
+import com.makco.smartfinance.user_interface.unredo.UndoRedoScreen;
 import com.makco.smartfinance.user_interface.constants.ApplicationConstants;
 import com.makco.smartfinance.user_interface.constants.DialogMessages;
 import com.makco.smartfinance.user_interface.constants.ProgressForm;
 import com.makco.smartfinance.user_interface.models.FamilyMemberModel;
+import com.makco.smartfinance.user_interface.unredo.CareTaker;
+import com.makco.smartfinance.user_interface.unredo.Memento;
 import com.makco.smartfinance.user_interface.validation.ErrorEnum;
-import java.net.URL;
-import java.util.Calendar;
-import java.util.EnumSet;
-import java.util.ResourceBundle;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javafx.concurrent.Worker;
@@ -27,12 +25,20 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import java.net.URL;
+import java.util.Calendar;
+import java.util.EnumSet;
+import java.util.ResourceBundle;
 
 /**
  * Created by mcalancea on 2016-04-01.
  */
 //http://www.devx.com/Java/Article/48193/0/page/2
-public class FamilyMemberController implements Initializable, ControlledScreen, RefreshableScreen {
+public class FamilyMemberController implements Initializable, ControlledScreen, UndoRedoScreen {
     private final static Logger LOG = LogManager.getLogger(FamilyMemberController.class);
     private ScreensController myController;
     private FamilyMemberModel familyMemberModel = new FamilyMemberModel();
@@ -44,6 +50,11 @@ public class FamilyMemberController implements Initializable, ControlledScreen, 
     private Worker<EnumSet<ErrorEnum>> onSaveWorker;
     private Worker<Void> onRefreshFamilyMembersWorker;
     private ProgressForm pForm = new ProgressForm();
+
+    private CareTaker careTaker;
+    private BooleanProperty isNotUndo = new SimpleBooleanProperty(true);
+    private BooleanProperty isUndoEmpty = new SimpleBooleanProperty(true);
+    private BooleanProperty isRedoEmpty = new SimpleBooleanProperty(true);
 
     @FXML
     private TableView<FamilyMember> table;
@@ -192,6 +203,7 @@ public class FamilyMemberController implements Initializable, ControlledScreen, 
     public void setScreenPage(ScreensController screenPage) {
         try {
             myController = screenPage;
+            careTaker = myController.getCareTaker();
         } catch (Exception e) {
             DialogMessages.showExceptionAlert(e);
         }
@@ -200,6 +212,7 @@ public class FamilyMemberController implements Initializable, ControlledScreen, 
     @Override
     public void refresh() {
         try {
+            careTaker.clear();
             initializeServices();
             startService(onRefreshFamilyMembersWorker, null, "from initialize");
             table.getSelectionModel().selectedItemProperty().addListener((observable, oldSelection, newSelection) -> {
@@ -216,7 +229,22 @@ public class FamilyMemberController implements Initializable, ControlledScreen, 
     public void initialize(URL location, ResourceBundle resources) {
         try {
             nameTF.setPrefColumnCount(64);
+            nameTF.textProperty().addListener((observable, oldValue, newValue) -> {
+                if (isNotUndo.getValue()/* && isNotRedo.getValue()*/) {
+                    saveForm();
+                } else {
+                    isNotUndo.setValue(true);
+                }
+            });
+
             descTA.setPrefColumnCount(128);
+            descTA.textProperty().addListener((observable, oldValue, newValue) -> {
+                if (isNotUndo.getValue()/* && isNotRedo.getValue()*/) {
+                    saveForm();
+                } else {
+                    isNotUndo.setValue(true);
+                }
+            });
 //            initializeServices();
 //            startService(onRefreshFamilyMembersWorker, null, "from initialize");
 //            table.getSelectionModel().selectedItemProperty().addListener((observable, oldSelection, newSelection) -> {
@@ -351,6 +379,84 @@ public class FamilyMemberController implements Initializable, ControlledScreen, 
         } catch (Exception e) {
             startService(onRefreshFamilyMembersWorker, null, "from populateTable: catch exception");
             DialogMessages.showExceptionAlert(e);
+        }
+    }
+
+    @Override
+    public void saveForm() {
+        try{
+            careTaker.saveState(new FamilyMemberFormState(nameTF.getText(), descTA.getText()));
+            isUndoEmpty.setValue(careTaker.isUndoEmpty());
+            isRedoEmpty.setValue(careTaker.isRedoEmpty());
+        }catch (Exception e){
+            DialogMessages.showExceptionAlert(e);
+        }
+    }
+
+    @Override
+    public void restoreFormState(Memento memento) {
+        try {
+            FamilyMemberFormState formState = (FamilyMemberFormState) memento;
+            nameTF.setText(formState.getNameTF());
+            descTA.setText(formState.getDescTA());
+            isUndoEmpty.setValue(careTaker.isUndoEmpty());
+            isRedoEmpty.setValue(careTaker.isRedoEmpty());
+        }catch (Exception e){
+            DialogMessages.showExceptionAlert(e);
+        }
+    }
+
+    @Override
+    public boolean isCloseAllowed() {
+        boolean result = true;
+        try{
+            StringBuilder contentText = new StringBuilder();
+            if(!StringUtils.isBlank(nameTF.getText())) {
+                contentText.append("Name (");
+                contentText.append(nameTF.getText());
+                contentText.append(") is not saved. ");
+            }
+
+            if(!StringUtils.isBlank(descTA.getText())) {
+                contentText.append("Description (");
+                contentText.append(descTA.getText());
+                contentText.append(") is not saved. ");
+            }
+
+            if(contentText.length() > 0){
+                contentText.append("Are you sure you want to close this window?");
+                result = DialogMessages.showConfirmationDialog(ApplicationConstants.FAMILY_MEMBER_WINDOW_TITLE,
+                        "Not all fields are empty", contentText.toString(), null);
+            }
+        }catch (Exception e){
+            DialogMessages.showExceptionAlert(e);
+        }
+        return result;
+    }
+
+    private static class FamilyMemberFormState implements Memento{
+        private final String nameTF;
+        private final String descTA;
+
+        public FamilyMemberFormState(String nameTF, String descTA){
+            this.nameTF = nameTF;
+            this.descTA = descTA;
+        }
+
+        public String getNameTF() {
+            return nameTF;
+        }
+
+        public String getDescTA() {
+            return descTA;
+        }
+
+        @Override
+        public String toString() {
+            return "FamilyMemberFormState{" +
+                    "nameTF='" + nameTF + '\'' +
+                    ", descTA='" + descTA + '\'' +
+                    '}';
         }
     }
 }
