@@ -60,7 +60,16 @@ public class ProgressForm {
         dialogStage.show();
     }
 
-    public Stage getDialogStage() {
+    private Stage getDialogStage() {
         return dialogStage;
+    }
+
+    public void show(){
+        getDialogStage().setAlwaysOnTop(true);
+        getDialogStage().show();
+    }
+
+    public void close(){
+        getDialogStage().close();
     }
 }
