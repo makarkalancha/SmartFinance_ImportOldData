@@ -101,11 +101,13 @@ public class ToolbarController implements Initializable, ControlledScreen {
         toolbar_Save = myController.getToolbar_Save();
         toolbar_Undo = myController.getToolbar_Undo();
         toolbar_Redo = myController.getToolbar_Redo();
-        tbSaveBtn.setDisable(toolbar_Save == null);
-        tbUndoBtn.setDisable(toolbar_Undo == null);
-        tbRedoBtn.setDisable(toolbar_Redo == null);
+
         isUndoEmpty.bind(myController.isUndoEmptyProperty());
         isRedoEmpty.bind(myController.isRedoEmptyProperty());
+
+        tbSaveBtn.setDisable(toolbar_Save == null);
+        tbUndoBtn.setDisable(toolbar_Undo == null || isUndoEmpty.getValue());
+        tbRedoBtn.setDisable(toolbar_Redo == null || isRedoEmpty.getValue());
     }
 
     @Override

@@ -272,6 +272,7 @@ public class FamilyMemberController implements Initializable, ControlledScreen, 
             clearBtn.setDisable(false);
             saveBtn.setDisable(false);
             deleteBtn.setDisable(true);
+            careTaker.clear();
         } catch (Exception e) {
             startService(onRefreshFamilyMembersWorker, null);
             DialogMessages.showExceptionAlert(e);

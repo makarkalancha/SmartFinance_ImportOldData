@@ -244,15 +244,7 @@ public class ScreensController extends BorderPane {
         return isUndoEmpty;
     }
 
-    public void setIsUndoEmpty(boolean isUndoEmpty) {
-        this.isUndoEmpty.set(isUndoEmpty);
-    }
-
     public BooleanProperty isRedoEmptyProperty() {
         return isRedoEmpty;
-    }
-
-    public void setIsRedoEmpty(boolean isRedoEmpty) {
-        this.isRedoEmpty.set(isRedoEmpty);
     }
 }
