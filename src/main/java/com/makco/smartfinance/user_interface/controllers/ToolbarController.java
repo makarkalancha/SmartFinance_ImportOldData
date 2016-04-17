@@ -58,8 +58,6 @@ public class ToolbarController implements Initializable, ControlledScreen {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-//        LOG.debug(String.format("SAVE_ICO: %s; UNDO_ICO: %s; REDO_ICO: %s;", ApplicationConstants.SAVE_ICO, ApplicationConstants.UNDO_ICO,
-//                ApplicationConstants.REDO_ICO));
         tbSaveBtn.setText("");
         tbUndoBtn.setText("");
         tbRedoBtn.setText("");
@@ -102,8 +100,8 @@ public class ToolbarController implements Initializable, ControlledScreen {
         toolbar_Undo = myController.getToolbar_Undo();
         toolbar_Redo = myController.getToolbar_Redo();
 
-        isUndoEmpty.bind(myController.isUndoEmptyProperty());
-        isRedoEmpty.bind(myController.isRedoEmptyProperty());
+        isUndoEmpty.bind(careTaker.isUndoEmptyProperty());
+        isRedoEmpty.bind(careTaker.isRedoEmptyProperty());
 
         tbSaveBtn.setDisable(toolbar_Save == null);
         tbUndoBtn.setDisable(toolbar_Undo == null || isUndoEmpty.getValue());

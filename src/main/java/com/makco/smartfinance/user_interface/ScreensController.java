@@ -32,8 +32,6 @@ public class ScreensController extends BorderPane {
     private Command toolbar_Save;
     private Command toolbar_Undo;
     private Command toolbar_Redo;
-    private BooleanProperty isUndoEmpty = new SimpleBooleanProperty(true);
-    private BooleanProperty isRedoEmpty = new SimpleBooleanProperty(true);
 
     //communitcate between controllers
     //http://stackoverflow.com/questions/14187963/passing-parameters-javafx-fxml
@@ -141,11 +139,6 @@ public class ScreensController extends BorderPane {
         LOG.debug(String.format("getChildren().size()=%d", getChildren().size()));
         NodeControlledScrBundle ncToOpen = screens.get(screen);
         NodeControlledScrBundle ncCurrent = screens.get(currentScreen);
-//        boolean a = ncToOpen != null;
-//        boolean b = ncCurrent == null;
-//        boolean c = ncCurrent.getControlledScreen().askPermissionToClose();
-//        boolean d = b || c;
-//        boolean e = a && d;
         if (ncToOpen != null){
             if(ncCurrent == null || ncCurrent.getControlledScreen().askPermissionToClose()) {
 
@@ -238,13 +231,5 @@ public class ScreensController extends BorderPane {
 
     public void setToolbar_Undo(Command toolbar_Undo) {
         this.toolbar_Undo = toolbar_Undo;
-    }
-
-    public BooleanProperty isUndoEmptyProperty() {
-        return isUndoEmpty;
-    }
-
-    public BooleanProperty isRedoEmptyProperty() {
-        return isRedoEmpty;
     }
 }

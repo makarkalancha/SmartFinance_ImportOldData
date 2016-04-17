@@ -39,7 +39,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
  */
 //http://www.devx.com/Java/Article/48193/0/page/2
 public class FamilyMemberController implements Initializable, ControlledScreen, UndoRedoScreen {
-
     private final static Logger LOG = LogManager.getLogger(FamilyMemberController.class);
     private ScreensController myController;
     private FamilyMemberModel familyMemberModel = new FamilyMemberModel();
@@ -52,8 +51,6 @@ public class FamilyMemberController implements Initializable, ControlledScreen, 
 
     private CareTaker careTaker;
     private BooleanProperty isNotUndo = new SimpleBooleanProperty(true);
-    private BooleanProperty isUndoEmpty = new SimpleBooleanProperty(true);
-    private BooleanProperty isRedoEmpty = new SimpleBooleanProperty(true);
 
     @FXML
     private TableView<FamilyMember> table;
@@ -227,8 +224,6 @@ public class FamilyMemberController implements Initializable, ControlledScreen, 
                         restoreFormState(careTaker.redoState());
                     }
             );
-            myController.isUndoEmptyProperty().bind(isUndoEmpty);
-            myController.isRedoEmptyProperty().bind(isRedoEmpty);
         } catch (Exception e) {
             DialogMessages.showExceptionAlert(e);
         }
@@ -362,10 +357,6 @@ public class FamilyMemberController implements Initializable, ControlledScreen, 
     public void saveForm() {
         try {
             careTaker.saveState(new FamilyMemberFormState(nameTF.getText(), descTA.getText()));
-            isUndoEmpty.setValue(careTaker.isUndoEmpty());
-            isRedoEmpty.setValue(careTaker.isRedoEmpty());
-            LOG.debug("FM: isUndoEmpty.saveForm->" + isUndoEmpty.get());
-            LOG.debug("FM: isRedoEmpty.saveForm->" + isRedoEmpty.get());
         } catch (Exception e) {
             DialogMessages.showExceptionAlert(e);
         }
@@ -377,10 +368,6 @@ public class FamilyMemberController implements Initializable, ControlledScreen, 
             FamilyMemberFormState formState = (FamilyMemberFormState) memento;
             nameTF.setText(formState.getNameTF());
             descTA.setText(formState.getDescTA());
-            isUndoEmpty.setValue(careTaker.isUndoEmpty());
-            isRedoEmpty.setValue(careTaker.isRedoEmpty());
-            LOG.debug("FM: isUndoEmpty.restoreFormState->" + isUndoEmpty.get());
-            LOG.debug("FM: isRedoEmpty.restoreFormState->" + isRedoEmpty.get());
         } catch (Exception e) {
             DialogMessages.showExceptionAlert(e);
         }
