@@ -49,7 +49,6 @@ public class Main extends Application{
             }
         };
         pForm.activateProgressBar(migrateWorker);
-        pForm.getDialogStage().setAlwaysOnTop(true);
     }
 
     //https://www.youtube.com/watch?v=5GsdaZWDcdY
@@ -92,40 +91,25 @@ public class Main extends Application{
                 for (Screens scr : Screens.values()) {
                     mainContainer.loadScreen(scr);
                 }
-//                mainContainer.setScreen(Screens.MAIN);
                 mainContainer.setScreen(Screens.FAMILY_MEMBER);
 
                 this.primaryStage.getIcons().add(new Image(ApplicationConstants.MAIN_WINDOW_ICO));
                 this.primaryStage.setTitle(ApplicationConstants.MAIN_WINDOW_TITLE);
                 ////http://stackoverflow.com/questions/19602727/how-to-reference-javafx-fxml-files-in-resource-folder
-//            Group root = new Group();
-//            root.getChildren().addAll(mainContainer);
-//            Scene scene = new Scene(root);
                 Scene scene = new Scene(mainContainer);
                 primaryStage.setScene(scene);
-
                 LOG.debug(">>>>primaryStage.show()->hello: start");
-//            primaryStage.setMaximized(true);
                 primaryStage.show();
-
-                pForm.getDialogStage().close();
-                //                startButton.setDisable(false);
+                pForm.close();
             });
             ((Task<Void>) migrateWorker).setOnFailed(event -> {
                 LOG.debug("migrateWorker->setOnFailed");
                 LOG.debug(">>>>>>>>migrateWorker->setOnFailed: pForm.getDialogStage().close()");
-
                 DialogMessages.showExceptionAlert(migrateWorker.getException());
-
-                pForm.getDialogStage().close();
-//                onClear(actionEvent);
-//                startButton.setDisable(false);
+                pForm.close();
             });
-            pForm.getDialogStage().show();
+            pForm.show();
             executor.execute((Task<Void>)migrateWorker);
-////            }
-
-
         }catch (Exception e){
             DialogMessages.showExceptionAlert(e);
         }
