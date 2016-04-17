@@ -1,16 +1,16 @@
 package com.makco.smartfinance.user_interface.controllers;
 
 import com.makco.smartfinance.persistence.entity.FamilyMember;
-import com.makco.smartfinance.user_interface.Action;
+import com.makco.smartfinance.user_interface.Command;
 import com.makco.smartfinance.user_interface.ControlledScreen;
 import com.makco.smartfinance.user_interface.ScreensController;
 import com.makco.smartfinance.user_interface.constants.ApplicationConstants;
 import com.makco.smartfinance.user_interface.constants.DialogMessages;
 import com.makco.smartfinance.user_interface.constants.ProgressForm;
 import com.makco.smartfinance.user_interface.models.FamilyMemberModel;
-import com.makco.smartfinance.user_interface.unredo.CareTaker;
-import com.makco.smartfinance.user_interface.unredo.Memento;
-import com.makco.smartfinance.user_interface.unredo.UndoRedoScreen;
+import com.makco.smartfinance.user_interface.undoredo.CareTaker;
+import com.makco.smartfinance.user_interface.undoredo.Memento;
+import com.makco.smartfinance.user_interface.undoredo.UndoRedoScreen;
 import com.makco.smartfinance.user_interface.validation.ErrorEnum;
 import java.net.URL;
 import java.util.Calendar;
@@ -44,9 +44,7 @@ public class FamilyMemberController implements Initializable, ControlledScreen, 
     private ScreensController myController;
     private FamilyMemberModel familyMemberModel = new FamilyMemberModel();
 
-    //    private Executor executor;
     private ActionEvent actionEvent;
-    private String globalTest;
     private Worker<Void> onDeleteWorker;
     private Worker<EnumSet<ErrorEnum>> onSaveWorker;
     private Worker<Void> onRefreshFamilyMembersWorker;
@@ -78,7 +76,6 @@ public class FamilyMemberController implements Initializable, ControlledScreen, 
                     return new Task<Void>() {
                         @Override
                         protected Void call() throws Exception {
-                            LOG.debug("globalTest:" + globalTest);
                             familyMemberModel.deletePendingFamilyMember();
                             return null;
                         }
@@ -91,9 +88,6 @@ public class FamilyMemberController implements Initializable, ControlledScreen, 
                     return new Task<EnumSet<ErrorEnum>>() {
                         @Override
                         protected EnumSet<ErrorEnum> call() throws Exception {
-                            LOG.debug("globalTest:" + globalTest);
-//                            familyMemberModel.savePendingFamilyMember(nameTF.getText(), descTA.getText());
-//                            return null;
                             return familyMemberModel.savePendingFamilyMember(nameTF.getText(), descTA.getText());
                         }
                     };
@@ -105,7 +99,6 @@ public class FamilyMemberController implements Initializable, ControlledScreen, 
                     return new Task<Void>() {
                         @Override
                         protected Void call() throws Exception {
-                            LOG.debug("globalTest:" + globalTest);
                             familyMemberModel.refreshFamilyMembers();
                             return null;
                         }
@@ -114,7 +107,7 @@ public class FamilyMemberController implements Initializable, ControlledScreen, 
             };
         } catch (Exception e) {
             //not in finally because refreshFamilyMembers must run before populateTable
-            startService(onRefreshFamilyMembersWorker, null, "from initializeServices: catch exception");
+            startService(onRefreshFamilyMembersWorker, null);
             DialogMessages.showExceptionAlert(e);
         }
     }
@@ -124,23 +117,20 @@ public class FamilyMemberController implements Initializable, ControlledScreen, 
             ((Service<Void>) onDeleteWorker).setOnSucceeded(event -> {
                 LOG.debug("onDeleteWorker->setOnSucceeded");
                 LOG.debug(">>>>>>>>onDeleteWorker->setOnSucceeded: pForm.getDialogStage().close()");
-                pForm.getDialogStage().close();
+                pForm.close();
                 populateTable();
-                //                startButton.setDisable(false);
             });
             ((Service<Void>) onDeleteWorker).setOnFailed(event -> {
                 LOG.debug("onDeleteWorker->setOnFailed");
                 LOG.debug(">>>>>>>>onDeleteWorker->setOnFailed: pForm.getDialogStage().close()");
                 DialogMessages.showExceptionAlert(onDeleteWorker.getException());
-                pForm.getDialogStage().close();
+                pForm.close();
                 populateTable();
-//                onClear(actionEvent);
-//                startButton.setDisable(false);
             });
             ((Service<EnumSet<ErrorEnum>>) onSaveWorker).setOnSucceeded(event -> {
                 LOG.debug("onSaveWorker->setOnSucceeded");
                 LOG.debug(">>>>>>>>onSaveWorker->setOnSucceeded: pForm.getDialogStage().close()");
-                pForm.getDialogStage().close();
+                pForm.close();
                 populateTable();
                 EnumSet<ErrorEnum> errors = ((Service<EnumSet<ErrorEnum>>) onSaveWorker).getValue();
                 if (!errors.isEmpty()) {
@@ -148,52 +138,40 @@ public class FamilyMemberController implements Initializable, ControlledScreen, 
                             (EnumSet<ErrorEnum>) ((Service) onSaveWorker).getValue(), null);
                 }
                 onClear(actionEvent);
-//                startButton.setDisable(false);
             });
             ((Service<EnumSet<ErrorEnum>>) onSaveWorker).setOnFailed(event -> {
                 LOG.debug("onSaveWorker->setOnFailed");
                 LOG.debug(">>>>>>>>onSaveWorker->setOnFailed: pForm.getDialogStage().close()");
                 DialogMessages.showExceptionAlert(onSaveWorker.getException());
-                pForm.getDialogStage().close();
+                pForm.close();
                 populateTable();
-//                onClear(actionEvent);
-//                startButton.setDisable(false);
             });
             ((Service<Void>) onRefreshFamilyMembersWorker).setOnSucceeded(event -> {
                 LOG.debug("onRefreshFamilyMembersWorker->setOnSucceeded");
                 LOG.debug(">>>>>>>>onRefreshFamilyMembersWorker->setOnSucceeded: pForm.getDialogStage().close()");
-                pForm.getDialogStage().close();
+                pForm.close();
                 populateTable();
-//                startButton.setDisable(false);
             });
             ((Service<Void>) onRefreshFamilyMembersWorker).setOnFailed(event -> {
                 LOG.debug("onRefreshFamilyMembersWorker->setOnFailed");
                 LOG.debug(">>>>>>>>onRefreshFamilyMembersWorker->setOnFailed: pForm.getDialogStage().close()");
                 DialogMessages.showExceptionAlert(onRefreshFamilyMembersWorker.getException());
-                pForm.getDialogStage().close();
+                pForm.close();
                 populateTable();
-//                onClear(actionEvent);
-//                startButton.setDisable(false);
             });
         } catch (Exception e) {
             //not in finally because refreshFamilyMembers must run before populateTable
-            startService(onRefreshFamilyMembersWorker, null, "from initializeServices: catch exception");
+            startService(onRefreshFamilyMembersWorker, null);
             DialogMessages.showExceptionAlert(e);
         }
     }
 
-    private <V> void startService(Worker<V> worker, ActionEvent event, String test) {
+    private <V> void startService(Worker<V> worker, ActionEvent event) {
         pForm.activateProgressBar(worker);
         LOG.debug(">>>>>>>>pForm.getDialogStage().show()");
-        pForm.getDialogStage().show();
-//        pForm.getDialogStage().toFront();
-        pForm.getDialogStage().setAlwaysOnTop(true);
+        pForm.show();
         actionEvent = event;
-        globalTest = test;
 
-//        ((Service<V>)worker).setOnSucceeded(succeededEevent -> {
-//            pForm.getDialogStage().close();
-//        });
         Service<V> service = ((Service<V>) worker);
         if (service == null) {
             LOG.debug("service IS NULL");
@@ -218,26 +196,26 @@ public class FamilyMemberController implements Initializable, ControlledScreen, 
         try {
             careTaker.clear();
             initializeServices();
-            startService(onRefreshFamilyMembersWorker, null, "from initialize");
+            startService(onRefreshFamilyMembersWorker, null);
             table.getSelectionModel().selectedItemProperty().addListener((observable, oldSelection, newSelection) -> {
                 if (newSelection != null) {
                     populateForm();
                 }
             });
 
-            myController.setToolbar_Save(new Action() {
+            myController.setToolbar_Save(new Command() {
                 @Override
                 public void execute() {
                     try {
                         LOG.debug("FamilyMemberController->onSave");
-                        startService(onSaveWorker, new ActionEvent(), "from onSave");
+                        startService(onSaveWorker, new ActionEvent());
                     } catch (Exception e) {
                         //no refreshFamilyMembers() because there are in deletePendingFamilyMember, populateTable, onClear
                         DialogMessages.showExceptionAlert(e);
                     }
                 }
             });
-            myController.setToolbar_Undo(new Action() {
+            myController.setToolbar_Undo(new Command() {
                 @Override
                 public void execute() {
                     isNotUndo.setValue(false);
@@ -274,19 +252,12 @@ public class FamilyMemberController implements Initializable, ControlledScreen, 
                     isNotUndo.setValue(true);
                 }
             });
-//            initializeServices();
-//            startService(onRefreshFamilyMembersWorker, null, "from initialize");
-//            table.getSelectionModel().selectedItemProperty().addListener((observable, oldSelection, newSelection) -> {
-//                if (newSelection != null) {
-//                    populateForm();
-//                }
-//            });
             clearBtn.setDisable(true);
             saveBtn.setDisable(false);
             deleteBtn.setDisable(true);
         } catch (Exception e) {
             //not in finally because refreshFamilyMembers must run before populateTable
-            startService(onRefreshFamilyMembersWorker, null, "from initialize: catch exception");
+            startService(onRefreshFamilyMembersWorker, null);
             DialogMessages.showExceptionAlert(e);
         }
     }
@@ -300,7 +271,7 @@ public class FamilyMemberController implements Initializable, ControlledScreen, 
             saveBtn.setDisable(false);
             deleteBtn.setDisable(true);
         } catch (Exception e) {
-            startService(onRefreshFamilyMembersWorker, null, "from onClear: catch exception");
+            startService(onRefreshFamilyMembersWorker, null);
             DialogMessages.showExceptionAlert(e);
         }
     }
@@ -309,21 +280,13 @@ public class FamilyMemberController implements Initializable, ControlledScreen, 
     public void onSave(ActionEvent event) {
         try {
             LOG.debug("FamilyMemberController->onSave");
-            startService(onSaveWorker, event, "from onSave");
+            startService(onSaveWorker, event);
+            careTaker.clear();
         } catch (Exception e) {
             //no refreshFamilyMembers() because there are in deletePendingFamilyMember, populateTable, onClear
             DialogMessages.showExceptionAlert(e);
         }
     }
-
-//    private void save(ActionEvent event) {
-//        try {
-//
-//        } catch (Exception e) {
-//            //no refreshFamilyMembers() because there are in deletePendingFamilyMember, populateTable, onClear
-//            DialogMessages.showExceptionAlert(e);
-//        }
-//    }
 
     @FXML
     public void onDelete(ActionEvent event) {
@@ -332,16 +295,6 @@ public class FamilyMemberController implements Initializable, ControlledScreen, 
 //            http://stackoverflow.com/questions/30249493/using-threads-to-make-database-requests
 //            http://stackoverflow.com/questions/29625170/display-popup-with-progressbar-in-javafx
             //http://www.jensd.de/wordpress/?p=1211
-            //use service as it can be reused
-//            Task taskToDelete = new Task<Void>() {
-//                @Override
-//                protected Void call() throws Exception {
-//
-//                }
-//            };
-//            Thread backGroundT = new Thread(taskToDelete);
-//            backGroundT.setDaemon(true);
-//            backGroundT.start();
             String title = ApplicationConstants.FAMILY_MEMBER_WINDOW_TITLE;
             String headerText = "Family Member Deletion";
             StringBuilder contentText = new StringBuilder("Are you sure you want to delete family member ");
@@ -349,19 +302,10 @@ public class FamilyMemberController implements Initializable, ControlledScreen, 
             contentText.append(nameTF.getText());
             contentText.append("\"?");
             if (DialogMessages.showConfirmationDialog(title, headerText, contentText.toString(), null)) {
-                startService(onDeleteWorker, event, "from onDelete");
+                startService(onDeleteWorker, event);
                 populateTable();
                 onClear(actionEvent);
             }
-        } catch (Exception e) {
-            //no refreshFamilyMembers() because there are in deletePendingFamilyMember, populateTable, onClear
-            DialogMessages.showExceptionAlert(e);
-        }
-    }
-
-    private void delete(ActionEvent event) {
-        try {
-
         } catch (Exception e) {
             //no refreshFamilyMembers() because there are in deletePendingFamilyMember, populateTable, onClear
             DialogMessages.showExceptionAlert(e);
@@ -378,7 +322,7 @@ public class FamilyMemberController implements Initializable, ControlledScreen, 
             nameTF.setText(familyMemberModel.getPendingFamilyMember().getName());
             descTA.setText(familyMemberModel.getPendingFamilyMember().getDescription());
         } catch (Exception e) {
-            startService(onRefreshFamilyMembersWorker, null, "from populateForm: catch exception");
+            startService(onRefreshFamilyMembersWorker, null);
             DialogMessages.showExceptionAlert(e);
         }
     }
@@ -406,7 +350,7 @@ public class FamilyMemberController implements Initializable, ControlledScreen, 
 
             table.getColumns().setAll(familyMemberIdCol, familyMemberNameCol, familyMemberDescCol, familyMemberCreatedCol, familyMemberUpdatedCol);
         } catch (Exception e) {
-            startService(onRefreshFamilyMembersWorker, null, "from populateTable: catch exception");
+            startService(onRefreshFamilyMembersWorker, null);
             DialogMessages.showExceptionAlert(e);
         }
     }
@@ -438,26 +382,10 @@ public class FamilyMemberController implements Initializable, ControlledScreen, 
     @Override
     public void close(){
         try {
-            myController.setToolbar_Save(new Action(){
-                @Override
-                public void execute() {
-                    try {
-                        LOG.debug("FamilyMemberController->onSave");
-                        startService(onSaveWorker, new ActionEvent(), "from onSave");
-                    } catch (Exception e) {
-                        //no refreshFamilyMembers() because there are in deletePendingFamilyMember, populateTable, onClear
-                        DialogMessages.showExceptionAlert(e);
-
-                    }
-                }
-            });
-            myController.setToolbar_Undo(new Action(){
-                @Override
-                public void execute() {
-                    restoreFormState(careTaker.undoState());
-                }
-            });
-            myController.setToolbar_Redo(() -> restoreFormState(careTaker.redoState()));
+            onClear(new ActionEvent());
+            myController.setToolbar_Save(null);
+            myController.setToolbar_Undo(null);
+            myController.setToolbar_Redo(null);
         } catch (Exception e) {
             DialogMessages.showExceptionAlert(e);
         }

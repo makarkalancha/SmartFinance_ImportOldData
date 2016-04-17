@@ -1,6 +1,4 @@
-package com.makco.smartfinance.user_interface.unredo;
-
-import com.makco.smartfinance.user_interface.unredo.Memento;
+package com.makco.smartfinance.user_interface.undoredo;
 
 /**
  * User: Makar Kalancha

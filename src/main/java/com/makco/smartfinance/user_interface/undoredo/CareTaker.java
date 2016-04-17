@@ -1,4 +1,4 @@
-package com.makco.smartfinance.user_interface.unredo;
+package com.makco.smartfinance.user_interface.undoredo;
 
 import com.makco.smartfinance.utils.collection.DequeStack;
 import com.makco.smartfinance.utils.collection.Stack;
@@ -12,8 +12,8 @@ import org.apache.logging.log4j.Logger;
  */
 public class CareTaker{
     private final static Logger LOG = LogManager.getLogger(CareTaker.class);
-    private Stack<Memento> undoStates = new DequeStack<>(3);
-    private Stack<Memento> redoStates = new DequeStack<>(3);
+    private Stack<Memento> undoStates = new DequeStack<>(128);
+    private Stack<Memento> redoStates = new DequeStack<>(128);
 
 //    http://blog.netopyr.com/2012/02/02/creating-read-only-properties-in-javafx/
 //    private SimpleIntegerProperty undoSize = new SimpleIntegerProperty();

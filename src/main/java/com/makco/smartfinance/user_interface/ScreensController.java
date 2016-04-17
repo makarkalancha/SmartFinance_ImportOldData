@@ -2,7 +2,7 @@ package com.makco.smartfinance.user_interface;
 
 import com.makco.smartfinance.user_interface.constants.DialogMessages;
 import com.makco.smartfinance.user_interface.constants.Screens;
-import com.makco.smartfinance.user_interface.unredo.CareTaker;
+import com.makco.smartfinance.user_interface.undoredo.CareTaker;
 import java.util.EnumMap;
 import java.util.Optional;
 import org.apache.logging.log4j.LogManager;
@@ -19,7 +19,6 @@ import javafx.scene.layout.VBox;
 //public class ScreensController extends VBox {
 public class ScreensController extends BorderPane {
     private final static Logger LOG = LogManager.getLogger(ScreensController.class);
-//    EnumMap<Screens, Node> screens = new EnumMap<>(Screens.class);
     private final EnumMap<Screens, NodeControlledScrBundle> screens = new EnumMap<>(Screens.class);
     private Screens currentScreen = Screens.MAIN;
     private final CareTaker careTaker = new CareTaker();
@@ -27,9 +26,9 @@ public class ScreensController extends BorderPane {
     private ControlledScreen menubar;
     private ControlledScreen toolbar;
 
-    private Action toolbar_Save;
-    private Action toolbar_Undo;
-    private Action toolbar_Redo;
+    private Command toolbar_Save;
+    private Command toolbar_Undo;
+    private Command toolbar_Redo;
 
     //communitcate between controllers
     //http://stackoverflow.com/questions/14187963/passing-parameters-javafx-fxml
@@ -48,19 +47,10 @@ public class ScreensController extends BorderPane {
         LOG.debug("ScreensController.constr");
     }
 
-//    public void addScreen(final Screens screen, final Node screenNode) {
-//        screens.put(screen, screenNode);
-//        LOG.debug(String.format("ScreensController.addScreen: name=%s; Node.screen=%s", screen.toString(), screenNode.toString()));
-//    }
-
     private void addScreen(final Screens screen, final NodeControlledScrBundle nodeControlledScrBundle) {
         screens.put(screen, nodeControlledScrBundle);
         LOG.debug(String.format("ScreensController.addScreen: name=%s; Node.screen=%s", screen.toString(), nodeControlledScrBundle.toString()));
     }
-
-//    public Node getScreen(final String name) {
-//        return screens.get(name);
-//    }
 
     public ControlledScreen getCurrentControlledScreen() {
         return screens.get(currentScreen).getControlledScreen();
@@ -127,7 +117,6 @@ public class ScreensController extends BorderPane {
             Parent childScreenNode = (Parent) myLoader.load();
             ControlledScreen controlledScreen = ((ControlledScreen) myLoader.getController());
             controlledScreen.setScreenPage(this);
-//            addScreen(screen, childScreenNode);
 
             addScreen(screen, new NodeControlledScrBundle(childScreenNode, controlledScreen));
             return true;
@@ -145,7 +134,6 @@ public class ScreensController extends BorderPane {
         boolean result = false;
         LOG.debug(String.format("ScreensController.setScreen: name=%s", screen.toString()));
         LOG.debug(String.format("getChildren().size()=%d", getChildren().size()));
-//        Node child = screens.get(screen);
         NodeControlledScrBundle ncToOpen = screens.get(screen);
         NodeControlledScrBundle ncCurrent = screens.get(currentScreen);
 //        boolean a = ncToOpen != null;
@@ -159,26 +147,13 @@ public class ScreensController extends BorderPane {
                 //is always -> BorderPane.getChildre.size:2 {getChildren().size()}
                 currentScreen = screen;
                 careTaker.clear();
+                ncCurrent.getControlledScreen().close();
+
                 setCenter(ncToOpen.getNode());
                 ncToOpen.getControlledScreen().refresh();
                 menubar.refresh();
                 toolbar.refresh();
                 result = true;
-//            if (!getChildren().isEmpty() && getChildren().size() > 1) {
-//                LOG.debug("getChildren() is greater than 1");
-//
-//                LOG.debug("children:" + getChildren().size());
-////                getChildren().remove(1);
-////                getChildren().add(1, child);
-//
-////                setVgrow(child,Priority.ALWAYS);
-//            } else {
-//                LOG.debug("getChildren() is less or equal than 1");
-////                getChildren().add(screens.get(screen));
-////                getChildren().add(child);
-//            }
-//                setCenter(ncToOpen.getNode());
-//                ncToOpen.getControlledScreen().refresh();
             }
         } else {
             DialogMessages.showExceptionAlert(new Exception(screen+" -> screen hasn't been loaded!!!"));
@@ -236,27 +211,27 @@ public class ScreensController extends BorderPane {
         return careTaker;
     }
 
-    public Action getToolbar_Redo() {
+    public Command getToolbar_Redo() {
         return toolbar_Redo;
     }
 
-    public void setToolbar_Redo(Action toolbar_Redo) {
+    public void setToolbar_Redo(Command toolbar_Redo) {
         this.toolbar_Redo = toolbar_Redo;
     }
 
-    public Action getToolbar_Save() {
+    public Command getToolbar_Save() {
         return toolbar_Save;
     }
 
-    public void setToolbar_Save(Action toolbar_Save) {
+    public void setToolbar_Save(Command toolbar_Save) {
         this.toolbar_Save = toolbar_Save;
     }
 
-    public Action getToolbar_Undo() {
+    public Command getToolbar_Undo() {
         return toolbar_Undo;
     }
 
-    public void setToolbar_Undo(Action toolbar_Undo) {
+    public void setToolbar_Undo(Command toolbar_Undo) {
         this.toolbar_Undo = toolbar_Undo;
     }
 }

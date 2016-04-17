@@ -20,13 +20,15 @@ public class FamilyMemberServiceImpl implements FamilyMemberService {
     private final static Logger LOG = LogManager.getLogger(FamilyMemberServiceImpl.class);
     private FamilyMemberDAO familyMemberDAO = new FamilyMemberDAOImpl();
 
+    private int tmp = 0;
+    
     @Override
     public void addFamilyMember(FamilyMember familyMember) {
         try {
             familyMemberDAO.addFamilyMember(familyMember);
-            LOG.debug("addFamilyMember: before 5 sec");
-            Thread.sleep(5000);
-            LOG.debug("addFamilyMember: after 5 sec");
+            LOG.debug("addFamilyMember: before " + tmp + " sec");
+            Thread.sleep(tmp);
+            LOG.debug("addFamilyMember: after " + tmp + " sec");
         } catch (Exception e) {
             DialogMessages.showExceptionAlert(e);
         }
@@ -37,9 +39,9 @@ public class FamilyMemberServiceImpl implements FamilyMemberService {
         List<FamilyMember> familyMemberList = new ArrayList<>();
         try {
             familyMemberList = familyMemberDAO.familyMemberList();
-            LOG.debug("familyMemberList: before 5 sec");
-            Thread.sleep(5000);
-            LOG.debug("familyMemberList: after 5 sec");
+            LOG.debug("familyMemberList: before " + tmp + " sec");
+            Thread.sleep(tmp);
+            LOG.debug("familyMemberList: after " + tmp + " sec");
         } catch (Exception e) {
             DialogMessages.showExceptionAlert(e);
         }
@@ -50,9 +52,9 @@ public class FamilyMemberServiceImpl implements FamilyMemberService {
     public void removeFamilyMember(Long id) {
         try{
             familyMemberDAO.removeFamilyMember(id);
-            LOG.debug("removeFamilyMember: before 5 sec");
-            Thread.sleep(5000);
-            LOG.debug("removeFamilyMember: after 5 sec");
+            LOG.debug("removeFamilyMember: before " + tmp + " sec");
+            Thread.sleep(tmp);
+            LOG.debug("removeFamilyMember: after " + tmp + " sec");
         } catch (Exception e) {
             DialogMessages.showExceptionAlert(e);
         }
@@ -62,9 +64,9 @@ public class FamilyMemberServiceImpl implements FamilyMemberService {
     public void updateFamilyMember(FamilyMember familyMember) {
         try{
             familyMemberDAO.updateFamilyMember(familyMember);
-            LOG.debug("updateFamilyMember: before 5 sec");
-            Thread.sleep(5000);
-            LOG.debug("updateFamilyMember: after 5 sec");
+            LOG.debug("updateFamilyMember: before " + tmp + " sec");
+            Thread.sleep(tmp);
+            LOG.debug("updateFamilyMember: after " + tmp + " sec");
         } catch (Exception e) {
             DialogMessages.showExceptionAlert(e);
         }
@@ -75,9 +77,9 @@ public class FamilyMemberServiceImpl implements FamilyMemberService {
         List<FamilyMember> familyMemberList = new ArrayList<>();
         try {
             familyMemberList = familyMemberDAO.getFamilyMemberByName(name);
-            LOG.debug("getFamilyMemberByName: before 5 sec");
-            Thread.sleep(5000);
-            LOG.debug("getFamilyMemberByName: after 5 sec");
+            LOG.debug("getFamilyMemberByName: before " + tmp + " sec");
+            Thread.sleep(tmp);
+            LOG.debug("getFamilyMemberByName: after " + tmp + " sec");
         } catch (Exception e) {
             DialogMessages.showExceptionAlert(e);
         }
@@ -89,9 +91,9 @@ public class FamilyMemberServiceImpl implements FamilyMemberService {
         FamilyMember familyMember = null;
         try {
             familyMember = familyMemberDAO.getFamilyMemberById(id);
-            LOG.debug("getFamilyMemberById: before 5 sec");
-            Thread.sleep(5000);
-            LOG.debug("getFamilyMemberById: after 5 sec");
+            LOG.debug("getFamilyMemberById: before " + tmp + " sec");
+            Thread.sleep(tmp);
+            LOG.debug("getFamilyMemberById: after " + tmp + " sec");
         } catch (Exception e) {
             DialogMessages.showExceptionAlert(e);
         }
@@ -102,9 +104,9 @@ public class FamilyMemberServiceImpl implements FamilyMemberService {
     public void saveOrUpdateFamilyMember(FamilyMember familyMember) {
         try{
             familyMemberDAO.saveOrUpdateFamilyMember(familyMember);
-            LOG.debug("saveOrUpdateFamilyMember: before 5 sec");
-            Thread.sleep(5000);
-            LOG.debug("saveOrUpdateFamilyMember: after 5 sec");
+            LOG.debug("saveOrUpdateFamilyMember: before " + tmp + " sec");
+            Thread.sleep(tmp);
+            LOG.debug("saveOrUpdateFamilyMember: after " + tmp + " sec");
         } catch (Exception e) {
             DialogMessages.showExceptionAlert(e);
         }
@@ -116,9 +118,9 @@ public class FamilyMemberServiceImpl implements FamilyMemberService {
         try {
             RuleSet ruleSet = new FamilyMemberRuleSet();
             errors = ruleSet.validate(familyMember);
-            LOG.debug("validate: before 5 sec");
-            Thread.sleep(5000);
-            LOG.debug("validate: after 5 sec");
+            LOG.debug("validate: before " + tmp + " sec");
+            Thread.sleep(tmp);
+            LOG.debug("validate: after " + tmp + " sec");
         } catch (Exception e) {
             DialogMessages.showExceptionAlert(e);
         }

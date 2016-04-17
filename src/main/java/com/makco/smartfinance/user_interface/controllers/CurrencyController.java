@@ -105,20 +105,20 @@ public class CurrencyController implements Initializable, ControlledScreen {
             ((Service<Void>) onDeleteWorker).setOnSucceeded(event -> {
                 LOG.debug("onDeleteWorker->setOnSucceeded");
                 LOG.debug(">>>>>>>>onDeleteWorker->setOnSucceeded: pForm.getDialogStage().close()");
-                pForm.getDialogStage().close();
+                pForm.close();
                 populateTable();
             });
             ((Service<Void>) onDeleteWorker).setOnFailed(event -> {
                 LOG.debug("onDeleteWorker->setOnFailed");
                 LOG.debug(">>>>>>>>onDeleteWorker->setOnFailed: pForm.getDialogStage().close()");
                 DialogMessages.showExceptionAlert(onDeleteWorker.getException());
-                pForm.getDialogStage().close();
+                pForm.close();
                 populateTable();
             });
             ((Service<EnumSet<ErrorEnum>>) onSaveWorker).setOnSucceeded(event -> {
                 LOG.debug("onSaveWorker->setOnSucceeded");
                 LOG.debug(">>>>>>>>onSaveWorker->setOnSucceeded: pForm.getDialogStage().close()");
-                pForm.getDialogStage().close();
+                pForm.close();
                 populateTable();
                 EnumSet<ErrorEnum> errors = onSaveWorker.getValue();
                 if(!errors.isEmpty()) {
@@ -131,20 +131,20 @@ public class CurrencyController implements Initializable, ControlledScreen {
                 LOG.debug("onSaveWorker->setOnFailed");
                 LOG.debug(">>>>>>>>onSaveWorker->setOnFailed: pForm.getDialogStage().close()");
                 DialogMessages.showExceptionAlert(onSaveWorker.getException());
-                pForm.getDialogStage().close();
+                pForm.close();
                 populateTable();
             });
             ((Service<Void>) onRefreshCurrencyWorker).setOnSucceeded(event -> {
                 LOG.debug("onRefreshCurrencyWorker->setOnSucceeded");
                 LOG.debug(">>>>>>>>onRefreshCurrencyWorker->setOnSucceeded: pForm.getDialogStage().close()");
-                pForm.getDialogStage().close();
+                pForm.close();
                 populateTable();
             });
             ((Service<Void>) onRefreshCurrencyWorker).setOnFailed(event -> {
                 LOG.debug("onRefreshCurrencyWorker->setOnFailed");
                 LOG.debug(">>>>>>>>onRefreshCurrencyWorker->setOnFailed: pForm.getDialogStage().close()");
                 DialogMessages.showExceptionAlert(onRefreshCurrencyWorker.getException());
-                pForm.getDialogStage().close();
+                pForm.close();
                 populateTable();
             });
         }catch (Exception e){
@@ -157,8 +157,7 @@ public class CurrencyController implements Initializable, ControlledScreen {
     private <V> void startService(Worker<V> worker, ActionEvent event){
         pForm.activateProgressBar(worker);
         LOG.debug(">>>>>>>>pForm.getDialogStage().show()");
-        pForm.getDialogStage().show();
-        pForm.getDialogStage().setAlwaysOnTop(true);
+        pForm.show();
         actionEvent = event;
 
         Service<V> service = ((Service<V>)worker);
