@@ -83,6 +83,16 @@ public class ToolbarController implements Initializable, ControlledScreen {
             LOG.debug("\n\n>>>>>>>>click redo");
             toolbar_Redo.execute();
         });
+
+        isUndoEmpty.addListener((observable, oldValue, newValue) ->{
+            LOG.debug("isUndoEmpty.addListener->oldValue: " + oldValue + "; newValue:" + newValue);
+            tbUndoBtn.setDisable(newValue);
+        });
+
+        isRedoEmpty.addListener((observable, oldValue, newValue) ->{
+            LOG.debug("isRedoEmpty.addListener->oldValue: " + oldValue + "; newValue:" + newValue);
+            tbRedoBtn.setDisable(newValue);
+        });
     }
 
 
@@ -94,6 +104,8 @@ public class ToolbarController implements Initializable, ControlledScreen {
         tbSaveBtn.setDisable(toolbar_Save == null);
         tbUndoBtn.setDisable(toolbar_Undo == null);
         tbRedoBtn.setDisable(toolbar_Redo == null);
+        isUndoEmpty.bind(myController.isUndoEmptyProperty());
+        isRedoEmpty.bind(myController.isRedoEmptyProperty());
     }
 
     @Override

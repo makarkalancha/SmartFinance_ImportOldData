@@ -227,6 +227,8 @@ public class FamilyMemberController implements Initializable, ControlledScreen, 
                         restoreFormState(careTaker.redoState());
                     }
             );
+            myController.isUndoEmptyProperty().bind(isUndoEmpty);
+            myController.isRedoEmptyProperty().bind(isRedoEmpty);
         } catch (Exception e) {
             DialogMessages.showExceptionAlert(e);
         }
@@ -361,6 +363,8 @@ public class FamilyMemberController implements Initializable, ControlledScreen, 
             careTaker.saveState(new FamilyMemberFormState(nameTF.getText(), descTA.getText()));
             isUndoEmpty.setValue(careTaker.isUndoEmpty());
             isRedoEmpty.setValue(careTaker.isRedoEmpty());
+            LOG.debug("FM: isUndoEmpty.saveForm->" + isUndoEmpty.get());
+            LOG.debug("FM: isRedoEmpty.saveForm->" + isRedoEmpty.get());
         } catch (Exception e) {
             DialogMessages.showExceptionAlert(e);
         }
@@ -374,6 +378,8 @@ public class FamilyMemberController implements Initializable, ControlledScreen, 
             descTA.setText(formState.getDescTA());
             isUndoEmpty.setValue(careTaker.isUndoEmpty());
             isRedoEmpty.setValue(careTaker.isRedoEmpty());
+            LOG.debug("FM: isUndoEmpty.restoreFormState->" + isUndoEmpty.get());
+            LOG.debug("FM: isRedoEmpty.restoreFormState->" + isRedoEmpty.get());
         } catch (Exception e) {
             DialogMessages.showExceptionAlert(e);
         }

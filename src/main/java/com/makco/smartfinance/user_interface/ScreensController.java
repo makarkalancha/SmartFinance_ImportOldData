@@ -5,6 +5,9 @@ import com.makco.smartfinance.user_interface.constants.Screens;
 import com.makco.smartfinance.user_interface.undoredo.CareTaker;
 import java.util.EnumMap;
 import java.util.Optional;
+
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import javafx.fxml.FXMLLoader;
@@ -29,6 +32,8 @@ public class ScreensController extends BorderPane {
     private Command toolbar_Save;
     private Command toolbar_Undo;
     private Command toolbar_Redo;
+    private BooleanProperty isUndoEmpty = new SimpleBooleanProperty(true);
+    private BooleanProperty isRedoEmpty = new SimpleBooleanProperty(true);
 
     //communitcate between controllers
     //http://stackoverflow.com/questions/14187963/passing-parameters-javafx-fxml
@@ -233,5 +238,21 @@ public class ScreensController extends BorderPane {
 
     public void setToolbar_Undo(Command toolbar_Undo) {
         this.toolbar_Undo = toolbar_Undo;
+    }
+
+    public BooleanProperty isUndoEmptyProperty() {
+        return isUndoEmpty;
+    }
+
+    public void setIsUndoEmpty(boolean isUndoEmpty) {
+        this.isUndoEmpty.set(isUndoEmpty);
+    }
+
+    public BooleanProperty isRedoEmptyProperty() {
+        return isRedoEmpty;
+    }
+
+    public void setIsRedoEmpty(boolean isRedoEmpty) {
+        this.isRedoEmpty.set(isRedoEmpty);
     }
 }
