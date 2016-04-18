@@ -16,12 +16,11 @@ import java.net.URL;
 import java.util.Calendar;
 import java.util.EnumSet;
 import java.util.ResourceBundle;
-
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javafx.concurrent.Worker;
@@ -46,7 +45,7 @@ public class CurrencyController implements Initializable, ControlledScreen, Undo
     private ActionEvent actionEvent;
     private Worker<Void> onDeleteWorker;
     private Worker<EnumSet<ErrorEnum>> onSaveWorker;
-    private Worker<Void> onRefreshCurrencyWorker;
+    private Worker<Void> onRefreshWorker;
     private ProgressForm pForm = new ProgressForm();
 
     private CareTaker careTaker;
@@ -92,7 +91,7 @@ public class CurrencyController implements Initializable, ControlledScreen, Undo
                     };
                 }
             };
-            onRefreshCurrencyWorker = new Service<Void>() {
+            onRefreshWorker = new Service<Void>() {
                 @Override
                 protected Task<Void> createTask() {
                     return new Task<Void>() {
@@ -106,7 +105,7 @@ public class CurrencyController implements Initializable, ControlledScreen, Undo
             };
         }catch (Exception e){
             //not in finally because refreshCurrency must run before populateTable
-            startService(onRefreshCurrencyWorker,null);
+            startService(onRefreshWorker,null);
             DialogMessages.showExceptionAlert(e);
         }
     }
@@ -145,22 +144,22 @@ public class CurrencyController implements Initializable, ControlledScreen, Undo
                 populateTable();
                 DialogMessages.showExceptionAlert(onSaveWorker.getException());
             });
-            ((Service<Void>) onRefreshCurrencyWorker).setOnSucceeded(event -> {
-                LOG.debug("onRefreshCurrencyWorker->setOnSucceeded");
-                LOG.debug(">>>>>>>>onRefreshCurrencyWorker->setOnSucceeded: pForm.getDialogStage().close()");
+            ((Service<Void>) onRefreshWorker).setOnSucceeded(event -> {
+                LOG.debug("onRefreshWorker->setOnSucceeded");
+                LOG.debug(">>>>>>>>onRefreshWorker->setOnSucceeded: pForm.getDialogStage().close()");
                 pForm.close();
                 populateTable();
             });
-            ((Service<Void>) onRefreshCurrencyWorker).setOnFailed(event -> {
-                LOG.debug("onRefreshCurrencyWorker->setOnFailed");
-                LOG.debug(">>>>>>>>onRefreshCurrencyWorker->setOnFailed: pForm.getDialogStage().close()");
+            ((Service<Void>) onRefreshWorker).setOnFailed(event -> {
+                LOG.debug("onRefreshWorker->setOnFailed");
+                LOG.debug(">>>>>>>>onRefreshWorker->setOnFailed: pForm.getDialogStage().close()");
                 pForm.close();
                 populateTable();
-                DialogMessages.showExceptionAlert(onRefreshCurrencyWorker.getException());
+                DialogMessages.showExceptionAlert(onRefreshWorker.getException());
             });
         }catch (Exception e){
             //not in finally because refreshCurrency must run before populateTable
-            startService(onRefreshCurrencyWorker,null);
+            startService(onRefreshWorker,null);
             DialogMessages.showExceptionAlert(e);
         }
     }
@@ -192,7 +191,7 @@ public class CurrencyController implements Initializable, ControlledScreen, Undo
         try{
             careTaker.clear();
             initializeServices();
-            startService(onRefreshCurrencyWorker, null);
+            startService(onRefreshWorker, null);
             table.getSelectionModel().selectedItemProperty().addListener((observable, oldSelection, newSelection) -> {
                 if (newSelection != null) {
                     populateForm();
@@ -223,7 +222,7 @@ public class CurrencyController implements Initializable, ControlledScreen, Undo
                     }
             );
         }catch (Exception e){
-            startService(onRefreshCurrencyWorker,null);
+            startService(onRefreshWorker,null);
             DialogMessages.showExceptionAlert(e);
         }
     }
@@ -262,7 +261,7 @@ public class CurrencyController implements Initializable, ControlledScreen, Undo
             deleteBtn.setDisable(true);
         } catch (Exception e) {
             //not in finally because refreshCurrency must run before populateTable
-            startService(onRefreshCurrencyWorker, null);
+            startService(onRefreshWorker, null);
             DialogMessages.showExceptionAlert(e);
         }
     }
@@ -278,7 +277,7 @@ public class CurrencyController implements Initializable, ControlledScreen, Undo
             deleteBtn.setDisable(true);
             careTaker.clear();
         }catch (Exception e){
-            startService(onRefreshCurrencyWorker,null);
+            startService(onRefreshWorker,null);
             DialogMessages.showExceptionAlert(e);
         }
     }
@@ -326,7 +325,7 @@ public class CurrencyController implements Initializable, ControlledScreen, Undo
             nameTF.setText(currencyModel.getPendingCurrency().getName());
             descTA.setText(currencyModel.getPendingCurrency().getDescription());
         }catch (Exception e){
-            startService(onRefreshCurrencyWorker,null);
+            startService(onRefreshWorker,null);
             DialogMessages.showExceptionAlert(e);
         }
     }
@@ -357,7 +356,7 @@ public class CurrencyController implements Initializable, ControlledScreen, Undo
 
             table.getColumns().setAll(currencyIdCol, currencyCodeCol, currencyNameCol, currencyDescCol, currencyCreatedCol, currencyUpdatedCol);
         }catch (Exception e){
-            startService(onRefreshCurrencyWorker,null);
+            startService(onRefreshWorker,null);
             DialogMessages.showExceptionAlert(e);
         }
     }

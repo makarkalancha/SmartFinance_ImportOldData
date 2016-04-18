@@ -46,7 +46,7 @@ public class FamilyMemberController implements Initializable, ControlledScreen, 
     private ActionEvent actionEvent;
     private Worker<Void> onDeleteWorker;
     private Worker<EnumSet<ErrorEnum>> onSaveWorker;
-    private Worker<Void> onRefreshFamilyMembersWorker;
+    private Worker<Void> onRefreshWorker;
     private ProgressForm pForm = new ProgressForm();
 
     private CareTaker careTaker;
@@ -90,7 +90,7 @@ public class FamilyMemberController implements Initializable, ControlledScreen, 
                     };
                 }
             };
-            onRefreshFamilyMembersWorker = new Service<Void>() {
+            onRefreshWorker = new Service<Void>() {
                 @Override
                 protected Task<Void> createTask() {
                     return new Task<Void>() {
@@ -104,7 +104,7 @@ public class FamilyMemberController implements Initializable, ControlledScreen, 
             };
         } catch (Exception e) {
             //not in finally because refreshFamilyMembers must run before populateTable
-            startService(onRefreshFamilyMembersWorker, null);
+            startService(onRefreshWorker, null);
             DialogMessages.showExceptionAlert(e);
         }
     }
@@ -143,22 +143,22 @@ public class FamilyMemberController implements Initializable, ControlledScreen, 
                 populateTable();
                 DialogMessages.showExceptionAlert(onSaveWorker.getException());
             });
-            ((Service<Void>) onRefreshFamilyMembersWorker).setOnSucceeded(event -> {
-                LOG.debug("onRefreshFamilyMembersWorker->setOnSucceeded");
-                LOG.debug(">>>>>>>>onRefreshFamilyMembersWorker->setOnSucceeded: pForm.getDialogStage().close()");
+            ((Service<Void>) onRefreshWorker).setOnSucceeded(event -> {
+                LOG.debug("onRefreshWorker->setOnSucceeded");
+                LOG.debug(">>>>>>>>onRefreshWorker->setOnSucceeded: pForm.getDialogStage().close()");
                 pForm.close();
                 populateTable();
             });
-            ((Service<Void>) onRefreshFamilyMembersWorker).setOnFailed(event -> {
-                LOG.debug("onRefreshFamilyMembersWorker->setOnFailed");
-                LOG.debug(">>>>>>>>onRefreshFamilyMembersWorker->setOnFailed: pForm.getDialogStage().close()");
+            ((Service<Void>) onRefreshWorker).setOnFailed(event -> {
+                LOG.debug("onRefreshWorker->setOnFailed");
+                LOG.debug(">>>>>>>>onRefreshWorker->setOnFailed: pForm.getDialogStage().close()");
                 pForm.close();
                 populateTable();
-                DialogMessages.showExceptionAlert(onRefreshFamilyMembersWorker.getException());
+                DialogMessages.showExceptionAlert(onRefreshWorker.getException());
             });
         } catch (Exception e) {
             //not in finally because refreshFamilyMembers must run before populateTable
-            startService(onRefreshFamilyMembersWorker, null);
+            startService(onRefreshWorker, null);
             DialogMessages.showExceptionAlert(e);
         }
     }
@@ -193,7 +193,7 @@ public class FamilyMemberController implements Initializable, ControlledScreen, 
         try {
             careTaker.clear();
             initializeServices();
-            startService(onRefreshFamilyMembersWorker, null);
+            startService(onRefreshWorker, null);
             table.getSelectionModel().selectedItemProperty().addListener((observable, oldSelection, newSelection) -> {
                 if (newSelection != null) {
                     populateForm();
@@ -254,7 +254,7 @@ public class FamilyMemberController implements Initializable, ControlledScreen, 
             deleteBtn.setDisable(true);
         } catch (Exception e) {
             //not in finally because refreshFamilyMembers must run before populateTable
-            startService(onRefreshFamilyMembersWorker, null);
+            startService(onRefreshWorker, null);
             DialogMessages.showExceptionAlert(e);
         }
     }
@@ -269,7 +269,7 @@ public class FamilyMemberController implements Initializable, ControlledScreen, 
             deleteBtn.setDisable(true);
             careTaker.clear();
         } catch (Exception e) {
-            startService(onRefreshFamilyMembersWorker, null);
+            startService(onRefreshWorker, null);
             DialogMessages.showExceptionAlert(e);
         }
     }
@@ -320,7 +320,7 @@ public class FamilyMemberController implements Initializable, ControlledScreen, 
             nameTF.setText(familyMemberModel.getPendingFamilyMember().getName());
             descTA.setText(familyMemberModel.getPendingFamilyMember().getDescription());
         } catch (Exception e) {
-            startService(onRefreshFamilyMembersWorker, null);
+            startService(onRefreshWorker, null);
             DialogMessages.showExceptionAlert(e);
         }
     }
@@ -348,7 +348,7 @@ public class FamilyMemberController implements Initializable, ControlledScreen, 
 
             table.getColumns().setAll(familyMemberIdCol, familyMemberNameCol, familyMemberDescCol, familyMemberCreatedCol, familyMemberUpdatedCol);
         } catch (Exception e) {
-            startService(onRefreshFamilyMembersWorker, null);
+            startService(onRefreshWorker, null);
             DialogMessages.showExceptionAlert(e);
         }
     }
