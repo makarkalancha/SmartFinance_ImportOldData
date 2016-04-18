@@ -366,8 +366,8 @@ public class FamilyMemberController implements Initializable, ControlledScreen, 
     public void restoreFormState(Memento memento) {
         try {
             FamilyMemberFormState formState = (FamilyMemberFormState) memento;
-            nameTF.setText(formState.getNameTF());
-            descTA.setText(formState.getDescTA());
+            nameTF.setText(formState.getNameTFStr());
+            descTA.setText(formState.getDescTAStr());
         } catch (Exception e) {
             DialogMessages.showExceptionAlert(e);
         }
@@ -414,27 +414,27 @@ public class FamilyMemberController implements Initializable, ControlledScreen, 
     }
 
     private static class FamilyMemberFormState implements Memento{
-        private final String nameTF;
-        private final String descTA;
+        private final String nameTFStr;
+        private final String descTAStr;
 
         public FamilyMemberFormState(String nameTF, String descTA){
-            this.nameTF = nameTF;
-            this.descTA = descTA;
+            this.nameTFStr = nameTF;
+            this.descTAStr = descTA;
         }
 
-        public String getNameTF() {
-            return nameTF;
+        public String getNameTFStr() {
+            return nameTFStr;
         }
 
-        public String getDescTA() {
-            return descTA;
+        public String getDescTAStr() {
+            return descTAStr;
         }
 
         @Override
         public String toString() {
             return "FamilyMemberFormState{" +
-                    "nameTF='" + nameTF + '\'' +
-                    ", descTA='" + descTA + '\'' +
+                    "nameTF='" + nameTFStr + '\'' +
+                    ", descTA='" + descTAStr + '\'' +
                     '}';
         }
     }

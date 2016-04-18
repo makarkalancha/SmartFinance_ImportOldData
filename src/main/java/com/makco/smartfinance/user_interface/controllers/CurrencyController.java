@@ -1,6 +1,7 @@
 package com.makco.smartfinance.user_interface.controllers;
 
 import com.makco.smartfinance.persistence.entity.Currency;
+import com.makco.smartfinance.user_interface.Command;
 import com.makco.smartfinance.user_interface.ControlledScreen;
 import com.makco.smartfinance.user_interface.ScreensController;
 import com.makco.smartfinance.user_interface.constants.ApplicationConstants;
@@ -8,6 +9,7 @@ import com.makco.smartfinance.user_interface.constants.DialogMessages;
 import com.makco.smartfinance.user_interface.constants.ProgressForm;
 import com.makco.smartfinance.user_interface.models.CurrencyModel;
 import com.makco.smartfinance.user_interface.undoredo.CareTaker;
+import com.makco.smartfinance.user_interface.undoredo.Memento;
 import com.makco.smartfinance.user_interface.undoredo.UndoRedoScreen;
 import com.makco.smartfinance.user_interface.validation.ErrorEnum;
 import java.net.URL;
@@ -17,6 +19,7 @@ import java.util.ResourceBundle;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import javafx.concurrent.Service;
@@ -35,7 +38,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 /**
  * Created by mcalancea on 2016-04-12.
  */
-public class CurrencyController implements Initializable, ControlledScreen/*, UndoRedoScreen */{
+public class CurrencyController implements Initializable, ControlledScreen, UndoRedoScreen {
     private final static Logger LOG = LogManager.getLogger(CurrencyController.class);
     private ScreensController myController;
     private CurrencyModel currencyModel = new CurrencyModel();
@@ -48,8 +51,6 @@ public class CurrencyController implements Initializable, ControlledScreen/*, Un
 
     private CareTaker careTaker;
     private BooleanProperty isNotUndo = new SimpleBooleanProperty(true);
-    private BooleanProperty isUndoEmpty = new SimpleBooleanProperty(true);
-    private BooleanProperty isRedoEmpty = new SimpleBooleanProperty(true);
 
     @FXML
     private TableView<Currency> table;
@@ -180,6 +181,7 @@ public class CurrencyController implements Initializable, ControlledScreen/*, Un
     public void setScreenPage(ScreensController screenPage) {
         try{
             myController = screenPage;
+            careTaker = myController.getCareTaker();
         }catch (Exception e){
             DialogMessages.showExceptionAlert(e);
         }
@@ -189,15 +191,31 @@ public class CurrencyController implements Initializable, ControlledScreen/*, Un
     public void initialize(URL location, ResourceBundle resources){
         try {
             codeTF.setPrefColumnCount(3);
+            codeTF.textProperty().addListener((observable, oldValue, newValue) -> {
+                if (isNotUndo.getValue()) {
+                    saveForm();
+                } else {
+                    isNotUndo.setValue(true);
+                }
+            });
+            
             nameTF.setPrefColumnCount(64);
+            nameTF.textProperty().addListener((observable, oldValue, newValue) -> {
+                if (isNotUndo.getValue()) {
+                    saveForm();
+                } else {
+                    isNotUndo.setValue(true);
+                }
+            });
+            
             descTA.setPrefColumnCount(128);
-//            initializeServices();
-//            startService(onRefreshCurrencyWorker, null);
-//            table.getSelectionModel().selectedItemProperty().addListener((observable, oldSelection, newSelection) -> {
-//                if (newSelection != null) {
-//                    populateForm();
-//                }
-//            });
+            descTA.textProperty().addListener((observable, oldValue, newValue) -> {
+                if (isNotUndo.getValue()) {
+                    saveForm();
+                } else {
+                    isNotUndo.setValue(true);
+                }
+            });
             clearBtn.setDisable(true);
             saveBtn.setDisable(false);
             deleteBtn.setDisable(true);
@@ -226,7 +244,9 @@ public class CurrencyController implements Initializable, ControlledScreen/*, Un
     @FXML
     public void onSave(ActionEvent event){
         try {
+            LOG.debug("CurrencyController->onSave");
             startService(onSaveWorker, event);
+            careTaker.clear();
         } catch (Exception e) {
             //no refreshCurrency() because there are in deletePendingCurrency, populateTable, onClear
             DialogMessages.showExceptionAlert(e);
@@ -303,6 +323,7 @@ public class CurrencyController implements Initializable, ControlledScreen/*, Un
     @Override
     public void refresh() {
         try{
+            careTaker.clear();
             initializeServices();
             startService(onRefreshCurrencyWorker, null);
             table.getSelectionModel().selectedItemProperty().addListener((observable, oldSelection, newSelection) -> {
@@ -310,6 +331,30 @@ public class CurrencyController implements Initializable, ControlledScreen/*, Un
                     populateForm();
                 }
             });
+            myController.setToolbar_Save(new Command() {
+                @Override
+                public void execute() {
+                    try {
+                        LOG.debug("CurrencyController->onSave");
+                        startService(onSaveWorker, new ActionEvent());
+                    } catch (Exception e) {
+                        //no refreshFamilyMembers() because there are in deletePendingFamilyMember, populateTable, onClear
+                        DialogMessages.showExceptionAlert(e);
+                    }
+                }
+            });
+            myController.setToolbar_Undo(new Command() {
+                @Override
+                public void execute() {
+                    isNotUndo.setValue(false);
+                    restoreFormState(careTaker.undoState());
+                }
+            });
+            myController.setToolbar_Redo(() -> {
+                        isNotUndo.setValue(false);
+                        restoreFormState(careTaker.redoState());
+                    }
+            );
         }catch (Exception e){
             startService(onRefreshCurrencyWorker,null);
             DialogMessages.showExceptionAlert(e);
@@ -318,11 +363,101 @@ public class CurrencyController implements Initializable, ControlledScreen/*, Un
 
     @Override
     public boolean askPermissionToClose() {
-        return false;
+        boolean result = true;
+        try{
+            StringBuilder contentText = new StringBuilder();
+            if(!StringUtils.isBlank(codeTF.getText())) {
+                contentText.append("Code (");
+                contentText.append(codeTF.getText());
+                contentText.append(") is not saved. ");
+            }
+
+            if(!StringUtils.isBlank(nameTF.getText())) {
+                contentText.append("Name (");
+                contentText.append(nameTF.getText());
+                contentText.append(") is not saved. ");
+            }
+
+            if(!StringUtils.isBlank(descTA.getText())) {
+                contentText.append("Description (");
+                contentText.append(descTA.getText());
+                contentText.append(") is not saved. ");
+            }
+
+            if(contentText.length() > 0){
+                contentText.append("Are you sure you want to close this window?");
+                result = DialogMessages.showConfirmationDialog(ApplicationConstants.CURRENCY_WINDOW_TITLE,
+                        "Not all fields are empty", contentText.toString(), null);
+            }
+        }catch (Exception e){
+            DialogMessages.showExceptionAlert(e);
+        }
+        return result;
     }
 
     @Override
     public void close() {
+        try {
+            onClear(new ActionEvent());
+            myController.setToolbar_Save(null);
+            myController.setToolbar_Undo(null);
+            myController.setToolbar_Redo(null);
+        } catch (Exception e) {
+            DialogMessages.showExceptionAlert(e);
+        }
+    }
 
+    @Override
+    public void saveForm() {
+        try {
+            careTaker.saveState(new CurrencyFormState(codeTF.getText(), nameTF.getText(), descTA.getText()));
+        } catch (Exception e) {
+            DialogMessages.showExceptionAlert(e);
+        }
+    }
+
+    @Override
+    public void restoreFormState(Memento memento) {
+        try {
+            CurrencyFormState formState = (CurrencyFormState) memento;
+            codeTF.setText(formState.getCodeTFStr());
+            nameTF.setText(formState.getNameTFStr());
+            descTA.setText(formState.getDescTAStr());
+        } catch (Exception e) {
+            DialogMessages.showExceptionAlert(e);
+        }
+    }
+
+    private static class CurrencyFormState implements Memento{
+        private final String codeTFStr;
+        private final String nameTFStr;
+        private final String descTAStr;
+
+        public CurrencyFormState(String codeTF, String nameTF, String descTA){
+            this.codeTFStr = codeTF;
+            this.nameTFStr = nameTF;
+            this.descTAStr = descTA;
+        }
+
+        public String getCodeTFStr() {
+            return codeTFStr;
+        }
+
+        public String getNameTFStr() {
+            return nameTFStr;
+        }
+
+        public String getDescTAStr() {
+            return descTAStr;
+        }
+
+        @Override
+        public String toString() {
+            return "CurrencyFormState{" +
+                    "codeTFStr='" + codeTFStr + '\'' +
+                    ", nameTFStr='" + nameTFStr + '\'' +
+                    ", descTAStr='" + descTAStr + '\'' +
+                    '}';
+        }
     }
 }
