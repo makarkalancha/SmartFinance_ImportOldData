@@ -9,6 +9,8 @@ import com.makco.smartfinance.user_interface.undoredo.CareTaker;
 import com.makco.smartfinance.user_interface.undoredo.UndoRedoScreen;
 import java.net.URL;
 import java.util.ResourceBundle;
+
+import javafx.event.ActionEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import javafx.beans.property.BooleanProperty;
@@ -58,54 +60,45 @@ public class ToolbarController implements Initializable, ControlledScreen {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        tbSaveBtn.setText("");
-        tbUndoBtn.setText("");
-        tbRedoBtn.setText("");
-        tbSaveBtn.setGraphic(new ImageView(new Image(ApplicationConstants.SAVE_ICO)));
-        tbUndoBtn.setGraphic(new ImageView(new Image(ApplicationConstants.UNDO_ICO)));
-        tbRedoBtn.setGraphic(new ImageView(new Image(ApplicationConstants.REDO_ICO)));
+        try{
+            tbSaveBtn.setText("");
+            tbUndoBtn.setText("");
+            tbRedoBtn.setText("");
+            tbSaveBtn.setGraphic(new ImageView(new Image(ApplicationConstants.SAVE_ICO)));
+            tbUndoBtn.setGraphic(new ImageView(new Image(ApplicationConstants.UNDO_ICO)));
+            tbRedoBtn.setGraphic(new ImageView(new Image(ApplicationConstants.REDO_ICO)));
 
-        //        https://docs.oracle.com/javase/8/javafx/properties-binding-tutorial/binding.htm
-        tbSaveBtn.setOnAction((event) -> {
-            toolbar_Save.execute();
-        });
+////https://docs.oracle.com/javase/8/javafx/properties-binding-tutorial/binding.htm
+            isUndoEmpty.addListener((observable, oldValue, newValue) ->{
+                LOG.debug("isUndoEmpty.addListener->oldValue: " + oldValue + "; newValue:" + newValue);
+                tbUndoBtn.setDisable(newValue);
+            });
 
-        tbUndoBtn.setOnAction((event) -> {
-            isNotUndo.setValue(false);
-            LOG.debug("\n\n>>>>>>>>click undo");
-            toolbar_Undo.execute();
-        });
-
-        tbRedoBtn.setOnAction((event) -> {
-            isNotUndo.setValue(false);
-            LOG.debug("\n\n>>>>>>>>click redo");
-            toolbar_Redo.execute();
-        });
-
-        isUndoEmpty.addListener((observable, oldValue, newValue) ->{
-            LOG.debug("isUndoEmpty.addListener->oldValue: " + oldValue + "; newValue:" + newValue);
-            tbUndoBtn.setDisable(newValue);
-        });
-
-        isRedoEmpty.addListener((observable, oldValue, newValue) ->{
-            LOG.debug("isRedoEmpty.addListener->oldValue: " + oldValue + "; newValue:" + newValue);
-            tbRedoBtn.setDisable(newValue);
-        });
+            isRedoEmpty.addListener((observable, oldValue, newValue) ->{
+                LOG.debug("isRedoEmpty.addListener->oldValue: " + oldValue + "; newValue:" + newValue);
+                tbRedoBtn.setDisable(newValue);
+            });
+        } catch (Exception e) {
+            DialogMessages.showExceptionAlert(e);
+        }
     }
-
 
     @Override
     public void refresh() {
-        toolbar_Save = myController.getToolbar_Save();
-        toolbar_Undo = myController.getToolbar_Undo();
-        toolbar_Redo = myController.getToolbar_Redo();
+        try{
+            toolbar_Save = myController.getToolbar_Save();
+            toolbar_Undo = myController.getToolbar_Undo();
+            toolbar_Redo = myController.getToolbar_Redo();
 
-        isUndoEmpty.bind(careTaker.isUndoEmptyProperty());
-        isRedoEmpty.bind(careTaker.isRedoEmptyProperty());
+            isUndoEmpty.bind(careTaker.isUndoEmptyProperty());
+            isRedoEmpty.bind(careTaker.isRedoEmptyProperty());
 
-        tbSaveBtn.setDisable(toolbar_Save == null);
-        tbUndoBtn.setDisable(toolbar_Undo == null || isUndoEmpty.getValue());
-        tbRedoBtn.setDisable(toolbar_Redo == null || isRedoEmpty.getValue());
+            tbSaveBtn.setDisable(toolbar_Save == null);
+            tbUndoBtn.setDisable(toolbar_Undo == null || isUndoEmpty.getValue());
+            tbRedoBtn.setDisable(toolbar_Redo == null || isRedoEmpty.getValue());
+        } catch (Exception e) {
+            DialogMessages.showExceptionAlert(e);
+        }
     }
 
     @Override
@@ -116,5 +109,36 @@ public class ToolbarController implements Initializable, ControlledScreen {
     @Override
     public void close() {
 
+    }
+
+    @FXML
+    public void onSave(ActionEvent event){
+         try{
+             toolbar_Save.execute();
+         }catch (Exception e){
+             DialogMessages.showExceptionAlert(e);
+         }
+    }
+
+    @FXML
+    public void onUndo(ActionEvent event){
+        try{
+            isNotUndo.setValue(false);
+            LOG.debug("\n\n>>>>>>>>click undo");
+            toolbar_Undo.execute();
+        }catch (Exception e){
+            DialogMessages.showExceptionAlert(e);
+        }
+    }
+
+    @FXML
+    public void onRedo(ActionEvent event){
+        try{
+            isNotUndo.setValue(false);
+            LOG.debug("\n\n>>>>>>>>click redo");
+            toolbar_Redo.execute();
+        }catch (Exception e){
+            DialogMessages.showExceptionAlert(e);
+        }
     }
 }

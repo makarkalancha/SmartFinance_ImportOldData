@@ -7,11 +7,16 @@ import com.makco.smartfinance.user_interface.constants.ApplicationConstants;
 import com.makco.smartfinance.user_interface.constants.DialogMessages;
 import com.makco.smartfinance.user_interface.constants.ProgressForm;
 import com.makco.smartfinance.user_interface.models.CurrencyModel;
+import com.makco.smartfinance.user_interface.undoredo.CareTaker;
+import com.makco.smartfinance.user_interface.undoredo.UndoRedoScreen;
 import com.makco.smartfinance.user_interface.validation.ErrorEnum;
 import java.net.URL;
 import java.util.Calendar;
 import java.util.EnumSet;
 import java.util.ResourceBundle;
+
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import javafx.concurrent.Service;
@@ -30,7 +35,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 /**
  * Created by mcalancea on 2016-04-12.
  */
-public class CurrencyController implements Initializable, ControlledScreen {
+public class CurrencyController implements Initializable, ControlledScreen/*, UndoRedoScreen */{
     private final static Logger LOG = LogManager.getLogger(CurrencyController.class);
     private ScreensController myController;
     private CurrencyModel currencyModel = new CurrencyModel();
@@ -40,6 +45,11 @@ public class CurrencyController implements Initializable, ControlledScreen {
     private Worker<EnumSet<ErrorEnum>> onSaveWorker;
     private Worker<Void> onRefreshCurrencyWorker;
     private ProgressForm pForm = new ProgressForm();
+
+    private CareTaker careTaker;
+    private BooleanProperty isNotUndo = new SimpleBooleanProperty(true);
+    private BooleanProperty isUndoEmpty = new SimpleBooleanProperty(true);
+    private BooleanProperty isRedoEmpty = new SimpleBooleanProperty(true);
 
     @FXML
     private TableView<Currency> table;

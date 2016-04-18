@@ -18,7 +18,7 @@
                 <Menu mnemonicParsing="false" text="Open Recent" />
                 <SeparatorMenuItem mnemonicParsing="false" />
                 <MenuItem mnemonicParsing="false" text="Close" />
-                <MenuItem fx:id="saveMenuItem" onAction="#toSave" text="_Save" />
+                <MenuItem fx:id="saveMenuItem" onAction="#onSave" text="_Save" />
                 <MenuItem mnemonicParsing="false" text="Save As…" />
                 <MenuItem mnemonicParsing="false" text="Revert" />
                 <SeparatorMenuItem mnemonicParsing="false" />
@@ -29,8 +29,8 @@
         </Menu>
         <Menu mnemonicParsing="false" text="Edit">
             <items>
-                <MenuItem mnemonicParsing="false" text="Undo" />
-                <MenuItem mnemonicParsing="false" text="Redo" />
+                <MenuItem fx:id="undoMenuItem" onAction="#onUndo" text="_Undo" />
+                <MenuItem fx:id="redoMenuItem" onAction="#onRedo" text="_Redo" />
                 <SeparatorMenuItem mnemonicParsing="false" />
                 <MenuItem mnemonicParsing="false" text="Cut" />
                 <MenuItem mnemonicParsing="false" text="Copy" />
@@ -44,7 +44,7 @@
         <Menu mnemonicParsing="false" text="Navigate">
             <items>
                 <MenuItem mnemonicParsing="false" onAction="#toMain" text="Main" />
-                <!--<MenuItem mnemonicParsing="false" onAction="#toCurrency" text="Currency" />-->
+                <MenuItem mnemonicParsing="false" onAction="#toCurrency" text="Currency" />
                 <MenuItem mnemonicParsing="false" onAction="#toFamilyMember" text="Family Members" />
                 <MenuItem mnemonicParsing="false" onAction="#toScene1" text="Scene 1" />
                 <MenuItem mnemonicParsing="false" onAction="#toScene2" text="Scene 2" />

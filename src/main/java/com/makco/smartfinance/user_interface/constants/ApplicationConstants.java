@@ -31,4 +31,8 @@ public class ApplicationConstants {
     //key shortcut
     public static final KeyCombination SAVE_KC = new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN);
     public static final KeyCombination QUIT_KC = new KeyCodeCombination(KeyCode.Q, KeyCombination.CONTROL_DOWN);
+    //in text fields default is called
+    public static final KeyCombination REDO_KC = new KeyCodeCombination(KeyCode.Y, KeyCombination.CONTROL_DOWN, KeyCombination.SHIFT_DOWN);
+    public static final KeyCombination UNDO_KC = new KeyCodeCombination(KeyCode.Z, KeyCombination.CONTROL_DOWN, KeyCombination.SHIFT_DOWN);
+
 }

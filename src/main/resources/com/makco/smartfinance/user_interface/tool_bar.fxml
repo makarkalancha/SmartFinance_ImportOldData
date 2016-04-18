@@ -11,16 +11,16 @@
 
 <ToolBar prefHeight="40.0" prefWidth="200.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="com.makco.smartfinance.user_interface.controllers.ToolbarController">
   <items>
-    <Button fx:id="tbSaveBtn" mnemonicParsing="false" prefHeight="20.0" prefWidth="20.0" text="Save">
+    <Button fx:id="tbSaveBtn" onAction="#onSave" mnemonicParsing="false" prefHeight="20.0" prefWidth="20.0" text="Save">
          <tooltip>
             <Tooltip text="Save..." />
          </tooltip></Button>
-      <Button fx:id="tbUndoBtn" mnemonicParsing="false" prefHeight="20.0" prefWidth="20.0" text="undo">
+      <Button fx:id="tbUndoBtn" onAction="#onUndo" mnemonicParsing="false" prefHeight="20.0" prefWidth="20.0" text="undo">
          <tooltip>
             <Tooltip text="Undo..." />
          </tooltip>
       </Button>
-      <Button fx:id="tbRedoBtn" mnemonicParsing="false" prefHeight="20.0" prefWidth="20.0" text="Redo">
+      <Button fx:id="tbRedoBtn" onAction="#onRedo" mnemonicParsing="false" prefHeight="20.0" prefWidth="20.0" text="Redo">
          <tooltip>
             <Tooltip text="Redo..." />
          </tooltip>
