@@ -5,11 +5,15 @@ import com.makco.smartfinance.persistence.contants.DataBaseConstants;
 import com.makco.smartfinance.user_interface.ScreensController;
 import com.makco.smartfinance.user_interface.constants.ApplicationConstants;
 import com.makco.smartfinance.user_interface.constants.DialogMessages;
-import com.makco.smartfinance.user_interface.constants.ProgressForm;
+import com.makco.smartfinance.user_interface.constants.ProgressBarForm;
+import com.makco.smartfinance.user_interface.constants.ProgressIndicatorForm;
 import com.makco.smartfinance.user_interface.constants.Screens;
 import com.makco.smartfinance.utils.Logs;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javafx.concurrent.Worker;
 import javafx.event.Event;
@@ -18,36 +22,46 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 
 /**
  * Created by mcalancea on 2016-03-28.
  */
 public class Main extends Application{
     private final static Logger LOG = LogManager.getLogger(Main.class);
-    private static final Executor executor = Executors.newCachedThreadPool(runnable -> {
-        Thread t = new Thread(runnable);
-        t.setDaemon(true);
-        return t;
-    });
+//    private static final Executor executor = Executors.newCachedThreadPool(runnable -> {
+//        Thread t = new Thread(runnable);
+//        t.setDaemon(true);
+//        return t;
+//    });
 
     private Stage primaryStage;
     private Worker<Void> preStartWorker;
-    private ProgressForm pFormStart = new ProgressForm();
+    private ProgressBarForm pFormStart = new ProgressBarForm();
 
     public Main(){
-        preStartWorker = new Task<Void>() {
+        preStartWorker = new Service<Void>() {
             @Override
-            protected Void call() throws Exception {
-                LOG.debug("1-Main:migrate");
-                H2DbUtils.migrate(DataBaseConstants.SCHEMA);
-                LOG.debug("2-Main:backup");
-                H2DbUtils.backup("start");
-                return null;
+            protected Task<Void> createTask() {
+                return new Task<Void>() {
+                    @Override
+                    protected Void call() throws Exception {
+                        int interval = 3_000;
+
+                        int total = 2;
+                        updateProgress(0,total);
+
+                        LOG.debug("1-Main:migrate");
+                        H2DbUtils.migrate(DataBaseConstants.SCHEMA);
+                        Thread.sleep(interval);
+                        updateProgress(1, total);
+
+                        LOG.debug("2-Main:backup");
+                        H2DbUtils.backup("start");
+                        Thread.sleep(interval);
+                        updateProgress(2, total);
+                        return null;
+                    }
+                };
             }
         };
         pFormStart.activateProgressBar(preStartWorker);
@@ -76,7 +90,7 @@ public class Main extends Application{
 ////                LOG.debug("db DOESN'T exist");
 //
 //            H2DbUtils.migrate(DataBaseConstants.SCHEMA);
-            ((Task<Void>) preStartWorker).setOnSucceeded(event -> {
+            ((Service<Void>) preStartWorker).setOnSucceeded(event -> {
                 LOG.debug("preStartWorker->setOnSucceeded");
                 LOG.debug(">>>>>>>>preStartWorker->setOnSucceeded: pFormStart.getDialogStage().close()");
 
@@ -104,14 +118,15 @@ public class Main extends Application{
                 primaryStage.show();
                 pFormStart.close();
             });
-            ((Task<Void>) preStartWorker).setOnFailed(event -> {
+            ((Service<Void>) preStartWorker).setOnFailed(event -> {
                 LOG.debug("preStartWorker->setOnFailed");
                 LOG.debug(">>>>>>>>preStartWorker->setOnFailed: pFormStart.getDialogStage().close()");
                 pFormStart.close();
                 DialogMessages.showExceptionAlert(preStartWorker.getException());
             });
             pFormStart.show();
-            executor.execute((Task<Void>) preStartWorker);
+            ((Service<Void>) preStartWorker).restart();
+//            executor.execute((Task<Void>) preStartWorker);
         }catch (Exception e){
             DialogMessages.showExceptionAlert(e);
         }
@@ -120,27 +135,33 @@ public class Main extends Application{
     public static void quit(Event evt){
         try {
             LOG.debug("Closing the applicatoin...");
-            Worker<Void> preQuitWorker = new Task<Void>() {
+            Worker<Void> preQuitWorker = new Service<Void>() {
                 @Override
-                protected Void call() throws Exception {
-                    LOG.debug("1-Main:backup");
-                    H2DbUtils.backup("quit");
-                    return null;
+                protected Task<Void> createTask() {
+                    return new Task<Void>() {
+                        @Override
+                        protected Void call() throws Exception {
+                            LOG.debug("1-Main:backup");
+                            H2DbUtils.backup("quit");
+                            return null;
+                        }
+                    };
                 }
             };
-            ProgressForm pFormQuit = new ProgressForm();
+            ProgressIndicatorForm pFormQuit = new ProgressIndicatorForm();
             pFormQuit.activateProgressBar(preQuitWorker);
 
-            ((Task<Void>) preQuitWorker).setOnSucceeded(event -> {
+            ((Service<Void>) preQuitWorker).setOnSucceeded(event -> {
                 Platform.exit();
                 System.exit(0);
             });
-            ((Task<Void>) preQuitWorker).setOnFailed(event -> {
+            ((Service<Void>) preQuitWorker).setOnFailed(event -> {
                 pFormQuit.close();
                 DialogMessages.showExceptionAlert(preQuitWorker.getException());
             });
             pFormQuit.show();
-            executor.execute((Task<Void>) preQuitWorker);
+            ((Service<Void>) preQuitWorker).restart();
+//            executor.execute((Task<Void>) preQuitWorker);
         } catch (Throwable t) {
             LOG.error(t, t);
         }

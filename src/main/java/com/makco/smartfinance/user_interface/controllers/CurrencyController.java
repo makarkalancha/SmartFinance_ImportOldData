@@ -6,7 +6,7 @@ import com.makco.smartfinance.user_interface.ControlledScreen;
 import com.makco.smartfinance.user_interface.ScreensController;
 import com.makco.smartfinance.user_interface.constants.ApplicationConstants;
 import com.makco.smartfinance.user_interface.constants.DialogMessages;
-import com.makco.smartfinance.user_interface.constants.ProgressForm;
+import com.makco.smartfinance.user_interface.constants.ProgressIndicatorForm;
 import com.makco.smartfinance.user_interface.models.CurrencyModel;
 import com.makco.smartfinance.user_interface.undoredo.CareTaker;
 import com.makco.smartfinance.user_interface.undoredo.Memento;
@@ -46,7 +46,7 @@ public class CurrencyController implements Initializable, ControlledScreen, Undo
     private Worker<Void> onDeleteWorker;
     private Worker<EnumSet<ErrorEnum>> onSaveWorker;
     private Worker<Void> onRefreshWorker;
-    private ProgressForm pForm = new ProgressForm();
+    private ProgressIndicatorForm pForm = new ProgressIndicatorForm();
 
     private CareTaker careTaker;
     private BooleanProperty isNotUndo = new SimpleBooleanProperty(true);

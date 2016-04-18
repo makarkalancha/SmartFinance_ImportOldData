@@ -23,10 +23,14 @@ public class ApplicationConstants {
 
     //ico
     public static final String MAIN_WINDOW_ICO = IMG_RESOURCE_FOLDER+"/wallet.png";
-    public static final String SAVE_ICO = IMG_RESOURCE_FOLDER+"/1460658953_floppy_disk_save_16x16.png";
-    public static final String UNDO_ICO = IMG_RESOURCE_FOLDER+"/1460658987_arrow-undo_16x16_w.png";
-    public static final String REDO_ICO = IMG_RESOURCE_FOLDER+"/1460658987_arrow-redo_16x16_w.png";
     public static final String FAMILY_MEMBER_WINDOW_ICO = IMG_RESOURCE_FOLDER+"/wallet.png";
+    public static final String PROGRESS_BAR_FORM_WINDOW_ICO = IMG_RESOURCE_FOLDER+"/wallet.png";
+    public static final String PROGRESS_INDICATOR_FORM_WINDOW_ICO = IMG_RESOURCE_FOLDER+"/wallet.png";
+    public static final String SAVE_ICO = IMG_RESOURCE_FOLDER+"/1460658953_floppy_disk_save_16x16.png";
+    public static final String REDO_ICO = IMG_RESOURCE_FOLDER+"/1460658987_arrow-redo_16x16_w.png";
+    public static final String UNDO_ICO = IMG_RESOURCE_FOLDER+"/1460658987_arrow-undo_16x16_w.png";
+
+
 
     //key shortcut
     public static final KeyCombination SAVE_KC = new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN);
