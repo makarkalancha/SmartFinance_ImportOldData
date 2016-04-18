@@ -1,5 +1,6 @@
 package com.makco.smartfinance.h2db.utils;
 
+import com.makco.smartfinance.h2db.utils.schema_constants.Table;
 import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
@@ -161,9 +162,31 @@ public class H2DbUtils {
     }
 
     public static boolean isDateUnitTableEmpty(String schemaName) throws SQLException{
-        boolean isEmpty = true;
-        Connection connection = DriverManager.getConnection("jdbc:h2:" + Context.INSTANCE.DB_DIR() + "/" + Context.INSTANCE.DB_NAME(),
-                Context.INSTANCE.DB_USER(), Context.INSTANCE.DB_PASSWORD());
-        return isEmpty;
+        try {
+            boolean isEmpty = true;
+            Connection connection = DriverManager.getConnection("jdbc:h2:" + Context.INSTANCE.DB_DIR() + "/" + Context.INSTANCE.DB_NAME(),
+                    Context.INSTANCE.DB_USER(), Context.INSTANCE.DB_PASSWORD());
+    //        H2DbUtils.setSchema(connection, Context.INSTANCE.DB_SCHEMA());
+            H2DbUtils.setSchema(connection, schemaName);
+            StringBuilder sizeDU = new StringBuilder();
+            sizeDU.append("SELECT COUNT(*) FROM ");
+            sizeDU.append(Table.Names.DATEUNIT);
+            sizeDU.append(";");
+            LOG.debug("sizeDU query: " + sizeDU.toString());
+            ResultSet rs = null;
+            try (
+                    PreparedStatement sizePS = connection.prepareStatement(sizeDU.toString());
+            ) {
+                sizePS.execute();
+                rs = sizePS.getResultSet();
+                if (rs.next()) {
+                    isEmpty = rs.getLong(1) == 0;
+                }
+            }
+            return isEmpty;
+        }catch (SQLException e) {
+            LOG.error(e, e);
+            throw e;
+        }
     }
 }
