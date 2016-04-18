@@ -122,9 +122,9 @@ public class CurrencyController implements Initializable, ControlledScreen, Undo
             ((Service<Void>) onDeleteWorker).setOnFailed(event -> {
                 LOG.debug("onDeleteWorker->setOnFailed");
                 LOG.debug(">>>>>>>>onDeleteWorker->setOnFailed: pForm.getDialogStage().close()");
-                DialogMessages.showExceptionAlert(onDeleteWorker.getException());
                 pForm.close();
                 populateTable();
+                DialogMessages.showExceptionAlert(onDeleteWorker.getException());
             });
             ((Service<EnumSet<ErrorEnum>>) onSaveWorker).setOnSucceeded(event -> {
                 LOG.debug("onSaveWorker->setOnSucceeded");
@@ -141,9 +141,9 @@ public class CurrencyController implements Initializable, ControlledScreen, Undo
             ((Service<EnumSet<ErrorEnum>>) onSaveWorker).setOnFailed(event -> {
                 LOG.debug("onSaveWorker->setOnFailed");
                 LOG.debug(">>>>>>>>onSaveWorker->setOnFailed: pForm.getDialogStage().close()");
-                DialogMessages.showExceptionAlert(onSaveWorker.getException());
                 pForm.close();
                 populateTable();
+                DialogMessages.showExceptionAlert(onSaveWorker.getException());
             });
             ((Service<Void>) onRefreshCurrencyWorker).setOnSucceeded(event -> {
                 LOG.debug("onRefreshCurrencyWorker->setOnSucceeded");
@@ -154,9 +154,9 @@ public class CurrencyController implements Initializable, ControlledScreen, Undo
             ((Service<Void>) onRefreshCurrencyWorker).setOnFailed(event -> {
                 LOG.debug("onRefreshCurrencyWorker->setOnFailed");
                 LOG.debug(">>>>>>>>onRefreshCurrencyWorker->setOnFailed: pForm.getDialogStage().close()");
-                DialogMessages.showExceptionAlert(onRefreshCurrencyWorker.getException());
                 pForm.close();
                 populateTable();
+                DialogMessages.showExceptionAlert(onRefreshCurrencyWorker.getException());
             });
         }catch (Exception e){
             //not in finally because refreshCurrency must run before populateTable
@@ -183,6 +183,47 @@ public class CurrencyController implements Initializable, ControlledScreen, Undo
             myController = screenPage;
             careTaker = myController.getCareTaker();
         }catch (Exception e){
+            DialogMessages.showExceptionAlert(e);
+        }
+    }
+
+    @Override
+    public void refresh() {
+        try{
+            careTaker.clear();
+            initializeServices();
+            startService(onRefreshCurrencyWorker, null);
+            table.getSelectionModel().selectedItemProperty().addListener((observable, oldSelection, newSelection) -> {
+                if (newSelection != null) {
+                    populateForm();
+                }
+            });
+            myController.setToolbar_Save(new Command() {
+                @Override
+                public void execute() {
+                    try {
+                        LOG.debug("CurrencyController->onSave");
+                        startService(onSaveWorker, new ActionEvent());
+                    } catch (Exception e) {
+                        //no refreshFamilyMembers() because there are in deletePendingFamilyMember, populateTable, onClear
+                        DialogMessages.showExceptionAlert(e);
+                    }
+                }
+            });
+            myController.setToolbar_Undo(new Command() {
+                @Override
+                public void execute() {
+                    isNotUndo.setValue(false);
+                    restoreFormState(careTaker.undoState());
+                }
+            });
+            myController.setToolbar_Redo(() -> {
+                        isNotUndo.setValue(false);
+                        restoreFormState(careTaker.redoState());
+                    }
+            );
+        }catch (Exception e){
+            startService(onRefreshCurrencyWorker,null);
             DialogMessages.showExceptionAlert(e);
         }
     }
@@ -235,6 +276,7 @@ public class CurrencyController implements Initializable, ControlledScreen, Undo
             clearBtn.setDisable(false);
             saveBtn.setDisable(false);
             deleteBtn.setDisable(true);
+            careTaker.clear();
         }catch (Exception e){
             startService(onRefreshCurrencyWorker,null);
             DialogMessages.showExceptionAlert(e);
@@ -321,42 +363,34 @@ public class CurrencyController implements Initializable, ControlledScreen, Undo
     }
 
     @Override
-    public void refresh() {
-        try{
-            careTaker.clear();
-            initializeServices();
-            startService(onRefreshCurrencyWorker, null);
-            table.getSelectionModel().selectedItemProperty().addListener((observable, oldSelection, newSelection) -> {
-                if (newSelection != null) {
-                    populateForm();
-                }
-            });
-            myController.setToolbar_Save(new Command() {
-                @Override
-                public void execute() {
-                    try {
-                        LOG.debug("CurrencyController->onSave");
-                        startService(onSaveWorker, new ActionEvent());
-                    } catch (Exception e) {
-                        //no refreshFamilyMembers() because there are in deletePendingFamilyMember, populateTable, onClear
-                        DialogMessages.showExceptionAlert(e);
-                    }
-                }
-            });
-            myController.setToolbar_Undo(new Command() {
-                @Override
-                public void execute() {
-                    isNotUndo.setValue(false);
-                    restoreFormState(careTaker.undoState());
-                }
-            });
-            myController.setToolbar_Redo(() -> {
-                        isNotUndo.setValue(false);
-                        restoreFormState(careTaker.redoState());
-                    }
-            );
-        }catch (Exception e){
-            startService(onRefreshCurrencyWorker,null);
+    public void saveForm() {
+        try {
+            careTaker.saveState(new CurrencyFormState(codeTF.getText(), nameTF.getText(), descTA.getText()));
+        } catch (Exception e) {
+            DialogMessages.showExceptionAlert(e);
+        }
+    }
+
+    @Override
+    public void restoreFormState(Memento memento) {
+        try {
+            CurrencyFormState formState = (CurrencyFormState) memento;
+            codeTF.setText(formState.getCodeTFStr());
+            nameTF.setText(formState.getNameTFStr());
+            descTA.setText(formState.getDescTAStr());
+        } catch (Exception e) {
+            DialogMessages.showExceptionAlert(e);
+        }
+    }
+
+    @Override
+    public void close() {
+        try {
+            onClear(new ActionEvent());
+            myController.setToolbar_Save(null);
+            myController.setToolbar_Undo(null);
+            myController.setToolbar_Redo(null);
+        } catch (Exception e) {
             DialogMessages.showExceptionAlert(e);
         }
     }
@@ -393,39 +427,6 @@ public class CurrencyController implements Initializable, ControlledScreen, Undo
             DialogMessages.showExceptionAlert(e);
         }
         return result;
-    }
-
-    @Override
-    public void close() {
-        try {
-            onClear(new ActionEvent());
-            myController.setToolbar_Save(null);
-            myController.setToolbar_Undo(null);
-            myController.setToolbar_Redo(null);
-        } catch (Exception e) {
-            DialogMessages.showExceptionAlert(e);
-        }
-    }
-
-    @Override
-    public void saveForm() {
-        try {
-            careTaker.saveState(new CurrencyFormState(codeTF.getText(), nameTF.getText(), descTA.getText()));
-        } catch (Exception e) {
-            DialogMessages.showExceptionAlert(e);
-        }
-    }
-
-    @Override
-    public void restoreFormState(Memento memento) {
-        try {
-            CurrencyFormState formState = (CurrencyFormState) memento;
-            codeTF.setText(formState.getCodeTFStr());
-            nameTF.setText(formState.getNameTFStr());
-            descTA.setText(formState.getDescTAStr());
-        } catch (Exception e) {
-            DialogMessages.showExceptionAlert(e);
-        }
     }
 
     private static class CurrencyFormState implements Memento{

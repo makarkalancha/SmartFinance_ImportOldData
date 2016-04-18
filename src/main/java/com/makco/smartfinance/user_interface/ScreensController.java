@@ -144,7 +144,7 @@ public class ScreensController extends BorderPane {
 
                 //is always -> BorderPane.getChildre.size:2 {getChildren().size()}
                 currentScreen = screen;
-                careTaker.clear();
+                careTaker.clear();//usually in refresh method there's clear
                 ncCurrent.getControlledScreen().close();
 
                 setCenter(ncToOpen.getNode());

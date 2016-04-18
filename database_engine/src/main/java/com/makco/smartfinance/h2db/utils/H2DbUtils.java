@@ -8,9 +8,15 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.flywaydb.core.Flyway;
+import org.h2.tools.Script;
 
 /**
  * Created by mcalancea on 2016-03-08.
@@ -97,13 +103,51 @@ public class H2DbUtils {
 
     public static int migrate(String schemaName) {
         Flyway flyway = new Flyway();
-        flyway.setDataSource("jdbc:h2:" + Context.INSTANCE.DB_DIR() + "/" + Context.INSTANCE.DB_NAME() + ";IFEXISTS=TRUE;",Context.INSTANCE.DB_USER(),Context.INSTANCE.DB_PASSWORD());
+//IFEXISTS=TRUE -> throws exception if DB doesn't exist
+//        flyway.setDataSource("jdbc:h2:" + Context.INSTANCE.DB_DIR() + "/" + Context.INSTANCE.DB_NAME() + ";IFEXISTS=TRUE;",Context.INSTANCE.DB_USER(),Context.INSTANCE.DB_PASSWORD());
+        flyway.setDataSource("jdbc:h2:" + Context.INSTANCE.DB_DIR() + "/" + Context.INSTANCE.DB_NAME(),Context.INSTANCE.DB_USER(),Context.INSTANCE.DB_PASSWORD());
         flyway.setTable("_SCHEMA_VERSION");
         flyway.setSchemas(schemaName);
         flyway.setBaselineOnMigrate(true);
         return flyway.migrate();
     }
 
+    public static void backup(String prefix) throws SQLException{
+        LocalDateTime currentDateTime = LocalDateTime.now();
+        String currentDateTimeStr = currentDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH-mm-ss"));
+        Script script = new Script();
+
+        List<String> argsList = new ArrayList<>();
+        //url
+        argsList.add("-url");
+        argsList.add("jdbc:h2:" + Context.INSTANCE.DB_DIR() + "/" + Context.INSTANCE.DB_NAME());
+        //user
+        argsList.add("-user");
+        argsList.add(Context.INSTANCE.DB_USER());
+        //password
+        argsList.add("-password");
+        argsList.add(Context.INSTANCE.DB_PASSWORD());
+        //script 2016-04-17T22-23-01_start_backup.zip
+        //prefix (start, end)
+        argsList.add("-script");
+        argsList.add("backups/" + currentDateTimeStr + "_" + prefix + "_backup.zip");
+        //options
+        argsList.add("-options");
+        argsList.add("compression");
+        argsList.add("zip");
+
+//        "jdbc:h2:" + Context.INSTANCE.DB_DIR() + "/" + Context.INSTANCE.DB_NAME()
+//
+//        java org.h2.tools.Script -url jdbc:h2:~/test -user sa -script test.zip -options compression zip
+//        DB_DIR = ~/smart_finance
+//        DB_NAME = finance
+//        DB_SCHEMA = FINANCE
+//        DB_USER = root
+//        DB_PASSWORD = root
+
+        script.runTool(argsList.toArray(new String[argsList.size()]));
+
+    }
 
     public static boolean checkIfSchemaExists(String dbSchemaName) {
         try {

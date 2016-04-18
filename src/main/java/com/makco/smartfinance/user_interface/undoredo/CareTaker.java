@@ -28,8 +28,10 @@ public class CareTaker{
 
     public void clear(){
         try {
+            LOG.debug("CareTaker->clear");
             undoStates.clear();
             redoStates.clear();
+            setStatesSizes();
         } catch (Exception e) {
             DialogMessages.showExceptionAlert(e);
         }

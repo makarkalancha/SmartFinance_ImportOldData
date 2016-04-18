@@ -120,9 +120,9 @@ public class FamilyMemberController implements Initializable, ControlledScreen, 
             ((Service<Void>) onDeleteWorker).setOnFailed(event -> {
                 LOG.debug("onDeleteWorker->setOnFailed");
                 LOG.debug(">>>>>>>>onDeleteWorker->setOnFailed: pForm.getDialogStage().close()");
-                DialogMessages.showExceptionAlert(onDeleteWorker.getException());
                 pForm.close();
                 populateTable();
+                DialogMessages.showExceptionAlert(onDeleteWorker.getException());
             });
             ((Service<EnumSet<ErrorEnum>>) onSaveWorker).setOnSucceeded(event -> {
                 LOG.debug("onSaveWorker->setOnSucceeded");
@@ -139,9 +139,9 @@ public class FamilyMemberController implements Initializable, ControlledScreen, 
             ((Service<EnumSet<ErrorEnum>>) onSaveWorker).setOnFailed(event -> {
                 LOG.debug("onSaveWorker->setOnFailed");
                 LOG.debug(">>>>>>>>onSaveWorker->setOnFailed: pForm.getDialogStage().close()");
-                DialogMessages.showExceptionAlert(onSaveWorker.getException());
                 pForm.close();
                 populateTable();
+                DialogMessages.showExceptionAlert(onSaveWorker.getException());
             });
             ((Service<Void>) onRefreshFamilyMembersWorker).setOnSucceeded(event -> {
                 LOG.debug("onRefreshFamilyMembersWorker->setOnSucceeded");
@@ -152,9 +152,9 @@ public class FamilyMemberController implements Initializable, ControlledScreen, 
             ((Service<Void>) onRefreshFamilyMembersWorker).setOnFailed(event -> {
                 LOG.debug("onRefreshFamilyMembersWorker->setOnFailed");
                 LOG.debug(">>>>>>>>onRefreshFamilyMembersWorker->setOnFailed: pForm.getDialogStage().close()");
-                DialogMessages.showExceptionAlert(onRefreshFamilyMembersWorker.getException());
                 pForm.close();
                 populateTable();
+                DialogMessages.showExceptionAlert(onRefreshFamilyMembersWorker.getException());
             });
         } catch (Exception e) {
             //not in finally because refreshFamilyMembers must run before populateTable

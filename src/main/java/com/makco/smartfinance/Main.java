@@ -7,48 +7,50 @@ import com.makco.smartfinance.user_interface.constants.ApplicationConstants;
 import com.makco.smartfinance.user_interface.constants.DialogMessages;
 import com.makco.smartfinance.user_interface.constants.ProgressForm;
 import com.makco.smartfinance.user_interface.constants.Screens;
-import com.makco.smartfinance.utils.ApplicationUtililities;
 import com.makco.smartfinance.utils.Logs;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.concurrent.Worker;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 /**
  * Created by mcalancea on 2016-03-28.
  */
 public class Main extends Application{
     private final static Logger LOG = LogManager.getLogger(Main.class);
+    private static final Executor executor = Executors.newCachedThreadPool(runnable -> {
+        Thread t = new Thread(runnable);
+        t.setDaemon(true);
+        return t;
+    });
 
     private Stage primaryStage;
-    private Executor executor;
-    private Worker<Void> migrateWorker;
-    private ProgressForm pForm = new ProgressForm();
+    private Worker<Void> preStartWorker;
+    private ProgressForm pFormStart = new ProgressForm();
 
     public Main(){
-        executor = Executors.newCachedThreadPool(runnable -> {
-            Thread t = new Thread(runnable);
-            t.setDaemon(true);
-            return t;
-        });
-
-        migrateWorker = new Task<Void>() {
+        preStartWorker = new Task<Void>() {
             @Override
             protected Void call() throws Exception {
-                LOG.debug("Main:migrate");
+                LOG.debug("1-Main:migrate");
                 H2DbUtils.migrate(DataBaseConstants.SCHEMA);
+                LOG.debug("2-Main:backup");
+                H2DbUtils.backup("start");
                 return null;
             }
         };
-        pForm.activateProgressBar(migrateWorker);
+        pFormStart.activateProgressBar(preStartWorker);
     }
 
     //https://www.youtube.com/watch?v=5GsdaZWDcdY
@@ -60,8 +62,8 @@ public class Main extends Application{
     //http://www.devx.com/Java/Article/48193/0/page/2
     @Override
     public void start(Stage primaryStage){
-        System.setErr(Logs.createLoggingProxy(System.err));
-        System.setOut(Logs.createLoggingProxy(System.out));
+        System.setErr(Logs.createLoggingErrors(System.err));
+        System.setOut(Logs.createLoggingDebugs(System.out));
         try {
 ////            H2DbUtils.checkIfSchemaExists(ApplicationConstants.DB_SCHEMA_NAME);
 ////http://www.hascode.com/2013/04/easy-database-migrations-using-flyway-java-ee-6-and-glassfish/
@@ -74,16 +76,16 @@ public class Main extends Application{
 ////                LOG.debug("db DOESN'T exist");
 //
 //            H2DbUtils.migrate(DataBaseConstants.SCHEMA);
-            ((Task<Void>) migrateWorker).setOnSucceeded(event -> {
-                LOG.debug("migrateWorker->setOnSucceeded");
-                LOG.debug(">>>>>>>>migrateWorker->setOnSucceeded: pForm.getDialogStage().close()");
+            ((Task<Void>) preStartWorker).setOnSucceeded(event -> {
+                LOG.debug("preStartWorker->setOnSucceeded");
+                LOG.debug(">>>>>>>>preStartWorker->setOnSucceeded: pFormStart.getDialogStage().close()");
 
                 this.primaryStage = primaryStage;
 
                 primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
                     @Override
                     public void handle(WindowEvent event) {
-                        ApplicationUtililities.quit(event);
+                        Main.quit(event);
                     }
                 });
 
@@ -100,18 +102,47 @@ public class Main extends Application{
                 primaryStage.setScene(scene);
                 LOG.debug(">>>>primaryStage.show()->hello: start");
                 primaryStage.show();
-                pForm.close();
+                pFormStart.close();
             });
-            ((Task<Void>) migrateWorker).setOnFailed(event -> {
-                LOG.debug("migrateWorker->setOnFailed");
-                LOG.debug(">>>>>>>>migrateWorker->setOnFailed: pForm.getDialogStage().close()");
-                DialogMessages.showExceptionAlert(migrateWorker.getException());
-                pForm.close();
+            ((Task<Void>) preStartWorker).setOnFailed(event -> {
+                LOG.debug("preStartWorker->setOnFailed");
+                LOG.debug(">>>>>>>>preStartWorker->setOnFailed: pFormStart.getDialogStage().close()");
+                pFormStart.close();
+                DialogMessages.showExceptionAlert(preStartWorker.getException());
             });
-            pForm.show();
-            executor.execute((Task<Void>)migrateWorker);
+            pFormStart.show();
+            executor.execute((Task<Void>) preStartWorker);
         }catch (Exception e){
             DialogMessages.showExceptionAlert(e);
+        }
+    }
+
+    public static void quit(Event evt){
+        try {
+            LOG.debug("Closing the applicatoin...");
+            Worker<Void> preQuitWorker = new Task<Void>() {
+                @Override
+                protected Void call() throws Exception {
+                    LOG.debug("1-Main:backup");
+                    H2DbUtils.backup("quit");
+                    return null;
+                }
+            };
+            ProgressForm pFormQuit = new ProgressForm();
+            pFormQuit.activateProgressBar(preQuitWorker);
+
+            ((Task<Void>) preQuitWorker).setOnSucceeded(event -> {
+                Platform.exit();
+                System.exit(0);
+            });
+            ((Task<Void>) preQuitWorker).setOnFailed(event -> {
+                pFormQuit.close();
+                DialogMessages.showExceptionAlert(preQuitWorker.getException());
+            });
+            pFormQuit.show();
+            executor.execute((Task<Void>) preQuitWorker);
+        } catch (Throwable t) {
+            LOG.error(t, t);
         }
     }
 }
