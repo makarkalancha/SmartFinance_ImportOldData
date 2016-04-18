@@ -101,6 +101,17 @@ public class H2DbUtils {
         return H2DbUtils.class.getClassLoader().getResourceAsStream(Context.INSTANCE.DB_SCRIPT_CREATE());
     }
 
+    public static boolean checkIfSchemaExists(String dbSchemaName) {
+        try {
+            Connection connection = DriverManager.getConnection("jdbc:h2:" + Context.INSTANCE.DB_DIR() + "/" + Context.INSTANCE.DB_NAME(),
+                    Context.INSTANCE.DB_USER(), Context.INSTANCE.DB_PASSWORD());
+            return checkIfSchemaExists(connection, "FINANCE");
+        } catch (SQLException e) {
+            LOG.error(e, e);
+            return false;
+        }
+    }
+
     public static int migrate(String schemaName) {
         Flyway flyway = new Flyway();
 //IFEXISTS=TRUE -> throws exception if DB doesn't exist
@@ -149,14 +160,10 @@ public class H2DbUtils {
 
     }
 
-    public static boolean checkIfSchemaExists(String dbSchemaName) {
-        try {
-            Connection connection = DriverManager.getConnection("jdbc:h2:" + Context.INSTANCE.DB_DIR() + "/" + Context.INSTANCE.DB_NAME(),
-                    Context.INSTANCE.DB_USER(), Context.INSTANCE.DB_PASSWORD());
-            return checkIfSchemaExists(connection, "FINANCE");
-        } catch (SQLException e) {
-            LOG.error(e, e);
-            return false;
-        }
+    public static boolean isDateUnitTableEmpty(String schemaName) throws SQLException{
+        boolean isEmpty = true;
+        Connection connection = DriverManager.getConnection("jdbc:h2:" + Context.INSTANCE.DB_DIR() + "/" + Context.INSTANCE.DB_NAME(),
+                Context.INSTANCE.DB_USER(), Context.INSTANCE.DB_PASSWORD());
+        return isEmpty;
     }
 }

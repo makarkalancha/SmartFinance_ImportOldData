@@ -14,6 +14,7 @@ import java.util.Date;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.ClassRule;
+import org.junit.Test;
 
 /**
  * Created by mcalancea on 2016-03-08.
@@ -25,7 +26,7 @@ public class H2DbUtilsTest {
     public static DBConnectionResource dbConnectionResource = new DBConnectionResource();
 
     //comment or remove this method from test suite
-//    @Test
+    @Test
     public void testDateUnitTable() throws Exception{
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         LocalDateTime start;
@@ -110,7 +111,7 @@ public class H2DbUtilsTest {
 
         long hours1 = Duration.between(start,end).toHours();
         long minutes1 = Duration.between(start,end).toMinutes();
-        long seconds1 = (Duration.between(start,end).toMillis() / 1000);
+        long seconds1 = (Duration.between(start,end).toMillis() / 1_000);
         long millisSeconds1 = Duration.between(start,end).toMillis();
         LOG.debug("duration1 (H:M:S.m): " + hours1 + ":" + minutes1 + ":" + seconds1 + "." + millisSeconds1);
 
