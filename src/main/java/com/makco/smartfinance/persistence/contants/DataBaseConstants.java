@@ -10,4 +10,5 @@ public class DataBaseConstants {
 //    public final static String USERNAME = "root";
 //    public final static String PASSWORD = "root";
     public final static String SCHEMA = "FINANCE";
+    public final static Integer BATCH_SIZE = 50;
 }
