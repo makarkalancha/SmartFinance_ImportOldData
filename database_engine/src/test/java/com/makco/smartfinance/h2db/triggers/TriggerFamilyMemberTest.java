@@ -9,7 +9,6 @@ import com.makco.smartfinance.h2db.utils.DBObjectType;
 import com.makco.smartfinance.h2db.utils.H2DbUtils;
 import com.makco.smartfinance.h2db.utils.JsonUtils;
 import com.makco.smartfinance.h2db.utils.schema_constants.Table;
-import java.io.InputStreamReader;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -17,7 +16,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.h2.tools.RunScript;
+import org.flywaydb.core.Flyway;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -47,8 +46,11 @@ public class TriggerFamilyMemberTest {
         if(!H2DbUtils.checkIfSchemaExists(dbConnectionResource.getConnection(), TestContext.INSTANCE.DB_SCHEMA())){
             H2DbUtils.createSchema(dbConnectionResource.getConnection(), TestContext.INSTANCE.DB_SCHEMA());
             H2DbUtils.setSchema(dbConnectionResource.getConnection(), TestContext.INSTANCE.DB_SCHEMA());
-            RunScript.execute(dbConnectionResource.getConnection(),
-                    new InputStreamReader(H2DbUtils.getCreateDBScript()));
+//            RunScript.execute(dbConnectionResource.getConnection(), new InputStreamReader(H2DbUtils.getCreateDBScript()));
+            Flyway flyway = new Flyway();
+            flyway.setDataSource(DBConnectionResource.getDbConnectionUrl(),TestContext.INSTANCE.DB_USER(),TestContext.INSTANCE.DB_PASSWORD());
+            flyway.setSchemas(TestContext.INSTANCE.DB_SCHEMA());
+            flyway.migrate();
         } else {
             H2DbUtils.setSchema(dbConnectionResource.getConnection(), TestContext.INSTANCE.DB_SCHEMA());
         }

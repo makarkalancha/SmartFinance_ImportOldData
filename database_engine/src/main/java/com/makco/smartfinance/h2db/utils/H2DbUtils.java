@@ -1,7 +1,6 @@
 package com.makco.smartfinance.h2db.utils;
 
 import com.makco.smartfinance.h2db.utils.schema_constants.Table;
-import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
@@ -13,7 +12,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.flywaydb.core.Flyway;
@@ -96,10 +94,6 @@ public class H2DbUtils {
             LOG.error(e, e);
             throw e;
         }
-    }
-
-    public static InputStream getCreateDBScript() {
-        return H2DbUtils.class.getClassLoader().getResourceAsStream(Context.INSTANCE.DB_SCRIPT_CREATE());
     }
 
     public static boolean checkIfSchemaExists(String dbSchemaName) {

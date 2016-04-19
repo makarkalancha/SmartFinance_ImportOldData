@@ -17,7 +17,6 @@ public enum Context {
     private String DB_SCHEMA;
     private String DB_USER;
     private String DB_PASSWORD;
-    private String DB_SCRIPT_CREATE;
     private final Logger LOG = LogManager.getLogger(Context.class);
 
     private boolean isFirstRun = true;
@@ -42,10 +41,6 @@ public enum Context {
         return DB_USER;
     }
 
-    public String DB_SCRIPT_CREATE() {
-        return DB_SCRIPT_CREATE;
-    }
-
     private Context() {
         if (isFirstRun) {
 
@@ -65,7 +60,6 @@ public enum Context {
                 DB_SCHEMA = prop.getProperty("DB_SCHEMA");
                 DB_USER = prop.getProperty("DB_USER");
                 DB_PASSWORD = prop.getProperty("DB_PASSWORD");
-                DB_SCRIPT_CREATE = prop.getProperty("DB_SCRIPT_CREATE");
 
                 isFirstRun = false;
             } catch (IOException ex) {

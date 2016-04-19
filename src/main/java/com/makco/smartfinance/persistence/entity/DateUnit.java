@@ -1,83 +1,86 @@
 package com.makco.smartfinance.persistence.entity;
 
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.Calendar;
+import java.time.temporal.ChronoUnit;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.persistence.UniqueConstraint;
 
 /**
  * Created by mcalancea on 2016-04-19.
  */
 @Entity
-@Table(
-        name="DATEUNIT",
-        uniqueConstraints = {
-                @UniqueConstraint(name = "IDXUNITYEAR", columnNames = {"UNITYEAR"}),
-                @UniqueConstraint(name = "IDXUNITMONTHOFYEAR", columnNames = {"UNITMONTHOFYEAR"}),
-                @UniqueConstraint(name = "IDXUNITMONTH", columnNames = {"UNITMONTH"}),
-                @UniqueConstraint(name = "IDXUNITDATEOFMONTH", columnNames = {"UNITDATEOFMONTH"}),
-                @UniqueConstraint(name = "IDXUNITDAYOFWEEK", columnNames = {"UNITDAYOFWEEK"}),
-                @UniqueConstraint(name = "IDXWEEKDAY", columnNames = {"WEEKDAY"}),
-                @UniqueConstraint(name = "IDXUNITTIMESTAMP", columnNames = {"UNITTIMESTAMP"}),
-        }
-)
+@Table(name="DATEUNIT")
 public class DateUnit {
-    @Column(name="UNITDATE")
+    private final static LocalDate EPOCH = LocalDate.ofEpochDay(0);
+
+    @Column(name="UNITDATE", updatable = false)
     private Long unitDate;
 
-    @Column(name="UNITDATEOFMONTH")
-    private Long unitDateOfMonth;
+    @Column(name="UNITDATEOFMONTH", updatable = false)
+    private Integer unitDateOfMonth;
 
-    @Column(name="UNITMONTH")
+    @Column(name="UNITMONTH", updatable = false)
     private Long unitMonth;
 
-    @Column(name="UNITMONTHOFYEAR")
+    @Column(name="UNITMONTHOFYEAR", updatable = false)
     private Integer unitMonthOfYear;
 
-    @Column(name="UNITYEAR")
+    @Column(name="UNITYEAR", updatable = false)
     private Integer unitYear;
 
-    @Column(name="UNITDAYOFWEEK")
+    @Column(name="UNITDAYOFWEEK", updatable = false)
     private Integer unitDayOfWeek;
 
-    @Column(name="WEEKDAY")
+    @Column(name="WEEKDAY", updatable = false)
     private boolean weekday;
 
-    @Column(name="UNITTIMESTAMP")
-    private Calendar unitTimestamp;
+    @Column(name="UNITTIMESTAMP", updatable = false)
+    private LocalDate unitTimestamp;
 
-    @Temporal(TemporalType.TIMESTAMP)
+//    @Temporal(TemporalType.TIMESTAMP)
     @org.hibernate.annotations.CreationTimestamp
     @Column(name="T_CREATEDON",insertable = false, updatable = false)
-    private Calendar createdOn;
+    private LocalDateTime createdOn;
 
     public DateUnit(){
 
     }
 
-    public DateUnit(Long unitDate, Long unitDateOfMonth, Long unitMonth, Integer unitMonthOfYear, Integer unitYear, Integer unitDayOfWeek,
-            boolean weekday, Calendar unitTimestamp, Calendar createdOn) {
-        this.unitDate = unitDate;
-        this.unitDateOfMonth = unitDateOfMonth;
-        this.unitMonth = unitMonth;
-        this.unitMonthOfYear = unitMonthOfYear;
-        this.unitYear = unitYear;
-        this.unitDayOfWeek = unitDayOfWeek;
-        this.weekday = weekday;
-        this.unitTimestamp = unitTimestamp;
-        this.createdOn = createdOn;
+//    public DateUnit(Long unitDate, Long unitDateOfMonth, Long unitMonth, Integer unitMonthOfYear, Integer unitYear, Integer unitDayOfWeek,
+//            boolean weekday, Calendar unitTimestamp, Calendar createdOn) {
+//        this.unitDate = unitDate;
+//        this.unitDateOfMonth = unitDateOfMonth;
+//        this.unitMonth = unitMonth;
+//        this.unitMonthOfYear = unitMonthOfYear;
+//        this.unitYear = unitYear;
+//        this.unitDayOfWeek = unitDayOfWeek;
+//        this.weekday = weekday;
+//        this.unitTimestamp = unitTimestamp;
+//        this.createdOn = createdOn;
+//    }
+
+    public DateUnit(LocalDate localDate) {
+        this.unitDate = ChronoUnit.DAYS.between(EPOCH, localDate);;
+        this.unitDateOfMonth = localDate.getDayOfMonth();
+        this.unitMonth = ChronoUnit.MONTHS.between(EPOCH, localDate);
+        this.unitMonthOfYear = localDate.getMonthValue();
+        this.unitYear = localDate.getYear();
+        this.unitDayOfWeek = localDate.getDayOfWeek().getValue();
+        this.weekday = (localDate.getDayOfWeek().getValue() == DayOfWeek.SUNDAY.getValue() ||
+                localDate.getDayOfWeek().getValue() == DayOfWeek.SATURDAY.getValue()) ?
+                false :
+                true;
+        this.unitTimestamp = localDate;
     }
 
     public Long getUnitDate() {
         return unitDate;
     }
 
-    public Long getUnitDateOfMonth() {
+    public Integer getUnitDateOfMonth() {
         return unitDateOfMonth;
     }
 
@@ -93,7 +96,7 @@ public class DateUnit {
         return unitMonthOfYear;
     }
 
-    public Calendar getUnitTimestamp() {
+    public LocalDate getUnitTimestamp() {
         return unitTimestamp;
     }
 
@@ -106,7 +109,7 @@ public class DateUnit {
     }
 
     public LocalDateTime getCreatedOn() {
-        return createdOn.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+        return createdOn;
     }
 
     @Override

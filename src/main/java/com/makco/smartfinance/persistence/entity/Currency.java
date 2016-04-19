@@ -7,8 +7,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -71,12 +69,12 @@ public class Currency implements Serializable{
     )
     private String description;
 
-    @Temporal(TemporalType.TIMESTAMP)
+//    @Temporal(TemporalType.TIMESTAMP)
     @org.hibernate.annotations.CreationTimestamp
     @Column(name="T_CREATEDON",insertable = false, updatable = false)
     protected LocalDateTime createdOn;
 
-    @Temporal(TemporalType.TIMESTAMP)
+//    @Temporal(TemporalType.TIMESTAMP)
     @org.hibernate.annotations.UpdateTimestamp
     @Column(name="T_UPDATEDON",insertable = false, updatable = false)
     protected LocalDateTime updatedOn;
