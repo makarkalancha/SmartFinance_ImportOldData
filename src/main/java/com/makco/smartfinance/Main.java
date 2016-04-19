@@ -4,12 +4,14 @@ import com.makco.smartfinance.h2db.utils.H2DbUtils;
 import com.makco.smartfinance.user_interface.ScreensController;
 import com.makco.smartfinance.user_interface.constants.ApplicationConstants;
 import com.makco.smartfinance.user_interface.constants.DialogMessages;
-import com.makco.smartfinance.user_interface.constants.ProgressBarForm;
-import com.makco.smartfinance.user_interface.constants.ProgressIndicatorForm;
+import com.makco.smartfinance.user_interface.constants.forms.ProgressBarForm;
+import com.makco.smartfinance.user_interface.constants.forms.ProgressIndicatorForm;
 import com.makco.smartfinance.user_interface.constants.Screens;
 import com.makco.smartfinance.utils.Logs;
+import java.time.LocalDate;
 import java.time.temporal.WeekFields;
 import java.util.Locale;
+import java.util.Optional;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.lookup.MainMapLookup;
@@ -80,10 +82,14 @@ public class Main extends Application{
             ((Service<Void>) preStartWorker).setOnSucceeded(event -> {
                 if(isEmpty.get()){
                     pFormStart.close();
-                    boolean isConfirmed = DialogMessages.showDateUnitConfirmationDialog();
-                    if(isConfirmed){
-
-                    }
+//                    boolean isConfirmed = DialogMessages.showDateUnitConfirmationDialog();
+//                    if(isConfirmed){
+//
+//                    }
+                    Optional<LocalDate> ldt = DialogMessages.showDateUnitConfirmationDialog();
+                    ldt.ifPresent(localDateTime ->
+                            LOG.debug("Main->localDatetime: "+localDateTime.toString())
+                    );
 //                    openApp();
                 } else {
                     openApp();

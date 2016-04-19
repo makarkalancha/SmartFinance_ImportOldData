@@ -1,5 +1,6 @@
-package com.makco.smartfinance.user_interface.constants;
+package com.makco.smartfinance.user_interface.constants.forms;
 
+import com.makco.smartfinance.user_interface.constants.ApplicationConstants;
 import javafx.concurrent.Worker;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;

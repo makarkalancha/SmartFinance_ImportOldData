@@ -1,8 +1,10 @@
 package com.makco.smartfinance.user_interface.constants;
 
+import com.makco.smartfinance.user_interface.constants.forms.DatePickerForm;
 import com.makco.smartfinance.user_interface.validation.ErrorEnum;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.Optional;
@@ -10,15 +12,20 @@ import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import javafx.application.Platform;
+import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.DatePicker;
+import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 /**
@@ -115,24 +122,56 @@ public class DialogMessages {
         alert.showAndWait();
     }
 
-    public static boolean showDateUnitConfirmationDialog(){
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
+    public static Optional<LocalDate> showDateUnitConfirmationDialog() {
+        //create custom dialog
+        Dialog<LocalDate> dialog = new Dialog<>();
+        dialog.setTitle("Fill dates");
+        dialog.setHeaderText("Fill dates for reports in application");
+
+        //set icons
+        Stage alertStage = (Stage) dialog.getDialogPane().getScene().getWindow();
         alertStage.getIcons().add(new Image(ApplicationConstants.MAIN_WINDOW_ICO));
-        alert.setGraphic(new ImageView(ApplicationConstants.CALENDAR));
+        dialog.setGraphic(new ImageView(ApplicationConstants.CALENDAR));
 
-        alert.setTitle("Fill dates");
-        alert.setHeaderText("Fill dates for reports in application");
-        alert.setContentText("Choose start date for reporting:");
+        //set buttons
+        ButtonType applyBtnTp = new ButtonType("Apply", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(applyBtnTp, ButtonType.CANCEL);
 
-        DatePicker startDate = new DatePicker();
-        alert.getDialogPane().setExpandableContent(startDate);
+        Label content = new Label("Choose start date for reporting:");
+        DatePickerForm startDate = new DatePickerForm();
+        VBox vb = new VBox();
+        vb.setAlignment(Pos.CENTER);
+        vb.getChildren().addAll(content, startDate.getDatePicker());
 
-        Optional<ButtonType> result = alert.showAndWait();
-        if (result.get() == ButtonType.OK){
-            return true;
-        } else {
-            return false;
-        }
+        //Enable/Disable Apply button depending on whether a date was entered
+        Node applyBtn = dialog.getDialogPane().lookupButton(applyBtnTp);
+        applyBtn.setDisable(true);
+
+        //do some validation
+        startDate.valueProperty().addListener((observable, oldValue, newValue) -> {
+            LOG.debug("startDate.valueProperty()->newValue == null:" + (newValue == null));
+            applyBtn.setDisable(newValue == null);
+        });
+        startDate.editorProperty().addListener((observable, oldValue, newValue) -> {
+            LOG.debug("startDate.editorProperty()->newValue == null:" + (newValue == null));
+            applyBtn.setDisable(newValue.getText().isEmpty());
+        });
+
+
+        dialog.getDialogPane().setContent(vb);
+        Platform.runLater(() -> startDate.requestFocus());
+
+        //convert the result to a LocalDateTime when Apply button is clicked
+        dialog.setResultConverter(dialogBtn -> {
+            if (dialogBtn == applyBtnTp) {
+                return startDate.getValue();
+            }
+            return null;
+        });
+        Optional<LocalDate> result = dialog.showAndWait();
+        result.ifPresent(localDateTime -> {
+            LOG.debug("localDateTime:" + localDateTime.toString());
+        });
+        return result;
     }
 }
