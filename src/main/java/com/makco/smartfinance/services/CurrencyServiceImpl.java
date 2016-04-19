@@ -21,15 +21,6 @@ public class CurrencyServiceImpl implements CurrencyService {
     private CurrencyDAO currencyDAO = new CurrencyDAOImpl();
 
     @Override
-    public void addCurrency(Currency currency) {
-        try {
-            currencyDAO.addCurrency(currency);
-        } catch (Exception e) {
-            DialogMessages.showExceptionAlert(e);
-        }
-    }
-
-    @Override
     public List<Currency> currencyList() {
         List<Currency> currencyList = new ArrayList<>();
         try {
@@ -75,15 +66,6 @@ public class CurrencyServiceImpl implements CurrencyService {
     public void saveOrUpdateCurrency(Currency currency) {
         try{
             currencyDAO.saveOrUpdateCurrency(currency);
-        } catch (Exception e) {
-            DialogMessages.showExceptionAlert(e);
-        }
-    }
-
-    @Override
-    public void updateCurrency(Currency currency) {
-        try{
-            currencyDAO.updateCurrency(currency);
         } catch (Exception e) {
             DialogMessages.showExceptionAlert(e);
         }

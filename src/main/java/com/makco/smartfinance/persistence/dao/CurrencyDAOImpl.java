@@ -17,24 +17,6 @@ public class CurrencyDAOImpl implements CurrencyDAO {
     private final static Logger LOG = LogManager.getLogger(CurrencyDAOImpl.class);
 
     @Override
-    public void addCurrency(Currency currency) {
-        Session session = null;
-        try {
-            session = HibernateUtil.openSession();
-            session.beginTransaction();
-            session.save(currency);
-            session.getTransaction().commit();
-        } catch (Exception e) {
-            session.getTransaction().rollback();
-            DialogMessages.showExceptionAlert(e);
-        } finally {
-            if(session != null){
-                session.close();
-            }
-        }
-    }
-
-    @Override
     public List<Currency> currencyList() {
         List<Currency> list = new ArrayList<>();
         Session session = null;
@@ -122,24 +104,6 @@ public class CurrencyDAOImpl implements CurrencyDAO {
             session = HibernateUtil.openSession();
             session.beginTransaction();
             session.saveOrUpdate(currency);
-            session.getTransaction().commit();
-        } catch (Exception e) {
-            session.getTransaction().rollback();
-            DialogMessages.showExceptionAlert(e);
-        } finally {
-            if(session != null){
-                session.close();
-            }
-        }
-    }
-
-    @Override
-    public void updateCurrency(Currency currency) {
-        Session session = null;
-        try{
-            session = HibernateUtil.openSession();
-            session.beginTransaction();
-            session.update(currency);
             session.getTransaction().commit();
         } catch (Exception e) {
             session.getTransaction().rollback();

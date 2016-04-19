@@ -15,9 +15,7 @@ public interface CurrencyService {
     Currency getCurrencyById(Long id);
     List<Currency> getCurrencyByCode(String code);
 
-    void addCurrency(Currency currency);
     void removeCurrency(Long id);
     void saveOrUpdateCurrency(Currency currency);
-    void updateCurrency(Currency currency);
     EnumSet<ErrorEnum> validate(Currency currency);
 }
