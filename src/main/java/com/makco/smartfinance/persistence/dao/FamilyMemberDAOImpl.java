@@ -17,12 +17,12 @@ public class FamilyMemberDAOImpl implements FamilyMemberDAO {
     private final static Logger LOG = LogManager.getLogger(FamilyMemberDAOImpl.class);
     @Override
     public void addFamilyMember(FamilyMember familyMember) {
+        Session session = null;
         try {
-            Session session = HibernateUtil.openSession();
+            session = HibernateUtil.openSession();
             session.beginTransaction();
             session.save(familyMember);
             session.getTransaction().commit();
-            session.close();
 
 //        EntityManager em = FinancePersistenceManager.INSTANCE.getEntityManager();
 //        em.getTransaction().begin();
@@ -31,19 +31,24 @@ public class FamilyMemberDAOImpl implements FamilyMemberDAO {
 //        em.getTransaction().commit();
 //        em.close();
         } catch (Exception e) {
+            session.getTransaction().rollback();
             DialogMessages.showExceptionAlert(e);
+        } finally {
+            if(session != null){
+                session.close();
+            }
         }
     }
 
     @Override
     public List<FamilyMember> familyMemberList() {
+        Session session = null;
         List<FamilyMember> list = new ArrayList<>();
         try{
-            Session session = HibernateUtil.openSession();
+            session = HibernateUtil.openSession();
             session.beginTransaction();
-            list = session.createQuery("FROM FamilyMember AS f ORDER BY f.name").list();
+            list = session.createQuery("SELECT f FROM FamilyMember f ORDER BY f.name").list();
             session.getTransaction().commit();
-            session.close();
 
 //        List<FamilyMember> list = new ArrayList<>();
 //        EntityManager em = FinancePersistenceManager.INSTANCE.getEntityManager();
@@ -53,20 +58,25 @@ public class FamilyMemberDAOImpl implements FamilyMemberDAO {
 //        em.close();
 //        return list;
         } catch (Exception e) {
+            session.getTransaction().rollback();
             DialogMessages.showExceptionAlert(e);
+        } finally {
+            if(session != null){
+                session.close();
+            }
         }
         return list;
     }
 
     @Override
     public void removeFamilyMember(Long id) {
+        Session session = null;
         try{
-            Session session = HibernateUtil.openSession();
+            session = HibernateUtil.openSession();
             session.beginTransaction();
             FamilyMember familyMember = (FamilyMember) session.load(FamilyMember.class, id);
             session.delete(familyMember);
             session.getTransaction().commit();
-            session.close();
 
 //        EntityManager em = FinancePersistenceManager.INSTANCE.getEntityManager();
 //        em.getTransaction().begin();
@@ -75,18 +85,23 @@ public class FamilyMemberDAOImpl implements FamilyMemberDAO {
 //        em.getTransaction().commit();
 //        em.close();
         } catch (Exception e) {
+            session.getTransaction().rollback();
             DialogMessages.showExceptionAlert(e);
+        } finally {
+            if(session != null){
+                session.close();
+            }
         }
     }
 
     @Override
     public void updateFamilyMember(FamilyMember familyMember) {
+        Session session = null;
         try{
-            Session session = HibernateUtil.openSession();
+            session = HibernateUtil.openSession();
             session.beginTransaction();
             session.update(familyMember);
             session.getTransaction().commit();
-            session.close();
 
 //        EntityManager em = FinancePersistenceManager.INSTANCE.getEntityManager();
 //        em.getTransaction().begin();
@@ -95,20 +110,24 @@ public class FamilyMemberDAOImpl implements FamilyMemberDAO {
 //        em.getTransaction().commit();
 //        em.close();
         } catch (Exception e) {
+            session.getTransaction().rollback();
             DialogMessages.showExceptionAlert(e);
+        } finally {
+            if(session != null){
+                session.close();
+            }
         }
     }
 
     @Override
     public FamilyMember getFamilyMemberById(Long id) {
+        Session session = null;
         FamilyMember familyMember = null;
         try{
-            Session session = HibernateUtil.openSession();
+            session = HibernateUtil.openSession();
             session.beginTransaction();
             familyMember = (FamilyMember) session.get(FamilyMember.class, id);
             session.getTransaction().commit();
-            session.close();
-
 
 //        FamilyMember familyMember = null;
 //        EntityManager em = FinancePersistenceManager.INSTANCE.getEntityManager();
@@ -118,22 +137,27 @@ public class FamilyMemberDAOImpl implements FamilyMemberDAO {
 //        em.close();
 //        return familyMember;
         } catch (Exception e) {
+            session.getTransaction().rollback();
             DialogMessages.showExceptionAlert(e);
+        } finally {
+            if(session != null){
+                session.close();
+            }
         }
         return familyMember;
     }
 
     @Override
     public List<FamilyMember> getFamilyMemberByName(String name) {
+        Session session = null;
         List<FamilyMember> familyMembers = new ArrayList<>();
         try {
-            Session session = HibernateUtil.openSession();
+            session = HibernateUtil.openSession();
             session.beginTransaction();
-            familyMembers = session.createQuery("FROM FamilyMember AS f WHERE name = :name ORDER BY f.name")
+            familyMembers = session.createQuery("SELECT f FROM FamilyMember f WHERE name = :name ORDER BY f.name")
                     .setString("name", name)
                     .list();
             session.getTransaction().commit();
-            session.close();
 
 //        FamilyMember familyMember = null;
 //        EntityManager em = FinancePersistenceManager.INSTANCE.getEntityManager();
@@ -143,21 +167,31 @@ public class FamilyMemberDAOImpl implements FamilyMemberDAO {
 //        em.close();
 //        return familyMember;
         } catch (Exception e) {
+            session.getTransaction().rollback();
             DialogMessages.showExceptionAlert(e);
+        } finally {
+            if(session != null){
+                session.close();
+            }
         }
         return familyMembers;
     }
 
     @Override
     public void saveOrUpdateFamilyMember(FamilyMember familyMember) {
+        Session session = null;
         try {
-            Session session = HibernateUtil.openSession();
+            session = HibernateUtil.openSession();
             session.beginTransaction();
             session.saveOrUpdate(familyMember);
             session.getTransaction().commit();
-            session.close();
         } catch (Exception e) {
+            session.getTransaction().rollback();
             DialogMessages.showExceptionAlert(e);
+        } finally {
+            if(session != null){
+                session.close();
+            }
         }
     }
 }

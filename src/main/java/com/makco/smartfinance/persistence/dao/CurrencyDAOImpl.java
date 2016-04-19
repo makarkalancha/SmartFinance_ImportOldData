@@ -18,101 +18,136 @@ public class CurrencyDAOImpl implements CurrencyDAO {
 
     @Override
     public void addCurrency(Currency currency) {
+        Session session = null;
         try {
-            Session session = HibernateUtil.openSession();
+            session = HibernateUtil.openSession();
             session.beginTransaction();
             session.save(currency);
             session.getTransaction().commit();
-            session.close();
         } catch (Exception e) {
+            session.getTransaction().rollback();
             DialogMessages.showExceptionAlert(e);
+        } finally {
+            if(session != null){
+                session.close();
+            }
         }
     }
 
     @Override
     public List<Currency> currencyList() {
         List<Currency> list = new ArrayList<>();
+        Session session = null;
         try{
-            Session session = HibernateUtil.openSession();
+            session = HibernateUtil.openSession();
             session.beginTransaction();
-            list = session.createQuery("FROM Currency AS c ORDER BY c.code").list();
+            list = session.createQuery("SELECT c FROM Currency c ORDER BY c.code").list();
             session.getTransaction().commit();
-            session.close();
         } catch (Exception e) {
+            session.getTransaction().rollback();
             DialogMessages.showExceptionAlert(e);
+        } finally {
+            if(session != null){
+                session.close();
+            }
         }
         return list;
     }
 
     @Override
     public Currency getCurrencyById(Long id) {
+        Session session = null;
         Currency currency = null;
         try{
-            Session session = HibernateUtil.openSession();
+            session = HibernateUtil.openSession();
             session.beginTransaction();
             currency = session.get(Currency.class, id);
             session.getTransaction().commit();
-            session.close();
         } catch (Exception e) {
+            session.getTransaction().rollback();
             DialogMessages.showExceptionAlert(e);
+        } finally {
+            if(session != null){
+                session.close();
+            }
         }
         return currency;
     }
 
     @Override
     public List<Currency> getCurrencyByCode(String code) {
+        Session session = null;
         List<Currency> currencies = new ArrayList<>();
         try {
-            Session session = HibernateUtil.openSession();
+            session = HibernateUtil.openSession();
             session.beginTransaction();
-            currencies = session.createQuery("FROM Currency AS c WHERE code = :code ORDER BY c.code")
+            currencies = session.createQuery("SELECT c FROM Currency c WHERE code = :code ORDER BY c.code")
                     .setString("code", code)
                     .list();
             session.getTransaction().commit();
-            session.close();
         } catch (Exception e) {
+            session.getTransaction().rollback();
             DialogMessages.showExceptionAlert(e);
+        } finally {
+            if(session != null){
+                session.close();
+            }
         }
         return currencies;
     }
 
     @Override
     public void removeCurrency(Long id) {
+        Session session = null;
         try{
-            Session session = HibernateUtil.openSession();
+            session = HibernateUtil.openSession();
             session.beginTransaction();
             Currency currency = session.load(Currency.class, id);
             session.delete(currency);
             session.getTransaction().commit();
-            session.close();
         } catch (Exception e) {
+            session.getTransaction().rollback();
             DialogMessages.showExceptionAlert(e);
+        } finally {
+            if(session != null){
+                session.close();
+            }
         }
     }
 
     @Override
     public void saveOrUpdateCurrency(Currency currency) {
+        Session session = null;
         try {
-            Session session = HibernateUtil.openSession();
+            session = HibernateUtil.openSession();
             session.beginTransaction();
             session.saveOrUpdate(currency);
             session.getTransaction().commit();
-            session.close();
         } catch (Exception e) {
+            session.getTransaction().rollback();
             DialogMessages.showExceptionAlert(e);
+        } finally {
+            if(session != null){
+                session.close();
+            }
         }
     }
 
     @Override
     public void updateCurrency(Currency currency) {
+        Session session = null;
         try{
-            Session session = HibernateUtil.openSession();
+            session = HibernateUtil.openSession();
             session.beginTransaction();
             session.update(currency);
             session.getTransaction().commit();
-            session.close();
         } catch (Exception e) {
+            session.getTransaction().rollback();
             DialogMessages.showExceptionAlert(e);
+        } finally {
+            if(session != null){
+                session.close();
+            }
         }
     }
 }
