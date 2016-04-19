@@ -35,11 +35,13 @@ public class Main extends Application{
     static {
         //set locale must be before initializing LOG, otherwise it will not work
         System.setProperty("java.locale.providers", "HOST,SPI,JRE");
+        System.setErr(Logs.createLoggingErrors(System.err));
+        System.setOut(Logs.createLoggingDebugs(System.out));
         LOG = LogManager.getLogger(Main.class);
     }
-//
+
     private Stage primaryStage;
-////    private Worker<Void> preStartWorker;
+//    private Worker<Void> preStartWorker;
     private PreStartWorker preStartWorker;
     private ProgressBarForm pFormStart = new ProgressBarForm();
     private BooleanProperty isEmpty = new SimpleBooleanProperty();
@@ -47,32 +49,20 @@ public class Main extends Application{
     public Main(){
         preStartWorker = new PreStartWorker();
         isEmpty.bind(preStartWorker.isEmptyProperty());
-////        isEmpty.addListener((observable, oldValue, newValue) -> {
-////            LOG.debug(String.format("Main->oldValue: %b; newValue: %b", oldValue, newValue));
-////            if(newValue){
-////                DialogMessages.showConfirmationDialog("Create", "Create", "insert or not", null);
-////            }
-////        });
         pFormStart.activateProgressBar(preStartWorker);
     }
 
     //https://www.youtube.com/watch?v=5GsdaZWDcdY
     //https://github.com/acaicedo/JFX-MultiScreen/tree/master/ScreensFramework/src/screensframework
     public static void main(String[] args) {
-//        LOG.debug("before java.locale.providers: " + System.getProperty("java.locale.providers"));
-//        System.setProperty("java.locale.providers", "HOST,SPI,JRE");
         //https://logging.apache.org/log4j/2.0/manual/lookups.html
         MainMapLookup.setMainArguments(args);
-//        LOG.debug("after java.locale.providers: " + System.getProperty("java.locale.providers"));
         Application.launch(args);
     }
     //http://stackoverflow.com/questions/24055897/same-stage-different-fxml-javafx
     //http://www.devx.com/Java/Article/48193/0/page/2
     @Override
     public void start(Stage primaryStage){
-        System.setErr(Logs.createLoggingErrors(System.err));
-        System.setOut(Logs.createLoggingDebugs(System.out));
-//
         try {
             this.primaryStage = primaryStage;
             LOG.debug("First day of the week: "+ WeekFields.of(Locale.getDefault()).getFirstDayOfWeek());
