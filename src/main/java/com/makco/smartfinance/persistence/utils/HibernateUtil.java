@@ -61,6 +61,7 @@ public class HibernateUtil {
         cfg.setProperty("hibernate.current_session_context_class", "thread");
 
         cfg.setProperty("hibernate.default_schema", "FINANCE");
+        cfg.setProperty("hibernate.jdbc.batch_size", DataBaseConstants.BATCH_SIZE.toString());
         return cfg;
     }
 
