@@ -12,8 +12,6 @@ public interface FamilyMemberDAO {
     FamilyMember getFamilyMemberById(Long id);
     List<FamilyMember> getFamilyMemberByName(String name);
 
-    void addFamilyMember(FamilyMember familyMember);
     void removeFamilyMember(Long id);
     void saveOrUpdateFamilyMember(FamilyMember familyMember);
-    void updateFamilyMember(FamilyMember familyMember);
 }

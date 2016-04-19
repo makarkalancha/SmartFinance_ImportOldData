@@ -23,18 +23,6 @@ public class FamilyMemberServiceImpl implements FamilyMemberService {
     private int tmp = 0;
     
     @Override
-    public void addFamilyMember(FamilyMember familyMember) {
-        try {
-            familyMemberDAO.addFamilyMember(familyMember);
-            LOG.debug("addFamilyMember: before " + tmp + " sec");
-            Thread.sleep(tmp);
-            LOG.debug("addFamilyMember: after " + tmp + " sec");
-        } catch (Exception e) {
-            DialogMessages.showExceptionAlert(e);
-        }
-    }
-
-    @Override
     public List<FamilyMember> familyMemberList() {
         List<FamilyMember> familyMemberList = new ArrayList<>();
         try {
@@ -55,18 +43,6 @@ public class FamilyMemberServiceImpl implements FamilyMemberService {
             LOG.debug("removeFamilyMember: before " + tmp + " sec");
             Thread.sleep(tmp);
             LOG.debug("removeFamilyMember: after " + tmp + " sec");
-        } catch (Exception e) {
-            DialogMessages.showExceptionAlert(e);
-        }
-    }
-
-    @Override
-    public void updateFamilyMember(FamilyMember familyMember) {
-        try{
-            familyMemberDAO.updateFamilyMember(familyMember);
-            LOG.debug("updateFamilyMember: before " + tmp + " sec");
-            Thread.sleep(tmp);
-            LOG.debug("updateFamilyMember: after " + tmp + " sec");
         } catch (Exception e) {
             DialogMessages.showExceptionAlert(e);
         }

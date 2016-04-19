@@ -16,9 +16,7 @@ public interface FamilyMemberService {
     FamilyMember getFamilyMemberById(Long id);
     List<FamilyMember> getFamilyMemberByName(String name);
 
-    void addFamilyMember(FamilyMember familyMember);
     void removeFamilyMember(Long id);
     void saveOrUpdateFamilyMember(FamilyMember familyMember);
-    void updateFamilyMember(FamilyMember familyMember);
     EnumSet<ErrorEnum> validate(FamilyMember familyMember);
 }

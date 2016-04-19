@@ -15,30 +15,6 @@ import org.hibernate.Session;
 //http://programmers.stackexchange.com/questions/220909/service-layer-vs-dao-why-both
 public class FamilyMemberDAOImpl implements FamilyMemberDAO {
     private final static Logger LOG = LogManager.getLogger(FamilyMemberDAOImpl.class);
-    @Override
-    public void addFamilyMember(FamilyMember familyMember) {
-        Session session = null;
-        try {
-            session = HibernateUtil.openSession();
-            session.beginTransaction();
-            session.save(familyMember);
-            session.getTransaction().commit();
-
-//        EntityManager em = FinancePersistenceManager.INSTANCE.getEntityManager();
-//        em.getTransaction().begin();
-//        em.persist(familyMember);
-////        em.flush();
-//        em.getTransaction().commit();
-//        em.close();
-        } catch (Exception e) {
-            session.getTransaction().rollback();
-            DialogMessages.showExceptionAlert(e);
-        } finally {
-            if(session != null){
-                session.close();
-            }
-        }
-    }
 
     @Override
     public List<FamilyMember> familyMemberList() {
@@ -82,31 +58,6 @@ public class FamilyMemberDAOImpl implements FamilyMemberDAO {
 //        em.getTransaction().begin();
 //        FamilyMember familyMember = (FamilyMember) em.find(FamilyMember.class, id);
 //        em.remove(familyMember);
-//        em.getTransaction().commit();
-//        em.close();
-        } catch (Exception e) {
-            session.getTransaction().rollback();
-            DialogMessages.showExceptionAlert(e);
-        } finally {
-            if(session != null){
-                session.close();
-            }
-        }
-    }
-
-    @Override
-    public void updateFamilyMember(FamilyMember familyMember) {
-        Session session = null;
-        try{
-            session = HibernateUtil.openSession();
-            session.beginTransaction();
-            session.update(familyMember);
-            session.getTransaction().commit();
-
-//        EntityManager em = FinancePersistenceManager.INSTANCE.getEntityManager();
-//        em.getTransaction().begin();
-//        em.persist(familyMember);
-////        em.flush();
 //        em.getTransaction().commit();
 //        em.close();
         } catch (Exception e) {
