@@ -7,7 +7,11 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import javafx.scene.control.DatePicker;
+import javafx.scene.image.ImageView;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import javafx.scene.control.Alert;
@@ -111,5 +115,26 @@ public class DialogMessages {
         alert.getDialogPane().setExpandableContent(expContent);
 
         alert.showAndWait();
+    }
+
+    public static boolean showDateUnitConfirmationDialog(){
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
+        alertStage.getIcons().add(new Image(ApplicationConstants.MAIN_WINDOW_ICO));
+        alert.setGraphic(new ImageView(ApplicationConstants.CALENDAR));
+
+        alert.setTitle("Fill dates");
+        alert.setHeaderText("Fill dates for reports in application");
+        alert.setContentText("Choose start date for reporting:");
+
+        DatePicker startDate = new DatePicker();
+        alert.getDialogPane().setExpandableContent(startDate);
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK){
+            return true;
+        } else {
+            return false;
+        }
     }
 }

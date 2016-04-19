@@ -22,6 +22,7 @@ public class ApplicationConstants {
     public static final String FAMILY_MEMBER_WINDOW_TITLE = "Family Member";
 
     //ico
+    public static final String CALENDAR = IMG_RESOURCE_FOLDER+"/calendar_60_45.png";
     public static final String MAIN_WINDOW_ICO = IMG_RESOURCE_FOLDER+"/wallet.png";
     public static final String FAMILY_MEMBER_WINDOW_ICO = IMG_RESOURCE_FOLDER+"/wallet.png";
     public static final String PROGRESS_BAR_FORM_WINDOW_ICO = IMG_RESOURCE_FOLDER+"/wallet.png";
