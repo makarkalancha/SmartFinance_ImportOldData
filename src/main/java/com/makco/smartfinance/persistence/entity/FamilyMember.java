@@ -98,12 +98,12 @@ public class FamilyMember implements Serializable{
     @Temporal(TemporalType.TIMESTAMP)
     @org.hibernate.annotations.CreationTimestamp
     @Column(name="T_CREATEDON",insertable = false, updatable = false)
-    protected Calendar createdOn;
+    private Calendar createdOn;
 
     @Temporal(TemporalType.TIMESTAMP)
     @org.hibernate.annotations.UpdateTimestamp
     @Column(name="T_UPDATEDON",insertable = false, updatable = false)
-    protected Calendar updatedOn;
+    private Calendar updatedOn;
 
     public FamilyMember(){
 
