@@ -4,13 +4,12 @@ import com.makco.smartfinance.h2db.utils.H2DbUtils;
 import com.makco.smartfinance.persistence.contants.DataBaseConstants;
 import com.makco.smartfinance.user_interface.Command;
 import com.makco.smartfinance.user_interface.constants.ApplicationConstants;
-import com.makco.smartfinance.user_interface.constants.DialogMessages;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 /**
  * User: Makar Kalancha
