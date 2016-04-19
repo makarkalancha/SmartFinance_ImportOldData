@@ -1,7 +1,6 @@
 package com.makco.smartfinance;
 
 import com.makco.smartfinance.h2db.utils.H2DbUtils;
-import com.makco.smartfinance.persistence.contants.DataBaseConstants;
 import com.makco.smartfinance.user_interface.ScreensController;
 import com.makco.smartfinance.user_interface.constants.ApplicationConstants;
 import com.makco.smartfinance.user_interface.constants.DialogMessages;
@@ -9,12 +8,15 @@ import com.makco.smartfinance.user_interface.constants.ProgressBarForm;
 import com.makco.smartfinance.user_interface.constants.ProgressIndicatorForm;
 import com.makco.smartfinance.user_interface.constants.Screens;
 import com.makco.smartfinance.utils.Logs;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
+import java.time.temporal.WeekFields;
+import java.util.Locale;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.core.lookup.MainMapLookup;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javafx.concurrent.Worker;
@@ -25,39 +27,43 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
-import java.time.temporal.WeekFields;
-import java.util.Locale;
-
 /**
  * Created by mcalancea on 2016-03-28.
  */
 public class Main extends Application{
-    private final static Logger LOG = LogManager.getLogger(Main.class);
-
+    private final static Logger LOG;
+    static {
+        //set locale must be before initializing LOG, otherwise it will not work
+        System.setProperty("java.locale.providers", "HOST,SPI,JRE");
+        LOG = LogManager.getLogger(Main.class);
+    }
+//
     private Stage primaryStage;
-//    private Worker<Void> preStartWorker;
+////    private Worker<Void> preStartWorker;
     private PreStartWorker preStartWorker;
     private ProgressBarForm pFormStart = new ProgressBarForm();
     private BooleanProperty isEmpty = new SimpleBooleanProperty();
 
     public Main(){
-        LOG.debug("before java.locale.providers: " + System.getProperty("java.locale.providers"));
-        System.setProperty("java.locale.providers", "HOST");
-        LOG.debug("after java.locale.providers: " + System.getProperty("java.locale.providers"));
         preStartWorker = new PreStartWorker();
         isEmpty.bind(preStartWorker.isEmptyProperty());
-//        isEmpty.addListener((observable, oldValue, newValue) -> {
-//            LOG.debug(String.format("Main->oldValue: %b; newValue: %b", oldValue, newValue));
-//            if(newValue){
-//                DialogMessages.showConfirmationDialog("Create", "Create", "insert or not", null);
-//            }
-//        });
+////        isEmpty.addListener((observable, oldValue, newValue) -> {
+////            LOG.debug(String.format("Main->oldValue: %b; newValue: %b", oldValue, newValue));
+////            if(newValue){
+////                DialogMessages.showConfirmationDialog("Create", "Create", "insert or not", null);
+////            }
+////        });
         pFormStart.activateProgressBar(preStartWorker);
     }
 
     //https://www.youtube.com/watch?v=5GsdaZWDcdY
     //https://github.com/acaicedo/JFX-MultiScreen/tree/master/ScreensFramework/src/screensframework
     public static void main(String[] args) {
+//        LOG.debug("before java.locale.providers: " + System.getProperty("java.locale.providers"));
+//        System.setProperty("java.locale.providers", "HOST,SPI,JRE");
+        //https://logging.apache.org/log4j/2.0/manual/lookups.html
+        MainMapLookup.setMainArguments(args);
+//        LOG.debug("after java.locale.providers: " + System.getProperty("java.locale.providers"));
         Application.launch(args);
     }
     //http://stackoverflow.com/questions/24055897/same-stage-different-fxml-javafx
@@ -66,10 +72,10 @@ public class Main extends Application{
     public void start(Stage primaryStage){
         System.setErr(Logs.createLoggingErrors(System.err));
         System.setOut(Logs.createLoggingDebugs(System.out));
-
+//
         try {
             this.primaryStage = primaryStage;
-            LOG.debug("First day of the week: "+WeekFields.of(Locale.getDefault()).getFirstDayOfWeek());
+            LOG.debug("First day of the week: "+ WeekFields.of(Locale.getDefault()).getFirstDayOfWeek());
 ////            H2DbUtils.checkIfSchemaExists(ApplicationConstants.DB_SCHEMA_NAME);
 ////http://www.hascode.com/2013/04/easy-database-migrations-using-flyway-java-ee-6-and-glassfish/
 ////            Flyway flyway = new Flyway();
@@ -88,7 +94,7 @@ public class Main extends Application{
                     if(isConfirmed){
 
                     }
-                    openApp();
+//                    openApp();
                 } else {
                     openApp();
                     pFormStart.close();
@@ -157,6 +163,7 @@ public class Main extends Application{
             pFormQuit.activateProgressBar(preQuitWorker);
 
             ((Service<Void>) preQuitWorker).setOnSucceeded(event -> {
+//                https://docs.oracle.com/javase/8/javafx/api/javafx/application/Application.html
                 Platform.exit();
                 System.exit(0);
             });
