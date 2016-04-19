@@ -2,8 +2,6 @@ package com.makco.smartfinance.persistence.entity;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.Calendar;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -76,12 +74,12 @@ public class Currency implements Serializable{
     @Temporal(TemporalType.TIMESTAMP)
     @org.hibernate.annotations.CreationTimestamp
     @Column(name="T_CREATEDON",insertable = false, updatable = false)
-    protected Calendar createdOn;
+    protected LocalDateTime createdOn;
 
     @Temporal(TemporalType.TIMESTAMP)
     @org.hibernate.annotations.UpdateTimestamp
     @Column(name="T_UPDATEDON",insertable = false, updatable = false)
-    protected Calendar updatedOn;
+    protected LocalDateTime updatedOn;
 
     public Currency(){
 
@@ -155,11 +153,11 @@ public class Currency implements Serializable{
     }
 
     public LocalDateTime getCreatedOn() {
-        return createdOn.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+        return createdOn;
     }
 
     public LocalDateTime getUpdatedOn() {
-        return updatedOn.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+        return updatedOn;
     }
 
 }
