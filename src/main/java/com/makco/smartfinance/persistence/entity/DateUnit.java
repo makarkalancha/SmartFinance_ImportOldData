@@ -1,12 +1,17 @@
 package com.makco.smartfinance.persistence.entity;
 
+import com.makco.smartfinance.persistence.entity.converter.LocalDateAttributeConverter;
+
+import javax.persistence.Column;
+import javax.persistence.Convert;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import java.sql.Timestamp;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
 
 /**
  * Created by mcalancea on 2016-04-19.
@@ -16,6 +21,7 @@ import javax.persistence.Table;
 public class DateUnit {
     private final static LocalDate EPOCH = LocalDate.ofEpochDay(0);
 
+    @Id
     @Column(name="UNITDATE", updatable = false)
     private Long unitDate;
 
@@ -40,27 +46,13 @@ public class DateUnit {
     @Column(name="UNITTIMESTAMP", updatable = false)
     private LocalDate unitTimestamp;
 
-//    @Temporal(TemporalType.TIMESTAMP)
     @org.hibernate.annotations.CreationTimestamp
     @Column(name="T_CREATEDON",insertable = false, updatable = false)
-    private LocalDateTime createdOn;
+    private Timestamp createdOn;
 
     public DateUnit(){
 
     }
-
-//    public DateUnit(Long unitDate, Long unitDateOfMonth, Long unitMonth, Integer unitMonthOfYear, Integer unitYear, Integer unitDayOfWeek,
-//            boolean weekday, Calendar unitTimestamp, Calendar createdOn) {
-//        this.unitDate = unitDate;
-//        this.unitDateOfMonth = unitDateOfMonth;
-//        this.unitMonth = unitMonth;
-//        this.unitMonthOfYear = unitMonthOfYear;
-//        this.unitYear = unitYear;
-//        this.unitDayOfWeek = unitDayOfWeek;
-//        this.weekday = weekday;
-//        this.unitTimestamp = unitTimestamp;
-//        this.createdOn = createdOn;
-//    }
 
     public DateUnit(LocalDate localDate) {
         this.unitDate = ChronoUnit.DAYS.between(EPOCH, localDate);;
@@ -109,7 +101,7 @@ public class DateUnit {
     }
 
     public LocalDateTime getCreatedOn() {
-        return createdOn;
+        return createdOn.toLocalDateTime();
     }
 
     @Override

@@ -1,7 +1,5 @@
 package com.makco.smartfinance.persistence.entity;
 
-import java.io.Serializable;
-import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,31 +8,15 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 /**
  * Created by mcalancea on 2016-03-01.
  */
 
 //http://howtodoinjava.com/jpa/jpa-native-delete-sql-query-example/
-//@SqlResultSetMapping(name="deleteResult",
-//        columns = { @ColumnResult(name = "count")}
-////        entities=@EntityResult(entityClass=Long.class)
-//        )
-//@NamedNativeQueries({
-//        @NamedNativeQuery(
-//                name = "deteleFamilyMemberNative",
-//                query = "UPDATE {h-schema}FAMILY_MEMBER SET ISDELETED = true WHERE ID = ? "
-////                , resultClass = FamilyMember.class //Caused by: org.h2.jdbc.JdbcSQLException: Method is only allowed for a query. Use execute or executeUpdate instead of executeQuery; SQL statement:                 UPDATE TEST.FAMILY_MEMBER SET ISDELETED = true WHERE ID = ? [90002-191]
-////                , resultSetMapping = "deleteResult" //org.h2.jdbc.JdbcSQLException: Method is only allowed for a query. Use execute or executeUpdate instead of executeQuery; SQL statement:                 UPDATE TEST.FAMILY_MEMBER SET ISDELETED = true WHERE ID = ? [90002-191]
-//        )
-//})
-//
-//@org.hibernate.annotations.Loader(
-//        namedQuery = "deteleFamilyMemberNative"
-//)
-
-
-
 @Entity
 @Table(
         name="FAMILY_MEMBER",
@@ -46,14 +28,6 @@ import javax.validation.constraints.Size;
 )
 //@org.hibernate.annotations.DynamicInsert
 //@org.hibernate.annotations.DynamicUpdate
-//Override the default Hibernation delete and set the deleted flag rather than deleting the record from the db.
-//@SQLDelete(sql="UPDATE {h-schema}FAMILY_MEMBER SET ISDELETED = true WHERE ID = ? ")
-//@SQLDelete(sql="UPDATE FAMILY_MEMBER SET ISDELETED = true WHERE ID = ? ")
-//@SQLDelete(sql="deteleFamilyMemberNative")
-//@SQLDelete(sql="deteleFamilyMemberNative; UPDATE FAMILY_MEMBER SET ISDELETED = true WHERE ID = ? ")
-//Filter added to retrieve only records that have not been soft deleted.
-//impossible to select records with field isdeleted
-//@Where(clause="ISDELETED <> true")
 public class FamilyMember implements Serializable{
     @Id
     @org.hibernate.annotations.GenericGenerator(
@@ -91,15 +65,13 @@ public class FamilyMember implements Serializable{
     )
     private String description;
 
-//    @Temporal(TemporalType.TIMESTAMP)
     @org.hibernate.annotations.CreationTimestamp
     @Column(name="T_CREATEDON",insertable = false, updatable = false)
-    private LocalDateTime createdOn;
+    private Timestamp createdOn;
 
-//    @Temporal(TemporalType.TIMESTAMP)
     @org.hibernate.annotations.UpdateTimestamp
     @Column(name="T_UPDATEDON",insertable = false, updatable = false)
-    private LocalDateTime updatedOn;
+    private Timestamp updatedOn;
 
     public FamilyMember(){
 
@@ -163,10 +135,10 @@ public class FamilyMember implements Serializable{
     }
 
     public LocalDateTime getCreatedOn() {
-        return createdOn;
+        return createdOn.toLocalDateTime();
     }
 
     public LocalDateTime getUpdatedOn() {
-        return updatedOn;
+        return updatedOn.toLocalDateTime();
     }
 }

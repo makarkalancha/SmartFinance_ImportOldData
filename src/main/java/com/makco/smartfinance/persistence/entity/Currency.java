@@ -1,12 +1,18 @@
 package com.makco.smartfinance.persistence.entity;
 
+import com.makco.smartfinance.persistence.entity.converter.LocalDateTimeAttributeConverter;
+
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -69,15 +75,13 @@ public class Currency implements Serializable{
     )
     private String description;
 
-//    @Temporal(TemporalType.TIMESTAMP)
     @org.hibernate.annotations.CreationTimestamp
     @Column(name="T_CREATEDON",insertable = false, updatable = false)
-    protected LocalDateTime createdOn;
+    protected Timestamp createdOn;
 
-//    @Temporal(TemporalType.TIMESTAMP)
     @org.hibernate.annotations.UpdateTimestamp
     @Column(name="T_UPDATEDON",insertable = false, updatable = false)
-    protected LocalDateTime updatedOn;
+    protected Timestamp updatedOn;
 
     public Currency(){
 
@@ -151,11 +155,11 @@ public class Currency implements Serializable{
     }
 
     public LocalDateTime getCreatedOn() {
-        return createdOn;
+        return createdOn.toLocalDateTime();
     }
 
     public LocalDateTime getUpdatedOn() {
-        return updatedOn;
+        return updatedOn.toLocalDateTime();
     }
 
 }
