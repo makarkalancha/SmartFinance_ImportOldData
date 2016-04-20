@@ -43,14 +43,13 @@ public class Main extends Application{
     }
 
     private Stage primaryStage;
-//    private Worker<Void> preStartWorker;
-    private PreStartWorker preStartWorker;
+    private Worker<Void> preStartWorker;
     private ProgressBarForm pFormStart = new ProgressBarForm();
     private BooleanProperty isEmpty = new SimpleBooleanProperty();
 
     public Main(){
         preStartWorker = new PreStartWorker();
-        isEmpty.bind(preStartWorker.isEmptyProperty());
+        isEmpty.bind(((PreStartWorker)preStartWorker).isEmptyProperty());
         pFormStart.activateProgressBar(preStartWorker);
     }
 
