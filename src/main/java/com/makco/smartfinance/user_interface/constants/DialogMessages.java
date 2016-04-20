@@ -137,7 +137,7 @@ public class DialogMessages {
         ButtonType applyBtnTp = new ButtonType("Apply", ButtonBar.ButtonData.OK_DONE);
         dialog.getDialogPane().getButtonTypes().addAll(applyBtnTp, ButtonType.CANCEL);
 
-        Label content = new Label("Choose start date for reporting:");
+        Label content = new Label("Choose start date for reporting (" + DatePickerForm.USER_FRIENDLY_PATTERN + "):");
         DatePickerForm startDate = new DatePickerForm();
         VBox vb = new VBox();
         vb.setAlignment(Pos.CENTER);

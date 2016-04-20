@@ -19,9 +19,11 @@ public class DatePickerForm {
     private final DatePicker datePicker;
     private final String pattern = "yyyy-MM-dd";
 
+    public final static String USER_FRIENDLY_PATTERN = "YYYY-MM-DD";
+
     public DatePickerForm() {
         this.datePicker = new DatePicker();
-        this.datePicker.setPromptText("YYYY-MM-DD"); //human readable, not a java developer
+        this.datePicker.setPromptText(USER_FRIENDLY_PATTERN); //human readable, not a java developer
         this.datePicker.setConverter(new StringConverter<LocalDate>() {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
             @Override
