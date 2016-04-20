@@ -2,7 +2,6 @@ package com.makco.smartfinance.h2db.utils;
 
 import com.makco.smartfinance.h2db.DBConnectionResource;
 import com.makco.smartfinance.h2db.TestContext;
-import com.makco.smartfinance.h2db.tables.DateUnit;
 import com.makco.smartfinance.h2db.utils.schema_constants.Table;
 import java.sql.PreparedStatement;
 import java.text.SimpleDateFormat;

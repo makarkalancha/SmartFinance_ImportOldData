@@ -13,7 +13,6 @@ import java.util.Date;
 import java.util.Random;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.flywaydb.core.Flyway;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -38,19 +37,6 @@ public class DateUnitFunctionsTriggersTests {
         String mess1 = "DateUnitFunctionsTriggersTests: Test->BeforeClass";
         System.out.println(mess1);
         LOG.debug(mess1);
-        if(!H2DbUtils.checkIfSchemaExists(dbConnectionResource.getConnection(), TestContext.INSTANCE.DB_SCHEMA())){
-            H2DbUtils.createSchema(dbConnectionResource.getConnection(), TestContext.INSTANCE.DB_SCHEMA());
-            H2DbUtils.setSchema(dbConnectionResource.getConnection(), TestContext.INSTANCE.DB_SCHEMA());
-
-//            --RunScript.execute(dbConnectionResource.getConnection(),
-//                    new InputStreamReader(H2DbUtils.getCreateDBScript()));
-            Flyway flyway = new Flyway();
-            flyway.setDataSource(DBConnectionResource.getDbConnectionUrl(),TestContext.INSTANCE.DB_USER(),TestContext.INSTANCE.DB_PASSWORD());
-            flyway.migrate();
-        } else {
-            H2DbUtils.setSchema(dbConnectionResource.getConnection(), TestContext.INSTANCE.DB_SCHEMA());
-        }
-
     }
 
     @AfterClass
@@ -59,28 +45,10 @@ public class DateUnitFunctionsTriggersTests {
         String mess1 = "DateUnitFunctionsTriggersTests: Test->AfterClass";
         System.out.println(mess1);
         LOG.debug(mess1);
-//        H2DbUtils.setSchema(dbConnectionResource.getConnection(), TestContext.INSTANCE.DB_SCHEMA());
-//        H2DbUtils.dropDBObject(dbConnectionResource.getConnection(), DBObjectType.TABLE, TestContext.INSTANCE.TABLE_DATEUNIT());
-//        if (H2DbUtils.checkIfSchemaExists(dbConnectionResource.getConnection(), TestContext.INSTANCE.DB_SCHEMA())) {
-//            H2DbUtils.dropDBObject(dbConnectionResource.getConnection(), DBObjectType.SCHEMA, TestContext.INSTANCE.DB_SCHEMA());
-//        }
-//        /////////////////////////////////////
-//        //second create full db but in test schema
-//        if(H2DbUtils.checkIfSchemaExists(dbConnectionResource.getConnection(), TestContext.INSTANCE.DB_SCHEMA())){
-//            H2DbUtils.dropDBObject(dbConnectionResource.getConnection(), DBObjectType.SCHEMA, TestContext.INSTANCE.DB_SCHEMA());
-//        }
-//        H2DbUtils.createSchema(dbConnectionResource.getConnection(), TestContext.INSTANCE.DB_SCHEMA());
-//        H2DbUtils.setSchema(dbConnectionResource.getConnection(), TestContext.INSTANCE.DB_SCHEMA());
-//        H2DbUtils.createDB(dbConnectionResource.getConnection(), TestContext.INSTANCE.DB_SCHEMA());
     }
 
     @Before
     public void setUp() throws Exception {
-//        dbConnectionResource.getConnection() = DriverManager.getdbConnectionResource.getConnection()(DB_dbConnectionResource.getConnection()_IF_EXISTS, DB_USER, DB_PASSWORD);
-//        if(!checkIfSchemaExists()){
-//            createSchema();
-//        }
-//        setTestSchema();
         Random rand = new Random();
         String dateToParse = (rand.nextInt((2016 - 2000) + 1) + 2000)+
                 "-"+
@@ -114,28 +82,15 @@ public class DateUnitFunctionsTriggersTests {
     public void testCreateDateUnitTable() throws Exception {
         if(H2DbUtils.checkIfDBObjectExists(dbConnectionResource.getConnection(), TestContext.INSTANCE.DB_SCHEMA(),
                 DBObjectType.TABLE, Table.Names.DATEUNIT.toString())){
-//            H2DbUtils.setSchema(dbConnectionResource.getConnection(),TestContext.INSTANCE.DB_SCHEMA());
-//            H2DbUtils.dropDBObject(dbConnectionResource.getConnection(), DBObjectType.TABLE, TestContext.INSTANCE.TABLE_DATEUNIT());
-//        }
-//
-//        if(!H2DbUtils.checkIfDBObjectExists(dbConnectionResource.getConnection(), TestContext.INSTANCE.DB_SCHEMA(),
-//                DBObjectType.TABLE, TestContext.INSTANCE.TABLE_DATEUNIT())) {
             H2DbUtils.setSchema(dbConnectionResource.getConnection(), TestContext.INSTANCE.DB_SCHEMA());
-//            DateUnitFunctions.createDateUnitTable(dbConnectionResource.getConnection());
             assert (H2DbUtils.checkIfDBObjectExists(dbConnectionResource.getConnection(), TestContext.INSTANCE.DB_SCHEMA(),
                     DBObjectType.TABLE, Table.Names.DATEUNIT.toString()));
 
-//            testCreateDateUnitTrigger();
             assert(H2DbUtils.checkIfDBObjectExists(dbConnectionResource.getConnection(), TestContext.INSTANCE.DB_SCHEMA(),
                         DBObjectType.TRIGGER, Trigger.DATEUNIT.T_DATEUNIT_INS.toString()));
 
             testInsertSelectDateSinceEpochDate_insert();
             testDateUnitTrigger_onInsert();
-
-//            testDateUnitTable_fakeUpdate();
-//            testDateUnitTrigger_onUpdate();
-                    
-
             testInsertSelectDateSinceEpochDate_select();
         } else {
             assert (false);
@@ -154,52 +109,6 @@ public class DateUnitFunctionsTriggersTests {
         assertEquals(insertedDateId, selectedDateId);
     }
 
-//    //    @Test: junit doesn't support order in test (http://stackoverflow.com/questions/3693626/how-to-run-test-methods-in-specific-order-in-junit4)
-//    public void testCreateDateUnitTrigger() throws Exception {
-//        if (H2DbUtils.checkIfDBObjectExists(dbConnectionResource.getConnection(), TestContext.INSTANCE.DB_SCHEMA(),
-//                DBObjectType.TRIGGER, TestContext.INSTANCE.TRIGGER_INS())) {
-//
-//            H2DbUtils.setSchema(dbConnectionResource.getConnection(), TestContext.INSTANCE.DB_SCHEMA());
-//            H2DbUtils.dropDBObject(dbConnectionResource.getConnection(), DBObjectType.TRIGGER, TestContext.INSTANCE.TRIGGER_INS());
-//        }
-//
-//        if (H2DbUtils.checkIfDBObjectExists(dbConnectionResource.getConnection(), TestContext.INSTANCE.DB_SCHEMA(),
-//                DBObjectType.TRIGGER, TestContext.INSTANCE.TRIGGER_UPD())) {
-//
-//            H2DbUtils.setSchema(dbConnectionResource.getConnection(), TestContext.INSTANCE.DB_SCHEMA());
-//            H2DbUtils.dropDBObject(dbConnectionResource.getConnection(), DBObjectType.TRIGGER, TestContext.INSTANCE.TRIGGER_UPD());
-//        }
-//
-//        if (!H2DbUtils.checkIfDBObjectExists(dbConnectionResource.getConnection(), TestContext.INSTANCE.DB_SCHEMA(),
-//                DBObjectType.TRIGGER, TestContext.INSTANCE.TRIGGER_INS()) &&
-//            !H2DbUtils.checkIfDBObjectExists(dbConnectionResource.getConnection(), TestContext.INSTANCE.DB_SCHEMA(),
-//                    DBObjectType.TRIGGER, TestContext.INSTANCE.TRIGGER_UPD())
-//            ) {
-//
-//            H2DbUtils.setSchema(dbConnectionResource.getConnection(), TestContext.INSTANCE.DB_SCHEMA());
-//
-//            TriggerDateUnit.createDateUnitInsertUpdateTriggers(dbConnectionResource.getConnection());
-//            boolean insTrExists = H2DbUtils.checkIfDBObjectExists(dbConnectionResource.getConnection(), TestContext.INSTANCE.DB_SCHEMA(),
-//                    DBObjectType.TRIGGER, TestContext.INSTANCE.TRIGGER_INS());
-//            boolean updTrExists = H2DbUtils.checkIfDBObjectExists(dbConnectionResource.getConnection(), TestContext.INSTANCE.DB_SCHEMA(),
-//                            DBObjectType.TRIGGER, TestContext.INSTANCE.TRIGGER_UPD());
-//            String mess1 = "insTrExists:"+insTrExists;
-//            System.out.println(mess1);
-//            LOG.debug(mess1);
-//
-//            mess1 = "updTrExists:"+updTrExists;
-//            System.out.println(mess1);
-//            LOG.debug(mess1);
-//
-//            assert(H2DbUtils.checkIfDBObjectExists(dbConnectionResource.getConnection(), TestContext.INSTANCE.DB_SCHEMA(),
-//                        DBObjectType.TRIGGER, TestContext.INSTANCE.TRIGGER_INS()) &&
-//                    H2DbUtils.checkIfDBObjectExists(dbConnectionResource.getConnection(), TestContext.INSTANCE.DB_SCHEMA(),
-//                        DBObjectType.TRIGGER, TestContext.INSTANCE.TRIGGER_UPD())
-//            );
-//        } else {
-//            assert (false);
-//        }
-//    }
 
     public void testDateUnitTrigger_onInsert() throws Exception {
         String query = "SELECT " + Table.DATEUNIT.UNITDATE + " FROM " + Table.Names.DATEUNIT + " WHERE " + Table.DATEUNIT.UNITDATE + " = ?" +
@@ -223,44 +132,4 @@ public class DateUnitFunctionsTriggersTests {
         }
         assert (isPassed);
     }
-
-//    //fake, because table DateUnit should be updated normally, only if epoch date is changed
-//    public void testDateUnitTable_fakeUpdate() throws Exception {
-//        String query = "UPDATE " + TestContext.INSTANCE.TABLE_DATEUNIT() + " SET UNITYEAR = UNITYEAR WHERE ID = ?";
-//        LOG.debug(query);
-//        PreparedStatement preparedStatement = null;
-//        boolean isPassed = false;
-//        try {
-//            preparedStatement = dbConnectionResource.getConnection().prepareStatement(query);
-//            preparedStatement.setLong(1, insertedDateId);
-//            isPassed = (preparedStatement.executeUpdate() > 0);
-//        } finally {
-//            if (preparedStatement != null) {
-//                preparedStatement.close();
-//            }
-//        }
-//    }
-    
-//    public void testDateUnitTrigger_onUpdate() throws Exception {
-//        String query = "SELECT ID FROM " + TestContext.INSTANCE.TABLE_DATEUNIT() + " WHERE ID = ?" +
-//                " AND T_CREATEDON != T_UPDATEDON";
-//        LOG.debug(query);
-//        ResultSet rs = null;
-//        PreparedStatement preparedStatement = null;
-//        boolean isPassed = false;
-//        try {
-//            preparedStatement = dbConnectionResource.getConnection().prepareStatement(query);
-//            preparedStatement.setLong(1, insertedDateId);
-//            rs = preparedStatement.executeQuery();
-//            isPassed = rs.next();
-//        } finally {
-//            if (preparedStatement != null) {
-//                preparedStatement.close();
-//            }
-//            if (rs != null) {
-//                rs.close();
-//            }
-//        }
-//        assert (isPassed);
-//    }
 }

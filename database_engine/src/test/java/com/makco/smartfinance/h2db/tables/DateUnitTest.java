@@ -1,11 +1,8 @@
 package com.makco.smartfinance.h2db.tables;
 
+import com.makco.smartfinance.h2db.utils.DateUnit;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
-import com.makco.smartfinance.h2db.tables.DateUnit;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

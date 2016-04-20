@@ -16,7 +16,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.flywaydb.core.Flyway;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -43,18 +42,6 @@ public class TriggerFamilyMemberTest {
         String mess1 = "TriggerFamilyMemberTest: Test->BeforeClass";
         System.out.println(mess1);
         LOG.debug(mess1);
-        if(!H2DbUtils.checkIfSchemaExists(dbConnectionResource.getConnection(), TestContext.INSTANCE.DB_SCHEMA())){
-            H2DbUtils.createSchema(dbConnectionResource.getConnection(), TestContext.INSTANCE.DB_SCHEMA());
-            H2DbUtils.setSchema(dbConnectionResource.getConnection(), TestContext.INSTANCE.DB_SCHEMA());
-//            RunScript.execute(dbConnectionResource.getConnection(), new InputStreamReader(H2DbUtils.getCreateDBScript()));
-            Flyway flyway = new Flyway();
-            flyway.setDataSource(DBConnectionResource.getDbConnectionUrl(),TestContext.INSTANCE.DB_USER(),TestContext.INSTANCE.DB_PASSWORD());
-            flyway.setSchemas(TestContext.INSTANCE.DB_SCHEMA());
-            flyway.migrate();
-        } else {
-            H2DbUtils.setSchema(dbConnectionResource.getConnection(), TestContext.INSTANCE.DB_SCHEMA());
-        }
-
     }
 
     @AfterClass
@@ -63,19 +50,6 @@ public class TriggerFamilyMemberTest {
         String mess1 = "TriggerFamilyMemberTest: Test->AfterClass";
         System.out.println(mess1);
         LOG.debug(mess1);
-//        H2DbUtils.setSchema(dbConnectionResource.getConnection(), TestContext.INSTANCE.DB_SCHEMA());
-//        H2DbUtils.dropDBObject(dbConnectionResource.getConnection(), DBObjectType.TABLE, TestContext.INSTANCE.TABLE_DATEUNIT());
-//        if (H2DbUtils.checkIfSchemaExists(dbConnectionResource.getConnection(), TestContext.INSTANCE.DB_SCHEMA())) {
-//            H2DbUtils.dropDBObject(dbConnectionResource.getConnection(), DBObjectType.SCHEMA, TestContext.INSTANCE.DB_SCHEMA());
-//        }
-//        /////////////////////////////////////
-//        //second create full db but in test schema
-//        if(H2DbUtils.checkIfSchemaExists(dbConnectionResource.getConnection(), TestContext.INSTANCE.DB_SCHEMA())){
-//            H2DbUtils.dropDBObject(dbConnectionResource.getConnection(), DBObjectType.SCHEMA, TestContext.INSTANCE.DB_SCHEMA());
-//        }
-//        H2DbUtils.createSchema(dbConnectionResource.getConnection(), TestContext.INSTANCE.DB_SCHEMA());
-//        H2DbUtils.setSchema(dbConnectionResource.getConnection(), TestContext.INSTANCE.DB_SCHEMA());
-//        H2DbUtils.createDB(dbConnectionResource.getConnection(), TestContext.INSTANCE.DB_SCHEMA());
     }
 
     @Before

@@ -23,14 +23,14 @@ import org.h2.tools.Script;
 public class H2DbUtils {
     private final static Logger LOG = LogManager.getLogger(H2DbUtils.class);
 
-    public static void createSchema(Connection connection, String dbSchemaName) throws SQLException{
-        try(Statement statement = connection.createStatement()) {
-            statement.execute("CREATE SCHEMA IF NOT EXISTS "+dbSchemaName);
-        }catch (SQLException e){
-            LOG.error(e, e);
-            throw e;
-        }
-    }
+//    public static void createSchema(Connection connection, String dbSchemaName) throws SQLException{
+//        try(Statement statement = connection.createStatement()) {
+//            statement.execute("CREATE SCHEMA IF NOT EXISTS "+dbSchemaName);
+//        }catch (SQLException e){
+//            LOG.error(e, e);
+//            throw e;
+//        }
+//    }
 
     public static void setSchema(Connection connection, String dbSchemaName) throws SQLException{
         try(Statement statement = connection.createStatement()) {
@@ -41,14 +41,14 @@ public class H2DbUtils {
         }
     }
 
-    public static boolean checkIfSchemaExists(Connection connection, String dbSchemaName)throws SQLException {
-        try{
-            return checkIfDBObjectExists(connection, dbSchemaName, DBObjectType.SCHEMA, null);
-        } catch (SQLException e){
-            LOG.error(e, e);
-            throw e;
-        }
-    }
+//    public static boolean checkIfSchemaExists(Connection connection, String dbSchemaName)throws SQLException {
+//        try{
+//            return checkIfDBObjectExists(connection, dbSchemaName, DBObjectType.SCHEMA, null);
+//        } catch (SQLException e){
+//            LOG.error(e, e);
+//            throw e;
+//        }
+//    }
 
     public static boolean checkIfDBObjectExists(Connection connection, String dbSchemaName, DBObjectType dbObjectType, String dbObjectName)
             throws SQLException {
@@ -87,25 +87,25 @@ public class H2DbUtils {
         return result;
     }
 
-    public static void dropDBObject(Connection connection, DBObjectType dbObjectType, String dbObjectName) throws Exception {
-        try (Statement statement = connection.createStatement()) {
-            statement.execute("DROP " + dbObjectType + " IF EXISTS " + dbObjectName);
-        } catch (SQLException e) {
-            LOG.error(e, e);
-            throw e;
-        }
-    }
-
-    public static boolean checkIfSchemaExists(String dbSchemaName) {
-        try {
-            Connection connection = DriverManager.getConnection("jdbc:h2:" + Context.INSTANCE.DB_DIR() + "/" + Context.INSTANCE.DB_NAME(),
-                    Context.INSTANCE.DB_USER(), Context.INSTANCE.DB_PASSWORD());
-            return checkIfSchemaExists(connection, "FINANCE");
-        } catch (SQLException e) {
-            LOG.error(e, e);
-            return false;
-        }
-    }
+//    public static void dropDBObject(Connection connection, DBObjectType dbObjectType, String dbObjectName) throws Exception {
+//        try (Statement statement = connection.createStatement()) {
+//            statement.execute("DROP " + dbObjectType + " IF EXISTS " + dbObjectName);
+//        } catch (SQLException e) {
+//            LOG.error(e, e);
+//            throw e;
+//        }
+//    }
+//
+//    public static boolean checkIfSchemaExists(String dbSchemaName) {
+//        try {
+//            Connection connection = DriverManager.getConnection("jdbc:h2:" + Context.INSTANCE.DB_DIR() + "/" + Context.INSTANCE.DB_NAME(),
+//                    Context.INSTANCE.DB_USER(), Context.INSTANCE.DB_PASSWORD());
+//            return checkIfSchemaExists(connection, "FINANCE");
+//        } catch (SQLException e) {
+//            LOG.error(e, e);
+//            return false;
+//        }
+//    }
 
     public static int migrate(String schemaName) {
         Flyway flyway = new Flyway();

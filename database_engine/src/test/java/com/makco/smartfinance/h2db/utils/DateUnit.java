@@ -1,4 +1,4 @@
-package com.makco.smartfinance.h2db.tables;
+package com.makco.smartfinance.h2db.utils;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
