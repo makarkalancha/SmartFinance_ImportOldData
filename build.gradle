@@ -65,6 +65,7 @@ dependencies {
     compile 'org.hibernate:hibernate-c3p0:' + hibernate_version //For connection pooling
     compile 'javax.validation:validation-api:1.0.0.GA' //javax.validation.constraints
     compile 'org.apache.commons:commons-lang3:3.4'
+    compile 'com.google.guava:guava:19.0'
 }
 
 //1st approach: dependent jars are in separate folder $libsDir\\$lib_folder
