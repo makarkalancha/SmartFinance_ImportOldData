@@ -1,9 +1,11 @@
 package com.makco.smartfinance.persistence.entity;
 
+import com.makco.smartfinance.persistence.contants.DataBaseConstants;
 import com.makco.smartfinance.persistence.utils.TestPersistenceManager;
 import java.time.LocalDate;
 import java.time.Month;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import javax.persistence.EntityManager;
 import org.apache.logging.log4j.LogManager;
@@ -93,6 +95,39 @@ public class DateUnitTest {
         assertEquals(LocalDate.of(1971, Month.FEBRUARY, 6), dateToInsert.getUnitTimestamp());
         assertEquals(true, dateToInsert.getCreatedOn() != null);
         LOG.info("end->testPersist");
+    }
+
+    @Test
+    public void testBatchQty() {
+        LocalDate start = LocalDate.of(2010, Month.JANUARY, 01);
+        LocalDate today = LocalDate.now();
+        LocalDate end = today.plus(5, ChronoUnit.YEARS);
+        System.out.println("start:" + start.toString());
+        System.out.println("today:" + today.toString());
+        System.out.println("end:" + end.toString());
+
+        long daysBetween = ChronoUnit.DAYS.between(start, end);
+        System.out.println("difference (in days) between start and end: " + daysBetween);
+        double batchQty1 = daysBetween / DataBaseConstants.BATCH_SIZE;
+        System.out.println("batchQty1: " + batchQty1);
+        double batchQty2 = ((double) daysBetween / DataBaseConstants.BATCH_SIZE);
+        System.out.println("batchQty2: " + batchQty2);
+        long result1 = Math.round(batchQty2);
+        System.out.println("result: " + result1);
+        double threePointZeroOne = 3.01d;
+        long result2 = Math.round(threePointZeroOne);
+        System.out.println("round(threePointZeroOne): " + result2);
+        double result3 = Math.ceil(threePointZeroOne);
+        System.out.println("ceil(threePointZeroOne): " + result3);
+        double result4 = Math.floor(threePointZeroOne);
+        System.out.println("floor(threePointZeroOne): " + result4);
+        long result5 = Math.floorDiv(daysBetween, DataBaseConstants.BATCH_SIZE);
+        System.out.println("floorDiv(daysBetween, DataBaseConstants.BATCH_SIZE): " + result5);
+        long result6 = Math.floorDiv(daysBetween * (-1), DataBaseConstants.BATCH_SIZE) * (-1);
+        System.out.println("floorDiv(daysBetween * (-1), DataBaseConstants.BATCH_SIZE) * (-1): " + result6);
+//        Duration diffStartEnd = Duration.between(start, end);
+//        System.out.println("difference (in days) between start and end: " + diffStartEnd.toDays());
+
     }
 
 }

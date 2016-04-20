@@ -6,16 +6,13 @@ import com.makco.smartfinance.h2db.utils.schema_constants.Table;
 import java.sql.PreparedStatement;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.Month;
 import java.time.temporal.ChronoUnit;
 import java.util.Calendar;
 import java.util.Date;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.ClassRule;
-import org.junit.Test;
 
 /**
  * Created by mcalancea on 2016-03-08.
@@ -119,21 +116,5 @@ public class H2DbUtilsTest {
 
         end = LocalDateTime.now();
         LOG.debug("method end at: " + end);
-    }
-
-    @Test
-    public void testBatchQty() {
-        LocalDate start = LocalDate.of(2010, Month.JANUARY, 01);
-        LocalDate today = LocalDate.now();
-        LocalDate end = today.plus(5, ChronoUnit.YEARS);
-        System.out.println("start:" + start.toString());
-        System.out.println("today:" + today.toString());
-        System.out.println("end:" + end.toString());
-
-        long daysBetween = ChronoUnit.DAYS.between(start, end);
-        System.out.println("difference (in days) between start and end: " + daysBetween);
-//        Duration diffStartEnd = Duration.between(start, end);
-//        System.out.println("difference (in days) between start and end: " + diffStartEnd.toDays());
-
     }
 }
