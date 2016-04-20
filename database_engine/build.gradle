@@ -11,7 +11,7 @@ flyway {
     password = 'root'
     //http://stackoverflow.com/questions/16115055/flywayinit-doesnt-create-schema-database
     // the create schema support is an all or nothing thing. If all schemas are missing, they all will be created, otherwise none will be created.
-    schemas = [/*,'FINANCE',*/'TEST', 'FOOBAR']
+    schemas = [/*,'FINANCE',*/'TEST'/*, 'FOOBAR'*/]
     table = '_SCHEMA_VERSION'
     baselineOnMigrate = true
 }

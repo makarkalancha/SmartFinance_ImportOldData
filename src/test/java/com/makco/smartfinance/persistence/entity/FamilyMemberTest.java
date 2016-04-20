@@ -47,6 +47,12 @@ public class FamilyMemberTest {
     }
 
     @Test
+    public void testCRUD() throws Exception{
+        testPersist();
+        testUpdate();
+        testDelete();
+    }
+
     public void testPersist() throws Exception {
         LOG.info("start->testPersist");
         em.getTransaction().begin();
@@ -89,7 +95,6 @@ public class FamilyMemberTest {
         em.getTransaction().commit();
     }
 
-//    @Test
     public void testUpdate() throws Exception {
         LOG.info("start->testUpdate");
         em.getTransaction().begin();
@@ -121,7 +126,6 @@ public class FamilyMemberTest {
         LOG.info("end->testUpdate");
     }
 
-    @Test
     public void testDelete() throws Exception {
         LOG.info("start->testDelete");
         em.getTransaction().begin();

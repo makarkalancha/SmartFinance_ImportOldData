@@ -23,6 +23,9 @@ public class CurrencyTest {
     private String currencyName = "Canadian Dollar";
     private String currencyDesc = "Dollar that is used in Canada";
 
+    private static int MIN = 1;
+    private static int MAX = 100;
+
     @BeforeClass
     public static void setUpClass() throws Exception {
         em = TestPersistenceManager.INSTANCE.getEntityManager();
@@ -43,11 +46,20 @@ public class CurrencyTest {
     }
 
     @Test
+    public void testCRUD() throws Exception{
+        testPersist();
+        testUpdate();
+        testDelete();
+    }
+
     public void testPersist() throws Exception{
         LOG.info("start->testPersist");
         em.getTransaction().begin();
         Currency cad = new Currency();
-        cad.setCode(currencyCode);
+        Random random = new Random();
+        Integer randomInt = random.nextInt((MAX - 0) + MIN + 0);
+        LOG.debug("testPersist.randomInt=" + randomInt);
+        cad.setCode(randomInt.toString());
         cad.setName(currencyName);
         cad.setDescription(currencyDesc);
 
@@ -63,7 +75,6 @@ public class CurrencyTest {
         LOG.info("end->testPersist");
     }
 
-    @Test
     public void testUpdate() throws Exception {
         LOG.info("start->testUpdate");
         em.getTransaction().begin();
@@ -75,8 +86,9 @@ public class CurrencyTest {
         Currency cad = em.find(Currency.class, id);
         Random random = new Random();
         //min 0 and max 100
-        int randomInt = random.nextInt((100 - 0) + 1 + 0);
-        String newName = currencyName + randomInt;
+        Integer randomInt = random.nextInt((MAX - 0) + MIN + 0);
+        LOG.debug("testUpdate.randomInt=" + randomInt);
+        String newName = randomInt.toString();
         String newDesc = currencyDesc + randomInt;
         cad.setName(newName);
         cad.setDescription(newDesc);
@@ -95,5 +107,26 @@ public class CurrencyTest {
         assert(cad.getUpdatedOn() != null);
         assertEquals(true, !cad.getCreatedOn().equals(cad.getUpdatedOn()));
         LOG.info("end->testUpdate");
+    }
+
+    public void testDelete() throws Exception {
+        LOG.info("start->testDelete");
+        em.getTransaction().begin();
+        Query qId = em.createQuery("SELECT min(c.id) as num from Currency c");
+        Long id = ((Long) qId.getSingleResult());
+
+        LOG.debug("min id = " + id);
+
+        Currency cad = em.find(Currency.class, id);
+
+        em.remove(cad);
+        em.getTransaction().commit();
+
+        Currency cadJustDeleted = em.find(Currency.class, id);
+        LOG.debug(">>>cadJustDeleted=" + cadJustDeleted);
+        LOG.debug(cad);
+
+        assertEquals(null, cadJustDeleted);
+        LOG.info("end->testDelete");
     }
 }
