@@ -27,6 +27,7 @@ import static org.junit.Assert.assertEquals;
 public class DateUnitFunctionsTriggersTests {
     private static final Logger LOG = LogManager.getLogger(DateUnitFunctionsTriggersTests.class);
     private Date dateToInsert;
+    private String dateToParse = "1960-01-01";
     private long insertedDateId;
 
     @ClassRule
@@ -50,15 +51,15 @@ public class DateUnitFunctionsTriggersTests {
     @Before
     public void setUp() throws Exception {
         Random rand = new Random();
-        String dateToParse = (rand.nextInt((2016 - 2000) + 1) + 2000)+
-                "-"+
-                (rand.nextInt((12 - 1) + 1) + 1)+
-                "-"+
-                (rand.nextInt((28 - 1) + 1) + 1);
+//        String dateToParse = (rand.nextInt((2016 - 2000) + 1) + 2000)+
+//                "-"+
+//                (rand.nextInt((12 - 1) + 1) + 1)+
+//                "-"+
+//                (rand.nextInt((28 - 1) + 1) + 1);
+        dateToInsert = new SimpleDateFormat("yyyy-MM-dd").parse(dateToParse);
         String mess1 = "random date (from 2000-01-01 to 2016-12-28): " + dateToParse;
         System.out.println(mess1);
         LOG.debug(mess1);
-        dateToInsert = new SimpleDateFormat("yyyy-MM-dd").parse(dateToParse);
         mess1 = "DateUnitFunctionsTriggersTests: Test->Before";
         System.out.println(mess1);
         LOG.debug(mess1);

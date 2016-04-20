@@ -1,17 +1,14 @@
 package com.makco.smartfinance.persistence.entity;
 
-import com.makco.smartfinance.persistence.entity.converter.LocalDateAttributeConverter;
-
-import javax.persistence.Column;
-import javax.persistence.Convert;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
 import java.sql.Timestamp;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 /**
  * Created by mcalancea on 2016-04-19.
@@ -19,6 +16,7 @@ import java.time.temporal.ChronoUnit;
 @Entity
 @Table(name="DATEUNIT")
 public class DateUnit {
+    //epochDay - the Epoch Day to convert, based on the epoch 1970-01-01
     private final static LocalDate EPOCH = LocalDate.ofEpochDay(0);
 
     @Id
