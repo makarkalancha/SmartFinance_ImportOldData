@@ -2,8 +2,12 @@ package com.makco.smartfinance.persistence.utils;
 
 import com.google.common.base.Objects;
 import com.makco.smartfinance.persistence.contants.DataBaseConstants;
+import com.makco.smartfinance.persistence.entity.DateUnit;
+
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by mcalancea on 2016-04-20.
@@ -23,6 +27,20 @@ public class DateUnitUtil {
         //4000 days / 50 row per batch = 80.02 => floor = 80
         //-4000 days/ 50 row per batch = -80.02 => floor = -81 => -81 x -1 = 81
         result = Math.floorDiv(daysBetween * (-1), DataBaseConstants.BATCH_SIZE) * (-1);
+        return result;
+    }
+
+    public static List<DateUnit> getListOfDateUnitEntities(LocalDate start, LocalDate end) throws Exception{
+        List<DateUnit> result = new ArrayList<>();
+        if(start.compareTo(end) < 0) {
+            LocalDate tmp = start;
+            while (tmp.compareTo(end) <= 0) {
+                DateUnit du = new DateUnit(tmp);
+                System.out.println(du);
+                result.add(du);
+                tmp = tmp.plus(1, ChronoUnit.DAYS);
+            }
+        }
         return result;
     }
 

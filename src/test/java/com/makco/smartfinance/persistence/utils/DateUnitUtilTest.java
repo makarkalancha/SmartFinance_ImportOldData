@@ -1,9 +1,14 @@
 package com.makco.smartfinance.persistence.utils;
 
+import com.makco.smartfinance.persistence.contants.DataBaseConstants;
+import com.makco.smartfinance.persistence.entity.DateUnit;
 import org.junit.Test;
 
 import java.time.LocalDate;
 import java.time.Month;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -33,5 +38,35 @@ public class DateUnitUtilTest {
         LocalDate startDate = LocalDate.of(2010, Month.JANUARY, 01);
         LocalDate endDate = LocalDate.of(2016, Month.APRIL, 20);
         assertEquals(47, DateUnitUtil.getNumberOfBatchesInRange(startDate, endDate));
+    }
+
+    @Test
+    public void getListOfDateUnitEntities() throws Exception{
+        LocalDate start = LocalDate.of(2005, Month.JANUARY, 1);
+        LocalDate end = LocalDate.of(2005, Month.FEBRUARY, 1);
+
+        List<DateUnit> result = new ArrayList<>();
+        if(start.compareTo(end) < 0) {
+            LocalDate tmp = start;
+            while (tmp.compareTo(end) <= 0) {
+                DateUnit du = new DateUnit(tmp);
+                System.out.println(du);
+                result.add(du);
+                tmp = tmp.plus(1, ChronoUnit.DAYS);
+            }
+        }
+        //start the same as LocalDate is immutable
+        System.out.println("start after loop: " + start);
+        System.out.println("result: " + result);
+    }
+
+    @Test
+    public void getListOfDateUnitEntities_startGreaterThanEnd() throws Exception{
+        //TODO
+    }
+
+    @Test
+    public void getListOfDateUnitEntities_startEqualsEnd() throws Exception{
+        //TODO
     }
 }
