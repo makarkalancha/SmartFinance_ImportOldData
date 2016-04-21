@@ -16,8 +16,6 @@ import org.apache.logging.log4j.Logger;
  */
 public class TestDateUnitFunctions {
     private static final Logger LOG = LogManager.getLogger(TestDateUnitFunctions.class);
-    //TODO try to make UNITDAY a PK;
-    //TODO create table from sql script, not a function
     public static void createDateUnitTable(Connection connection) throws SQLException{
         final StringBuilder createDateUnitTable = new StringBuilder();
         createDateUnitTable.append("CREATE SEQUENCE IF NOT EXISTS SEQ_DATEUNIT;");
