@@ -124,17 +124,21 @@ public class Currency implements Serializable{
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) {
+    public boolean equals(Object other) {
+        if (this == other) {
             return true;
         }
-        if (o == null || getClass() != o.getClass()) {
+        if (other == null) {
             return false;
         }
 
-        Currency that = (Currency) o;
+        if (!(other instanceof Currency)) {
+            return false;
+        }
 
-        return id.equals(that.id);
+        Currency that = (Currency) other;
+
+        return getId().equals(that.getId());
     }
 
     @Override

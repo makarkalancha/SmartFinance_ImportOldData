@@ -104,18 +104,25 @@ public class FamilyMember implements Serializable{
         this.name = name;
     }
 
+    // hibernate persistence p.277
+    // as other can be Hibernate proxy use:
+    // getters(), instanceof (instead of getClass())
     @Override
-    public boolean equals(Object o) {
-        if (this == o) {
+    public boolean equals(Object other) {
+        if (this == other) {
             return true;
         }
-        if (o == null || getClass() != o.getClass()) {
+        if (other == null) {
             return false;
         }
 
-        FamilyMember that = (FamilyMember) o;
+        if (!(other instanceof FamilyMember)) {
+            return false;
+        }
 
-        return id.equals(that.id);
+        FamilyMember that = (FamilyMember) other;
+
+        return getId().equals(that.getId());
     }
 
     @Override

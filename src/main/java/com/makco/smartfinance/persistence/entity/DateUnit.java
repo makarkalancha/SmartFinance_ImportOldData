@@ -103,17 +103,21 @@ public class DateUnit {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) {
+    public boolean equals(Object other) {
+        if (this == other) {
             return true;
         }
-        if (o == null || getClass() != o.getClass()) {
+        if (other == null) {
             return false;
         }
 
-        DateUnit that = (DateUnit) o;
+        if (!(other instanceof DateUnit)) {
+            return false;
+        }
 
-        return unitDate.equals(that.unitDate);
+        DateUnit that = (DateUnit) other;
+
+        return getUnitDate().equals(that.getUnitDate());
     }
 
     @Override
