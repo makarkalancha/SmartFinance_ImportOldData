@@ -2,6 +2,7 @@ package com.makco.smartfinance.persistence.utils;
 
 import com.makco.smartfinance.persistence.contants.DataBaseConstants;
 import com.makco.smartfinance.persistence.entity.Currency;
+import com.makco.smartfinance.persistence.entity.DateUnit;
 import com.makco.smartfinance.persistence.entity.FamilyMember;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -46,8 +47,9 @@ public class HibernateUtil {
 
     private static Configuration getConfiguration() {
         Configuration cfg = new Configuration();
-        cfg.addAnnotatedClass(FamilyMember.class);
         cfg.addAnnotatedClass(Currency.class);
+        cfg.addAnnotatedClass(DateUnit.class);
+        cfg.addAnnotatedClass(FamilyMember.class);
 //        cfg.setProperty("hibernate.connection.driver_class", "org.h2.Driver");
         cfg.setProperty("javax.persistence.jdbc.driver", "org.h2.Driver");
         cfg.setProperty("hibernate.connection.url", DataBaseConstants.URL);
