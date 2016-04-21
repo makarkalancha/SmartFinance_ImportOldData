@@ -9,10 +9,10 @@ import java.time.temporal.ChronoUnit;
  * Created by mcalancea on 2016-04-20.
  */
 public class DateUnitUtil {
-    public static final int DEFAULT_YEARS_IN_FUTURE = 5;
+    public static final Chrono DEFAULT_5_YEARS_IN_FUTURE = new Chrono(5L,ChronoUnit.YEARS);
 
-    public static LocalDate getLocaDateInFutureSinceNow(){
-        return LocalDate.now().plus(DEFAULT_YEARS_IN_FUTURE)
+    public static LocalDate getLocaDateInFutureSinceDate(LocalDate localDate){
+        return localDate.plus(DEFAULT_5_YEARS_IN_FUTURE.getChronoNumber(), DEFAULT_5_YEARS_IN_FUTURE.getChronoUnit());
     }
 
     public static long getNumberOfBatchesInRange(LocalDate start, LocalDate end) throws Exception{
