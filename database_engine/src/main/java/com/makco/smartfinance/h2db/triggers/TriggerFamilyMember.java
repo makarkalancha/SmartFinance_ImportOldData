@@ -6,16 +6,12 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Date;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 /**
  * User: Makar Kalancha
  * Date: 06/03/2016
  * Time: 18:05
  */
 public class TriggerFamilyMember extends AbstractTrigger {
-    private final static Logger LOG = LogManager.getLogger(TriggerFamilyMember.class);
 
     @Override
     protected void insert(Connection connection, Object[] oldRow, Object[] newRow) throws SQLException {

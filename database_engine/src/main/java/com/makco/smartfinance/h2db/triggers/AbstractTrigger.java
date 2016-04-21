@@ -5,7 +5,6 @@ import com.makco.smartfinance.h2db.utils.schema_constants.Table;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.Arrays;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.h2.api.Trigger;
@@ -63,22 +62,22 @@ public abstract class AbstractTrigger implements Trigger {
     @Override
     public void fire(Connection connection, Object[] oldRow, Object[] newRow) throws SQLException {
         LOG.debug(logTriggerName());
-        LOG.debug("before oldRow:" + Arrays.toString(oldRow));
-        LOG.debug("before newRow:" + Arrays.toString(newRow));
+//        LOG.debug("before oldRow:" + Arrays.toString(oldRow));
+//        LOG.debug("before newRow:" + Arrays.toString(newRow));
         now = new java.util.Date();
-        LOG.debug("now: " + now);
+//        LOG.debug("now: " + now);
         if (Trigger.INSERT == type) {
-            LOG.debug("operation type: Trigger.INSERT." + type);
+//            LOG.debug("operation type: Trigger.INSERT." + type);
             insert(connection, oldRow, newRow);
         } else if (Trigger.UPDATE == type) {
-            LOG.debug("operation type: Trigger.UPDATE." + type);
+//            LOG.debug("operation type: Trigger.UPDATE." + type);
             update(connection, oldRow, newRow);
         } else if (Trigger.DELETE == type) {
-            LOG.debug("operation type: Trigger.DELETE." + type);
+//            LOG.debug("operation type: Trigger.DELETE." + type);
             delete(connection, oldRow, newRow);
         }
-        LOG.debug("after oldRow:" + Arrays.toString(oldRow));
-        LOG.debug("after newRow:" + Arrays.toString(newRow));
+//        LOG.debug("after oldRow:" + Arrays.toString(oldRow));
+//        LOG.debug("after newRow:" + Arrays.toString(newRow));
     }
 
     @Override
@@ -89,13 +88,13 @@ public abstract class AbstractTrigger implements Trigger {
     private String fillTableJson(JsonObject rowJson) {
         tableJson.addProperty(Table.Elements.tableName.toString(), schemaNameAndTable.toString());
         tableJson.add(Table.Elements.row.toString(), rowJson);
-        LOG.debug("tableJson: " + tableJson.toString());
+//        LOG.debug("tableJson: " + tableJson.toString());
         return tableJson.toString();
     }
 
     protected int insertIntoDeletedRowsTable(Connection connection) throws SQLException{
         String query = queryStrB.toString().replace(SCHEMA_NAME_PLACEHOLDER, schemaName);
-        LOG.debug("query:" + query);
+//        LOG.debug("query:" + query);
         try (
                 PreparedStatement preparedStatement = connection.prepareStatement(query);
         ) {
@@ -116,7 +115,7 @@ public abstract class AbstractTrigger implements Trigger {
 
     protected void delete(Connection connection, Object[] oldRow, Object[] newRow) throws SQLException{
         prepareJsonForDeletion(oldRow);
-        LOG.debug("rowJson: " + rowJson);
+//        LOG.debug("rowJson: " + rowJson);
         insertIntoDeletedRowsTable(connection);
     }
 }

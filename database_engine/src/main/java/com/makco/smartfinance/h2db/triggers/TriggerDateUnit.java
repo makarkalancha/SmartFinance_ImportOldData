@@ -1,11 +1,8 @@
 package com.makco.smartfinance.h2db.triggers;
 
+import com.makco.smartfinance.h2db.utils.schema_constants.Table;
 import java.sql.Connection;
 import java.sql.SQLException;
-
-import com.makco.smartfinance.h2db.utils.schema_constants.Table;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 /**
  * User: Makar Kalancha
@@ -13,7 +10,6 @@ import org.apache.logging.log4j.Logger;
  * Time: 18:05
  */
 public class TriggerDateUnit extends AbstractTrigger {
-    private final static Logger LOG = LogManager.getLogger(TriggerDateUnit.class);
 
     @Override
     protected void insert(Connection connection, Object[] oldRow, Object[] newRow) throws SQLException {

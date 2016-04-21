@@ -1,9 +1,6 @@
 package com.makco.smartfinance.h2db.triggers;
 
 import com.makco.smartfinance.h2db.utils.schema_constants.Table;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import java.sql.Connection;
 import java.sql.SQLException;
 
@@ -13,7 +10,6 @@ import java.sql.SQLException;
  * Time: 18:05
  */
 public class TriggerDeleteRows extends AbstractTrigger {
-    private final static Logger LOG = LogManager.getLogger(TriggerDeleteRows.class);
 
     @Override
     protected String logTriggerName() {
