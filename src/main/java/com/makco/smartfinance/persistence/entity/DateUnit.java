@@ -138,6 +138,7 @@ public class DateUnit {
         return "DateUnit{" +
                 "unitDay=" + unitDay +
                 ", unitDayOfMonth=" + unitDayOfMonth +
+                ", unitDayOfYear=" + unitDayOfYear +
                 ", unitMonth=" + unitMonth +
                 ", unitMonthOfYear=" + unitMonthOfYear +
                 ", unitYear=" + unitYear +
