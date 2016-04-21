@@ -27,7 +27,9 @@ import static org.junit.Assert.assertEquals;
 public class DateUnitFunctionsTriggersTests {
     private static final Logger LOG = LogManager.getLogger(DateUnitFunctionsTriggersTests.class);
     private Date dateToInsert;
-    private String dateToParse = "1960-01-01";
+    private Date epochDateToInsert;
+    private String epochDateToParse = "1970-01-01";
+    private String dateToParse = "1970-01-10";
     private long insertedDateId;
 
     @ClassRule
@@ -57,6 +59,7 @@ public class DateUnitFunctionsTriggersTests {
 //                "-"+
 //                (rand.nextInt((28 - 1) + 1) + 1);
         dateToInsert = new SimpleDateFormat("yyyy-MM-dd").parse(dateToParse);
+        epochDateToInsert = new SimpleDateFormat("yyyy-MM-dd").parse(epochDateToParse);
         String mess1 = "random date (from 2000-01-01 to 2016-12-28): " + dateToParse;
         System.out.println(mess1);
         LOG.debug(mess1);
@@ -90,6 +93,7 @@ public class DateUnitFunctionsTriggersTests {
             assert(H2DbUtils.checkIfDBObjectExists(dbConnectionResource.getConnection(), TestContext.INSTANCE.DB_SCHEMA(),
                         DBObjectType.TRIGGER, Trigger.DATEUNIT.T_DATEUNIT_INS.toString()));
 
+            testInsertSelectDateSinceEpochDate_insert_EpochDate();
             testInsertSelectDateSinceEpochDate_insert();
             testDateUnitTrigger_onInsert();
             testInsertSelectDateSinceEpochDate_select();
@@ -99,20 +103,25 @@ public class DateUnitFunctionsTriggersTests {
     }
 
     //    @Test: junit doesn't support order in test (http://stackoverflow.com/questions/3693626/how-to-run-test-methods-in-specific-order-in-junit4)
+    public void testInsertSelectDateSinceEpochDate_insert_EpochDate() throws Exception {
+        long insertedEpochDateId = TestDateUnitFunctions.insertSelectDate(dbConnectionResource.getConnection(), epochDateToInsert);
+        assertEquals(0, insertedEpochDateId);
+    }
+
     public void testInsertSelectDateSinceEpochDate_insert() throws Exception {
-        insertedDateId = DateUnitFunctions.insertSelectDate(dbConnectionResource.getConnection(), dateToInsert);
-        assert (insertedDateId > 0);
+        insertedDateId = TestDateUnitFunctions.insertSelectDate(dbConnectionResource.getConnection(), dateToInsert);
+        assert (0 < insertedDateId);
     }
 
     //    @Test: junit doesn't support order in test (http://stackoverflow.com/questions/3693626/how-to-run-test-methods-in-specific-order-in-junit4)
     public void testInsertSelectDateSinceEpochDate_select() throws Exception {
-        long selectedDateId = DateUnitFunctions.insertSelectDate(dbConnectionResource.getConnection(), dateToInsert);
+        long selectedDateId = TestDateUnitFunctions.insertSelectDate(dbConnectionResource.getConnection(), dateToInsert);
         assertEquals(insertedDateId, selectedDateId);
     }
 
 
     public void testDateUnitTrigger_onInsert() throws Exception {
-        String query = "SELECT " + Table.DATEUNIT.UNITDATE + " FROM " + Table.Names.DATEUNIT + " WHERE " + Table.DATEUNIT.UNITDATE + " = ?" +
+        String query = "SELECT " + Table.DATEUNIT.UNITDAY + " FROM " + Table.Names.DATEUNIT + " WHERE " + Table.DATEUNIT.UNITDAY + " = ?" +
                 " AND " + Table.DATEUNIT.T_CREATEDON + " IS NOT NULL";
         LOG.debug(query);
         ResultSet rs = null;

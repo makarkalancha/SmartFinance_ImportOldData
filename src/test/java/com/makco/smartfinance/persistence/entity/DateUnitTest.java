@@ -2,12 +2,6 @@ package com.makco.smartfinance.persistence.entity;
 
 import com.makco.smartfinance.persistence.contants.DataBaseConstants;
 import com.makco.smartfinance.persistence.utils.TestPersistenceManager;
-import java.time.LocalDate;
-import java.time.Month;
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
-import java.util.Date;
-import javax.persistence.EntityManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.After;
@@ -15,6 +9,14 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import javax.persistence.EntityManager;
+import java.time.LocalDate;
+import java.time.Month;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
+import java.util.Date;
+
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -26,6 +28,7 @@ public class DateUnitTest {
 
     private Date dateToInsert;
     private String dateToParse = "1971-02-06";//"1970-01-01" is used in databaseEngine trigger test
+    private DateUnit du;
 
 //    private static int MIN = 1;
 //    private static int MAX = 100;
@@ -43,10 +46,60 @@ public class DateUnitTest {
 
     @Before
     public void setUp() throws Exception {
+        du = new DateUnit(LocalDate.of(2016, Month.FEBRUARY, 1));
     }
 
     @After
     public void tearDown() throws Exception {
+    }
+
+    @Test
+    public void testGetUnitTimeStamp() throws Exception {
+        LocalDate fact = du.getUnitTimestamp();
+        LocalDate plan = LocalDate.of(2016, Month.FEBRUARY, 1);
+        assertEquals(fact, plan);
+    }
+
+    @Test
+    public void testGetUnitYear() throws Exception {
+        int fact = du.getUnitYear();
+        int plan = 2016;
+        assertEquals(fact, plan);
+    }
+
+    @Test
+    public void testGetUnitMonthOfYear() throws Exception {
+        int fact = du.getUnitMonthOfYear();
+        int plan = 2;
+        assertEquals(fact, plan);
+    }
+
+    @Test
+    public void testGetUnitMonth() throws Exception {
+        long fact = du.getUnitMonth();
+        long plan = 553L;
+        assertEquals(fact, plan);
+    }
+
+    @Test
+    public void testGetUnitDate() throws Exception {
+        long fact = du.getUnitDay();
+        long plan = 16832L;
+        assertEquals(fact, plan);
+    }
+
+    @Test
+    public void testGetUnitDayOfWeek() throws Exception {
+        int fact = du.getUnitDayOfWeek();
+        int plan = 1;
+        assertEquals(fact, plan);
+    }
+
+    @Test
+    public void testGetWeekDay() throws Exception {
+        boolean fact = du.isWeekday();
+        boolean plan = true;
+        assertEquals(fact, plan);
     }
 
     @Test
@@ -62,31 +115,20 @@ public class DateUnitTest {
             em.remove(toRemove);
         }
         em.getTransaction().commit();
-        ////////////////
-
+        ////////////////////////////////
         em.getTransaction().begin();
-//        Random rand = new Random();
-//        int randMonth = (rand.nextInt((12 - 1) + 1) + 1);
-//        int randDay = (rand.nextInt((28 - 1) + 1) + 1);
-//        String dateToParse = (rand.nextInt((2016 - 2000) + 1) + 2000) +
-//                "-" +
-//                ((randMonth < 10) ? "0" + randMonth : randMonth) +
-//                "-" +
-//                ((randDay < 10) ? "0" + randDay : randDay);
-        String mess1 = "random date (from 2000-01-01 to 2016-12-28): " + dateToParse;
-        System.out.println(mess1);
-        LOG.debug(mess1);
         LocalDate localDate = LocalDate.parse(dateToParse, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         DateUnit dateToInsert = new DateUnit(localDate);
         LOG.debug("date to insert: " + dateToInsert);
         em.persist(dateToInsert);
 //        em.flush();
         em.getTransaction().commit();
-        LOG.debug("INS: cad: .getId()=" + dateToInsert.getUnitDate());
+        LOG.debug("INS: cad.getId()=" + dateToInsert.getUnitDay());
         LOG.debug("INS: cad.getCreatedOn()=" + dateToInsert.getCreatedOn());
 
-        assertEquals(new Long(401), dateToInsert.getUnitDate());
-        assertEquals(new Integer(6), dateToInsert.getUnitDateOfMonth());
+        assertEquals(new Long(401), dateToInsert.getUnitDay());
+        assertEquals(new Integer(6), dateToInsert.getUnitDayOfMonth());
+        assertEquals(new Integer(37), dateToInsert.getUnitDayOfYear());
         assertEquals(new Long(13), dateToInsert.getUnitMonth());
         assertEquals(new Integer(2), dateToInsert.getUnitMonthOfYear());
         assertEquals(new Integer(1971), dateToInsert.getUnitYear());
@@ -99,7 +141,7 @@ public class DateUnitTest {
 
     @Test
     public void testBatchQty() {
-        LocalDate start = LocalDate.of(2010, Month.JANUARY, 01);
+        LocalDate start = LocalDate.of(2010, Month.JANUARY, 1);
         LocalDate today = LocalDate.now();
         LocalDate end = today.plus(5, ChronoUnit.YEARS);
         System.out.println("start:" + start.toString());

@@ -1,6 +1,6 @@
 package com.makco.smartfinance.h2db.functions;
 
-import com.makco.smartfinance.h2db.utils.DateUnit;
+import com.makco.smartfinance.h2db.utils.TestUtilDateUnit;
 import com.makco.smartfinance.h2db.utils.schema_constants.Table;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -14,9 +14,9 @@ import org.apache.logging.log4j.Logger;
 /**
  * Created by mcalancea on 2016-02-16.
  */
-public class DateUnitFunctions {
-    private static final Logger LOG = LogManager.getLogger(DateUnitFunctions.class);
-    //TODO try to make UNITDATE a PK;
+public class TestDateUnitFunctions {
+    private static final Logger LOG = LogManager.getLogger(TestDateUnitFunctions.class);
+    //TODO try to make UNITDAY a PK;
     //TODO create table from sql script, not a function
     public static void createDateUnitTable(Connection connection) throws SQLException{
         final StringBuilder createDateUnitTable = new StringBuilder();
@@ -27,7 +27,7 @@ public class DateUnitFunctions {
             createDateUnitTable.append("UNITYEAR INT NOT NULL,");
             createDateUnitTable.append("UNITMONTHOFYEAR INT NOT NULL,");
             createDateUnitTable.append("UNITMONTH BIGINT NOT NULL,");
-            createDateUnitTable.append("UNITDATE BIGINT NOT NULL,");
+            createDateUnitTable.append("UNITDAY BIGINT NOT NULL,");
             createDateUnitTable.append("UNITDAYOFWEEK INT NOT NULL,");
             createDateUnitTable.append("WEEKDAY BOOLEAN NOT NULL,");//if weekend false
             createDateUnitTable.append("T_CREATEDON TIMESTAMP,");
@@ -39,7 +39,7 @@ public class DateUnitFunctions {
         createDateUnitTable.append("CREATE INDEX IF NOT EXISTS IDXUNITYEAR ON DATEUNIT(UNITYEAR);");
         createDateUnitTable.append("CREATE INDEX IF NOT EXISTS IDXUNITMONTHOFYEAR ON DATEUNIT(UNITMONTHOFYEAR);");
         createDateUnitTable.append("CREATE INDEX IF NOT EXISTS IDXUNITMONTH ON DATEUNIT(UNITMONTH);");
-        createDateUnitTable.append("CREATE INDEX IF NOT EXISTS IDXUNITDATE ON DATEUNIT(UNITDATE);");
+        createDateUnitTable.append("CREATE INDEX IF NOT EXISTS IDXUNITDATE ON DATEUNIT(UNITDAY);");
         createDateUnitTable.append("CREATE INDEX IF NOT EXISTS IDXUNITDAYOFWEEK ON DATEUNIT(UNITDAYOFWEEK);");
         createDateUnitTable.append("CREATE INDEX IF NOT EXISTS IDXWEEKDAY ON DATEUNIT(WEEKDAY);");
 
@@ -55,10 +55,10 @@ public class DateUnitFunctions {
     public static Long insertSelectDate(Connection connection, Date date) throws SQLException {
         try {
             Long result = null;
-            DateUnit du = new DateUnit(date);
+            TestUtilDateUnit du = new TestUtilDateUnit(date);
 
             StringBuilder selectQuery = new StringBuilder();
-            selectQuery.append("SELECT " + Table.DATEUNIT.UNITDATE + " FROM " + Table.Names.DATEUNIT);
+            selectQuery.append("SELECT " + Table.DATEUNIT.UNITDAY + " FROM " + Table.Names.DATEUNIT);
             selectQuery.append(" WHERE " + Table.DATEUNIT.UNITTIMESTAMP + " = ?");
 
             StringBuilder insertQuery = new StringBuilder();
@@ -69,11 +69,12 @@ public class DateUnitFunctions {
             insertQuery.append(Table.DATEUNIT.UNITYEAR + ", ");
             insertQuery.append(Table.DATEUNIT.UNITMONTHOFYEAR + ", ");
             insertQuery.append(Table.DATEUNIT.UNITMONTH + ", ");
-            insertQuery.append(Table.DATEUNIT.UNITDATE + ", ");
+            insertQuery.append(Table.DATEUNIT.UNITDAY + ", ");
             insertQuery.append(Table.DATEUNIT.UNITDAYOFWEEK + ", ");
             insertQuery.append(Table.DATEUNIT.WEEKDAY + ", ");
-            insertQuery.append(Table.DATEUNIT.UNITDATEOFMONTH + ") ");
-            insertQuery.append("VALUES (?,?,?,?,?,?,?,?); ");
+            insertQuery.append(Table.DATEUNIT.UNITDAYOFYEAR + ", ");
+            insertQuery.append(Table.DATEUNIT.UNITDAYOFMONTH + ") ");
+            insertQuery.append("VALUES (?,?,?,?,?,?,?,?,?); ");
 
             LOG.debug(selectQuery.toString());
             LOG.debug(insertQuery.toString());
@@ -92,16 +93,17 @@ public class DateUnitFunctions {
                     insertPS.setInt(2, du.getUnitYear());
                     insertPS.setInt(3, du.getUnitMonthOfYear());
                     insertPS.setLong(4, du.getUnitMonth());
-                    insertPS.setLong(5, du.getUnitDate());
+                    insertPS.setLong(5, du.getUnitDay());
                     insertPS.setInt(6, du.getUnitDayOfWeek());
                     insertPS.setBoolean(7, du.getWeekDay());
-                    insertPS.setLong(8, du.getUnitDateOfMonth());
+                    insertPS.setInt(8, du.getUnitDayOfYear());
+                    insertPS.setLong(9, du.getUnitDayOfMonth());
 
                     insertPS.executeUpdate();
 //                rs = insertPS.getGeneratedKeys();
 //                rs.next();
 //                result = rs.getLong(1);
-                    result = du.getUnitDate();
+                    result = du.getUnitDay();
                 }
 
                 return result;

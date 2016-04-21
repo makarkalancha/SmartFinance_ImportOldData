@@ -20,11 +20,14 @@ public class DateUnit {
     private final static LocalDate EPOCH = LocalDate.ofEpochDay(0);
 
     @Id
-    @Column(name="UNITDATE", updatable = false)
-    private Long unitDate;
+    @Column(name="UNITDAY", updatable = false)
+    private Long unitDay;
 
-    @Column(name="UNITDATEOFMONTH", updatable = false)
-    private Integer unitDateOfMonth;
+    @Column(name="UNITDAYOFMONTH", updatable = false)
+    private Integer unitDayOfMonth;
+
+    @Column(name="UNITDAYOFYEAR", updatable = false)
+    private Integer unitDayOfYear;
 
     @Column(name="UNITMONTH", updatable = false)
     private Long unitMonth;
@@ -53,8 +56,9 @@ public class DateUnit {
     }
 
     public DateUnit(LocalDate localDate) {
-        this.unitDate = ChronoUnit.DAYS.between(EPOCH, localDate);;
-        this.unitDateOfMonth = localDate.getDayOfMonth();
+        this.unitDay = ChronoUnit.DAYS.between(EPOCH, localDate);;
+        this.unitDayOfMonth = localDate.getDayOfMonth();
+        this.unitDayOfYear = localDate.getDayOfYear();
         this.unitMonth = ChronoUnit.MONTHS.between(EPOCH, localDate);
         this.unitMonthOfYear = localDate.getMonthValue();
         this.unitYear = localDate.getYear();
@@ -66,12 +70,16 @@ public class DateUnit {
         this.unitTimestamp = localDate;
     }
 
-    public Long getUnitDate() {
-        return unitDate;
+    public Long getUnitDay() {
+        return unitDay;
     }
 
-    public Integer getUnitDateOfMonth() {
-        return unitDateOfMonth;
+    public Integer getUnitDayOfMonth() {
+        return unitDayOfMonth;
+    }
+
+    public Integer getUnitDayOfYear() {
+        return unitDayOfYear;
     }
 
     public Integer getUnitDayOfWeek() {
@@ -117,19 +125,19 @@ public class DateUnit {
 
         DateUnit that = (DateUnit) other;
 
-        return getUnitDate().equals(that.getUnitDate());
+        return getUnitDay().equals(that.getUnitDay());
     }
 
     @Override
     public int hashCode() {
-        return unitDate.hashCode();
+        return unitDay.hashCode();
     }
 
     @Override
     public String toString() {
         return "DateUnit{" +
-                "unitDate=" + unitDate +
-                ", unitDateOfMonth=" + unitDateOfMonth +
+                "unitDay=" + unitDay +
+                ", unitDayOfMonth=" + unitDayOfMonth +
                 ", unitMonth=" + unitMonth +
                 ", unitMonthOfYear=" + unitMonthOfYear +
                 ", unitYear=" + unitYear +

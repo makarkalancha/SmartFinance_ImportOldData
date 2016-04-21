@@ -63,15 +63,16 @@ public class Table {
     };
     
     public enum DATEUNIT implements IEnumRow {
-        UNITDATE(0),
-        UNITDATEOFMONTH(1),
-        UNITMONTH(2),
-        UNITMONTHOFYEAR(3),
-        UNITYEAR(4),
-        UNITDAYOFWEEK(5),
-        WEEKDAY(6),
-        UNITTIMESTAMP(7),
-        T_CREATEDON(8);
+        UNITDAY(0),
+        UNITDAYOFMONTH(1),
+        UNITDAYOFYEAR(2),
+        UNITMONTH(3),
+        UNITMONTHOFYEAR(4),
+        UNITYEAR(5),
+        UNITDAYOFWEEK(6),
+        WEEKDAY(7),
+        UNITTIMESTAMP(8),
+        T_CREATEDON(9);
 
         private int columnIndex;
         private DATEUNIT(int columnIndex) {

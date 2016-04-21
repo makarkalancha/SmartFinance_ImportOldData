@@ -8,12 +8,12 @@ import java.time.temporal.ChronoUnit;
 /**
  * Created by mcalancea on 2016-02-26.
  */
-public class DateUnit {
+public class TestUtilDateUnit {
     private final static LocalDate EPOCH = LocalDate.ofEpochDay(0);
     private final java.util.Date date;
     private final LocalDate localDate;
 
-    public DateUnit(java.util.Date date){
+    public TestUtilDateUnit(java.util.Date date){
         this.date = date;
         this.localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
     }
@@ -34,11 +34,15 @@ public class DateUnit {
         return ChronoUnit.MONTHS.between(EPOCH, localDate);
     }
 
-    public long getUnitDateOfMonth() {
+    public long getUnitDayOfMonth() {
         return localDate.getDayOfMonth();
     }
 
-    public long getUnitDate() {
+    public int getUnitDayOfYear() {
+        return localDate.getDayOfYear();
+    }
+
+    public long getUnitDay() {
         return ChronoUnit.DAYS.between(EPOCH, localDate);
     }
 

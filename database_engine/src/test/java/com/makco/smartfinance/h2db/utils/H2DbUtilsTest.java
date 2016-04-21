@@ -47,10 +47,10 @@ public class H2DbUtilsTest {
         insertDU.append(Table.DATEUNIT.UNITYEAR + ", ");
         insertDU.append(Table.DATEUNIT.UNITMONTHOFYEAR + ", ");
         insertDU.append(Table.DATEUNIT.UNITMONTH + ", ");
-        insertDU.append(Table.DATEUNIT.UNITDATE + ", ");
+        insertDU.append(Table.DATEUNIT.UNITDAY + ", ");
         insertDU.append(Table.DATEUNIT.UNITDAYOFWEEK + ", ");
         insertDU.append(Table.DATEUNIT.WEEKDAY + ", ");
-        insertDU.append(Table.DATEUNIT.UNITDATEOFMONTH + ") ");
+        insertDU.append(Table.DATEUNIT.UNITDAYOFMONTH + ") ");
         insertDU.append("VALUES (?,?,?,?,?,?,?,?); ");
 
         Date todaysDate = new Date();
@@ -75,15 +75,15 @@ public class H2DbUtilsTest {
                 Calendar cal = Calendar.getInstance();
                 cal.setTime(todaysDate);
                 cal.add(Calendar.DATE, -count);
-                DateUnit du = new DateUnit(cal.getTime());
+                TestUtilDateUnit du = new TestUtilDateUnit(cal.getTime());
                 insertPS.setDate(1, du.getUnitTimeStamp());
                 insertPS.setInt(2, du.getUnitYear());
                 insertPS.setInt(3, du.getUnitMonthOfYear());
                 insertPS.setLong(4, du.getUnitMonth());
-                insertPS.setLong(5, du.getUnitDate());
+                insertPS.setLong(5, du.getUnitDay());
                 insertPS.setInt(6, du.getUnitDayOfWeek());
                 insertPS.setBoolean(7, du.getWeekDay());
-                insertPS.setLong(8, du.getUnitDateOfMonth());
+                insertPS.setLong(8, du.getUnitDayOfMonth());
                 insertPS.addBatch();
 
                 ++count;
