@@ -1,16 +1,13 @@
 package com.makco.smartfinance.persistence.utils;
 
-import com.makco.smartfinance.persistence.contants.DataBaseConstants;
 import com.makco.smartfinance.persistence.entity.DateUnit;
-import org.junit.Test;
-
 import java.time.LocalDate;
 import java.time.Month;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.junit.Assert.*;
+import org.junit.Test;
+import static org.junit.Assert.assertEquals;
 
 /**
  * User: Makar Kalancha
@@ -18,18 +15,20 @@ import static org.junit.Assert.*;
  * Time: 22:05
  */
 public class DateUnitUtilTest {
-    private LocalDate initialDate = LocalDate.of(2000, Month.JANUARY, 1);
+    private LocalDate Jan_1_2000 = LocalDate.of(2000, Month.JANUARY, 1);
+    private LocalDate Jan_1_2005 = LocalDate.of(2005, Month.JANUARY, 1);
+    private LocalDate Feb_1_2005 = LocalDate.of(2005, Month.FEBRUARY, 1);
+
     @Test
     public void testGetLocaDateInFutureSinceNow() throws Exception {
-        LocalDate resultDate = DateUnitUtil.getLocaDateInFutureSinceDate(initialDate);
-        assertEquals(LocalDate.of(2005, Month.JANUARY, 1), resultDate);
+        LocalDate resultDate = DateUnitUtil.getLocaDateInFutureSinceDate(Jan_1_2000);
+        assertEquals(Jan_1_2005, resultDate);
     }
 
     @Test
     public void testGetNumberOfBatchesInRange_2() throws Exception {
-        LocalDate startDate = initialDate;
-        LocalDate endDate = LocalDate.of(2000, Month.APRIL, 9);
-        assertEquals(2, DateUnitUtil.getNumberOfBatchesInRange(startDate, endDate));
+        LocalDate Apr_9_2000 = LocalDate.of(2000, Month.APRIL, 9);
+        assertEquals(2, DateUnitUtil.getNumberOfBatchesInRange(Jan_1_2000, Apr_9_2000));
     }
 
     @Test
@@ -41,32 +40,35 @@ public class DateUnitUtilTest {
     }
 
     @Test
-    public void getListOfDateUnitEntities() throws Exception{
-        LocalDate start = LocalDate.of(2005, Month.JANUARY, 1);
-        LocalDate end = LocalDate.of(2005, Month.FEBRUARY, 1);
+    public void getListOfDateUnitEntitiesManually() throws Exception{
+        LocalDate start = Jan_1_2005;
+        LocalDate end = Feb_1_2005;
 
         List<DateUnit> result = new ArrayList<>();
         if(start.compareTo(end) < 0) {
             LocalDate tmp = start;
             while (tmp.compareTo(end) <= 0) {
                 DateUnit du = new DateUnit(tmp);
-                System.out.println(du);
+//                System.out.println(du);
                 result.add(du);
                 tmp = tmp.plus(1, ChronoUnit.DAYS);
             }
         }
-        //start the same as LocalDate is immutable
-        System.out.println("start after loop: " + start);
+        //Jan_1_2005 the same as LocalDate is immutable
+        System.out.println("Jan_1_2005 after loop: " + start);
         System.out.println("result: " + result);
+        assertEquals(32, result.size());
     }
 
     @Test
     public void getListOfDateUnitEntities_startGreaterThanEnd() throws Exception{
-        //TODO
+        List<DateUnit> result = DateUnitUtil.getListOfDateUnitEntities(Feb_1_2005, Jan_1_2005);
+        assertEquals(0, result.size());
     }
 
     @Test
     public void getListOfDateUnitEntities_startEqualsEnd() throws Exception{
-        //TODO
+        List<DateUnit> result = DateUnitUtil.getListOfDateUnitEntities(Jan_1_2005, Jan_1_2005);
+        assertEquals(0, result.size());
     }
 }
