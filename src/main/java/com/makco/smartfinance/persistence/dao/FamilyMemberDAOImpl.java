@@ -17,7 +17,7 @@ public class FamilyMemberDAOImpl implements FamilyMemberDAO {
     private final static Logger LOG = LogManager.getLogger(FamilyMemberDAOImpl.class);
 
     @Override
-    public List<FamilyMember> familyMemberList() {
+    public synchronized List<FamilyMember> familyMemberList() {
         Session session = null;
         List<FamilyMember> list = new ArrayList<>();
         try{
@@ -45,7 +45,7 @@ public class FamilyMemberDAOImpl implements FamilyMemberDAO {
     }
 
     @Override
-    public void removeFamilyMember(Long id) {
+    public synchronized void removeFamilyMember(Long id) {
         Session session = null;
         try{
             session = HibernateUtil.openSession();
@@ -71,7 +71,7 @@ public class FamilyMemberDAOImpl implements FamilyMemberDAO {
     }
 
     @Override
-    public FamilyMember getFamilyMemberById(Long id) {
+    public synchronized FamilyMember getFamilyMemberById(Long id) {
         Session session = null;
         FamilyMember familyMember = null;
         try{
@@ -99,7 +99,7 @@ public class FamilyMemberDAOImpl implements FamilyMemberDAO {
     }
 
     @Override
-    public List<FamilyMember> getFamilyMemberByName(String name) {
+    public synchronized List<FamilyMember> getFamilyMemberByName(String name) {
         Session session = null;
         List<FamilyMember> familyMembers = new ArrayList<>();
         try {
@@ -129,7 +129,7 @@ public class FamilyMemberDAOImpl implements FamilyMemberDAO {
     }
 
     @Override
-    public void saveOrUpdateFamilyMember(FamilyMember familyMember) {
+    public synchronized void saveOrUpdateFamilyMember(FamilyMember familyMember) {
         Session session = null;
         try {
             session = HibernateUtil.openSession();
