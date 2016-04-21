@@ -20,6 +20,7 @@ configurations {
     h2
     log4j2api
     log4j2core
+    testOutput
 }
 
 dependencies {
@@ -29,6 +30,7 @@ dependencies {
     log4j2core 'org.apache.logging.log4j:log4j-core:2.5'
     compile 'com.google.code.gson:gson:2.2.4'
     compile 'org.flywaydb:flyway-core:4.0'
+    testOutput sourceSets.test.output
 }
 
 jar {

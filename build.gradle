@@ -66,6 +66,9 @@ dependencies {
     compile 'javax.validation:validation-api:1.0.0.GA' //javax.validation.constraints
     compile 'org.apache.commons:commons-lang3:3.4'
     compile 'com.google.guava:guava:19.0'
+
+    //https://softnoise.wordpress.com/2014/09/07/gradle-sub-project-test-dependencies-in-multi-project-builds/
+    testCompile project(path: ':database_engine', configuration: 'testOutput')
 }
 
 //1st approach: dependent jars are in separate folder $libsDir\\$lib_folder
