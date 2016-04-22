@@ -74,24 +74,12 @@ public class Main extends Application{
         MainMapLookup.setMainArguments(args);
         Application.launch(args);
     }
-    //http://stackoverflow.com/questions/24055897/same-stage-different-fxml-javafx
     //http://www.devx.com/Java/Article/48193/0/page/2
     @Override
     public void start(Stage primaryStage){
         try {
             this.primaryStage = primaryStage;
             LOG.debug("First day of the week: "+ WeekFields.of(Locale.getDefault()).getFirstDayOfWeek());
-////            H2DbUtils.checkIfSchemaExists(ApplicationConstants.DB_SCHEMA_NAME);
-////http://www.hascode.com/2013/04/easy-database-migrations-using-flyway-java-ee-6-and-glassfish/
-////            Flyway flyway = new Flyway();
-////            flyway.setDataSource(DBConnectionResource.getDbConnectionUrl(),TestContext.INSTANCE.DB_USER(),TestContext.INSTANCE.DB_PASSWORD());
-////            flyway.migrate();
-////            if(H2DbUtils.checkIfSchemaExists(DataBaseConstants.SCHEMA)){
-////                LOG.debug("db exists");
-////            } else {
-////                LOG.debug("db DOESN'T exist");
-//
-//            H2DbUtils.migrate(DataBaseConstants.SCHEMA);
             ((Service<Void>) preStartWorker).setOnSucceeded(event -> {
                 if(isEmpty.get()){
                     pFormStart.close();
