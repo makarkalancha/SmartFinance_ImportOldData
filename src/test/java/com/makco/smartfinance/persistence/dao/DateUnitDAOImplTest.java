@@ -28,6 +28,7 @@ import org.junit.Test;
 public class DateUnitDAOImplTest {
     private static final Logger LOG = LogManager.getLogger(DateUnitDAOImplTest.class);
     private static EntityManager em;
+    private DateUnitDAO dateUnitDAO = new DateUnitDAOImplForTest();
 
     private static String addDUListElapsedTimeByBatch;
     private static String addDUListElapsedTimeAllAtOnce;
@@ -76,7 +77,6 @@ public class DateUnitDAOImplTest {
 //        LocalDate endDate = DateUnitUtil.getLocaDateInFutureSinceDate(now);
         long batchesQty = DateUnitUtil.getNumberOfBatchesInRange(Jan_01_1980, Jan_01_1990);
         LOG.debug("testAddDateUnitListByBatch->batchesQty: " + batchesQty);
-        DateUnitDAO dateUnitDAO = new DateUnitDAOImplForTest();
         List<DateUnit> dateUnitList = DateUnitUtil.getListOfDateUnitEntities(Jan_01_1980, Jan_01_1990);
         startProcessing = LocalDateTime.now();
         for(List<DateUnit> batch : Lists.partition(dateUnitList, DataBaseConstants.BATCH_SIZE)) {
@@ -113,7 +113,6 @@ public class DateUnitDAOImplTest {
         LocalDate Jan_01_1990 = LocalDate.of(1990, Month.JANUARY, 1);
         long batchesQty = DateUnitUtil.getNumberOfBatchesInRange(Jan_01_1980, Jan_01_1990);
         LOG.debug("testAddDateUnitListAllAtOnce->batchesQty: " + batchesQty);
-        DateUnitDAO dateUnitDAO = new DateUnitDAOImplForTest();
         List<DateUnit> dateUnitList = DateUnitUtil.getListOfDateUnitEntities(Jan_01_1980, Jan_01_1990);
 
         startProcessing = LocalDateTime.now();
@@ -141,5 +140,11 @@ public class DateUnitDAOImplTest {
     @Test
     public void testGetDateUnitByUnitDate() throws Exception {
 
+    }
+
+    @Test
+    public void testIsEmpty() throws Exception {
+        boolean result = dateUnitDAO.isEmpty();
+        assert (!result);
     }
 }

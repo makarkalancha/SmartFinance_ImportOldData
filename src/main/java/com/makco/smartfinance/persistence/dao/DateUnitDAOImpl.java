@@ -102,4 +102,24 @@ public class DateUnitDAOImpl implements DateUnitDAO {
         }
         return dateUnit;
     }
+
+    @Override
+    public boolean isEmpty() {
+        Session session = null;
+        boolean isEmpty = false;
+        try{
+            session = HibernateUtil.openSession();
+            session.beginTransaction();
+            isEmpty = session.createQuery("SELECT 1 FROM DateUnit").setMaxResults(1).list().isEmpty();
+            session.getTransaction().commit();
+        } catch (Exception e) {
+            session.getTransaction().rollback();
+            DialogMessages.showExceptionAlert(e);
+        } finally {
+            if(session != null){
+                session.close();
+            }
+        }
+        return isEmpty;
+    }
 }

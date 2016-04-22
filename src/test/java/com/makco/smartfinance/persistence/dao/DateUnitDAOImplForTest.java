@@ -2,9 +2,12 @@ package com.makco.smartfinance.persistence.dao;
 
 import com.makco.smartfinance.persistence.contants.DataBaseConstants;
 import com.makco.smartfinance.persistence.entity.DateUnit;
+import com.makco.smartfinance.persistence.utils.HibernateUtil;
 import com.makco.smartfinance.persistence.utils.HibernateUtilTest;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.makco.smartfinance.user_interface.constants.DialogMessages;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
@@ -100,5 +103,25 @@ public class DateUnitDAOImplForTest implements DateUnitDAO {
             }
         }
         return dateUnit;
+    }
+
+    @Override
+    public boolean isEmpty() {
+        Session session = null;
+        boolean isEmpty = false;
+        try{
+            session = HibernateUtilTest.openSession();
+            session.beginTransaction();
+            isEmpty = session.createQuery("SELECT 1 FROM DateUnit").setMaxResults(1).list().isEmpty();
+            session.getTransaction().commit();
+        } catch (Exception e) {
+            session.getTransaction().rollback();
+            LOG.error(e, e);
+        } finally {
+            if(session != null){
+                session.close();
+            }
+        }
+        return isEmpty;
     }
 }

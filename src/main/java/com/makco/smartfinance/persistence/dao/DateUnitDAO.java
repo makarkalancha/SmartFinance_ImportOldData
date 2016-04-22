@@ -13,4 +13,6 @@ public interface DateUnitDAO {
 
     void addDateUnit(DateUnit dateUnit);
     void addDateUnitList(List<DateUnit> dateUnit);
+
+    boolean isEmpty();
 }
