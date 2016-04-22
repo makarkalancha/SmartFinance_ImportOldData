@@ -73,6 +73,7 @@ public class ProgressIndicatorForm {
     }
 
     public void close(){
+        pin.progressProperty().unbind();
         getDialogStage().close();
     }
 }

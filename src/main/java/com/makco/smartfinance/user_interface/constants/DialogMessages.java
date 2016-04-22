@@ -89,7 +89,7 @@ public class DialogMessages {
         Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
         alertStage.getIcons().add(new Image(ApplicationConstants.MAIN_WINDOW_ICO));
         alert.setTitle("Exception Dialog");
-        alert.setHeaderText("Look, an Exception Dialog");
+        alert.setHeaderText("Exception Dialog");
         alert.setContentText(t.getMessage());
 
 //            Exception ex = new FileNotFoundException("Could not find file blabla.txt");
@@ -169,9 +169,9 @@ public class DialogMessages {
             return null;
         });
         Optional<LocalDate> result = dialog.showAndWait();
-        result.ifPresent(localDateTime -> {
-            LOG.debug("localDateTime:" + localDateTime.toString());
-        });
+//        result.ifPresent(localDateTime -> {
+//            LOG.debug("localDateTime:" + localDateTime.toString());
+//        });
         return result;
     }
 }

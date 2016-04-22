@@ -70,7 +70,7 @@ public class ProgressBarForm {
         pb.progressProperty().bind(task.progressProperty());
         dialogStage.titleProperty().bind(task.titleProperty());
         messageLbl.textProperty().bind(task.messageProperty());
-        task.messageProperty();
+//        task.messageProperty();
 //        pin.progressProperty().bind(task.progressProperty());
         dialogStage.show();
     }
@@ -85,6 +85,9 @@ public class ProgressBarForm {
     }
 
     public void close(){
+        pb.progressProperty().unbind();
+        dialogStage.titleProperty().unbind();
+        messageLbl.textProperty().unbind();
         getDialogStage().close();
     }
 }

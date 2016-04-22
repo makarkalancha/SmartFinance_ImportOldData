@@ -1,6 +1,9 @@
 package com.makco.smartfinance;
 
 import com.makco.smartfinance.h2db.utils.H2DbUtils;
+import com.makco.smartfinance.user_interface.workers.QuitWorker;
+import com.makco.smartfinance.user_interface.workers.prestart.InsertDateUnitWorker;
+import com.makco.smartfinance.user_interface.workers.prestart.PreStartWorker;
 import com.makco.smartfinance.user_interface.ScreensController;
 import com.makco.smartfinance.user_interface.constants.ApplicationConstants;
 import com.makco.smartfinance.user_interface.constants.DialogMessages;
@@ -12,6 +15,7 @@ import java.time.LocalDate;
 import java.time.temporal.WeekFields;
 import java.util.Locale;
 import java.util.Optional;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.lookup.MainMapLookup;
@@ -32,6 +36,9 @@ import javafx.stage.WindowEvent;
 /**
  * Created by mcalancea on 2016-03-28.
  */
+
+//TODO run h2 db and launch main
+//exception will appear with progress bar
 public class Main extends Application{
     private final static Logger LOG;
     static {
@@ -42,15 +49,25 @@ public class Main extends Application{
         LOG = LogManager.getLogger(Main.class);
     }
 
+    private static final Worker<Void> quitWorker = new QuitWorker();;
+
     private Stage primaryStage;
     private Worker<Void> preStartWorker;
+    private Worker<Void> insertDateUnitWorker;
+
     private ProgressBarForm pFormStart = new ProgressBarForm();
+    private ProgressBarForm pFormInsertDateUnit = new ProgressBarForm();
+
+
     private BooleanProperty isEmpty = new SimpleBooleanProperty();
 
     public Main(){
         preStartWorker = new PreStartWorker();
         isEmpty.bind(((PreStartWorker)preStartWorker).isEmptyProperty());
         pFormStart.activateProgressBar(preStartWorker);
+
+        insertDateUnitWorker = new InsertDateUnitWorker();
+        pFormInsertDateUnit.activateProgressBar(insertDateUnitWorker);
     }
 
     //https://www.youtube.com/watch?v=5GsdaZWDcdY
@@ -81,30 +98,46 @@ public class Main extends Application{
             ((Service<Void>) preStartWorker).setOnSucceeded(event -> {
                 if(isEmpty.get()){
                     pFormStart.close();
-//                    boolean isConfirmed = DialogMessages.showDateUnitConfirmationDialog();
-//                    if(isConfirmed){
-//
-//                    }
                     Optional<LocalDate> ldt = DialogMessages.showDateUnitConfirmationDialog();
-                    ldt.ifPresent(localDateTime ->
-                            LOG.debug("Main->localDatetime: "+localDateTime.toString())
-                    );
-//                    openApp();
+                    if (ldt.isPresent()) {
+                        LocalDate localDate = ldt.get();
+                        LOG.debug("Main->localDatetime: " + localDate.toString());
+                        pFormInsertDateUnit.show();
+                        ((InsertDateUnitWorker)insertDateUnitWorker).setStartLocalDate(localDate);
+                        ((Service<Void>) insertDateUnitWorker).restart();
+                    } else {
+                        Main.quit(null);
+                    }
                 } else {
                     openApp();
                     pFormStart.close();
                 }
             });
             ((Service<Void>) preStartWorker).setOnFailed(event -> {
-                LOG.debug("preStartWorker->setOnFailed");
-                LOG.debug(">>>>>>>>preStartWorker->setOnFailed: pFormStart.getDialogStage().close()");
                 pFormStart.close();
+                LOG.debug("preStartWorker->setOnFailed");
                 DialogMessages.showExceptionAlert(preStartWorker.getException());
+                preStartWorker.cancel();
+                Main.quit(null);
             });
             pFormStart.show();
             ((Service<Void>) preStartWorker).restart();
+
+
+            ((Service<Void>) insertDateUnitWorker).setOnSucceeded(event -> {
+                openApp();
+                pFormInsertDateUnit.close();
+            });
+            ((Service<Void>) insertDateUnitWorker).setOnFailed(event -> {
+                LOG.debug("insertDateUnitWorker->setOnFailed");
+                pFormInsertDateUnit.close();
+                DialogMessages.showExceptionAlert(insertDateUnitWorker.getException());
+                insertDateUnitWorker.cancel();
+                Main.quit(null);
+            });
         }catch (Exception e){
             DialogMessages.showExceptionAlert(e);
+            Main.quit(null);
         }
     }
 
@@ -139,36 +172,30 @@ public class Main extends Application{
     }
 
     public static void quit(Event evt){
+        ProgressIndicatorForm pFormQuit = new ProgressIndicatorForm();
         try {
             LOG.debug("Closing the applicatoin...");
-            Worker<Void> preQuitWorker = new Service<Void>() {
-                @Override
-                protected Task<Void> createTask() {
-                    return new Task<Void>() {
-                        @Override
-                        protected Void call() throws Exception {
-                            LOG.debug("1-Main:backup");
-                            H2DbUtils.backup("quit");
-                            return null;
-                        }
-                    };
-                }
-            };
-            ProgressIndicatorForm pFormQuit = new ProgressIndicatorForm();
-            pFormQuit.activateProgressBar(preQuitWorker);
+            pFormQuit.activateProgressBar(quitWorker);
 
-            ((Service<Void>) preQuitWorker).setOnSucceeded(event -> {
+            ((Service<Void>) quitWorker).setOnSucceeded(event -> {
 //                https://docs.oracle.com/javase/8/javafx/api/javafx/application/Application.html
                 Platform.exit();
                 System.exit(0);
             });
-            ((Service<Void>) preQuitWorker).setOnFailed(event -> {
+            ((Service<Void>) quitWorker).setOnFailed(event -> {
                 pFormQuit.close();
-                DialogMessages.showExceptionAlert(preQuitWorker.getException());
+                DialogMessages.showExceptionAlert(quitWorker.getException());
+                quitWorker.cancel();
+                Platform.exit();
+                System.exit(0);
             });
             pFormQuit.show();
-            ((Service<Void>) preQuitWorker).restart();
+            ((Service<Void>) quitWorker).restart();
         } catch (Throwable t) {
+            pFormQuit.close();
+            if(quitWorker != null){
+                quitWorker.cancel();
+            }
             DialogMessages.showExceptionAlert(t);
         }
     }

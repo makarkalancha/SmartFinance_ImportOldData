@@ -1,9 +1,10 @@
-package com.makco.smartfinance;
+package com.makco.smartfinance.user_interface.workers.prestart;
 
 import com.makco.smartfinance.h2db.utils.H2DbUtils;
 import com.makco.smartfinance.persistence.contants.DataBaseConstants;
+import com.makco.smartfinance.services.DateUnitService;
+import com.makco.smartfinance.services.DateUnitServiceImpl;
 import com.makco.smartfinance.user_interface.Command;
-import com.makco.smartfinance.user_interface.constants.ApplicationConstants;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import javafx.beans.property.BooleanProperty;
@@ -38,7 +39,7 @@ public class PreStartWorker extends Service<Void>{
         return new Task<Void>() {
             @Override
             protected Void call() throws Exception {
-                int interval = 250;
+                int interval = 100;
 
                 Command[] commands = {
                         new DBMigrate(),
@@ -53,11 +54,11 @@ public class PreStartWorker extends Service<Void>{
                 for (int i = 1; i <= total; i++) {
                     updateTitle("Example Service (" + i + ")");
                     updateMessage("Processed " + i + " of " + total + " items.");
+                    commands[i - 1].execute();
                     updateProgress(i, total);
-                    commands[i-1].execute();
                     Thread.sleep(interval);
                 }
-                Thread.sleep(250);
+                //                Thread.sleep(250);
                 return null;
             }
         };
@@ -67,7 +68,8 @@ public class PreStartWorker extends Service<Void>{
         @Override
         public void execute() throws Exception {
             LOG.debug("Main: is date unit table empty");
-            PreStartWorker.this.isEmpty.set(H2DbUtils.isDateUnitTableEmpty(ApplicationConstants.DB_SCHEMA_NAME));
+            DateUnitService dateUnitService = new DateUnitServiceImpl();
+            PreStartWorker.this.isEmpty.set(dateUnitService.isEmpty());
         }
     }
 

@@ -71,4 +71,12 @@ public class DateUnitUtilTest {
         List<DateUnit> result = DateUnitUtil.getListOfDateUnitEntities(Jan_1_2005, Jan_1_2005);
         assertEquals(0, result.size());
     }
+
+    @Test
+    public void testPercent() throws Exception{
+        int precent = new Double(((double)1000 / 4000) * 100).intValue();
+        System.out.println(precent);
+        assertEquals(25, precent);
+//        System.out.println(precent.intValue());
+    }
 }
