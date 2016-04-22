@@ -115,6 +115,8 @@ public class H2DbUtils {
         flyway.setTable("_SCHEMA_VERSION");
         flyway.setSchemas(schemaName);
         flyway.setBaselineOnMigrate(true);
+        flyway.setCallbacks(new BeforeClean());
+        flyway.setCleanOnValidationError(true);
         return flyway.migrate();
     }
 
