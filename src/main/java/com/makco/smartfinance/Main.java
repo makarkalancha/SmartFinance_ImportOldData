@@ -1,21 +1,19 @@
 package com.makco.smartfinance;
 
-import com.makco.smartfinance.h2db.utils.H2DbUtils;
-import com.makco.smartfinance.user_interface.workers.QuitWorker;
-import com.makco.smartfinance.user_interface.workers.prestart.InsertDateUnitWorker;
-import com.makco.smartfinance.user_interface.workers.prestart.PreStartWorker;
 import com.makco.smartfinance.user_interface.ScreensController;
 import com.makco.smartfinance.user_interface.constants.ApplicationConstants;
 import com.makco.smartfinance.user_interface.constants.DialogMessages;
+import com.makco.smartfinance.user_interface.constants.Screens;
 import com.makco.smartfinance.user_interface.constants.forms.ProgressBarForm;
 import com.makco.smartfinance.user_interface.constants.forms.ProgressIndicatorForm;
-import com.makco.smartfinance.user_interface.constants.Screens;
+import com.makco.smartfinance.user_interface.workers.QuitWorker;
+import com.makco.smartfinance.user_interface.workers.prestart.InsertDateUnitWorker;
+import com.makco.smartfinance.user_interface.workers.prestart.PreStartWorker;
 import com.makco.smartfinance.utils.Logs;
 import java.time.LocalDate;
 import java.time.temporal.WeekFields;
 import java.util.Locale;
 import java.util.Optional;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.lookup.MainMapLookup;
@@ -24,7 +22,6 @@ import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.concurrent.Service;
-import javafx.concurrent.Task;
 import javafx.concurrent.Worker;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -114,6 +111,7 @@ public class Main extends Application{
                 }
             });
             ((Service<Void>) preStartWorker).setOnFailed(event -> {
+                pFormInsertDateUnit.close();
                 pFormStart.close();
                 LOG.debug("preStartWorker->setOnFailed");
                 DialogMessages.showExceptionAlert(preStartWorker.getException());
@@ -131,6 +129,7 @@ public class Main extends Application{
             ((Service<Void>) insertDateUnitWorker).setOnFailed(event -> {
                 LOG.debug("insertDateUnitWorker->setOnFailed");
                 pFormInsertDateUnit.close();
+                pFormStart.close();
                 DialogMessages.showExceptionAlert(insertDateUnitWorker.getException());
                 insertDateUnitWorker.cancel();
                 Main.quit(null);
