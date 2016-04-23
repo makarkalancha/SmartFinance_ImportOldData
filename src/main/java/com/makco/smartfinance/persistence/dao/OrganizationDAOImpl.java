@@ -52,7 +52,6 @@ public class OrganizationDAOImpl implements OrganizationDAO {
             session.beginTransaction();
             list = session.createQuery("SELECT o FROM Organization o ORDER BY o.name").list();
             session.getTransaction().commit();
-            throw new Exception(">>>>>>>>>>>>test");
         } catch (Exception e) {
             try {
                 if (session.getTransaction().getStatus() == TransactionStatus.ACTIVE
@@ -68,7 +67,7 @@ public class OrganizationDAOImpl implements OrganizationDAO {
                 session.close();
             }
         }
-//        return list;
+        return list;
     }
 
     @Override
