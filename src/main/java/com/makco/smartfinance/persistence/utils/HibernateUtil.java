@@ -66,6 +66,10 @@ public class HibernateUtil {
 
         cfg.setProperty("hibernate.default_schema", "FINANCE");
         cfg.setProperty("hibernate.jdbc.batch_size", DataBaseConstants.BATCH_SIZE.toString());
+
+        //JTA
+        //https://github.com/press0/hibernate-jpa-best-practices/blob/master/environment/src/main/java/org/jpwh/env/TransactionManagerSetup.java
+//        cfg.setProperty("hibernate.transaction.jta.platform", "org.hibernate.service.jta.platform.internal.BitronixJtaPlatform");
         return cfg;
     }
 
