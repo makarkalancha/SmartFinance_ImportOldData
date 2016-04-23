@@ -1,6 +1,6 @@
-package com.makco.smartfinance.user_interface.constants.forms;
+package com.makco.smartfinance.user_interface.utility_screens.forms;
 
-import com.makco.smartfinance.user_interface.constants.ApplicationConstants;
+import com.makco.smartfinance.user_interface.constants.UserInterfaceConstants;
 import javafx.concurrent.Worker;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -26,7 +26,7 @@ public class ProgressIndicatorForm {
 //        dialogStage.initStyle(StageStyle.UTILITY);//Defines a Stage style with a solid white background and minimal platform decorations used for a utility window.
         dialogStage.setResizable(false);
         dialogStage.initModality(Modality.APPLICATION_MODAL);
-        dialogStage.getIcons().add(new Image(ApplicationConstants.PROGRESS_INDICATOR_FORM_WINDOW_ICO));
+        dialogStage.getIcons().add(new Image(UserInterfaceConstants.PROGRESS_INDICATOR_FORM_WINDOW_ICO));
 
         // PROGRESS BAR
 //        final Label label = new Label();

@@ -1,6 +1,6 @@
 package com.makco.smartfinance.user_interface.undoredo;
 
-import com.makco.smartfinance.user_interface.constants.DialogMessages;
+import com.makco.smartfinance.user_interface.utility_screens.DialogMessages;
 import com.makco.smartfinance.utils.collection.DequeStack;
 import com.makco.smartfinance.utils.collection.Stack;
 import javafx.beans.property.BooleanProperty;

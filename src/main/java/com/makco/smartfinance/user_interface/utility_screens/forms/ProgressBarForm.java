@@ -1,6 +1,6 @@
-package com.makco.smartfinance.user_interface.constants.forms;
+package com.makco.smartfinance.user_interface.utility_screens.forms;
 
-import com.makco.smartfinance.user_interface.constants.ApplicationConstants;
+import com.makco.smartfinance.user_interface.constants.UserInterfaceConstants;
 import javafx.concurrent.Worker;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -33,7 +33,7 @@ public class ProgressBarForm {
         dialogStage.setResizable(false);
         //Defines a modal window that blocks events from being delivered to any other application window.
         dialogStage.initModality(Modality.APPLICATION_MODAL);
-        dialogStage.getIcons().add(new Image(ApplicationConstants.PROGRESS_BAR_FORM_WINDOW_ICO));
+        dialogStage.getIcons().add(new Image(UserInterfaceConstants.PROGRESS_BAR_FORM_WINDOW_ICO));
 
         messageLbl = new Label();
         messageLbl.setPrefHeight(18);

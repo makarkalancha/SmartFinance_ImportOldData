@@ -1,7 +1,7 @@
 package com.makco.smartfinance.user_interface.validation.rule_sets;
 
 import com.makco.smartfinance.persistence.entity.Currency;
-import com.makco.smartfinance.user_interface.constants.DialogMessages;
+import com.makco.smartfinance.user_interface.utility_screens.DialogMessages;
 import com.makco.smartfinance.user_interface.validation.ErrorEnum;
 import com.makco.smartfinance.user_interface.validation.Rule;
 import com.makco.smartfinance.user_interface.validation.RuleSet;

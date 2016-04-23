@@ -3,7 +3,6 @@ package com.makco.smartfinance.services;
 import com.makco.smartfinance.persistence.dao.CurrencyDAO;
 import com.makco.smartfinance.persistence.dao.CurrencyDAOImpl;
 import com.makco.smartfinance.persistence.entity.Currency;
-import com.makco.smartfinance.user_interface.constants.DialogMessages;
 import com.makco.smartfinance.user_interface.validation.ErrorEnum;
 import com.makco.smartfinance.user_interface.validation.RuleSet;
 import com.makco.smartfinance.user_interface.validation.rule_sets.CurrencyRuleSet;
@@ -21,64 +20,64 @@ public class CurrencyServiceImpl implements CurrencyService {
     private CurrencyDAO currencyDAO = new CurrencyDAOImpl();
 
     @Override
-    public List<Currency> currencyList() {
+    public List<Currency> currencyList() throws Exception {
         List<Currency> currencyList = new ArrayList<>();
         try {
             currencyList = currencyDAO.currencyList();
         } catch (Exception e) {
-            DialogMessages.showExceptionAlert(e);
+            throw e;
         }
         return currencyList;
     }
 
     @Override
-    public Currency getCurrencyById(Long id) {
+    public Currency getCurrencyById(Long id) throws Exception {
         Currency currency = null;
         try {
             currency = currencyDAO.getCurrencyById(id);
         } catch (Exception e) {
-            DialogMessages.showExceptionAlert(e);
+            throw e;
         }
         return currency;
     }
 
     @Override
-    public List<Currency> getCurrencyByCode(String code) {
+    public List<Currency> getCurrencyByCode(String code) throws Exception {
         List<Currency> currencyList = new ArrayList<>();
         try {
             currencyList = currencyDAO.getCurrencyByCode(code);
         } catch (Exception e) {
-            DialogMessages.showExceptionAlert(e);
+            throw e;
         }
         return currencyList;
     }
 
     @Override
-    public void removeCurrency(Long id) {
+    public void removeCurrency(Long id) throws Exception {
         try{
             currencyDAO.removeCurrency(id);
         } catch (Exception e) {
-            DialogMessages.showExceptionAlert(e);
+            throw e;
         }
     }
 
     @Override
-    public void saveOrUpdateCurrency(Currency currency) {
+    public void saveOrUpdateCurrency(Currency currency) throws Exception {
         try{
             currencyDAO.saveOrUpdateCurrency(currency);
         } catch (Exception e) {
-            DialogMessages.showExceptionAlert(e);
+            throw e;
         }
     }
 
     @Override
-    public EnumSet<ErrorEnum> validate(Currency currency) {
+    public EnumSet<ErrorEnum> validate(Currency currency) throws Exception {
         EnumSet<ErrorEnum> errors = EnumSet.noneOf(ErrorEnum.class);
         try {
             RuleSet ruleSet = new CurrencyRuleSet();
             errors = ruleSet.validate(currency);
         } catch (Exception e) {
-            DialogMessages.showExceptionAlert(e);
+            throw e;
         }
         return errors;
     }

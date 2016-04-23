@@ -7,6 +7,7 @@ public enum Screens {
     CURRENCY("currency.fxml"),
     FAMILY_MEMBER("family_member.fxml"),
     MAIN("main.fxml"),
+    ORGANIZATION("organization.fxml"),
     SCREEN1("scene1.fxml"),
     SCREEN2("scene2.fxml");
 

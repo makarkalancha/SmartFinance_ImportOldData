@@ -8,11 +8,11 @@ import java.util.List;
  */
 //https://howtoprogramwithjava.com/hibernate-creating-data-access-objects-daos/
 public interface DateUnitDAO {
-    List<DateUnit> dateUnitList();
-    DateUnit getDateUnitByUnitDate(Long unitDate);
+    List<DateUnit> dateUnitList() throws Exception;
+    DateUnit getDateUnitByUnitDate(Long unitDate) throws Exception;
 
-    void addDateUnit(DateUnit dateUnit);
-    void addDateUnitList(List<DateUnit> dateUnit);
+    void addDateUnit(DateUnit dateUnit) throws Exception;
+    void addDateUnitList(List<DateUnit> dateUnit) throws Exception;
 
-    boolean isEmpty();
+    boolean isEmpty() throws Exception;
 }

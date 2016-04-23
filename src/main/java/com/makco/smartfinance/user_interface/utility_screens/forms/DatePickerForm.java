@@ -1,4 +1,4 @@
-package com.makco.smartfinance.user_interface.constants.forms;
+package com.makco.smartfinance.user_interface.utility_screens.forms;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;

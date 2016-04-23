@@ -8,10 +8,10 @@ import java.util.List;
  */
 //https://howtoprogramwithjava.com/hibernate-creating-data-access-objects-daos/
 public interface CurrencyDAO {
-    List<Currency> currencyList();
-    Currency getCurrencyById(Long id);
-    List<Currency> getCurrencyByCode(String code);
+    List<Currency> currencyList() throws Exception;
+    Currency getCurrencyById(Long id) throws Exception;
+    List<Currency> getCurrencyByCode(String code) throws Exception;
 
-    void removeCurrency(Long id);
-    void saveOrUpdateCurrency(Currency currency);
+    void removeCurrency(Long id) throws Exception;
+    void saveOrUpdateCurrency(Currency currency) throws Exception;
 }

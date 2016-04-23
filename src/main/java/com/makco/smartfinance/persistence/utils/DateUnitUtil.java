@@ -1,7 +1,7 @@
 package com.makco.smartfinance.persistence.utils;
 
 import com.google.common.base.Objects;
-import com.makco.smartfinance.persistence.contants.DataBaseConstants;
+import com.makco.smartfinance.constants.DataBaseConstants;
 import com.makco.smartfinance.persistence.entity.DateUnit;
 
 import java.time.LocalDate;

@@ -2,12 +2,12 @@ package com.makco.smartfinance.persistence.dao;
 
 import com.makco.smartfinance.persistence.entity.Currency;
 import com.makco.smartfinance.persistence.utils.HibernateUtil;
-import com.makco.smartfinance.user_interface.constants.DialogMessages;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
+import org.hibernate.resource.transaction.spi.TransactionStatus;
 
 /**
  * Created by mcalancea on 2016-04-12.
@@ -17,7 +17,7 @@ public class CurrencyDAOImpl implements CurrencyDAO {
     private final static Logger LOG = LogManager.getLogger(CurrencyDAOImpl.class);
 
     @Override
-    public synchronized List<Currency> currencyList() {
+    public synchronized List<Currency> currencyList() throws Exception {
         List<Currency> list = new ArrayList<>();
         Session session = null;
         try{
@@ -26,8 +26,15 @@ public class CurrencyDAOImpl implements CurrencyDAO {
             list = session.createQuery("SELECT c FROM Currency c ORDER BY c.code").list();
             session.getTransaction().commit();
         } catch (Exception e) {
-            session.getTransaction().rollback();
-            DialogMessages.showExceptionAlert(e);
+            try {
+                if (session.getTransaction().getStatus() == TransactionStatus.ACTIVE
+                        || session.getTransaction().getStatus() == TransactionStatus.MARKED_ROLLBACK)
+                    session.getTransaction().rollback();
+            } catch (Exception rbEx) {
+                System.err.println("Rollback of transaction failed, trace follows!");
+                rbEx.printStackTrace(System.err);
+            }
+            throw new RuntimeException(e);
         } finally {
             if(session != null){
                 session.close();
@@ -37,7 +44,7 @@ public class CurrencyDAOImpl implements CurrencyDAO {
     }
 
     @Override
-    public synchronized Currency getCurrencyById(Long id) {
+    public synchronized Currency getCurrencyById(Long id) throws Exception {
         Session session = null;
         Currency currency = null;
         try{
@@ -46,8 +53,15 @@ public class CurrencyDAOImpl implements CurrencyDAO {
             currency = session.get(Currency.class, id);
             session.getTransaction().commit();
         } catch (Exception e) {
-            session.getTransaction().rollback();
-            DialogMessages.showExceptionAlert(e);
+            try {
+                if (session.getTransaction().getStatus() == TransactionStatus.ACTIVE
+                        || session.getTransaction().getStatus() == TransactionStatus.MARKED_ROLLBACK)
+                    session.getTransaction().rollback();
+            } catch (Exception rbEx) {
+                System.err.println("Rollback of transaction failed, trace follows!");
+                rbEx.printStackTrace(System.err);
+            }
+            throw new RuntimeException(e);
         } finally {
             if(session != null){
                 session.close();
@@ -57,7 +71,7 @@ public class CurrencyDAOImpl implements CurrencyDAO {
     }
 
     @Override
-    public synchronized List<Currency> getCurrencyByCode(String code) {
+    public synchronized List<Currency> getCurrencyByCode(String code) throws Exception {
         Session session = null;
         List<Currency> currencies = new ArrayList<>();
         try {
@@ -68,8 +82,15 @@ public class CurrencyDAOImpl implements CurrencyDAO {
                     .list();
             session.getTransaction().commit();
         } catch (Exception e) {
-            session.getTransaction().rollback();
-            DialogMessages.showExceptionAlert(e);
+            try {
+                if (session.getTransaction().getStatus() == TransactionStatus.ACTIVE
+                        || session.getTransaction().getStatus() == TransactionStatus.MARKED_ROLLBACK)
+                    session.getTransaction().rollback();
+            } catch (Exception rbEx) {
+                System.err.println("Rollback of transaction failed, trace follows!");
+                rbEx.printStackTrace(System.err);
+            }
+            throw new RuntimeException(e);
         } finally {
             if(session != null){
                 session.close();
@@ -79,7 +100,7 @@ public class CurrencyDAOImpl implements CurrencyDAO {
     }
 
     @Override
-    public synchronized void removeCurrency(Long id) {
+    public synchronized void removeCurrency(Long id) throws Exception {
         Session session = null;
         try{
             session = HibernateUtil.openSession();
@@ -88,8 +109,15 @@ public class CurrencyDAOImpl implements CurrencyDAO {
             session.delete(currency);
             session.getTransaction().commit();
         } catch (Exception e) {
-            session.getTransaction().rollback();
-            DialogMessages.showExceptionAlert(e);
+            try {
+                if (session.getTransaction().getStatus() == TransactionStatus.ACTIVE
+                        || session.getTransaction().getStatus() == TransactionStatus.MARKED_ROLLBACK)
+                    session.getTransaction().rollback();
+            } catch (Exception rbEx) {
+                System.err.println("Rollback of transaction failed, trace follows!");
+                rbEx.printStackTrace(System.err);
+            }
+            throw new RuntimeException(e);
         } finally {
             if(session != null){
                 session.close();
@@ -98,7 +126,7 @@ public class CurrencyDAOImpl implements CurrencyDAO {
     }
 
     @Override
-    public synchronized void saveOrUpdateCurrency(Currency currency) {
+    public synchronized void saveOrUpdateCurrency(Currency currency) throws Exception {
         Session session = null;
         try {
             session = HibernateUtil.openSession();
@@ -106,8 +134,15 @@ public class CurrencyDAOImpl implements CurrencyDAO {
             session.saveOrUpdate(currency);
             session.getTransaction().commit();
         } catch (Exception e) {
-            session.getTransaction().rollback();
-            DialogMessages.showExceptionAlert(e);
+            try {
+                if (session.getTransaction().getStatus() == TransactionStatus.ACTIVE
+                        || session.getTransaction().getStatus() == TransactionStatus.MARKED_ROLLBACK)
+                    session.getTransaction().rollback();
+            } catch (Exception rbEx) {
+                System.err.println("Rollback of transaction failed, trace follows!");
+                rbEx.printStackTrace(System.err);
+            }
+            throw new RuntimeException(e);
         } finally {
             if(session != null){
                 session.close();

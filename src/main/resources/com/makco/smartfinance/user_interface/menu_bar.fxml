@@ -46,6 +46,7 @@
                 <MenuItem mnemonicParsing="false" onAction="#toMain" text="Main" />
                 <MenuItem mnemonicParsing="false" onAction="#toCurrency" text="Currency" />
                 <MenuItem mnemonicParsing="false" onAction="#toFamilyMember" text="Family Members" />
+                <MenuItem mnemonicParsing="false" onAction="#toOrganization" text="Organizations" />
                 <MenuItem mnemonicParsing="false" onAction="#toScene1" text="Scene 1" />
                 <MenuItem mnemonicParsing="false" onAction="#toScene2" text="Scene 2" />
             </items>

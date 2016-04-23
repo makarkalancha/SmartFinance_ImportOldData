@@ -1,13 +1,11 @@
 package com.makco.smartfinance.user_interface;
 
-import com.makco.smartfinance.user_interface.constants.DialogMessages;
+import com.makco.smartfinance.user_interface.utility_screens.DialogMessages;
 import com.makco.smartfinance.user_interface.constants.Screens;
 import com.makco.smartfinance.user_interface.undoredo.CareTaker;
 import java.util.EnumMap;
 import java.util.Optional;
 
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import javafx.fxml.FXMLLoader;

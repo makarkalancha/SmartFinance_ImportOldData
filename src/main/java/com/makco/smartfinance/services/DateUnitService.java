@@ -1,21 +1,17 @@
 package com.makco.smartfinance.services;
 
-import com.makco.smartfinance.persistence.entity.Currency;
 import com.makco.smartfinance.persistence.entity.DateUnit;
-import com.makco.smartfinance.user_interface.validation.ErrorEnum;
-
-import java.util.EnumSet;
 import java.util.List;
 
 /**
  * Created by mcalancea on 2016-04-21.
  */
 public interface DateUnitService {
-    List<DateUnit> dateUnitList();
-    DateUnit getDateUnitByUnitDate(Long unitDate);
+    List<DateUnit> dateUnitList() throws Exception;
+    DateUnit getDateUnitByUnitDate(Long unitDate) throws Exception;
 
-    void addDateUnit(DateUnit dateUnit);
-    void addDateUnitList(List<DateUnit> dateUnitList);
+    void addDateUnit(DateUnit dateUnit) throws Exception;
+    void addDateUnitList(List<DateUnit> dateUnitList) throws Exception;
 
-    boolean isEmpty();
+    boolean isEmpty() throws Exception;
 }

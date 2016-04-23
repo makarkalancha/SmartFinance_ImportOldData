@@ -1,14 +1,14 @@
 package com.makco.smartfinance.persistence.dao;
 
-import com.makco.smartfinance.persistence.contants.DataBaseConstants;
+import com.makco.smartfinance.constants.DataBaseConstants;
 import com.makco.smartfinance.persistence.entity.DateUnit;
 import com.makco.smartfinance.persistence.utils.HibernateUtil;
-import com.makco.smartfinance.user_interface.constants.DialogMessages;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
+import org.hibernate.resource.transaction.spi.TransactionStatus;
 
 /**
  * Created by mcalancea on 2016-04-19.
@@ -18,7 +18,7 @@ public class DateUnitDAOImpl implements DateUnitDAO {
     private final static Logger LOG = LogManager.getLogger(DateUnitDAOImpl.class);
 
     @Override
-    public synchronized void addDateUnit(DateUnit dateUnit) {
+    public synchronized void addDateUnit(DateUnit dateUnit) throws Exception {
         Session session = null;
         try {
             session = HibernateUtil.openSession();
@@ -26,8 +26,15 @@ public class DateUnitDAOImpl implements DateUnitDAO {
             session.save(dateUnit);
             session.getTransaction().commit();
         } catch (Exception e) {
-            session.getTransaction().rollback();
-            DialogMessages.showExceptionAlert(e);
+            try {
+                if (session.getTransaction().getStatus() == TransactionStatus.ACTIVE
+                        || session.getTransaction().getStatus() == TransactionStatus.MARKED_ROLLBACK)
+                    session.getTransaction().rollback();
+            } catch (Exception rbEx) {
+                System.err.println("Rollback of transaction failed, trace follows!");
+                rbEx.printStackTrace(System.err);
+            }
+            throw new RuntimeException(e);
         } finally {
             if(session != null){
                 session.close();
@@ -36,7 +43,7 @@ public class DateUnitDAOImpl implements DateUnitDAO {
     }
 
     @Override
-    public synchronized void addDateUnitList(List<DateUnit> dateUnits) {
+    public synchronized void addDateUnitList(List<DateUnit> dateUnits) throws Exception {
         //https://docs.jboss.org/hibernate/orm/3.3/reference/en/html/batch.html
         Session session = null;
         try {
@@ -54,8 +61,15 @@ public class DateUnitDAOImpl implements DateUnitDAO {
 
             session.getTransaction().commit();
         } catch (Exception e) {
-            session.getTransaction().rollback();
-            DialogMessages.showExceptionAlert(e);
+            try {
+                if (session.getTransaction().getStatus() == TransactionStatus.ACTIVE
+                        || session.getTransaction().getStatus() == TransactionStatus.MARKED_ROLLBACK)
+                    session.getTransaction().rollback();
+            } catch (Exception rbEx) {
+                System.err.println("Rollback of transaction failed, trace follows!");
+                rbEx.printStackTrace(System.err);
+            }
+            throw new RuntimeException(e);
         } finally {
             if(session != null){
                 session.close();
@@ -64,7 +78,7 @@ public class DateUnitDAOImpl implements DateUnitDAO {
     }
 
     @Override
-    public synchronized List<DateUnit> dateUnitList() {
+    public synchronized List<DateUnit> dateUnitList() throws Exception {
         List<DateUnit> list = new ArrayList<>();
         Session session = null;
         try{
@@ -73,8 +87,15 @@ public class DateUnitDAOImpl implements DateUnitDAO {
             list = session.createQuery("SELECT du FROM DateUnit du ORDER BY du.unitDate").list();
             session.getTransaction().commit();
         } catch (Exception e) {
-            session.getTransaction().rollback();
-            DialogMessages.showExceptionAlert(e);
+            try {
+                if (session.getTransaction().getStatus() == TransactionStatus.ACTIVE
+                        || session.getTransaction().getStatus() == TransactionStatus.MARKED_ROLLBACK)
+                    session.getTransaction().rollback();
+            } catch (Exception rbEx) {
+                System.err.println("Rollback of transaction failed, trace follows!");
+                rbEx.printStackTrace(System.err);
+            }
+            throw new RuntimeException(e);
         } finally {
             if(session != null){
                 session.close();
@@ -84,7 +105,7 @@ public class DateUnitDAOImpl implements DateUnitDAO {
     }
 
     @Override
-    public synchronized DateUnit getDateUnitByUnitDate(Long unitDate) {
+    public synchronized DateUnit getDateUnitByUnitDate(Long unitDate) throws Exception {
         Session session = null;
         DateUnit dateUnit = null;
         try{
@@ -93,8 +114,15 @@ public class DateUnitDAOImpl implements DateUnitDAO {
             dateUnit = session.get(DateUnit.class, unitDate);
             session.getTransaction().commit();
         } catch (Exception e) {
-            session.getTransaction().rollback();
-            DialogMessages.showExceptionAlert(e);
+            try {
+                if (session.getTransaction().getStatus() == TransactionStatus.ACTIVE
+                        || session.getTransaction().getStatus() == TransactionStatus.MARKED_ROLLBACK)
+                    session.getTransaction().rollback();
+            } catch (Exception rbEx) {
+                System.err.println("Rollback of transaction failed, trace follows!");
+                rbEx.printStackTrace(System.err);
+            }
+            throw new RuntimeException(e);
         } finally {
             if(session != null){
                 session.close();
@@ -104,7 +132,7 @@ public class DateUnitDAOImpl implements DateUnitDAO {
     }
 
     @Override
-    public boolean isEmpty() {
+    public synchronized boolean isEmpty() throws Exception {
         Session session = null;
         boolean isEmpty = false;
         try{
@@ -113,8 +141,15 @@ public class DateUnitDAOImpl implements DateUnitDAO {
             isEmpty = session.createQuery("SELECT 1 FROM DateUnit").setMaxResults(1).list().isEmpty();
             session.getTransaction().commit();
         } catch (Exception e) {
-            session.getTransaction().rollback();
-            DialogMessages.showExceptionAlert(e);
+            try {
+                if (session.getTransaction().getStatus() == TransactionStatus.ACTIVE
+                        || session.getTransaction().getStatus() == TransactionStatus.MARKED_ROLLBACK)
+                    session.getTransaction().rollback();
+            } catch (Exception rbEx) {
+                System.err.println("Rollback of transaction failed, trace follows!");
+                rbEx.printStackTrace(System.err);
+            }
+            throw new RuntimeException(e);
         } finally {
             if(session != null){
                 session.close();

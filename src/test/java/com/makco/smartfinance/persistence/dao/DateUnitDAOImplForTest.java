@@ -1,13 +1,11 @@
 package com.makco.smartfinance.persistence.dao;
 
-import com.makco.smartfinance.persistence.contants.DataBaseConstants;
+import com.makco.smartfinance.constants.DataBaseConstants;
 import com.makco.smartfinance.persistence.entity.DateUnit;
-import com.makco.smartfinance.persistence.utils.HibernateUtil;
 import com.makco.smartfinance.persistence.utils.HibernateUtilTest;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.makco.smartfinance.user_interface.constants.DialogMessages;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;

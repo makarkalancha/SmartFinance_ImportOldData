@@ -1,6 +1,6 @@
 package com.makco.smartfinance.persistence.utils;
 
-import com.makco.smartfinance.persistence.contants.DataBaseConstants;
+import com.makco.smartfinance.constants.DataBaseConstants;
 import com.makco.smartfinance.persistence.entity.Currency;
 import com.makco.smartfinance.persistence.entity.DateUnit;
 import com.makco.smartfinance.persistence.entity.FamilyMember;

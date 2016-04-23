@@ -11,11 +11,11 @@ import java.util.List;
 //http://programmers.stackexchange.com/questions/220909/service-layer-vs-dao-why-both
 //http://programmers.stackexchange.com/questions/162399/how-essential-is-it-to-make-a-service-layer
 public interface CurrencyService {
-    List<Currency> currencyList();
-    Currency getCurrencyById(Long id);
-    List<Currency> getCurrencyByCode(String code);
+    List<Currency> currencyList() throws Exception;
+    Currency getCurrencyById(Long id) throws Exception;
+    List<Currency> getCurrencyByCode(String code) throws Exception;
 
-    void removeCurrency(Long id);
-    void saveOrUpdateCurrency(Currency currency);
-    EnumSet<ErrorEnum> validate(Currency currency);
+    void removeCurrency(Long id) throws Exception;
+    void saveOrUpdateCurrency(Currency currency) throws Exception;
+    EnumSet<ErrorEnum> validate(Currency currency) throws Exception;
 }

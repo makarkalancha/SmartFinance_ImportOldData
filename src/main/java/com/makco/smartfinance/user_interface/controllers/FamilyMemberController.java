@@ -1,12 +1,13 @@
 package com.makco.smartfinance.user_interface.controllers;
 
+import com.makco.smartfinance.constants.DataBaseConstants;
 import com.makco.smartfinance.persistence.entity.FamilyMember;
 import com.makco.smartfinance.user_interface.Command;
 import com.makco.smartfinance.user_interface.ControlledScreen;
 import com.makco.smartfinance.user_interface.ScreensController;
-import com.makco.smartfinance.user_interface.constants.ApplicationConstants;
-import com.makco.smartfinance.user_interface.constants.DialogMessages;
-import com.makco.smartfinance.user_interface.constants.forms.ProgressIndicatorForm;
+import com.makco.smartfinance.user_interface.constants.UserInterfaceConstants;
+import com.makco.smartfinance.user_interface.utility_screens.DialogMessages;
+import com.makco.smartfinance.user_interface.utility_screens.forms.ProgressIndicatorForm;
 import com.makco.smartfinance.user_interface.models.FamilyMemberModel;
 import com.makco.smartfinance.user_interface.undoredo.CareTaker;
 import com.makco.smartfinance.user_interface.undoredo.Memento;
@@ -232,7 +233,7 @@ public class FamilyMemberController implements Initializable, ControlledScreen, 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         try {
-            nameTF.setPrefColumnCount(64);
+            nameTF.setPrefColumnCount(DataBaseConstants.FM_NAME_MAX_LGTH);
             nameTF.textProperty().addListener((observable, oldValue, newValue) -> {
                 if (isNotUndo.getValue()/* && isNotRedo.getValue()*/) {
                     saveForm();
@@ -241,7 +242,7 @@ public class FamilyMemberController implements Initializable, ControlledScreen, 
                 }
             });
 
-            descTA.setPrefColumnCount(128);
+            descTA.setPrefColumnCount(DataBaseConstants.FM_DESCRIPTION_MAX_LGTH);
             descTA.textProperty().addListener((observable, oldValue, newValue) -> {
                 if (isNotUndo.getValue()/* && isNotRedo.getValue()*/) {
                     saveForm();
@@ -293,7 +294,7 @@ public class FamilyMemberController implements Initializable, ControlledScreen, 
 //            http://stackoverflow.com/questions/30249493/using-threads-to-make-database-requests
 //            http://stackoverflow.com/questions/29625170/display-popup-with-progressbar-in-javafx
             //http://www.jensd.de/wordpress/?p=1211
-            String title = ApplicationConstants.FAMILY_MEMBER_WINDOW_TITLE;
+            String title = UserInterfaceConstants.FAMILY_MEMBER_WINDOW_TITLE;
             String headerText = "Family Member Deletion";
             StringBuilder contentText = new StringBuilder("Are you sure you want to delete family member ");
             contentText.append("\"");
@@ -404,7 +405,7 @@ public class FamilyMemberController implements Initializable, ControlledScreen, 
 
             if(contentText.length() > 0){
                 contentText.append("Are you sure you want to close this window?");
-                result = DialogMessages.showConfirmationDialog(ApplicationConstants.FAMILY_MEMBER_WINDOW_TITLE,
+                result = DialogMessages.showConfirmationDialog(UserInterfaceConstants.FAMILY_MEMBER_WINDOW_TITLE,
                         "Not all fields are empty", contentText.toString(), null);
             }
         }catch (Exception e){

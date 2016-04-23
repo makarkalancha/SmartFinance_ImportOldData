@@ -1,17 +1,17 @@
 package com.makco.smartfinance.user_interface.controllers;
 
 import com.makco.smartfinance.constants.DataBaseConstants;
-import com.makco.smartfinance.persistence.entity.Currency;
+import com.makco.smartfinance.persistence.entity.Organization;
 import com.makco.smartfinance.user_interface.Command;
 import com.makco.smartfinance.user_interface.ControlledScreen;
 import com.makco.smartfinance.user_interface.ScreensController;
 import com.makco.smartfinance.user_interface.constants.UserInterfaceConstants;
-import com.makco.smartfinance.user_interface.utility_screens.DialogMessages;
-import com.makco.smartfinance.user_interface.utility_screens.forms.ProgressIndicatorForm;
-import com.makco.smartfinance.user_interface.models.CurrencyModel;
+import com.makco.smartfinance.user_interface.models.OrganizationModel;
 import com.makco.smartfinance.user_interface.undoredo.CareTaker;
 import com.makco.smartfinance.user_interface.undoredo.Memento;
 import com.makco.smartfinance.user_interface.undoredo.UndoRedoScreen;
+import com.makco.smartfinance.user_interface.utility_screens.DialogMessages;
+import com.makco.smartfinance.user_interface.utility_screens.forms.ProgressIndicatorForm;
 import com.makco.smartfinance.user_interface.validation.ErrorEnum;
 import java.net.URL;
 import java.util.Calendar;
@@ -36,12 +36,13 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 /**
- * Created by mcalancea on 2016-04-12.
+ * Created by mcalancea on 2016-04-01.
  */
-public class CurrencyController implements Initializable, ControlledScreen, UndoRedoScreen {
-    private final static Logger LOG = LogManager.getLogger(CurrencyController.class);
+//http://www.devx.com/Java/Article/48193/0/page/2
+public class OrganizationController implements Initializable, ControlledScreen, UndoRedoScreen {
+    private final static Logger LOG = LogManager.getLogger(OrganizationController.class);
     private ScreensController myController;
-    private CurrencyModel currencyModel = new CurrencyModel();
+    private OrganizationModel organizationModel = new OrganizationModel();
 
     private ActionEvent actionEvent;
     private Worker<Void> onDeleteWorker;
@@ -53,9 +54,7 @@ public class CurrencyController implements Initializable, ControlledScreen, Undo
     private BooleanProperty isNotUndo = new SimpleBooleanProperty(true);
 
     @FXML
-    private TableView<Currency> table;
-    @FXML
-    private TextField codeTF;
+    private TableView<Organization> table;
     @FXML
     private TextField nameTF;
     @FXML
@@ -67,15 +66,15 @@ public class CurrencyController implements Initializable, ControlledScreen, Undo
     @FXML
     private Button deleteBtn;
 
-    public CurrencyController(){
-        try{
+    public OrganizationController() {
+        try {
             onDeleteWorker = new Service<Void>() {
                 @Override
                 protected Task<Void> createTask() {
                     return new Task<Void>() {
                         @Override
                         protected Void call() throws Exception {
-                            currencyModel.deletePendingCurrency();
+                            organizationModel.deletePendingOrganization();
                             return null;
                         }
                     };
@@ -87,7 +86,7 @@ public class CurrencyController implements Initializable, ControlledScreen, Undo
                     return new Task<EnumSet<ErrorEnum>>() {
                         @Override
                         protected EnumSet<ErrorEnum> call() throws Exception {
-                            return currencyModel.savePendingCurrency(codeTF.getText(), nameTF.getText(), descTA.getText());
+                            return organizationModel.savePendingOrganization(nameTF.getText(), descTA.getText());
                         }
                     };
                 }
@@ -98,21 +97,21 @@ public class CurrencyController implements Initializable, ControlledScreen, Undo
                     return new Task<Void>() {
                         @Override
                         protected Void call() throws Exception {
-                            currencyModel.refreshCurrency();
+                            organizationModel.refreshOrganization();
                             return null;
                         }
                     };
                 }
             };
-        }catch (Exception e){
-            //not in finally because refreshCurrency must run before populateTable
-            startService(onRefreshWorker,null);
+        } catch (Exception e) {
+            //not in finally because refreshOrganization must run before populateTable
+            startService(onRefreshWorker, null);
             DialogMessages.showExceptionAlert(e);
         }
     }
 
-    public void initializeServices(){
-        try{
+    public void initializeServices() {
+        try {
             ((Service<Void>) onDeleteWorker).setOnSucceeded(event -> {
                 LOG.debug("onDeleteWorker->setOnSucceeded");
                 LOG.debug(">>>>>>>>onDeleteWorker->setOnSucceeded: pForm.getDialogStage().close()");
@@ -131,9 +130,9 @@ public class CurrencyController implements Initializable, ControlledScreen, Undo
                 LOG.debug(">>>>>>>>onSaveWorker->setOnSucceeded: pForm.getDialogStage().close()");
                 pForm.close();
                 populateTable();
-                EnumSet<ErrorEnum> errors = onSaveWorker.getValue();
-                if(!errors.isEmpty()) {
-                    DialogMessages.showErrorDialog("Error while saving Currency: " + codeTF.getText(),
+                EnumSet<ErrorEnum> errors = ((Service<EnumSet<ErrorEnum>>) onSaveWorker).getValue();
+                if (!errors.isEmpty()) {
+                    DialogMessages.showErrorDialog("Error while saving Organization: " + nameTF.getText(),
                             (EnumSet<ErrorEnum>) ((Service) onSaveWorker).getValue(), null);
                 }
                 onClear(actionEvent);
@@ -158,38 +157,41 @@ public class CurrencyController implements Initializable, ControlledScreen, Undo
                 populateTable();
                 DialogMessages.showExceptionAlert(onRefreshWorker.getException());
             });
-        }catch (Exception e){
-            //not in finally because refreshCurrency must run before populateTable
-            startService(onRefreshWorker,null);
+        } catch (Exception e) {
+            //not in finally because refreshOrganization must run before populateTable
+            startService(onRefreshWorker, null);
             DialogMessages.showExceptionAlert(e);
         }
     }
 
-    private <V> void startService(Worker<V> worker, ActionEvent event){
+    private <V> void startService(Worker<V> worker, ActionEvent event) {
         pForm.activateProgressBar(worker);
         LOG.debug(">>>>>>>>pForm.getDialogStage().show()");
         pForm.show();
         actionEvent = event;
 
-        Service<V> service = ((Service<V>)worker);
-        if(service != null){
-            ((Service<V>)worker).restart();
+        Service<V> service = ((Service<V>) worker);
+        if (service == null) {
+            LOG.debug("service IS NULL");
+        } else {
+            LOG.debug("service IS NOT NULL");
+            ((Service<V>) worker).restart();
         }
     }
 
     @Override
     public void setScreenPage(ScreensController screenPage) {
-        try{
+        try {
             myController = screenPage;
             careTaker = myController.getCareTaker();
-        }catch (Exception e){
+        } catch (Exception e) {
             DialogMessages.showExceptionAlert(e);
         }
     }
 
     @Override
     public void refresh() {
-        try{
+        try {
             careTaker.clear();
             initializeServices();
             startService(onRefreshWorker, null);
@@ -198,14 +200,15 @@ public class CurrencyController implements Initializable, ControlledScreen, Undo
                     populateForm();
                 }
             });
+
             myController.setToolbar_Save(new Command() {
                 @Override
                 public void execute() {
                     try {
-                        LOG.debug("CurrencyController->onSave");
+                        LOG.debug("OrganizationController->onSave");
                         startService(onSaveWorker, new ActionEvent());
                     } catch (Exception e) {
-                        //no refreshCurrency() because there are in deletePendingCurrency, populateTable, onClear
+                        //no refreshOrganization() because there are in deletePendingOrganization, populateTable, onClear
                         DialogMessages.showExceptionAlert(e);
                     }
                 }
@@ -222,25 +225,15 @@ public class CurrencyController implements Initializable, ControlledScreen, Undo
                         restoreFormState(careTaker.redoState());
                     }
             );
-        }catch (Exception e){
-            startService(onRefreshWorker,null);
+        } catch (Exception e) {
             DialogMessages.showExceptionAlert(e);
         }
     }
 
     @Override
-    public void initialize(URL location, ResourceBundle resources){
+    public void initialize(URL location, ResourceBundle resources) {
         try {
-            codeTF.setPrefColumnCount(DataBaseConstants.CUR_CODE_MAX_LGTH);
-            codeTF.textProperty().addListener((observable, oldValue, newValue) -> {
-                if (isNotUndo.getValue()) {
-                    saveForm();
-                } else {
-                    isNotUndo.setValue(true);
-                }
-            });
-            
-            nameTF.setPrefColumnCount(DataBaseConstants.CUR_NAME_MAX_LGTH);
+            nameTF.setPrefColumnCount(DataBaseConstants.ORG_NAME_MAX_LGTH);
             nameTF.textProperty().addListener((observable, oldValue, newValue) -> {
                 if (isNotUndo.getValue()) {
                     saveForm();
@@ -248,8 +241,8 @@ public class CurrencyController implements Initializable, ControlledScreen, Undo
                     isNotUndo.setValue(true);
                 }
             });
-            
-            descTA.setPrefColumnCount(DataBaseConstants.CUR_DESCRIPTION_MAX_LGTH);
+
+            descTA.setPrefColumnCount(DataBaseConstants.ORG_DESCRIPTION_MAX_LGTH);
             descTA.textProperty().addListener((observable, oldValue, newValue) -> {
                 if (isNotUndo.getValue()) {
                     saveForm();
@@ -261,103 +254,98 @@ public class CurrencyController implements Initializable, ControlledScreen, Undo
             saveBtn.setDisable(false);
             deleteBtn.setDisable(true);
         } catch (Exception e) {
-            //not in finally because refreshCurrency must run before populateTable
+            //not in finally because refreshOrganization must run before populateTable
             startService(onRefreshWorker, null);
             DialogMessages.showExceptionAlert(e);
         }
     }
 
     @FXML
-    public void onClear(ActionEvent event){
-        try{
-            codeTF.clear();
+    public void onClear(ActionEvent event) {
+        try {
             nameTF.clear();
             descTA.clear();
             clearBtn.setDisable(false);
             saveBtn.setDisable(false);
             deleteBtn.setDisable(true);
             careTaker.clear();
-        }catch (Exception e){
-            startService(onRefreshWorker,null);
+        } catch (Exception e) {
+            startService(onRefreshWorker, null);
             DialogMessages.showExceptionAlert(e);
         }
     }
 
     @FXML
-    public void onSave(ActionEvent event){
+    public void onSave(ActionEvent event) {
         try {
-            LOG.debug("CurrencyController->onSave");
+            LOG.debug("OrganizationController->onSave");
             startService(onSaveWorker, event);
             careTaker.clear();
         } catch (Exception e) {
-            //no refreshCurrency() because there are in deletePendingCurrency, populateTable, onClear
+            //no refreshOrganization() because there are in deletePendingOrganization, populateTable, onClear
             DialogMessages.showExceptionAlert(e);
         }
     }
 
     @FXML
-    public void onDelete(ActionEvent event){
+    public void onDelete(ActionEvent event) {
         try {
-            String title = UserInterfaceConstants.CURRENCY_WINDOW_TITLE;
-            String headerText = "Currency Deletion";
-            StringBuilder contentText = new StringBuilder("Are you sure you want to delete currency ");
+            String title = UserInterfaceConstants.ORGANIZATION_WINDOW_TITLE;
+            String headerText = "Organization Deletion";
+            StringBuilder contentText = new StringBuilder("Are you sure you want to delete organization ");
             contentText.append("\"");
-            contentText.append(codeTF.getText());
+            contentText.append(nameTF.getText());
             contentText.append("\"?");
-            if(DialogMessages.showConfirmationDialog(title,headerText,contentText.toString(),null)) {
+            if (DialogMessages.showConfirmationDialog(title, headerText, contentText.toString(), null)) {
                 startService(onDeleteWorker, event);
                 populateTable();
                 onClear(actionEvent);
             }
         } catch (Exception e) {
-            //no refreshCurrency() because there are in deletePendingCurrency, populateTable, onClear
+            //no refreshOrganization() because there are in deletePendingOrganization, populateTable, onClear
             DialogMessages.showExceptionAlert(e);
         }
     }
 
-    private void populateForm(){
-        try{
+    private void populateForm() {
+        try {
             clearBtn.setDisable(false);
             saveBtn.setDisable(false);
             deleteBtn.setDisable(false);
-            currencyModel.setPendingCurrencyProperty(table.getSelectionModel().getSelectedItem());
+            organizationModel.setPendingOrganizationProperty(table.getSelectionModel().getSelectedItem());
 
-            codeTF.setText(currencyModel.getPendingCurrency().getCode());
-            nameTF.setText(currencyModel.getPendingCurrency().getName());
-            descTA.setText(currencyModel.getPendingCurrency().getDescription());
-        }catch (Exception e){
-            startService(onRefreshWorker,null);
+            nameTF.setText(organizationModel.getPendingOrganization().getName());
+            descTA.setText(organizationModel.getPendingOrganization().getDescription());
+        } catch (Exception e) {
+            startService(onRefreshWorker, null);
             DialogMessages.showExceptionAlert(e);
         }
     }
 
-    private void populateTable(){
-        try{
-            LOG.debug("currencyModel.getCurrencies().size():" + currencyModel.getCurrencies().size());
+    private void populateTable() {
+        try {
+            LOG.debug("organizationModel.getOrganizations().size():" + organizationModel.getOrganizations().size());
             table.getItems().clear();
-            table.setItems(currencyModel.getCurrencies());
+            table.setItems(organizationModel.getOrganizations());
 
-            TableColumn<Currency, Long> currencyIdCol = new TableColumn<>("ID");
-            currencyIdCol.setCellValueFactory(new PropertyValueFactory<Currency, Long>("id"));
+            TableColumn<Organization, Long> organizationIdCol = new TableColumn<>("ID");
+            organizationIdCol.setCellValueFactory(new PropertyValueFactory<Organization, Long>("id"));
 
-            TableColumn<Currency, String> currencyCodeCol = new TableColumn<>("Code");
-            currencyCodeCol.setCellValueFactory(new PropertyValueFactory<Currency, String>("code"));
-            
-            TableColumn<Currency, String> currencyNameCol = new TableColumn<>("Name");
-            currencyNameCol.setCellValueFactory(new PropertyValueFactory<Currency, String>("name"));
+            TableColumn<Organization, String> organizationNameCol = new TableColumn<>("Name");
+            organizationNameCol.setCellValueFactory(new PropertyValueFactory<Organization, String>("name"));
 
-            TableColumn<Currency, String> currencyDescCol = new TableColumn<>("Description");
-            currencyDescCol.setCellValueFactory(new PropertyValueFactory<Currency, String>("description"));
+            TableColumn<Organization, String> organizationDescCol = new TableColumn<>("Description");
+            organizationDescCol.setCellValueFactory(new PropertyValueFactory<Organization, String>("description"));
 
-            TableColumn<Currency, Calendar> currencyCreatedCol = new TableColumn<>("Created on");
-            currencyCreatedCol.setCellValueFactory(new PropertyValueFactory<Currency, Calendar>("createdOn"));
+            TableColumn<Organization, Calendar> organizationCreatedCol = new TableColumn<>("Created on");
+            organizationCreatedCol.setCellValueFactory(new PropertyValueFactory<Organization, Calendar>("createdOn"));
 
-            TableColumn<Currency, Calendar> currencyUpdatedCol = new TableColumn<>("Updated on");
-            currencyUpdatedCol.setCellValueFactory(new PropertyValueFactory<Currency, Calendar>("updatedOn"));
+            TableColumn<Organization, Calendar> organizationUpdatedCol = new TableColumn<>("Updated on");
+            organizationUpdatedCol.setCellValueFactory(new PropertyValueFactory<Organization, Calendar>("updatedOn"));
 
-            table.getColumns().setAll(currencyIdCol, currencyCodeCol, currencyNameCol, currencyDescCol, currencyCreatedCol, currencyUpdatedCol);
-        }catch (Exception e){
-            startService(onRefreshWorker,null);
+            table.getColumns().setAll(organizationIdCol, organizationNameCol, organizationDescCol, organizationCreatedCol, organizationUpdatedCol);
+        } catch (Exception e) {
+            startService(onRefreshWorker, null);
             DialogMessages.showExceptionAlert(e);
         }
     }
@@ -365,7 +353,7 @@ public class CurrencyController implements Initializable, ControlledScreen, Undo
     @Override
     public void saveForm() {
         try {
-            careTaker.saveState(new CurrencyFormState(codeTF.getText(), nameTF.getText(), descTA.getText()));
+            careTaker.saveState(new OrganizationFormState(nameTF.getText(), descTA.getText()));
         } catch (Exception e) {
             DialogMessages.showExceptionAlert(e);
         }
@@ -374,8 +362,7 @@ public class CurrencyController implements Initializable, ControlledScreen, Undo
     @Override
     public void restoreFormState(Memento memento) {
         try {
-            CurrencyFormState formState = (CurrencyFormState) memento;
-            codeTF.setText(formState.getCodeTFStr());
+            OrganizationFormState formState = (OrganizationFormState) memento;
             nameTF.setText(formState.getNameTFStr());
             descTA.setText(formState.getDescTAStr());
         } catch (Exception e) {
@@ -384,7 +371,7 @@ public class CurrencyController implements Initializable, ControlledScreen, Undo
     }
 
     @Override
-    public void close() {
+    public void close(){
         try {
             onClear(new ActionEvent());
             myController.setToolbar_Save(null);
@@ -400,12 +387,6 @@ public class CurrencyController implements Initializable, ControlledScreen, Undo
         boolean result = true;
         try{
             StringBuilder contentText = new StringBuilder();
-            if(!StringUtils.isBlank(codeTF.getText())) {
-                contentText.append("Code (");
-                contentText.append(codeTF.getText());
-                contentText.append(") is not saved. ");
-            }
-
             if(!StringUtils.isBlank(nameTF.getText())) {
                 contentText.append("Name (");
                 contentText.append(nameTF.getText());
@@ -420,7 +401,7 @@ public class CurrencyController implements Initializable, ControlledScreen, Undo
 
             if(contentText.length() > 0){
                 contentText.append("Are you sure you want to close this window?");
-                result = DialogMessages.showConfirmationDialog(UserInterfaceConstants.CURRENCY_WINDOW_TITLE,
+                result = DialogMessages.showConfirmationDialog(UserInterfaceConstants.ORGANIZATION_WINDOW_TITLE,
                         "Not all fields are empty", contentText.toString(), null);
             }
         }catch (Exception e){
@@ -429,19 +410,13 @@ public class CurrencyController implements Initializable, ControlledScreen, Undo
         return result;
     }
 
-    private static class CurrencyFormState implements Memento{
-        private final String codeTFStr;
+    private static class OrganizationFormState implements Memento{
         private final String nameTFStr;
         private final String descTAStr;
 
-        public CurrencyFormState(String codeTF, String nameTF, String descTA){
-            this.codeTFStr = codeTF;
+        public OrganizationFormState(String nameTF, String descTA){
             this.nameTFStr = nameTF;
             this.descTAStr = descTA;
-        }
-
-        public String getCodeTFStr() {
-            return codeTFStr;
         }
 
         public String getNameTFStr() {
@@ -454,10 +429,9 @@ public class CurrencyController implements Initializable, ControlledScreen, Undo
 
         @Override
         public String toString() {
-            return "CurrencyFormState{" +
-                    "codeTFStr='" + codeTFStr + '\'' +
-                    ", nameTFStr='" + nameTFStr + '\'' +
-                    ", descTAStr='" + descTAStr + '\'' +
+            return "OrganizationFormState{" +
+                    "nameTF='" + nameTFStr + '\'' +
+                    ", descTA='" + descTAStr + '\'' +
                     '}';
         }
     }

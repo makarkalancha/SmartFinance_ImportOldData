@@ -3,7 +3,6 @@ package com.makco.smartfinance.services;
 import com.makco.smartfinance.persistence.dao.FamilyMemberDAO;
 import com.makco.smartfinance.persistence.dao.FamilyMemberDAOImpl;
 import com.makco.smartfinance.persistence.entity.FamilyMember;
-import com.makco.smartfinance.user_interface.constants.DialogMessages;
 import com.makco.smartfinance.user_interface.validation.ErrorEnum;
 import com.makco.smartfinance.user_interface.validation.RuleSet;
 import com.makco.smartfinance.user_interface.validation.rule_sets.FamilyMemberRuleSet;
@@ -23,7 +22,7 @@ public class FamilyMemberServiceImpl implements FamilyMemberService {
     private int tmp = 0;
     
     @Override
-    public List<FamilyMember> familyMemberList() {
+    public List<FamilyMember> familyMemberList() throws Exception {
         List<FamilyMember> familyMemberList = new ArrayList<>();
         try {
             familyMemberList = familyMemberDAO.familyMemberList();
@@ -31,25 +30,25 @@ public class FamilyMemberServiceImpl implements FamilyMemberService {
             Thread.sleep(tmp);
             LOG.debug("familyMemberList: after " + tmp + " sec");
         } catch (Exception e) {
-            DialogMessages.showExceptionAlert(e);
+            throw e;
         }
         return familyMemberList;
     }
 
     @Override
-    public void removeFamilyMember(Long id) {
+    public void removeFamilyMember(Long id) throws Exception {
         try{
             familyMemberDAO.removeFamilyMember(id);
             LOG.debug("removeFamilyMember: before " + tmp + " sec");
             Thread.sleep(tmp);
             LOG.debug("removeFamilyMember: after " + tmp + " sec");
         } catch (Exception e) {
-            DialogMessages.showExceptionAlert(e);
+            throw e;
         }
     }
 
     @Override
-    public List<FamilyMember> getFamilyMemberByName(String name) {
+    public List<FamilyMember> getFamilyMemberByName(String name) throws Exception {
         List<FamilyMember> familyMemberList = new ArrayList<>();
         try {
             familyMemberList = familyMemberDAO.getFamilyMemberByName(name);
@@ -57,13 +56,13 @@ public class FamilyMemberServiceImpl implements FamilyMemberService {
             Thread.sleep(tmp);
             LOG.debug("getFamilyMemberByName: after " + tmp + " sec");
         } catch (Exception e) {
-            DialogMessages.showExceptionAlert(e);
+            throw e;
         }
         return familyMemberList;
     }
 
     @Override
-    public FamilyMember getFamilyMemberById(Long id) {
+    public FamilyMember getFamilyMemberById(Long id) throws Exception {
         FamilyMember familyMember = null;
         try {
             familyMember = familyMemberDAO.getFamilyMemberById(id);
@@ -71,25 +70,25 @@ public class FamilyMemberServiceImpl implements FamilyMemberService {
             Thread.sleep(tmp);
             LOG.debug("getFamilyMemberById: after " + tmp + " sec");
         } catch (Exception e) {
-            DialogMessages.showExceptionAlert(e);
+            throw e;
         }
         return familyMember;
     }
 
     @Override
-    public void saveOrUpdateFamilyMember(FamilyMember familyMember) {
+    public void saveOrUpdateFamilyMember(FamilyMember familyMember) throws Exception {
         try{
             familyMemberDAO.saveOrUpdateFamilyMember(familyMember);
             LOG.debug("saveOrUpdateFamilyMember: before " + tmp + " sec");
             Thread.sleep(tmp);
             LOG.debug("saveOrUpdateFamilyMember: after " + tmp + " sec");
         } catch (Exception e) {
-            DialogMessages.showExceptionAlert(e);
+            throw e;
         }
     }
 
     @Override
-    public EnumSet<ErrorEnum> validate(FamilyMember familyMember) {
+    public EnumSet<ErrorEnum> validate(FamilyMember familyMember) throws Exception {
         EnumSet<ErrorEnum> errors = EnumSet.noneOf(ErrorEnum.class);
         try {
             RuleSet ruleSet = new FamilyMemberRuleSet();
@@ -98,7 +97,7 @@ public class FamilyMemberServiceImpl implements FamilyMemberService {
             Thread.sleep(tmp);
             LOG.debug("validate: after " + tmp + " sec");
         } catch (Exception e) {
-            DialogMessages.showExceptionAlert(e);
+            throw e;
         }
         return errors;
     }

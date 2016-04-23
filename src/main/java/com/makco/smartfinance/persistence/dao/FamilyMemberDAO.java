@@ -8,10 +8,10 @@ import java.util.List;
  */
 //https://howtoprogramwithjava.com/hibernate-creating-data-access-objects-daos/
 public interface FamilyMemberDAO {
-    List<FamilyMember> familyMemberList();
-    FamilyMember getFamilyMemberById(Long id);
-    List<FamilyMember> getFamilyMemberByName(String name);
+    List<FamilyMember> familyMemberList() throws Exception;
+    FamilyMember getFamilyMemberById(Long id) throws Exception;
+    List<FamilyMember> getFamilyMemberByName(String name) throws Exception;
 
-    void removeFamilyMember(Long id);
-    void saveOrUpdateFamilyMember(FamilyMember familyMember);
+    void removeFamilyMember(Long id) throws Exception;
+    void saveOrUpdateFamilyMember(FamilyMember familyMember) throws Exception;
 }

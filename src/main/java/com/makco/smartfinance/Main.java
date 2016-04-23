@@ -1,11 +1,11 @@
 package com.makco.smartfinance;
 
 import com.makco.smartfinance.user_interface.ScreensController;
-import com.makco.smartfinance.user_interface.constants.ApplicationConstants;
-import com.makco.smartfinance.user_interface.constants.DialogMessages;
 import com.makco.smartfinance.user_interface.constants.Screens;
-import com.makco.smartfinance.user_interface.constants.forms.ProgressBarForm;
-import com.makco.smartfinance.user_interface.constants.forms.ProgressIndicatorForm;
+import com.makco.smartfinance.user_interface.constants.UserInterfaceConstants;
+import com.makco.smartfinance.user_interface.utility_screens.DialogMessages;
+import com.makco.smartfinance.user_interface.utility_screens.forms.ProgressBarForm;
+import com.makco.smartfinance.user_interface.utility_screens.forms.ProgressIndicatorForm;
 import com.makco.smartfinance.user_interface.workers.QuitWorker;
 import com.makco.smartfinance.user_interface.workers.prestart.InsertDateUnitWorker;
 import com.makco.smartfinance.user_interface.workers.prestart.PreStartWorker;
@@ -60,11 +60,11 @@ public class Main extends Application{
 
     public Main(){
         preStartWorker = new PreStartWorker();
-        isEmpty.bind(((PreStartWorker)preStartWorker).isEmptyProperty());
-        pFormStart.activateProgressBar(preStartWorker);
+        isEmpty.bind(((PreStartWorker) preStartWorker).isEmptyProperty());
+
 
         insertDateUnitWorker = new InsertDateUnitWorker();
-        pFormInsertDateUnit.activateProgressBar(insertDateUnitWorker);
+
     }
 
     //https://www.youtube.com/watch?v=5GsdaZWDcdY
@@ -81,14 +81,15 @@ public class Main extends Application{
             this.primaryStage = primaryStage;
             LOG.debug("First day of the week: "+ WeekFields.of(Locale.getDefault()).getFirstDayOfWeek());
             ((Service<Void>) preStartWorker).setOnSucceeded(event -> {
-                if(isEmpty.get()){
+                if (isEmpty.get()) {
                     pFormStart.close();
                     Optional<LocalDate> ldt = DialogMessages.showDateUnitConfirmationDialog();
                     if (ldt.isPresent()) {
                         LocalDate localDate = ldt.get();
                         LOG.debug("Main->localDatetime: " + localDate.toString());
+                        pFormInsertDateUnit.activateProgressBar(insertDateUnitWorker);
                         pFormInsertDateUnit.show();
-                        ((InsertDateUnitWorker)insertDateUnitWorker).setStartLocalDate(localDate);
+                        ((InsertDateUnitWorker) insertDateUnitWorker).setStartLocalDate(localDate);
                         ((Service<Void>) insertDateUnitWorker).restart();
                     } else {
                         Main.quit(null);
@@ -106,6 +107,7 @@ public class Main extends Application{
                 preStartWorker.cancel();
                 Main.quit(null);
             });
+            pFormStart.activateProgressBar(preStartWorker);
             pFormStart.show();
             ((Service<Void>) preStartWorker).restart();
 
@@ -144,10 +146,10 @@ public class Main extends Application{
             for (Screens scr : Screens.values()) {
                 mainContainer.loadScreen(scr);
             }
-            mainContainer.setScreen(Screens.FAMILY_MEMBER);
+            mainContainer.setScreen(Screens.ORGANIZATION);
 
-            this.primaryStage.getIcons().add(new Image(ApplicationConstants.MAIN_WINDOW_ICO));
-            this.primaryStage.setTitle(ApplicationConstants.MAIN_WINDOW_TITLE);
+            this.primaryStage.getIcons().add(new Image(UserInterfaceConstants.MAIN_WINDOW_ICO));
+            this.primaryStage.setTitle(UserInterfaceConstants.MAIN_WINDOW_TITLE);
             ////http://stackoverflow.com/questions/19602727/how-to-reference-javafx-fxml-files-in-resource-folder
             Scene scene = new Scene(mainContainer);
             primaryStage.setScene(scene);

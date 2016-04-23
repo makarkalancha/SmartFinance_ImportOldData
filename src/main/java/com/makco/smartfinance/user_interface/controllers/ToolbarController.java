@@ -3,8 +3,8 @@ package com.makco.smartfinance.user_interface.controllers;
 import com.makco.smartfinance.user_interface.Command;
 import com.makco.smartfinance.user_interface.ControlledScreen;
 import com.makco.smartfinance.user_interface.ScreensController;
-import com.makco.smartfinance.user_interface.constants.ApplicationConstants;
-import com.makco.smartfinance.user_interface.constants.DialogMessages;
+import com.makco.smartfinance.user_interface.constants.UserInterfaceConstants;
+import com.makco.smartfinance.user_interface.utility_screens.DialogMessages;
 import com.makco.smartfinance.user_interface.undoredo.CareTaker;
 import com.makco.smartfinance.user_interface.undoredo.UndoRedoScreen;
 import java.net.URL;
@@ -64,9 +64,9 @@ public class ToolbarController implements Initializable, ControlledScreen {
             tbSaveBtn.setText("");
             tbUndoBtn.setText("");
             tbRedoBtn.setText("");
-            tbSaveBtn.setGraphic(new ImageView(new Image(ApplicationConstants.SAVE_ICO)));
-            tbUndoBtn.setGraphic(new ImageView(new Image(ApplicationConstants.UNDO_ICO)));
-            tbRedoBtn.setGraphic(new ImageView(new Image(ApplicationConstants.REDO_ICO)));
+            tbSaveBtn.setGraphic(new ImageView(new Image(UserInterfaceConstants.SAVE_ICO)));
+            tbUndoBtn.setGraphic(new ImageView(new Image(UserInterfaceConstants.UNDO_ICO)));
+            tbRedoBtn.setGraphic(new ImageView(new Image(UserInterfaceConstants.REDO_ICO)));
 
 ////https://docs.oracle.com/javase/8/javafx/properties-binding-tutorial/binding.htm
             isUndoEmpty.addListener((observable, oldValue, newValue) ->{

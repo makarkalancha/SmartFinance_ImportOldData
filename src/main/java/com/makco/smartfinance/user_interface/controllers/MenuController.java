@@ -4,22 +4,21 @@ import com.makco.smartfinance.Main;
 import com.makco.smartfinance.user_interface.Command;
 import com.makco.smartfinance.user_interface.ControlledScreen;
 import com.makco.smartfinance.user_interface.ScreensController;
-import com.makco.smartfinance.user_interface.constants.ApplicationConstants;
-import com.makco.smartfinance.user_interface.constants.DialogMessages;
 import com.makco.smartfinance.user_interface.constants.Screens;
+import com.makco.smartfinance.user_interface.constants.UserInterfaceConstants;
 import com.makco.smartfinance.user_interface.undoredo.CareTaker;
 import com.makco.smartfinance.user_interface.undoredo.UndoRedoScreen;
+import com.makco.smartfinance.user_interface.utility_screens.DialogMessages;
+import java.net.URL;
+import java.util.ResourceBundle;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.MenuItem;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-import java.net.URL;
-import java.util.ResourceBundle;
 
 /**
  * Created by mcalancea on 2016-04-01.
@@ -63,10 +62,10 @@ public class MenuController implements Initializable, ControlledScreen {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         try{
-            saveMenuItem.setAccelerator(ApplicationConstants.SAVE_KC);
-            undoMenuItem.setAccelerator(ApplicationConstants.UNDO_KC);
-            redoMenuItem.setAccelerator(ApplicationConstants.REDO_KC);
-            quitMenuItem.setAccelerator(ApplicationConstants.QUIT_KC);
+            saveMenuItem.setAccelerator(UserInterfaceConstants.SAVE_KC);
+            undoMenuItem.setAccelerator(UserInterfaceConstants.UNDO_KC);
+            redoMenuItem.setAccelerator(UserInterfaceConstants.REDO_KC);
+            quitMenuItem.setAccelerator(UserInterfaceConstants.QUIT_KC);
 
 ////        https://docs.oracle.com/javase/8/javafx/properties-binding-tutorial/binding.htm
             isUndoEmpty.addListener((observable, oldValue, newValue) ->{
@@ -106,6 +105,11 @@ public class MenuController implements Initializable, ControlledScreen {
     @FXML
     public void toFamilyMember(ActionEvent event){
         myController.setScreen(Screens.FAMILY_MEMBER);
+    }
+
+    @FXML
+    public void toOrganization(ActionEvent event){
+        myController.setScreen(Screens.ORGANIZATION);
     }
 
     @FXML

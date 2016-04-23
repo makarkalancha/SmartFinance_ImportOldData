@@ -1,6 +1,7 @@
-package com.makco.smartfinance.user_interface.constants;
+package com.makco.smartfinance.user_interface.utility_screens;
 
-import com.makco.smartfinance.user_interface.constants.forms.DatePickerForm;
+import com.makco.smartfinance.user_interface.constants.UserInterfaceConstants;
+import com.makco.smartfinance.user_interface.utility_screens.forms.DatePickerForm;
 import com.makco.smartfinance.user_interface.validation.ErrorEnum;
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -39,7 +40,7 @@ public class DialogMessages {
     public static boolean showConfirmationDialog(String title, String headerText, String contentText, String ico){
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
-        ico = (StringUtils.isBlank(ico)) ? ApplicationConstants.MAIN_WINDOW_ICO : ico;
+        ico = (StringUtils.isBlank(ico)) ? UserInterfaceConstants.MAIN_WINDOW_ICO : ico;
         alertStage.getIcons().add(new Image(ico));
 
         if(!StringUtils.isBlank(title)){
@@ -64,7 +65,7 @@ public class DialogMessages {
         //http://stackoverflow.com/questions/27877547/styling-a-dialog-from-javafx-openjfx-dialogs-project
         Alert alert = new Alert(Alert.AlertType.ERROR);
         Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
-        ico = (StringUtils.isBlank(ico)) ? ApplicationConstants.MAIN_WINDOW_ICO : ico;
+        ico = (StringUtils.isBlank(ico)) ? UserInterfaceConstants.MAIN_WINDOW_ICO : ico;
         alertStage.getIcons().add(new Image(ico));
         alert.setTitle("Errors");
         if(!StringUtils.isBlank(headerText)){
@@ -87,7 +88,7 @@ public class DialogMessages {
         LOG.error(t, t);
         Alert alert = new Alert(Alert.AlertType.ERROR);
         Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
-        alertStage.getIcons().add(new Image(ApplicationConstants.MAIN_WINDOW_ICO));
+        alertStage.getIcons().add(new Image(UserInterfaceConstants.MAIN_WINDOW_ICO));
         alert.setTitle("Exception Dialog");
         alert.setHeaderText("Exception Dialog");
         alert.setContentText(t.getMessage());
@@ -130,8 +131,8 @@ public class DialogMessages {
 
         //set icons
         Stage alertStage = (Stage) dialog.getDialogPane().getScene().getWindow();
-        alertStage.getIcons().add(new Image(ApplicationConstants.MAIN_WINDOW_ICO));
-        dialog.setGraphic(new ImageView(ApplicationConstants.CALENDAR));
+        alertStage.getIcons().add(new Image(UserInterfaceConstants.MAIN_WINDOW_ICO));
+        dialog.setGraphic(new ImageView(UserInterfaceConstants.CALENDAR));
 
         //set buttons
         ButtonType applyBtnTp = new ButtonType("Apply", ButtonBar.ButtonData.OK_DONE);

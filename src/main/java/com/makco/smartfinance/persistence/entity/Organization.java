@@ -14,30 +14,28 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
- * Created by mcalancea on 2016-03-01.
+ * Created by mcalancea on 2016-04-22.
  */
 
-//http://howtodoinjava.com/jpa/jpa-native-delete-sql-query-example/
 @Entity
 @Table(
-        name="FAMILY_MEMBER",
+        name = "ORGANIZATION",
         uniqueConstraints =
-                @UniqueConstraint(
-                        name="IDX_UNQ_FMLMMBR_NM",
-                        columnNames = {"NAME"}
-                )
+        @UniqueConstraint(
+                name = "IDX_UNQ_ORGNZTN_NM",
+                columnNames = {"NAME"}
+        )
 )
-//@org.hibernate.annotations.DynamicInsert
-//@org.hibernate.annotations.DynamicUpdate
-public class FamilyMember implements Serializable{
+public class Organization implements Serializable {
+
     @Id
     @org.hibernate.annotations.GenericGenerator(
-            name = "FAMILY_MEMBER_SEQUENCE_GENERATOR",
+            name = "ORGANIZATION_SEQUENCE_GENERATOR",
             strategy = "enhanced-sequence",
             parameters = {
                     @org.hibernate.annotations.Parameter(
                             name = "sequence_name",
-                            value = "SEQ_FAMILY_MEMBER"
+                            value = "SEQ_ORGANIZATION"
                     ),
                     @org.hibernate.annotations.Parameter(
                             name = "initial_value",
@@ -45,40 +43,40 @@ public class FamilyMember implements Serializable{
                     )
             }
     )
-    @GeneratedValue(generator = "FAMILY_MEMBER_SEQUENCE_GENERATOR")
-    @Column(name="ID")
+    @GeneratedValue(generator = "ORGANIZATION_SEQUENCE_GENERATOR")
+    @Column(name = "ID")
     private Long id;
 
     @Column(name = "NAME", unique = true)
     @NotNull
     @Size(
             min = 2,
-            max = DataBaseConstants.FM_NAME_MAX_LGTH,
-            message = "Name is required, maximum " + DataBaseConstants.FM_NAME_MAX_LGTH + " characters."
+            max = DataBaseConstants.ORG_NAME_MAX_LGTH,
+            message = "Name is required, maximum " + DataBaseConstants.ORG_NAME_MAX_LGTH + " characters."
     )
     private String name;
 
     @Column(name = "DESCRIPTION")
     @Size(
             min = 0,
-            max = DataBaseConstants.FM_DESCRIPTION_MAX_LGTH,
-            message = "Description length is " + DataBaseConstants.FM_DESCRIPTION_MAX_LGTH + " characters."
+            max = DataBaseConstants.ORG_DESCRIPTION_MAX_LGTH,
+            message = "Description length is " + DataBaseConstants.ORG_DESCRIPTION_MAX_LGTH + " characters."
     )
     private String description;
 
     @org.hibernate.annotations.CreationTimestamp
-    @Column(name="T_CREATEDON",insertable = false, updatable = false)
+    @Column(name = "T_CREATEDON", insertable = false, updatable = false)
     private Timestamp createdOn;
 
     @org.hibernate.annotations.UpdateTimestamp
-    @Column(name="T_UPDATEDON",insertable = false, updatable = false)
+    @Column(name = "T_UPDATEDON", insertable = false, updatable = false)
     private Timestamp updatedOn;
 
-    public FamilyMember(){
+    public Organization() {
 
     }
 
-    public FamilyMember(String name, String description){
+    public Organization(String name, String description) {
         this.name = name;
         this.description = description;
     }
@@ -105,9 +103,6 @@ public class FamilyMember implements Serializable{
         this.name = name;
     }
 
-    // hibernate persistence p.277
-    // as other can be Hibernate proxy use:
-    // getters(), instanceof (instead of getClass())
     @Override
     public boolean equals(Object other) {
         if (this == other) {
@@ -117,11 +112,11 @@ public class FamilyMember implements Serializable{
             return false;
         }
 
-        if (!(other instanceof FamilyMember)) {
+        if (!(other instanceof Organization)) {
             return false;
         }
 
-        FamilyMember that = (FamilyMember) other;
+        Organization that = (Organization) other;
 
         return getId().equals(that.getId());
     }
@@ -133,13 +128,13 @@ public class FamilyMember implements Serializable{
 
     @Override
     public String toString() {
-        return "FamilyMember{" +
+        return "Organization{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", createdOn='" + createdOn + '\'' +
                 ", updatedOn='" + updatedOn + '\'' +
-            '}';
+                '}';
     }
 
     public LocalDateTime getCreatedOn() {

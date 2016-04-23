@@ -1,18 +1,14 @@
 package com.makco.smartfinance.persistence.entity;
 
-import com.makco.smartfinance.persistence.entity.converter.LocalDateTimeAttributeConverter;
-
+import com.makco.smartfinance.constants.DataBaseConstants;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
-import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -53,25 +49,25 @@ public class Currency implements Serializable{
     @Column(name="CODE")
     @NotNull
     @Size(
-        min = 2,
-        max = 3,
-        message = "Currency code"
+        min = DataBaseConstants.CUR_CODE_MAX_LGTH,
+        max = DataBaseConstants.CUR_CODE_MAX_LGTH,
+        message = "Currency code is required, maximum " + DataBaseConstants.CUR_CODE_MAX_LGTH + " characters."
     )
     private String code;
 
-    @Column(name="NAME")
+    @Column(name = "NAME")
     @Size(
             min = 0,
-            max = 64,
-            message = "Full name of the currency, length is 64 characters."
+            max = DataBaseConstants.CUR_NAME_MAX_LGTH,
+            message = "Full name of the currency, length is " + DataBaseConstants.CUR_NAME_MAX_LGTH + " characters."
     )
     private String name;
 
-    @Column(name="DESCRIPTION")
+    @Column(name = "DESCRIPTION")
     @Size(
             min = 0,
-            max = 128,
-            message = "Description length is 128 characters."
+            max = DataBaseConstants.CUR_DESCRIPTION_MAX_LGTH,
+            message = "Description length is " + DataBaseConstants.CUR_DESCRIPTION_MAX_LGTH + " characters."
     )
     private String description;
 

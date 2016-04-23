@@ -1,7 +1,7 @@
 package com.makco.smartfinance.user_interface.workers.prestart;
 
 import com.makco.smartfinance.h2db.utils.H2DbUtils;
-import com.makco.smartfinance.persistence.contants.DataBaseConstants;
+import com.makco.smartfinance.constants.DataBaseConstants;
 import com.makco.smartfinance.services.DateUnitService;
 import com.makco.smartfinance.services.DateUnitServiceImpl;
 import com.makco.smartfinance.user_interface.Command;

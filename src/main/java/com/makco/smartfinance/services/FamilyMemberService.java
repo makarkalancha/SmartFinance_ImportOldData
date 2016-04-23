@@ -12,11 +12,11 @@ import java.util.List;
 //http://programmers.stackexchange.com/questions/220909/service-layer-vs-dao-why-both
 //http://programmers.stackexchange.com/questions/162399/how-essential-is-it-to-make-a-service-layer
 public interface FamilyMemberService {
-    List<FamilyMember> familyMemberList();
-    FamilyMember getFamilyMemberById(Long id);
-    List<FamilyMember> getFamilyMemberByName(String name);
+    List<FamilyMember> familyMemberList() throws Exception;
+    FamilyMember getFamilyMemberById(Long id) throws Exception;
+    List<FamilyMember> getFamilyMemberByName(String name) throws Exception;
 
-    void removeFamilyMember(Long id);
-    void saveOrUpdateFamilyMember(FamilyMember familyMember);
-    EnumSet<ErrorEnum> validate(FamilyMember familyMember);
+    void removeFamilyMember(Long id) throws Exception;
+    void saveOrUpdateFamilyMember(FamilyMember familyMember) throws Exception;
+    EnumSet<ErrorEnum> validate(FamilyMember familyMember) throws Exception;
 }

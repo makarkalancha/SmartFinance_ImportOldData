@@ -9,10 +9,8 @@ import javafx.scene.input.KeyCombination;
 /**
  * Created by mcalancea on 2016-04-05.
  */
-public class ApplicationConstants {
-    private final static Logger LOG = LogManager.getLogger(ApplicationConstants.class);
-
-    public static final String DB_SCHEMA_NAME = "FINANCE";
+public class UserInterfaceConstants {
+    private final static Logger LOG = LogManager.getLogger(UserInterfaceConstants.class);
 
     public static final String IMG_RESOURCE_FOLDER = "images";
 
@@ -20,6 +18,8 @@ public class ApplicationConstants {
     public static final String MAIN_WINDOW_TITLE = "Hello";
     public static final String CURRENCY_WINDOW_TITLE = "Currency";
     public static final String FAMILY_MEMBER_WINDOW_TITLE = "Family Member";
+    public static final String ORGANIZATION_WINDOW_TITLE = "Organization";
+
 
     //ico
     public static final String CALENDAR = IMG_RESOURCE_FOLDER+"/calendar_60_45.png";
@@ -30,7 +30,6 @@ public class ApplicationConstants {
     public static final String SAVE_ICO = IMG_RESOURCE_FOLDER+"/1460658953_floppy_disk_save_16x16.png";
     public static final String REDO_ICO = IMG_RESOURCE_FOLDER+"/1460658987_arrow-redo_16x16_w.png";
     public static final String UNDO_ICO = IMG_RESOURCE_FOLDER+"/1460658987_arrow-undo_16x16_w.png";
-
 
 
     //key shortcut

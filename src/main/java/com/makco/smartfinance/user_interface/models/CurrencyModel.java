@@ -3,7 +3,6 @@ package com.makco.smartfinance.user_interface.models;
 import com.makco.smartfinance.persistence.entity.Currency;
 import com.makco.smartfinance.services.CurrencyService;
 import com.makco.smartfinance.services.CurrencyServiceImpl;
-import com.makco.smartfinance.user_interface.constants.DialogMessages;
 import com.makco.smartfinance.user_interface.validation.ErrorEnum;
 import java.util.EnumSet;
 import org.apache.logging.log4j.LogManager;
@@ -24,23 +23,23 @@ public class CurrencyModel {
 
     }
 
-    public void refreshCurrency(){
+    public void refreshCurrency() throws Exception{
         try{
             if (!currencies.isEmpty()) {
                 currencies.clear();
             }
             currencies = FXCollections.observableArrayList(currencyService.currencyList());
             LOG.debug("currencies.size: " + currencies.size());
-        }catch (Exception e){
-            DialogMessages.showExceptionAlert(e);
+        }catch (Exception e) {
+            throw e;
         }
     }
 
-    public ObservableList<Currency> getCurrencies() {
+    public ObservableList<Currency> getCurrencies() throws Exception {
         return currencies;
     }
 
-    public EnumSet<ErrorEnum> savePendingCurrency(String code, String name, String description) {
+    public EnumSet<ErrorEnum> savePendingCurrency(String code, String name, String description) throws Exception {
         EnumSet<ErrorEnum> errors = EnumSet.noneOf(ErrorEnum.class);
         code = code.toUpperCase();
         try {
@@ -60,33 +59,31 @@ public class CurrencyModel {
                 currencyService.saveOrUpdateCurrency(tmpCurrency);
             }
         } catch (Exception e) {
-            DialogMessages.showExceptionAlert(e);
+            throw e;
         } finally {
             refreshCurrency();
         }
         return errors;
     }
 
-    public void deletePendingCurrency(){
-        try{
+    public void deletePendingCurrency() throws Exception {
+        try {
             if (pendingCurrency != null && pendingCurrency.getId() != null) {
                 currencyService.removeCurrency(pendingCurrency.getId());
                 pendingCurrency = null;
             }
-        } catch (Exception e){
-            DialogMessages.showExceptionAlert(e);
-        }finally {
+        } catch (Exception e) {
+            throw e;
+        } finally {
             refreshCurrency();
         }
     }
 
-    public Currency getPendingCurrency() {
+    public Currency getPendingCurrency() throws Exception {
         return pendingCurrency;
     }
 
-    public void setPendingCurrencyProperty(Currency currency) {
+    public void setPendingCurrencyProperty(Currency currency) throws Exception {
         pendingCurrency = currency;
     }
-
-
 }
