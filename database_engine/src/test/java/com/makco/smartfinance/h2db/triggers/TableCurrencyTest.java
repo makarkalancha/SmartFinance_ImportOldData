@@ -12,12 +12,15 @@ import com.makco.smartfinance.h2db.utils.JsonUtils;
 import com.makco.smartfinance.h2db.utils.schema_constants.Table;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.h2.jdbc.JdbcSQLException;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.junit.runners.MethodSorters;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -32,10 +35,9 @@ import static org.junit.Assert.assertEquals;
  * Date: 24/04/2016
  * Time: 00:54
  */
-//TODO fix test like in TriggerFamilyMemberTest
-public class TriggerCurrencyTest {
-    private static final Logger LOG = LogManager.getLogger(TriggerCurrencyTest.class);
-    private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+public class TableCurrencyTest {
+    private static final Logger LOG = LogManager.getLogger(TableCurrencyTest.class);
     private static final SimpleDateFormat sdfJson = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     @ClassRule
@@ -71,42 +73,43 @@ public class TriggerCurrencyTest {
         LOG.debug(mess1);
     }
 
-    @Test
-    public void testCRUDWithCurrencyTable() throws Exception {
-        if(H2DbUtils.checkIfDBObjectExists(dbConnectionResource.getConnection(), TestContext.INSTANCE.DB_SCHEMA(),
-                DBObjectType.TABLE, Table.Names.CURRENCY.toString())){
-            H2DbUtils.setSchema(dbConnectionResource.getConnection(), TestContext.INSTANCE.DB_SCHEMA());
-
-            testCurrency_insert();
-            testCurrency_update();
-            testCurrency_delete();
-
-        } else {
-            assert (false);
+    public Long insert(String code, String name, String desc) throws Exception {
+        LOG.debug("insert");
+        String queryInsert = "INSERT INTO " + Table.Names.CURRENCY +
+                " (" + Table.CURRENCY.CODE + ", " + Table.CURRENCY.NAME + ", " + Table.CURRENCY.DESCRIPTION + ") " +
+                "VALUES('" + code + "','" + name + "','" + desc + "')";
+        LOG.debug(queryInsert);
+        ResultSet rs = null;
+        Long result = -1L;
+        try (
+                PreparedStatement insertPS = dbConnectionResource.getConnection().prepareStatement(queryInsert, Statement.RETURN_GENERATED_KEYS);
+        ){
+            insertPS.executeUpdate();
+            rs = insertPS.getGeneratedKeys();
+            rs.next();
+            result = rs.getLong(1);
+            return result;
+        } finally {
+            if(rs != null){
+                rs.close();
+            }
         }
     }
 
-    //    @Test: junit doesn't support order in test (http://stackoverflow.com/questions/3693626/how-to-run-test-methods-in-specific-order-in-junit4)
-    public void testCurrency_insert() throws Exception {
-        String queryInsert = "INSERT INTO " + Table.Names.CURRENCY +
-                " (" + Table.CURRENCY.CODE + ", " + Table.CURRENCY.NAME + ", " + Table.CURRENCY.DESCRIPTION + ") " +
-                "VALUES('CAD','cad name','cad desc')";
+    @Test
+    public void testCurrency_1_insert() throws Exception {
+        LOG.debug("testFamilyMember_1_insert");
         String queryDates = "SELECT " + Table.CURRENCY.ID + " FROM " + Table.Names.CURRENCY +
                 " WHERE " + Table.CURRENCY.ID + " = ?" +
                 " AND " + Table.CURRENCY.T_CREATEDON + " IS NOT NULL" +
                 " AND " + Table.CURRENCY.T_UPDATEDON + " IS NOT NULL" +
                 " AND " + Table.CURRENCY.T_CREATEDON + " = " + Table.CURRENCY.T_UPDATEDON;
-        LOG.debug(queryInsert);
         LOG.debug(queryDates);
         ResultSet rs = null;
         try (
-            PreparedStatement insertPS = dbConnectionResource.getConnection().prepareStatement(queryInsert, Statement.RETURN_GENERATED_KEYS);
-            PreparedStatement selectDatesPS = dbConnectionResource.getConnection().prepareStatement(queryDates);
+                PreparedStatement selectDatesPS = dbConnectionResource.getConnection().prepareStatement(queryDates);
         ){
-            insertPS.executeUpdate();
-            rs = insertPS.getGeneratedKeys();
-            rs.next();
-            long idJustInserted = rs.getLong(1);
+            long idJustInserted = insert("CAD","cad name","cad desc");
             LOG.debug("idJustInserted > 0: idJustInserted=" + idJustInserted);
             assert (idJustInserted > 0);
             selectDatesPS.setLong(1, idJustInserted);
@@ -124,32 +127,52 @@ public class TriggerCurrencyTest {
         }
     }
 
-    public void testCurrency_update() throws Exception {
-        String querySelect = "SELECT MAX(" + Table.CURRENCY.ID + ") FROM " + Table.Names.CURRENCY;
+    @Test(expected=JdbcSQLException.class)
+    public void testCurrency_2_insertDuplicate() throws Exception {
+        LOG.debug("testCurrency_2_insertDuplicate");
+        //Unique index or primary key violation: "IDX_UNQ_CRRNC_CD ON TEST.CURRENCY(CODE) VALUES ('CAD', 7)"
+        testCurrency_1_insert();
+    }
+
+    public void update(Long id, String code) throws Exception {
+        LOG.debug("update");
         String queryUpdate = "UPDATE " + Table.Names.CURRENCY + " SET " + Table.CURRENCY.CODE + " = ? " +
                 " WHERE " + Table.CURRENCY.ID + " = ?";
+        LOG.debug(queryUpdate);
+        ResultSet rs = null;
+        try (
+                PreparedStatement updatePS = dbConnectionResource.getConnection().prepareStatement(queryUpdate);
+        ){
+            updatePS.setString(1, code);
+            updatePS.setLong(2, id);
+            updatePS.executeUpdate();
+        } finally {
+            if (rs != null) rs.close();
+        }
+    }
+
+    @Test
+    public void testCurrency_3_update() throws Exception {
+        LOG.debug("testCurrency_3_update");
+        String querySelect = "SELECT MAX(" + Table.CURRENCY.ID + ") FROM " + Table.Names.CURRENCY;
         String queryDates = "SELECT " + Table.CURRENCY.ID + " FROM " + Table.Names.CURRENCY +
                 " WHERE " + Table.CURRENCY.ID + " = ?" +
                 " AND " + Table.CURRENCY.T_CREATEDON + " IS NOT NULL" +
                 " AND " + Table.CURRENCY.T_UPDATEDON + " IS NOT NULL" +
                 " AND " + Table.CURRENCY.T_CREATEDON + " != " + Table.CURRENCY.T_UPDATEDON;
         LOG.debug(querySelect);
-        LOG.debug(queryUpdate);
         LOG.debug(queryDates);
         ResultSet rs = null;
         long idMax = 0L;
         try (
                 PreparedStatement selectPS = dbConnectionResource.getConnection().prepareStatement(querySelect);
-                PreparedStatement updatePS = dbConnectionResource.getConnection().prepareStatement(queryUpdate);
                 PreparedStatement selectDatesPS = dbConnectionResource.getConnection().prepareStatement(queryDates);
         ){
             rs = selectPS.executeQuery();
             rs.next();
             idMax = rs.getLong(1);
 
-            updatePS.setString(1, "USD");
-            updatePS.setLong(2, idMax);
-            updatePS.executeUpdate();
+            update(idMax, "USD");
 
             selectDatesPS.setLong(1, idMax);
             rs = selectDatesPS.executeQuery();
@@ -162,7 +185,29 @@ public class TriggerCurrencyTest {
         }
     }
 
-    public void testCurrency_delete() throws Exception {
+    @Test(expected=JdbcSQLException.class)
+    public void testCurrency_4_updateDuplicate() throws Exception {
+        LOG.debug("testCurrency_4_updateDuplicate");
+        String queryDates = "SELECT " + Table.CURRENCY.ID + " FROM " + Table.Names.CURRENCY +
+                " WHERE " + Table.CURRENCY.ID + " = ?" +
+                " AND " + Table.CURRENCY.T_CREATEDON + " IS NOT NULL" +
+                " AND " + Table.CURRENCY.T_UPDATEDON + " IS NOT NULL" +
+                " AND " + Table.CURRENCY.T_CREATEDON + " != " + Table.CURRENCY.T_UPDATEDON;
+        LOG.debug(queryDates);
+        ResultSet rs = null;
+        try {
+            long idJustInserted = insert("EUR", "euro", "Europa''s currency");
+            //"USD" duplicate update, 1st update in method  testFamilyMember_3_update
+            //Unique index or primary key violation: "IDX_UNQ_CRRNC_CD ON TEST.CURRENCY(CODE) VALUES ('USD', 7)"
+            update(idJustInserted, "USD");
+        } finally {
+            if (rs != null) rs.close();
+        }
+    }
+
+    @Test
+    public void testCurrency_5_delete() throws Exception {
+        LOG.debug("testCurrency_5_delete");
         String querySelect = "SELECT MIN(" + Table.CURRENCY.ID + ") FROM " + Table.Names.CURRENCY;
         String queryDelete = "DELETE FROM " + Table.Names.CURRENCY + " WHERE " +
                 Table.CURRENCY.ID + " = ?";
@@ -199,7 +244,7 @@ public class TriggerCurrencyTest {
             JsonObject jsonObject = jsonParser.parse(jsonRow).getAsJsonObject();
             JsonObject rowJsonObject = jsonObject.get(Table.Elements.row.toString()).getAsJsonObject();
 
-            long idFromDeletedRows = rowJsonObject.get(Table.CURRENCY.ID.toString()).getAsLong();
+            long idFromDeletedRows = rowJsonObject.get(Table.FAMILY_MEMBER.ID.toString()).getAsLong();
             assertEquals(true, idMin == idFromDeletedRows);
         } finally {
             if (rs != null) rs.close();
