@@ -98,7 +98,7 @@ public class TableCurrencyTest {
 
     @Test
     public void testCurrency_1_insert() throws Exception {
-        LOG.debug("testFamilyMember_1_insert");
+        LOG.debug("testCurrency_1_insert");
         String queryDates = "SELECT " + Table.CURRENCY.ID + " FROM " + Table.Names.CURRENCY +
                 " WHERE " + Table.CURRENCY.ID + " = ?" +
                 " AND " + Table.CURRENCY.T_CREATEDON + " IS NOT NULL" +
@@ -197,7 +197,7 @@ public class TableCurrencyTest {
         ResultSet rs = null;
         try {
             long idJustInserted = insert("EUR", "euro", "Europa''s currency");
-            //"USD" duplicate update, 1st update in method  testFamilyMember_3_update
+            //"USD" duplicate update, 1st update in method  testCurrency_3_update
             //Unique index or primary key violation: "IDX_UNQ_CRRNC_CD ON TEST.CURRENCY(CODE) VALUES ('USD', 7)"
             update(idJustInserted, "USD");
         } finally {
@@ -244,7 +244,7 @@ public class TableCurrencyTest {
             JsonObject jsonObject = jsonParser.parse(jsonRow).getAsJsonObject();
             JsonObject rowJsonObject = jsonObject.get(Table.Elements.row.toString()).getAsJsonObject();
 
-            long idFromDeletedRows = rowJsonObject.get(Table.FAMILY_MEMBER.ID.toString()).getAsLong();
+            long idFromDeletedRows = rowJsonObject.get(Table.CURRENCY.ID.toString()).getAsLong();
             assertEquals(true, idMin == idFromDeletedRows);
         } finally {
             if (rs != null) rs.close();
