@@ -46,6 +46,7 @@ public class TableFamilyMemberTest {
         String mess1 = "TriggerFamilyMemberTest: Test->BeforeClass";
         System.out.println(mess1);
         LOG.debug(mess1);
+        //        H2DbUtils.setSchema(dbConnectionResource.getConnection(), "TEST");
         H2DbUtilsTest.emptyTable(dbConnectionResource.getConnection(), Table.Names.FAMILY_MEMBER);
     }
 

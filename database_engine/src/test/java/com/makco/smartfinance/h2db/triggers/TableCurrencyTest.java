@@ -45,6 +45,7 @@ public class TableCurrencyTest {
         String mess1 = "TriggerCurrencyTest: Test->BeforeClass";
         System.out.println(mess1);
         LOG.debug(mess1);
+        //        H2DbUtils.setSchema(dbConnectionResource.getConnection(), "TEST");
         H2DbUtilsTest.emptyTable(dbConnectionResource.getConnection(), Table.Names.CURRENCY);
     }
 
