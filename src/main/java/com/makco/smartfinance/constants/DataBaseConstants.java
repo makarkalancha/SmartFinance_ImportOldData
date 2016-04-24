@@ -19,15 +19,15 @@ public class DataBaseConstants {
 
     //family_memeber
     public final static int FM_NAME_MAX_LGTH = 32;
-    public final static int FM_DESCRIPTION_MAX_LGTH = 128;
+    public final static int FM_DESCRIPTION_MAX_LGTH = 512;
 
     //currency
     public final static int CUR_CODE_MAX_LGTH = 3;
     public final static int CUR_NAME_MAX_LGTH = 32;
-    public final static int CUR_DESCRIPTION_MAX_LGTH = 128;
+    public final static int CUR_DESCRIPTION_MAX_LGTH = 512;
 
     //organization
     public final static int ORG_NAME_MAX_LGTH = 32;
-    public final static int ORG_DESCRIPTION_MAX_LGTH = 128;
+    public final static int ORG_DESCRIPTION_MAX_LGTH = 512;
 
 }
