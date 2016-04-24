@@ -3,6 +3,8 @@ package com.makco.smartfinance.h2db.utils;
 import com.makco.smartfinance.h2db.DBConnectionResource;
 import com.makco.smartfinance.h2db.TestContext;
 import com.makco.smartfinance.h2db.utils.schema_constants.Table;
+
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
@@ -22,6 +24,20 @@ public class H2DbUtilsTest {
 
     @ClassRule
     public static DBConnectionResource dbConnectionResource = new DBConnectionResource();
+
+    public static void emptyTable(Connection connection, Table.Names tableName) throws Exception {
+        H2DbUtils.setSchema(connection, TestContext.INSTANCE.DB_SCHEMA());
+        StringBuilder deleteAllFromTableQ = new StringBuilder();
+        deleteAllFromTableQ.append("DELETE FROM ");
+        deleteAllFromTableQ.append(tableName);
+        deleteAllFromTableQ.append(";");
+
+        try (
+                PreparedStatement deletePS = connection.prepareStatement(deleteAllFromTableQ.toString());
+        ) {
+            deletePS.executeUpdate();
+        }
+    }
 
     //comment or remove this method from test suite
 //    @Test

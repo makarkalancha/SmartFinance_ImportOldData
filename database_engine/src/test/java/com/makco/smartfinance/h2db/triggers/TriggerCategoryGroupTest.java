@@ -7,14 +7,8 @@ import com.makco.smartfinance.h2db.DBConnectionResource;
 import com.makco.smartfinance.h2db.TestContext;
 import com.makco.smartfinance.h2db.utils.DBObjectType;
 import com.makco.smartfinance.h2db.utils.H2DbUtils;
-import com.makco.smartfinance.h2db.utils.H2DbUtilsTest;
 import com.makco.smartfinance.h2db.utils.JsonUtils;
 import com.makco.smartfinance.h2db.utils.schema_constants.Table;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.After;
@@ -22,33 +16,34 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
+
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import static org.junit.Assert.assertEquals;
 
 /**
  * User: Makar Kalancha
- * Date: 25/03/2016
- * Time: 12:05
+ * Date: 24/04/2016
+ * Time: 00:54
  */
-public class TriggerFamilyMemberTest {
-    private static final Logger LOG = LogManager.getLogger(TriggerFamilyMemberTest.class);
+public class TriggerCategoryGroupTest {
+    private static final Logger LOG = LogManager.getLogger(TriggerCategoryGroupTest.class);
     private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
     private static final SimpleDateFormat sdfJson = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     @ClassRule
     public static DBConnectionResource dbConnectionResource = new DBConnectionResource();
-    @Rule
-    public final ExpectedException exception = ExpectedException.none();
 
     @BeforeClass
     public static void setUpClass() throws Exception {
         String mess1 = "TriggerFamilyMemberTest: Test->BeforeClass";
         System.out.println(mess1);
         LOG.debug(mess1);
-        H2DbUtilsTest.emptyTable(dbConnectionResource.getConnection(), Table.Names.FAMILY_MEMBER);
     }
 
     @AfterClass
@@ -79,11 +74,9 @@ public class TriggerFamilyMemberTest {
                 DBObjectType.TABLE, Table.Names.FAMILY_MEMBER.toString())){
             H2DbUtils.setSchema(dbConnectionResource.getConnection(), TestContext.INSTANCE.DB_SCHEMA());
 
-            testFamilyMember_insert();
-            testFamilyMember_insertDuplicate();
-            testFamilyMember_update();
-            testFamilyMember_updateDuplicate();
-//            testFamilyMember_delete();
+            testFamilyMemeber_insert();
+            testFamilyMemeber_update();
+            testFamilyMemeber_delete();
 
         } else {
             assert (false);
@@ -91,11 +84,10 @@ public class TriggerFamilyMemberTest {
     }
 
     //    @Test: junit doesn't support order in test (http://stackoverflow.com/questions/3693626/how-to-run-test-methods-in-specific-order-in-junit4)
-    public void testFamilyMember_insert() throws Exception {
-        LOG.debug("testFamilyMember_insert");
+    public void testFamilyMemeber_insert() throws Exception {
         String queryInsert = "INSERT INTO " + Table.Names.FAMILY_MEMBER +
                 " (" + Table.FAMILY_MEMBER.NAME + ", " + Table.FAMILY_MEMBER.DESCRIPTION + ") " +
-                "VALUES('the Flintstones','family')";
+                "VALUES('the Flintstones" + (sdf.format(new Date())) + "','family')";
         String queryDates = "SELECT " + Table.FAMILY_MEMBER.ID + " FROM " + Table.Names.FAMILY_MEMBER +
                 " WHERE " + Table.FAMILY_MEMBER.ID + " = ?" +
                 " AND " + Table.FAMILY_MEMBER.T_CREATEDON + " IS NOT NULL" +
@@ -127,17 +119,11 @@ public class TriggerFamilyMemberTest {
         } finally {
             if (rs != null) rs.close();
         }
+
+
     }
 
-    public void testFamilyMember_insertDuplicate() throws Exception {
-        LOG.debug("testFamilyMember_insertDuplicate");
-        //Unique index or primary key violation: "IDX_UNQ_FMLMMBR_NM ON TEST.FAMILY_MEMBER(NAME) VALUES ('the Flintstones', 9)"
-        exception.expect(org.h2.jdbc.JdbcSQLException.class);
-        testFamilyMember_insert();
-    }
-
-    public void testFamilyMember_update() throws Exception {
-        LOG.debug("testFamilyMember_update");
+    public void testFamilyMemeber_update() throws Exception {
         String querySelect = "SELECT MAX(" + Table.FAMILY_MEMBER.ID + ") FROM " + Table.Names.FAMILY_MEMBER;
         String queryUpdate = "UPDATE " + Table.Names.FAMILY_MEMBER + " SET " + Table.FAMILY_MEMBER.NAME + " = ? " +
                 " WHERE " + Table.FAMILY_MEMBER.ID + " = ?";
@@ -151,6 +137,7 @@ public class TriggerFamilyMemberTest {
         LOG.debug(queryDates);
         ResultSet rs = null;
         long idMax = 0L;
+        long idNewMin = 0L;
         try (
                 PreparedStatement selectPS = dbConnectionResource.getConnection().prepareStatement(querySelect);
                 PreparedStatement updatePS = dbConnectionResource.getConnection().prepareStatement(queryUpdate);
@@ -160,7 +147,7 @@ public class TriggerFamilyMemberTest {
             rs.next();
             idMax = rs.getLong(1);
 
-            updatePS.setString(1, "Barney");
+            updatePS.setString(1, "Barney" + (sdf.format(new Date())));
             updatePS.setLong(2, idMax);
             updatePS.executeUpdate();
 
@@ -175,13 +162,7 @@ public class TriggerFamilyMemberTest {
         }
     }
 
-    public void testFamilyMember_updateDuplicate() throws Exception {
-        LOG.debug("testFamilyMember_updateDuplicate");
-        testFamilyMember_update();
-    }
-
-    public void testFamilyMember_delete() throws Exception {
-        LOG.debug("testFamilyMember_delete");
+    public void testFamilyMemeber_delete() throws Exception {
         String querySelect = "SELECT MIN(" + Table.FAMILY_MEMBER.ID + ") FROM " + Table.Names.FAMILY_MEMBER;
         String queryDelete = "DELETE FROM " + Table.Names.FAMILY_MEMBER + " WHERE " +
                 Table.FAMILY_MEMBER.ID + " = ?";
