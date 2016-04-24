@@ -22,7 +22,7 @@ public class FamilyMemberTest {
     private static EntityManager em;
     private String familyMemberName = "Freddy";
     private String dublicateName = "Twin";
-    private String defaultDescription = "husband";
+    private String defaultDescription = "husband or wife's man";
 
     private static int MIN = 1;
     private static int MAX = 1_000_000;

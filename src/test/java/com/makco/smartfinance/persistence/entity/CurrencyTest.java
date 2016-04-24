@@ -21,7 +21,7 @@ public class CurrencyTest {
     private static EntityManager em;
     private String currencyCode = "CAD";
     private String currencyName = "Canadian Dollar";
-    private String currencyDesc = "Dollar that is used in Canada";
+    private String currencyDesc = "Dollar that is used in Canada or Canada's dollar";
 
     private static int MIN = 1;
     private static int MAX = 100;
