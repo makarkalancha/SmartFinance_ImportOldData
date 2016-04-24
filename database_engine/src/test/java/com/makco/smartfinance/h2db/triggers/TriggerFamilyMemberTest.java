@@ -4,9 +4,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.makco.smartfinance.h2db.DBConnectionResource;
-import com.makco.smartfinance.h2db.TestContext;
-import com.makco.smartfinance.h2db.utils.DBObjectType;
-import com.makco.smartfinance.h2db.utils.H2DbUtils;
 import com.makco.smartfinance.h2db.utils.H2DbUtilsTest;
 import com.makco.smartfinance.h2db.utils.JsonUtils;
 import com.makco.smartfinance.h2db.utils.schema_constants.Table;
@@ -17,14 +14,15 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.h2.jdbc.JdbcSQLException;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
-import org.junit.Rule;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
+import org.junit.runners.MethodSorters;
 
 import static org.junit.Assert.assertEquals;
 
@@ -33,6 +31,9 @@ import static org.junit.Assert.assertEquals;
  * Date: 25/03/2016
  * Time: 12:05
  */
+
+//https://github.com/junit-team/junit4/blob/master/doc/ReleaseNotes4.11.md#test-execution-order
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TriggerFamilyMemberTest {
     private static final Logger LOG = LogManager.getLogger(TriggerFamilyMemberTest.class);
     private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
@@ -40,8 +41,6 @@ public class TriggerFamilyMemberTest {
 
     @ClassRule
     public static DBConnectionResource dbConnectionResource = new DBConnectionResource();
-    @Rule
-    public final ExpectedException exception = ExpectedException.none();
 
     @BeforeClass
     public static void setUpClass() throws Exception {
@@ -73,45 +72,61 @@ public class TriggerFamilyMemberTest {
         LOG.debug(mess1);
     }
 
-    @Test
-    public void testCRUDWithFamilyMemberTable() throws Exception {
-        if(H2DbUtils.checkIfDBObjectExists(dbConnectionResource.getConnection(), TestContext.INSTANCE.DB_SCHEMA(),
-                DBObjectType.TABLE, Table.Names.FAMILY_MEMBER.toString())){
-            H2DbUtils.setSchema(dbConnectionResource.getConnection(), TestContext.INSTANCE.DB_SCHEMA());
+//    @Test
+//    public void testCRUDWithFamilyMemberTable() throws Exception {
+//        if(H2DbUtils.checkIfDBObjectExists(dbConnectionResource.getConnection(), TestContext.INSTANCE.DB_SCHEMA(),
+//                DBObjectType.TABLE, Table.Names.FAMILY_MEMBER.toString())){
+//            H2DbUtils.setSchema(dbConnectionResource.getConnection(), TestContext.INSTANCE.DB_SCHEMA());
+//
+//            testFamilyMember_1_insert();
+//            testFamilyMember_2_insertDuplicate();
+//            testFamilyMember_3_update();
+//            testFamilyMember_4_updateDuplicate();
+////            testFamilyMember_5_delete();
+//
+//        } else {
+//            assert (false);
+//        }
+//    }
 
-            testFamilyMember_insert();
-            testFamilyMember_insertDuplicate();
-            testFamilyMember_update();
-            testFamilyMember_updateDuplicate();
-//            testFamilyMember_delete();
-
-        } else {
-            assert (false);
+    public Long insert(String name, String desc) throws Exception {
+        LOG.debug("insert");
+        String queryInsert = "INSERT INTO " + Table.Names.FAMILY_MEMBER +
+                " (" + Table.FAMILY_MEMBER.NAME + ", " + Table.FAMILY_MEMBER.DESCRIPTION + ") " +
+                "VALUES('" + name + "','" + desc + "')";
+        LOG.debug(queryInsert);
+        ResultSet rs = null;
+        Long result = -1L;
+        try (
+                PreparedStatement insertPS = dbConnectionResource.getConnection().prepareStatement(queryInsert, Statement.RETURN_GENERATED_KEYS);
+        ){
+            insertPS.executeUpdate();
+            rs = insertPS.getGeneratedKeys();
+            rs.next();
+            result = rs.getLong(1);
+            return result;
+        } finally {
+            if(rs != null){
+                rs.close();
+            }
         }
     }
 
     //    @Test: junit doesn't support order in test (http://stackoverflow.com/questions/3693626/how-to-run-test-methods-in-specific-order-in-junit4)
-    public void testFamilyMember_insert() throws Exception {
-        LOG.debug("testFamilyMember_insert");
-        String queryInsert = "INSERT INTO " + Table.Names.FAMILY_MEMBER +
-                " (" + Table.FAMILY_MEMBER.NAME + ", " + Table.FAMILY_MEMBER.DESCRIPTION + ") " +
-                "VALUES('the Flintstones','family')";
+    @Test
+    public void testFamilyMember_1_insert() throws Exception {
+        LOG.debug("testFamilyMember_1_insert");
         String queryDates = "SELECT " + Table.FAMILY_MEMBER.ID + " FROM " + Table.Names.FAMILY_MEMBER +
                 " WHERE " + Table.FAMILY_MEMBER.ID + " = ?" +
                 " AND " + Table.FAMILY_MEMBER.T_CREATEDON + " IS NOT NULL" +
                 " AND " + Table.FAMILY_MEMBER.T_UPDATEDON + " IS NOT NULL" +
                 " AND " + Table.FAMILY_MEMBER.T_CREATEDON + " = " + Table.FAMILY_MEMBER.T_UPDATEDON;
-        LOG.debug(queryInsert);
         LOG.debug(queryDates);
         ResultSet rs = null;
         try (
-            PreparedStatement insertPS = dbConnectionResource.getConnection().prepareStatement(queryInsert, Statement.RETURN_GENERATED_KEYS);
             PreparedStatement selectDatesPS = dbConnectionResource.getConnection().prepareStatement(queryDates);
         ){
-            insertPS.executeUpdate();
-            rs = insertPS.getGeneratedKeys();
-            rs.next();
-            long idJustInserted = rs.getLong(1);
+            long idJustInserted = insert("the Flintstones", "family");
             LOG.debug("idJustInserted > 0: idJustInserted=" + idJustInserted);
             assert (idJustInserted > 0);
             selectDatesPS.setLong(1, idJustInserted);
@@ -129,40 +144,53 @@ public class TriggerFamilyMemberTest {
         }
     }
 
-    public void testFamilyMember_insertDuplicate() throws Exception {
-        LOG.debug("testFamilyMember_insertDuplicate");
+    @Test(expected=JdbcSQLException.class)
+    public void testFamilyMember_2_insertDuplicate() throws Exception {
+        LOG.debug("testFamilyMember_2_insertDuplicate");
         //Unique index or primary key violation: "IDX_UNQ_FMLMMBR_NM ON TEST.FAMILY_MEMBER(NAME) VALUES ('the Flintstones', 9)"
-        exception.expect(org.h2.jdbc.JdbcSQLException.class);
-        testFamilyMember_insert();
+        testFamilyMember_1_insert();
     }
 
-    public void testFamilyMember_update() throws Exception {
-        LOG.debug("testFamilyMember_update");
-        String querySelect = "SELECT MAX(" + Table.FAMILY_MEMBER.ID + ") FROM " + Table.Names.FAMILY_MEMBER;
+    public void update(Long id, String name) throws Exception {
+        LOG.debug("update");
         String queryUpdate = "UPDATE " + Table.Names.FAMILY_MEMBER + " SET " + Table.FAMILY_MEMBER.NAME + " = ? " +
                 " WHERE " + Table.FAMILY_MEMBER.ID + " = ?";
+        LOG.debug(queryUpdate);
+        ResultSet rs = null;
+        long idMax = 0L;
+        try (
+                PreparedStatement updatePS = dbConnectionResource.getConnection().prepareStatement(queryUpdate);
+        ){
+            updatePS.setString(1, name);
+            updatePS.setLong(2, id);
+            updatePS.executeUpdate();
+        } finally {
+            if (rs != null) rs.close();
+        }
+    }
+
+    @Test
+    public void testFamilyMember_3_update() throws Exception {
+        LOG.debug("testFamilyMember_3_update");
+        String querySelect = "SELECT MAX(" + Table.FAMILY_MEMBER.ID + ") FROM " + Table.Names.FAMILY_MEMBER;
         String queryDates = "SELECT " + Table.FAMILY_MEMBER.ID + " FROM " + Table.Names.FAMILY_MEMBER +
                 " WHERE " + Table.FAMILY_MEMBER.ID + " = ?" +
                 " AND " + Table.FAMILY_MEMBER.T_CREATEDON + " IS NOT NULL" +
                 " AND " + Table.FAMILY_MEMBER.T_UPDATEDON + " IS NOT NULL" +
                 " AND " + Table.FAMILY_MEMBER.T_CREATEDON + " != " + Table.FAMILY_MEMBER.T_UPDATEDON;
         LOG.debug(querySelect);
-        LOG.debug(queryUpdate);
         LOG.debug(queryDates);
         ResultSet rs = null;
         long idMax = 0L;
         try (
                 PreparedStatement selectPS = dbConnectionResource.getConnection().prepareStatement(querySelect);
-                PreparedStatement updatePS = dbConnectionResource.getConnection().prepareStatement(queryUpdate);
                 PreparedStatement selectDatesPS = dbConnectionResource.getConnection().prepareStatement(queryDates);
         ){
             rs = selectPS.executeQuery();
             rs.next();
             idMax = rs.getLong(1);
 
-            updatePS.setString(1, "Barney");
-            updatePS.setLong(2, idMax);
-            updatePS.executeUpdate();
+            update(idMax, "Barney");
 
             selectDatesPS.setLong(1, idMax);
             rs = selectDatesPS.executeQuery();
@@ -175,13 +203,29 @@ public class TriggerFamilyMemberTest {
         }
     }
 
-    public void testFamilyMember_updateDuplicate() throws Exception {
-        LOG.debug("testFamilyMember_updateDuplicate");
-        testFamilyMember_update();
+    //Unique index or primary key violation: "IDX_UNQ_FMLMMBR_NM ON TEST.FAMILY_MEMBER(NAME)
+    @Test(expected=JdbcSQLException.class)
+    public void testFamilyMember_4_updateDuplicate() throws Exception {
+        LOG.debug("testFamilyMember_4_updateDuplicate");
+        String queryDates = "SELECT " + Table.FAMILY_MEMBER.ID + " FROM " + Table.Names.FAMILY_MEMBER +
+                " WHERE " + Table.FAMILY_MEMBER.ID + " = ?" +
+                " AND " + Table.FAMILY_MEMBER.T_CREATEDON + " IS NOT NULL" +
+                " AND " + Table.FAMILY_MEMBER.T_UPDATEDON + " IS NOT NULL" +
+                " AND " + Table.FAMILY_MEMBER.T_CREATEDON + " != " + Table.FAMILY_MEMBER.T_UPDATEDON;
+        LOG.debug(queryDates);
+        ResultSet rs = null;
+        try {
+            long idJustInserted = insert("Wilma", "Fred''s wife");
+            //"Barney" duplicate update, 1st update in method  testFamilyMember_3_update
+            update(idJustInserted, "Barney");
+        } finally {
+            if (rs != null) rs.close();
+        }
     }
 
-    public void testFamilyMember_delete() throws Exception {
-        LOG.debug("testFamilyMember_delete");
+    @Test
+    public void testFamilyMember_5_delete() throws Exception {
+        LOG.debug("testFamilyMember_5_delete");
         String querySelect = "SELECT MIN(" + Table.FAMILY_MEMBER.ID + ") FROM " + Table.Names.FAMILY_MEMBER;
         String queryDelete = "DELETE FROM " + Table.Names.FAMILY_MEMBER + " WHERE " +
                 Table.FAMILY_MEMBER.ID + " = ?";
