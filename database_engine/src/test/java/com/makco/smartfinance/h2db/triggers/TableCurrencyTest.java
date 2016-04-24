@@ -4,9 +4,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.makco.smartfinance.h2db.DBConnectionResource;
-import com.makco.smartfinance.h2db.TestContext;
-import com.makco.smartfinance.h2db.utils.DBObjectType;
-import com.makco.smartfinance.h2db.utils.H2DbUtils;
 import com.makco.smartfinance.h2db.utils.H2DbUtilsTest;
 import com.makco.smartfinance.h2db.utils.JsonUtils;
 import com.makco.smartfinance.h2db.utils.schema_constants.Table;
@@ -97,8 +94,8 @@ public class TableCurrencyTest {
     }
 
     @Test
-    public void testCurrency_1_insert() throws Exception {
-        LOG.debug("testCurrency_1_insert");
+    public void testCurrency_11_insert() throws Exception {
+        LOG.debug("testCurrency_11_insert");
         String queryDates = "SELECT " + Table.CURRENCY.ID + " FROM " + Table.Names.CURRENCY +
                 " WHERE " + Table.CURRENCY.ID + " = ?" +
                 " AND " + Table.CURRENCY.T_CREATEDON + " IS NOT NULL" +
@@ -128,10 +125,10 @@ public class TableCurrencyTest {
     }
 
     @Test(expected=JdbcSQLException.class)
-    public void testCurrency_2_insertDuplicate() throws Exception {
-        LOG.debug("testCurrency_2_insertDuplicate");
+    public void testCurrency_12_insertDuplicate() throws Exception {
+        LOG.debug("testCurrency_12_insertDuplicate");
         //Unique index or primary key violation: "IDX_UNQ_CRRNC_CD ON TEST.CURRENCY(CODE) VALUES ('CAD', 7)"
-        testCurrency_1_insert();
+        testCurrency_11_insert();
     }
 
     public void update(Long id, String code) throws Exception {
@@ -152,8 +149,8 @@ public class TableCurrencyTest {
     }
 
     @Test
-    public void testCurrency_3_update() throws Exception {
-        LOG.debug("testCurrency_3_update");
+    public void testCurrency_21_update() throws Exception {
+        LOG.debug("testCurrency_21_update");
         String querySelect = "SELECT MAX(" + Table.CURRENCY.ID + ") FROM " + Table.Names.CURRENCY;
         String queryDates = "SELECT " + Table.CURRENCY.ID + " FROM " + Table.Names.CURRENCY +
                 " WHERE " + Table.CURRENCY.ID + " = ?" +
@@ -186,8 +183,8 @@ public class TableCurrencyTest {
     }
 
     @Test(expected=JdbcSQLException.class)
-    public void testCurrency_4_updateDuplicate() throws Exception {
-        LOG.debug("testCurrency_4_updateDuplicate");
+    public void testCurrency_22_updateDuplicate() throws Exception {
+        LOG.debug("testCurrency_22_updateDuplicate");
         String queryDates = "SELECT " + Table.CURRENCY.ID + " FROM " + Table.Names.CURRENCY +
                 " WHERE " + Table.CURRENCY.ID + " = ?" +
                 " AND " + Table.CURRENCY.T_CREATEDON + " IS NOT NULL" +
@@ -197,7 +194,7 @@ public class TableCurrencyTest {
         ResultSet rs = null;
         try {
             long idJustInserted = insert("EUR", "euro", "Europa''s currency");
-            //"USD" duplicate update, 1st update in method  testCurrency_3_update
+            //"USD" duplicate update, 1st update in method  testCurrency_21_update
             //Unique index or primary key violation: "IDX_UNQ_CRRNC_CD ON TEST.CURRENCY(CODE) VALUES ('USD', 7)"
             update(idJustInserted, "USD");
         } finally {
@@ -206,8 +203,8 @@ public class TableCurrencyTest {
     }
 
     @Test
-    public void testCurrency_5_delete() throws Exception {
-        LOG.debug("testCurrency_5_delete");
+    public void testCurrency_31_delete() throws Exception {
+        LOG.debug("testCurrency_31_delete");
         String querySelect = "SELECT MIN(" + Table.CURRENCY.ID + ") FROM " + Table.Names.CURRENCY;
         String queryDelete = "DELETE FROM " + Table.Names.CURRENCY + " WHERE " +
                 Table.CURRENCY.ID + " = ?";

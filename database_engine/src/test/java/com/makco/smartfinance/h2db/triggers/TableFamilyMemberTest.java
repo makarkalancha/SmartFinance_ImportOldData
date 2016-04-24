@@ -96,8 +96,8 @@ public class TableFamilyMemberTest {
 
     //    @Test: junit doesn't support order in test (http://stackoverflow.com/questions/3693626/how-to-run-test-methods-in-specific-order-in-junit4)
     @Test
-    public void testFamilyMember_1_insert() throws Exception {
-        LOG.debug("testFamilyMember_1_insert");
+    public void testFamilyMember_11_insert() throws Exception {
+        LOG.debug("testFamilyMember_11_insert");
         String queryDates = "SELECT " + Table.FAMILY_MEMBER.ID + " FROM " + Table.Names.FAMILY_MEMBER +
                 " WHERE " + Table.FAMILY_MEMBER.ID + " = ?" +
                 " AND " + Table.FAMILY_MEMBER.T_CREATEDON + " IS NOT NULL" +
@@ -127,10 +127,10 @@ public class TableFamilyMemberTest {
     }
 
     @Test(expected=JdbcSQLException.class)
-    public void testFamilyMember_2_insertDuplicate() throws Exception {
-        LOG.debug("testFamilyMember_2_insertDuplicate");
+    public void testFamilyMember_12_insertDuplicate() throws Exception {
+        LOG.debug("testFamilyMember_12_insertDuplicate");
         //Unique index or primary key violation: "IDX_UNQ_FMLMMBR_NM ON TEST.FAMILY_MEMBER(NAME) VALUES ('the Flintstones', 9)"
-        testFamilyMember_1_insert();
+        testFamilyMember_11_insert();
     }
 
     public void update(Long id, String name) throws Exception {
@@ -151,8 +151,8 @@ public class TableFamilyMemberTest {
     }
 
     @Test
-    public void testFamilyMember_3_update() throws Exception {
-        LOG.debug("testFamilyMember_3_update");
+    public void testFamilyMember_21_update() throws Exception {
+        LOG.debug("testFamilyMember_21_update");
         String querySelect = "SELECT MAX(" + Table.FAMILY_MEMBER.ID + ") FROM " + Table.Names.FAMILY_MEMBER;
         String queryDates = "SELECT " + Table.FAMILY_MEMBER.ID + " FROM " + Table.Names.FAMILY_MEMBER +
                 " WHERE " + Table.FAMILY_MEMBER.ID + " = ?" +
@@ -186,8 +186,8 @@ public class TableFamilyMemberTest {
 
     //Unique index or primary key violation: "IDX_UNQ_FMLMMBR_NM ON TEST.FAMILY_MEMBER(NAME)
     @Test(expected=JdbcSQLException.class)
-    public void testFamilyMember_4_updateDuplicate() throws Exception {
-        LOG.debug("testFamilyMember_4_updateDuplicate");
+    public void testFamilyMember_22_updateDuplicate() throws Exception {
+        LOG.debug("testFamilyMember_22_updateDuplicate");
         String queryDates = "SELECT " + Table.FAMILY_MEMBER.ID + " FROM " + Table.Names.FAMILY_MEMBER +
                 " WHERE " + Table.FAMILY_MEMBER.ID + " = ?" +
                 " AND " + Table.FAMILY_MEMBER.T_CREATEDON + " IS NOT NULL" +
@@ -197,7 +197,7 @@ public class TableFamilyMemberTest {
         ResultSet rs = null;
         try {
             long idJustInserted = insert("Wilma", "Fred''s wife");
-            //"Barney" duplicate update, 1st update in method  testFamilyMember_3_update
+            //"Barney" duplicate update, 1st update in method  testFamilyMember_21_update
             update(idJustInserted, "Barney");
         } finally {
             if (rs != null) rs.close();
@@ -205,8 +205,8 @@ public class TableFamilyMemberTest {
     }
 
     @Test
-    public void testFamilyMember_5_delete() throws Exception {
-        LOG.debug("testFamilyMember_5_delete");
+    public void testFamilyMember_31_delete() throws Exception {
+        LOG.debug("testFamilyMember_31_delete");
         String querySelect = "SELECT MIN(" + Table.FAMILY_MEMBER.ID + ") FROM " + Table.Names.FAMILY_MEMBER;
         String queryDelete = "DELETE FROM " + Table.Names.FAMILY_MEMBER + " WHERE " +
                 Table.FAMILY_MEMBER.ID + " = ?";
@@ -308,5 +308,4 @@ public class TableFamilyMemberTest {
         Date updatedOn = sdfJson.parse(rowJsonObject.get(Table.FAMILY_MEMBER.T_UPDATEDON.toString()).getAsString());
         assertEquals(sdfJson.parse("2006-05-04 03:02:01"), updatedOn);
     }
-
 }

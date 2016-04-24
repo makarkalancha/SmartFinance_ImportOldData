@@ -4,9 +4,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.makco.smartfinance.h2db.DBConnectionResource;
-import com.makco.smartfinance.h2db.TestContext;
-import com.makco.smartfinance.h2db.utils.DBObjectType;
-import com.makco.smartfinance.h2db.utils.H2DbUtils;
 import com.makco.smartfinance.h2db.utils.H2DbUtilsTest;
 import com.makco.smartfinance.h2db.utils.JsonUtils;
 import com.makco.smartfinance.h2db.utils.schema_constants.Table;
@@ -97,8 +94,8 @@ public class TableOrganizationTest {
     }
 
     @Test
-    public void testOrganization_1_insert() throws Exception {
-        LOG.debug("testOrganization_1_insert");
+    public void testOrganization_11_insert() throws Exception {
+        LOG.debug("testOrganization_11_insert");
         String queryDates = "SELECT " + Table.ORGANIZATION.ID + " FROM " + Table.Names.ORGANIZATION +
                 " WHERE " + Table.ORGANIZATION.ID + " = ?" +
                 " AND " + Table.ORGANIZATION.T_CREATEDON + " IS NOT NULL" +
@@ -128,10 +125,10 @@ public class TableOrganizationTest {
     }
 
     @Test(expected=JdbcSQLException.class)
-    public void testOrganization_2_insertDuplicate() throws Exception {
-        LOG.debug("testOrganization_2_insertDuplicate");
+    public void testOrganization_12_insertDuplicate() throws Exception {
+        LOG.debug("testOrganization_12_insertDuplicate");
         //Unique index or primary key violation: "IDX_UNQ_ORGNZTN_NM ON TEST.ORGANIZATION(NAME) VALUES ('Walmart', 1)"
-        testOrganization_1_insert();
+        testOrganization_11_insert();
     }
 
     public void update(Long id, String name) throws Exception {
@@ -152,8 +149,8 @@ public class TableOrganizationTest {
     }
 
     @Test
-    public void testOrganization_3_update() throws Exception {
-        LOG.debug("testOrganization_3_update");
+    public void testOrganization_21_update() throws Exception {
+        LOG.debug("testOrganization_21_update");
         String querySelect = "SELECT MAX(" + Table.ORGANIZATION.ID + ") FROM " + Table.Names.ORGANIZATION;
         String queryDates = "SELECT " + Table.ORGANIZATION.ID + " FROM " + Table.Names.ORGANIZATION +
                 " WHERE " + Table.ORGANIZATION.ID + " = ?" +
@@ -186,8 +183,8 @@ public class TableOrganizationTest {
     }
 
     @Test(expected=JdbcSQLException.class)
-    public void testOrganization_4_updateDuplicate() throws Exception {
-        LOG.debug("testOrganization_4_updateDuplicate");
+    public void testOrganization_22_updateDuplicate() throws Exception {
+        LOG.debug("testOrganization_22_updateDuplicate");
         String queryDates = "SELECT " + Table.ORGANIZATION.ID + " FROM " + Table.Names.ORGANIZATION +
                 " WHERE " + Table.ORGANIZATION.ID + " = ?" +
                 " AND " + Table.ORGANIZATION.T_CREATEDON + " IS NOT NULL" +
@@ -197,7 +194,7 @@ public class TableOrganizationTest {
         ResultSet rs = null;
         try {
             long idJustInserted = insert("Loblaw''s", "shop");
-            //"IGA" duplicate update, 1st update in method  testOrganization_3_update
+            //"IGA" duplicate update, 1st update in method  testOrganization_21_update
             //Unique index or primary key violation: "IDX_UNQ_ORGNZTN_NM ON TEST.ORGANIZATION(NAME) VALUES ('IGA', 1)"
             update(idJustInserted, "IGA");
         } finally {
@@ -206,7 +203,7 @@ public class TableOrganizationTest {
     }
 
     @Test
-    public void testOrganization_5_delete() throws Exception {
+    public void testOrganization_31_delete() throws Exception {
         String querySelect = "SELECT MIN(" + Table.ORGANIZATION.ID + ") FROM " + Table.Names.ORGANIZATION;
         String queryDelete = "DELETE FROM " + Table.Names.ORGANIZATION + " WHERE " +
                 Table.ORGANIZATION.ID + " = ?";
