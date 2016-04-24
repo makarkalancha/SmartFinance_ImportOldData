@@ -12,12 +12,15 @@ import com.makco.smartfinance.h2db.utils.JsonUtils;
 import com.makco.smartfinance.h2db.utils.schema_constants.Table;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.h2.jdbc.JdbcSQLException;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.junit.runners.MethodSorters;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -32,10 +35,9 @@ import static org.junit.Assert.assertEquals;
  * Date: 24/04/2016
  * Time: 00:54
  */
-//TODO fix test like in TriggerFamilyMemberTest
-public class TriggerOrganizationTest {
-    private static final Logger LOG = LogManager.getLogger(TriggerOrganizationTest.class);
-    private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+public class TableOrganizationTest {
+    private static final Logger LOG = LogManager.getLogger(TableOrganizationTest.class);
     private static final SimpleDateFormat sdfJson = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     @ClassRule
@@ -71,42 +73,43 @@ public class TriggerOrganizationTest {
         LOG.debug(mess1);
     }
 
-    @Test
-    public void testCRUDWithOrganizationTable() throws Exception {
-        if(H2DbUtils.checkIfDBObjectExists(dbConnectionResource.getConnection(), TestContext.INSTANCE.DB_SCHEMA(),
-                DBObjectType.TABLE, Table.Names.ORGANIZATION.toString())){
-            H2DbUtils.setSchema(dbConnectionResource.getConnection(), TestContext.INSTANCE.DB_SCHEMA());
-
-            testOrganization_insert();
-            testOrganization_update();
-            testOrganization_delete();
-
-        } else {
-            assert (false);
+    public Long insert(String name, String desc) throws Exception {
+        LOG.debug("insert");
+        String queryInsert = "INSERT INTO " + Table.Names.ORGANIZATION +
+                " (" + Table.ORGANIZATION.NAME + ", " + Table.ORGANIZATION.DESCRIPTION + ") " +
+                "VALUES('" + name + "','" + desc + "')";
+        LOG.debug(queryInsert);
+        ResultSet rs = null;
+        Long result = -1L;
+        try (
+                PreparedStatement insertPS = dbConnectionResource.getConnection().prepareStatement(queryInsert, Statement.RETURN_GENERATED_KEYS);
+        ){
+            insertPS.executeUpdate();
+            rs = insertPS.getGeneratedKeys();
+            rs.next();
+            result = rs.getLong(1);
+            return result;
+        } finally {
+            if(rs != null){
+                rs.close();
+            }
         }
     }
 
-    //    @Test: junit doesn't support order in test (http://stackoverflow.com/questions/3693626/how-to-run-test-methods-in-specific-order-in-junit4)
-    public void testOrganization_insert() throws Exception {
-        String queryInsert = "INSERT INTO " + Table.Names.ORGANIZATION +
-                " (" + Table.ORGANIZATION.NAME + ", " + Table.ORGANIZATION.DESCRIPTION + ") " +
-                "VALUES('the Flintstones" + (sdf.format(new Date())) + "','family')";
+    @Test
+    public void testOrganization_1_insert() throws Exception {
+        LOG.debug("testOrganization_1_insert");
         String queryDates = "SELECT " + Table.ORGANIZATION.ID + " FROM " + Table.Names.ORGANIZATION +
                 " WHERE " + Table.ORGANIZATION.ID + " = ?" +
                 " AND " + Table.ORGANIZATION.T_CREATEDON + " IS NOT NULL" +
                 " AND " + Table.ORGANIZATION.T_UPDATEDON + " IS NOT NULL" +
                 " AND " + Table.ORGANIZATION.T_CREATEDON + " = " + Table.ORGANIZATION.T_UPDATEDON;
-        LOG.debug(queryInsert);
         LOG.debug(queryDates);
         ResultSet rs = null;
         try (
-            PreparedStatement insertPS = dbConnectionResource.getConnection().prepareStatement(queryInsert, Statement.RETURN_GENERATED_KEYS);
-            PreparedStatement selectDatesPS = dbConnectionResource.getConnection().prepareStatement(queryDates);
+                PreparedStatement selectDatesPS = dbConnectionResource.getConnection().prepareStatement(queryDates);
         ){
-            insertPS.executeUpdate();
-            rs = insertPS.getGeneratedKeys();
-            rs.next();
-            long idJustInserted = rs.getLong(1);
+            long idJustInserted = insert("Walmart", "shop");
             LOG.debug("idJustInserted > 0: idJustInserted=" + idJustInserted);
             assert (idJustInserted > 0);
             selectDatesPS.setLong(1, idJustInserted);
@@ -122,37 +125,54 @@ public class TriggerOrganizationTest {
         } finally {
             if (rs != null) rs.close();
         }
-
-
     }
 
-    public void testOrganization_update() throws Exception {
-        String querySelect = "SELECT MAX(" + Table.ORGANIZATION.ID + ") FROM " + Table.Names.ORGANIZATION;
+    @Test(expected=JdbcSQLException.class)
+    public void testOrganization_2_insertDuplicate() throws Exception {
+        LOG.debug("testOrganization_2_insertDuplicate");
+        //Unique index or primary key violation: "IDX_UNQ_ORGNZTN_NM ON TEST.ORGANIZATION(NAME) VALUES ('Walmart', 1)"
+        testOrganization_1_insert();
+    }
+
+    public void update(Long id, String name) throws Exception {
+        LOG.debug("update");
         String queryUpdate = "UPDATE " + Table.Names.ORGANIZATION + " SET " + Table.ORGANIZATION.NAME + " = ? " +
                 " WHERE " + Table.ORGANIZATION.ID + " = ?";
+        LOG.debug(queryUpdate);
+        ResultSet rs = null;
+        try (
+                PreparedStatement updatePS = dbConnectionResource.getConnection().prepareStatement(queryUpdate);
+        ){
+            updatePS.setString(1, name);
+            updatePS.setLong(2, id);
+            updatePS.executeUpdate();
+        } finally {
+            if (rs != null) rs.close();
+        }
+    }
+
+    @Test
+    public void testOrganization_3_update() throws Exception {
+        LOG.debug("testOrganization_3_update");
+        String querySelect = "SELECT MAX(" + Table.ORGANIZATION.ID + ") FROM " + Table.Names.ORGANIZATION;
         String queryDates = "SELECT " + Table.ORGANIZATION.ID + " FROM " + Table.Names.ORGANIZATION +
                 " WHERE " + Table.ORGANIZATION.ID + " = ?" +
                 " AND " + Table.ORGANIZATION.T_CREATEDON + " IS NOT NULL" +
                 " AND " + Table.ORGANIZATION.T_UPDATEDON + " IS NOT NULL" +
                 " AND " + Table.ORGANIZATION.T_CREATEDON + " != " + Table.ORGANIZATION.T_UPDATEDON;
         LOG.debug(querySelect);
-        LOG.debug(queryUpdate);
         LOG.debug(queryDates);
         ResultSet rs = null;
         long idMax = 0L;
-        long idNewMin = 0L;
         try (
                 PreparedStatement selectPS = dbConnectionResource.getConnection().prepareStatement(querySelect);
-                PreparedStatement updatePS = dbConnectionResource.getConnection().prepareStatement(queryUpdate);
                 PreparedStatement selectDatesPS = dbConnectionResource.getConnection().prepareStatement(queryDates);
         ){
             rs = selectPS.executeQuery();
             rs.next();
             idMax = rs.getLong(1);
 
-            updatePS.setString(1, "Barney" + (sdf.format(new Date())));
-            updatePS.setLong(2, idMax);
-            updatePS.executeUpdate();
+            update(idMax, "IGA");
 
             selectDatesPS.setLong(1, idMax);
             rs = selectDatesPS.executeQuery();
@@ -165,7 +185,28 @@ public class TriggerOrganizationTest {
         }
     }
 
-    public void testOrganization_delete() throws Exception {
+    @Test(expected=JdbcSQLException.class)
+    public void testOrganization_4_updateDuplicate() throws Exception {
+        LOG.debug("testOrganization_4_updateDuplicate");
+        String queryDates = "SELECT " + Table.ORGANIZATION.ID + " FROM " + Table.Names.ORGANIZATION +
+                " WHERE " + Table.ORGANIZATION.ID + " = ?" +
+                " AND " + Table.ORGANIZATION.T_CREATEDON + " IS NOT NULL" +
+                " AND " + Table.ORGANIZATION.T_UPDATEDON + " IS NOT NULL" +
+                " AND " + Table.ORGANIZATION.T_CREATEDON + " != " + Table.ORGANIZATION.T_UPDATEDON;
+        LOG.debug(queryDates);
+        ResultSet rs = null;
+        try {
+            long idJustInserted = insert("Loblaw''s", "shop");
+            //"IGA" duplicate update, 1st update in method  testOrganization_3_update
+            //Unique index or primary key violation: "IDX_UNQ_ORGNZTN_NM ON TEST.ORGANIZATION(NAME) VALUES ('IGA', 1)"
+            update(idJustInserted, "IGA");
+        } finally {
+            if (rs != null) rs.close();
+        }
+    }
+
+    @Test
+    public void testOrganization_5_delete() throws Exception {
         String querySelect = "SELECT MIN(" + Table.ORGANIZATION.ID + ") FROM " + Table.Names.ORGANIZATION;
         String queryDelete = "DELETE FROM " + Table.Names.ORGANIZATION + " WHERE " +
                 Table.ORGANIZATION.ID + " = ?";
