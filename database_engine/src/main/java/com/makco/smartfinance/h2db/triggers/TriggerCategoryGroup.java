@@ -37,7 +37,7 @@ public class TriggerCategoryGroup extends AbstractTrigger {
     protected void prepareJsonForDeletion(Object[] oldRow) {
         rowJson.addProperty(Table.CATEGORY_GROUP.ID.toString(), (Long) oldRow[Table.CATEGORY_GROUP.ID.getColumnIndex()]);
         rowJson.addProperty(Table.CATEGORY_GROUP.TYPE.toString(),
-                (Character) oldRow[Table.CATEGORY_GROUP.TYPE.getColumnIndex()]);
+                (String) oldRow[Table.CATEGORY_GROUP.TYPE.getColumnIndex()]);
         rowJson.addProperty(Table.CATEGORY_GROUP.NAME.toString(),
                 (String) oldRow[Table.CATEGORY_GROUP.NAME.getColumnIndex()]);
         rowJson.addProperty(Table.CATEGORY_GROUP.DESCRIPTION.toString(),
