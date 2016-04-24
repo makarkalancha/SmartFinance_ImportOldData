@@ -32,6 +32,7 @@ import static org.junit.Assert.assertEquals;
  * Date: 24/04/2016
  * Time: 00:54
  */
+//TODO fix test like in TriggerFamilyMemberTest
 public class TriggerCurrencyTest {
     private static final Logger LOG = LogManager.getLogger(TriggerCurrencyTest.class);
     private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
