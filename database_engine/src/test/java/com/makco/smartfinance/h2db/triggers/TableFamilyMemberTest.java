@@ -34,9 +34,8 @@ import static org.junit.Assert.assertEquals;
 
 //https://github.com/junit-team/junit4/blob/master/doc/ReleaseNotes4.11.md#test-execution-order
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class TriggerFamilyMemberTest {
-    private static final Logger LOG = LogManager.getLogger(TriggerFamilyMemberTest.class);
-    private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+public class TableFamilyMemberTest {
+    private static final Logger LOG = LogManager.getLogger(TableFamilyMemberTest.class);
     private static final SimpleDateFormat sdfJson = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     @ClassRule
@@ -71,23 +70,6 @@ public class TriggerFamilyMemberTest {
         System.out.println(mess1);
         LOG.debug(mess1);
     }
-
-//    @Test
-//    public void testCRUDWithFamilyMemberTable() throws Exception {
-//        if(H2DbUtils.checkIfDBObjectExists(dbConnectionResource.getConnection(), TestContext.INSTANCE.DB_SCHEMA(),
-//                DBObjectType.TABLE, Table.Names.FAMILY_MEMBER.toString())){
-//            H2DbUtils.setSchema(dbConnectionResource.getConnection(), TestContext.INSTANCE.DB_SCHEMA());
-//
-//            testFamilyMember_1_insert();
-//            testFamilyMember_2_insertDuplicate();
-//            testFamilyMember_3_update();
-//            testFamilyMember_4_updateDuplicate();
-////            testFamilyMember_5_delete();
-//
-//        } else {
-//            assert (false);
-//        }
-//    }
 
     public Long insert(String name, String desc) throws Exception {
         LOG.debug("insert");
@@ -157,7 +139,6 @@ public class TriggerFamilyMemberTest {
                 " WHERE " + Table.FAMILY_MEMBER.ID + " = ?";
         LOG.debug(queryUpdate);
         ResultSet rs = null;
-        long idMax = 0L;
         try (
                 PreparedStatement updatePS = dbConnectionResource.getConnection().prepareStatement(queryUpdate);
         ){
