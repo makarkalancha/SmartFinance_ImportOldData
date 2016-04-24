@@ -3,6 +3,7 @@ package com.makco.smartfinance.h2db.triggers;
 import com.makco.smartfinance.h2db.utils.schema_constants.Table;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 
 /**
  * User: Makar Kalancha
@@ -13,7 +14,7 @@ public class TriggerDateUnit extends AbstractTrigger {
 
     @Override
     protected void insert(Connection connection, Object[] oldRow, Object[] newRow) throws SQLException {
-        newRow[Table.DATEUNIT.T_CREATEDON.getColumnIndex()] = new java.sql.Timestamp(now.getTime());
+        newRow[Table.DATEUNIT.T_CREATEDON.getColumnIndex()] = Timestamp.valueOf(now);
     }
 
     @Override

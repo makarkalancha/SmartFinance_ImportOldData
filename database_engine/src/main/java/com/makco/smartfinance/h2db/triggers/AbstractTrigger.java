@@ -5,6 +5,9 @@ import com.makco.smartfinance.h2db.utils.schema_constants.Table;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.h2.api.Trigger;
@@ -35,7 +38,8 @@ public abstract class AbstractTrigger implements Trigger {
         queryStrB.append(") VALUES(?,?,?)");
     }
 
-    protected java.util.Date now;
+//    protected java.util.Date now;
+    protected LocalDateTime now;
     private int type;
     private String schemaName;
     private String tableName;
@@ -64,7 +68,8 @@ public abstract class AbstractTrigger implements Trigger {
         LOG.debug(logTriggerName());
 //        LOG.debug("before oldRow:" + Arrays.toString(oldRow));
 //        LOG.debug("before newRow:" + Arrays.toString(newRow));
-        now = new java.util.Date();
+//        now = new java.util.Date();
+        now = LocalDateTime.now();
 //        LOG.debug("now: " + now);
         if (Trigger.INSERT == type) {
 //            LOG.debug("operation type: Trigger.INSERT." + type);
