@@ -191,6 +191,38 @@ public class TableCategoryTest {
         }
     }
 
+    //Referential integrity constraint violation: "CONSTRAINT_31: TEST.CATEGORY FOREIGN KEY(CATEGORY_GROUP_ID, CATEGORY_GROUP_TYPE) REFERENCES TEST.CATEGORY_GROUP(ID, TYPE) (1, 'D')"
+    @Test(expected=JdbcSQLException.class)
+    public void testCategory_14_insertCategory_DifferentType() throws Exception {
+        LOG.debug("testCategory_11_insert");
+        String queryDates = "SELECT " + Table.CATEGORY.ID + " FROM " + Table.Names.CATEGORY +
+                " WHERE " + Table.CATEGORY.ID + " = ?" +
+                " AND " + Table.CATEGORY.T_CREATEDON + " IS NOT NULL" +
+                " AND " + Table.CATEGORY.T_UPDATEDON + " IS NOT NULL" +
+                " AND " + Table.CATEGORY.T_CREATEDON + " = " + Table.CATEGORY.T_UPDATEDON;
+        LOG.debug(queryDates);
+        ResultSet rs = null;
+        try (
+                PreparedStatement selectDatesPS = dbConnectionResource.getConnection().prepareStatement(queryDates);
+        ){
+            long idJustInserted = insertCategory(categoryGroupIdMain, "D", "CG:Main->cat4", "category 4");
+            LOG.debug("idJustInserted > 0: idJustInserted=" + idJustInserted);
+            assert (idJustInserted > 0);
+            selectDatesPS.setLong(1, idJustInserted);
+            rs = selectDatesPS.executeQuery();
+            rs.next();
+            long idWithDates = rs.getLong(1);
+            LOG.debug("idWithDates > 0: idWithDates=" + idWithDates);
+            LOG.debug("idJustInserted == idWithDates: " + (idJustInserted == idWithDates) +
+                    "; idJustInserted=" + idJustInserted +
+                    "; idWithDates=" + idWithDates);
+            assert (idWithDates > 0);
+            assert (idJustInserted == idWithDates);
+        } finally {
+            if (rs != null) rs.close();
+        }
+    }
+
     public void update(Long id, String name) throws Exception {
         LOG.debug("update");
         String queryUpdate = "UPDATE " + Table.Names.CATEGORY + " SET " + Table.CATEGORY.NAME + " = ? " +
