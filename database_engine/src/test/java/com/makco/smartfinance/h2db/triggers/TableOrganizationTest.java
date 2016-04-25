@@ -7,6 +7,11 @@ import com.makco.smartfinance.h2db.DBConnectionResource;
 import com.makco.smartfinance.h2db.utils.H2DbUtilsTest;
 import com.makco.smartfinance.h2db.utils.JsonUtils;
 import com.makco.smartfinance.h2db.utils.schema_constants.Table;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.h2.jdbc.JdbcSQLException;
@@ -18,13 +23,6 @@ import org.junit.ClassRule;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
-
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -186,12 +184,6 @@ public class TableOrganizationTest {
     @Test(expected=JdbcSQLException.class)
     public void testOrganization_22_updateDuplicate() throws Exception {
         LOG.debug("testOrganization_22_updateDuplicate");
-        String queryDates = "SELECT " + Table.ORGANIZATION.ID + " FROM " + Table.Names.ORGANIZATION +
-                " WHERE " + Table.ORGANIZATION.ID + " = ?" +
-                " AND " + Table.ORGANIZATION.T_CREATEDON + " IS NOT NULL" +
-                " AND " + Table.ORGANIZATION.T_UPDATEDON + " IS NOT NULL" +
-                " AND " + Table.ORGANIZATION.T_CREATEDON + " != " + Table.ORGANIZATION.T_UPDATEDON;
-        LOG.debug(queryDates);
         ResultSet rs = null;
         try {
             long idJustInserted = insert("Loblaw''s", "shop");

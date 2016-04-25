@@ -189,12 +189,6 @@ public class TableFamilyMemberTest {
     @Test(expected=JdbcSQLException.class)
     public void testFamilyMember_22_updateDuplicate() throws Exception {
         LOG.debug("testFamilyMember_22_updateDuplicate");
-        String queryDates = "SELECT " + Table.FAMILY_MEMBER.ID + " FROM " + Table.Names.FAMILY_MEMBER +
-                " WHERE " + Table.FAMILY_MEMBER.ID + " = ?" +
-                " AND " + Table.FAMILY_MEMBER.T_CREATEDON + " IS NOT NULL" +
-                " AND " + Table.FAMILY_MEMBER.T_UPDATEDON + " IS NOT NULL" +
-                " AND " + Table.FAMILY_MEMBER.T_CREATEDON + " != " + Table.FAMILY_MEMBER.T_UPDATEDON;
-        LOG.debug(queryDates);
         ResultSet rs = null;
         try {
             long idJustInserted = insert("Wilma", "Fred''s wife");

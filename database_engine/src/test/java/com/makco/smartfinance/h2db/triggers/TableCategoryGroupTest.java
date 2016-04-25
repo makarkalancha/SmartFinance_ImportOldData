@@ -4,10 +4,14 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.makco.smartfinance.h2db.DBConnectionResource;
-import com.makco.smartfinance.h2db.utils.H2DbUtils;
 import com.makco.smartfinance.h2db.utils.H2DbUtilsTest;
 import com.makco.smartfinance.h2db.utils.JsonUtils;
 import com.makco.smartfinance.h2db.utils.schema_constants.Table;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.h2.jdbc.JdbcSQLException;
@@ -19,13 +23,6 @@ import org.junit.ClassRule;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
-
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -321,12 +318,6 @@ public class TableCategoryGroupTest {
     @Test(expected=JdbcSQLException.class)
     public void testCategoryGroup_24_updateDuplicate_NameAndType() throws Exception {
         LOG.debug("testCategoryGroup_24_updateDuplicate_NameAndType");
-        String queryDates = "SELECT " + Table.CATEGORY_GROUP.ID + " FROM " + Table.Names.CATEGORY_GROUP +
-                " WHERE " + Table.CATEGORY_GROUP.ID + " = ?" +
-                " AND " + Table.CATEGORY_GROUP.T_CREATEDON + " IS NOT NULL" +
-                " AND " + Table.CATEGORY_GROUP.T_UPDATEDON + " IS NOT NULL" +
-                " AND " + Table.CATEGORY_GROUP.T_CREATEDON + " != " + Table.CATEGORY_GROUP.T_UPDATEDON;
-        LOG.debug(queryDates);
         ResultSet rs = null;
         try {
             long idJustInserted = insert("C", "transport","bus, taxi");
