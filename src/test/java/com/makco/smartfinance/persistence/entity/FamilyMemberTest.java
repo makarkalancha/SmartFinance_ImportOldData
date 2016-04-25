@@ -10,12 +10,15 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.junit.runners.MethodSorters;
 import static org.junit.Assert.assertEquals;
 
 /**
  * Created by mcalancea on 2016-03-02.
  */
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class FamilyMemberTest {
 
     private final static Logger LOG = LogManager.getLogger(FamilyMemberTest.class);
@@ -46,14 +49,15 @@ public class FamilyMemberTest {
     public void tearDown() throws Exception {
     }
 
-    @Test
-    public void testCRUD() throws Exception{
-        testPersist();
-        testUpdate();
-        testDelete();
-    }
+//    @Test
+//    public void testCRUD() throws Exception{
+//        testPersist();
+//        testUpdate();
+//        testDelete();
+//    }
 
-    public void testPersist() throws Exception {
+    @Test
+    public void test_11_Persist() throws Exception {
         LOG.info("start->testPersist");
         em.getTransaction().begin();
         FamilyMember husband = new FamilyMember();
@@ -75,8 +79,9 @@ public class FamilyMemberTest {
         LOG.info("end->testPersist");
     }
 
-    //    @Test(expected=RollbackException.class)
-    public void testPersistDuplicateName() throws Exception {
+//    @Test(expected = RollbackException.class)//persistence or transaction
+    @Test
+    public void test_12_PersistDuplicateName() throws Exception {
         LOG.info("start->testPersistDuplicateName");
         Random random = new Random();
         int randomInt = random.nextInt((MAX - 0) + MIN + 0);
@@ -95,7 +100,8 @@ public class FamilyMemberTest {
         em.getTransaction().commit();
     }
 
-    public void testUpdate() throws Exception {
+    @Test
+    public void test_21_Update() throws Exception {
         LOG.info("start->testUpdate");
         em.getTransaction().begin();
         Query qId = em.createQuery("SELECT min(f.id) from FamilyMember f");
@@ -126,7 +132,8 @@ public class FamilyMemberTest {
         LOG.info("end->testUpdate");
     }
 
-    public void testDelete() throws Exception {
+    @Test
+    public void test_31_Delete() throws Exception {
         LOG.info("start->testDelete");
         em.getTransaction().begin();
         Query qId = em.createQuery("SELECT min(f.id) as num from FamilyMember f");

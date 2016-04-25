@@ -10,12 +10,15 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.junit.runners.MethodSorters;
 import static org.junit.Assert.assertEquals;
 
 /**
  * Created by mcalancea on 2016-03-28.
  */
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class CurrencyTest {
     private final static Logger LOG = LogManager.getLogger(CurrencyTest.class);
     private static EntityManager em;
@@ -45,14 +48,15 @@ public class CurrencyTest {
     public void tearDown() throws Exception {
     }
 
-    @Test
-    public void testCRUD() throws Exception{
-        testPersist();
-        testUpdate();
-        testDelete();
-    }
+//    @Test
+//    public void testCRUD() throws Exception{
+//        testPersist();
+//        testUpdate();
+//        testDelete();
+//    }
 
-    public void testPersist() throws Exception{
+    @Test
+    public void test_11_Persist() throws Exception{
         LOG.info("start->testPersist");
         em.getTransaction().begin();
         Currency cad = new Currency();
@@ -75,7 +79,8 @@ public class CurrencyTest {
         LOG.info("end->testPersist");
     }
 
-    public void testUpdate() throws Exception {
+    @Test
+    public void test_21_Update() throws Exception {
         LOG.info("start->testUpdate");
         em.getTransaction().begin();
         Query qId = em.createQuery("SELECT max(c.id) as num from Currency c");
@@ -109,7 +114,8 @@ public class CurrencyTest {
         LOG.info("end->testUpdate");
     }
 
-    public void testDelete() throws Exception {
+    @Test
+    public void test_31_Delete() throws Exception {
         LOG.info("start->testDelete");
         em.getTransaction().begin();
         Query qId = em.createQuery("SELECT min(c.id) as num from Currency c");
