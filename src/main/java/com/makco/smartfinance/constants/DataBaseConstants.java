@@ -30,4 +30,12 @@ public class DataBaseConstants {
     public final static int ORG_NAME_MAX_LGTH = 32;
     public final static int ORG_DESCRIPTION_MAX_LGTH = 512;
 
+    //category_group
+    public final static int CG_NAME_MAX_LGTH = 32;
+    public final static int CG_DESCRIPTION_MAX_LGTH = 512;
+
+    //category
+    public final static int CAT_NAME_MAX_LGTH = 32;
+    public final static int CAT_DESCRIPTION_MAX_LGTH = 512;
+
 }
