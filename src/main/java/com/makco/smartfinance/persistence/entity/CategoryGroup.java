@@ -3,6 +3,7 @@ package com.makco.smartfinance.persistence.entity;
 import java.sql.Timestamp;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
+import javax.persistence.DiscriminatorType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -16,7 +17,7 @@ import javax.persistence.UniqueConstraint;
  */
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "TYPE")
+@DiscriminatorColumn(name = "TYPE", discriminatorType= DiscriminatorType.STRING, length=1)
 @Table(
     name="CATEGORY_GROUP",
     uniqueConstraints =
@@ -68,4 +69,6 @@ public abstract class CategoryGroup {
     public Timestamp getUpdatedOn() {
         return updatedOn;
     }
+
+    public abstract String toStringSimple();
 }

@@ -6,6 +6,8 @@ import java.util.TreeSet;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -32,8 +34,10 @@ public class CategoryGroupDebit extends CategoryGroup{
     )
     private String description;
 
-    //TODO because it's LAZY, check if you need to add ProgressIndicator when object is loaded
-    @
+
+    //http://stackoverflow.com/questions/30838526/how-to-have-a-sorted-set-of-objects-based-on-a-specific-field
+    @OneToMany(mappedBy = "categoryGroupDebit", fetch = FetchType.LAZY)
+    @javax.persistence.OrderBy("name")
     private SortedSet<CategoryDebit> categoryDebit = new TreeSet<>();
 //    private SortedMap<Long, CategoryDebit> categoryDebit = new TreeMap<>();
 
@@ -86,6 +90,17 @@ public class CategoryGroupDebit extends CategoryGroup{
 
     @Override
     public String toString() {
+        return "CategoryGroupDebit{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", createdOn='" + createdOn + '\'' +
+                ", updatedOn='" + updatedOn + '\'' +
+                '}';
+    }
+
+    @Override
+    public String toStringSimple() {
         return "CategoryGroupDebit{" +
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +

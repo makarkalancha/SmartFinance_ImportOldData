@@ -8,6 +8,12 @@
         >
     <persistence-unit name="test" transaction-type="RESOURCE_LOCAL">
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+        <class>com.makco.smartfinance.persistence.entity.Category</class>
+        <class>com.makco.smartfinance.persistence.entity.CategoryCredit</class>
+        <class>com.makco.smartfinance.persistence.entity.CategoryDebit</class>
+        <class>com.makco.smartfinance.persistence.entity.CategoryGroup</class>
+        <class>com.makco.smartfinance.persistence.entity.CategoryGroupCredit</class>
+        <class>com.makco.smartfinance.persistence.entity.CategoryGroupDebit</class>
         <class>com.makco.smartfinance.persistence.entity.Currency</class>
         <class>com.makco.smartfinance.persistence.entity.DateUnit</class>
         <class>com.makco.smartfinance.persistence.entity.FamilyMember</class>

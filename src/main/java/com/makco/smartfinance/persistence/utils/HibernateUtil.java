@@ -1,6 +1,12 @@
 package com.makco.smartfinance.persistence.utils;
 
 import com.makco.smartfinance.constants.DataBaseConstants;
+import com.makco.smartfinance.persistence.entity.Category;
+import com.makco.smartfinance.persistence.entity.CategoryCredit;
+import com.makco.smartfinance.persistence.entity.CategoryDebit;
+import com.makco.smartfinance.persistence.entity.CategoryGroup;
+import com.makco.smartfinance.persistence.entity.CategoryGroupCredit;
+import com.makco.smartfinance.persistence.entity.CategoryGroupDebit;
 import com.makco.smartfinance.persistence.entity.Currency;
 import com.makco.smartfinance.persistence.entity.DateUnit;
 import com.makco.smartfinance.persistence.entity.FamilyMember;
@@ -48,6 +54,12 @@ public class HibernateUtil {
 
     private static Configuration getConfiguration() {
         Configuration cfg = new Configuration();
+        cfg.addAnnotatedClass(Category.class);
+        cfg.addAnnotatedClass(CategoryCredit.class);
+        cfg.addAnnotatedClass(CategoryDebit.class);
+        cfg.addAnnotatedClass(CategoryGroup.class);
+        cfg.addAnnotatedClass(CategoryGroupCredit.class);
+        cfg.addAnnotatedClass(CategoryGroupDebit.class);
         cfg.addAnnotatedClass(Currency.class);
         cfg.addAnnotatedClass(DateUnit.class);
         cfg.addAnnotatedClass(FamilyMember.class);

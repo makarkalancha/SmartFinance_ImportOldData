@@ -87,4 +87,15 @@ public class CategoryGroupCredit extends CategoryGroup{
                 ", updatedOn='" + updatedOn + '\'' +
                 '}';
     }
+
+    @Override
+    public String toStringSimple() {
+        return "CategoryGroupCredit{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", createdOn='" + createdOn + '\'' +
+                ", updatedOn='" + updatedOn + '\'' +
+                '}';
+    }
 }

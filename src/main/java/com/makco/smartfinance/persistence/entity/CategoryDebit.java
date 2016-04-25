@@ -64,6 +64,14 @@ public class CategoryDebit extends Category{
         this.name = name;
     }
 
+    public CategoryGroupDebit getCategoryGroupDebit() {
+        return categoryGroupDebit;
+    }
+
+    public void setCategoryGroupDebit(CategoryGroupDebit categoryGroupDebit) {
+        this.categoryGroupDebit = categoryGroupDebit;
+    }
+
     @Override
     public boolean equals(Object other) {
         if (this == other) {
@@ -95,6 +103,7 @@ public class CategoryDebit extends Category{
                 ", description='" + description + '\'' +
                 ", createdOn='" + createdOn + '\'' +
                 ", updatedOn='" + updatedOn + '\'' +
+                ", CategoryGroupDebit='" + categoryGroupDebit.toStringSimple() + '\'' +
                 '}';
     }
 }
