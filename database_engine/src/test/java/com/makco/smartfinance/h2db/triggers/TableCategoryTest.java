@@ -4,12 +4,14 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.makco.smartfinance.h2db.DBConnectionResource;
-import com.makco.smartfinance.h2db.TestContext;
-import com.makco.smartfinance.h2db.utils.DBObjectType;
-import com.makco.smartfinance.h2db.utils.H2DbUtils;
 import com.makco.smartfinance.h2db.utils.H2DbUtilsTest;
 import com.makco.smartfinance.h2db.utils.JsonUtils;
 import com.makco.smartfinance.h2db.utils.schema_constants.Table;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.h2.jdbc.JdbcSQLException;
@@ -21,13 +23,6 @@ import org.junit.ClassRule;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
-
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -128,7 +123,7 @@ public class TableCategoryTest {
     }
 
     @Test
-    public void testCategory_11_insertCategory() throws Exception {
+    public void testCategory_11_insertCategory_MainCat1() throws Exception {
         LOG.debug("testCategory_11_insert");
         String queryDates = "SELECT " + Table.CATEGORY.ID + " FROM " + Table.Names.CATEGORY +
                 " WHERE " + Table.CATEGORY.ID + " = ?" +
@@ -140,7 +135,7 @@ public class TableCategoryTest {
         try (
                 PreparedStatement selectDatesPS = dbConnectionResource.getConnection().prepareStatement(queryDates);
         ){
-            long idJustInserted = insertCategory(categoryGroupIdMain, categoryGroupType, "the Flintstones", "family");
+            long idJustInserted = insertCategory(categoryGroupIdMain, categoryGroupType, "CG:Main->cat1", "category 1");
             LOG.debug("idJustInserted > 0: idJustInserted=" + idJustInserted);
             assert (idJustInserted > 0);
             selectDatesPS.setLong(1, idJustInserted);
@@ -161,8 +156,39 @@ public class TableCategoryTest {
     @Test(expected=JdbcSQLException.class)
     public void testCategory_12_insertDuplicate() throws Exception {
         LOG.debug("testCategory_12_insertDuplicate");
-        //Unique index or primary key violation: "IDX_UNQ_FMLMMBR_NM ON TEST.CATEGORY(NAME) VALUES ('the Flintstones', 9)"
-        testCategory_11_insertCategory();
+        //Unique index or primary key violation: "IDX_UNQ_CTGR_CGIDNM ON TEST.CATEGORY(CATEGORY_GROUP_ID, NAME) VALUES (1, 'CG:Main->cat1', 1)"
+        testCategory_11_insertCategory_MainCat1();
+    }
+
+    @Test
+    public void testCategory_13_insertCategory_AnotherCat1() throws Exception {
+        LOG.debug("testCategory_11_insert");
+        String queryDates = "SELECT " + Table.CATEGORY.ID + " FROM " + Table.Names.CATEGORY +
+                " WHERE " + Table.CATEGORY.ID + " = ?" +
+                " AND " + Table.CATEGORY.T_CREATEDON + " IS NOT NULL" +
+                " AND " + Table.CATEGORY.T_UPDATEDON + " IS NOT NULL" +
+                " AND " + Table.CATEGORY.T_CREATEDON + " = " + Table.CATEGORY.T_UPDATEDON;
+        LOG.debug(queryDates);
+        ResultSet rs = null;
+        try (
+                PreparedStatement selectDatesPS = dbConnectionResource.getConnection().prepareStatement(queryDates);
+        ){
+            long idJustInserted = insertCategory(categoryGroupIdAnother, categoryGroupType, "CG:Main->cat1", "category 1");
+            LOG.debug("idJustInserted > 0: idJustInserted=" + idJustInserted);
+            assert (idJustInserted > 0);
+            selectDatesPS.setLong(1, idJustInserted);
+            rs = selectDatesPS.executeQuery();
+            rs.next();
+            long idWithDates = rs.getLong(1);
+            LOG.debug("idWithDates > 0: idWithDates=" + idWithDates);
+            LOG.debug("idJustInserted == idWithDates: " + (idJustInserted == idWithDates) +
+                    "; idJustInserted=" + idJustInserted +
+                    "; idWithDates=" + idWithDates);
+            assert (idWithDates > 0);
+            assert (idJustInserted == idWithDates);
+        } finally {
+            if (rs != null) rs.close();
+        }
     }
 
     public void update(Long id, String name) throws Exception {
@@ -185,7 +211,9 @@ public class TableCategoryTest {
     @Test
     public void testCategory_21_update() throws Exception {
         LOG.debug("testCategory_21_update");
-        String querySelect = "SELECT MAX(" + Table.CATEGORY.ID + ") FROM " + Table.Names.CATEGORY;
+        String querySelect =
+                "SELECT MAX(" + Table.CATEGORY.ID + ") FROM " + Table.Names.CATEGORY + " WHERE " + Table.CATEGORY.CATEGORY_GROUP_ID + " = " +
+                        categoryGroupIdMain;
         String queryDates = "SELECT " + Table.CATEGORY.ID + " FROM " + Table.Names.CATEGORY +
                 " WHERE " + Table.CATEGORY.ID + " = ?" +
                 " AND " + Table.CATEGORY.T_CREATEDON + " IS NOT NULL" +
@@ -203,7 +231,7 @@ public class TableCategoryTest {
             rs.next();
             idMax = rs.getLong(1);
 
-            update(idMax, "Barney");
+            update(idMax, "cat1_v1");
 
             selectDatesPS.setLong(1, idMax);
             rs = selectDatesPS.executeQuery();
@@ -216,27 +244,34 @@ public class TableCategoryTest {
         }
     }
 
-    //Unique index or primary key violation: "IDX_UNQ_FMLMMBR_NM ON TEST.CATEGORY(NAME)
+    //Unique index or primary key violation: "IDX_UNQ_CTGR_CGIDNM ON TEST.CATEGORY(CATEGORY_GROUP_ID, NAME) VALUES (1, 'cat1_v1', 1)"
     @Test(expected=JdbcSQLException.class)
     public void testCategory_22_updateDuplicate() throws Exception {
         LOG.debug("testCategory_22_updateDuplicate");
-        String queryDates = "SELECT " + Table.CATEGORY.ID + " FROM " + Table.Names.CATEGORY +
-                " WHERE " + Table.CATEGORY.ID + " = ?" +
-                " AND " + Table.CATEGORY.T_CREATEDON + " IS NOT NULL" +
-                " AND " + Table.CATEGORY.T_UPDATEDON + " IS NOT NULL" +
-                " AND " + Table.CATEGORY.T_CREATEDON + " != " + Table.CATEGORY.T_UPDATEDON;
-        LOG.debug(queryDates);
         ResultSet rs = null;
         try {
-            long idJustInserted = insertCategory("Wilma", "Fred''s wife");
-            //"Barney" duplicate update, 1st update in method  testCategory_21_update
-            update(idJustInserted, "Barney");
+            long idJustInserted = insertCategory(categoryGroupIdMain, categoryGroupType, "CG:Main->cat2", "category 2");
+            //"cat1_v1" duplicate update, 1st update in method  testCategory_21_update
+            update(idJustInserted, "cat1_v1");
         } finally {
             if (rs != null) rs.close();
         }
     }
 
     @Test
+    public void testCategory_23_update_sameName_AnotherCG() throws Exception {
+        LOG.debug("testCategory_23_update_sameName_AnotherCG");
+        ResultSet rs = null;
+        try {
+            long idJustInserted = insertCategory(categoryGroupIdAnother, categoryGroupType, "CG:Another->cat3", "category 3");
+            //"cat1_v1" duplicate update, 1st update in method  testCategory_21_update
+            update(idJustInserted, "cat1_v1");
+        } finally {
+            if (rs != null) rs.close();
+        }
+    }
+
+//    @Test
     public void testCategory_31_delete() throws Exception {
         LOG.debug("testCategory_31_delete");
         String querySelect = "SELECT MIN(" + Table.CATEGORY.ID + ") FROM " + Table.Names.CATEGORY;

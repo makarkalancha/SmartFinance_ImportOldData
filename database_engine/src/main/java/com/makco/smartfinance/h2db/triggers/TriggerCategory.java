@@ -36,7 +36,7 @@ public class TriggerCategory extends AbstractTrigger {
         rowJson.addProperty(Table.CATEGORY.CATEGORY_GROUP_ID.toString(),
                 (Long) oldRow[Table.CATEGORY.CATEGORY_GROUP_ID.getColumnIndex()]);
         rowJson.addProperty(Table.CATEGORY.CATEGORY_GROUP_TYPE.toString(),
-                (Character) oldRow[Table.CATEGORY.CATEGORY_GROUP_TYPE.getColumnIndex()]);
+                (String) oldRow[Table.CATEGORY.CATEGORY_GROUP_TYPE.getColumnIndex()]);
         rowJson.addProperty(Table.CATEGORY.NAME.toString(), (String) oldRow[Table.CATEGORY.NAME.getColumnIndex()]);
         rowJson.addProperty(Table.CATEGORY.DESCRIPTION.toString(),
                 (String) oldRow[Table.CATEGORY.DESCRIPTION.getColumnIndex()]);
