@@ -126,6 +126,32 @@ public class CategoryGroupTest {
     }
 
     @Test
+    public void test_14_Persist_creditWithDebitName() throws Exception {
+        LOG.info("start->testPersist");
+        Random random = new Random();
+        int randomInt = random.nextInt((MAX - 0) + MIN + 0);
+
+        CategoryGroup categoryGroupDebit1 = new CategoryGroupDebit();
+        categoryGroupDebit1.setName(dublicateName + randomInt);
+        categoryGroupDebit1.setDescription(defaultDescription);
+        em.persist(categoryGroupDebit1);
+
+        CategoryGroup categoryGroupCredit2 = new CategoryGroupCredit();
+        categoryGroupCredit2.setName(dublicateName + randomInt);
+        categoryGroupCredit2.setDescription(defaultDescription);
+        em.persist(categoryGroupCredit2);
+        em.getTransaction().commit();
+
+        LOG.debug("categoryGroupDebit1.getId()=" + categoryGroupDebit1.getId());
+        LOG.debug("categoryGroupDebit1.getName()=" + categoryGroupDebit1.getName());
+        LOG.debug("categoryGroupCredit2.getId()=" + categoryGroupCredit2.getId());
+        LOG.debug("categoryGroupCredit2.getName()=" + categoryGroupCredit2.getName());
+
+        assertEquals(true, categoryGroupDebit1.getName().equals(categoryGroupCredit2.getName()));
+        LOG.info("end->testPersist");
+    }
+
+    @Test
     public void test_21_Update_debit() throws Exception {
         LOG.info("start->testUpdate");
         Query qId = em.createQuery("SELECT min(cg.id) from CategoryGroup cg");

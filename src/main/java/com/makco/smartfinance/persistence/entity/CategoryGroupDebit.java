@@ -1,5 +1,6 @@
 package com.makco.smartfinance.persistence.entity;
 
+import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import javax.persistence.DiscriminatorValue;
@@ -20,6 +21,18 @@ public class CategoryGroupDebit extends CategoryGroup{
 //    private SortedMap<Long, CategoryDebit> debitCategories = new TreeMap<>();
 
     public CategoryGroupDebit() {
+    }
+
+    public SortedSet<CategoryDebit> getDebitCategories() {
+        return new TreeSet<>(debitCategories);
+    }
+
+    public void addDebitCategory(CategoryDebit debitCategory) {
+        this.debitCategories.add(debitCategory);
+    }
+
+    public void addDebitCategories(List<CategoryDebit> debitCategories) {
+        this.debitCategories.addAll(debitCategories);
     }
 
     public CategoryGroupDebit(String name, String description) {
