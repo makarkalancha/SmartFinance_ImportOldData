@@ -31,34 +31,28 @@ public class CurrencyTest {
 
     @BeforeClass
     public static void setUpClass() throws Exception {
-        em = TestPersistenceManager.INSTANCE.getEntityManager();
+
     }
 
     @AfterClass
     public static void tearDownClass() throws Exception {
-//        em.close();
-//        TestPersistenceManager.INSTANCE.close();
+        TestPersistenceManager.INSTANCE.close();
     }
 
     @Before
     public void setUp() throws Exception {
+        em = TestPersistenceManager.INSTANCE.getEntityManager();
+        em.getTransaction().begin();
     }
 
     @After
     public void tearDown() throws Exception {
+        em.close();
     }
-
-//    @Test
-//    public void testCRUD() throws Exception{
-//        testPersist();
-//        testUpdate();
-//        testDelete();
-//    }
 
     @Test
     public void test_11_Persist() throws Exception{
         LOG.info("start->testPersist");
-        em.getTransaction().begin();
         Currency cad = new Currency();
         Random random = new Random();
         Integer randomInt = random.nextInt((MAX - 0) + MIN + 0);
@@ -68,7 +62,6 @@ public class CurrencyTest {
         cad.setDescription(currencyDesc);
 
         em.persist(cad);
-//        em.flush();
         em.getTransaction().commit();
         LOG.debug("INS: cad: .getId()=" + cad.getId());
         LOG.debug("INS: cad.getCreatedOn()=" + cad.getCreatedOn());
@@ -82,7 +75,6 @@ public class CurrencyTest {
     @Test
     public void test_21_Update() throws Exception {
         LOG.info("start->testUpdate");
-        em.getTransaction().begin();
         Query qId = em.createQuery("SELECT max(c.id) as num from Currency c");
         Long id = ((Long) qId.getSingleResult());
 
@@ -117,7 +109,6 @@ public class CurrencyTest {
     @Test
     public void test_31_Delete() throws Exception {
         LOG.info("start->testDelete");
-        em.getTransaction().begin();
         Query qId = em.createQuery("SELECT min(c.id) as num from Currency c");
         Long id = ((Long) qId.getSingleResult());
 

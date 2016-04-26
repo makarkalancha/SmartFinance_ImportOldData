@@ -4,6 +4,7 @@ import com.makco.smartfinance.persistence.utils.TestPersistenceManager;
 import java.util.Random;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import javax.persistence.RollbackException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.After;
@@ -32,34 +33,28 @@ public class FamilyMemberTest {
 
     @BeforeClass
     public static void setUpClass() throws Exception {
-        em = TestPersistenceManager.INSTANCE.getEntityManager();
+
     }
 
     @AfterClass
     public static void tearDownClass() throws Exception {
-//        em.close();
-//        TestPersistenceManager.INSTANCE.close();
+        TestPersistenceManager.INSTANCE.close();
     }
 
     @Before
     public void setUp() throws Exception {
+        em = TestPersistenceManager.INSTANCE.getEntityManager();
+        em.getTransaction().begin();
     }
 
     @After
     public void tearDown() throws Exception {
+        em.close();
     }
-
-//    @Test
-//    public void testCRUD() throws Exception{
-//        testPersist();
-//        testUpdate();
-//        testDelete();
-//    }
 
     @Test
     public void test_11_Persist() throws Exception {
         LOG.info("start->testPersist");
-        em.getTransaction().begin();
         FamilyMember husband = new FamilyMember();
         Random random = new Random();
         int randomInt = random.nextInt((MAX - 0) + MIN + 0);
@@ -79,31 +74,45 @@ public class FamilyMemberTest {
         LOG.info("end->testPersist");
     }
 
-//    @Test(expected = RollbackException.class)//persistence or transaction
-    @Test
+    @Test(expected = RollbackException.class)//persistence or transaction
+    //Unique index or primary key violation: "IDX_UNQ_FMLMMBR_NM ON TEST.FAMILY_MEMBER(NAME) VALUES ('Twin516576', 2)"
     public void test_12_PersistDuplicateName() throws Exception {
-        LOG.info("start->testPersistDuplicateName");
+        LOG.info("start->test_12_PersistDuplicateName");
         Random random = new Random();
         int randomInt = random.nextInt((MAX - 0) + MIN + 0);
-        LOG.debug("testPersistDuplicateName.randomInt=" + randomInt);
-        em.getTransaction().begin();
-        FamilyMember husband1 = new FamilyMember();
-        husband1.setName(dublicateName + randomInt);
-        husband1.setDescription(defaultDescription);
-        em.persist(husband1);
+        LOG.debug("test_12_PersistDuplicateName.randomInt=" + randomInt);
+        try {
+            FamilyMember husband1 = new FamilyMember();
+            husband1.setName(dublicateName + randomInt);
+            husband1.setDescription(defaultDescription);
+            em.persist(husband1);
 
-        FamilyMember husband2 = new FamilyMember();
-        husband2.setName(dublicateName + randomInt);
-        husband2.setDescription(defaultDescription);
-        em.persist(husband2);
-
-        em.getTransaction().commit();
+            FamilyMember husband2 = new FamilyMember();
+            husband2.setName(dublicateName + randomInt);
+            husband2.setDescription(defaultDescription);
+            em.persist(husband2);
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            try {
+                if (em.getTransaction().isActive()) {
+                    em.getTransaction().rollback();
+                }
+            } catch (Exception rbEx) {
+                System.err.println("Rollback of transaction failed, trace follows!");
+                rbEx.printStackTrace(System.err);
+            }
+//            throw new RuntimeException(e);
+            throw e;
+        } finally {
+//            if (em != null && em.isOpen()) {
+//                em.close();
+//            }
+        }
     }
 
     @Test
     public void test_21_Update() throws Exception {
         LOG.info("start->testUpdate");
-        em.getTransaction().begin();
         Query qId = em.createQuery("SELECT min(f.id) from FamilyMember f");
         Long id = ((Long) qId.getSingleResult());
 
@@ -135,7 +144,6 @@ public class FamilyMemberTest {
     @Test
     public void test_31_Delete() throws Exception {
         LOG.info("start->testDelete");
-        em.getTransaction().begin();
         Query qId = em.createQuery("SELECT min(f.id) as num from FamilyMember f");
         Long id = ((Long) qId.getSingleResult());
 
