@@ -1,5 +1,6 @@
 package com.makco.smartfinance.persistence.entity;
 
+import com.makco.smartfinance.constants.DataBaseConstants;
 import java.sql.Timestamp;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
@@ -11,6 +12,8 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 /**
  * Created by mcalancea on 2016-04-25.
@@ -46,6 +49,23 @@ public abstract class CategoryGroup {
     @Column(name="ID")
     protected Long id;
 
+    @Column(name = "NAME", unique = true)
+    @NotNull
+    @Size(
+            min = 2,
+            max = DataBaseConstants.CG_NAME_MAX_LGTH,
+            message = "Name is required, maximum " + DataBaseConstants.CG_NAME_MAX_LGTH + " characters."
+    )
+    protected String name;
+
+    @Column(name = "DESCRIPTION")
+    @Size(
+            min = 0,
+            max = DataBaseConstants.CG_DESCRIPTION_MAX_LGTH,
+            message = "Description length is " + DataBaseConstants.CG_DESCRIPTION_MAX_LGTH + " characters."
+    )
+    protected String description;
+
     @org.hibernate.annotations.CreationTimestamp
     @Column(name="T_CREATEDON",insertable = false, updatable = false)
     protected Timestamp createdOn;
@@ -60,6 +80,22 @@ public abstract class CategoryGroup {
 
     public Long getId() {
         return id;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public Timestamp getCreatedOn() {

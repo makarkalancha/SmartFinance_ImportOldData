@@ -1,15 +1,11 @@
 package com.makco.smartfinance.persistence.entity;
 
-import com.makco.smartfinance.constants.DataBaseConstants;
 import java.util.SortedSet;
 import java.util.TreeSet;
-import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 /**
  * Created by mcalancea on 2016-04-25.
@@ -17,29 +13,11 @@ import javax.validation.constraints.Size;
 @Entity
 @DiscriminatorValue("D")
 public class CategoryGroupDebit extends CategoryGroup{
-    @Column(name = "NAME", unique = true)
-    @NotNull
-    @Size(
-            min = 2,
-            max = DataBaseConstants.CG_NAME_MAX_LGTH,
-            message = "Name is required, maximum " + DataBaseConstants.CG_NAME_MAX_LGTH + " characters."
-    )
-    private String name;
-
-    @Column(name = "DESCRIPTION")
-    @Size(
-            min = 0,
-            max = DataBaseConstants.CG_DESCRIPTION_MAX_LGTH,
-            message = "Description length is " + DataBaseConstants.CG_DESCRIPTION_MAX_LGTH + " characters."
-    )
-    private String description;
-
-
     //http://stackoverflow.com/questions/30838526/how-to-have-a-sorted-set-of-objects-based-on-a-specific-field
     @OneToMany(mappedBy = "categoryGroupDebit", fetch = FetchType.LAZY)
     @javax.persistence.OrderBy("name")
-    private SortedSet<CategoryDebit> categoryDebit = new TreeSet<>();
-//    private SortedMap<Long, CategoryDebit> categoryDebit = new TreeMap<>();
+    private SortedSet<CategoryDebit> debitCategories = new TreeSet<>();
+//    private SortedMap<Long, CategoryDebit> debitCategories = new TreeMap<>();
 
     public CategoryGroupDebit() {
     }
@@ -47,22 +25,6 @@ public class CategoryGroupDebit extends CategoryGroup{
     public CategoryGroupDebit(String name, String description) {
         this.name = name;
         this.description = description;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     @Override
@@ -96,6 +58,7 @@ public class CategoryGroupDebit extends CategoryGroup{
                 ", description='" + description + '\'' +
                 ", createdOn='" + createdOn + '\'' +
                 ", updatedOn='" + updatedOn + '\'' +
+                ", debitCategories='" + debitCategories + '\'' +
                 '}';
     }
 

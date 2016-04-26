@@ -1,11 +1,10 @@
 package com.makco.smartfinance.persistence.entity;
 
-import com.makco.smartfinance.constants.DataBaseConstants;
-import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 /**
  * Created by mcalancea on 2016-04-25.
@@ -13,22 +12,10 @@ import javax.validation.constraints.Size;
 @Entity
 @DiscriminatorValue("C")
 public class CategoryCredit extends Category{
-    @Column(name = "NAME", unique = true)
-    @NotNull
-    @Size(
-            min = 2,
-            max = DataBaseConstants.CAT_NAME_MAX_LGTH,
-            message = "Name is required, maximum " + DataBaseConstants.CAT_NAME_MAX_LGTH + " characters."
-    )
-    private String name;
-
-    @Column(name = "DESCRIPTION")
-    @Size(
-            min = 0,
-            max = DataBaseConstants.CAT_DESCRIPTION_MAX_LGTH,
-            message = "Description length is " + DataBaseConstants.CAT_DESCRIPTION_MAX_LGTH + " characters."
-    )
-    private String description;
+    //TODO because it's LAZY, check if you need to add ProgressIndicator when object is loaded
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "CATEGORY_GROUP_ID",nullable = false)
+    private CategoryGroupCredit categoryGroupCredit;
 
     public CategoryCredit(){
 
@@ -36,22 +23,6 @@ public class CategoryCredit extends Category{
 
     public CategoryCredit(String description, String name) {
         this.description = description;
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
         this.name = name;
     }
 
