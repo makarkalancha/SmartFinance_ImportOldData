@@ -28,6 +28,9 @@ public class HibernateUtil {
     private final static Logger LOG = LogManager.getLogger(HibernateUtil.class);
     private static final SessionFactory SESSION_FACTORY;
     private static final ServiceRegistry SERVICE_REGISTRY;
+
+    private static int instanceCount = 0;
+
     static {
         try{
             Configuration config = getConfiguration();
@@ -46,6 +49,7 @@ public class HibernateUtil {
                 }
             });
             SESSION_FACTORY = config.buildSessionFactory(SERVICE_REGISTRY);
+            LOG.debug(">>>>>>>HibernateUtil.instanceCount: " + (++instanceCount));
         }catch (Throwable throwable){
             LOG.error(throwable,throwable);
             throw new ExceptionInInitializerError(throwable);
@@ -85,7 +89,10 @@ public class HibernateUtil {
         return cfg;
     }
 
-    public static Session openSession() {
+    public static Session openSession(){
+        if(instanceCount > 1) {
+            throw new RuntimeException("There is more than one (1) instance of SESSION_FACTORY configured");
+        }
         return SESSION_FACTORY.openSession();
     }
 }
