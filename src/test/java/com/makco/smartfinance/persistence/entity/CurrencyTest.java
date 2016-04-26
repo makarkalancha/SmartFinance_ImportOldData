@@ -4,6 +4,7 @@ import com.makco.smartfinance.persistence.utils.TestPersistenceManager;
 import java.util.Random;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import javax.persistence.RollbackException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.After;
@@ -70,6 +71,39 @@ public class CurrencyTest {
         assertEquals(true, cad.getCreatedOn() != null);
         assertEquals(true, cad.getUpdatedOn() != null);
         LOG.info("end->testPersist");
+    }
+
+    @Test(expected = RollbackException.class)//persistence, not transaction
+    //"IDX_UNQ_ORGNZTN_NM ON TEST.ORGANIZATION(NAME) VALUES ('TwinShop880921', 7)"
+    public void test_12_PersistDuplicateName() throws Exception {
+        LOG.info("start->test_12_PersistDuplicateName");
+        Random random = new Random();
+        int randomInt = random.nextInt((MAX - 0) + MIN + 0);
+        LOG.debug("test_12_PersistDuplicateName.randomInt=" + randomInt);
+        String currencyDuplicate = "TWN";
+        String currencyDuplicateDesc = "twin desc";
+        try {
+            Currency currency1 = new Currency();
+            currency1.setName(currencyDuplicate);
+            currency1.setDescription(currencyDuplicateDesc);
+            em.persist(currency1);
+
+            Currency currency2 = new Currency();
+            currency2.setName(currencyDuplicate);
+            currency2.setDescription(currencyDuplicateDesc);
+            em.persist(currency2);
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            try {
+                if (em.getTransaction().isActive()) {
+                    em.getTransaction().rollback();
+                }
+            } catch (Exception rbEx) {
+                System.err.println("Rollback of transaction failed, trace follows!");
+                rbEx.printStackTrace(System.err);
+            }
+            throw e;
+        }
     }
 
     @Test
