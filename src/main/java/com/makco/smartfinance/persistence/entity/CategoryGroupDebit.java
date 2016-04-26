@@ -23,6 +23,11 @@ public class CategoryGroupDebit extends CategoryGroup{
     public CategoryGroupDebit() {
     }
 
+    public CategoryGroupDebit(String name, String description) {
+        this.name = name;
+        this.description = description;
+    }
+
     public SortedSet<CategoryDebit> getDebitCategories() {
         return new TreeSet<>(debitCategories);
     }
@@ -33,11 +38,6 @@ public class CategoryGroupDebit extends CategoryGroup{
 
     public void addDebitCategories(List<CategoryDebit> debitCategories) {
         this.debitCategories.addAll(debitCategories);
-    }
-
-    public CategoryGroupDebit(String name, String description) {
-        this.name = name;
-        this.description = description;
     }
 
     @Override

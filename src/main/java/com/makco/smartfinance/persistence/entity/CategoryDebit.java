@@ -16,6 +16,7 @@ public class CategoryDebit extends Category{
     //TODO because it's LAZY, check if you need to add ProgressIndicator when object is loaded
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CATEGORY_GROUP_ID",nullable = false)
+//    private CategoryGroup categoryGroupDebit;
     private CategoryGroupDebit categoryGroupDebit;
 
     public CategoryDebit(){
@@ -27,12 +28,15 @@ public class CategoryDebit extends Category{
         this.name = name;
     }
 
-    public CategoryGroupDebit getCategoryGroupDebit() {
+    @Override
+    public CategoryGroup getCategoryGroup() {
         return categoryGroupDebit;
     }
 
-    public void setCategoryGroupDebit(CategoryGroupDebit categoryGroupDebit) {
-        this.categoryGroupDebit = categoryGroupDebit;
+    @Override
+    public void setCategoryGroup(CategoryGroup categoryGroup) {
+        this.categoryGroupDebit = (CategoryGroupDebit) categoryGroup;
+//        this.categoryGroupDebit = categoryGroup;
     }
 
     @Override

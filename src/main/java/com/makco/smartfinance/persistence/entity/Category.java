@@ -98,6 +98,10 @@ public abstract class Category {
         this.name = name;
     }
 
+    public abstract CategoryGroup getCategoryGroup();
+
+    public abstract void setCategoryGroup(CategoryGroup categoryGroup);
+
     public Timestamp getCreatedOn() {
         return createdOn;
     }

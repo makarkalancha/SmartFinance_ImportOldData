@@ -15,7 +15,7 @@ public class CategoryCredit extends Category{
     //TODO because it's LAZY, check if you need to add ProgressIndicator when object is loaded
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CATEGORY_GROUP_ID",nullable = false)
-    private CategoryGroupCredit categoryGroupCredit;
+    private CategoryGroup categoryGroupCredit;
 
     public CategoryCredit(){
 
@@ -24,6 +24,16 @@ public class CategoryCredit extends Category{
     public CategoryCredit(String description, String name) {
         this.description = description;
         this.name = name;
+    }
+
+    @Override
+    public CategoryGroup getCategoryGroup() {
+        return categoryGroupCredit;
+    }
+
+    @Override
+    public void setCategoryGroup(CategoryGroup categoryGroup) {
+        this.categoryGroupCredit = categoryGroup;
     }
 
     @Override
