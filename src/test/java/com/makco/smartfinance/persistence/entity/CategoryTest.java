@@ -1,11 +1,11 @@
 package com.makco.smartfinance.persistence.entity;
 
+import com.google.common.collect.Lists;
 import com.makco.smartfinance.persistence.utils.TestPersistenceManager;
 import java.util.Random;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
-import javax.persistence.RollbackException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.After;
@@ -102,23 +102,27 @@ public class CategoryTest {
         LOG.info("end->testPersist");
     }
 
-    @Test(expected = RollbackException.class)//persistence, not transaction
-    //Unique index or primary key violation: "IDX_UNQ_CTGRGRP_TPNM ON TEST.CATEGORY_GROUP(TYPE, NAME) VALUES ('D', 'TwinCategory771883', 2)"
+//    @Test(expected = RollbackException.class)//persistence, not transaction
+    @Test
+//    Unique index or primary key violation: "IDX_UNQ_CTGRGRP_TPNM ON TEST.CATEGORY_GROUP(TYPE, NAME) VALUES ('D', 'TwinCategory771883', 2)"
     public void test_12_PersistDuplicateName_debit() throws Exception {
         LOG.info("start->test_12_PersistDuplicateName");
         Random random = new Random();
         int randomInt = random.nextInt((MAX - 0) + MIN + 0);
         LOG.debug("test_12_PersistDuplicateName.randomInt=" + randomInt);
         try {
-            Category categoryDebit1 = new CategoryDebit();
-            categoryDebit1.setName(dublicateName + randomInt);
-            categoryDebit1.setDescription(defaultDescription);
-            em.persist(categoryDebit1);
+            //Saves the bids automatically (later, at flush time)
+            em.persist(categoryGroupDebit1);
 
-            Category categoryDebit2 = new CategoryDebit();
-            categoryDebit2.setName(dublicateName + randomInt);
-            categoryDebit2.setDescription(defaultDescription);
-            em.persist(categoryDebit2);
+            Category categoryDebit1 = new CategoryDebit(categoryGroupDebit1, dublicateName + randomInt, defaultDescription);
+
+            Category categoryDebit2 = new CategoryDebit(categoryGroupDebit1, dublicateName + randomInt, defaultDescription);
+            //http://stackoverflow.com/questions/858572/how-to-make-a-new-list-in-java
+//            categoryGroupDebit1.addCategories(Arrays.asList(categoryDebit1, categoryDebit2));
+            categoryGroupDebit1.addCategories(Lists.newArrayList(categoryDebit1, categoryDebit2));
+
+            LOG.debug("categoryDebit1=" + categoryDebit1);
+            LOG.debug("categoryDebit2=" + categoryDebit2);
             em.getTransaction().commit();
         } catch (Exception e) {
             try {
