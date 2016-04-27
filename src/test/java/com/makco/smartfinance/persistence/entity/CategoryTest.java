@@ -3,6 +3,7 @@ package com.makco.smartfinance.persistence.entity;
 import com.makco.smartfinance.persistence.utils.TestPersistenceManager;
 import java.util.Random;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import javax.persistence.RollbackException;
 import org.apache.logging.log4j.LogManager;
@@ -47,6 +48,7 @@ public class CategoryTest {
     public void setUp() throws Exception {
         em = TestPersistenceManager.INSTANCE.getEntityManager();
         em.getTransaction().begin();
+        setCategoryGroupDebit();
     }
 
     @After
@@ -54,18 +56,42 @@ public class CategoryTest {
         em.close();
     }
 
+    private void setCategoryGroupDebit(){
+        if(categoryGroupDebit1.getId() == null) {
+            CategoryGroupDebit tmp = null;
+            try {
+                tmp = (CategoryGroupDebit) em.createQuery("select cd from CategoryGroupDebit cd where cd.name = :catGrName")
+                        .setParameter("catGrName", categoryGroupDebit1.getName())
+                        .getSingleResult();
+            } catch (NoResultException e) {
+
+            }
+            if (tmp != null) {
+                categoryGroupDebit1 = tmp;
+            }
+        }
+    }
+
     @Test
-    public void test_11_Persist_debit() throws Exception {
+    public void test_11_Persist_categoryGroupAndCategoryWithOnePersist_debit() throws Exception {
         LOG.info("start->testPersist");
-        Category category1 = new CategoryDebit();
         Random random = new Random();
         int randomInt = random.nextInt((MAX - 0) + MIN + 0);
         LOG.debug("testPersist.randomInt=" + randomInt);
-        category1.setCategoryGroup(categoryGroupDebit1);
+
+        //Saves the bids automatically (later, at flush time)
+        em.persist(categoryGroupDebit1);
+
+//        Category category1 = new CategoryDebit(categoryGroupDebit1, categoryDebit1 + randomInt, defaultDescription);
+        CategoryDebit category1 = new CategoryDebit();
         category1.setName(categoryDebit1 + randomInt);
         category1.setDescription(defaultDescription);
 
-        em.persist(category1);
+        //bidirectional association
+        category1.setCategoryGroup(categoryGroupDebit1);
+        categoryGroupDebit1.addCategory(category1);
+
+        //Dirty checking; SQL execution
         em.getTransaction().commit();
         LOG.debug("category1.getId()=" + category1.getId());
         LOG.debug("category1.getCreatedOn()=" + category1.getCreatedOn());

@@ -2,6 +2,7 @@ package com.makco.smartfinance.persistence.entity;
 
 import com.makco.smartfinance.constants.DataBaseConstants;
 import java.sql.Timestamp;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
@@ -29,7 +30,7 @@ import javax.validation.constraints.Size;
             columnNames = {"TYPE","NAME"}
     )
 )
-public abstract class CategoryGroup {
+public abstract class CategoryGroup <T extends Category>{
     @Id
     @org.hibernate.annotations.GenericGenerator(
             name = "CATEGORY_GROUP_SEQUENCE_GENERATOR",
@@ -97,6 +98,10 @@ public abstract class CategoryGroup {
     public void setName(String name) {
         this.name = name;
     }
+
+    public abstract void addCategory(T category);
+
+    public abstract void addCategories(List<T> categories);
 
     public Timestamp getCreatedOn() {
         return createdOn;
