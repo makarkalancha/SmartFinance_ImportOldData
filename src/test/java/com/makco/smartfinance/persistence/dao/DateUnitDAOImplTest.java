@@ -42,9 +42,6 @@ public class DateUnitDAOImplTest {
     public static void tearDownClass() throws Exception {
         LOG.debug(">>>addDUListElapsedTimeByBatch:" + addDUListElapsedTimeByBatch);
         LOG.debug(">>>addDUListElapsedTimeAllAtOnce:" + addDUListElapsedTimeAllAtOnce);
-//        em.close();
-
-//        TestPersistenceManager.INSTANCE.close();
     }
 
     @Before
