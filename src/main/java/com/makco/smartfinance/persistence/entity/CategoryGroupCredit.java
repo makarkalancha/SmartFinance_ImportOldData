@@ -3,6 +3,7 @@ package com.makco.smartfinance.persistence.entity;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import javax.persistence.CascadeType;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -15,7 +16,7 @@ import javax.persistence.OneToMany;
 @DiscriminatorValue("C")
 public class CategoryGroupCredit extends CategoryGroup<CategoryCredit>{
     //http://stackoverflow.com/questions/30838526/how-to-have-a-sorted-set-of-objects-based-on-a-specific-field
-    @OneToMany(mappedBy = "categoryGroupCredit", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "categoryGroupCredit", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     @javax.persistence.OrderBy("name")
     private SortedSet<CategoryCredit> creditCategories = new TreeSet<>();
 //    private SortedMap<Long, CategoryCredit> creditCategories = new TreeMap<>();

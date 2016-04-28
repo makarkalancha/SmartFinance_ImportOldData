@@ -21,7 +21,8 @@ public class CategoryCredit extends Category{
 
     }
 
-    public CategoryCredit(String description, String name) {
+    public CategoryCredit(CategoryGroup categoryGroup, String name, String description) {
+        this.categoryGroupCredit = (CategoryGroupCredit) categoryGroup;
         this.description = description;
         this.name = name;
     }

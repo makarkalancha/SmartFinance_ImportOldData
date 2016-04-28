@@ -25,7 +25,7 @@ public class CategoryDebit extends Category implements Comparable<CategoryDebit>
 
     }
 
-    public CategoryDebit(CategoryGroup categoryGroup, String description, String name) {
+    public CategoryDebit(CategoryGroup categoryGroup, String name, String description) {
         this.categoryGroupDebit = (CategoryGroupDebit) categoryGroup;
         this.name = name;
         this.description = description;
