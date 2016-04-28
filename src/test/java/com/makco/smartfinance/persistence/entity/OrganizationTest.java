@@ -1,7 +1,8 @@
 package com.makco.smartfinance.persistence.entity;
 
-import com.makco.smartfinance.persistence.utils.TestPersistenceManager;
 import com.makco.smartfinance.utils.RandomWithinRange;
+import com.makco.smartfinance.utils.rules.EntityManagerRule;
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.persistence.RollbackException;
@@ -12,6 +13,7 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 import static org.junit.Assert.assertEquals;
@@ -23,7 +25,6 @@ import static org.junit.Assert.assertEquals;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class OrganizationTest {
     private final static Logger LOG = LogManager.getLogger(OrganizationTest.class);
-    private static EntityManager em;
     private String organizationName = "Shop1";
     private String dublicateName = "TwinShop";
     private String defaultDescription = "shop's description";
@@ -32,6 +33,9 @@ public class OrganizationTest {
     private static int MAX = 1_000_000;
     private static RandomWithinRange randomWithinRange = new RandomWithinRange(MIN, MAX);
 
+    @Rule
+    public final EntityManagerRule entityManagerRule = new EntityManagerRule();
+
     @BeforeClass
     public static void setUpClass() throws Exception {
 
@@ -39,23 +43,24 @@ public class OrganizationTest {
 
     @AfterClass
     public static void tearDownClass() throws Exception {
-        TestPersistenceManager.INSTANCE.close();
+
     }
 
     @Before
     public void setUp() throws Exception {
-        em = TestPersistenceManager.INSTANCE.getEntityManager();
-        em.getTransaction().begin();
+
     }
 
     @After
     public void tearDown() throws Exception {
-        em.close();
+
     }
 
     @Test
     public void test_11_Persist() throws Exception {
         LOG.info("start->test_11_Persist");
+        EntityManager em = entityManagerRule.getEntityManager();
+
         Organization shop1 = new Organization();
         int randomInt = randomWithinRange.getRandom();
         LOG.debug("testPersist.randomInt=" + randomInt);
@@ -63,7 +68,7 @@ public class OrganizationTest {
         shop1.setDescription(defaultDescription);
 
         em.persist(shop1);
-        em.getTransaction().commit();
+        entityManagerRule.commit();
         LOG.debug("shop1.getId()=" + shop1.getId());
         LOG.debug("shop1.getCreatedOn()=" + shop1.getCreatedOn());
         LOG.debug("shop1.getUpdatedOn()=" + shop1.getUpdatedOn());
@@ -77,6 +82,8 @@ public class OrganizationTest {
     //"IDX_UNQ_ORGNZTN_NM ON TEST.ORGANIZATION(NAME) VALUES ('TwinShop880921', 7)"
     public void test_12_PersistDuplicateName() throws Exception {
         LOG.info("start->test_12_PersistDuplicateName");
+        EntityManager em = entityManagerRule.getEntityManager();
+
         int randomInt = randomWithinRange.getRandom();
         LOG.debug("test_12_PersistDuplicateName.randomInt=" + randomInt);
         try {
@@ -89,11 +96,11 @@ public class OrganizationTest {
             organization2.setName(dublicateName + randomInt);
             organization2.setDescription(defaultDescription);
             em.persist(organization2);
-            em.getTransaction().commit();
+            entityManagerRule.commit();
         } catch (Exception e) {
             try {
-                if (em.getTransaction().isActive()) {
-                    em.getTransaction().rollback();
+                if (entityManagerRule.isActive()) {
+                    entityManagerRule.rollback();
                 }
             } catch (Exception rbEx) {
                 System.err.println("Rollback of transaction failed, trace follows!");
@@ -104,8 +111,36 @@ public class OrganizationTest {
     }
 
     @Test
+    public void test_13_Persist_multiple() throws Exception {
+        LOG.info("start->test_13_Persist_multiple");
+        EntityManager em = entityManagerRule.getEntityManager();
+
+        String orgDescription = "multiple";
+        for (int i = 0; i < 10; i++) {
+            Organization shop1 = new Organization();
+            shop1.setName(organizationName + "_" + i);
+            shop1.setDescription(orgDescription);
+
+            em.persist(shop1);
+        }
+        entityManagerRule.commit();
+
+        List<Currency> multipleOrg = em.createQuery("select o from Organization o where o.description = :description")
+                .setParameter("description", orgDescription)
+                .getResultList();
+
+//        entityManagerRule.commit();
+
+        LOG.info("test_13_Persist_multiple: multipleOrg.size() = " + multipleOrg.size());
+        assertEquals(true, multipleOrg.size() > 0);
+        LOG.info("end->test_13_Persist_multiple");
+    }
+
+    @Test
     public void test_21_Update() throws Exception {
         LOG.info("start->test_21_Update");
+        EntityManager em = entityManagerRule.getEntityManager();
+
         Query qId = em.createQuery("SELECT min(o.id) from Organization o");
         Long id = ((Long) qId.getSingleResult());
 
@@ -119,7 +154,7 @@ public class OrganizationTest {
         organization.setDescription(defaultDescription + randomInt);
 
         em.persist(organization);
-        em.getTransaction().commit();
+        entityManagerRule.commit();
 
         LOG.debug(">>>organization.getId()=" + organization.getId());
         LOG.debug(">>>organization.getCreatedOn()=" + organization.getCreatedOn());
@@ -135,6 +170,8 @@ public class OrganizationTest {
     @Test
     public void test_31_Delete() throws Exception {
         LOG.info("start->test_31_Delete");
+        EntityManager em = entityManagerRule.getEntityManager();
+
         Query qId = em.createQuery("SELECT min(o.id) as num from Organization o");
         Long id = ((Long) qId.getSingleResult());
 
@@ -143,7 +180,7 @@ public class OrganizationTest {
         Organization organization = em.find(Organization.class, id);
 
         em.remove(organization);
-        em.getTransaction().commit();
+        entityManagerRule.commit();
 
         Organization organizationJustDeleted = em.find(Organization.class, id);
         LOG.debug(">>>organization=" + organizationJustDeleted);
