@@ -1,7 +1,7 @@
 package com.makco.smartfinance.persistence.entity;
 
 import com.makco.smartfinance.persistence.utils.TestPersistenceManager;
-import java.util.Random;
+import com.makco.smartfinance.utils.RandomWithinRange;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.persistence.RollbackException;
@@ -30,6 +30,7 @@ public class CategoryGroupTest {
 
     private static int MIN = 1;
     private static int MAX = 1_000_000;
+    private static RandomWithinRange randomWithinRange = new RandomWithinRange(MIN, MAX);
 
     @BeforeClass
     public static void setUpClass() throws Exception {
@@ -56,8 +57,7 @@ public class CategoryGroupTest {
     public void test_11_Persist_debit() throws Exception {
         LOG.info("start->testPersist");
         CategoryGroup categoryGroup1 = new CategoryGroupDebit();
-        Random random = new Random();
-        int randomInt = random.nextInt((MAX - 0) + MIN + 0);
+        int randomInt = randomWithinRange.getRandom();
         LOG.debug("testPersist.randomInt=" + randomInt);
         categoryGroup1.setName(categoryGroupDebit1 + randomInt);
         categoryGroup1.setDescription(defaultDescription);
@@ -77,8 +77,7 @@ public class CategoryGroupTest {
     //Unique index or primary key violation: "IDX_UNQ_CTGRGRP_TPNM ON TEST.CATEGORY_GROUP(TYPE, NAME) VALUES ('D', 'TwinCategoryGroup771883', 2)"
     public void test_12_PersistDuplicateName_debit() throws Exception {
         LOG.info("start->test_12_PersistDuplicateName");
-        Random random = new Random();
-        int randomInt = random.nextInt((MAX - 0) + MIN + 0);
+        int randomInt = randomWithinRange.getRandom();
         LOG.debug("test_12_PersistDuplicateName.randomInt=" + randomInt);
         try {
             CategoryGroup categoryGroupDebit1 = new CategoryGroupDebit();
@@ -108,8 +107,7 @@ public class CategoryGroupTest {
     public void test_13_Persist_credit() throws Exception {
         LOG.info("start->testPersist");
         CategoryGroup categoryGroup1 = new CategoryGroupCredit();
-        Random random = new Random();
-        int randomInt = random.nextInt((MAX - 0) + MIN + 0);
+        int randomInt = randomWithinRange.getRandom();
         LOG.debug("testPersist.randomInt=" + randomInt);
         categoryGroup1.setName(categoryGroupCredit1 + randomInt);
         categoryGroup1.setDescription(defaultDescription);
@@ -128,8 +126,7 @@ public class CategoryGroupTest {
     @Test
     public void test_14_Persist_creditWithDebitName() throws Exception {
         LOG.info("start->testPersist");
-        Random random = new Random();
-        int randomInt = random.nextInt((MAX - 0) + MIN + 0);
+        int randomInt = randomWithinRange.getRandom();
 
         CategoryGroup categoryGroupDebit1 = new CategoryGroupDebit();
         categoryGroupDebit1.setName(dublicateName + randomInt);
@@ -162,8 +159,7 @@ public class CategoryGroupTest {
         CategoryGroup categoryGroup = em.find(CategoryGroup.class, id);
 
         //min 0 and max 100
-        Random random = new Random();
-        int randomInt = random.nextInt((MAX - 0) + MIN + 0);
+        int randomInt = randomWithinRange.getRandom();
         LOG.debug("testUpdate.randomInt=" + randomInt);
         categoryGroup.setName(categoryGroupDebit1 + randomInt);
         categoryGroup.setDescription(defaultDescription + randomInt);

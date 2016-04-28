@@ -2,7 +2,7 @@ package com.makco.smartfinance.persistence.entity;
 
 import com.google.common.collect.Lists;
 import com.makco.smartfinance.persistence.utils.TestPersistenceManager;
-import java.util.Random;
+import com.makco.smartfinance.utils.RandomWithinRange;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
@@ -33,6 +33,7 @@ public class CategoryTest {
 
     private static int MIN = 1;
     private static int MAX = 1_000_000;
+    private static RandomWithinRange randomWithinRange = new RandomWithinRange(MIN, MAX);
 
     @BeforeClass
     public static void setUpClass() throws Exception {
@@ -75,8 +76,7 @@ public class CategoryTest {
     @Test
     public void test_11_Persist_categoryGroupAndCategoryWithOnePersist_debit() throws Exception {
         LOG.info("start->testPersist");
-        Random random = new Random();
-        int randomInt = random.nextInt((MAX - 0) + MIN + 0);
+        int randomInt = randomWithinRange.getRandom();
         LOG.debug("testPersist.randomInt=" + randomInt);
 
         //Saves the bids automatically (later, at flush time)
@@ -107,8 +107,7 @@ public class CategoryTest {
 //    Unique index or primary key violation: "IDX_UNQ_CTGRGRP_TPNM ON TEST.CATEGORY_GROUP(TYPE, NAME) VALUES ('D', 'TwinCategory771883', 2)"
     public void test_12_PersistDuplicateName_debit() throws Exception {
         LOG.info("start->test_12_PersistDuplicateName");
-        Random random = new Random();
-        int randomInt = random.nextInt((MAX - 0) + MIN + 0);
+        int randomInt = randomWithinRange.getRandom();
         LOG.debug("test_12_PersistDuplicateName.randomInt=" + randomInt);
         try {
             //Saves the bids automatically (later, at flush time)
@@ -141,8 +140,7 @@ public class CategoryTest {
     public void test_13_Persist_credit() throws Exception {
         LOG.info("start->testPersist");
         Category category1 = new CategoryCredit();
-        Random random = new Random();
-        int randomInt = random.nextInt((MAX - 0) + MIN + 0);
+        int randomInt = randomWithinRange.getRandom();
         LOG.debug("testPersist.randomInt=" + randomInt);
         category1.setName(categoryCredit1 + randomInt);
         category1.setDescription(defaultDescription);
@@ -161,8 +159,7 @@ public class CategoryTest {
     @Test
     public void test_14_Persist_creditWithDebitName() throws Exception {
         LOG.info("start->testPersist");
-        Random random = new Random();
-        int randomInt = random.nextInt((MAX - 0) + MIN + 0);
+        int randomInt = randomWithinRange.getRandom();
 
         Category categoryDebit1 = new CategoryDebit();
         categoryDebit1.setName(dublicateName + randomInt);
@@ -195,8 +192,7 @@ public class CategoryTest {
         Category category = em.find(Category.class, id);
 
         //min 0 and max 100
-        Random random = new Random();
-        int randomInt = random.nextInt((MAX - 0) + MIN + 0);
+        int randomInt = randomWithinRange.getRandom();
         LOG.debug("testUpdate.randomInt=" + randomInt);
         category.setName(categoryDebit1 + randomInt);
         category.setDescription(defaultDescription + randomInt);

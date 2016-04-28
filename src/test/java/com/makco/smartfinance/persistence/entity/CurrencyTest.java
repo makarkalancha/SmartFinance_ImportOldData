@@ -1,7 +1,8 @@
 package com.makco.smartfinance.persistence.entity;
 
 import com.makco.smartfinance.persistence.utils.TestPersistenceManager;
-import java.util.Random;
+import com.makco.smartfinance.utils.RandomWithinRange;
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.persistence.RollbackException;
@@ -23,12 +24,12 @@ import static org.junit.Assert.assertEquals;
 public class CurrencyTest {
     private final static Logger LOG = LogManager.getLogger(CurrencyTest.class);
     private static EntityManager em;
-    private String currencyCode = "CAD";
     private String currencyName = "Canadian Dollar";
     private String currencyDesc = "Dollar that is used in Canada or Canada's dollar";
 
-    private static int MIN = 1;
-    private static int MAX = 100;
+    private static final int MIN = 100;
+    private static final int MAX = 999;
+    private static RandomWithinRange randomWithinRange = new RandomWithinRange(MIN, MAX);
 
     @BeforeClass
     public static void setUpClass() throws Exception {
@@ -42,21 +43,22 @@ public class CurrencyTest {
 
     @Before
     public void setUp() throws Exception {
-        em = TestPersistenceManager.INSTANCE.getEntityManager();
-        em.getTransaction().begin();
+
     }
 
     @After
     public void tearDown() throws Exception {
-        em.close();
+//        em.close();
     }
 
     @Test
     public void test_11_Persist() throws Exception{
-        LOG.info("start->testPersist");
+        LOG.info("start->test_11_Persist");
+        em = TestPersistenceManager.INSTANCE.getEntityManager();
+        em.getTransaction().begin();
+
         Currency cad = new Currency();
-        Random random = new Random();
-        Integer randomInt = random.nextInt((MAX - 0) + MIN + 0);
+        Integer randomInt = randomWithinRange.getRandom();
         LOG.debug("testPersist.randomInt=" + randomInt);
         cad.setCode(randomInt.toString());
         cad.setName(currencyName);
@@ -68,6 +70,7 @@ public class CurrencyTest {
         LOG.debug("INS: cad.getCreatedOn()=" + cad.getCreatedOn());
         LOG.debug("INS: cad.getUpdatedOn()=" + cad.getUpdatedOn());
 
+        em.close();
         assertEquals(true, cad.getCreatedOn() != null);
         assertEquals(true, cad.getUpdatedOn() != null);
         LOG.info("end->testPersist");
@@ -77,8 +80,10 @@ public class CurrencyTest {
     //"IDX_UNQ_ORGNZTN_NM ON TEST.ORGANIZATION(NAME) VALUES ('TwinShop880921', 7)"
     public void test_12_PersistDuplicateName() throws Exception {
         LOG.info("start->test_12_PersistDuplicateName");
-        Random random = new Random();
-        int randomInt = random.nextInt((MAX - 0) + MIN + 0);
+        em = TestPersistenceManager.INSTANCE.getEntityManager();
+        em.getTransaction().begin();
+
+        int randomInt = randomWithinRange.getRandom();
         LOG.debug("test_12_PersistDuplicateName.randomInt=" + randomInt);
         String currencyDuplicate = "TWN";
         String currencyDuplicateDesc = "twin desc";
@@ -103,21 +108,54 @@ public class CurrencyTest {
                 rbEx.printStackTrace(System.err);
             }
             throw e;
+        } finally {
+            em.close();
         }
     }
 
     @Test
+    public void test_13_Persist_multiple() throws Exception {
+        LOG.info("start->test_13_Persist_multiple");
+        em = TestPersistenceManager.INSTANCE.getEntityManager();
+        em.getTransaction().begin();
+
+        String currencyDescription = "multiple";
+        for (int i = 0; i < 10; i++) {
+            Currency cad = new Currency();
+            Integer randomInt = randomWithinRange.getRandom();
+            LOG.debug("testPersist.randomInt=" + randomInt);
+
+            cad.setCode(randomInt.toString());
+            cad.setName(currencyName + "_" + i);
+            cad.setDescription(currencyDescription);
+
+            em.persist(cad);
+        }
+        em.getTransaction().commit();
+
+        List<Currency> multipleCurrencies = em.createQuery("select c from Currency c where c.description = :description")
+                .setParameter("description", currencyDescription)
+                .getResultList();
+
+        em.close();
+        LOG.info("test_13_Persist_multiple: multipleCurrencies.size() = " + multipleCurrencies.size());
+        assertEquals(true, multipleCurrencies.size() > 0);
+        LOG.info("end->test_13_Persist_multiple");
+    }
+
+    @Test
     public void test_21_Update() throws Exception {
-        LOG.info("start->testUpdate");
+        LOG.info("start->test_21_Update");
+        em = TestPersistenceManager.INSTANCE.getEntityManager();
+        em.getTransaction().begin();
+
         Query qId = em.createQuery("SELECT max(c.id) as num from Currency c");
         Long id = ((Long) qId.getSingleResult());
 
         LOG.debug("max num = " + id);
 
         Currency cad = em.find(Currency.class, id);
-        Random random = new Random();
-        //min 0 and max 100
-        Integer randomInt = random.nextInt((MAX - 0) + MIN + 0);
+        Integer randomInt = randomWithinRange.getRandom();
         LOG.debug("testUpdate.randomInt=" + randomInt);
         String newName = randomInt.toString();
         String newDesc = currencyDesc + randomInt;
@@ -126,7 +164,7 @@ public class CurrencyTest {
 
         em.persist(cad);
         em.getTransaction().commit();
-
+        em.close();
         LOG.debug("UPD: cad.getId()=" + cad.getId());
         LOG.debug("UPD: cad.getCreatedOn()=" + cad.getCreatedOn());
         LOG.debug("UPD: cad.getUpdatedOn()=" + cad.getUpdatedOn());
@@ -142,7 +180,10 @@ public class CurrencyTest {
 
     @Test
     public void test_31_Delete() throws Exception {
-        LOG.info("start->testDelete");
+        LOG.info("start->test_31_Delete");
+        em = TestPersistenceManager.INSTANCE.getEntityManager();
+        em.getTransaction().begin();
+
         Query qId = em.createQuery("SELECT min(c.id) as num from Currency c");
         Long id = ((Long) qId.getSingleResult());
 
@@ -154,6 +195,7 @@ public class CurrencyTest {
         em.getTransaction().commit();
 
         Currency cadJustDeleted = em.find(Currency.class, id);
+        em.close();
         LOG.debug(">>>cadJustDeleted=" + cadJustDeleted);
         LOG.debug(cad);
 

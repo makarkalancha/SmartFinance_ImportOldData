@@ -1,7 +1,7 @@
 package com.makco.smartfinance.persistence.entity;
 
 import com.makco.smartfinance.persistence.utils.TestPersistenceManager;
-import java.util.Random;
+import com.makco.smartfinance.utils.RandomWithinRange;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.persistence.RollbackException;
@@ -30,6 +30,7 @@ public class OrganizationTest {
 
     private static int MIN = 1;
     private static int MAX = 1_000_000;
+    private static RandomWithinRange randomWithinRange = new RandomWithinRange(MIN, MAX);
 
     @BeforeClass
     public static void setUpClass() throws Exception {
@@ -54,10 +55,9 @@ public class OrganizationTest {
 
     @Test
     public void test_11_Persist() throws Exception {
-        LOG.info("start->testPersist");
+        LOG.info("start->test_11_Persist");
         Organization shop1 = new Organization();
-        Random random = new Random();
-        int randomInt = random.nextInt((MAX - 0) + MIN + 0);
+        int randomInt = randomWithinRange.getRandom();
         LOG.debug("testPersist.randomInt=" + randomInt);
         shop1.setName(organizationName + randomInt);
         shop1.setDescription(defaultDescription);
@@ -77,8 +77,7 @@ public class OrganizationTest {
     //"IDX_UNQ_ORGNZTN_NM ON TEST.ORGANIZATION(NAME) VALUES ('TwinShop880921', 7)"
     public void test_12_PersistDuplicateName() throws Exception {
         LOG.info("start->test_12_PersistDuplicateName");
-        Random random = new Random();
-        int randomInt = random.nextInt((MAX - 0) + MIN + 0);
+        int randomInt = randomWithinRange.getRandom();
         LOG.debug("test_12_PersistDuplicateName.randomInt=" + randomInt);
         try {
             Organization organization1 = new Organization();
@@ -106,7 +105,7 @@ public class OrganizationTest {
 
     @Test
     public void test_21_Update() throws Exception {
-        LOG.info("start->testUpdate");
+        LOG.info("start->test_21_Update");
         Query qId = em.createQuery("SELECT min(o.id) from Organization o");
         Long id = ((Long) qId.getSingleResult());
 
@@ -114,9 +113,7 @@ public class OrganizationTest {
 
         Organization organization = em.find(Organization.class, id);
 
-        //min 0 and max 100
-        Random random = new Random();
-        int randomInt = random.nextInt((MAX - 0) + MIN + 0);
+        int randomInt = randomWithinRange.getRandom();
         LOG.debug("testUpdate.randomInt=" + randomInt);
         organization.setName(organizationName + randomInt);
         organization.setDescription(defaultDescription + randomInt);
@@ -137,7 +134,7 @@ public class OrganizationTest {
 
     @Test
     public void test_31_Delete() throws Exception {
-        LOG.info("start->testDelete");
+        LOG.info("start->test_31_Delete");
         Query qId = em.createQuery("SELECT min(o.id) as num from Organization o");
         Long id = ((Long) qId.getSingleResult());
 

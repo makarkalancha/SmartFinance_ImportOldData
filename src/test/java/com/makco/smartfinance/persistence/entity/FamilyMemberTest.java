@@ -1,6 +1,7 @@
 package com.makco.smartfinance.persistence.entity;
 
 import com.makco.smartfinance.persistence.utils.TestPersistenceManager;
+import com.makco.smartfinance.utils.RandomWithinRange;
 import java.util.Random;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -30,6 +31,7 @@ public class FamilyMemberTest {
 
     private static int MIN = 1;
     private static int MAX = 1_000_000;
+    private static RandomWithinRange randomWithinRange = new RandomWithinRange(MIN, MAX);
 
     @BeforeClass
     public static void setUpClass() throws Exception {
@@ -43,21 +45,22 @@ public class FamilyMemberTest {
 
     @Before
     public void setUp() throws Exception {
-        em = TestPersistenceManager.INSTANCE.getEntityManager();
-        em.getTransaction().begin();
+        //if opened in setUp and closed in tearDown, data is not saved in Db
+//        em = TestPersistenceManager.INSTANCE.getEntityManager();
+//        em.getTransaction().begin();
     }
 
     @After
     public void tearDown() throws Exception {
-        em.close();
+        //if opened in setUp and closed in tearDown, data is not saved in Db
+//        em.close();
     }
 
     @Test
     public void test_11_Persist() throws Exception {
-        LOG.info("start->testPersist");
+        LOG.info("start->test_11_Persist");
         FamilyMember husband = new FamilyMember();
-        Random random = new Random();
-        int randomInt = random.nextInt((MAX - 0) + MIN + 0);
+        int randomInt = randomWithinRange.getRandom();
         LOG.debug("testPersist.randomInt=" + randomInt);
         husband.setName(familyMemberName + randomInt);
         husband.setDescription(defaultDescription);
@@ -78,8 +81,7 @@ public class FamilyMemberTest {
     //Unique index or primary key violation: "IDX_UNQ_FMLMMBR_NM ON TEST.FAMILY_MEMBER(NAME) VALUES ('Twin516576', 2)"
     public void test_12_PersistDuplicateName() throws Exception {
         LOG.info("start->test_12_PersistDuplicateName");
-        Random random = new Random();
-        int randomInt = random.nextInt((MAX - 0) + MIN + 0);
+        int randomInt = randomWithinRange.getRandom();
         LOG.debug("test_12_PersistDuplicateName.randomInt=" + randomInt);
         try {
             FamilyMember husband1 = new FamilyMember();
@@ -112,7 +114,7 @@ public class FamilyMemberTest {
 
     @Test
     public void test_21_Update() throws Exception {
-        LOG.info("start->testUpdate");
+        LOG.info("start->test_21_Update");
         Query qId = em.createQuery("SELECT min(f.id) from FamilyMember f");
         Long id = ((Long) qId.getSingleResult());
 
@@ -120,9 +122,7 @@ public class FamilyMemberTest {
 
         FamilyMember husband = em.find(FamilyMember.class, id);
 
-        //min 0 and max 100
-        Random random = new Random();
-        int randomInt = random.nextInt((MAX - 0) + MIN + 0);
+        int randomInt = randomWithinRange.getRandom();
         LOG.debug("testUpdate.randomInt=" + randomInt);
         husband.setName(familyMemberName + randomInt);
         husband.setDescription(defaultDescription + randomInt);
@@ -143,7 +143,7 @@ public class FamilyMemberTest {
 
     @Test
     public void test_31_Delete() throws Exception {
-        LOG.info("start->testDelete");
+        LOG.info("start->test_31_Delete");
         Query qId = em.createQuery("SELECT min(f.id) as num from FamilyMember f");
         Long id = ((Long) qId.getSingleResult());
 
