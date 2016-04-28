@@ -1,7 +1,7 @@
 package com.makco.smartfinance.persistence.entity;
 
-import com.makco.smartfinance.persistence.utils.TestPersistenceManager;
 import com.makco.smartfinance.utils.RandomWithinRange;
+import com.makco.smartfinance.utils.rules.EntityManagerRule;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.persistence.RollbackException;
@@ -12,6 +12,7 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 import static org.junit.Assert.assertEquals;
@@ -22,7 +23,6 @@ import static org.junit.Assert.assertEquals;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class CategoryGroupTest {
     private final static Logger LOG = LogManager.getLogger(CategoryGroupTest.class);
-    private static EntityManager em;
     private String categoryGroupDebit1 = "CategoryGroupDebit1";
     private String categoryGroupCredit1 = "CategoryGroupCredit1";
     private String dublicateName = "TwinCategoryGroup";
@@ -32,6 +32,9 @@ public class CategoryGroupTest {
     private static int MAX = 1_000_000;
     private static RandomWithinRange randomWithinRange = new RandomWithinRange(MIN, MAX);
 
+    @Rule
+    public final EntityManagerRule entityManagerRule = new EntityManagerRule();
+    
     @BeforeClass
     public static void setUpClass() throws Exception {
 
@@ -39,23 +42,24 @@ public class CategoryGroupTest {
 
     @AfterClass
     public static void tearDownClass() throws Exception {
-        TestPersistenceManager.INSTANCE.close();
+        
     }
 
     @Before
     public void setUp() throws Exception {
-        em = TestPersistenceManager.INSTANCE.getEntityManager();
-        em.getTransaction().begin();
+        
     }
 
     @After
     public void tearDown() throws Exception {
-        em.close();
+        
     }
 
     @Test
     public void test_11_Persist_debit() throws Exception {
         LOG.info("start->testPersist");
+        EntityManager em = entityManagerRule.getEntityManager();
+        
         CategoryGroup categoryGroup1 = new CategoryGroupDebit();
         int randomInt = randomWithinRange.getRandom();
         LOG.debug("testPersist.randomInt=" + randomInt);
@@ -63,7 +67,7 @@ public class CategoryGroupTest {
         categoryGroup1.setDescription(defaultDescription);
 
         em.persist(categoryGroup1);
-        em.getTransaction().commit();
+        entityManagerRule.commit();
         LOG.debug("categoryGroup1.getId()=" + categoryGroup1.getId());
         LOG.debug("categoryGroup1.getCreatedOn()=" + categoryGroup1.getCreatedOn());
         LOG.debug("categoryGroup1.getUpdatedOn()=" + categoryGroup1.getUpdatedOn());
@@ -77,6 +81,8 @@ public class CategoryGroupTest {
     //Unique index or primary key violation: "IDX_UNQ_CTGRGRP_TPNM ON TEST.CATEGORY_GROUP(TYPE, NAME) VALUES ('D', 'TwinCategoryGroup771883', 2)"
     public void test_12_PersistDuplicateName_debit() throws Exception {
         LOG.info("start->test_12_PersistDuplicateName");
+        EntityManager em = entityManagerRule.getEntityManager();
+
         int randomInt = randomWithinRange.getRandom();
         LOG.debug("test_12_PersistDuplicateName.randomInt=" + randomInt);
         try {
@@ -89,11 +95,11 @@ public class CategoryGroupTest {
             categoryGroupDebit2.setName(dublicateName + randomInt);
             categoryGroupDebit2.setDescription(defaultDescription);
             em.persist(categoryGroupDebit2);
-            em.getTransaction().commit();
+            entityManagerRule.commit();
         } catch (Exception e) {
             try {
-                if (em.getTransaction().isActive()) {
-                    em.getTransaction().rollback();
+                if (entityManagerRule.isActive()) {
+                    entityManagerRule.rollback();
                 }
             } catch (Exception rbEx) {
                 System.err.println("Rollback of transaction failed, trace follows!");
@@ -106,6 +112,8 @@ public class CategoryGroupTest {
     @Test
     public void test_13_Persist_credit() throws Exception {
         LOG.info("start->testPersist");
+        EntityManager em = entityManagerRule.getEntityManager();
+
         CategoryGroup categoryGroup1 = new CategoryGroupCredit();
         int randomInt = randomWithinRange.getRandom();
         LOG.debug("testPersist.randomInt=" + randomInt);
@@ -113,7 +121,7 @@ public class CategoryGroupTest {
         categoryGroup1.setDescription(defaultDescription);
 
         em.persist(categoryGroup1);
-        em.getTransaction().commit();
+        entityManagerRule.commit();
         LOG.debug("categoryGroup1.getId()=" + categoryGroup1.getId());
         LOG.debug("categoryGroup1.getCreatedOn()=" + categoryGroup1.getCreatedOn());
         LOG.debug("categoryGroup1.getUpdatedOn()=" + categoryGroup1.getUpdatedOn());
@@ -126,8 +134,9 @@ public class CategoryGroupTest {
     @Test
     public void test_14_Persist_creditWithDebitName() throws Exception {
         LOG.info("start->testPersist");
-        int randomInt = randomWithinRange.getRandom();
+        EntityManager em = entityManagerRule.getEntityManager();
 
+        int randomInt = randomWithinRange.getRandom();
         CategoryGroup categoryGroupDebit1 = new CategoryGroupDebit();
         categoryGroupDebit1.setName(dublicateName + randomInt);
         categoryGroupDebit1.setDescription(defaultDescription);
@@ -137,7 +146,7 @@ public class CategoryGroupTest {
         categoryGroupCredit2.setName(dublicateName + randomInt);
         categoryGroupCredit2.setDescription(defaultDescription);
         em.persist(categoryGroupCredit2);
-        em.getTransaction().commit();
+        entityManagerRule.commit();
 
         LOG.debug("categoryGroupDebit1.getId()=" + categoryGroupDebit1.getId());
         LOG.debug("categoryGroupDebit1.getName()=" + categoryGroupDebit1.getName());
@@ -151,6 +160,8 @@ public class CategoryGroupTest {
     @Test
     public void test_21_Update_debit() throws Exception {
         LOG.info("start->testUpdate");
+        EntityManager em = entityManagerRule.getEntityManager();
+
         Query qId = em.createQuery("SELECT min(cg.id) from CategoryGroup cg");
         Long id = ((Long) qId.getSingleResult());
 
@@ -165,7 +176,7 @@ public class CategoryGroupTest {
         categoryGroup.setDescription(defaultDescription + randomInt);
 
         em.persist(categoryGroup);
-        em.getTransaction().commit();
+        entityManagerRule.commit();
 
         LOG.debug(">>>categoryGroup.getId()=" + categoryGroup.getId());
         LOG.debug(">>>categoryGroup.getCreatedOn()=" + categoryGroup.getCreatedOn());
@@ -181,6 +192,8 @@ public class CategoryGroupTest {
     @Test
     public void test_31_Delete_debit() throws Exception {
         LOG.info("start->testDelete");
+        EntityManager em = entityManagerRule.getEntityManager();
+
         Query qId = em.createQuery("SELECT min(cg.id) as num from CategoryGroup cg");
         Long id = ((Long) qId.getSingleResult());
 
@@ -189,7 +202,7 @@ public class CategoryGroupTest {
         CategoryGroup categoryGroup = em.find(CategoryGroup.class, id);
 
         em.remove(categoryGroup);
-        em.getTransaction().commit();
+        entityManagerRule.commit();
 
         CategoryGroup organizationJustDeleted = em.find(CategoryGroup.class, id);
         LOG.debug(">>>categoryGroup=" + organizationJustDeleted);

@@ -35,6 +35,7 @@ public class FamilyMemberTest {
     private String familyMemberName = "Freddy";
     private String dublicateName = "Twin";
     private String defaultDescription = "husband or wife's man";
+
     @Rule
     public final EntityManagerRule entityManagerRule = new EntityManagerRule();
 
