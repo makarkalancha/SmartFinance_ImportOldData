@@ -19,10 +19,13 @@ public enum TestPersistenceManager {
     }
 
     public EntityManager getEntityManager(){
+        if(!emFactory.isOpen()){
+            emFactory = Persistence.createEntityManagerFactory("test");
+        }
         return emFactory.createEntityManager();
     }
 
-    public void close(){
+    public void closeFactory(){
         emFactory.close();
     }
 }
