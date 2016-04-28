@@ -28,9 +28,6 @@ public class DateUnitTest {
     private String dateToParse = "1971-02-06";//"1970-01-01" is used in databaseEngine trigger test
     private DateUnit du;
 
-//    private static int MIN = 1;
-//    private static int MAX = 100;
-
     @BeforeClass
     public static void setUpClass() throws Exception {
         em = TestPersistenceManager.INSTANCE.getEntityManager();
@@ -38,8 +35,6 @@ public class DateUnitTest {
 
     @AfterClass
     public static void tearDownClass() throws Exception {
-//        em.close();
-//        TestPersistenceManager.INSTANCE.close();
     }
 
     @Before
