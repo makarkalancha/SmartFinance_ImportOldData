@@ -103,6 +103,10 @@ public abstract class CategoryGroup <T extends Category>{
 
     public abstract void addCategories(List<T> categories);
 
+    public abstract void removeCategory(T category);
+
+    public abstract void removeCategories(List<T> categories);
+
     public Timestamp getCreatedOn() {
         return createdOn;
     }

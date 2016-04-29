@@ -16,7 +16,10 @@ import javax.persistence.OneToMany;
 @DiscriminatorValue("D")
 public class CategoryGroupDebit extends CategoryGroup<CategoryDebit>{
     //http://stackoverflow.com/questions/30838526/how-to-have-a-sorted-set-of-objects-based-on-a-specific-field
-    @OneToMany(mappedBy = "categoryGroupDebit", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    //https://vladmihalcea.com/2015/03/05/a-beginners-guide-to-jpa-and-hibernate-cascade-types/
+//    https://howtoprogramwithjava.com/hibernate-onetomany-bidirectional-relationship/
+//    @OneToMany(mappedBy = "categoryGroupDebit", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)//entityManager
+    @OneToMany(mappedBy = "categoryGroupDebit", cascade = CascadeType.ALL, fetch = FetchType.LAZY)//session
     @javax.persistence.OrderBy("name")
     private SortedSet<CategoryDebit> debitCategories = new TreeSet<>();
 //    private SortedSet<? extends Category> debitCategories = new TreeSet<CategoryDebit>(); 
@@ -47,6 +50,16 @@ public class CategoryGroupDebit extends CategoryGroup<CategoryDebit>{
     @Override
     public void addCategory(CategoryDebit category) {
         this.debitCategories.add(category);
+    }
+
+    @Override
+    public void removeCategory(CategoryDebit category) {
+        this.debitCategories.remove(category);
+    }
+
+    @Override
+    public void removeCategories(List<CategoryDebit> categories) {
+        this.debitCategories.remove(categories);
     }
 
     //    @Override

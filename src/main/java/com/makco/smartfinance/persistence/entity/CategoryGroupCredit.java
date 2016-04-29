@@ -16,7 +16,7 @@ import javax.persistence.OneToMany;
 @DiscriminatorValue("C")
 public class CategoryGroupCredit extends CategoryGroup<CategoryCredit>{
     //http://stackoverflow.com/questions/30838526/how-to-have-a-sorted-set-of-objects-based-on-a-specific-field
-    @OneToMany(mappedBy = "categoryGroupCredit", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "categoryGroupCredit", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @javax.persistence.OrderBy("name")
     private SortedSet<CategoryCredit> creditCategories = new TreeSet<>();
 //    private SortedMap<Long, CategoryCredit> creditCategories = new TreeMap<>();
@@ -41,6 +41,16 @@ public class CategoryGroupCredit extends CategoryGroup<CategoryCredit>{
     @Override
     public void addCategory(CategoryCredit category) {
         this.creditCategories.add(category);
+    }
+
+    @Override
+    public void removeCategory(CategoryCredit category) {
+        this.creditCategories.remove(category);
+    }
+
+    @Override
+    public void removeCategories(List<CategoryCredit> categories) {
+        this.creditCategories.removeAll(categories);
     }
 
     @Override
