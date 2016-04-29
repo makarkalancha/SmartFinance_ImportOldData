@@ -35,12 +35,12 @@ public class CategoryGroupCredit extends CategoryGroup<CategoryCredit>{
 
     @Override
     public void addCategories(List<CategoryCredit> categories) {
-
+        this.creditCategories.addAll(categories);
     }
 
     @Override
     public void addCategory(CategoryCredit category) {
-
+        this.creditCategories.add(category);
     }
 
     @Override

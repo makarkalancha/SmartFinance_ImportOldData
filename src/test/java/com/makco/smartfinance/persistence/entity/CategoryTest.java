@@ -28,7 +28,7 @@ public class CategoryTest {
     private final static Logger LOG = LogManager.getLogger(CategoryTest.class);
     private String categoryDebitName1 = "CategoryDebit1";
     private String categoryCreditName1 = "CategoryCredit1";
-    private String dublicateName = "TwinCategory";
+    private String duplicateName = "TwinCategory";
     private String defaultDescription = "shop's description";
 
     private static int MIN = 1;
@@ -143,14 +143,15 @@ public class CategoryTest {
         EntityManager em = entityManagerRule.getEntityManager();
 
         int randomInt = randomWithinRange.getRandom();
+        String generatedDuplicateName = duplicateName + randomInt;
         LOG.debug("test_12_PersistDuplicateName.randomInt=" + randomInt);
         try {
             //Saves the bids automatically (later, at flush time)
             em.persist(categoryGroupDebit1);
 
-            Category categoryDebit1 = new CategoryDebit(categoryGroupDebit1, dublicateName + randomInt, defaultDescription);
+            Category categoryDebit1 = new CategoryDebit(categoryGroupDebit1, generatedDuplicateName, defaultDescription);
 
-            Category categoryDebit2 = new CategoryDebit(categoryGroupDebit1, dublicateName + randomInt, defaultDescription);
+            Category categoryDebit2 = new CategoryDebit(categoryGroupDebit1, generatedDuplicateName, defaultDescription);
             //http://stackoverflow.com/questions/858572/how-to-make-a-new-list-in-java
 //            categoryGroupDebit1.addCategories(Arrays.asList(categoryDebitName1, categoryDebit2));
             categoryGroupDebit1.addCategories(Lists.newArrayList(categoryDebit1, categoryDebit2));
@@ -208,16 +209,24 @@ public class CategoryTest {
         EntityManager em = entityManagerRule.getEntityManager();
 
         int randomInt = randomWithinRange.getRandom();
+        String generatedDuplicateName = duplicateName + randomInt;
+
+        //Saves the bids automatically (later, at flush time)
+        //Can I reattach a detached instance? p252
+        //Session.saveOrUpdateCopy() == EnitityManager.merge()
+        em.persist(categoryGroupDebit1);
+        em.persist(categoryGroupCredit1);
 
         Category categoryDebit1 = new CategoryDebit();
-        categoryDebit1.setName(dublicateName + randomInt);
+        categoryDebit1.setName(generatedDuplicateName);
         categoryDebit1.setDescription(defaultDescription);
-        em.persist(categoryDebit1);
+        categoryDebit1.setCategoryGroup(categoryGroupDebit1);
 
         Category categoryCredit2 = new CategoryCredit();
-        categoryCredit2.setName(dublicateName + randomInt);
+        categoryCredit2.setName(generatedDuplicateName);
         categoryCredit2.setDescription(defaultDescription);
-        em.persist(categoryCredit2);
+        categoryCredit2.setCategoryGroup(categoryGroupCredit1);
+
         entityManagerRule.commit();
 
         LOG.debug("categoryDebitName1.getId()=" + categoryDebit1.getId());

@@ -11,7 +11,7 @@ import javax.persistence.ManyToOne;
  */
 @Entity
 @DiscriminatorValue("C")
-public class CategoryCredit extends Category{
+public class CategoryCredit extends Category implements Comparable<CategoryCredit>{
     //TODO because it's LAZY, check if you need to add ProgressIndicator when object is loaded
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CATEGORY_GROUP_ID",nullable = false)
@@ -69,5 +69,11 @@ public class CategoryCredit extends Category{
                 ", createdOn='" + createdOn + '\'' +
                 ", updatedOn='" + updatedOn + '\'' +
                 '}';
+    }
+
+    //because CategoryDebit is used in CategoryGroupDebit SortedSet<CategoryDebit> and this collection puts only Comparable
+    @Override
+    public int compareTo(CategoryCredit that) {
+        return this.name.compareTo(that.name);
     }
 }
