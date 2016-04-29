@@ -17,7 +17,7 @@ public class CurrencyDAOImpl implements CurrencyDAO {
     private final static Logger LOG = LogManager.getLogger(CurrencyDAOImpl.class);
 
     @Override
-    public synchronized List<Currency> currencyList() throws Exception {
+    public List<Currency> currencyList() throws Exception {
         List<Currency> list = new ArrayList<>();
         Session session = null;
         try{
@@ -44,7 +44,7 @@ public class CurrencyDAOImpl implements CurrencyDAO {
     }
 
     @Override
-    public synchronized Currency getCurrencyById(Long id) throws Exception {
+    public Currency getCurrencyById(Long id) throws Exception {
         Session session = null;
         Currency currency = null;
         try{
@@ -71,7 +71,7 @@ public class CurrencyDAOImpl implements CurrencyDAO {
     }
 
     @Override
-    public synchronized List<Currency> getCurrencyByCode(String code) throws Exception {
+    public List<Currency> getCurrencyByCode(String code) throws Exception {
         Session session = null;
         List<Currency> currencies = new ArrayList<>();
         try {
@@ -100,7 +100,7 @@ public class CurrencyDAOImpl implements CurrencyDAO {
     }
 
     @Override
-    public synchronized void removeCurrency(Long id) throws Exception {
+    public void removeCurrency(Long id) throws Exception {
         Session session = null;
         try{
             session = HibernateUtil.openSession();
@@ -126,7 +126,7 @@ public class CurrencyDAOImpl implements CurrencyDAO {
     }
 
     @Override
-    public synchronized void saveOrUpdateCurrency(Currency currency) throws Exception {
+    public void saveOrUpdateCurrency(Currency currency) throws Exception {
         Session session = null;
         try {
             session = HibernateUtil.openSession();

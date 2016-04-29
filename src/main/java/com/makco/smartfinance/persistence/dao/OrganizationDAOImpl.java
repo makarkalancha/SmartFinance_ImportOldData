@@ -17,7 +17,7 @@ public class OrganizationDAOImpl implements OrganizationDAO {
     private final static Logger LOG = LogManager.getLogger(OrganizationDAOImpl.class);
 
     @Override
-    public synchronized Organization getOrganizationById(Long id) throws Exception {
+    public Organization getOrganizationById(Long id) throws Exception {
         Session session = null;
         Organization organization = null;
         try{
@@ -44,7 +44,7 @@ public class OrganizationDAOImpl implements OrganizationDAO {
     }
 
     @Override
-    public synchronized List<Organization> organizationList() throws Exception {
+    public List<Organization> organizationList() throws Exception {
         Session session = null;
         List<Organization> list = new ArrayList<>();
         try {
@@ -71,7 +71,7 @@ public class OrganizationDAOImpl implements OrganizationDAO {
     }
 
     @Override
-    public synchronized List<Organization> getOrganizationByName(String name) throws Exception {
+    public List<Organization> getOrganizationByName(String name) throws Exception {
         Session session = null;
         List<Organization> organizations = new ArrayList<>();
         try {
@@ -100,7 +100,7 @@ public class OrganizationDAOImpl implements OrganizationDAO {
     }
 
     @Override
-    public synchronized void removeOrganization(Long id) throws Exception {
+    public void removeOrganization(Long id) throws Exception {
         Session session = null;
         try{
             session = HibernateUtil.openSession();
@@ -126,7 +126,7 @@ public class OrganizationDAOImpl implements OrganizationDAO {
     }
 
     @Override
-    public synchronized void saveOrUpdateOrganization(Organization organization) throws Exception {
+    public void saveOrUpdateOrganization(Organization organization) throws Exception {
         Session session = null;
         try {
             session = HibernateUtil.openSession();

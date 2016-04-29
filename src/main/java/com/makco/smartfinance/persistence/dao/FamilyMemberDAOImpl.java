@@ -16,8 +16,10 @@ import org.hibernate.resource.transaction.spi.TransactionStatus;
 public class FamilyMemberDAOImpl implements FamilyMemberDAO {
     private final static Logger LOG = LogManager.getLogger(FamilyMemberDAOImpl.class);
 
+    //It is not intended that implementors be threadsafe. Instead each thread/transaction should obtain its own instance from a SessionFactory.
+    //so no need to use synchronized
     @Override
-    public synchronized List<FamilyMember> familyMemberList() throws Exception {
+    public List<FamilyMember> familyMemberList() throws Exception {
         Session session = null;
         List<FamilyMember> list = new ArrayList<>();
         try{
@@ -53,7 +55,7 @@ public class FamilyMemberDAOImpl implements FamilyMemberDAO {
     }
 
     @Override
-    public synchronized void removeFamilyMember(Long id) throws Exception {
+    public void removeFamilyMember(Long id) throws Exception {
         Session session = null;
         try{
             session = HibernateUtil.openSession();
@@ -86,7 +88,7 @@ public class FamilyMemberDAOImpl implements FamilyMemberDAO {
     }
 
     @Override
-    public synchronized FamilyMember getFamilyMemberById(Long id) throws Exception {
+    public FamilyMember getFamilyMemberById(Long id) throws Exception {
         Session session = null;
         FamilyMember familyMember = null;
         try{
@@ -121,7 +123,9 @@ public class FamilyMemberDAOImpl implements FamilyMemberDAO {
     }
 
     @Override
-    public synchronized List<FamilyMember> getFamilyMemberByName(String name) throws Exception {
+    //http://www.stevideter.com/2008/12/07/saveorupdate-versus-merge-in-hibernate/
+    //http://blog.xebia.com/jpa-implementation-patterns-saving-detached-entities/
+    public List<FamilyMember> getFamilyMemberByName(String name) throws Exception {
         Session session = null;
         List<FamilyMember> familyMembers = new ArrayList<>();
         try {
@@ -158,7 +162,7 @@ public class FamilyMemberDAOImpl implements FamilyMemberDAO {
     }
 
     @Override
-    public synchronized void saveOrUpdateFamilyMember(FamilyMember familyMember) throws Exception {
+    public void saveOrUpdateFamilyMember(FamilyMember familyMember) throws Exception {
         Session session = null;
         try {
             session = HibernateUtil.openSession();

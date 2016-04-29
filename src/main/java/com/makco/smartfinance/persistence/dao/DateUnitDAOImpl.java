@@ -18,7 +18,7 @@ public class DateUnitDAOImpl implements DateUnitDAO {
     private final static Logger LOG = LogManager.getLogger(DateUnitDAOImpl.class);
 
     @Override
-    public synchronized void addDateUnit(DateUnit dateUnit) throws Exception {
+    public void addDateUnit(DateUnit dateUnit) throws Exception {
         Session session = null;
         try {
             session = HibernateUtil.openSession();
@@ -43,7 +43,7 @@ public class DateUnitDAOImpl implements DateUnitDAO {
     }
 
     @Override
-    public synchronized void addDateUnitList(List<DateUnit> dateUnits) throws Exception {
+    public void addDateUnitList(List<DateUnit> dateUnits) throws Exception {
         //https://docs.jboss.org/hibernate/orm/3.3/reference/en/html/batch.html
         Session session = null;
         try {
@@ -78,7 +78,7 @@ public class DateUnitDAOImpl implements DateUnitDAO {
     }
 
     @Override
-    public synchronized List<DateUnit> dateUnitList() throws Exception {
+    public List<DateUnit> dateUnitList() throws Exception {
         List<DateUnit> list = new ArrayList<>();
         Session session = null;
         try{
@@ -105,7 +105,7 @@ public class DateUnitDAOImpl implements DateUnitDAO {
     }
 
     @Override
-    public synchronized DateUnit getDateUnitByUnitDate(Long unitDate) throws Exception {
+    public DateUnit getDateUnitByUnitDate(Long unitDate) throws Exception {
         Session session = null;
         DateUnit dateUnit = null;
         try{
@@ -132,7 +132,7 @@ public class DateUnitDAOImpl implements DateUnitDAO {
     }
 
     @Override
-    public synchronized boolean isEmpty() throws Exception {
+    public boolean isEmpty() throws Exception {
         Session session = null;
         boolean isEmpty = false;
         try{

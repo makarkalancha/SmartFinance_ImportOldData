@@ -18,7 +18,7 @@ public class DateUnitDAOImplForTest implements DateUnitDAO {
     private final static Logger LOG = LogManager.getLogger(DateUnitDAOImplForTest.class);
 
     @Override
-    public synchronized void addDateUnit(DateUnit dateUnit) {
+    public void addDateUnit(DateUnit dateUnit) {
         Session session = null;
         try {
             session = HibernateUtilTest.openSession();
@@ -36,7 +36,7 @@ public class DateUnitDAOImplForTest implements DateUnitDAO {
     }
 
     @Override
-    public synchronized void addDateUnitList(List<DateUnit> dateUnits) {
+    public void addDateUnitList(List<DateUnit> dateUnits) {
         //https://docs.jboss.org/hibernate/orm/3.3/reference/en/html/batch.html
         Session session = null;
         try {
@@ -64,7 +64,7 @@ public class DateUnitDAOImplForTest implements DateUnitDAO {
     }
 
     @Override
-    public synchronized List<DateUnit> dateUnitList() {
+    public List<DateUnit> dateUnitList() {
         List<DateUnit> list = new ArrayList<>();
         Session session = null;
         try{
@@ -84,7 +84,7 @@ public class DateUnitDAOImplForTest implements DateUnitDAO {
     }
 
     @Override
-    public synchronized DateUnit getDateUnitByUnitDate(Long unitDate) {
+    public DateUnit getDateUnitByUnitDate(Long unitDate) {
         Session session = null;
         DateUnit dateUnit = null;
         try{
