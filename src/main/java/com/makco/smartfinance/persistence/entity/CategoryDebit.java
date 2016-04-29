@@ -49,20 +49,6 @@ public class CategoryDebit extends Category implements Comparable<CategoryDebit>
     //when entity is transient id == null, so it's impossible to put it in Map or Set
     @Override
     public boolean equals(Object other) {
-//        if (this == other) {
-//            return true;
-//        }
-//        if (other == null) {
-//            return false;
-//        }
-//
-//        if (!(other instanceof CategoryDebit)) {
-//            return false;
-//        }
-//
-//        CategoryDebit that = (CategoryDebit) other;
-//
-//        return getId().equals(that.getId());
         if (other instanceof CategoryDebit) {
             CategoryDebit that = (CategoryDebit) other;
             return Objects.equal(getCategoryGroupType(), that.getCategoryGroupType())

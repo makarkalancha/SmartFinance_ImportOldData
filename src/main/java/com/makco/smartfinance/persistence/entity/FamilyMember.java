@@ -1,5 +1,6 @@
 package com.makco.smartfinance.persistence.entity;
 
+import com.google.common.base.Objects;
 import com.makco.smartfinance.constants.DataBaseConstants;
 import java.io.Serializable;
 import java.sql.Timestamp;
@@ -105,30 +106,36 @@ public class FamilyMember implements Serializable{
         this.name = name;
     }
 
-    // hibernate persistence p.277
+    //TODO change equals and hashCode
+    // hibernate persistence 277 business key
     // as other can be Hibernate proxy use:
     // getters(), instanceof (instead of getClass())
     @Override
     public boolean equals(Object other) {
-        if (this == other) {
-            return true;
+//        if (this == other) {
+//            return true;
+//        }
+//        if (other == null) {
+//            return false;
+//        }
+//
+//        if (!(other instanceof FamilyMember)) {
+//            return false;
+//        }
+//
+//        FamilyMember that = (FamilyMember) other;
+//
+//        return getName().equals(that.getName());
+        if (other instanceof FamilyMember) {
+            FamilyMember that = (FamilyMember) other;
+            return Objects.equal(getName(), that.getName());
         }
-        if (other == null) {
-            return false;
-        }
-
-        if (!(other instanceof FamilyMember)) {
-            return false;
-        }
-
-        FamilyMember that = (FamilyMember) other;
-
-        return getId().equals(that.getId());
+        return false;
     }
 
     @Override
     public int hashCode() {
-        return id.hashCode();
+        return Objects.hashCode(getName());
     }
 
     @Override
