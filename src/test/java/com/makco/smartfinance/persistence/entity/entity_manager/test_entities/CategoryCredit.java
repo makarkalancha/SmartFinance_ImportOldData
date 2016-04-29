@@ -72,6 +72,6 @@ public class CategoryCredit extends Category implements Comparable<CategoryCredi
     //because CategoryDebit is used in CategoryGroupDebit SortedSet<CategoryDebit> and this collection puts only Comparable
     @Override
     public int compareTo(CategoryCredit that) {
-        return this.name.compareTo(that.name);
+        return this.getName().compareTo(that.getName());
     }
 }
