@@ -2,11 +2,9 @@ package com.makco.smartfinance.persistence.entity.entity_manager;
 
 import com.google.common.collect.Lists;
 import com.makco.smartfinance.persistence.entity.Category;
-import com.makco.smartfinance.persistence.entity.entity_manager.test_entities.CategoryCredit;
-import com.makco.smartfinance.persistence.entity.entity_manager.test_entities.CategoryDebit;
+import com.makco.smartfinance.persistence.entity.FamilyMember;
+import com.makco.smartfinance.persistence.entity.entity_manager.test_entities.*;
 import com.makco.smartfinance.persistence.entity.CategoryGroup;
-import com.makco.smartfinance.persistence.entity.entity_manager.test_entities.CategoryGroupCredit;
-import com.makco.smartfinance.persistence.entity.entity_manager.test_entities.CategoryGroupDebit;
 import com.makco.smartfinance.utils.RandomWithinRange;
 import com.makco.smartfinance.utils.rules.EntityManagerRule;
 import javax.persistence.EntityManager;
@@ -24,6 +22,9 @@ import org.junit.FixMethodOrder;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
+
+import java.util.List;
+
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -137,7 +138,7 @@ public class CategoryEMTest {
 
         assertEquals(true, category1.getCreatedOn() != null);
         assertEquals(true, category1.getUpdatedOn() != null);
-        LOG.info("end->testPersist");
+        LOG.info("end->test_11_Persist_categoryGroupAndCategoryWithOnePersist_debit");
     }
 
 //    @Test(expected = RollbackException.class)//persistence, not transaction
@@ -206,12 +207,12 @@ public class CategoryEMTest {
 
         assertEquals(true, category1.getCreatedOn() != null);
         assertEquals(true, category1.getUpdatedOn() != null);
-        LOG.info("end->testPersist");
+        LOG.info("end->test_13_Persist_credit");
     }
 
     @Test
     public void test_14_Persist_creditWithDebitName() throws Exception {
-        LOG.info("start->testPersist");
+        LOG.info("start->test_14_Persist_creditWithDebitName");
         EntityManager em = entityManagerRule.getEntityManager();
 
         int randomInt = randomWithinRange.getRandom();
@@ -241,7 +242,7 @@ public class CategoryEMTest {
         LOG.debug("categoryCredit2.getName()=" + categoryCredit2.getName());
 
         assertEquals(true, categoryDebit1.getName().equals(categoryCredit2.getName()));
-        LOG.info("end->testPersist");
+        LOG.info("end->test_14_Persist_creditWithDebitName");
     }
 
     @Test
@@ -249,11 +250,99 @@ public class CategoryEMTest {
         //TODO get query of:
         //catGr eager, cat eager and bidirect;
         //get cat -> get cat gr -> get collection of cat => cartesian product
+        LOG.info("start->test_15_getLoop");
+        EntityManager em = entityManagerRule.getEntityManager();
+        int randomInt = randomWithinRange.getRandom();
+
+        EagerCategoryGroupDebit eagerCategoryGroupDebit =
+                new EagerCategoryGroupDebit("eager_cg_name_" + randomInt, "eager_cg_desc_" + randomInt);
+        em.persist(eagerCategoryGroupDebit);
+
+        String eagerCategoryDescription = "multiple";
+        for (int i = 0; i < 10; i++) {
+            EagerCategoryDebit eagerCategoryDebit = new EagerCategoryDebit(
+                            eagerCategoryGroupDebit,
+                            i + "eager_c_name_" + randomInt,
+                            i + "eager_c_desc_" + randomInt);
+            eagerCategoryGroupDebit.addCategory(eagerCategoryDebit);
+        }
+        entityManagerRule.commit();
+//        entityManagerRule.getEntityManager().close();
+
+///////////////////////////////////////////////////////////
+        EntityManager em1= entityManagerRule.getEntityManager();
+
+
+        Query qId = em.createQuery("SELECT min(a.id) from EagerCategoryDebit a");
+        LOG.debug(">>>EagerCategoryDebit: SELECT min(a.id) from EagerCategoryDebit a");
+        Long id = ((Long) qId.getSingleResult());
+        LOG.debug(">>>EagerCategoryDebit min id = " + id);
+
+        EagerCategoryDebit eagerCategoryDebit = em.find(EagerCategoryDebit.class, id);
+
+        LOG.debug(">>>eagerCategoryDebit.getCategoryGroup()");
+        EagerCategoryGroupDebit eagerCategoryGroupDebit1 = (EagerCategoryGroupDebit) eagerCategoryDebit.getCategoryGroup();
+        LOG.debug(">>>eagerCategoryGroupDebit1.getDebitCategories().size(): "+eagerCategoryGroupDebit1.getDebitCategories().size());
+
+        //EAGER SQL QUERY
+//        select
+//        min(eagercateg0_.ID) as col_0_0_
+//        from
+//        TEST.CATEGORY eagercateg0_
+//        where
+//        eagercateg0_.CATEGORY_GROUP_TYPE='E'
+//                -------------
+//                select
+//        eagercateg0_.ID as ID2_0_0_,
+//                eagercateg0_.T_CREATEDON as T_CREATE3_0_0_,
+//        eagercateg0_.DESCRIPTION as DESCRIPT4_0_0_,
+//                eagercateg0_.NAME as NAME5_0_0_,
+//        eagercateg0_.T_UPDATEDON as T_UPDATE6_0_0_,
+//                eagercateg0_.CATEGORY_GROUP_ID as CATEGORY7_0_0_,
+//        eagercateg1_.ID as ID2_1_1_,
+//                eagercateg1_.T_CREATEDON as T_CREATE3_1_1_,
+//        eagercateg1_.DESCRIPTION as DESCRIPT4_1_1_,
+//                eagercateg1_.NAME as NAME5_1_1_,
+//        eagercateg1_.T_UPDATEDON as T_UPDATE6_1_1_
+//                from
+//        TEST.CATEGORY eagercateg0_
+//        inner join
+//        TEST.CATEGORY_GROUP eagercateg1_
+//        on eagercateg0_.CATEGORY_GROUP_ID=eagercateg1_.ID
+//        where
+//        eagercateg0_.ID=?
+//        and eagercateg0_.CATEGORY_GROUP_TYPE='E'
+//                -------------
+//                select
+//        debitcateg0_.CATEGORY_GROUP_ID as CATEGORY7_0_0_,
+//                debitcateg0_.ID as ID2_0_0_,
+//        debitcateg0_.ID as ID2_0_1_,
+//                debitcateg0_.T_CREATEDON as T_CREATE3_0_1_,
+//        debitcateg0_.DESCRIPTION as DESCRIPT4_0_1_,
+//                debitcateg0_.NAME as NAME5_0_1_,
+//        debitcateg0_.T_UPDATEDON as T_UPDATE6_0_1_,
+//                debitcateg0_.CATEGORY_GROUP_ID as CATEGORY7_0_1_
+//        from
+//        TEST.CATEGORY debitcateg0_
+//        where
+//        debitcateg0_.CATEGORY_GROUP_ID=?
+//        order by
+//        debitcateg0_.NAME
+//                -------------
+
+
+        LOG.info("eagerCategoryDebit.getId(): " + eagerCategoryDebit.getId());
+        LOG.info("eagerCategoryDebit.getCategoryGroupType(): " + eagerCategoryDebit.getCategoryGroupType());
+        LOG.info("eagerCategoryDebit.getCategoryGroup(): " + eagerCategoryDebit.getCategoryGroup());
+
+//        entityManagerRule.commit();
+
+        LOG.info("end->test_15_getLoop");
     }
 
     @Test
     public void test_21_Update_debit() throws Exception {
-        LOG.info("start->testUpdate");
+        LOG.info("start->test_21_Update_debit");
         EntityManager em = entityManagerRule.getEntityManager();
 
         Query qId = em.createQuery("SELECT min(cg.id) from Category cg");
@@ -280,12 +369,12 @@ public class CategoryEMTest {
         assertEquals(true, category.getCreatedOn() != null);
         assertEquals(true, category.getUpdatedOn() != null);
         assertEquals(true, !category.getCreatedOn().equals(category.getUpdatedOn()));
-        LOG.info("end->testUpdate");
+        LOG.info("end->test_21_Update_debit");
     }
 
     @Test
     public void test_31_Delete_debit() throws Exception {
-        LOG.info("start->testDelete");
+        LOG.info("start->test_31_Delete_debit");
         EntityManager em = entityManagerRule.getEntityManager();
 
         Query qId = em.createQuery("SELECT min(cg.id) as num from Category cg");
@@ -308,6 +397,6 @@ public class CategoryEMTest {
         LOG.debug(category);
 
         assertEquals(null, categoryJustDeleted);
-        LOG.info("end->testDelete");
+        LOG.info("end->test_31_Delete_debit");
     }
 }

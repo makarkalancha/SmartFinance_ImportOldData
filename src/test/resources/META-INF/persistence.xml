@@ -11,9 +11,11 @@
         <class>com.makco.smartfinance.persistence.entity.Category</class>
         <class>com.makco.smartfinance.persistence.entity.entity_manager.test_entities.CategoryCredit</class>
         <class>com.makco.smartfinance.persistence.entity.entity_manager.test_entities.CategoryDebit</class>
+        <class>com.makco.smartfinance.persistence.entity.entity_manager.test_entities.EagerCategoryDebit</class>
         <class>com.makco.smartfinance.persistence.entity.CategoryGroup</class>
         <class>com.makco.smartfinance.persistence.entity.entity_manager.test_entities.CategoryGroupCredit</class>
         <class>com.makco.smartfinance.persistence.entity.entity_manager.test_entities.CategoryGroupDebit</class>
+        <class>com.makco.smartfinance.persistence.entity.entity_manager.test_entities.EagerCategoryGroupDebit</class>
         <class>com.makco.smartfinance.persistence.entity.Currency</class>
         <class>com.makco.smartfinance.persistence.entity.DateUnit</class>
         <class>com.makco.smartfinance.persistence.entity.FamilyMember</class>
