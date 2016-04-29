@@ -2,11 +2,11 @@ package com.makco.smartfinance.persistence.entity.entity_manager;
 
 import com.google.common.collect.Lists;
 import com.makco.smartfinance.persistence.entity.Category;
-import com.makco.smartfinance.persistence.entity.CategoryCredit;
-import com.makco.smartfinance.persistence.entity.CategoryDebit;
+import com.makco.smartfinance.persistence.entity.entity_manager.test_entities.CategoryCredit;
+import com.makco.smartfinance.persistence.entity.entity_manager.test_entities.CategoryDebit;
 import com.makco.smartfinance.persistence.entity.CategoryGroup;
-import com.makco.smartfinance.persistence.entity.CategoryGroupCredit;
-import com.makco.smartfinance.persistence.entity.CategoryGroupDebit;
+import com.makco.smartfinance.persistence.entity.entity_manager.test_entities.CategoryGroupCredit;
+import com.makco.smartfinance.persistence.entity.entity_manager.test_entities.CategoryGroupDebit;
 import com.makco.smartfinance.utils.RandomWithinRange;
 import com.makco.smartfinance.utils.rules.EntityManagerRule;
 import javax.persistence.EntityManager;
@@ -245,7 +245,7 @@ public class CategoryEMTest {
     }
 
     @Test
-    public void test15_getLoop() throws Exception{
+    public void test_15_getLoop() throws Exception{
         //TODO get query of:
         //catGr eager, cat eager and bidirect;
         //get cat -> get cat gr -> get collection of cat => cartesian product
@@ -294,15 +294,20 @@ public class CategoryEMTest {
         LOG.debug("min id = " + id);
 
         Category category = em.find(Category.class, id);
+        CategoryGroup categoryGroup = category.getCategoryGroup();
 
+        categoryGroup.removeCategory(category);
+
+        em.persist(categoryGroup);
         em.remove(category);
+
         entityManagerRule.commit();
 
-        Category organizationJustDeleted = em.find(Category.class, id);
-        LOG.debug(">>>category=" + organizationJustDeleted);
+        Category categoryJustDeleted = em.find(Category.class, id);
+        LOG.debug(">>>category=" + categoryJustDeleted);
         LOG.debug(category);
 
-        assertEquals(null, organizationJustDeleted);
+        assertEquals(null, categoryJustDeleted);
         LOG.info("end->testDelete");
     }
 }
