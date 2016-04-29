@@ -247,7 +247,6 @@ public class CategoryEMTest {
 
     @Test
     public void test_15_getLoop() throws Exception{
-        //TODO get query of:
         //catGr eager, cat eager and bidirect;
         //get cat -> get cat gr -> get collection of cat => cartesian product
         LOG.info("start->test_15_getLoop");
@@ -273,12 +272,12 @@ public class CategoryEMTest {
         EntityManager em1= entityManagerRule.getEntityManager();
 
 
-        Query qId = em.createQuery("SELECT min(a.id) from EagerCategoryDebit a");
+        Query qId = em1.createQuery("SELECT min(a.id) from EagerCategoryDebit a");
         LOG.debug(">>>EagerCategoryDebit: SELECT min(a.id) from EagerCategoryDebit a");
         Long id = ((Long) qId.getSingleResult());
         LOG.debug(">>>EagerCategoryDebit min id = " + id);
 
-        EagerCategoryDebit eagerCategoryDebit = em.find(EagerCategoryDebit.class, id);
+        EagerCategoryDebit eagerCategoryDebit = em1.find(EagerCategoryDebit.class, id);
 
         LOG.debug(">>>eagerCategoryDebit.getCategoryGroup()");
         EagerCategoryGroupDebit eagerCategoryGroupDebit1 = (EagerCategoryGroupDebit) eagerCategoryDebit.getCategoryGroup();
