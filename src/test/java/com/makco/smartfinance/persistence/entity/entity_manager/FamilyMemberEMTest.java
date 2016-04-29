@@ -129,7 +129,7 @@ public class FamilyMemberEMTest {
         String fmDescription = "multiple";
         for (int i = 0; i < 10; i++) {
             FamilyMember fm = new FamilyMember();
-            fm.setName(i+"_"+familyMemberName + "_" + randomInt);
+            fm.setName(i + "_" + familyMemberName + "_" + randomInt);
             fm.setDescription(fmDescription);
 
             em.persist(fm);
