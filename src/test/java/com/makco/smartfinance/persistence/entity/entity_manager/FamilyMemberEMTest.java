@@ -125,11 +125,11 @@ public class FamilyMemberEMTest {
     public void test_13_Persist_multiple() throws Exception {
         LOG.info("start->test_13_Persist_multiple");
         EntityManager em = entityManagerRule.getEntityManager();
-
+        int randomInt = randomWithinRange.getRandom();
         String fmDescription = "multiple";
         for (int i = 0; i < 10; i++) {
             FamilyMember fm = new FamilyMember();
-            fm.setName(familyMemberName + "_" + i);
+            fm.setName(i+"_"+familyMemberName + "_" + randomInt);
             fm.setDescription(fmDescription);
 
             em.persist(fm);

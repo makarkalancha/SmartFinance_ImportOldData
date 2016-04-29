@@ -117,10 +117,11 @@ public class OrganizationEMTest {
         LOG.info("start->test_13_Persist_multiple");
         EntityManager em = entityManagerRule.getEntityManager();
 
+        int randomInt = randomWithinRange.getRandom();
         String orgDescription = "multiple";
         for (int i = 0; i < 10; i++) {
             Organization shop1 = new Organization();
-            shop1.setName(organizationName + "_" + i);
+            shop1.setName(i + "_" + organizationName + "_" + randomInt);
             shop1.setDescription(orgDescription);
 
             em.persist(shop1);
