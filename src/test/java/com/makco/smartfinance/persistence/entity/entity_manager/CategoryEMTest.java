@@ -171,8 +171,8 @@ public class CategoryEMTest {
                     entityManagerRule.rollback();
                 }
             } catch (Exception rbEx) {
-                System.err.println("Rollback of transaction failed, trace follows!");
-                rbEx.printStackTrace(System.err);
+                LOG.error("Rollback of transaction failed, trace follows!");
+                LOG.error(rbEx, rbEx);
             }
             throw e;
         }
@@ -242,6 +242,13 @@ public class CategoryEMTest {
 
         assertEquals(true, categoryDebit1.getName().equals(categoryCredit2.getName()));
         LOG.info("end->testPersist");
+    }
+
+    @Test
+    public void test15_getLoop() throws Exception{
+        //TODO get query of:
+        //catGr eager, cat eager and bidirect;
+        //get cat -> get cat gr -> get collection of cat => cartesian product
     }
 
     @Test

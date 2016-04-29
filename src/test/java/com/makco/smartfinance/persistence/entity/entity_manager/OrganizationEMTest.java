@@ -105,8 +105,8 @@ public class OrganizationEMTest {
                     entityManagerRule.rollback();
                 }
             } catch (Exception rbEx) {
-                System.err.println("Rollback of transaction failed, trace follows!");
-                rbEx.printStackTrace(System.err);
+                LOG.error("Rollback of transaction failed, trace follows!");
+                LOG.error(rbEx, rbEx);
             }
             throw e;
         }
