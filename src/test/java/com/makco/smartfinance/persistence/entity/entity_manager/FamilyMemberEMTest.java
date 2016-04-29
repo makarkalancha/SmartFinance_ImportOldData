@@ -1,5 +1,7 @@
-package com.makco.smartfinance.persistence.entity;
+package com.makco.smartfinance.persistence.entity.entity_manager;
 
+import com.makco.smartfinance.persistence.entity.Currency;
+import com.makco.smartfinance.persistence.entity.FamilyMember;
 import com.makco.smartfinance.utils.RandomWithinRange;
 import com.makco.smartfinance.utils.rules.EntityManagerRule;
 import java.util.List;
@@ -25,8 +27,8 @@ import static org.junit.Assert.assertEquals;
 //:database_engine:flywayClean is run after every test class, so DB is clean after testing
 //if you want to see data in DB, comment 2 rows in database_engine/build.gradle: flywayMigrate.dependsOn(flywayClean) & test.dependsOn(flywayMigrate)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class FamilyMemberTest {
-    private final static Logger LOG = LogManager.getLogger(FamilyMemberTest.class);
+public class FamilyMemberEMTest {
+    private final static Logger LOG = LogManager.getLogger(FamilyMemberEMTest.class);
 
     private static int MIN = 1;
     private static int MAX = 1_000_000;
@@ -41,22 +43,22 @@ public class FamilyMemberTest {
 
     @BeforeClass
     public static void setUpClass() throws Exception {
-        LOG.debug(">>>FamilyMemberTest.setUpClass");
+        LOG.debug(">>>FamilyMemberEMTest.setUpClass");
     }
 
     @AfterClass
     public static void tearDownClass() throws Exception {
-        LOG.debug(">>>FamilyMemberTest.tearDownClass");
+        LOG.debug(">>>FamilyMemberEMTest.tearDownClass");
     }
 
     @Before
     public void setUp() throws Exception {
-        LOG.debug(">>>FamilyMemberTest.setUp");
+        LOG.debug(">>>FamilyMemberEMTest.setUp");
     }
 
     @After
     public void tearDown() throws Exception {
-        LOG.debug(">>>FamilyMemberTest.tearDown");
+        LOG.debug(">>>FamilyMemberEMTest.tearDown");
     }
 
     @Test

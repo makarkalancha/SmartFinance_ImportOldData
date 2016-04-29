@@ -1,5 +1,8 @@
-package com.makco.smartfinance.persistence.entity;
+package com.makco.smartfinance.persistence.entity.entity_manager;
 
+import com.makco.smartfinance.persistence.entity.CategoryGroup;
+import com.makco.smartfinance.persistence.entity.CategoryGroupCredit;
+import com.makco.smartfinance.persistence.entity.CategoryGroupDebit;
 import com.makco.smartfinance.utils.RandomWithinRange;
 import com.makco.smartfinance.utils.rules.EntityManagerRule;
 import javax.persistence.EntityManager;
@@ -21,8 +24,8 @@ import static org.junit.Assert.assertEquals;
  * Created by mcalancea on 2016-04-25.
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class CategoryGroupTest {
-    private final static Logger LOG = LogManager.getLogger(CategoryGroupTest.class);
+public class CategoryGroupEMTest {
+    private final static Logger LOG = LogManager.getLogger(CategoryGroupEMTest.class);
     private String categoryGroupDebit1 = "CategoryGroupDebit1";
     private String categoryGroupCredit1 = "CategoryGroupCredit1";
     private String dublicateName = "TwinCategoryGroup";

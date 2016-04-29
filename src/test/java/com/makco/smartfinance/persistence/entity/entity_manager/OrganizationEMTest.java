@@ -1,5 +1,7 @@
-package com.makco.smartfinance.persistence.entity;
+package com.makco.smartfinance.persistence.entity.entity_manager;
 
+import com.makco.smartfinance.persistence.entity.Currency;
+import com.makco.smartfinance.persistence.entity.Organization;
 import com.makco.smartfinance.utils.RandomWithinRange;
 import com.makco.smartfinance.utils.rules.EntityManagerRule;
 import java.util.List;
@@ -23,8 +25,8 @@ import static org.junit.Assert.assertEquals;
  */
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class OrganizationTest {
-    private final static Logger LOG = LogManager.getLogger(OrganizationTest.class);
+public class OrganizationEMTest {
+    private final static Logger LOG = LogManager.getLogger(OrganizationEMTest.class);
     private String organizationName = "Shop1";
     private String dublicateName = "TwinShop";
     private String defaultDescription = "shop's description";

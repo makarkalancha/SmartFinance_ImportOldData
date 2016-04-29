@@ -1,6 +1,12 @@
-package com.makco.smartfinance.persistence.entity;
+package com.makco.smartfinance.persistence.entity.entity_manager;
 
 import com.google.common.collect.Lists;
+import com.makco.smartfinance.persistence.entity.Category;
+import com.makco.smartfinance.persistence.entity.CategoryCredit;
+import com.makco.smartfinance.persistence.entity.CategoryDebit;
+import com.makco.smartfinance.persistence.entity.CategoryGroup;
+import com.makco.smartfinance.persistence.entity.CategoryGroupCredit;
+import com.makco.smartfinance.persistence.entity.CategoryGroupDebit;
 import com.makco.smartfinance.utils.RandomWithinRange;
 import com.makco.smartfinance.utils.rules.EntityManagerRule;
 import javax.persistence.EntityManager;
@@ -24,8 +30,8 @@ import static org.junit.Assert.assertEquals;
  * Created by mcalancea on 2016-04-25.
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class CategoryTest {
-    private final static Logger LOG = LogManager.getLogger(CategoryTest.class);
+public class CategoryEMTest {
+    private final static Logger LOG = LogManager.getLogger(CategoryEMTest.class);
     private String categoryDebitName1 = "CategoryDebit1";
     private String categoryCreditName1 = "CategoryCredit1";
     private String duplicateName = "TwinCategory";
@@ -70,7 +76,7 @@ public class CategoryTest {
                         .setParameter("catGrName", categoryGroupDebit1.getName())
                         .getSingleResult();
             } catch (NoResultException e) {
-
+                LOG.error(e, e);
             }
             if (tmp != null) {
                 categoryGroupDebit1 = tmp;
@@ -90,7 +96,7 @@ public class CategoryTest {
                         .setParameter("catGrName", categoryGroupCredit1.getName())
                         .getSingleResult();
             } catch (NoResultException e) {
-
+                LOG.error(e, e);
             }
             if (tmp != null) {
                 categoryGroupCredit1 = tmp;

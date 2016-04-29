@@ -1,6 +1,7 @@
-package com.makco.smartfinance.persistence.entity;
+package com.makco.smartfinance.persistence.entity.entity_manager;
 
 import com.makco.smartfinance.constants.DataBaseConstants;
+import com.makco.smartfinance.persistence.entity.DateUnit;
 import com.makco.smartfinance.persistence.utils.TestPersistenceManager;
 import java.time.LocalDate;
 import java.time.Month;
@@ -20,8 +21,8 @@ import static org.junit.Assert.assertEquals;
 /**
  * Created by mcalancea on 2016-03-28.
  */
-public class DateUnitTest {
-    private final static Logger LOG = LogManager.getLogger(DateUnitTest.class);
+public class DateUnitEMTest {
+    private final static Logger LOG = LogManager.getLogger(DateUnitEMTest.class);
     private static EntityManager em;
 
     private Date dateToInsert;

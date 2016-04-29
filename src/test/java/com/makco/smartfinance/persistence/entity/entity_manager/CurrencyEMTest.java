@@ -1,5 +1,6 @@
-package com.makco.smartfinance.persistence.entity;
+package com.makco.smartfinance.persistence.entity.entity_manager;
 
+import com.makco.smartfinance.persistence.entity.Currency;
 import com.makco.smartfinance.utils.RandomWithinRange;
 import com.makco.smartfinance.utils.rules.EntityManagerRule;
 import java.util.List;
@@ -22,8 +23,8 @@ import static org.junit.Assert.assertEquals;
  * Created by mcalancea on 2016-03-28.
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class CurrencyTest {
-    private final static Logger LOG = LogManager.getLogger(CurrencyTest.class);
+public class CurrencyEMTest {
+    private final static Logger LOG = LogManager.getLogger(CurrencyEMTest.class);
     private String currencyName = "Canadian Dollar";
     private String currencyDesc = "Dollar that is used in Canada or Canada's dollar";
 
