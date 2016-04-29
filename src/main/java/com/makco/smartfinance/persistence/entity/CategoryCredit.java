@@ -1,5 +1,6 @@
 package com.makco.smartfinance.persistence.entity;
 
+import com.google.common.base.Objects;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -38,26 +39,23 @@ public class CategoryCredit extends Category implements Comparable<CategoryCredi
     }
 
     @Override
+    public String getCategoryGroupType() {
+        return "С";
+    }
+
+    @Override
     public boolean equals(Object other) {
-        if (this == other) {
-            return true;
+        if (other instanceof CategoryDebit) {
+            CategoryDebit that = (CategoryDebit) other;
+            return Objects.equal(getCategoryGroupType(), that.getCategoryGroupType())
+                    && Objects.equal(getName(), that.getName());
         }
-        if (other == null) {
-            return false;
-        }
-
-        if (!(other instanceof CategoryCredit)) {
-            return false;
-        }
-
-        CategoryCredit that = (CategoryCredit) other;
-
-        return getId().equals(that.getId());
+        return false;
     }
 
     @Override
     public int hashCode() {
-        return id.hashCode();
+        return Objects.hashCode(getCategoryGroupType(), getName());
     }
 
     @Override

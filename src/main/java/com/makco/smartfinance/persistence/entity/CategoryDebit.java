@@ -42,6 +42,10 @@ public class CategoryDebit extends Category implements Comparable<CategoryDebit>
 //        this.categoryGroupDebit = categoryGroup;
     }
 
+    @Override
+    public String getCategoryGroupType() {
+        return "D";
+    }
     //when entity is transient id == null, so it's impossible to put it in Map or Set
     @Override
     public boolean equals(Object other) {
@@ -61,9 +65,8 @@ public class CategoryDebit extends Category implements Comparable<CategoryDebit>
 //        return getId().equals(that.getId());
         if (other instanceof CategoryDebit) {
             CategoryDebit that = (CategoryDebit) other;
-            return Objects.equal(id, that.getId())
-                    && Objects.equal(name, that.getName())
-                    && Objects.equal(description, that.getDescription());
+            return Objects.equal(getCategoryGroupType(), that.getCategoryGroupType())
+                    && Objects.equal(getName(), that.getName());
         }
         return false;
     }
@@ -72,7 +75,7 @@ public class CategoryDebit extends Category implements Comparable<CategoryDebit>
     //when entity is transient id == null, so it's impossible to put it in Map or Set
     @Override
     public int hashCode() {
-        return Objects.hashCode(id, name, description);
+        return Objects.hashCode(getCategoryGroupType(), getName());
     }
 
     @Override
