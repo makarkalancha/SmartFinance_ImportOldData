@@ -123,8 +123,9 @@ public class FamilyMemberDAOImpl implements FamilyMemberDAO {
     }
 
     @Override
-    //http://www.stevideter.com/2008/12/07/saveorupdate-versus-merge-in-hibernate/
-    //http://blog.xebia.com/jpa-implementation-patterns-saving-detached-entities/
+//    http://www.stevideter.com/2008/12/07/saveorupdate-versus-merge-in-hibernate/
+//    http://blog.xebia.com/jpa-implementation-patterns-saving-detached-entities/
+//    http://www.journaldev.com/3481/hibernate-save-vs-saveorupdate-vs-persist-vs-merge-vs-update-explanation-with-examples
     public List<FamilyMember> getFamilyMemberByName(String name) throws Exception {
         Session session = null;
         List<FamilyMember> familyMembers = new ArrayList<>();
