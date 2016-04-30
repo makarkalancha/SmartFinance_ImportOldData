@@ -71,6 +71,8 @@ dependencies {
     testCompile project(path: ':database_engine', configuration: 'testOutput')
 }
 
+clean.dependsOn ":database_engine:flywayMigrate"
+
 //1st approach: dependent jars are in separate folder $libsDir\\$lib_folder
 task copyLibDependecies(type: Copy) {
     println ">>>path to store dependencies: $libsDir\\$lib_folder"
@@ -110,3 +112,4 @@ jar {
 ////JAVA NATIVE PACKAGE
 //https://jaxenter.com/tutorial-a-guide-to-the-gradle-javafx-plugin-105730.html
 //https://github.com/bmuschko/gradle-javafx-hello-world/blob/master/build.gradle
+
