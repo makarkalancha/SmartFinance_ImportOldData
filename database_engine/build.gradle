@@ -50,4 +50,4 @@ jar {
 }
 
 flywayMigrate.dependsOn(flywayClean)
-//test.dependsOn(flywayMigrate)
+test.dependsOn(flywayMigrate)
