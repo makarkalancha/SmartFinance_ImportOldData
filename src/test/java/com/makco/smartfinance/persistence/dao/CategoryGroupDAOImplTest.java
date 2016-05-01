@@ -76,17 +76,32 @@ public class CategoryGroupDAOImplTest {
         assertEquals(true, categoryGroup.getUpdatedOn() != null);
     }
 
-    @Test //TODO
+    @Test
+    //TODO test_12_saveCategoryGroupWithCategories
+    public void test_12_saveCategoryGroupWithCategories() throws Exception {
+
+    }
+
+    @Test
+    //TODO test_21_updateCategoryGroup
     public void test_21_updateCategoryGroup() throws Exception {
 
     }
 
-    @Test //TODO
+    @Test
+    //TODO test_31_removeCategoryGroup
     public void test_31_removeCategoryGroup() throws Exception {
 
     }
 
-    @Test //TODO
+    @Test
+    //TODO test_32_removeCategoryGroup
+    public void test_32_removeCategoryGroupWithCategories() throws Exception {
+
+    }
+
+    @Test
+    //TODO test_41_seleteAllCategoryGroups
     public void test_41_seleteAllCategoryGroups() throws Exception {
 //        Session session = null;
 //        List<FamilyMember> list = new ArrayList<>();
@@ -115,13 +130,33 @@ public class CategoryGroupDAOImplTest {
 //        return list;
     }
 
-    @Test //TODO
+    @Test
+    //TODO test_42_seleteCategoryGroupById
     public void test_42_seleteCategoryGroupById() throws Exception {
 
     }
 
-    @Test //TODO
+    @Test
+    //TODO test_43_seleteCategoryGroupByName
     public void test_43_seleteCategoryGroupByName() throws Exception {
+
+    }
+
+    @Test
+    //TODO test_44_seleteAllCategoryGroupsWithCategories
+    public void test_44_seleteAllCategoryGroupsWithCategories() throws Exception {
+
+    }
+
+    @Test
+    //TODO test_45_seleteDebitCategoryGroupsWithCategories
+    public void test_45_seleteDebitCategoryGroupsWithCategories() throws Exception {
+
+    }
+
+    @Test
+    //TODO test_46_seleteCreditCategoryGroupsWithCategories
+    public void test_46_seleteCreditCategoryGroupsWithCategories() throws Exception {
 
     }
 }
