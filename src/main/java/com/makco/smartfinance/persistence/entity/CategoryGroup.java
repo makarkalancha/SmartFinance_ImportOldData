@@ -31,6 +31,10 @@ import javax.validation.constraints.Size;
     )
 )
 public abstract class CategoryGroup <T extends Category>{
+    public static final String CATEGORY_GROUP_TYPE_DEBIT = "D";
+    public static final String CATEGORY_GROUP_TYPE_CREDIT = "C";
+
+
     @Id
     @org.hibernate.annotations.GenericGenerator(
             name = "CATEGORY_GROUP_SEQUENCE_GENERATOR",
@@ -106,6 +110,8 @@ public abstract class CategoryGroup <T extends Category>{
     public abstract void removeCategory(T category);
 
     public abstract void removeCategories(List<T> categories);
+
+    public abstract String getCategoryGroupType();
 
     public Timestamp getCreatedOn() {
         return createdOn;

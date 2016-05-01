@@ -12,7 +12,12 @@ import org.hibernate.resource.transaction.spi.TransactionStatus;
 /**
  * Created by mcalancea on 2016-04-05.
  */
-//http://programmers.stackexchange.com/questions/220909/service-layer-vs-dao-why-both
+/**
+ *http://programmers.stackexchange.com/questions/220909/service-layer-vs-dao-why-both
+ *session instead of entityManager:
+ * -migration from hibernate to something else is still expensive even with if code follows JPA
+ * -entityManager in hibernate framework uses session (check code in code grep)
+ */
 public class FamilyMemberDAOImpl implements FamilyMemberDAO {
     private final static Logger LOG = LogManager.getLogger(FamilyMemberDAOImpl.class);
 

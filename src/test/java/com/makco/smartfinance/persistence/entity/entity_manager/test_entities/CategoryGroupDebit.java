@@ -61,6 +61,11 @@ public class CategoryGroupDebit extends CategoryGroup<CategoryDebit> {
         this.debitCategories.remove(categories);
     }
 
+    @Override
+    public String getCategoryGroupType() {
+        return CATEGORY_GROUP_TYPE_DEBIT;
+    }
+
     //    @Override
 ////    public void addCategory(Category category) {
 //////        this.debitCategories.add((CategoryDebit) category);

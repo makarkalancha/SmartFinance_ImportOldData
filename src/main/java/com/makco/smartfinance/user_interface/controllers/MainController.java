@@ -19,7 +19,7 @@ public class MainController implements Initializable, ControlledScreen {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        //TODO
+
     }
 
     @Override

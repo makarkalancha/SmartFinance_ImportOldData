@@ -1,5 +1,7 @@
 package com.makco.smartfinance.persistence.entity;
 
+import com.google.common.base.Objects;
+
 import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -13,7 +15,7 @@ import javax.persistence.OneToMany;
  * Created by mcalancea on 2016-04-25.
  */
 @Entity
-@DiscriminatorValue("C")
+@DiscriminatorValue(CategoryGroup.CATEGORY_GROUP_TYPE_CREDIT)
 public class CategoryGroupCredit extends CategoryGroup<CategoryCredit>{
     //http://stackoverflow.com/questions/30838526/how-to-have-a-sorted-set-of-objects-based-on-a-specific-field
     @OneToMany(mappedBy = "categoryGroupCredit", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -54,26 +56,23 @@ public class CategoryGroupCredit extends CategoryGroup<CategoryCredit>{
     }
 
     @Override
+    public String getCategoryGroupType() {
+        return CATEGORY_GROUP_TYPE_CREDIT;
+    }
+
+    @Override
     public boolean equals(Object other) {
-        if (this == other) {
-            return true;
+        if (other instanceof CategoryGroupCredit) {
+            CategoryGroupCredit that = (CategoryGroupCredit) other;
+            return Objects.equal(getCategoryGroupType(), that.getCategoryGroupType())
+                    && Objects.equal(getName(), that.getName());
         }
-        if (other == null) {
-            return false;
-        }
-
-        if (!(other instanceof CategoryGroupCredit)) {
-            return false;
-        }
-
-        CategoryGroupCredit that = (CategoryGroupCredit) other;
-
-        return getId().equals(that.getId());
+        return false;
     }
 
     @Override
     public int hashCode() {
-        return id.hashCode();
+        return Objects.hashCode(getCategoryGroupType(), getName());
     }
 
     @Override

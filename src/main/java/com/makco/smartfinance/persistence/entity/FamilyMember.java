@@ -106,7 +106,6 @@ public class FamilyMember implements Serializable{
         this.name = name;
     }
 
-    //TODO change equals and hashCode
     // hibernate persistence 277 business key
     // as other can be Hibernate proxy use:
     // getters(), instanceof (instead of getClass())

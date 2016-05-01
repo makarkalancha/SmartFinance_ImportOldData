@@ -14,9 +14,10 @@ import javax.persistence.ManyToOne;
 @DiscriminatorValue("D")
 //because CategoryDebit is used in CategoryGroupDebit SortedSet<CategoryDebit> and this collection puts only Comparable
 public class CategoryDebit extends Category implements Comparable<CategoryDebit>{
-
-    //TODO because it's LAZY, check if you need to add ProgressIndicator when object is loaded
-    @ManyToOne(fetch = FetchType.LAZY)
+    /**
+     * @ManyToOne is eager loaded by default (p318-289)
+     */
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "CATEGORY_GROUP_ID",nullable = false)
 //    private CategoryGroup categoryGroupDebit;
     private CategoryGroupDebit categoryGroupDebit;
@@ -46,7 +47,9 @@ public class CategoryDebit extends Category implements Comparable<CategoryDebit>
     public String getCategoryGroupType() {
         return "D";
     }
+
     //when entity is transient id == null, so it's impossible to put it in Map or Set
+    //redundant check getCategoryGroupType(), because there's already check for instance of CategoryDebit
     @Override
     public boolean equals(Object other) {
         if (other instanceof CategoryDebit) {

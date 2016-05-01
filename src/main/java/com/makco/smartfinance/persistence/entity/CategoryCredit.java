@@ -13,8 +13,7 @@ import javax.persistence.ManyToOne;
 @Entity
 @DiscriminatorValue("C")
 public class CategoryCredit extends Category implements Comparable<CategoryCredit>{
-    //TODO because it's LAZY, check if you need to add ProgressIndicator when object is loaded
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "CATEGORY_GROUP_ID",nullable = false)
     private CategoryGroup categoryGroupCredit;
 

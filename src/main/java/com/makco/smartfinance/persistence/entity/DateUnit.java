@@ -1,5 +1,7 @@
 package com.makco.smartfinance.persistence.entity;
 
+import com.google.common.base.Objects;
+
 import java.sql.Timestamp;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -112,25 +114,16 @@ public class DateUnit {
 
     @Override
     public boolean equals(Object other) {
-        if (this == other) {
-            return true;
+        if (other instanceof DateUnit) {
+            DateUnit that = (DateUnit) other;
+            return Objects.equal(getUnitDay(), that.getUnitDay());
         }
-        if (other == null) {
-            return false;
-        }
-
-        if (!(other instanceof DateUnit)) {
-            return false;
-        }
-
-        DateUnit that = (DateUnit) other;
-
-        return getUnitDay().equals(that.getUnitDay());
+        return false;
     }
 
     @Override
     public int hashCode() {
-        return unitDay.hashCode();
+        return Objects.hashCode(getUnitDay());
     }
 
     @Override

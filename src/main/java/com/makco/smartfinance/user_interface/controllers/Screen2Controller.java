@@ -22,7 +22,7 @@ public class Screen2Controller implements Initializable, ControlledScreen {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        //TODO
+
     }
 
     @FXML

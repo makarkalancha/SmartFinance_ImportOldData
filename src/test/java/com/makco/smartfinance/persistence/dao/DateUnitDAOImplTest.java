@@ -62,7 +62,6 @@ public class DateUnitDAOImplTest {
 
     @Test
     public void testAddDateUnitListByBatch_Jan_1_1990__Jan_1_2000() throws Exception {
-        // TODO
 //        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         LocalDateTime startProcessing;
         LocalDateTime endProcessing;
@@ -101,7 +100,6 @@ public class DateUnitDAOImplTest {
 
     @Test
     public void testAddDateUnitListAllAtOnce_Jan_1_1980__Jan_1_1990() throws Exception {
-        // TODO
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         LocalDateTime startProcessing;
         LocalDateTime endProcessing;

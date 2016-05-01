@@ -34,7 +34,6 @@ import javafx.stage.WindowEvent;
  * Created by mcalancea on 2016-03-28.
  */
 
-//TODO run h2 db and launch main
 //exception will appear with progress bar
 public class Main extends Application{
     private final static Logger LOG;

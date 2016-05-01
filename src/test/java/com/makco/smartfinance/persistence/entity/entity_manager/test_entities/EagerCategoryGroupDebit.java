@@ -51,6 +51,11 @@ public class EagerCategoryGroupDebit extends CategoryGroup<EagerCategoryDebit> {
     }
 
     @Override
+    public String getCategoryGroupType() {
+        return CATEGORY_GROUP_TYPE_DEBIT;
+    }
+
+    @Override
     public boolean equals(Object other) {
         if (this == other) {
             return true;

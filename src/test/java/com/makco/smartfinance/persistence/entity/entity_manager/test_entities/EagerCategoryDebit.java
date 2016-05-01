@@ -13,8 +13,6 @@ import javax.persistence.*;
 @DiscriminatorValue("E")
 //because CategoryDebit is used in CategoryGroupDebit SortedSet<CategoryDebit> and this collection puts only Comparable
 public class EagerCategoryDebit extends Category implements Comparable<EagerCategoryDebit>{
-
-    //TODO because it's LAZY, check if you need to add ProgressIndicator when object is loaded
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "CATEGORY_GROUP_ID",nullable = false)
 //    private CategoryGroup categoryGroupDebit;

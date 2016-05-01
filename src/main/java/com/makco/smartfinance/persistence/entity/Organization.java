@@ -1,5 +1,6 @@
 package com.makco.smartfinance.persistence.entity;
 
+import com.google.common.base.Objects;
 import com.makco.smartfinance.constants.DataBaseConstants;
 import java.io.Serializable;
 import java.sql.Timestamp;
@@ -105,25 +106,16 @@ public class Organization implements Serializable {
 
     @Override
     public boolean equals(Object other) {
-        if (this == other) {
-            return true;
+        if (other instanceof Organization) {
+            Organization that = (Organization) other;
+            return Objects.equal(getName(), that.getName());
         }
-        if (other == null) {
-            return false;
-        }
-
-        if (!(other instanceof Organization)) {
-            return false;
-        }
-
-        Organization that = (Organization) other;
-
-        return getId().equals(that.getId());
+        return false;
     }
 
     @Override
     public int hashCode() {
-        return id.hashCode();
+        return Objects.hashCode(getName());
     }
 
     @Override

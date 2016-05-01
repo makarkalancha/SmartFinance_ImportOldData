@@ -1,5 +1,6 @@
 package com.makco.smartfinance.persistence.entity;
 
+import com.google.common.base.Objects;
 import com.makco.smartfinance.constants.DataBaseConstants;
 import java.io.Serializable;
 import java.sql.Timestamp;
@@ -121,25 +122,16 @@ public class Currency implements Serializable{
 
     @Override
     public boolean equals(Object other) {
-        if (this == other) {
-            return true;
+        if (other instanceof Currency) {
+            Currency that = (Currency) other;
+            return Objects.equal(getCode(), that.getCode());
         }
-        if (other == null) {
-            return false;
-        }
-
-        if (!(other instanceof Currency)) {
-            return false;
-        }
-
-        Currency that = (Currency) other;
-
-        return getId().equals(that.getId());
+        return false;
     }
 
     @Override
     public int hashCode() {
-        return id.hashCode();
+        return Objects.hashCode(getCode());
     }
 
     @Override

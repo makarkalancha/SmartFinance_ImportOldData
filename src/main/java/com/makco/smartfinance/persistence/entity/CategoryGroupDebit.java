@@ -1,5 +1,7 @@
 package com.makco.smartfinance.persistence.entity;
 
+import com.google.common.base.Objects;
+
 import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -13,12 +15,16 @@ import javax.persistence.OneToMany;
  * Created by mcalancea on 2016-04-25.
  */
 @Entity
-@DiscriminatorValue("D")
+//@DiscriminatorValue("D")
+@DiscriminatorValue(CategoryGroup.CATEGORY_GROUP_TYPE_DEBIT)
 public class CategoryGroupDebit extends CategoryGroup<CategoryDebit>{
-    //http://stackoverflow.com/questions/30838526/how-to-have-a-sorted-set-of-objects-based-on-a-specific-field
-    //https://vladmihalcea.com/2015/03/05/a-beginners-guide-to-jpa-and-hibernate-cascade-types/
-//    https://howtoprogramwithjava.com/hibernate-onetomany-bidirectional-relationship/
-//    @OneToMany(mappedBy = "categoryGroupDebit", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)//entityManager
+    /**
+     *http://stackoverflow.com/questions/30838526/how-to-have-a-sorted-set-of-objects-based-on-a-specific-field
+     *https://vladmihalcea.com/2015/03/05/a-beginners-guide-to-jpa-and-hibernate-cascade-types/
+     *https://howtoprogramwithjava.com/hibernate-onetomany-bidirectional-relationship/
+     * @OneToMany(mappedBy = "categoryGroupDebit", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)//entityManager
+     * - association collections @OneToMany and @ManyToMany are lazy-loaded by default  (p318-289)
+    */
     @OneToMany(mappedBy = "categoryGroupDebit", cascade = CascadeType.ALL, fetch = FetchType.LAZY)//session
     @javax.persistence.OrderBy("name")
     private SortedSet<CategoryDebit> debitCategories = new TreeSet<>();
@@ -62,6 +68,11 @@ public class CategoryGroupDebit extends CategoryGroup<CategoryDebit>{
         this.debitCategories.remove(categories);
     }
 
+    @Override
+    public String getCategoryGroupType() {
+        return CATEGORY_GROUP_TYPE_DEBIT;
+    }
+
     //    @Override
 ////    public void addCategory(Category category) {
 //////        this.debitCategories.add((CategoryDebit) category);
@@ -89,25 +100,17 @@ public class CategoryGroupDebit extends CategoryGroup<CategoryDebit>{
 
     @Override
     public boolean equals(Object other) {
-        if (this == other) {
-            return true;
+        if (other instanceof CategoryGroupDebit) {
+            CategoryGroupDebit that = (CategoryGroupDebit) other;
+            return Objects.equal(getCategoryGroupType(), that.getCategoryGroupType())
+                    && Objects.equal(getName(), that.getName());
         }
-        if (other == null) {
-            return false;
-        }
-
-        if (!(other instanceof CategoryGroupDebit)) {
-            return false;
-        }
-
-        CategoryGroupDebit that = (CategoryGroupDebit) other;
-
-        return getId().equals(that.getId());
+        return false;
     }
 
     @Override
     public int hashCode() {
-        return id.hashCode();
+        return Objects.hashCode(getCategoryGroupType(), getName());
     }
 
     @Override

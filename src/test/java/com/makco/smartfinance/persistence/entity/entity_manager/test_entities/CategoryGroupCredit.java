@@ -53,6 +53,11 @@ public class CategoryGroupCredit extends CategoryGroup<CategoryCredit> {
     }
 
     @Override
+    public String getCategoryGroupType() {
+        return CATEGORY_GROUP_TYPE_CREDIT;
+    }
+
+    @Override
     public boolean equals(Object other) {
         if (this == other) {
             return true;
