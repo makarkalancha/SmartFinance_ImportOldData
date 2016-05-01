@@ -71,7 +71,7 @@ dependencies {
     testCompile project(path: ':database_engine', configuration: 'testOutput')
 }
 
-clean.dependsOn ":database_engine:flywayMigrate"
+test.dependsOn ":database_engine:test"
 
 //1st approach: dependent jars are in separate folder $libsDir\\$lib_folder
 task copyLibDependecies(type: Copy) {
