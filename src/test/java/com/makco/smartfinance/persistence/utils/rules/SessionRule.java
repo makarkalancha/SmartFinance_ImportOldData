@@ -1,4 +1,4 @@
-package com.makco.smartfinance.utils.rules;
+package com.makco.smartfinance.persistence.utils.rules;
 
 import com.makco.smartfinance.persistence.utils.TestPersistenceSession;
 import org.apache.logging.log4j.LogManager;

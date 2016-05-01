@@ -8,7 +8,7 @@ import com.makco.smartfinance.persistence.entity.CategoryGroup;
 import com.makco.smartfinance.persistence.entity.CategoryGroupCredit;
 import com.makco.smartfinance.persistence.entity.CategoryGroupDebit;
 import com.makco.smartfinance.utils.RandomWithinRange;
-import com.makco.smartfinance.utils.rules.SessionRule;
+import com.makco.smartfinance.persistence.utils.rules.SessionRule;
 import javax.persistence.NonUniqueResultException;
 import javax.persistence.Persistence;
 import javax.persistence.PersistenceUtil;

@@ -3,7 +3,7 @@ package com.makco.smartfinance.persistence.entity.entity_manager;
 import com.makco.smartfinance.persistence.entity.Currency;
 import com.makco.smartfinance.persistence.entity.FamilyMember;
 import com.makco.smartfinance.utils.RandomWithinRange;
-import com.makco.smartfinance.utils.rules.EntityManagerRule;
+import com.makco.smartfinance.persistence.utils.rules.EntityManagerRule;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
