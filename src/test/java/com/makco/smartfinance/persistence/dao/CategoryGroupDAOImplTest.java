@@ -1,21 +1,20 @@
 package com.makco.smartfinance.persistence.dao;
 
+import com.makco.smartfinance.persistence.dao.dao_implementations.CategoryGroupDAOImplForTest;
+import com.makco.smartfinance.persistence.entity.Category;
 import com.makco.smartfinance.persistence.entity.CategoryGroup;
 import com.makco.smartfinance.persistence.entity.CategoryGroupDebit;
-import com.makco.smartfinance.persistence.entity.FamilyMember;
-import com.makco.smartfinance.persistence.utils.HibernateUtil;
-import com.makco.smartfinance.persistence.utils.TestPersistenceSession;
+import com.makco.smartfinance.persistence.entity.entity_manager.test_entities.CategoryDebit;
 import com.makco.smartfinance.utils.RandomWithinRange;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.hibernate.Session;
-import org.hibernate.resource.transaction.spi.TransactionStatus;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -33,39 +32,14 @@ public class CategoryGroupDAOImplTest {
     private static int MAX = 1_000_000;
     private static RandomWithinRange randomWithinRange = new RandomWithinRange(MIN, MAX);
 
-
-    private void saveOrUpdateCategoryGroup(CategoryGroup categoryGroup) throws Exception {
-        Session session = null;
-        try {
-            session = TestPersistenceSession.openSession();
-            session.beginTransaction();
-            session.saveOrUpdate(categoryGroup);
-            session.getTransaction().commit();
-        } catch (Exception e) {
-            try {
-                if (session.getTransaction().getStatus() == TransactionStatus.ACTIVE
-                        || session.getTransaction().getStatus() == TransactionStatus.MARKED_ROLLBACK)
-                    session.getTransaction().rollback();
-            } catch (Exception rbEx) {
-                LOG.error("Rollback of transaction failed, trace follows!");
-                LOG.error(rbEx, rbEx);
-            }
-            throw new RuntimeException(e);
-        } finally {
-            if(session != null){
-                session.close();
-            }
-        }
-    }
-
-
+    private CategoryGroupDAOImplForTest categoryGroupDAOImplForTest = new CategoryGroupDAOImplForTest();
 
     @Test
     public void test_11_saveOrUpdateCategoryGroupDebit() throws Exception {
         int randomInt = randomWithinRange.getRandom();
         String name = debitCategoryGroupDebitName + randomInt;
         CategoryGroup categoryGroup = new CategoryGroupDebit(name, debitCategoryGroupDebitDesc);
-        saveOrUpdateCategoryGroup(categoryGroup);
+        categoryGroupDAOImplForTest.saveOrUpdateCategoryGroup(categoryGroup);
 
         LOG.debug("categoryGroup: " + categoryGroup);
         assertEquals(true, categoryGroup.getId() != null);
@@ -79,6 +53,39 @@ public class CategoryGroupDAOImplTest {
     @Test
     //TODO test_12_saveCategoryGroupWithCategories
     public void test_12_saveCategoryGroupWithCategories() throws Exception {
+        int randomInt = randomWithinRange.getRandom();
+        String name = debitCategoryGroupDebitName + randomInt;
+        CategoryGroup categoryGroup = new CategoryGroupDebit(name, debitCategoryGroupDebitDesc);
+
+        List<Category> categories = new ArrayList<>();
+
+        for(int i = 1 ; i < 5;i++) {
+            Category category = new CategoryDebit(categoryGroup, "cat deb " + i + "->" + randomInt,
+                    "debit category #" + i + " 'description'");
+            categories.add(category);
+        }
+
+        categoryGroupDAOImplForTest.saveOrUpdateCategoryGroup(categoryGroup);
+
+        LOG.debug("categoryGroup: " + categoryGroup);
+        assertEquals(true, categoryGroup.getId() != null);
+        assertEquals(CategoryGroup.CATEGORY_GROUP_TYPE_DEBIT, categoryGroup.getCategoryGroupType());
+        assertEquals(name, categoryGroup.getName());
+        assertEquals(debitCategoryGroupDebitDesc, categoryGroup.getDescription());
+        assertEquals(true, categoryGroup.getCreatedOn() != null);
+        assertEquals(true, categoryGroup.getUpdatedOn() != null);
+        assertEquals(false, categoryGroup.getCategories().isEmpty());
+        for (Category category : categories){
+            LOG.debug("category: " + category);
+            assertEquals(true, category.getId() != null);
+            assertEquals(true, category.getCreatedOn() != null);
+            assertEquals(true, category.getUpdatedOn() != null);
+        }
+    }
+
+    @Test
+    //TODO test_13_saveCategoryGroupWithCategoriesFromAnotherGroupType
+    public void test_13_saveCategoryGroupWithCategoriesFromAnotherGroupType() throws Exception {
 
     }
 

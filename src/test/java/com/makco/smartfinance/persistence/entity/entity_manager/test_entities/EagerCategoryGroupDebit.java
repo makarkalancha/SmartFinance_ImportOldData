@@ -4,6 +4,7 @@ import com.makco.smartfinance.persistence.entity.Category;
 import com.makco.smartfinance.persistence.entity.CategoryGroup;
 
 import javax.persistence.*;
+import java.util.Collection;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -30,24 +31,35 @@ public class EagerCategoryGroupDebit extends CategoryGroup<EagerCategoryDebit> {
         return new TreeSet<>(debitCategories);
     }
 
+//    @Override
+//    public void addCategories(List<EagerCategoryDebit> categories) {
+//        this.debitCategories.addAll(categories);
+//    }
+//
+//    @Override
+//    public void addCategory(EagerCategoryDebit category) {
+//        this.debitCategories.add(category);
+//    }
+//
+//    @Override
+//    public void removeCategory(EagerCategoryDebit category) {
+//        this.debitCategories.remove(category);
+//    }
+//
+//    @Override
+//    public void removeCategories(List<EagerCategoryDebit> categories) {
+//        this.debitCategories.remove(categories);
+//    }
+
+
     @Override
-    public void addCategories(List<EagerCategoryDebit> categories) {
-        this.debitCategories.addAll(categories);
+    public Collection<EagerCategoryDebit> getCategories() {
+        return this.debitCategories;
     }
 
     @Override
-    public void addCategory(EagerCategoryDebit category) {
-        this.debitCategories.add(category);
-    }
-
-    @Override
-    public void removeCategory(EagerCategoryDebit category) {
-        this.debitCategories.remove(category);
-    }
-
-    @Override
-    public void removeCategories(List<EagerCategoryDebit> categories) {
-        this.debitCategories.remove(categories);
+    public void setCategories(Collection<EagerCategoryDebit> categories) {
+        this.debitCategories = new TreeSet<>(categories);
     }
 
     @Override

@@ -2,6 +2,7 @@ package com.makco.smartfinance.persistence.entity;
 
 import com.google.common.base.Objects;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -35,24 +36,34 @@ public class CategoryGroupCredit extends CategoryGroup<CategoryCredit>{
         return new TreeSet<>(creditCategories);
     }
 
+//    @Override
+//    public void addCategories(List<CategoryCredit> categories) {
+//        this.creditCategories.addAll(categories);
+//    }
+//
+//    @Override
+//    public void addCategory(CategoryCredit category) {
+//        this.creditCategories.add(category);
+//    }
+//
+//    @Override
+//    public void removeCategory(CategoryCredit category) {
+//        this.creditCategories.remove(category);
+//    }
+//
+//    @Override
+//    public void removeCategories(List<CategoryCredit> categories) {
+//        this.creditCategories.removeAll(categories);
+//    }
+
     @Override
-    public void addCategories(List<CategoryCredit> categories) {
-        this.creditCategories.addAll(categories);
+    public Collection<CategoryCredit> getCategories() {
+        return this.creditCategories;
     }
 
     @Override
-    public void addCategory(CategoryCredit category) {
-        this.creditCategories.add(category);
-    }
-
-    @Override
-    public void removeCategory(CategoryCredit category) {
-        this.creditCategories.remove(category);
-    }
-
-    @Override
-    public void removeCategories(List<CategoryCredit> categories) {
-        this.creditCategories.removeAll(categories);
+    public void setCategories(Collection<CategoryCredit> categories) {
+        this.creditCategories = new TreeSet<>(categories);
     }
 
     @Override

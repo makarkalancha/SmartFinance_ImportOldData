@@ -1,6 +1,7 @@
-package com.makco.smartfinance.persistence.dao;
+package com.makco.smartfinance.persistence.dao.dao_implementations;
 
 import com.makco.smartfinance.constants.DataBaseConstants;
+import com.makco.smartfinance.persistence.dao.DateUnitDAO;
 import com.makco.smartfinance.persistence.entity.DateUnit;
 import com.makco.smartfinance.persistence.utils.HibernateUtilTest;
 import java.util.ArrayList;

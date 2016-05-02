@@ -40,7 +40,7 @@ public class CategoryEMEagerTest {
                     eagerCategoryGroupDebit,
                     i + "eager_cat_name_" + randomInt,
                     i + "eager_cat_desc_" + randomInt);
-            eagerCategoryGroupDebit.addCategory(eagerCategoryDebit);
+            eagerCategoryGroupDebit.getCategories().add(eagerCategoryDebit);
         }
         em.getTransaction().commit();
         em.close();

@@ -2,6 +2,7 @@ package com.makco.smartfinance.persistence.entity;
 
 import com.google.common.base.Objects;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -48,24 +49,34 @@ public class CategoryGroupDebit extends CategoryGroup<CategoryDebit>{
         return new TreeSet<>(debitCategories);
     }
 
+//    @Override
+//    public void addCategories(List<CategoryDebit> categories) {
+//        this.debitCategories.addAll(categories);
+//    }
+//
+//    @Override
+//    public void addCategory(CategoryDebit category) {
+//        this.debitCategories.add(category);
+//    }
+//
+//    @Override
+//    public void removeCategory(CategoryDebit category) {
+//        this.debitCategories.remove(category);
+//    }
+//
+//    @Override
+//    public void removeCategories(List<CategoryDebit> categories) {
+//        this.debitCategories.remove(categories);
+//    }
+
     @Override
-    public void addCategories(List<CategoryDebit> categories) {
-        this.debitCategories.addAll(categories);
+    public Collection<CategoryDebit> getCategories() {
+        return this.debitCategories;
     }
 
     @Override
-    public void addCategory(CategoryDebit category) {
-        this.debitCategories.add(category);
-    }
-
-    @Override
-    public void removeCategory(CategoryDebit category) {
-        this.debitCategories.remove(category);
-    }
-
-    @Override
-    public void removeCategories(List<CategoryDebit> categories) {
-        this.debitCategories.remove(categories);
+    public void setCategories(Collection<CategoryDebit> categories) {
+        this.debitCategories = new TreeSet<>(categories);
     }
 
     @Override

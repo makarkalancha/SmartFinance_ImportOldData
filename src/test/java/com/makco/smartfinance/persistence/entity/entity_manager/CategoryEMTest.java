@@ -125,7 +125,7 @@ public class CategoryEMTest {
 
         //bidirectional association
         category1.setCategoryGroup(categoryGroupDebit1);
-        categoryGroupDebit1.addCategory(category1);
+        categoryGroupDebit1.getCategories().add(category1);
 
         //Dirty checking; SQL execution
         entityManagerRule.commit();
@@ -158,7 +158,7 @@ public class CategoryEMTest {
             Category categoryDebit2 = new CategoryDebit(categoryGroupDebit1, generatedDuplicateName, defaultDescription);
             //http://stackoverflow.com/questions/858572/how-to-make-a-new-list-in-java
 //            categoryGroupDebit1.addCategories(Arrays.asList(categoryDebitName1, categoryDebit2));
-            categoryGroupDebit1.addCategories(Lists.newArrayList(categoryDebit1, categoryDebit2));
+            categoryGroupDebit1.getCategories().add(Lists.newArrayList(categoryDebit1, categoryDebit2));
 
             LOG.debug("categoryDebitName1=" + categoryDebit1);
             LOG.debug("categoryDebit2=" + categoryDebit2);
@@ -195,7 +195,7 @@ public class CategoryEMTest {
 
         //bidirectional association
         category1.setCategoryGroup(categoryGroupCredit1);
-        categoryGroupCredit1.addCategory(category1);
+        categoryGroupCredit1.getCategories().add(category1);
 
         entityManagerRule.commit();
         LOG.debug("category1.getId()=" + category1.getId());
@@ -287,7 +287,7 @@ public class CategoryEMTest {
         Category category = em.find(Category.class, id);
         CategoryGroup categoryGroup = category.getCategoryGroup();
 
-        categoryGroup.removeCategory(category);
+        categoryGroup.getCategories().remove(category);
 
         em.persist(categoryGroup);
         em.remove(category);

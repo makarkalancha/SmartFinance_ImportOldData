@@ -2,6 +2,7 @@ package com.makco.smartfinance.persistence.entity;
 
 import com.makco.smartfinance.constants.DataBaseConstants;
 import java.sql.Timestamp;
+import java.util.Collection;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
@@ -103,13 +104,17 @@ public abstract class CategoryGroup <T extends Category>{
         this.name = name;
     }
 
-    public abstract void addCategory(T category);
+//    public abstract void addCategory(T category);
+//
+//    public abstract void addCategories(List<T> categories);
+//
+//    public abstract void removeCategory(T category);
+//
+//    public abstract void removeCategories(List<T> categories);
 
-    public abstract void addCategories(List<T> categories);
+    public abstract Collection<T> getCategories();
 
-    public abstract void removeCategory(T category);
-
-    public abstract void removeCategories(List<T> categories);
+    public abstract void setCategories(Collection<T> categories);
 
     public abstract String getCategoryGroupType();
 

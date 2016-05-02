@@ -2,6 +2,7 @@ package com.makco.smartfinance.persistence.dao;
 
 import com.google.common.collect.Lists;
 import com.makco.smartfinance.constants.DataBaseConstants;
+import com.makco.smartfinance.persistence.dao.dao_implementations.DateUnitDAOImplForTest;
 import com.makco.smartfinance.persistence.entity.DateUnit;
 import com.makco.smartfinance.persistence.utils.DateUnitUtil;
 import com.makco.smartfinance.persistence.utils.TestPersistenceManager;
