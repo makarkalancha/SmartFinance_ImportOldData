@@ -5,14 +5,9 @@
       <GradleProjectSettings>
         <option name="distributionType" value="LOCAL" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="gradleHome" value="$PROJECT_DIR$/../../apps_web/gradle-2.11" />
+        <option name="gradleHome" value="$PROJECT_DIR$/../../apps/gradle-2.11" />
+        <option name="gradleJvm" value="#JAVA_HOME" />
         <option name="modules">
-          <set>
-            <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/database_engine" />
-          </set>
-        </option>
-        <option name="myModules">
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/database_engine" />
