@@ -2,6 +2,8 @@ package com.makco.smartfinance.persistence.dao.dao_implementations;
 
 import com.makco.smartfinance.persistence.dao.CategoryGroupDAOImplTest;
 import com.makco.smartfinance.persistence.entity.CategoryGroup;
+import com.makco.smartfinance.persistence.entity.FamilyMember;
+import com.makco.smartfinance.persistence.utils.HibernateUtil;
 import com.makco.smartfinance.persistence.utils.TestPersistenceSession;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -38,12 +40,13 @@ public class CategoryGroupDAOImplForTest {
         }
     }
 
-    public void saveOrUpdateCategoryGroupWithCategories(CategoryGroup categoryGroup) throws Exception {
+    public CategoryGroup getCategoryGroupById(Long id) throws Exception {
         Session session = null;
-        try {
+        CategoryGroup categoryGroup = null;
+        try{
             session = TestPersistenceSession.openSession();
             session.beginTransaction();
-            session.saveOrUpdate(categoryGroup);
+            categoryGroup = (CategoryGroup) session.get(CategoryGroup.class, id);
             session.getTransaction().commit();
         } catch (Exception e) {
             try {
@@ -60,5 +63,7 @@ public class CategoryGroupDAOImplForTest {
                 session.close();
             }
         }
+        return categoryGroup;
     }
+
 }

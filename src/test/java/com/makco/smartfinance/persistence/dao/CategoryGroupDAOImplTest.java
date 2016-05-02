@@ -1,13 +1,12 @@
 package com.makco.smartfinance.persistence.dao;
 
 import com.makco.smartfinance.persistence.dao.dao_implementations.CategoryGroupDAOImplForTest;
-import com.makco.smartfinance.persistence.entity.Category;
-import com.makco.smartfinance.persistence.entity.CategoryDebit;
-import com.makco.smartfinance.persistence.entity.CategoryGroup;
-import com.makco.smartfinance.persistence.entity.CategoryGroupDebit;
+import com.makco.smartfinance.persistence.entity.*;
+import com.makco.smartfinance.persistence.utils.TestPersistenceSession;
 import com.makco.smartfinance.utils.RandomWithinRange;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.hibernate.Session;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
@@ -84,16 +83,71 @@ public class CategoryGroupDAOImplTest {
         }
     }
 
+    //java.lang.ClassCastException: com.makco.smartfinance.persistence.entity.CategoryGroupDebit cannot be cast to com.makco.smartfinance.persistence.entity.CategoryGroupCredit
+//    @Test(expected = ClassCastException.class)
     @Test
-    //TODO test_13_saveCategoryGroupWithCategoriesFromAnotherGroupType
     public void test_13_saveCategoryGroupWithCategoriesFromAnotherGroupType() throws Exception {
+        int randomInt = randomWithinRange.getRandom();
+        String name = debitCategoryGroupDebitName + randomInt;
+        CategoryGroup categoryGroup = new CategoryGroupDebit(name, debitCategoryGroupDebitDesc);
 
+        List<Category> categories = new ArrayList<>();
+
+        //put service: putting category_group in category and category in category_group
+        for(int i = 1 ; i < 5;i++) {
+            Category category = new CategoryCredit(categoryGroup, "cat cred " + i + "->" + randomInt,
+                    "credit category #" + i + " 'description'");
+            categories.add(category);
+        }
+        categoryGroup.setCategories(categories);
+
+        categoryGroupDAOImplForTest.saveOrUpdateCategoryGroup(categoryGroup);
+//        java.lang.ClassCastException: com.makco.smartfinance.persistence.entity.CategoryGroupDebit cannot be cast to com.makco.smartfinance.persistence.entity.CategoryGroupCredit
+//        at com.makco.smartfinance.persistence.entity.CategoryCredit.<init>(CategoryCredit.java:25)
+//        at com.makco.smartfinance.persistence.dao.CategoryGroupDAOImplTest.test_13_saveCategoryGroupWithCategoriesFromAnotherGroupType(CategoryGroupDAOImplTest.java:97)
     }
 
     @Test
     //TODO test_21_updateCategoryGroup
     public void test_21_updateCategoryGroup() throws Exception {
+        int randomInt = randomWithinRange.getRandom();
 
+        Session session = TestPersistenceSession.openSession();
+        session.beginTransaction();
+//        http://stackoverflow.com/questions/15957441/jpql-with-subquery-to-select-max-count
+        List<CategoryGroup> categoryGroupList = (CategoryGroup) session
+                .createQuery("SELECT cg FROM CategoryGroup cg WHERE cg.comments.size = (SELECT MAX(u2.comments.size) FROM User u2)";
+
+
+        String name = debitCategoryGroupDebitName + randomInt;
+        CategoryGroup categoryGroup = new CategoryGroupDebit(name, debitCategoryGroupDebitDesc);
+
+        List<Category> categories = new ArrayList<>();
+
+        //put service: putting category_group in category and category in category_group
+        for(int i = 1 ; i < 5;i++) {
+            Category category = new CategoryDebit(categoryGroup, "cat deb " + i + "->" + randomInt,
+                    "debit category #" + i + " 'description'");
+            categories.add(category);
+        }
+        categoryGroup.setCategories(categories);
+
+        categoryGroupDAOImplForTest.saveOrUpdateCategoryGroup(categoryGroup);
+
+        LOG.debug("categoryGroup: " + categoryGroup);
+        assertEquals(true, categoryGroup.getId() != null);
+        assertEquals(CategoryGroup.CATEGORY_GROUP_TYPE_DEBIT, categoryGroup.getCategoryGroupType());
+        assertEquals(name, categoryGroup.getName());
+        assertEquals(debitCategoryGroupDebitDesc, categoryGroup.getDescription());
+        assertEquals(true, categoryGroup.getCreatedOn() != null);
+        assertEquals(true, categoryGroup.getUpdatedOn() != null);
+        assertEquals(false, categoryGroup.getCategories().isEmpty());
+        for (Category category : categories){
+            LOG.debug("category: " + category);
+            assertEquals(true, category.getId() != null);
+            assertEquals(true, category.getCreatedOn() != null);
+            assertEquals(true, category.getUpdatedOn() != null);
+        }
     }
 
     @Test
