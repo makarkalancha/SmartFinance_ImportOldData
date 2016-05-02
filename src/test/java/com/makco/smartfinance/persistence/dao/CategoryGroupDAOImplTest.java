@@ -2,9 +2,9 @@ package com.makco.smartfinance.persistence.dao;
 
 import com.makco.smartfinance.persistence.dao.dao_implementations.CategoryGroupDAOImplForTest;
 import com.makco.smartfinance.persistence.entity.Category;
+import com.makco.smartfinance.persistence.entity.CategoryDebit;
 import com.makco.smartfinance.persistence.entity.CategoryGroup;
 import com.makco.smartfinance.persistence.entity.CategoryGroupDebit;
-import com.makco.smartfinance.persistence.entity.entity_manager.test_entities.CategoryDebit;
 import com.makco.smartfinance.utils.RandomWithinRange;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -51,7 +51,6 @@ public class CategoryGroupDAOImplTest {
     }
 
     @Test
-    //TODO test_12_saveCategoryGroupWithCategories
     public void test_12_saveCategoryGroupWithCategories() throws Exception {
         int randomInt = randomWithinRange.getRandom();
         String name = debitCategoryGroupDebitName + randomInt;
@@ -59,11 +58,13 @@ public class CategoryGroupDAOImplTest {
 
         List<Category> categories = new ArrayList<>();
 
+        //put service: putting category_group in category and category in category_group
         for(int i = 1 ; i < 5;i++) {
             Category category = new CategoryDebit(categoryGroup, "cat deb " + i + "->" + randomInt,
                     "debit category #" + i + " 'description'");
             categories.add(category);
         }
+        categoryGroup.setCategories(categories);
 
         categoryGroupDAOImplForTest.saveOrUpdateCategoryGroup(categoryGroup);
 
