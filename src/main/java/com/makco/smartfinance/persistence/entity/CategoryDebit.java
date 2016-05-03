@@ -19,28 +19,28 @@ public class CategoryDebit extends Category implements Comparable<CategoryDebit>
      */
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "CATEGORY_GROUP_ID",nullable = false)
-//    private CategoryGroup categoryGroupDebit;
-    private CategoryGroupDebit categoryGroupDebit;
+    private CategoryGroup categoryGroup;
+//    private CategoryGroupDebit categoryGroup;
 
     public CategoryDebit(){
 
     }
 
     public CategoryDebit(CategoryGroup categoryGroup, String name, String description) {
-        this.categoryGroupDebit = (CategoryGroupDebit) categoryGroup;
+        this.categoryGroup = (CategoryGroupDebit) categoryGroup;
         this.name = name;
         this.description = description;
     }
 
     @Override
     public CategoryGroup getCategoryGroup() {
-        return categoryGroupDebit;
+        return categoryGroup;
     }
 
     @Override
     public void setCategoryGroup(CategoryGroup categoryGroup) {
-        this.categoryGroupDebit = (CategoryGroupDebit) categoryGroup;
-//        this.categoryGroupDebit = categoryGroup;
+        this.categoryGroup = (CategoryGroupDebit) categoryGroup;
+//        this.categoryGroup = categoryGroup;
     }
 
     @Override
@@ -75,7 +75,7 @@ public class CategoryDebit extends Category implements Comparable<CategoryDebit>
                 ", description='" + description + '\'' +
                 ", createdOn='" + createdOn + '\'' +
                 ", updatedOn='" + updatedOn + '\'' +
-                ", CategoryGroupDebit='" + categoryGroupDebit.toStringSimple() + '\'' +
+                ", CategoryGroupDebit='" + categoryGroup.toStringFull() + '\'' +
                 '}';
     }
 

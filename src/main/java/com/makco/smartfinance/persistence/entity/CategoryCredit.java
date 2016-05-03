@@ -15,26 +15,26 @@ import javax.persistence.ManyToOne;
 public class CategoryCredit extends Category implements Comparable<CategoryCredit>{
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "CATEGORY_GROUP_ID",nullable = false)
-    private CategoryGroup categoryGroupCredit;
+    private CategoryGroup categoryGroup;
 
     public CategoryCredit(){
 
     }
 
     public CategoryCredit(CategoryGroup categoryGroup, String name, String description) {
-        this.categoryGroupCredit = (CategoryGroupCredit) categoryGroup;
+        this.categoryGroup = (CategoryGroupCredit) categoryGroup;
         this.description = description;
         this.name = name;
     }
 
     @Override
     public CategoryGroup getCategoryGroup() {
-        return categoryGroupCredit;
+        return categoryGroup;
     }
 
     @Override
     public void setCategoryGroup(CategoryGroup categoryGroup) {
-        this.categoryGroupCredit = categoryGroup;
+        this.categoryGroup = categoryGroup;
     }
 
     @Override

@@ -15,7 +15,7 @@ import java.util.TreeSet;
 @Entity
 @DiscriminatorValue("E")
 public class EagerCategoryGroupDebit extends CategoryGroup<EagerCategoryDebit> {
-    @OneToMany(mappedBy = "categoryGroupDebit", cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)//session is using CascadeType.ALL
+    @OneToMany(mappedBy = "categoryGroup", cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)//session is using CascadeType.ALL
     @OrderBy("name")
     private SortedSet<EagerCategoryDebit> debitCategories = new TreeSet<>();
 
@@ -103,7 +103,7 @@ public class EagerCategoryGroupDebit extends CategoryGroup<EagerCategoryDebit> {
     }
 
     @Override
-    public String toStringSimple() {
+    public String toStringFull() {
         return "CategoryGroupDebit{" +
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +

@@ -3,7 +3,6 @@ package com.makco.smartfinance.persistence.entity.entity_manager.test_entities;
 import com.google.common.base.Objects;
 import com.makco.smartfinance.persistence.entity.Category;
 import com.makco.smartfinance.persistence.entity.CategoryGroup;
-import com.makco.smartfinance.persistence.entity.entity_manager.test_entities.CategoryGroupDebit;
 
 import javax.persistence.*;
 
@@ -70,7 +69,7 @@ public class CategoryDebit extends Category implements Comparable<CategoryDebit>
                 ", description='" + description + '\'' +
                 ", createdOn='" + createdOn + '\'' +
                 ", updatedOn='" + updatedOn + '\'' +
-                ", CategoryGroupDebit='" + categoryGroupDebit.toStringSimple() + '\'' +
+                ", CategoryGroupDebit='" + categoryGroupDebit.toStringFull() + '\'' +
                 '}';
     }
 

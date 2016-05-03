@@ -15,28 +15,28 @@ import javax.persistence.*;
 public class EagerCategoryDebit extends Category implements Comparable<EagerCategoryDebit>{
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "CATEGORY_GROUP_ID",nullable = false)
-//    private CategoryGroup categoryGroupDebit;
-    private EagerCategoryGroupDebit categoryGroupDebit;
+    private CategoryGroup categoryGroup;
+//    private EagerCategoryGroupDebit categoryGroup;
 
     public EagerCategoryDebit(){
 
     }
 
     public EagerCategoryDebit(CategoryGroup categoryGroup, String name, String description) {
-        this.categoryGroupDebit = (EagerCategoryGroupDebit) categoryGroup;
+        this.categoryGroup = (EagerCategoryGroupDebit) categoryGroup;
         this.name = name;
         this.description = description;
     }
 
     @Override
     public CategoryGroup getCategoryGroup() {
-        return categoryGroupDebit;
+        return categoryGroup;
     }
 
     @Override
     public void setCategoryGroup(CategoryGroup categoryGroup) {
-        this.categoryGroupDebit = (EagerCategoryGroupDebit) categoryGroup;
-//        this.categoryGroupDebit = categoryGroup;
+        this.categoryGroup = (EagerCategoryGroupDebit) categoryGroup;
+//        this.categoryGroup = categoryGroup;
     }
 
     @Override
@@ -69,7 +69,7 @@ public class EagerCategoryDebit extends Category implements Comparable<EagerCate
                 ", description='" + description + '\'' +
                 ", createdOn='" + createdOn + '\'' +
                 ", updatedOn='" + updatedOn + '\'' +
-                ", CategoryGroupDebit='" + categoryGroupDebit.toStringSimple() + '\'' +
+                ", CategoryGroupDebit='" + categoryGroup.toStringFull() + '\'' +
                 '}';
     }
 

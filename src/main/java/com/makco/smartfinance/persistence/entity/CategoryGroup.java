@@ -126,5 +126,5 @@ public abstract class CategoryGroup <T extends Category>{
         return updatedOn;
     }
 
-    public abstract String toStringSimple();
+    public abstract String toStringFull();
 }

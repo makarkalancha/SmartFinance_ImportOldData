@@ -3,7 +3,6 @@ package com.makco.smartfinance.persistence.entity;
 import com.google.common.base.Objects;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import javax.persistence.CascadeType;
@@ -19,10 +18,10 @@ import javax.persistence.OneToMany;
 @DiscriminatorValue(CategoryGroup.CATEGORY_GROUP_TYPE_CREDIT)
 public class CategoryGroupCredit extends CategoryGroup<CategoryCredit>{
     //http://stackoverflow.com/questions/30838526/how-to-have-a-sorted-set-of-objects-based-on-a-specific-field
-    @OneToMany(mappedBy = "categoryGroupCredit", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "categoryGroup", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @javax.persistence.OrderBy("name")
-    private SortedSet<CategoryCredit> creditCategories = new TreeSet<>();
-//    private SortedMap<Long, CategoryCredit> creditCategories = new TreeMap<>();
+    private SortedSet<CategoryCredit> categories = new TreeSet<>();
+//    private SortedMap<Long, CategoryCredit> categories = new TreeMap<>();
 
     public CategoryGroupCredit() {
     }
@@ -33,37 +32,37 @@ public class CategoryGroupCredit extends CategoryGroup<CategoryCredit>{
     }
 
     public SortedSet<CategoryCredit> getDebitCategories() {
-        return new TreeSet<>(creditCategories);
+        return new TreeSet<>(categories);
     }
 
 //    @Override
 //    public void addCategories(List<CategoryCredit> categories) {
-//        this.creditCategories.addAll(categories);
+//        this.categories.addAll(categories);
 //    }
 //
 //    @Override
 //    public void addCategory(CategoryCredit category) {
-//        this.creditCategories.add(category);
+//        this.categories.add(category);
 //    }
 //
 //    @Override
 //    public void removeCategory(CategoryCredit category) {
-//        this.creditCategories.remove(category);
+//        this.categories.remove(category);
 //    }
 //
 //    @Override
 //    public void removeCategories(List<CategoryCredit> categories) {
-//        this.creditCategories.removeAll(categories);
+//        this.categories.removeAll(categories);
 //    }
 
     @Override
     public Collection<CategoryCredit> getCategories() {
-        return this.creditCategories;
+        return this.categories;
     }
 
     @Override
     public void setCategories(Collection<CategoryCredit> categories) {
-        this.creditCategories = new TreeSet<>(categories);
+        this.categories = new TreeSet<>(categories);
     }
 
     @Override
@@ -94,18 +93,18 @@ public class CategoryGroupCredit extends CategoryGroup<CategoryCredit>{
                 ", description='" + description + '\'' +
                 ", createdOn='" + createdOn + '\'' +
                 ", updatedOn='" + updatedOn + '\'' +
-                ", creditCategories='" + creditCategories + '\'' +
                 '}';
     }
 
     @Override
-    public String toStringSimple() {
+    public String toStringFull() {
         return "CategoryGroupCredit{" +
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", createdOn='" + createdOn + '\'' +
                 ", updatedOn='" + updatedOn + '\'' +
+                ", categories='" + categories + '\'' +
                 '}';
     }
 }

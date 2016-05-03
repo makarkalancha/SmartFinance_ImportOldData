@@ -3,7 +3,6 @@ package com.makco.smartfinance.persistence.entity;
 import com.google.common.base.Objects;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import javax.persistence.CascadeType;
@@ -26,12 +25,12 @@ public class CategoryGroupDebit extends CategoryGroup<CategoryDebit>{
      * @OneToMany(mappedBy = "categoryGroupDebit", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)//entityManager
      * - association collections @OneToMany and @ManyToMany are lazy-loaded by default  (p318-289)
     */
-    @OneToMany(mappedBy = "categoryGroupDebit", cascade = CascadeType.ALL, fetch = FetchType.LAZY)//session
+    @OneToMany(mappedBy = "categoryGroup", cascade = CascadeType.ALL, fetch = FetchType.LAZY)//session
     @javax.persistence.OrderBy("name")
-    private SortedSet<CategoryDebit> debitCategories = new TreeSet<>();
-//    private SortedSet<? extends Category> debitCategories = new TreeSet<CategoryDebit>(); 
-//    private List<? extends Category> debitCategories = new ArrayList<CategoryDebit>();
-//    private SortedMap<Long, CategoryDebit> debitCategories = new TreeMap<>();
+    private SortedSet<CategoryDebit> categories = new TreeSet<>();
+//    private SortedSet<? extends Category> categories = new TreeSet<CategoryDebit>();
+//    private List<? extends Category> categories = new ArrayList<CategoryDebit>();
+//    private SortedMap<Long, CategoryDebit> categories = new TreeMap<>();
 
     public CategoryGroupDebit() {
     }
@@ -42,41 +41,41 @@ public class CategoryGroupDebit extends CategoryGroup<CategoryDebit>{
     }
 
 //    public SortedSet<CategoryDebit> getDebitCategories() {
-//        return new TreeSet<>(debitCategories);
+//        return new TreeSet<>(categories);
 //    }
-
-    public SortedSet<? extends Category> getDebitCategories() {
-        return new TreeSet<>(debitCategories);
-    }
-
+//
+//    public SortedSet<? extends Category> getDebitCategories() {
+//        return new TreeSet<>(categories);
+//    }
+//
 //    @Override
 //    public void addCategories(List<CategoryDebit> categories) {
-//        this.debitCategories.addAll(categories);
+//        this.categories.addAll(categories);
 //    }
 //
 //    @Override
 //    public void addCategory(CategoryDebit category) {
-//        this.debitCategories.add(category);
+//        this.categories.add(category);
 //    }
 //
 //    @Override
 //    public void removeCategory(CategoryDebit category) {
-//        this.debitCategories.remove(category);
+//        this.categories.remove(category);
 //    }
 //
 //    @Override
 //    public void removeCategories(List<CategoryDebit> categories) {
-//        this.debitCategories.remove(categories);
+//        this.categories.remove(categories);
 //    }
 
     @Override
     public Collection<CategoryDebit> getCategories() {
-        return this.debitCategories;
+        return this.categories;
     }
 
     @Override
     public void setCategories(Collection<CategoryDebit> categories) {
-        this.debitCategories = new TreeSet<>(categories);
+        this.categories = new TreeSet<>(categories);
     }
 
     @Override
@@ -86,27 +85,27 @@ public class CategoryGroupDebit extends CategoryGroup<CategoryDebit>{
 
     //    @Override
 ////    public void addCategory(Category category) {
-//////        this.debitCategories.add((CategoryDebit) category);
-////        this.debitCategories.add(category);
+//////        this.categories.add((CategoryDebit) category);
+////        this.categories.add(category);
 ////    }
 //    public <T extends Category> void addCategory(T category) {
-//        this.debitCategories.add(category);
+//        this.categories.add(category);
 //    }
 
 //    @Override
 ////    public void addCategories(List<Category> categories) {
-////        this.debitCategories.addAll((CategoryDebit) categories);
+////        this.categories.addAll((CategoryDebit) categories);
 //    public void addCategories(List<? extends Category> categories) {
 //
 //    }
 
 
 //    public void addDebitCategory(CategoryDebit debitCategory) {
-//        this.debitCategories.add(debitCategory);
+//        this.categories.add(debitCategory);
 //    }
 
-//    public void addDebitCategories(List<CategoryDebit> debitCategories) {
-//        this.debitCategories.addAll(debitCategories);
+//    public void addDebitCategories(List<CategoryDebit> categories) {
+//        this.categories.addAll(categories);
 //    }
 
     @Override
@@ -132,18 +131,19 @@ public class CategoryGroupDebit extends CategoryGroup<CategoryDebit>{
                 ", description='" + description + '\'' +
                 ", createdOn='" + createdOn + '\'' +
                 ", updatedOn='" + updatedOn + '\'' +
-                ", debitCategories='" + debitCategories + '\'' +
+
                 '}';
     }
 
     @Override
-    public String toStringSimple() {
+    public String toStringFull() {
         return "CategoryGroupDebit{" +
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", createdOn='" + createdOn + '\'' +
                 ", updatedOn='" + updatedOn + '\'' +
+                ", categories='" + categories + '\'' +
                 '}';
     }
 }
