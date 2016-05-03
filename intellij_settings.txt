@@ -1,0 +1,3 @@
+Settings -> Editor -> General -> Console -> Override console cycle buffer size (1024 KB) = 10240
+Settings -> Editor -> Code Style -> Java -> Imports (tab) -> Class count to use import with '*': 9999
+Settings -> Editor -> Code Style -> Java -> Imports (tab) -> Names count to use static import with '*': 9999
