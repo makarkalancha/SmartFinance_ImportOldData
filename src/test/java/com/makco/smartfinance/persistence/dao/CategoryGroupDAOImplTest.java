@@ -128,7 +128,7 @@ public class CategoryGroupDAOImplTest {
 
         List<Object[]> catGrCrWithQtyOfCatCr = session
 //                .createQuery("SELECT TYPE(c) as type, COUNT(c) as count FROM Category c where TYPE(c) <> 'E' group by TYPE(c)")
-                .createQuery("SELECT c.categoryGroup, COUNT(c) as max_count FROM CategoryCredit c group by c.categoryGroup")
+                .createQuery("SELECT c.categoryGroup, COUNT(c) FROM CategoryCredit c group by c.categoryGroup")
                 .list();
 
         LOG.debug(">>>categoryGroupList: "+catGrCrWithQtyOfCatCr);
