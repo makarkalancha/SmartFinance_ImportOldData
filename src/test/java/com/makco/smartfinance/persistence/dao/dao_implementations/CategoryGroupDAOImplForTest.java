@@ -7,6 +7,7 @@ import com.makco.smartfinance.persistence.utils.HibernateUtil;
 import com.makco.smartfinance.persistence.utils.TestPersistenceSession;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.resource.transaction.spi.TransactionStatus;
 
@@ -40,13 +41,17 @@ public class CategoryGroupDAOImplForTest {
         }
     }
 
-    public CategoryGroup getCategoryGroupById(Long id) throws Exception {
+    public CategoryGroup getCategoryGroupById(Long id, boolean initializeCategories) throws Exception {
         Session session = null;
         CategoryGroup categoryGroup = null;
         try{
             session = TestPersistenceSession.openSession();
             session.beginTransaction();
             categoryGroup = (CategoryGroup) session.get(CategoryGroup.class, id);
+            if(initializeCategories){
+                //wrongClassException check entity classes in session, again eager might interfere
+                Hibernate.initialize(categoryGroup.getCategories());
+            }
             session.getTransaction().commit();
         } catch (Exception e) {
             try {

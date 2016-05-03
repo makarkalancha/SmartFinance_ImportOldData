@@ -142,7 +142,7 @@ public class CategoryGroupDAOImplTest {
         session.getTransaction().commit();
         session.close();
 
-        CategoryGroup categoryGroup = categoryGroupDAOImplForTest.getCategoryGroupById(minCategoryGroupCredit.getId());
+        CategoryGroup categoryGroup = categoryGroupDAOImplForTest.getCategoryGroupById(minCategoryGroupCredit.getId(), false);
 
         String newName = categoryGroup.getName()+"_changed_v"+randomInt;
 
@@ -163,62 +163,57 @@ public class CategoryGroupDAOImplTest {
     @Test
     //TODO test_21_updateCategoryGroup
     public void test_22_updateCategoryGroupWithCategories() throws Exception {
-//        int randomInt = randomWithinRange.getRandom();
-//
-//        Session session = TestPersistenceSession.openSession();
-//        session.beginTransaction();
-////        http://stackoverflow.com/questions/15957441/jpql-with-subquery-to-select-max-count
-////        List<CategoryGroup> categoryGroupList = session
-////                .createQuery("SELECT cg FROM CategoryGroup cg WHERE cg.comments.size = (SELECT c.categoryGroupCredit.id COUNT(u2.comments.size) FROM Category c)")
-////                .list();
-//
-//        List<Object[]> catGrCrWithQtyOfCatCr = session
-////                .createQuery("SELECT TYPE(c) as type, COUNT(c) as count FROM Category c where TYPE(c) <> 'E' group by TYPE(c)")
-//                .createQuery("SELECT c.categoryGroup, COUNT(c) as max_count FROM CategoryCredit c group by c.categoryGroup")
-//                .list();
-//
-//        LOG.debug(">>>categoryGroupList: "+catGrCrWithQtyOfCatCr);
-//
-//        CategoryGroupCredit maxCategoryGroupCredit = (CategoryGroupCredit)catGrCrWithQtyOfCatCr
-//                .stream()
-//                .max(Comparator.comparingLong(obj -> (long)obj[1]))
-//                .map(max -> max[0])
-//                .orElse(null);
-//        LOG.debug(">>>maxCategoryGroupCredit: "+maxCategoryGroupCredit);
-//        session.getTransaction().commit();
-//        session.close();
-//
-//        String name = debitCategoryGroupDebitName + randomInt;
-//        CategoryGroup categoryGroup = categoryGroupDAOImplForTest.getCategoryGroupById(maxCategoryGroupCredit.getId());
-//
-//        categoryGroup.setName(categoryGroup.getName()+"_chaged_v"+randomInt);
-//
-//        List<Category> categories = new ArrayList<>();
-//
-//        //put service: putting category_group in category and category in category_group
-//        for(int i = 1 ; i < 5;i++) {
-//            Category category = new CategoryDebit(categoryGroup, "cat deb " + i + "->" + randomInt,
-//                    "debit category #" + i + " 'description'");
-//            categories.add(category);
-//        }
-//        categoryGroup.setCategories(categories);
-//
-//        categoryGroupDAOImplForTest.saveOrUpdateCategoryGroup(categoryGroup);
-//
-//        LOG.debug("categoryGroup: " + categoryGroup);
-//        assertEquals(true, categoryGroup.getId() != null);
-//        assertEquals(CategoryGroup.CATEGORY_GROUP_TYPE_DEBIT, categoryGroup.getCategoryGroupType());
-//        assertEquals(name, categoryGroup.getName());
-//        assertEquals(debitCategoryGroupDebitDesc, categoryGroup.getDescription());
-//        assertEquals(true, categoryGroup.getCreatedOn() != null);
-//        assertEquals(true, categoryGroup.getUpdatedOn() != null);
-//        assertEquals(false, categoryGroup.getCategories().isEmpty());
-//        for (Category category : categories){
-//            LOG.debug("category: " + category);
-//            assertEquals(true, category.getId() != null);
-//            assertEquals(true, category.getCreatedOn() != null);
-//            assertEquals(true, category.getUpdatedOn() != null);
-//        }
+        int randomInt = randomWithinRange.getRandom();
+
+        Session session = TestPersistenceSession.openSession();
+        session.beginTransaction();
+
+        List<Object[]> catGrCrWithQtyOfCatCr = session
+//                .createQuery("SELECT TYPE(c) as type, COUNT(c) as count FROM Category c where TYPE(c) <> 'E' group by TYPE(c)")
+                .createQuery("SELECT c.categoryGroup.id, COUNT(c) as max_count FROM CategoryCredit c group by c.categoryGroup.id")
+                .list();
+
+        LOG.debug(">>>categoryGroupList: "+catGrCrWithQtyOfCatCr);
+
+        Long maxCategoryGroupCreditId = (Long)catGrCrWithQtyOfCatCr
+                .stream()
+                .max(Comparator.comparingLong(obj -> (long)obj[1]))
+                .map(max -> max[0])
+                .orElse(null);
+        LOG.debug(">>>maxCategoryGroupCreditId: "+maxCategoryGroupCreditId);
+        session.getTransaction().commit();
+        session.close();
+
+        CategoryGroup categoryGroup = categoryGroupDAOImplForTest.getCategoryGroupById(maxCategoryGroupCreditId, true);
+
+        categoryGroup.setName(categoryGroup.getName()+"_chaged_v"+randomInt);
+
+        List<Category> categories = new ArrayList<>();
+        String name = debitCategoryGroupDebitName + randomInt;
+        //put service: putting category_group in category and category in category_group
+        for(int i = 1 ; i < 5;i++) {
+            Category category = new CategoryDebit(categoryGroup, "cat deb " + i + "->" + randomInt,
+                    "debit category #" + i + " 'description'");
+            categories.add(category);
+        }
+        categoryGroup.setCategories(categories);
+
+        categoryGroupDAOImplForTest.saveOrUpdateCategoryGroup(categoryGroup);
+
+        LOG.debug("categoryGroup: " + categoryGroup);
+        assertEquals(true, categoryGroup.getId() != null);
+        assertEquals(CategoryGroup.CATEGORY_GROUP_TYPE_DEBIT, categoryGroup.getCategoryGroupType());
+        assertEquals(name, categoryGroup.getName());
+        assertEquals(debitCategoryGroupDebitDesc, categoryGroup.getDescription());
+        assertEquals(true, categoryGroup.getCreatedOn() != null);
+        assertEquals(true, categoryGroup.getUpdatedOn() != null);
+        assertEquals(false, categoryGroup.getCategories().isEmpty());
+        for (Category category : categories){
+            LOG.debug("category: " + category);
+            assertEquals(true, category.getId() != null);
+            assertEquals(true, category.getCreatedOn() != null);
+            assertEquals(true, category.getUpdatedOn() != null);
+        }
     }
 
     @Test
