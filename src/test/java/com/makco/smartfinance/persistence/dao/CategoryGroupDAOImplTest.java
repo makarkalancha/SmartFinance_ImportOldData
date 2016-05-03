@@ -115,39 +115,45 @@ public class CategoryGroupDAOImplTest {
         Session session = TestPersistenceSession.openSession();
         session.beginTransaction();
 //        http://stackoverflow.com/questions/15957441/jpql-with-subquery-to-select-max-count
-        List<CategoryGroup> categoryGroupList = (CategoryGroup) session
-                .createQuery("SELECT cg FROM CategoryGroup cg WHERE cg.comments.size = (SELECT MAX(u2.comments.size) FROM User u2)";
+//        List<CategoryGroup> categoryGroupList = session
+//                .createQuery("SELECT cg FROM CategoryGroup cg WHERE cg.comments.size = (SELECT c.categoryGroupCredit.id COUNT(u2.comments.size) FROM Category c)")
+//                .list();
 
+        List<Category> categoryGroupList = session
+                .createQuery("SELECT c.categoryGroupCredit.id, COUNT(c) FROM Category c group by c.categoryGroupCredit.id")
+                .list();
 
-        String name = debitCategoryGroupDebitName + randomInt;
-        CategoryGroup categoryGroup = new CategoryGroupDebit(name, debitCategoryGroupDebitDesc);
+        LOG.debug(">>>categoryGroupList: "+categoryGroupList);
 
-        List<Category> categories = new ArrayList<>();
-
-        //put service: putting category_group in category and category in category_group
-        for(int i = 1 ; i < 5;i++) {
-            Category category = new CategoryDebit(categoryGroup, "cat deb " + i + "->" + randomInt,
-                    "debit category #" + i + " 'description'");
-            categories.add(category);
-        }
-        categoryGroup.setCategories(categories);
-
-        categoryGroupDAOImplForTest.saveOrUpdateCategoryGroup(categoryGroup);
-
-        LOG.debug("categoryGroup: " + categoryGroup);
-        assertEquals(true, categoryGroup.getId() != null);
-        assertEquals(CategoryGroup.CATEGORY_GROUP_TYPE_DEBIT, categoryGroup.getCategoryGroupType());
-        assertEquals(name, categoryGroup.getName());
-        assertEquals(debitCategoryGroupDebitDesc, categoryGroup.getDescription());
-        assertEquals(true, categoryGroup.getCreatedOn() != null);
-        assertEquals(true, categoryGroup.getUpdatedOn() != null);
-        assertEquals(false, categoryGroup.getCategories().isEmpty());
-        for (Category category : categories){
-            LOG.debug("category: " + category);
-            assertEquals(true, category.getId() != null);
-            assertEquals(true, category.getCreatedOn() != null);
-            assertEquals(true, category.getUpdatedOn() != null);
-        }
+//        String name = debitCategoryGroupDebitName + randomInt;
+//        CategoryGroup categoryGroup = new CategoryGroupDebit(name, debitCategoryGroupDebitDesc);
+//
+//        List<Category> categories = new ArrayList<>();
+//
+//        //put service: putting category_group in category and category in category_group
+//        for(int i = 1 ; i < 5;i++) {
+//            Category category = new CategoryDebit(categoryGroup, "cat deb " + i + "->" + randomInt,
+//                    "debit category #" + i + " 'description'");
+//            categories.add(category);
+//        }
+//        categoryGroup.setCategories(categories);
+//
+//        categoryGroupDAOImplForTest.saveOrUpdateCategoryGroup(categoryGroup);
+//
+//        LOG.debug("categoryGroup: " + categoryGroup);
+//        assertEquals(true, categoryGroup.getId() != null);
+//        assertEquals(CategoryGroup.CATEGORY_GROUP_TYPE_DEBIT, categoryGroup.getCategoryGroupType());
+//        assertEquals(name, categoryGroup.getName());
+//        assertEquals(debitCategoryGroupDebitDesc, categoryGroup.getDescription());
+//        assertEquals(true, categoryGroup.getCreatedOn() != null);
+//        assertEquals(true, categoryGroup.getUpdatedOn() != null);
+//        assertEquals(false, categoryGroup.getCategories().isEmpty());
+//        for (Category category : categories){
+//            LOG.debug("category: " + category);
+//            assertEquals(true, category.getId() != null);
+//            assertEquals(true, category.getCreatedOn() != null);
+//            assertEquals(true, category.getUpdatedOn() != null);
+//        }
     }
 
     @Test
