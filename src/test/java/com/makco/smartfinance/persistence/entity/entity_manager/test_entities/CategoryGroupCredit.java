@@ -16,7 +16,7 @@ import java.util.TreeSet;
 @DiscriminatorValue("C")
 public class CategoryGroupCredit extends CategoryGroup<CategoryCredit> {
     //http://stackoverflow.com/questions/30838526/how-to-have-a-sorted-set-of-objects-based-on-a-specific-field
-    @OneToMany(mappedBy = "categoryGroupCredit", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY) //session is using CascadeType.ALL
+    @OneToMany(mappedBy = "categoryGroup", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY) //session is using CascadeType.ALL
     @javax.persistence.OrderBy("name")
     private SortedSet<CategoryCredit> creditCategories = new TreeSet<>();
 //    private SortedMap<Long, CategoryCredit> creditCategories = new TreeMap<>();

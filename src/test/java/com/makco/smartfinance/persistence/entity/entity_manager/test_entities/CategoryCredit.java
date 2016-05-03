@@ -3,7 +3,6 @@ package com.makco.smartfinance.persistence.entity.entity_manager.test_entities;
 import com.google.common.base.Objects;
 import com.makco.smartfinance.persistence.entity.Category;
 import com.makco.smartfinance.persistence.entity.CategoryGroup;
-import com.makco.smartfinance.persistence.entity.entity_manager.test_entities.CategoryGroupCredit;
 
 import javax.persistence.*;
 
@@ -15,26 +14,26 @@ import javax.persistence.*;
 public class CategoryCredit extends Category implements Comparable<CategoryCredit>{
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CATEGORY_GROUP_ID",nullable = false)
-    private CategoryGroup categoryGroupCredit;
+    private CategoryGroup categoryGroup;
 
     public CategoryCredit(){
 
     }
 
     public CategoryCredit(CategoryGroup categoryGroup, String name, String description) {
-        this.categoryGroupCredit = (CategoryGroupCredit) categoryGroup;
+        this.categoryGroup = (CategoryGroupCredit) categoryGroup;
         this.description = description;
         this.name = name;
     }
 
     @Override
     public CategoryGroup getCategoryGroup() {
-        return categoryGroupCredit;
+        return categoryGroup;
     }
 
     @Override
     public void setCategoryGroup(CategoryGroup categoryGroup) {
-        this.categoryGroupCredit = categoryGroup;
+        this.categoryGroup = categoryGroup;
     }
 
     @Override

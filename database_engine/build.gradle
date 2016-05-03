@@ -49,5 +49,5 @@ jar {
     }
 }
 
-//flywayMigrate.dependsOn(flywayClean)
-//test.dependsOn(flywayMigrate)
+flywayMigrate.dependsOn(flywayClean)
+test.dependsOn(flywayMigrate)

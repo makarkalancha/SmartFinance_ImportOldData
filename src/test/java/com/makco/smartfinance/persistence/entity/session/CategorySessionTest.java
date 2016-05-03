@@ -159,7 +159,7 @@ public class CategorySessionTest {
             Category categoryDebit2 = new CategoryDebit(categoryGroupDebit1, generatedDuplicateName, defaultDescription);
             //http://stackoverflow.com/questions/858572/how-to-make-a-new-list-in-java
 //            categoryGroupDebit1.addCategories(Arrays.asList(categoryDebitName1, categoryDebit2));
-            categoryGroupDebit1.getCategories().add(Lists.newArrayList(categoryDebit1, categoryDebit2));
+            categoryGroupDebit1.getCategories().addAll(Lists.newArrayList(categoryDebit1, categoryDebit2));
 
             LOG.debug("categoryDebitName1=" + categoryDebit1);
             LOG.debug("categoryDebit2=" + categoryDebit2);

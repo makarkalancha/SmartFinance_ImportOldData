@@ -75,7 +75,7 @@ public class CategoryDebit extends Category implements Comparable<CategoryDebit>
                 ", description='" + description + '\'' +
                 ", createdOn='" + createdOn + '\'' +
                 ", updatedOn='" + updatedOn + '\'' +
-                ", CategoryGroupDebit='" + categoryGroup.toStringFull() + '\'' +
+                ", CategoryGroupDebit='" + categoryGroup + '\'' +
                 '}';
     }
 
