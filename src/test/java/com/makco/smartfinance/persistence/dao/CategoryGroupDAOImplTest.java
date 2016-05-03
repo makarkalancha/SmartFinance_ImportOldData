@@ -120,7 +120,7 @@ public class CategoryGroupDAOImplTest {
 //                .list();
 
         List<Category> categoryGroupList = session
-                .createQuery("SELECT c.categoryGroupCredit.id, COUNT(c) FROM Category c group by c.categoryGroupCredit.id")
+                .createQuery("SELECT c.categoryGroup as categoryGroup, COUNT(c) as count FROM Category c group by c.categoryGroup")
                 .list();
 
         LOG.debug(">>>categoryGroupList: "+categoryGroupList);
