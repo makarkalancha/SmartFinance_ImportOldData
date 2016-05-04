@@ -33,6 +33,8 @@ public class DataBaseConstants {
     //category_group
     public final static int CG_NAME_MAX_LGTH = 32;
     public final static int CG_DESCRIPTION_MAX_LGTH = 512;
+    public static final String CATEGORY_GROUP_TYPE_DEBIT = "D";
+    public static final String CATEGORY_GROUP_TYPE_CREDIT = "C";
 
     //category
     public final static int CAT_NAME_MAX_LGTH = 32;

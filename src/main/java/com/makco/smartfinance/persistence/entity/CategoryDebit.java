@@ -1,6 +1,8 @@
 package com.makco.smartfinance.persistence.entity;
 
 import com.google.common.base.Objects;
+import com.makco.smartfinance.constants.DataBaseConstants;
+
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -11,7 +13,7 @@ import javax.persistence.ManyToOne;
  * Created by mcalancea on 2016-04-25.
  */
 @Entity
-@DiscriminatorValue("D")
+@DiscriminatorValue(DataBaseConstants.CATEGORY_GROUP_TYPE_DEBIT)
 //because CategoryDebit is used in CategoryGroupDebit SortedSet<CategoryDebit> and this collection puts only Comparable
 public class CategoryDebit extends Category implements Comparable<CategoryDebit>{
     /**
@@ -45,7 +47,7 @@ public class CategoryDebit extends Category implements Comparable<CategoryDebit>
 
     @Override
     public String getCategoryGroupType() {
-        return "D";
+        return DataBaseConstants.CATEGORY_GROUP_TYPE_DEBIT;
     }
 
     //when entity is transient id == null, so it's impossible to put it in Map or Set

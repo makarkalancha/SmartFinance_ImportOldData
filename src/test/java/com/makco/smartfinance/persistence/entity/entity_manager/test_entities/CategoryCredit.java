@@ -1,6 +1,7 @@
 package com.makco.smartfinance.persistence.entity.entity_manager.test_entities;
 
 import com.google.common.base.Objects;
+import com.makco.smartfinance.constants.DataBaseConstants;
 import com.makco.smartfinance.persistence.entity.Category;
 import com.makco.smartfinance.persistence.entity.CategoryGroup;
 
@@ -10,7 +11,7 @@ import javax.persistence.*;
  * Created by mcalancea on 2016-04-29.
  */
 @Entity
-@DiscriminatorValue("C")
+@DiscriminatorValue(DataBaseConstants.CATEGORY_GROUP_TYPE_CREDIT)
 public class CategoryCredit extends Category implements Comparable<CategoryCredit>{
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CATEGORY_GROUP_ID",nullable = false)
@@ -38,7 +39,7 @@ public class CategoryCredit extends Category implements Comparable<CategoryCredi
 
     @Override
     public String getCategoryGroupType() {
-        return "С";
+        return DataBaseConstants.CATEGORY_GROUP_TYPE_CREDIT;
     }
 
     @Override

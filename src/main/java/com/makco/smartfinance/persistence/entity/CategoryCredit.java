@@ -1,6 +1,8 @@
 package com.makco.smartfinance.persistence.entity;
 
 import com.google.common.base.Objects;
+import com.makco.smartfinance.constants.DataBaseConstants;
+
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -11,7 +13,7 @@ import javax.persistence.ManyToOne;
  * Created by mcalancea on 2016-04-25.
  */
 @Entity
-@DiscriminatorValue("C")
+@DiscriminatorValue(DataBaseConstants.CATEGORY_GROUP_TYPE_CREDIT)
 public class CategoryCredit extends Category implements Comparable<CategoryCredit>{
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "CATEGORY_GROUP_ID",nullable = false)
@@ -39,7 +41,7 @@ public class CategoryCredit extends Category implements Comparable<CategoryCredi
 
     @Override
     public String getCategoryGroupType() {
-        return "С";
+        return DataBaseConstants.CATEGORY_GROUP_TYPE_CREDIT;
     }
 
     @Override
