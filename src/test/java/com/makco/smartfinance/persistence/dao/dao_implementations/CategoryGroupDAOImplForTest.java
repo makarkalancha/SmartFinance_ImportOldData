@@ -187,4 +187,30 @@ public class CategoryGroupDAOImplForTest {
         }
     }
 
+    public void removeCategory(Long id) throws Exception {
+        Session session = null;
+        try{
+            session = TestPersistenceSession.openSession();
+            session.beginTransaction();
+            Category category = (Category) session.load(Category.class, id);
+            LOG.debug(">>>removeCategoryGroup: " + category);
+            session.delete(category);
+            session.getTransaction().commit();
+        } catch (Exception e) {
+            try {
+                if (session.getTransaction().getStatus() == TransactionStatus.ACTIVE
+                        || session.getTransaction().getStatus() == TransactionStatus.MARKED_ROLLBACK)
+                    session.getTransaction().rollback();
+            } catch (Exception rbEx) {
+                LOG.error("Rollback of transaction failed, trace follows!");
+                LOG.error(rbEx, rbEx);
+            }
+            throw new RuntimeException(e);
+        } finally {
+            if(session != null){
+                session.close();
+            }
+        }
+    }
+
 }
