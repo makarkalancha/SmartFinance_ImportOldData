@@ -443,7 +443,9 @@ public class CategoryGroupDAOImplTest {
 
     @Test
     public void test_31_removeCategoryGroup() throws Exception {
-        CategoryGroupCredit categoryGroupCredit = new CategoryGroupCredit("catGr to del", "category group to delete");
+        int randomInt = randomWithinRange.getRandom();
+        CategoryGroupCredit categoryGroupCredit = new CategoryGroupCredit("catGr to del " + randomInt,
+                "category group to delete " + randomInt);
         categoryGroupDAOImplForTest.saveOrUpdateCategoryGroup(categoryGroupCredit);
         LOG.debug(">>>category group to delete: " + categoryGroupCredit.getId());
 
@@ -454,13 +456,36 @@ public class CategoryGroupDAOImplTest {
     }
 
     @Test
-    //TODO test_32_removeCategoryGroupWithCategories
     public void test_32_removeCategoryGroupWithCategories() throws Exception {
+        int randomInt = randomWithinRange.getRandom();
+        CategoryGroup categoryGroupCredit = new CategoryGroupCredit("catGr to del " + randomInt,
+                "category group to delete " + randomInt);
 
+        List<Category> categories = new ArrayList<>();
+        //put service: putting category_group in category and category in category_group
+        for(int i = 1 ; i < 5;i++) {
+            Category category = new CategoryCredit(categoryGroupCredit, "cat cr " + i + "->" + randomInt,
+                    "credit category #" + i + " 'description'");
+            categories.add(category);
+        }
+        categoryGroupCredit.setCategories(categories);
+
+        categoryGroupDAOImplForTest.saveOrUpdateCategoryGroup(categoryGroupCredit);
+        LOG.debug(">>>category group to delete: " + categoryGroupCredit);
+        LOG.debug(">>>categories to delete: " + categories);
+
+        categoryGroupDAOImplForTest.removeCategoryGroup(categoryGroupCredit.getId());
+
+        CategoryGroup categoryGroup = categoryGroupDAOImplForTest.getCategoryGroupById(categoryGroupCredit.getId(), false);
+        assertEquals(true, categoryGroup == null);
+        for(Category category : categories){
+            Category categoryDeleted = categoryGroupDAOImplForTest.getCategoryById(category.getId());
+            assertEquals(true, categoryDeleted == null);
+        }
     }
 
     @Test
-    //TODO test_33_removeCategoryGroupWithCategories
+    //TODO test_33_removeCategoryFromCategoryGroup
     public void test_33_removeCategoryFromCategoryGroup() throws Exception {
 
     }

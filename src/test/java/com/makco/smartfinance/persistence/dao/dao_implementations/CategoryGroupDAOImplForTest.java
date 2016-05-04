@@ -119,6 +119,32 @@ public class CategoryGroupDAOImplForTest {
         return categoryGroup;
     }
 
+    public Category getCategoryById(Long id) throws Exception {
+        Session session = null;
+        Category category = null;
+        try{
+            session = TestPersistenceSession.openSession();
+            session.beginTransaction();
+            category = (Category) session.get(Category.class, id);
+            session.getTransaction().commit();
+        } catch (Exception e) {
+            try {
+                if (session.getTransaction().getStatus() == TransactionStatus.ACTIVE
+                        || session.getTransaction().getStatus() == TransactionStatus.MARKED_ROLLBACK)
+                    session.getTransaction().rollback();
+            } catch (Exception rbEx) {
+                LOG.error("Rollback of transaction failed, trace follows!");
+                LOG.error(rbEx, rbEx);
+            }
+            throw new RuntimeException(e);
+        } finally {
+            if(session != null){
+                session.close();
+            }
+        }
+        return category;
+    }
+
     public void removeCategoryGroup(Long id) throws Exception {
         Session session = null;
         try{
