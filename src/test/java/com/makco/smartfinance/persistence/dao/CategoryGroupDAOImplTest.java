@@ -301,7 +301,6 @@ public class CategoryGroupDAOImplTest {
     }
 
     @Test
-    //TODO compare sqls in test_24 vs test_25
     public void test_24_updateCategoryGroupWithOneCategoryUpdate() throws Exception {
         int randomInt = randomWithinRange.getRandom();
 
@@ -372,7 +371,6 @@ public class CategoryGroupDAOImplTest {
     }
 
     @Test
-    //TODO compare sqls in test_24 vs test_25
     public void test_25_updateCategoryGroupWithOneCategoryWithMerge() throws Exception {
         int randomInt = randomWithinRange.getRandom();
 
