@@ -24,6 +24,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -441,14 +442,26 @@ public class CategoryGroupDAOImplTest {
     }
 
     @Test
-    //TODO test_31_removeCategoryGroup
     public void test_31_removeCategoryGroup() throws Exception {
+        CategoryGroupCredit categoryGroupCredit = new CategoryGroupCredit("catGr to del", "category group to delete");
+        categoryGroupDAOImplForTest.saveOrUpdateCategoryGroup(categoryGroupCredit);
+        LOG.debug(">>>category group to delete: " + categoryGroupCredit.getId());
+
+        categoryGroupDAOImplForTest.removeCategoryGroup(categoryGroupCredit.getId());
+
+        CategoryGroup categoryGroup = categoryGroupDAOImplForTest.getCategoryGroupById(categoryGroupCredit.getId(), false);
+        assertEquals(true, categoryGroup == null);
+    }
+
+    @Test
+    //TODO test_32_removeCategoryGroupWithCategories
+    public void test_32_removeCategoryGroupWithCategories() throws Exception {
 
     }
 
     @Test
-    //TODO test_32_removeCategoryGroup
-    public void test_32_removeCategoryGroupWithCategories() throws Exception {
+    //TODO test_33_removeCategoryGroupWithCategories
+    public void test_33_removeCategoryFromCategoryGroup() throws Exception {
 
     }
 
