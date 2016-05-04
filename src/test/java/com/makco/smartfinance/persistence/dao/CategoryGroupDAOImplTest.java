@@ -70,7 +70,7 @@ public class CategoryGroupDAOImplTest {
 
         //put service: putting category_group in category and category in category_group
         for(int i = 1 ; i < 5;i++) {
-            Category category = new CategoryDebit(categoryGroup, "cat deb " + i + "->" + randomInt,
+            Category category = new CategoryDebit(categoryGroup, "cat deb " + i + "_v" + randomInt,
                     "debit category #" + i + " 'description'");
             categories.add(category);
         }
@@ -106,7 +106,7 @@ public class CategoryGroupDAOImplTest {
 
         //put service: putting category_group in category and category in category_group
         for(int i = 1 ; i < 5;i++) {
-            Category category = new CategoryCredit(categoryGroup, "cat cred " + i + "->" + randomInt,
+            Category category = new CategoryCredit(categoryGroup, "cat cred " + i + "_v" + randomInt,
                     "credit category #" + i + " 'description'");
             categories.add(category);
         }
@@ -204,7 +204,7 @@ public class CategoryGroupDAOImplTest {
         int i = 0;
         while (iterator.hasNext()) {
             Category category = iterator.next();
-            String categoryNewName = category.getName() + "_changed_v" + (++i) + "_" + randomInt;
+            String categoryNewName = category.getName() + "_changed_v" + (++i) + "_v" + randomInt;
             categoryNewName = (categoryNewName.length() > DataBaseConstants.CAT_NAME_MAX_LGTH) ?
                     categoryNewName.substring(categoryNewName.length() - DataBaseConstants.CAT_NAME_MAX_LGTH) :
                     categoryNewName;
@@ -271,7 +271,7 @@ public class CategoryGroupDAOImplTest {
         int i = 0;
         while (iterator.hasNext()) {
             Category category = iterator.next();
-            String categoryNewName = category.getName() + "_changed_v" + (++i) + "_" + randomInt;
+            String categoryNewName = category.getName() + "_changed_v" + (++i) + "_v" + randomInt;
             categoryNewName = (categoryNewName.length() > DataBaseConstants.CAT_NAME_MAX_LGTH) ?
                     categoryNewName.substring(categoryNewName.length() - DataBaseConstants.CAT_NAME_MAX_LGTH) :
                     categoryNewName;
@@ -338,7 +338,7 @@ public class CategoryGroupDAOImplTest {
         int i = 0;
         if (iterator.hasNext()) {
             Category category = iterator.next();
-            String categoryNewName = category.getName() + "_changed_v" + (++i) + "_" + randomInt;
+            String categoryNewName = category.getName() + "_changed_v" + (++i) + "_v" + randomInt;
             categoryNewName = (categoryNewName.length() > DataBaseConstants.CAT_NAME_MAX_LGTH) ?
                     categoryNewName.substring(categoryNewName.length() - DataBaseConstants.CAT_NAME_MAX_LGTH) :
                     categoryNewName;
@@ -408,7 +408,7 @@ public class CategoryGroupDAOImplTest {
         int i = 0;
         if (iterator.hasNext()) {
             Category category = iterator.next();
-            String categoryNewName = category.getName() + "_changed_v" + (++i) + "_" + randomInt;
+            String categoryNewName = category.getName() + "_changed_v" + (++i) + "_v" + randomInt;
             categoryNewName = (categoryNewName.length() > DataBaseConstants.CAT_NAME_MAX_LGTH) ?
                     categoryNewName.substring(categoryNewName.length() - DataBaseConstants.CAT_NAME_MAX_LGTH) :
                     categoryNewName;
@@ -444,7 +444,7 @@ public class CategoryGroupDAOImplTest {
     @Test
     public void test_31_removeCategoryGroup() throws Exception {
         int randomInt = randomWithinRange.getRandom();
-        CategoryGroupCredit categoryGroupCredit = new CategoryGroupCredit("catGr to del " + randomInt,
+        CategoryGroupCredit categoryGroupCredit = new CategoryGroupCredit("catGr to del v" + randomInt,
                 "category group to delete " + randomInt);
         categoryGroupDAOImplForTest.saveOrUpdateCategoryGroup(categoryGroupCredit);
         LOG.debug(">>>category group to delete: " + categoryGroupCredit.getId());
@@ -464,7 +464,7 @@ public class CategoryGroupDAOImplTest {
         List<Category> categories = new ArrayList<>();
         //put service: putting category_group in category and category in category_group
         for(int i = 1 ; i < 5;i++) {
-            Category category = new CategoryCredit(categoryGroupCredit, "cat cr " + i + "->" + randomInt,
+            Category category = new CategoryCredit(categoryGroupCredit, "cat cr " + i + "_v" + randomInt,
                     "credit category #" + i + " 'description'");
             categories.add(category);
         }
@@ -485,7 +485,6 @@ public class CategoryGroupDAOImplTest {
     }
 
     @Test
-    //TODO test_33_removeCategoryFromCategoryGroup
     public void test_33_removeCategoryFromCategoryGroup() throws Exception {
         int randomInt = randomWithinRange.getRandom();
         int categoriesQty = 5;
@@ -495,7 +494,7 @@ public class CategoryGroupDAOImplTest {
         List<Category> categories = new ArrayList<>();
         //put service: putting category_group in category and category in category_group
         for(int i = 0 ; i < categoriesQty;i++) {
-            Category category = new CategoryCredit(categoryGroupCredit, "cat cr " + i + "->" + randomInt,
+            Category category = new CategoryCredit(categoryGroupCredit, "cat cr " + i + "_v" + randomInt,
                     "credit category #" + i + " 'description'");
             categories.add(category);
         }
@@ -528,31 +527,41 @@ public class CategoryGroupDAOImplTest {
     @Test
     //TODO test_41_seleteAllCategoryGroups
     public void test_41_seleteAllCategoryGroups() throws Exception {
-//        Session session = null;
-//        List<FamilyMember> list = new ArrayList<>();
-//        try{
-//            session = HibernateUtil.openSession();
-//            session.beginTransaction();
-//            list = session.createQuery("SELECT f FROM FamilyMember f ORDER BY f.name").list();
-//            session.getTransaction().commit();
-//
-//        } catch (Exception e) {
-//            //hibernate persistence p.257
-//            try {
-//                if (session.getTransaction().getStatus() == TransactionStatus.ACTIVE
-//                        || session.getTransaction().getStatus() == TransactionStatus.MARKED_ROLLBACK)
-//                    session.getTransaction().rollback();
-//            } catch (Exception rbEx) {
-//                LOG.error("Rollback of transaction failed, trace follows!");
-//                LOG.error(rbEx, rbEx);
-//            }
-//            throw new RuntimeException(e);
-//        } finally {
-//            if(session != null){
-//                session.close();
-//            }
-//        }
-//        return list;
+        int randomInt = randomWithinRange.getRandom();
+        int categoriesQty = 3;
+        CategoryGroup categoryGroupCredit = new CategoryGroupCredit("cr catGr to sel " + randomInt,
+                "credit category group to select " + randomInt);
+        List<Category> creditCategories = new ArrayList<>();
+        //put service: putting category_group in category and category in category_group
+        for(int i = 0 ; i < categoriesQty;i++) {
+            Category category = new CategoryCredit(categoryGroupCredit, "cat cr " + i + "_v" + randomInt,
+                    "credit category #" + i + " 'description'");
+            creditCategories.add(category);
+        }
+        categoryGroupCredit.setCategories(creditCategories);
+        categoryGroupDAOImplForTest.saveOrUpdateCategoryGroup(categoryGroupCredit);
+
+        LOG.debug(">>>category group credit to delete: " + categoryGroupCredit);
+        LOG.debug(">>>credit categories to delete: " + creditCategories);
+
+        CategoryGroup categoryGroupDebit = new CategoryGroupDebit("dt catGr to sel " + randomInt,
+                "debit category group to select " + randomInt);
+        List<Category> debitCategories = new ArrayList<>();
+        //put service: putting category_group in category and category in category_group
+        for(int i = 0 ; i < categoriesQty;i++) {
+            Category category = new CategoryDebit(categoryGroupDebit, "cat dt " + i + "_v" + randomInt,
+                    "debit category #" + i + " 'description'");
+            debitCategories.add(category);
+        }
+        categoryGroupDebit.setCategories(debitCategories);
+        categoryGroupDAOImplForTest.saveOrUpdateCategoryGroup(categoryGroupDebit);
+
+        LOG.debug(">>>category group debit to delete: " + categoryGroupDebit);
+        LOG.debug(">>>debit categories to delete: " + debitCategories);
+
+        List<CategoryGroup> categoryGroups = categoryGroupDAOImplForTest.categoryGroupList();
+        LOG.debug(">>>categoryGroupList: " + categoryGroups);
+        assertEquals(true, categoryGroups.size() > 0);
     }
 
     @Test
@@ -576,12 +585,50 @@ public class CategoryGroupDAOImplTest {
     @Test
     //TODO test_45_seleteDebitCategoryGroupsWithCategories
     public void test_45_seleteDebitCategoryGroupsWithCategories() throws Exception {
+        int randomInt = randomWithinRange.getRandom();
+        int categoriesQty = 3;
+        CategoryGroup categoryGroupDebit = new CategoryGroupDebit("dt catGr to sel " + randomInt,
+                "debit category group to select " + randomInt);
+        List<Category> debitCategories = new ArrayList<>();
+        //put service: putting category_group in category and category in category_group
+        for(int i = 0 ; i < categoriesQty;i++) {
+            Category category = new CategoryDebit(categoryGroupDebit, "cat dt " + i + "_v" + randomInt,
+                    "debit category #" + i + " 'description'");
+            debitCategories.add(category);
+        }
+        categoryGroupDebit.setCategories(debitCategories);
+        categoryGroupDAOImplForTest.saveOrUpdateCategoryGroup(categoryGroupDebit);
 
+        LOG.debug(">>>category group to delete: " + categoryGroupDebit);
+        LOG.debug(">>>categories to delete: " + debitCategories);
+
+        List<CategoryGroupDebit> categoryGroupDebits = categoryGroupDAOImplForTest.categoryGroupDebitList();
+        LOG.debug(">>>categoryGroupDebits: " + categoryGroupDebits);
+        assertEquals(true, categoryGroupDebits.size() > 0);
     }
 
     @Test
     //TODO test_46_seleteCreditCategoryGroupsWithCategories
     public void test_46_seleteCreditCategoryGroupsWithCategories() throws Exception {
+        int randomInt = randomWithinRange.getRandom();
+        int categoriesQty = 3;
+        CategoryGroup categoryGroupCredit = new CategoryGroupCredit("cr catGr to sel " + randomInt,
+                "credit category group to select " + randomInt);
+        List<Category> creditCategories = new ArrayList<>();
+        //put service: putting category_group in category and category in category_group
+        for(int i = 0 ; i < categoriesQty;i++) {
+            Category category = new CategoryCredit(categoryGroupCredit, "cat cr " + i + "_v" + randomInt,
+                    "credit category #" + i + " 'description'");
+            creditCategories.add(category);
+        }
+        categoryGroupCredit.setCategories(creditCategories);
+        categoryGroupDAOImplForTest.saveOrUpdateCategoryGroup(categoryGroupCredit);
 
+        LOG.debug(">>>category group to delete: " + categoryGroupCredit);
+        LOG.debug(">>>categories to delete: " + creditCategories);
+
+        List<CategoryGroupCredit> categoryGroups = categoryGroupDAOImplForTest.categoryGroupCreditList();
+        LOG.debug(">>>categoryGroupList: " + categoryGroups);
+        assertEquals(true, categoryGroups.size() > 0);
     }
 }

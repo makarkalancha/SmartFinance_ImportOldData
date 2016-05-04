@@ -3,6 +3,8 @@ package com.makco.smartfinance.persistence.dao.dao_implementations;
 import com.makco.smartfinance.persistence.dao.CategoryGroupDAOImplTest;
 import com.makco.smartfinance.persistence.entity.Category;
 import com.makco.smartfinance.persistence.entity.CategoryGroup;
+import com.makco.smartfinance.persistence.entity.CategoryGroupCredit;
+import com.makco.smartfinance.persistence.entity.CategoryGroupDebit;
 import com.makco.smartfinance.persistence.entity.FamilyMember;
 import com.makco.smartfinance.persistence.utils.HibernateUtil;
 import com.makco.smartfinance.persistence.utils.TestPersistenceSession;
@@ -11,6 +13,9 @@ import org.apache.logging.log4j.Logger;
 import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.resource.transaction.spi.TransactionStatus;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by mcalancea on 2016-05-02.
@@ -211,6 +216,91 @@ public class CategoryGroupDAOImplForTest {
                 session.close();
             }
         }
+    }
+
+    public List<CategoryGroup> categoryGroupList() throws Exception {
+        Session session = null;
+        List<CategoryGroup> list = new ArrayList<>();
+        try{
+            session = HibernateUtil.openSession();
+            session.beginTransaction();
+            list = session.createQuery("SELECT cg FROM CategoryGroup cg ORDER BY cg.name").list();
+            session.getTransaction().commit();
+
+        } catch (Exception e) {
+            //hibernate persistence p.257
+            try {
+                if (session.getTransaction().getStatus() == TransactionStatus.ACTIVE
+                        || session.getTransaction().getStatus() == TransactionStatus.MARKED_ROLLBACK)
+                    session.getTransaction().rollback();
+            } catch (Exception rbEx) {
+                LOG.error("Rollback of transaction failed, trace follows!");
+                LOG.error(rbEx, rbEx);
+            }
+            throw new RuntimeException(e);
+        } finally {
+            if(session != null){
+                session.close();
+            }
+        }
+        return list;
+    }
+
+    public List<CategoryGroupCredit> categoryGroupCreditList() throws Exception {
+        Session session = null;
+        List<CategoryGroupCredit> list = new ArrayList<>();
+        try{
+            session = HibernateUtil.openSession();
+            session.beginTransaction();
+//            list = session.createQuery("SELECT cg FROM CategoryGroupCredit cg ORDER BY cg.name").list();
+            list = session.createQuery("SELECT cg FROM CategoryGroupCredit cg").list();
+            session.getTransaction().commit();
+
+        } catch (Exception e) {
+            //hibernate persistence p.257
+            try {
+                if (session.getTransaction().getStatus() == TransactionStatus.ACTIVE
+                        || session.getTransaction().getStatus() == TransactionStatus.MARKED_ROLLBACK)
+                    session.getTransaction().rollback();
+            } catch (Exception rbEx) {
+                LOG.error("Rollback of transaction failed, trace follows!");
+                LOG.error(rbEx, rbEx);
+            }
+            throw new RuntimeException(e);
+        } finally {
+            if(session != null){
+                session.close();
+            }
+        }
+        return list;
+    }
+
+    public List<CategoryGroupDebit> categoryGroupDebitList() throws Exception {
+        Session session = null;
+        List<CategoryGroupDebit> list = new ArrayList<>();
+        try{
+            session = HibernateUtil.openSession();
+            session.beginTransaction();
+            list = session.createQuery("SELECT cg FROM CategoryGroupDebit cg ORDER BY cg.name").list();
+            session.getTransaction().commit();
+
+        } catch (Exception e) {
+            //hibernate persistence p.257
+            try {
+                if (session.getTransaction().getStatus() == TransactionStatus.ACTIVE
+                        || session.getTransaction().getStatus() == TransactionStatus.MARKED_ROLLBACK)
+                    session.getTransaction().rollback();
+            } catch (Exception rbEx) {
+                LOG.error("Rollback of transaction failed, trace follows!");
+                LOG.error(rbEx, rbEx);
+            }
+            throw new RuntimeException(e);
+        } finally {
+            if(session != null){
+                session.close();
+            }
+        }
+        return list;
     }
 
 }
