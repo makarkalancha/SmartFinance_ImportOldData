@@ -18,13 +18,22 @@ import org.hibernate.resource.transaction.spi.TransactionStatus;
 public class CategoryGroupDAOImplForTest {
     private final static Logger LOG = LogManager.getLogger(CategoryGroupDAOImplForTest.class);
 
+    /**
+     * check file saveOrUpdateCategoryGroup.log: find "statement [prep" 6 hits,
+     * and 2 (! vs 3 in merge) statements registered, released and closed:
+     * 1) update TEST.CATEGORY_GROUP set DESCRIPTION=?, NAME=? where ID=? {1: 'categoryGroupDebit_description', 2: '_changed_v167092_changed_v511301', 3: 9}]
+     * 2) update TEST.CATEGORY set DESCRIPTION=?, NAME=?, CATEGORY_GROUP_ID=? where ID=? {1: 'debit category #1 ''description''', 2: 'nged_v1_461186_changed_v1_167092', 3: 9, 4: 7}]
+     * !!!so use saveOrUpdate and not merge!!!
+     */
     public void saveOrUpdateCategoryGroup(CategoryGroup categoryGroup) throws Exception {
         Session session = null;
         try {
+            LOG.debug(">>>saveOrUpdateCategoryGroup: start");
             session = TestPersistenceSession.openSession();
             session.beginTransaction();
             session.saveOrUpdate(categoryGroup);
             session.getTransaction().commit();
+            LOG.debug(">>>saveOrUpdateCategoryGroup: end");
         } catch (Exception e) {
             try {
                 if (session.getTransaction().getStatus() == TransactionStatus.ACTIVE
@@ -42,13 +51,23 @@ public class CategoryGroupDAOImplForTest {
         }
     }
 
+    /**
+     * check file saveOrUpdateWithMergeCategoryGroup.log: find "statement [prep" 10 hits,
+     * and 3 (! vs 2 in saveOrUpdate) statements registered, released and closed:
+     * 1) select categorygr0_.ID as ID2_1_1_, categorygr0_.T_CREATEDON as T_CREATE3_1_1_, categorygr0_.DESCRIPTION as DESCRIPT4_1_1_, categorygr0_.NAME as NAME5_1_1_, categorygr0_.T_UPDATEDON as T_UPDATE6_1_1_, categories1_.CATEGORY_GROUP_ID as CATEGORY7_0_3_, categories1_.ID as ID2_0_3_, categories1_.ID as ID2_0_0_, categories1_.T_CREATEDON as T_CREATE3_0_0_, categories1_.DESCRIPTION as DESCRIPT4_0_0_, categories1_.NAME as NAME5_0_0_, categories1_.T_UPDATEDON as T_UPDATE6_0_0_, categories1_.CATEGORY_GROUP_ID as CATEGORY7_0_0_ from TEST.CATEGORY_GROUP categorygr0_ left outer join TEST.CATEGORY categories1_ on categorygr0_.ID=categories1_.CATEGORY_GROUP_ID and categories1_.CATEGORY_GROUP_TYPE='D' where categorygr0_.ID=? and categorygr0_.TYPE='D' order by categories1_.NAME {1: 9}]
+     * 2) update TEST.CATEGORY set DESCRIPTION=?, NAME=?, CATEGORY_GROUP_ID=? where ID=? {1: 'debit category #2 ''description''', 2: 'nged_v1_511301_changed_v1_417087', 3: 9, 4: 8}]
+     * 3) update TEST.CATEGORY_GROUP set DESCRIPTION=?, NAME=? where ID=? {1: 'categoryGroupDebit_description', 2: '_changed_v511301_changed_v417087', 3: 9}]
+     * !!!so use saveOrUpdate and not merge!!!
+     */
     public void saveOrUpdateWithMergeCategoryGroup(CategoryGroup categoryGroup) throws Exception {
         Session session = null;
         try {
+            LOG.debug(">>>saveOrUpdateWithMergeCategoryGroup: start");
             session = TestPersistenceSession.openSession();
             session.beginTransaction();
             session.merge(categoryGroup);
             session.getTransaction().commit();
+            LOG.debug(">>>saveOrUpdateWithMergeCategoryGroup: end");
         } catch (Exception e) {
             try {
                 if (session.getTransaction().getStatus() == TransactionStatus.ACTIVE

@@ -1,0 +1,157 @@
+12:09:01.377 [main] DEBUG com.makco.smartfinance.persistence.dao.dao_implementations.CategoryGroupDAOImplForTest - >>>saveOrUpdateCategoryGroup: start
+12:09:01.377 [main] TRACE org.hibernate.internal.SessionFactoryImpl$SessionBuilderImpl - Opening Hibernate Session.  tenant=null, owner=null
+12:09:01.377 [main] TRACE org.hibernate.internal.SessionImpl - Opened session at timestamp: 14623781413
+12:09:01.377 [main] DEBUG org.hibernate.engine.transaction.internal.TransactionImpl - begin
+12:09:01.377 [main] TRACE org.hibernate.resource.jdbc.internal.AbstractLogicalConnectionImplementor - Preparing to begin transaction via JDBC Connection.setAutoCommit(false)
+12:09:01.377 [main] TRACE org.hibernate.resource.jdbc.internal.AbstractLogicalConnectionImplementor - Transaction begun via JDBC Connection.setAutoCommit(false)
+12:09:01.377 [main] TRACE org.hibernate.resource.transaction.backend.jdbc.internal.JdbcResourceLocalTransactionCoordinatorImpl - ResourceLocalTransactionCoordinatorImpl#afterBeginCallback
+12:09:01.378 [main] TRACE org.hibernate.engine.spi.IdentifierValue - ID unsaved-value: null
+12:09:01.378 [main] TRACE org.hibernate.event.internal.AbstractSaveEventListener - Detached instance of: com.makco.smartfinance.persistence.entity.CategoryGroupDebit
+12:09:01.378 [main] TRACE org.hibernate.event.internal.DefaultSaveOrUpdateEventListener - Updating detached instance
+12:09:01.378 [main] TRACE org.hibernate.event.internal.DefaultSaveOrUpdateEventListener - Updating [com.makco.smartfinance.persistence.entity.CategoryGroupDebit#9]
+12:09:01.380 [main] TRACE org.hibernate.event.internal.DefaultSaveOrUpdateEventListener - Updating [com.makco.smartfinance.persistence.entity.CategoryGroupDebit#9]
+12:09:01.380 [main] TRACE org.hibernate.engine.internal.Cascade - Processing cascade ACTION_SAVE_UPDATE for: com.makco.smartfinance.persistence.entity.CategoryGroupDebit
+12:09:01.380 [main] TRACE org.hibernate.engine.internal.Cascade - Cascade ACTION_SAVE_UPDATE for collection: com.makco.smartfinance.persistence.entity.CategoryGroupDebit.categories
+12:09:01.380 [main] TRACE org.hibernate.engine.spi.CascadingAction - Cascading to save or update: com.makco.smartfinance.persistence.entity.CategoryDebit
+12:09:01.380 [main] TRACE org.hibernate.engine.spi.IdentifierValue - ID unsaved-value: null
+12:09:01.380 [main] TRACE org.hibernate.event.internal.AbstractSaveEventListener - Detached instance of: com.makco.smartfinance.persistence.entity.CategoryDebit
+12:09:01.380 [main] TRACE org.hibernate.event.internal.DefaultSaveOrUpdateEventListener - Updating detached instance
+12:09:01.380 [main] TRACE org.hibernate.event.internal.DefaultSaveOrUpdateEventListener - Updating [com.makco.smartfinance.persistence.entity.CategoryDebit#8]
+12:09:01.380 [main] TRACE org.hibernate.event.internal.DefaultSaveOrUpdateEventListener - Updating [com.makco.smartfinance.persistence.entity.CategoryDebit#8]
+12:09:01.380 [main] TRACE org.hibernate.engine.spi.CascadingAction - Cascading to save or update: com.makco.smartfinance.persistence.entity.CategoryDebit
+12:09:01.381 [main] TRACE org.hibernate.engine.spi.IdentifierValue - ID unsaved-value: null
+12:09:01.381 [main] TRACE org.hibernate.event.internal.AbstractSaveEventListener - Detached instance of: com.makco.smartfinance.persistence.entity.CategoryDebit
+12:09:01.381 [main] TRACE org.hibernate.event.internal.DefaultSaveOrUpdateEventListener - Updating detached instance
+12:09:01.381 [main] TRACE org.hibernate.event.internal.DefaultSaveOrUpdateEventListener - Updating [com.makco.smartfinance.persistence.entity.CategoryDebit#9]
+12:09:01.381 [main] TRACE org.hibernate.event.internal.DefaultSaveOrUpdateEventListener - Updating [com.makco.smartfinance.persistence.entity.CategoryDebit#9]
+12:09:01.381 [main] TRACE org.hibernate.engine.spi.CascadingAction - Cascading to save or update: com.makco.smartfinance.persistence.entity.CategoryDebit
+12:09:01.381 [main] TRACE org.hibernate.engine.spi.IdentifierValue - ID unsaved-value: null
+12:09:01.381 [main] TRACE org.hibernate.event.internal.AbstractSaveEventListener - Detached instance of: com.makco.smartfinance.persistence.entity.CategoryDebit
+12:09:01.381 [main] TRACE org.hibernate.event.internal.DefaultSaveOrUpdateEventListener - Updating detached instance
+12:09:01.381 [main] TRACE org.hibernate.event.internal.DefaultSaveOrUpdateEventListener - Updating [com.makco.smartfinance.persistence.entity.CategoryDebit#10]
+12:09:01.381 [main] TRACE org.hibernate.event.internal.DefaultSaveOrUpdateEventListener - Updating [com.makco.smartfinance.persistence.entity.CategoryDebit#10]
+12:09:01.381 [main] TRACE org.hibernate.engine.spi.CascadingAction - Cascading to save or update: com.makco.smartfinance.persistence.entity.CategoryDebit
+12:09:01.381 [main] TRACE org.hibernate.engine.spi.IdentifierValue - ID unsaved-value: null
+12:09:01.381 [main] TRACE org.hibernate.event.internal.AbstractSaveEventListener - Detached instance of: com.makco.smartfinance.persistence.entity.CategoryDebit
+12:09:01.381 [main] TRACE org.hibernate.event.internal.DefaultSaveOrUpdateEventListener - Updating detached instance
+12:09:01.381 [main] TRACE org.hibernate.event.internal.DefaultSaveOrUpdateEventListener - Updating [com.makco.smartfinance.persistence.entity.CategoryDebit#7]
+12:09:01.381 [main] TRACE org.hibernate.event.internal.DefaultSaveOrUpdateEventListener - Updating [com.makco.smartfinance.persistence.entity.CategoryDebit#7]
+12:09:01.381 [main] TRACE org.hibernate.engine.internal.Cascade - Done cascade ACTION_SAVE_UPDATE for collection: com.makco.smartfinance.persistence.entity.CategoryGroupDebit.categories
+12:09:01.381 [main] TRACE org.hibernate.engine.internal.Cascade - Done processing cascade ACTION_SAVE_UPDATE for: com.makco.smartfinance.persistence.entity.CategoryGroupDebit
+12:09:01.385 [main] DEBUG org.hibernate.engine.transaction.internal.TransactionImpl - committing
+12:09:01.385 [main] TRACE org.hibernate.resource.transaction.backend.jdbc.internal.JdbcResourceLocalTransactionCoordinatorImpl - ResourceLocalTransactionCoordinatorImpl#beforeCompletionCallback
+12:09:01.385 [main] TRACE org.hibernate.internal.SessionImpl - SessionImpl#beforeTransactionCompletion()
+12:09:01.385 [main] TRACE org.hibernate.internal.SessionImpl - Automatically flushing session
+12:09:01.385 [main] TRACE org.hibernate.event.internal.AbstractFlushingEventListener - Flushing session
+12:09:01.385 [main] DEBUG org.hibernate.event.internal.AbstractFlushingEventListener - Processing flush-time cascades
+12:09:01.385 [main] TRACE org.hibernate.engine.internal.Cascade - Processing cascade ACTION_SAVE_UPDATE for: com.makco.smartfinance.persistence.entity.CategoryGroupDebit
+12:09:01.385 [main] TRACE org.hibernate.engine.internal.Cascade - Cascade ACTION_SAVE_UPDATE for collection: com.makco.smartfinance.persistence.entity.CategoryGroupDebit.categories
+12:09:01.385 [main] TRACE org.hibernate.engine.spi.CascadingAction - Cascading to save or update: com.makco.smartfinance.persistence.entity.CategoryDebit
+12:09:01.385 [main] TRACE org.hibernate.event.internal.AbstractSaveEventListener - Persistent instance of: com.makco.smartfinance.persistence.entity.CategoryDebit
+12:09:01.385 [main] TRACE org.hibernate.event.internal.DefaultSaveOrUpdateEventListener - Ignoring persistent instance
+12:09:01.385 [main] TRACE org.hibernate.event.internal.DefaultSaveOrUpdateEventListener - Object already associated with session: [com.makco.smartfinance.persistence.entity.CategoryDebit#8]
+12:09:01.385 [main] TRACE org.hibernate.engine.spi.CascadingAction - Cascading to save or update: com.makco.smartfinance.persistence.entity.CategoryDebit
+12:09:01.385 [main] TRACE org.hibernate.event.internal.AbstractSaveEventListener - Persistent instance of: com.makco.smartfinance.persistence.entity.CategoryDebit
+12:09:01.385 [main] TRACE org.hibernate.event.internal.DefaultSaveOrUpdateEventListener - Ignoring persistent instance
+12:09:01.385 [main] TRACE org.hibernate.event.internal.DefaultSaveOrUpdateEventListener - Object already associated with session: [com.makco.smartfinance.persistence.entity.CategoryDebit#9]
+12:09:01.385 [main] TRACE org.hibernate.engine.spi.CascadingAction - Cascading to save or update: com.makco.smartfinance.persistence.entity.CategoryDebit
+12:09:01.385 [main] TRACE org.hibernate.event.internal.AbstractSaveEventListener - Persistent instance of: com.makco.smartfinance.persistence.entity.CategoryDebit
+12:09:01.385 [main] TRACE org.hibernate.event.internal.DefaultSaveOrUpdateEventListener - Ignoring persistent instance
+12:09:01.385 [main] TRACE org.hibernate.event.internal.DefaultSaveOrUpdateEventListener - Object already associated with session: [com.makco.smartfinance.persistence.entity.CategoryDebit#10]
+12:09:01.385 [main] TRACE org.hibernate.engine.spi.CascadingAction - Cascading to save or update: com.makco.smartfinance.persistence.entity.CategoryDebit
+12:09:01.386 [main] TRACE org.hibernate.event.internal.AbstractSaveEventListener - Persistent instance of: com.makco.smartfinance.persistence.entity.CategoryDebit
+12:09:01.386 [main] TRACE org.hibernate.event.internal.DefaultSaveOrUpdateEventListener - Ignoring persistent instance
+12:09:01.386 [main] TRACE org.hibernate.event.internal.DefaultSaveOrUpdateEventListener - Object already associated with session: [com.makco.smartfinance.persistence.entity.CategoryDebit#7]
+12:09:01.386 [main] TRACE org.hibernate.engine.internal.Cascade - Done cascade ACTION_SAVE_UPDATE for collection: com.makco.smartfinance.persistence.entity.CategoryGroupDebit.categories
+12:09:01.386 [main] TRACE org.hibernate.engine.internal.Cascade - Done processing cascade ACTION_SAVE_UPDATE for: com.makco.smartfinance.persistence.entity.CategoryGroupDebit
+12:09:01.386 [main] DEBUG org.hibernate.event.internal.AbstractFlushingEventListener - Dirty checking collections
+12:09:01.386 [main] TRACE org.hibernate.event.internal.AbstractFlushingEventListener - Flushing entities and processing referenced collections
+12:09:01.386 [main] TRACE org.hibernate.event.internal.DefaultFlushEntityEventListener - Updating entity: [com.makco.smartfinance.persistence.entity.CategoryGroupDebit#9]
+12:09:01.390 [main] DEBUG org.hibernate.engine.internal.Collections - Collection found: [com.makco.smartfinance.persistence.entity.CategoryGroupDebit.categories#9], was: [com.makco.smartfinance.persistence.entity.CategoryGroupDebit.categories#9] (initialized)
+12:09:01.390 [main] TRACE org.hibernate.event.internal.DefaultFlushEntityEventListener - Updating entity: [com.makco.smartfinance.persistence.entity.CategoryDebit#8]
+12:09:01.391 [main] TRACE org.hibernate.event.internal.DefaultFlushEntityEventListener - Updating entity: [com.makco.smartfinance.persistence.entity.CategoryDebit#9]
+12:09:01.391 [main] TRACE org.hibernate.event.internal.DefaultFlushEntityEventListener - Updating entity: [com.makco.smartfinance.persistence.entity.CategoryDebit#10]
+12:09:01.391 [main] TRACE org.hibernate.event.internal.DefaultFlushEntityEventListener - Updating entity: [com.makco.smartfinance.persistence.entity.CategoryDebit#7]
+12:09:01.391 [main] TRACE org.hibernate.event.internal.AbstractFlushingEventListener - Processing unreferenced collections
+12:09:01.391 [main] TRACE org.hibernate.event.internal.AbstractFlushingEventListener - Scheduling collection removes/(re)creates/updates
+12:09:01.391 [main] DEBUG org.hibernate.event.internal.AbstractFlushingEventListener - Flushed: 0 insertions, 5 updates, 0 deletions to 5 objects
+12:09:01.391 [main] DEBUG org.hibernate.event.internal.AbstractFlushingEventListener - Flushed: 0 (re)creations, 0 updates, 0 removals to 1 collections
+12:09:01.391 [main] DEBUG org.hibernate.internal.util.EntityPrinter - Listing entities:
+12:09:01.391 [main] DEBUG org.hibernate.internal.util.EntityPrinter - com.makco.smartfinance.persistence.entity.CategoryDebit{name=nged_v1_461186_changed_v1_167092, description=debit category #1 'description', id=7, updatedOn=2016-05-04 12:06:28.759, createdOn=2016-05-03 16:40:18.18, categoryGroup=com.makco.smartfinance.persistence.entity.CategoryGroup#9}
+12:09:01.391 [main] DEBUG org.hibernate.internal.util.EntityPrinter - com.makco.smartfinance.persistence.entity.CategoryDebit{name=anged_v2_56227_changed_v1_511301, description=debit category #2 'description', id=8, updatedOn=2016-05-04 12:06:12.372, createdOn=2016-05-03 16:40:18.181, categoryGroup=com.makco.smartfinance.persistence.entity.CategoryGroup#9}
+12:09:01.391 [main] DEBUG org.hibernate.internal.util.EntityPrinter - com.makco.smartfinance.persistence.entity.CategoryGroupDebit{name=_changed_v167092_changed_v511301, description=categoryGroupDebit_description, id=9, updatedOn=2016-05-04 12:06:28.765, categories=[com.makco.smartfinance.persistence.entity.CategoryDebit#8, com.makco.smartfinance.persistence.entity.CategoryDebit#9, com.makco.smartfinance.persistence.entity.CategoryDebit#10, com.makco.smartfinance.persistence.entity.CategoryDebit#7], createdOn=2016-05-03 16:40:18.178}
+12:09:01.391 [main] DEBUG org.hibernate.internal.util.EntityPrinter - com.makco.smartfinance.persistence.entity.CategoryDebit{name=anged_v3_739129_changed_v3_56227, description=debit category #3 'description', id=9, updatedOn=2016-05-04 12:06:12.373, createdOn=2016-05-03 16:40:18.182, categoryGroup=com.makco.smartfinance.persistence.entity.CategoryGroup#9}
+12:09:01.391 [main] DEBUG org.hibernate.internal.util.EntityPrinter - com.makco.smartfinance.persistence.entity.CategoryDebit{name=anged_v4_739129_changed_v4_56227, description=debit category #4 'description', id=10, updatedOn=2016-05-04 12:06:12.373, createdOn=2016-05-03 16:40:18.182, categoryGroup=com.makco.smartfinance.persistence.entity.CategoryGroup#9}
+12:09:01.391 [main] TRACE org.hibernate.event.internal.AbstractFlushingEventListener - Executing flush
+12:09:01.396 [main] TRACE org.hibernate.persister.entity.AbstractEntityPersister - Updating entity: [com.makco.smartfinance.persistence.entity.CategoryGroupDebit#9]
+12:09:01.396 [main] TRACE org.hibernate.service.internal.AbstractServiceRegistryImpl - Initializing service [role=org.hibernate.engine.jdbc.batch.spi.BatchBuilder]
+12:09:01.400 [main] TRACE org.hibernate.service.internal.AbstractServiceRegistryImpl - Initializing service [role=org.hibernate.jmx.spi.JmxService]
+12:09:01.401 [main] TRACE org.hibernate.engine.jdbc.batch.internal.BatchBuilderImpl - Building batch [size=50]
+12:09:01.403 [main] DEBUG org.hibernate.SQL - update TEST.CATEGORY_GROUP set DESCRIPTION=?, NAME=? where ID=?
+Hibernate: update TEST.CATEGORY_GROUP set DESCRIPTION=?, NAME=? where ID=?
+12:09:01.403 [main] TRACE org.hibernate.resource.jdbc.internal.ResourceRegistryStandardImpl - Registering statement [prep50: update TEST.CATEGORY_GROUP set DESCRIPTION=?, NAME=? where ID=?]
+12:09:01.403 [main] TRACE org.hibernate.persister.entity.AbstractEntityPersister - Dehydrating entity: [com.makco.smartfinance.persistence.entity.CategoryGroupDebit#9]
+12:09:01.404 [main] TRACE org.hibernate.type.descriptor.sql.BasicBinder - binding parameter [1] as [VARCHAR] - [categoryGroupDebit_description]
+12:09:01.404 [main] TRACE org.hibernate.type.descriptor.sql.BasicBinder - binding parameter [2] as [VARCHAR] - [_changed_v167092_changed_v511301]
+12:09:01.404 [main] TRACE org.hibernate.type.descriptor.sql.BasicBinder - binding parameter [3] as [BIGINT] - [9]
+12:09:01.405 [main] TRACE org.hibernate.persister.entity.AbstractEntityPersister - Updating entity: [com.makco.smartfinance.persistence.entity.CategoryDebit#8]
+12:09:01.405 [main] DEBUG org.hibernate.engine.jdbc.batch.internal.BatchingBatch - Executing batch size: 1
+12:09:01.406 [main] DEBUG com.makco.smartfinance.h2db.triggers.AbstractTrigger - CATEGORY_GROUP
+12:09:01.417 [main] TRACE org.hibernate.resource.jdbc.internal.ResourceRegistryStandardImpl - Releasing statement [prep50: update TEST.CATEGORY_GROUP set DESCRIPTION=?, NAME=? where ID=? {1: 'categoryGroupDebit_description', 2: '_changed_v167092_changed_v511301', 3: 9}]
+12:09:01.417 [main] TRACE org.hibernate.resource.jdbc.internal.ResourceRegistryStandardImpl - Closing prepared statement [prep50: update TEST.CATEGORY_GROUP set DESCRIPTION=?, NAME=? where ID=? {1: 'categoryGroupDebit_description', 2: '_changed_v167092_changed_v511301', 3: 9}]
+12:09:01.417 [main] TRACE org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl - Starting after statement execution processing [ON_CLOSE]
+12:09:01.417 [main] TRACE org.hibernate.engine.jdbc.batch.internal.BatchBuilderImpl - Building batch [size=50]
+12:09:01.417 [main] DEBUG org.hibernate.SQL - update TEST.CATEGORY set DESCRIPTION=?, NAME=?, CATEGORY_GROUP_ID=? where ID=?
+Hibernate: update TEST.CATEGORY set DESCRIPTION=?, NAME=?, CATEGORY_GROUP_ID=? where ID=?
+12:09:01.417 [main] TRACE org.hibernate.resource.jdbc.internal.ResourceRegistryStandardImpl - Registering statement [prep52: update TEST.CATEGORY set DESCRIPTION=?, NAME=?, CATEGORY_GROUP_ID=? where ID=?]
+12:09:01.417 [main] TRACE org.hibernate.persister.entity.AbstractEntityPersister - Dehydrating entity: [com.makco.smartfinance.persistence.entity.CategoryDebit#8]
+12:09:01.417 [main] TRACE org.hibernate.type.descriptor.sql.BasicBinder - binding parameter [1] as [VARCHAR] - [debit category #2 'description']
+12:09:01.417 [main] TRACE org.hibernate.type.descriptor.sql.BasicBinder - binding parameter [2] as [VARCHAR] - [anged_v2_56227_changed_v1_511301]
+12:09:01.417 [main] TRACE org.hibernate.type.descriptor.sql.BasicBinder - binding parameter [3] as [BIGINT] - [9]
+12:09:01.417 [main] TRACE org.hibernate.type.descriptor.sql.BasicBinder - binding parameter [4] as [BIGINT] - [8]
+12:09:01.417 [main] TRACE org.hibernate.persister.entity.AbstractEntityPersister - Updating entity: [com.makco.smartfinance.persistence.entity.CategoryDebit#9]
+12:09:01.417 [main] DEBUG org.hibernate.engine.jdbc.batch.internal.AbstractBatchImpl - Reusing batch statement
+12:09:01.417 [main] DEBUG org.hibernate.SQL - update TEST.CATEGORY set DESCRIPTION=?, NAME=?, CATEGORY_GROUP_ID=? where ID=?
+Hibernate: update TEST.CATEGORY set DESCRIPTION=?, NAME=?, CATEGORY_GROUP_ID=? where ID=?
+12:09:01.417 [main] TRACE org.hibernate.persister.entity.AbstractEntityPersister - Dehydrating entity: [com.makco.smartfinance.persistence.entity.CategoryDebit#9]
+12:09:01.417 [main] TRACE org.hibernate.type.descriptor.sql.BasicBinder - binding parameter [1] as [VARCHAR] - [debit category #3 'description']
+12:09:01.417 [main] TRACE org.hibernate.type.descriptor.sql.BasicBinder - binding parameter [2] as [VARCHAR] - [anged_v3_739129_changed_v3_56227]
+12:09:01.418 [main] TRACE org.hibernate.type.descriptor.sql.BasicBinder - binding parameter [3] as [BIGINT] - [9]
+12:09:01.418 [main] TRACE org.hibernate.type.descriptor.sql.BasicBinder - binding parameter [4] as [BIGINT] - [9]
+12:09:01.418 [main] TRACE org.hibernate.persister.entity.AbstractEntityPersister - Updating entity: [com.makco.smartfinance.persistence.entity.CategoryDebit#10]
+12:09:01.418 [main] DEBUG org.hibernate.engine.jdbc.batch.internal.AbstractBatchImpl - Reusing batch statement
+12:09:01.418 [main] DEBUG org.hibernate.SQL - update TEST.CATEGORY set DESCRIPTION=?, NAME=?, CATEGORY_GROUP_ID=? where ID=?
+Hibernate: update TEST.CATEGORY set DESCRIPTION=?, NAME=?, CATEGORY_GROUP_ID=? where ID=?
+12:09:01.418 [main] TRACE org.hibernate.persister.entity.AbstractEntityPersister - Dehydrating entity: [com.makco.smartfinance.persistence.entity.CategoryDebit#10]
+12:09:01.418 [main] TRACE org.hibernate.type.descriptor.sql.BasicBinder - binding parameter [1] as [VARCHAR] - [debit category #4 'description']
+12:09:01.418 [main] TRACE org.hibernate.type.descriptor.sql.BasicBinder - binding parameter [2] as [VARCHAR] - [anged_v4_739129_changed_v4_56227]
+12:09:01.418 [main] TRACE org.hibernate.type.descriptor.sql.BasicBinder - binding parameter [3] as [BIGINT] - [9]
+12:09:01.422 [main] TRACE org.hibernate.type.descriptor.sql.BasicBinder - binding parameter [4] as [BIGINT] - [10]
+12:09:01.422 [main] TRACE org.hibernate.persister.entity.AbstractEntityPersister - Updating entity: [com.makco.smartfinance.persistence.entity.CategoryDebit#7]
+12:09:01.422 [main] DEBUG org.hibernate.engine.jdbc.batch.internal.AbstractBatchImpl - Reusing batch statement
+12:09:01.422 [main] DEBUG org.hibernate.SQL - update TEST.CATEGORY set DESCRIPTION=?, NAME=?, CATEGORY_GROUP_ID=? where ID=?
+Hibernate: update TEST.CATEGORY set DESCRIPTION=?, NAME=?, CATEGORY_GROUP_ID=? where ID=?
+12:09:01.422 [main] TRACE org.hibernate.persister.entity.AbstractEntityPersister - Dehydrating entity: [com.makco.smartfinance.persistence.entity.CategoryDebit#7]
+12:09:01.422 [main] TRACE org.hibernate.type.descriptor.sql.BasicBinder - binding parameter [1] as [VARCHAR] - [debit category #1 'description']
+12:09:01.422 [main] TRACE org.hibernate.type.descriptor.sql.BasicBinder - binding parameter [2] as [VARCHAR] - [nged_v1_461186_changed_v1_167092]
+12:09:01.422 [main] TRACE org.hibernate.type.descriptor.sql.BasicBinder - binding parameter [3] as [BIGINT] - [9]
+12:09:01.422 [main] TRACE org.hibernate.type.descriptor.sql.BasicBinder - binding parameter [4] as [BIGINT] - [7]
+12:09:01.422 [main] DEBUG org.hibernate.engine.jdbc.batch.internal.BatchingBatch - Executing batch size: 4
+12:09:01.423 [main] DEBUG com.makco.smartfinance.h2db.triggers.AbstractTrigger - CATEGORY
+12:09:01.424 [main] DEBUG com.makco.smartfinance.h2db.triggers.AbstractTrigger - CATEGORY
+12:09:01.425 [main] DEBUG com.makco.smartfinance.h2db.triggers.AbstractTrigger - CATEGORY
+12:09:01.425 [main] DEBUG com.makco.smartfinance.h2db.triggers.AbstractTrigger - CATEGORY
+12:09:01.426 [main] TRACE org.hibernate.resource.jdbc.internal.ResourceRegistryStandardImpl - Releasing statement [prep52: update TEST.CATEGORY set DESCRIPTION=?, NAME=?, CATEGORY_GROUP_ID=? where ID=? {1: 'debit category #1 ''description''', 2: 'nged_v1_461186_changed_v1_167092', 3: 9, 4: 7}]
+12:09:01.426 [main] TRACE org.hibernate.resource.jdbc.internal.ResourceRegistryStandardImpl - Closing prepared statement [prep52: update TEST.CATEGORY set DESCRIPTION=?, NAME=?, CATEGORY_GROUP_ID=? where ID=? {1: 'debit category #1 ''description''', 2: 'nged_v1_461186_changed_v1_167092', 3: 9, 4: 7}]
+12:09:01.426 [main] TRACE org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl - Starting after statement execution processing [ON_CLOSE]
+12:09:01.426 [main] TRACE org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl - Starting after statement execution processing [ON_CLOSE]
+12:09:01.426 [main] TRACE org.hibernate.event.internal.AbstractFlushingEventListener - Post flush
+12:09:01.426 [main] TRACE org.hibernate.resource.transaction.internal.SynchronizationRegistryStandardImpl - SynchronizationRegistryStandardImpl.notifySynchronizationsBeforeTransactionCompletion
+12:09:01.426 [main] TRACE org.hibernate.resource.jdbc.internal.AbstractLogicalConnectionImplementor - Preparing to commit transaction via JDBC Connection.commit()
+12:09:01.426 [main] TRACE org.hibernate.resource.jdbc.internal.AbstractLogicalConnectionImplementor - Transaction committed via JDBC Connection.commit()
+12:09:01.426 [main] TRACE org.hibernate.resource.jdbc.internal.AbstractLogicalConnectionImplementor - LogicalConnection#afterTransaction
+12:09:01.426 [main] TRACE org.hibernate.resource.jdbc.internal.ResourceRegistryStandardImpl - Releasing JDBC resources
+12:09:01.426 [main] TRACE org.hibernate.resource.transaction.backend.jdbc.internal.JdbcResourceLocalTransactionCoordinatorImpl - ResourceLocalTransactionCoordinatorImpl#afterCompletionCallback(true)
+12:09:01.426 [main] TRACE org.hibernate.resource.transaction.internal.SynchronizationRegistryStandardImpl - SynchronizationRegistryStandardImpl.notifySynchronizationsAfterTransactionCompletion(3)
+12:09:01.427 [main] TRACE org.hibernate.internal.SessionImpl - SessionImpl#afterTransactionCompletion(successful=true, delayed=false)
+12:09:01.427 [main] DEBUG com.makco.smartfinance.persistence.dao.dao_implementations.CategoryGroupDAOImplForTest - >>>saveOrUpdateCategoryGroup: end

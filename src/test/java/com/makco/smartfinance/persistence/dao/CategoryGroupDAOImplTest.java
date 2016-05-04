@@ -118,7 +118,6 @@ public class CategoryGroupDAOImplTest {
     }
 
     @Test
-    //TODO test_21_updateCategoryGroup
     public void test_21_updateCategoryGroup() throws Exception {
         int randomInt = randomWithinRange.getRandom();
 
@@ -231,6 +230,215 @@ public class CategoryGroupDAOImplTest {
             assertEquals(true, category.getCreatedOn() != null);
             assertEquals(true, category.getUpdatedOn() != null);
             assertEquals(true, categoryGroup.getCreatedOn() != categoryGroup.getUpdatedOn());
+        }
+    }
+
+    @Test
+    public void test_23_updateCategoryGroupWithCategoriesWithMerge() throws Exception {
+        int randomInt = randomWithinRange.getRandom();
+
+        Session session = TestPersistenceSession.openSession();
+        session.beginTransaction();
+
+        List<Object[]> catGrCrWithQtyOfCatCr = session
+                .createQuery("SELECT c.categoryGroup.id, COUNT(c) as max_count FROM CategoryDebit c group by c.categoryGroup.id")
+                .list();
+
+        LOG.debug(">>>categoryGroupList: "+catGrCrWithQtyOfCatCr);
+
+        Long maxCategoryGroupCreditId = (Long)catGrCrWithQtyOfCatCr
+                .stream()
+                .max(Comparator.comparingLong(obj -> (long)obj[1]))
+                .map(max -> max[0])
+                .orElse(null);
+        LOG.debug(">>>maxCategoryGroupCreditId: "+maxCategoryGroupCreditId);
+        session.getTransaction().commit();
+        session.close();
+
+        CategoryGroup categoryGroup = categoryGroupDAOImplForTest.getCategoryGroupById(maxCategoryGroupCreditId, true);
+
+        String catgoryGroupNewName = categoryGroup.getName()+"_changed_v"+randomInt;
+
+        catgoryGroupNewName = (catgoryGroupNewName.length() > DataBaseConstants.CG_NAME_MAX_LGTH) ?
+                catgoryGroupNewName.substring(catgoryGroupNewName.length() - DataBaseConstants.CG_NAME_MAX_LGTH) :
+                catgoryGroupNewName;
+        categoryGroup.setName(catgoryGroupNewName);
+
+        //put service: putting category_group in category and category in category_group
+        Set<String> categoryNames = new HashSet<>();
+        Iterator<Category> iterator = categoryGroup.getCategories().iterator();
+        int i = 0;
+        while (iterator.hasNext()) {
+            Category category = iterator.next();
+            String categoryNewName = category.getName() + "_changed_v" + (++i) + "_" + randomInt;
+            categoryNewName = (categoryNewName.length() > DataBaseConstants.CAT_NAME_MAX_LGTH) ?
+                    categoryNewName.substring(categoryNewName.length() - DataBaseConstants.CAT_NAME_MAX_LGTH) :
+                    categoryNewName;
+            category.setName(categoryNewName);
+            categoryNames.add(categoryNewName);
+        }
+
+        categoryGroupDAOImplForTest.saveOrUpdateWithMergeCategoryGroup(categoryGroup);
+
+        LOG.debug(">>>categoryGroup: " + categoryGroup);
+        assertEquals(true, categoryGroup.getId() != null);
+        assertEquals(DataBaseConstants.CATEGORY_GROUP_TYPE_DEBIT, categoryGroup.getCategoryGroupType());
+        assertEquals(catgoryGroupNewName, categoryGroup.getName());
+        assertEquals(true, categoryGroup.getCreatedOn() != null);
+        assertEquals(true, categoryGroup.getUpdatedOn() != null);
+        assertEquals(true, categoryGroup.getCreatedOn() != categoryGroup.getUpdatedOn());
+        assertEquals(false, categoryGroup.getCategories().isEmpty());
+        Iterator<Category> iteratorCheck = categoryGroup.getCategories().iterator();
+        while (iteratorCheck.hasNext()) {
+            Category category = iteratorCheck.next();
+            LOG.debug(">>>category: " + category);
+            assertEquals(true, categoryNames.contains(category.getName()));
+            categoryNames.remove(category.getName());
+            assertEquals(true, category.getCreatedOn() != null);
+            assertEquals(true, category.getUpdatedOn() != null);
+            assertEquals(true, categoryGroup.getCreatedOn() != categoryGroup.getUpdatedOn());
+        }
+    }
+
+    @Test
+    //TODO compare sqls in test_24 vs test_25
+    public void test_24_updateCategoryGroupWithOneCategoryUpdate() throws Exception {
+        int randomInt = randomWithinRange.getRandom();
+
+        Session session = TestPersistenceSession.openSession();
+        session.beginTransaction();
+
+        List<Object[]> catGrCrWithQtyOfCatCr = session
+                .createQuery("SELECT c.categoryGroup.id, COUNT(c) as max_count FROM CategoryDebit c group by c.categoryGroup.id")
+                .list();
+
+        LOG.debug(">>>categoryGroupList: "+catGrCrWithQtyOfCatCr);
+
+        Long maxCategoryGroupCreditId = (Long)catGrCrWithQtyOfCatCr
+                .stream()
+                .max(Comparator.comparingLong(obj -> (long)obj[1]))
+                .map(max -> max[0])
+                .orElse(null);
+        LOG.debug(">>>maxCategoryGroupCreditId: "+maxCategoryGroupCreditId);
+        session.getTransaction().commit();
+        session.close();
+
+        CategoryGroup categoryGroup = categoryGroupDAOImplForTest.getCategoryGroupById(maxCategoryGroupCreditId, true);
+
+        String catgoryGroupNewName = categoryGroup.getName()+"_changed_v"+randomInt;
+
+        catgoryGroupNewName = (catgoryGroupNewName.length() > DataBaseConstants.CG_NAME_MAX_LGTH) ?
+                catgoryGroupNewName.substring(catgoryGroupNewName.length() - DataBaseConstants.CG_NAME_MAX_LGTH) :
+                catgoryGroupNewName;
+        categoryGroup.setName(catgoryGroupNewName);
+
+        //put service: putting category_group in category and category in category_group
+        Set<String> categoryNames = new HashSet<>();
+        Iterator<Category> iterator = categoryGroup.getCategories().iterator();
+        int i = 0;
+        if (iterator.hasNext()) {
+            Category category = iterator.next();
+            String categoryNewName = category.getName() + "_changed_v" + (++i) + "_" + randomInt;
+            categoryNewName = (categoryNewName.length() > DataBaseConstants.CAT_NAME_MAX_LGTH) ?
+                    categoryNewName.substring(categoryNewName.length() - DataBaseConstants.CAT_NAME_MAX_LGTH) :
+                    categoryNewName;
+            category.setName(categoryNewName);
+            categoryNames.add(categoryNewName);
+        }
+
+        categoryGroupDAOImplForTest.saveOrUpdateCategoryGroup(categoryGroup);
+
+        LOG.debug(">>>categoryGroup: " + categoryGroup);
+        assertEquals(true, categoryGroup.getId() != null);
+        assertEquals(DataBaseConstants.CATEGORY_GROUP_TYPE_DEBIT, categoryGroup.getCategoryGroupType());
+        assertEquals(catgoryGroupNewName, categoryGroup.getName());
+        assertEquals(true, categoryGroup.getCreatedOn() != null);
+        assertEquals(true, categoryGroup.getUpdatedOn() != null);
+        assertEquals(true, categoryGroup.getCreatedOn() != categoryGroup.getUpdatedOn());
+        assertEquals(false, categoryGroup.getCategories().isEmpty());
+        Iterator<Category> iteratorCheck = categoryGroup.getCategories().iterator();
+        while (iteratorCheck.hasNext()) {
+            Category category = iteratorCheck.next();
+            LOG.debug(">>>category: " + category);
+            if(categoryNames.contains(category.getName())) {
+                assertEquals(true, categoryNames.contains(category.getName()));
+                categoryNames.remove(category.getName());
+                assertEquals(true, category.getCreatedOn() != null);
+                assertEquals(true, category.getUpdatedOn() != null);
+                assertEquals(true, categoryGroup.getCreatedOn() != categoryGroup.getUpdatedOn());
+                break;
+            }
+        }
+    }
+
+    @Test
+    //TODO compare sqls in test_24 vs test_25
+    public void test_25_updateCategoryGroupWithOneCategoryWithMerge() throws Exception {
+        int randomInt = randomWithinRange.getRandom();
+
+        Session session = TestPersistenceSession.openSession();
+        session.beginTransaction();
+
+        List<Object[]> catGrCrWithQtyOfCatCr = session
+                .createQuery("SELECT c.categoryGroup.id, COUNT(c) as max_count FROM CategoryDebit c group by c.categoryGroup.id")
+                .list();
+
+        LOG.debug(">>>categoryGroupList: "+catGrCrWithQtyOfCatCr);
+
+        Long maxCategoryGroupCreditId = (Long)catGrCrWithQtyOfCatCr
+                .stream()
+                .max(Comparator.comparingLong(obj -> (long)obj[1]))
+                .map(max -> max[0])
+                .orElse(null);
+        LOG.debug(">>>maxCategoryGroupCreditId: "+maxCategoryGroupCreditId);
+        session.getTransaction().commit();
+        session.close();
+
+        CategoryGroup categoryGroup = categoryGroupDAOImplForTest.getCategoryGroupById(maxCategoryGroupCreditId, true);
+
+        String catgoryGroupNewName = categoryGroup.getName()+"_changed_v"+randomInt;
+
+        catgoryGroupNewName = (catgoryGroupNewName.length() > DataBaseConstants.CG_NAME_MAX_LGTH) ?
+                catgoryGroupNewName.substring(catgoryGroupNewName.length() - DataBaseConstants.CG_NAME_MAX_LGTH) :
+                catgoryGroupNewName;
+        categoryGroup.setName(catgoryGroupNewName);
+
+        //put service: putting category_group in category and category in category_group
+        Set<String> categoryNames = new HashSet<>();
+        Iterator<Category> iterator = categoryGroup.getCategories().iterator();
+        int i = 0;
+        if (iterator.hasNext()) {
+            Category category = iterator.next();
+            String categoryNewName = category.getName() + "_changed_v" + (++i) + "_" + randomInt;
+            categoryNewName = (categoryNewName.length() > DataBaseConstants.CAT_NAME_MAX_LGTH) ?
+                    categoryNewName.substring(categoryNewName.length() - DataBaseConstants.CAT_NAME_MAX_LGTH) :
+                    categoryNewName;
+            category.setName(categoryNewName);
+            categoryNames.add(categoryNewName);
+        }
+
+        categoryGroupDAOImplForTest.saveOrUpdateWithMergeCategoryGroup(categoryGroup);
+
+        LOG.debug(">>>categoryGroup: " + categoryGroup);
+        assertEquals(true, categoryGroup.getId() != null);
+        assertEquals(DataBaseConstants.CATEGORY_GROUP_TYPE_DEBIT, categoryGroup.getCategoryGroupType());
+        assertEquals(catgoryGroupNewName, categoryGroup.getName());
+        assertEquals(true, categoryGroup.getCreatedOn() != null);
+        assertEquals(true, categoryGroup.getUpdatedOn() != null);
+        assertEquals(true, categoryGroup.getCreatedOn() != categoryGroup.getUpdatedOn());
+        assertEquals(false, categoryGroup.getCategories().isEmpty());
+        Iterator<Category> iteratorCheck = categoryGroup.getCategories().iterator();
+        while (iteratorCheck.hasNext()) {
+            Category category = iteratorCheck.next();
+            LOG.debug(">>>category: " + category);
+            if(categoryNames.contains(category.getName())) {
+                assertEquals(true, categoryNames.contains(category.getName()));
+                categoryNames.remove(category.getName());
+                assertEquals(true, category.getCreatedOn() != null);
+                assertEquals(true, category.getUpdatedOn() != null);
+                assertEquals(true, categoryGroup.getCreatedOn() != categoryGroup.getUpdatedOn());
+                break;
+            }
         }
     }
 
