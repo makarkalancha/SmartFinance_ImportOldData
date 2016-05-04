@@ -1,6 +1,8 @@
 package com.makco.smartfinance.persistence.entity;
 
 import com.makco.smartfinance.constants.DataBaseConstants;
+import org.hibernate.annotations.DiscriminatorOptions;
+
 import java.sql.Timestamp;
 import java.util.Collection;
 import java.util.List;
@@ -22,6 +24,8 @@ import javax.validation.constraints.Size;
  */
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+////http://stackoverflow.com/questions/12199874/about-the-use-of-forcediscriminator-discriminatoroptionsforce-true
+@DiscriminatorOptions(force = true)
 @DiscriminatorColumn(name = "TYPE", discriminatorType= DiscriminatorType.STRING, length=1)
 @Table(
     name="CATEGORY_GROUP",
@@ -32,10 +36,6 @@ import javax.validation.constraints.Size;
     )
 )
 public abstract class CategoryGroup <T extends Category>{
-    public static final String CATEGORY_GROUP_TYPE_DEBIT = "D";
-    public static final String CATEGORY_GROUP_TYPE_CREDIT = "C";
-
-
     @Id
     @org.hibernate.annotations.GenericGenerator(
             name = "CATEGORY_GROUP_SEQUENCE_GENERATOR",

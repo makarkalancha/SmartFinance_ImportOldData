@@ -19,7 +19,10 @@ import org.junit.runners.MethodSorters;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
 
@@ -49,7 +52,7 @@ public class CategoryGroupDAOImplTest {
 
         LOG.debug("categoryGroup: " + categoryGroup);
         assertEquals(true, categoryGroup.getId() != null);
-        assertEquals(CategoryGroup.CATEGORY_GROUP_TYPE_DEBIT, categoryGroup.getCategoryGroupType());
+        assertEquals(DataBaseConstants.CATEGORY_GROUP_TYPE_DEBIT, categoryGroup.getCategoryGroupType());
         assertEquals(name, categoryGroup.getName());
         assertEquals(debitCategoryGroupDebitDesc, categoryGroup.getDescription());
         assertEquals(true, categoryGroup.getCreatedOn() != null);
@@ -76,7 +79,7 @@ public class CategoryGroupDAOImplTest {
 
         LOG.debug("categoryGroup: " + categoryGroup);
         assertEquals(true, categoryGroup.getId() != null);
-        assertEquals(CategoryGroup.CATEGORY_GROUP_TYPE_DEBIT, categoryGroup.getCategoryGroupType());
+        assertEquals(DataBaseConstants.CATEGORY_GROUP_TYPE_DEBIT, categoryGroup.getCategoryGroupType());
         assertEquals(name, categoryGroup.getName());
         assertEquals(debitCategoryGroupDebitDesc, categoryGroup.getDescription());
         assertEquals(true, categoryGroup.getCreatedOn() != null);
@@ -153,7 +156,7 @@ public class CategoryGroupDAOImplTest {
 
         LOG.debug("categoryGroup: " + categoryGroup);
         assertEquals(true, categoryGroup.getId() != null);
-        assertEquals(CategoryGroup.CATEGORY_GROUP_TYPE_CREDIT, categoryGroup.getCategoryGroupType());
+        assertEquals(DataBaseConstants.CATEGORY_GROUP_TYPE_CREDIT, categoryGroup.getCategoryGroupType());
         assertEquals(newName, categoryGroup.getName());
         assertEquals(true, categoryGroup.getCreatedOn() != null);
         assertEquals(true, categoryGroup.getUpdatedOn() != null);
@@ -161,7 +164,10 @@ public class CategoryGroupDAOImplTest {
     }
 
     @Test
-    //TODO test_21_updateCategoryGroup
+    //with CategoryGroup EAGER loading of Categories it works
+    //with CategoryGroup LAZY loading of Categories it works: if CategoryGroup and Category classes have @DiscriminatorOptions(force = true)
+    ////http://stackoverflow.com/questions/4334197/discriminator-wrongclassexception-jpa-with-hibernate-backend
+    ////http://anshuiitk.blogspot.ca/2011/04/hibernate-wrongclassexception.html
     public void test_22_updateCategoryGroupWithCategories() throws Exception {
         int randomInt = randomWithinRange.getRandom();
 
@@ -169,8 +175,7 @@ public class CategoryGroupDAOImplTest {
         session.beginTransaction();
 
         List<Object[]> catGrCrWithQtyOfCatCr = session
-//                .createQuery("SELECT TYPE(c) as type, COUNT(c) as count FROM Category c where TYPE(c) <> 'E' group by TYPE(c)")
-                .createQuery("SELECT c.categoryGroup.id, COUNT(c) as max_count FROM CategoryCredit c group by c.categoryGroup.id")
+                .createQuery("SELECT c.categoryGroup.id, COUNT(c) as max_count FROM CategoryDebit c group by c.categoryGroup.id")
                 .list();
 
         LOG.debug(">>>categoryGroupList: "+catGrCrWithQtyOfCatCr);
@@ -186,33 +191,46 @@ public class CategoryGroupDAOImplTest {
 
         CategoryGroup categoryGroup = categoryGroupDAOImplForTest.getCategoryGroupById(maxCategoryGroupCreditId, true);
 
-        categoryGroup.setName(categoryGroup.getName()+"_chaged_v"+randomInt);
+        String catgoryGroupNewName = categoryGroup.getName()+"_changed_v"+randomInt;
 
-        List<Category> categories = new ArrayList<>();
-        String name = debitCategoryGroupDebitName + randomInt;
+        catgoryGroupNewName = (catgoryGroupNewName.length() > DataBaseConstants.CG_NAME_MAX_LGTH) ?
+                catgoryGroupNewName.substring(catgoryGroupNewName.length() - DataBaseConstants.CG_NAME_MAX_LGTH) :
+                catgoryGroupNewName;
+        categoryGroup.setName(catgoryGroupNewName);
+
         //put service: putting category_group in category and category in category_group
-        for(int i = 1 ; i < 5;i++) {
-            Category category = new CategoryDebit(categoryGroup, "cat deb " + i + "->" + randomInt,
-                    "debit category #" + i + " 'description'");
-            categories.add(category);
+        Set<String> categoryNames = new HashSet<>();
+        Iterator<Category> iterator = categoryGroup.getCategories().iterator();
+        int i = 0;
+        while (iterator.hasNext()) {
+            Category category = iterator.next();
+            String categoryNewName = category.getName() + "_changed_v" + (++i) + "_" + randomInt;
+            categoryNewName = (categoryNewName.length() > DataBaseConstants.CAT_NAME_MAX_LGTH) ?
+                    categoryNewName.substring(categoryNewName.length() - DataBaseConstants.CAT_NAME_MAX_LGTH) :
+                    categoryNewName;
+            category.setName(categoryNewName);
+            categoryNames.add(categoryNewName);
         }
-        categoryGroup.setCategories(categories);
 
         categoryGroupDAOImplForTest.saveOrUpdateCategoryGroup(categoryGroup);
 
-        LOG.debug("categoryGroup: " + categoryGroup);
+        LOG.debug(">>>categoryGroup: " + categoryGroup);
         assertEquals(true, categoryGroup.getId() != null);
-        assertEquals(CategoryGroup.CATEGORY_GROUP_TYPE_DEBIT, categoryGroup.getCategoryGroupType());
-        assertEquals(name, categoryGroup.getName());
-        assertEquals(debitCategoryGroupDebitDesc, categoryGroup.getDescription());
+        assertEquals(DataBaseConstants.CATEGORY_GROUP_TYPE_DEBIT, categoryGroup.getCategoryGroupType());
+        assertEquals(catgoryGroupNewName, categoryGroup.getName());
         assertEquals(true, categoryGroup.getCreatedOn() != null);
         assertEquals(true, categoryGroup.getUpdatedOn() != null);
+        assertEquals(true, categoryGroup.getCreatedOn() != categoryGroup.getUpdatedOn());
         assertEquals(false, categoryGroup.getCategories().isEmpty());
-        for (Category category : categories){
-            LOG.debug("category: " + category);
-            assertEquals(true, category.getId() != null);
+        Iterator<Category> iteratorCheck = categoryGroup.getCategories().iterator();
+        while (iteratorCheck.hasNext()) {
+            Category category = iteratorCheck.next();
+            LOG.debug(">>>category: " + category);
+            assertEquals(true, categoryNames.contains(category.getName()));
+            categoryNames.remove(category.getName());
             assertEquals(true, category.getCreatedOn() != null);
             assertEquals(true, category.getUpdatedOn() != null);
+            assertEquals(true, categoryGroup.getCreatedOn() != categoryGroup.getUpdatedOn());
         }
     }
 

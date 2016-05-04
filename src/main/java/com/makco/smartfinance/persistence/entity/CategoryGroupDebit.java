@@ -1,6 +1,7 @@
 package com.makco.smartfinance.persistence.entity;
 
 import com.google.common.base.Objects;
+import com.makco.smartfinance.constants.DataBaseConstants;
 
 import java.util.Collection;
 import java.util.SortedSet;
@@ -16,7 +17,7 @@ import javax.persistence.OneToMany;
  */
 @Entity
 //@DiscriminatorValue("D")
-@DiscriminatorValue(CategoryGroup.CATEGORY_GROUP_TYPE_DEBIT)
+@DiscriminatorValue(DataBaseConstants.CATEGORY_GROUP_TYPE_DEBIT)
 public class CategoryGroupDebit extends CategoryGroup<CategoryDebit>{
     /**
      *http://stackoverflow.com/questions/30838526/how-to-have-a-sorted-set-of-objects-based-on-a-specific-field
@@ -25,7 +26,9 @@ public class CategoryGroupDebit extends CategoryGroup<CategoryDebit>{
      * @OneToMany(mappedBy = "categoryGroupDebit", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)//entityManager
      * - association collections @OneToMany and @ManyToMany are lazy-loaded by default  (p318-289)
     */
-    @OneToMany(mappedBy = "categoryGroup", cascade = CascadeType.ALL, fetch = FetchType.LAZY)//session
+//    @OneToMany(mappedBy = "categoryGroup", cascade = CascadeType.ALL, fetch = FetchType.LAZY)//session
+//http://stackoverflow.com/questions/4334197/discriminator-wrongclassexception-jpa-with-hibernate-backend
+    @OneToMany(mappedBy = "categoryGroup", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @javax.persistence.OrderBy("name")
     private SortedSet<CategoryDebit> categories = new TreeSet<>();
 //    private SortedSet<? extends Category> categories = new TreeSet<CategoryDebit>();
@@ -80,7 +83,7 @@ public class CategoryGroupDebit extends CategoryGroup<CategoryDebit>{
 
     @Override
     public String getCategoryGroupType() {
-        return CATEGORY_GROUP_TYPE_DEBIT;
+        return DataBaseConstants.CATEGORY_GROUP_TYPE_DEBIT;
     }
 
     //    @Override

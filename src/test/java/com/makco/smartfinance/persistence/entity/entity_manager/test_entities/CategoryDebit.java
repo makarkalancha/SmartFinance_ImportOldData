@@ -1,8 +1,8 @@
 package com.makco.smartfinance.persistence.entity.entity_manager.test_entities;
 
 import com.google.common.base.Objects;
-import com.makco.smartfinance.persistence.entity.Category;
-import com.makco.smartfinance.persistence.entity.CategoryGroup;
+import com.makco.smartfinance.constants.DataBaseConstants;
+import com.makco.smartfinance.persistence.entity.*;
 
 import javax.persistence.*;
 
@@ -10,38 +10,38 @@ import javax.persistence.*;
  * Created by mcalancea on 2016-04-29.
  */
 @Entity
-@DiscriminatorValue("D")
-//because CategoryDebit is used in CategoryGroupDebit SortedSet<CategoryDebit> and this collection puts only Comparable
+@DiscriminatorValue(DataBaseConstants.CATEGORY_GROUP_TYPE_DEBIT)
+//because CategoryDebit is used in categoryGroup SortedSet<CategoryDebit> and this collection puts only Comparable
 public class CategoryDebit extends Category implements Comparable<CategoryDebit>{
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CATEGORY_GROUP_ID",nullable = false)
-//    private CategoryGroup categoryGroupDebit;
-    private CategoryGroupDebit categoryGroupDebit;
+//    private CategoryGroup categoryGroup;
+    private CategoryGroup categoryGroup;
 
     public CategoryDebit(){
 
     }
 
     public CategoryDebit(CategoryGroup categoryGroup, String name, String description) {
-        this.categoryGroupDebit = (CategoryGroupDebit) categoryGroup;
+        this.categoryGroup = (CategoryGroupDebit) categoryGroup;
         this.name = name;
         this.description = description;
     }
 
     @Override
     public CategoryGroup getCategoryGroup() {
-        return categoryGroupDebit;
+        return categoryGroup;
     }
 
     @Override
     public void setCategoryGroup(CategoryGroup categoryGroup) {
-        this.categoryGroupDebit = (CategoryGroupDebit) categoryGroup;
-//        this.categoryGroupDebit = categoryGroup;
+        this.categoryGroup = (CategoryGroupDebit) categoryGroup;
+//        this.categoryGroup = categoryGroup;
     }
 
     @Override
     public String getCategoryGroupType() {
-        return "D";
+        return DataBaseConstants.CATEGORY_GROUP_TYPE_DEBIT;
     }
     //when entity is transient id == null, so it's impossible to put it in Map or Set
     @Override
@@ -69,12 +69,12 @@ public class CategoryDebit extends Category implements Comparable<CategoryDebit>
                 ", description='" + description + '\'' +
                 ", createdOn='" + createdOn + '\'' +
                 ", updatedOn='" + updatedOn + '\'' +
-                ", CategoryGroupDebit='" + categoryGroupDebit.toStringFull() + '\'' +
+                ", categoryGroup='" + categoryGroup.toStringFull() + '\'' +
                 '}';
     }
 
 
-    //because CategoryDebit is used in CategoryGroupDebit SortedSet<CategoryDebit> and this collection puts only Comparable
+    //because CategoryDebit is used in categoryGroup SortedSet<CategoryDebit> and this collection puts only Comparable
     @Override
     public int compareTo(CategoryDebit that) {
         return this.getName().compareTo(that.getName());
