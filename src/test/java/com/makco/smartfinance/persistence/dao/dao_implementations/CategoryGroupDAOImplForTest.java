@@ -6,7 +6,7 @@ import com.makco.smartfinance.persistence.entity.CategoryGroup;
 import com.makco.smartfinance.persistence.entity.CategoryGroupCredit;
 import com.makco.smartfinance.persistence.entity.CategoryGroupDebit;
 import com.makco.smartfinance.persistence.entity.FamilyMember;
-import com.makco.smartfinance.persistence.utils.HibernateUtil;
+import com.makco.smartfinance.persistence.utils.TestPersistenceSession;
 import com.makco.smartfinance.persistence.utils.TestPersistenceSession;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -222,7 +222,7 @@ public class CategoryGroupDAOImplForTest {
         Session session = null;
         List<CategoryGroup> list = new ArrayList<>();
         try{
-            session = HibernateUtil.openSession();
+            session = TestPersistenceSession.openSession();
             session.beginTransaction();
             list = session.createQuery("SELECT cg FROM CategoryGroup cg ORDER BY cg.name").list();
             session.getTransaction().commit();
@@ -250,7 +250,7 @@ public class CategoryGroupDAOImplForTest {
         Session session = null;
         List<CategoryGroupCredit> list = new ArrayList<>();
         try{
-            session = HibernateUtil.openSession();
+            session = TestPersistenceSession.openSession();
             session.beginTransaction();
 //            list = session.createQuery("SELECT cg FROM CategoryGroupCredit cg ORDER BY cg.name").list();
             list = session.createQuery("SELECT cg FROM CategoryGroupCredit cg").list();
@@ -279,7 +279,7 @@ public class CategoryGroupDAOImplForTest {
         Session session = null;
         List<CategoryGroupDebit> list = new ArrayList<>();
         try{
-            session = HibernateUtil.openSession();
+            session = TestPersistenceSession.openSession();
             session.beginTransaction();
             list = session.createQuery("SELECT cg FROM CategoryGroupDebit cg ORDER BY cg.name").list();
             session.getTransaction().commit();
