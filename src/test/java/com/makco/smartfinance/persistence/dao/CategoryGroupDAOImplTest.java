@@ -567,7 +567,7 @@ public class CategoryGroupDAOImplTest {
     @Test
     //TODO test_42_seleteCategoryGroupById
     public void test_42_seleteCategoryGroupById() throws Exception {
-
+       //getCategoryById
     }
 
     @Test
