@@ -567,7 +567,32 @@ public class CategoryGroupDAOImplTest {
     @Test
     //TODO test_42_seleteCategoryGroupById
     public void test_42_seleteCategoryGroupById() throws Exception {
-       //getCategoryById
+        int randomInt = randomWithinRange.getRandom();
+        int categoriesQty = 3;
+        CategoryGroup categoryGroupCredit = new CategoryGroupCredit("cr catGr to sel " + randomInt,
+                "credit category group to select " + randomInt);
+        List<Category> creditCategories = new ArrayList<>();
+        //put service: putting category_group in category and category in category_group
+        for(int i = 0 ; i < categoriesQty;i++) {
+            Category category = new CategoryCredit(categoryGroupCredit, "cat cr " + i + "_v" + randomInt,
+                    "credit category #" + i + " 'description'");
+            creditCategories.add(category);
+        }
+        categoryGroupCredit.setCategories(creditCategories);
+        categoryGroupDAOImplForTest.saveOrUpdateCategoryGroup(categoryGroupCredit);
+
+        long categoryGroupId = categoryGroupCredit.getId();
+        LOG.debug(">>>category group credit to delete: " + categoryGroupCredit);
+        LOG.debug(">>>credit categories to delete: " + creditCategories);
+
+        CategoryGroup categoryGroupById = categoryGroupDAOImplForTest.getCategoryGroupById(categoryGroupId, true);
+
+        LOG.debug(">>>category group select by id: " + categoryGroupById);
+
+        assertEquals(true, categoryGroupId == categoryGroupById.getId());
+
+        LOG.debug(">>>categoryGroupList: " + categoryGroupById.getCategories());
+        assertEquals(true, categoryGroupById.getCategories().size() > 0);
     }
 
     @Test
