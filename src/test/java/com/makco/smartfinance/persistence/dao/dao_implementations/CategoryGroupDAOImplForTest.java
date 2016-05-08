@@ -1,13 +1,11 @@
 package com.makco.smartfinance.persistence.dao.dao_implementations;
 
-import com.makco.smartfinance.persistence.dao.CategoryGroupDAOImplTest;
 import com.makco.smartfinance.persistence.entity.Category;
 import com.makco.smartfinance.persistence.entity.CategoryGroup;
 import com.makco.smartfinance.persistence.entity.CategoryGroupCredit;
 import com.makco.smartfinance.persistence.entity.CategoryGroupDebit;
-import com.makco.smartfinance.persistence.entity.FamilyMember;
 import com.makco.smartfinance.persistence.utils.TestPersistenceSession;
-import com.makco.smartfinance.persistence.utils.TestPersistenceSession;
+import com.sun.org.apache.xml.internal.security.algorithms.implementations.SignatureECDSA;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Hibernate;
@@ -15,6 +13,7 @@ import org.hibernate.Session;
 import org.hibernate.resource.transaction.spi.TransactionStatus;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -224,7 +223,8 @@ public class CategoryGroupDAOImplForTest {
         try{
             session = TestPersistenceSession.openSession();
             session.beginTransaction();
-            list = session.createQuery("SELECT cg FROM CategoryGroup cg ORDER BY cg.name").list();
+            list = session.createQuery("SELECT cg FROM CategoryGroup cg").list();
+            Collections.sort(list, (CategoryGroup cg1,  CategoryGroup cg2) -> cg1.getName().toLowerCase().compareTo(cg2.getName().toLowerCase()));
             session.getTransaction().commit();
 
         } catch (Exception e) {

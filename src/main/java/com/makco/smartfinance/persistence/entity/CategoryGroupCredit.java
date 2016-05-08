@@ -95,6 +95,7 @@ public class CategoryGroupCredit extends CategoryGroup<CategoryCredit>{
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
+                ", getCategoryGroupType='" + getCategoryGroupType() + '\'' +
                 ", createdOn='" + createdOn + '\'' +
                 ", updatedOn='" + updatedOn + '\'' +
                 '}';

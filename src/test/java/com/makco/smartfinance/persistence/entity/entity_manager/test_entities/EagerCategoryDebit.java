@@ -63,13 +63,14 @@ public class EagerCategoryDebit extends Category implements Comparable<EagerCate
 
     @Override
     public String toString() {
-        return "CategoryDebit{" +
+        return "CategoryEagerDebit{" +
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
+                ", getCategoryGroupType='" + getCategoryGroupType() + '\'' +
+                ", categoryGroup='" + categoryGroup + '\'' +
                 ", createdOn='" + createdOn + '\'' +
                 ", updatedOn='" + updatedOn + '\'' +
-                ", CategoryGroupDebit='" + categoryGroup.toStringFull() + '\'' +
                 '}';
     }
 

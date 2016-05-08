@@ -132,6 +132,7 @@ public class CategoryGroupDebit extends CategoryGroup<CategoryDebit>{
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
+                ", getCategoryGroupType='" + getCategoryGroupType() + '\'' +
                 ", createdOn='" + createdOn + '\'' +
                 ", updatedOn='" + updatedOn + '\'' +
 

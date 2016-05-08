@@ -33,8 +33,9 @@ import static org.junit.Assert.assertEquals;
  * Time: 23:52
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class CategoryGroupDAOImplTest {
-    private final static Logger LOG = LogManager.getLogger(CategoryGroupDAOImplTest.class);
+//category_group & category DAO
+public class CategoriesManagementDAOImplTest {
+    private final static Logger LOG = LogManager.getLogger(CategoriesManagementDAOImplTest.class);
     private static final String debitCategoryGroupDebitName = "categoryGroupDebit_name";
     private static final String debitCategoryGroupDebitDesc = "categoryGroupDebit_description";
 
@@ -525,7 +526,6 @@ public class CategoryGroupDAOImplTest {
     }
 
     @Test
-    //TODO test_41_seleteAllCategoryGroups
     public void test_41_seleteAllCategoryGroups() throws Exception {
         int randomInt = randomWithinRange.getRandom();
         int categoriesQty = 3;
@@ -635,6 +635,31 @@ public class CategoryGroupDAOImplTest {
     @Test
     //TODO test_46_seleteCreditCategoryGroupsWithCategories
     public void test_46_seleteCreditCategoryGroupsWithCategories() throws Exception {
+        int randomInt = randomWithinRange.getRandom();
+        int categoriesQty = 3;
+        CategoryGroup categoryGroupCredit = new CategoryGroupCredit("cr catGr to sel " + randomInt,
+                "credit category group to select " + randomInt);
+        List<Category> creditCategories = new ArrayList<>();
+        //put service: putting category_group in category and category in category_group
+        for(int i = 0 ; i < categoriesQty;i++) {
+            Category category = new CategoryCredit(categoryGroupCredit, "cat cr " + i + "_v" + randomInt,
+                    "credit category #" + i + " 'description'");
+            creditCategories.add(category);
+        }
+        categoryGroupCredit.setCategories(creditCategories);
+        categoryGroupDAOImplForTest.saveOrUpdateCategoryGroup(categoryGroupCredit);
+
+        LOG.debug(">>>category group to delete: " + categoryGroupCredit);
+        LOG.debug(">>>categories to delete: " + creditCategories);
+
+        List<CategoryGroupCredit> categoryGroups = categoryGroupDAOImplForTest.categoryGroupCreditList();
+        LOG.debug(">>>categoryGroupList: " + categoryGroups);
+        assertEquals(true, categoryGroups.size() > 0);
+    }
+
+    @Test
+    //TODO test_47_seleteCategoryByNameAndItsCategoryGroup
+    public void test_47_seleteCategoryByNameAndItsCategoryGroup() throws Exception {
         int randomInt = randomWithinRange.getRandom();
         int categoriesQty = 3;
         CategoryGroup categoryGroupCredit = new CategoryGroupCredit("cr catGr to sel " + randomInt,

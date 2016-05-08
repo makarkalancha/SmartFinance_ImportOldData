@@ -93,13 +93,13 @@ public class EagerCategoryGroupDebit extends CategoryGroup<EagerCategoryDebit> {
 
     @Override
     public String toString() {
-        return "CategoryGroupDebit{" +
+        return "CategoryGroupEagerDebit{" +
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
+                ", getCategoryGroupType='" + getCategoryGroupType() + '\'' +
                 ", createdOn='" + createdOn + '\'' +
                 ", updatedOn='" + updatedOn + '\'' +
-                ", debitCategories='" + debitCategories + '\'' +
                 '}';
     }
 
