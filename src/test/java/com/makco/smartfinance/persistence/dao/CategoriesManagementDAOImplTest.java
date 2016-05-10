@@ -565,7 +565,6 @@ public class CategoriesManagementDAOImplTest {
     }
 
     @Test
-    //TODO test_42_seleteCategoryGroupById
     public void test_42_seleteCategoryGroupById() throws Exception {
         int randomInt = randomWithinRange.getRandom();
         int categoriesQty = 3;
@@ -579,11 +578,12 @@ public class CategoriesManagementDAOImplTest {
             creditCategories.add(category);
         }
         categoryGroupCredit.setCategories(creditCategories);
+        LOG.debug(">>>category group id: " + categoryGroupCredit);
+        LOG.debug(">>>categories of category group: " + creditCategories);
         categoryGroupDAOImplForTest.saveOrUpdateCategoryGroup(categoryGroupCredit);
 
         long categoryGroupId = categoryGroupCredit.getId();
-        LOG.debug(">>>category group credit to delete: " + categoryGroupCredit);
-        LOG.debug(">>>credit categories to delete: " + creditCategories);
+        LOG.debug(">>>category group id: " + categoryGroupId);
 
         CategoryGroup categoryGroupById = categoryGroupDAOImplForTest.getCategoryGroupById(categoryGroupId, true);
 
