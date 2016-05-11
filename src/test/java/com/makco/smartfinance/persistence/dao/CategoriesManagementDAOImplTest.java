@@ -615,6 +615,7 @@ public class CategoriesManagementDAOImplTest {
         LOG.debug(">>>categories of category group: " + creditCategories);
         categoryGroupDAOImplForTest.saveOrUpdateCategoryGroup(categoryGroupDebit);
 
+        //TODO byName return list as it might be debit or credit and return categories
         CategoryGroup categoryGroupById = categoryGroupDAOImplForTest.getCategoryGroupById(categoryGroupId, true);
 
         LOG.debug(">>>category group select by id: " + categoryGroupById);

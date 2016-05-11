@@ -132,6 +132,7 @@ public class CategoryGroupDAOImplForTest {
             list = session.createQuery("SELECT cg FROM CategoryGroup cg where cg.name = :categoryGroupName")
                     .setString("categoryGroupName", categoryGroupName)
                     .list();
+            //TODO byName return list as it might be debit or credit and return categories
             if(initializeCategories){
                 //wrongClassException check entity classes in session, again eager might interfere
                 //http://stackoverflow.com/questions/4334197/discriminator-wrongclassexception-jpa-with-hibernate-backend
