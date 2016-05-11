@@ -598,7 +598,31 @@ public class CategoriesManagementDAOImplTest {
     @Test
     //TODO test_43_seleteCategoryGroupByName
     public void test_43_seleteCategoryGroupByName() throws Exception {
+        int randomInt = randomWithinRange.getRandom();
+        int categoriesQty = 3;
+        String categoryGroupCreditName = "db catGr to sel " + randomInt;
+        CategoryGroup categoryGroupDebit = new CategoryGroupDebit(categoryGroupCreditName,
+                "debit category group to select " + randomInt);
+        List<Category> creditCategories = new ArrayList<>();
+        //put service: putting category_group in category and category in category_group
+        for(int i = 0 ; i < categoriesQty;i++) {
+            Category category = new CategoryDebit(categoryGroupDebit, "cat db " + i + "_v" + randomInt,
+                    "credit category #" + i + " 'description'");
+            creditCategories.add(category);
+        }
+        categoryGroupDebit.setCategories(creditCategories);
+        LOG.debug(">>>category group id: " + categoryGroupDebit);
+        LOG.debug(">>>categories of category group: " + creditCategories);
+        categoryGroupDAOImplForTest.saveOrUpdateCategoryGroup(categoryGroupDebit);
 
+        CategoryGroup categoryGroupById = categoryGroupDAOImplForTest.getCategoryGroupById(categoryGroupId, true);
+
+        LOG.debug(">>>category group select by id: " + categoryGroupById);
+
+        assertEquals(true, categoryGroupId == categoryGroupById.getId());
+
+        LOG.debug(">>>categoryGroupList: " + categoryGroupById.getCategories());
+        assertEquals(true, categoryGroupById.getCategories().size() > 0);
     }
 
     @Test
