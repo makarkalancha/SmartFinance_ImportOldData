@@ -54,7 +54,7 @@ public class CategoriesManagementDAOImplTest {
 
         LOG.debug("categoryGroup: " + categoryGroup);
         assertEquals(true, categoryGroup.getId() != null);
-        assertEquals(DataBaseConstants.CATEGORY_GROUP_TYPE.DEBIT, categoryGroup.getCategoryGroupType());
+        assertEquals(DataBaseConstants.CATEGORY_GROUP_TYPE.DEBIT.getDiscriminator(), categoryGroup.getCategoryGroupType());
         assertEquals(name, categoryGroup.getName());
         assertEquals(debitCategoryGroupDebitDesc, categoryGroup.getDescription());
         assertEquals(true, categoryGroup.getCreatedOn() != null);
@@ -81,7 +81,7 @@ public class CategoriesManagementDAOImplTest {
 
         LOG.debug("categoryGroup: " + categoryGroup);
         assertEquals(true, categoryGroup.getId() != null);
-        assertEquals(DataBaseConstants.CATEGORY_GROUP_TYPE.DEBIT, categoryGroup.getCategoryGroupType());
+        assertEquals(DataBaseConstants.CATEGORY_GROUP_TYPE.DEBIT.getDiscriminator(), categoryGroup.getCategoryGroupType());
         assertEquals(name, categoryGroup.getName());
         assertEquals(debitCategoryGroupDebitDesc, categoryGroup.getDescription());
         assertEquals(true, categoryGroup.getCreatedOn() != null);
@@ -157,7 +157,7 @@ public class CategoriesManagementDAOImplTest {
 
         LOG.debug("categoryGroup: " + categoryGroup);
         assertEquals(true, categoryGroup.getId() != null);
-        assertEquals(DataBaseConstants.CATEGORY_GROUP_TYPE.CREDIT, categoryGroup.getCategoryGroupType());
+        assertEquals(DataBaseConstants.CATEGORY_GROUP_TYPE.CREDIT.getDiscriminator(), categoryGroup.getCategoryGroupType());
         assertEquals(newName, categoryGroup.getName());
         assertEquals(true, categoryGroup.getCreatedOn() != null);
         assertEquals(true, categoryGroup.getUpdatedOn() != null);
@@ -217,7 +217,7 @@ public class CategoriesManagementDAOImplTest {
 
         LOG.debug(">>>categoryGroup: " + categoryGroup);
         assertEquals(true, categoryGroup.getId() != null);
-        assertEquals(DataBaseConstants.CATEGORY_GROUP_TYPE.DEBIT, categoryGroup.getCategoryGroupType());
+        assertEquals(DataBaseConstants.CATEGORY_GROUP_TYPE.DEBIT.getDiscriminator(), categoryGroup.getCategoryGroupType());
         assertEquals(catgoryGroupNewName, categoryGroup.getName());
         assertEquals(true, categoryGroup.getCreatedOn() != null);
         assertEquals(true, categoryGroup.getUpdatedOn() != null);
@@ -284,7 +284,7 @@ public class CategoriesManagementDAOImplTest {
 
         LOG.debug(">>>categoryGroup: " + categoryGroup);
         assertEquals(true, categoryGroup.getId() != null);
-        assertEquals(DataBaseConstants.CATEGORY_GROUP_TYPE.DEBIT, categoryGroup.getCategoryGroupType());
+        assertEquals(DataBaseConstants.CATEGORY_GROUP_TYPE.DEBIT.getDiscriminator(), categoryGroup.getCategoryGroupType());
         assertEquals(catgoryGroupNewName, categoryGroup.getName());
         assertEquals(true, categoryGroup.getCreatedOn() != null);
         assertEquals(true, categoryGroup.getUpdatedOn() != null);
@@ -351,7 +351,7 @@ public class CategoriesManagementDAOImplTest {
 
         LOG.debug(">>>categoryGroup: " + categoryGroup);
         assertEquals(true, categoryGroup.getId() != null);
-        assertEquals(DataBaseConstants.CATEGORY_GROUP_TYPE.DEBIT, categoryGroup.getCategoryGroupType());
+        assertEquals(DataBaseConstants.CATEGORY_GROUP_TYPE.DEBIT.getDiscriminator(), categoryGroup.getCategoryGroupType());
         assertEquals(catgoryGroupNewName, categoryGroup.getName());
         assertEquals(true, categoryGroup.getCreatedOn() != null);
         assertEquals(true, categoryGroup.getUpdatedOn() != null);
@@ -421,7 +421,7 @@ public class CategoriesManagementDAOImplTest {
 
         LOG.debug(">>>categoryGroup: " + categoryGroup);
         assertEquals(true, categoryGroup.getId() != null);
-        assertEquals(DataBaseConstants.CATEGORY_GROUP_TYPE.DEBIT, categoryGroup.getCategoryGroupType());
+        assertEquals(DataBaseConstants.CATEGORY_GROUP_TYPE.DEBIT.getDiscriminator(), categoryGroup.getCategoryGroupType());
         assertEquals(catgoryGroupNewName, categoryGroup.getName());
         assertEquals(true, categoryGroup.getCreatedOn() != null);
         assertEquals(true, categoryGroup.getUpdatedOn() != null);
@@ -559,7 +559,7 @@ public class CategoriesManagementDAOImplTest {
         LOG.debug(">>>category group debit to delete: " + categoryGroupDebit);
         LOG.debug(">>>debit categories to delete: " + debitCategories);
 
-        List<CategoryGroup> categoryGroups = categoryGroupDAOImplForTest.categoryGroupList();
+        List<CategoryGroup> categoryGroups = categoryGroupDAOImplForTest.categoryGroupList(false);
         LOG.debug(">>>categoryGroupList: " + categoryGroups);
         assertEquals(true, categoryGroups.size() > 0);
     }
@@ -627,13 +627,40 @@ public class CategoriesManagementDAOImplTest {
     }
 
     @Test
-    //TODO test_44_seleteAllCategoryGroupsWithCategories
     public void test_44_seleteAllCategoryGroupsWithCategories() throws Exception {
+        int randomInt = randomWithinRange.getRandom();
+        int categoriesQty = 3;
+        CategoryGroup categoryGroupDebit = new CategoryGroupDebit("dt catGr to sel All " + randomInt,
+                "debit category group to select all " + randomInt);
+        List<Category> debitCategories = new ArrayList<>();
+        //put service: putting category_group in category and category in category_group
+        for(int i = 0 ; i < categoriesQty;i++) {
+            Category category = new CategoryDebit(categoryGroupDebit, "cat dt All" + i + "_v" + randomInt,
+                    "debit category #" + i + " 'description' select all categoryGroups with categories");
+            debitCategories.add(category);
+        }
+        categoryGroupDebit.setCategories(debitCategories);
+        categoryGroupDAOImplForTest.saveOrUpdateCategoryGroup(categoryGroupDebit);
 
+        List<CategoryGroup> categoryGroups = categoryGroupDAOImplForTest.categoryGroupList(true);
+        LOG.debug(">>>categoryGroups: " + categoryGroups);
+        assertEquals(true, categoryGroups.size() > 0);
+
+        int qtyCategoryGroupsWithCategories = 0;
+        int qtyCategoryGroupsWithoutCategories = 0;
+        for(CategoryGroup categoryGroup : categoryGroups){
+            if(categoryGroup.getCategories().size() > 0){
+                ++qtyCategoryGroupsWithCategories;
+            } else {
+                ++qtyCategoryGroupsWithoutCategories;
+            }
+        }
+        LOG.debug(">>>qtyCategoryGroupsWithCategories: " + qtyCategoryGroupsWithCategories);
+        LOG.debug(">>>qtyCategoryGroupsWithoutCategories: " + qtyCategoryGroupsWithoutCategories);
+        assertEquals(true, qtyCategoryGroupsWithCategories > 0);
     }
 
     @Test
-    //TODO test_45_seleteDebitCategoryGroupsWithCategories
     public void test_45_seleteDebitCategoryGroupsWithCategories() throws Exception {
         int randomInt = randomWithinRange.getRandom();
         int categoriesQty = 3;
@@ -652,13 +679,25 @@ public class CategoriesManagementDAOImplTest {
         LOG.debug(">>>category group to delete: " + categoryGroupDebit);
         LOG.debug(">>>categories to delete: " + debitCategories);
 
-        List<CategoryGroupDebit> categoryGroupDebits = categoryGroupDAOImplForTest.categoryGroupDebitList();
+        List<CategoryGroupDebit> categoryGroupDebits = categoryGroupDAOImplForTest.categoryGroupDebitList(true);
         LOG.debug(">>>categoryGroupDebits: " + categoryGroupDebits);
         assertEquals(true, categoryGroupDebits.size() > 0);
+
+        int qtyCategoryGroupsWithCategories = 0;
+        int qtyCategoryGroupsWithoutCategories = 0;
+        for(CategoryGroup categoryGroup : categoryGroupDebits){
+            if(categoryGroup.getCategories().size() > 0){
+                ++qtyCategoryGroupsWithCategories;
+            } else {
+                ++qtyCategoryGroupsWithoutCategories;
+            }
+        }
+        LOG.debug(">>>qtyCategoryGroupsWithCategories: " + qtyCategoryGroupsWithCategories);
+        LOG.debug(">>>qtyCategoryGroupsWithoutCategories: " + qtyCategoryGroupsWithoutCategories);
+        assertEquals(true, qtyCategoryGroupsWithCategories > 0);
     }
 
     @Test
-    //TODO test_46_seleteCreditCategoryGroupsWithCategories
     public void test_46_seleteCreditCategoryGroupsWithCategories() throws Exception {
         int randomInt = randomWithinRange.getRandom();
         int categoriesQty = 3;
@@ -677,34 +716,47 @@ public class CategoriesManagementDAOImplTest {
         LOG.debug(">>>category group to delete: " + categoryGroupCredit);
         LOG.debug(">>>categories to delete: " + creditCategories);
 
-        List<CategoryGroupCredit> categoryGroups = categoryGroupDAOImplForTest.categoryGroupCreditList();
-        LOG.debug(">>>categoryGroupList: " + categoryGroups);
-        assertEquals(true, categoryGroups.size() > 0);
+        List<CategoryGroupCredit> categoryGroupCredits = categoryGroupDAOImplForTest.categoryGroupCreditList(true);
+        LOG.debug(">>>categoryGroupList: " + categoryGroupCredits);
+        assertEquals(true, categoryGroupCredits.size() > 0);
+
+        int qtyCategoryGroupsWithCategories = 0;
+        int qtyCategoryGroupsWithoutCategories = 0;
+        for(CategoryGroup categoryGroup : categoryGroupCredits){
+            if(categoryGroup.getCategories().size() > 0){
+                ++qtyCategoryGroupsWithCategories;
+            } else {
+                ++qtyCategoryGroupsWithoutCategories;
+            }
+        }
+        LOG.debug(">>>qtyCategoryGroupsWithCategories: " + qtyCategoryGroupsWithCategories);
+        LOG.debug(">>>qtyCategoryGroupsWithoutCategories: " + qtyCategoryGroupsWithoutCategories);
+        assertEquals(true, qtyCategoryGroupsWithCategories > 0);
     }
 
     @Test
-    //TODO test_47_seleteCategoryByNameAndItsCategoryGroup
     public void test_47_seleteCategoryByNameAndItsCategoryGroup() throws Exception {
         int randomInt = randomWithinRange.getRandom();
-        int categoriesQty = 3;
         CategoryGroup categoryGroupCredit = new CategoryGroupCredit("cr catGr to sel " + randomInt,
                 "credit category group to select " + randomInt);
         List<Category> creditCategories = new ArrayList<>();
         //put service: putting category_group in category and category in category_group
-        for(int i = 0 ; i < categoriesQty;i++) {
-            Category category = new CategoryCredit(categoryGroupCredit, "cat cr " + i + "_v" + randomInt,
-                    "credit category #" + i + " 'description'");
-            creditCategories.add(category);
-        }
+        String categoryName = "cat cr 47_v" + randomInt;
+        Category category = new CategoryCredit(categoryGroupCredit, categoryName,
+                "credit category test #47 'description'");
+        creditCategories.add(category);
         categoryGroupCredit.setCategories(creditCategories);
         categoryGroupDAOImplForTest.saveOrUpdateCategoryGroup(categoryGroupCredit);
 
         LOG.debug(">>>category group to delete: " + categoryGroupCredit);
         LOG.debug(">>>categories to delete: " + creditCategories);
 
-        List<CategoryGroupCredit> categoryGroups = categoryGroupDAOImplForTest.categoryGroupCreditList();
-        LOG.debug(">>>categoryGroupList: " + categoryGroups);
-        assertEquals(true, categoryGroups.size() > 0);
+        List<Category> categoryByNameList = categoryGroupDAOImplForTest.getCategoryByName(categoryName);
+        LOG.debug(">>>categoryByNameList: " + categoryByNameList);
+        assertEquals(true, categoryByNameList.size() > 0);
+        for(Category cat : categoryByNameList) {
+            assertEquals(true, categoryName.equals(cat.getName()));
+        }
     }
 
     @Test
