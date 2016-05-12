@@ -10,6 +10,7 @@ import com.sun.org.apache.xml.internal.security.algorithms.implementations.Signa
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Hibernate;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.resource.transaction.spi.TransactionStatus;
 
@@ -301,6 +302,51 @@ public class CategoryGroupDAOImplForTest {
         try{
             session = TestPersistenceSession.openSession();
             session.beginTransaction();
+            list = session.createQuery("SELECT cg FROM CategoryGroup cg").list();
+            if(initializeCategories){
+                for(CategoryGroup categoryGroup : list) {
+                    //wrongClassException check entity classes in session, again eager might interfere
+                    //http://stackoverflow.com/questions/4334197/discriminator-wrongclassexception-jpa-with-hibernate-backend
+                    //http://anshuiitk.blogspot.ca/2011/04/hibernate-wrongclassexception.html
+                    //http://stackoverflow.com/questions/12199874/about-the-use-of-forcediscriminator-discriminatoroptionsforce-true
+                    //http://stackoverflow.com/questions/19928568/hibernate-best-practice-to-pull-all-lazy-collections
+                    Hibernate.initialize(categoryGroup.getCategories());
+                }
+            }
+            Collections.sort(list, (CategoryGroup cg1,  CategoryGroup cg2) -> cg1.getName().toLowerCase().compareTo(cg2.getName().toLowerCase()));
+            session.getTransaction().commit();
+        } catch (Exception e) {
+            //hibernate persistence p.257
+            try {
+                if (session.getTransaction().getStatus() == TransactionStatus.ACTIVE
+                        || session.getTransaction().getStatus() == TransactionStatus.MARKED_ROLLBACK)
+                    session.getTransaction().rollback();
+            } catch (Exception rbEx) {
+                LOG.error("Rollback of transaction failed, trace follows!");
+                LOG.error(rbEx, rbEx);
+            }
+            throw new RuntimeException(e);
+        } finally {
+            if(session != null){
+                session.close();
+            }
+        }
+        return list;
+    }
+
+    public List<CategoryGroup> categoryGroupList(DataBaseConstants.CATEGORY_GROUP_TYPE type, boolean initializeCategories) throws Exception {
+        Session session = null;
+        List<CategoryGroup> list = new ArrayList<>();
+        try{
+            session = TestPersistenceSession.openSession();
+            session.beginTransaction();
+            String queryStr = null;
+            switch (type){
+                //TODO finish here: one method for every search DRY principle
+                case DataBaseConstants.CATEGORY_GROUP_TYPE.DEBIT:
+                    queryStr = ""
+            }
+
             list = session.createQuery("SELECT cg FROM CategoryGroup cg").list();
             if(initializeCategories){
                 for(CategoryGroup categoryGroup : list) {
