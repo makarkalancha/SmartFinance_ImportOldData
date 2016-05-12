@@ -600,8 +600,8 @@ public class CategoriesManagementDAOImplTest {
     public void test_43_seleteCategoryGroupByName() throws Exception {
         int randomInt = randomWithinRange.getRandom();
         int categoriesQty = 3;
-        String categoryGroupCreditName = "db catGr to sel " + randomInt;
-        CategoryGroup categoryGroupDebit = new CategoryGroupDebit(categoryGroupCreditName,
+        String categoryGroupSameName = "same categoryGroup name " + randomInt;
+        CategoryGroup categoryGroupDebit = new CategoryGroupDebit(categoryGroupSameName,
                 "debit category group to select " + randomInt);
         List<Category> creditCategories = new ArrayList<>();
         //put service: putting category_group in category and category in category_group
