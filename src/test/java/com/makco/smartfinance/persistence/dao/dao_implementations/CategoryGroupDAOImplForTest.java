@@ -1,5 +1,6 @@
 package com.makco.smartfinance.persistence.dao.dao_implementations;
 
+import com.makco.smartfinance.constants.DataBaseConstants;
 import com.makco.smartfinance.persistence.entity.Category;
 import com.makco.smartfinance.persistence.entity.CategoryGroup;
 import com.makco.smartfinance.persistence.entity.CategoryGroupCredit;
@@ -162,7 +163,7 @@ public class CategoryGroupDAOImplForTest {
         return list;
     }
 
-    public CategoryGroup getCategoryGroupByNameAndType(String categoryGroupName, String type, boolean initializeCategories) throws Exception {
+    public CategoryGroup getCategoryGroupByNameAndType(String categoryGroupName, DataBaseConstants.CATEGORY_GROUP_TYPE type, boolean initializeCategories) throws Exception {
         Session session = null;
         CategoryGroup categoryGroup = null;
         try{
@@ -171,7 +172,7 @@ public class CategoryGroupDAOImplForTest {
             categoryGroup = (CategoryGroup) session
                     .createQuery("SELECT cg FROM CategoryGroup cg where cg.name = :categoryGroupName and cg.class = :type")
                     .setString("categoryGroupName", categoryGroupName)
-                    .setString("type", type)
+                    .setString("type", type.getDiscriminator())
                     .uniqueResult();
             if(initializeCategories){
                 //wrongClassException check entity classes in session, again eager might interfere

@@ -54,7 +54,7 @@ public class CategoriesManagementDAOImplTest {
 
         LOG.debug("categoryGroup: " + categoryGroup);
         assertEquals(true, categoryGroup.getId() != null);
-        assertEquals(DataBaseConstants.CATEGORY_GROUP_TYPE_DEBIT, categoryGroup.getCategoryGroupType());
+        assertEquals(DataBaseConstants.CATEGORY_GROUP_TYPE.DEBIT, categoryGroup.getCategoryGroupType());
         assertEquals(name, categoryGroup.getName());
         assertEquals(debitCategoryGroupDebitDesc, categoryGroup.getDescription());
         assertEquals(true, categoryGroup.getCreatedOn() != null);
@@ -81,7 +81,7 @@ public class CategoriesManagementDAOImplTest {
 
         LOG.debug("categoryGroup: " + categoryGroup);
         assertEquals(true, categoryGroup.getId() != null);
-        assertEquals(DataBaseConstants.CATEGORY_GROUP_TYPE_DEBIT, categoryGroup.getCategoryGroupType());
+        assertEquals(DataBaseConstants.CATEGORY_GROUP_TYPE.DEBIT, categoryGroup.getCategoryGroupType());
         assertEquals(name, categoryGroup.getName());
         assertEquals(debitCategoryGroupDebitDesc, categoryGroup.getDescription());
         assertEquals(true, categoryGroup.getCreatedOn() != null);
@@ -157,7 +157,7 @@ public class CategoriesManagementDAOImplTest {
 
         LOG.debug("categoryGroup: " + categoryGroup);
         assertEquals(true, categoryGroup.getId() != null);
-        assertEquals(DataBaseConstants.CATEGORY_GROUP_TYPE_CREDIT, categoryGroup.getCategoryGroupType());
+        assertEquals(DataBaseConstants.CATEGORY_GROUP_TYPE.CREDIT, categoryGroup.getCategoryGroupType());
         assertEquals(newName, categoryGroup.getName());
         assertEquals(true, categoryGroup.getCreatedOn() != null);
         assertEquals(true, categoryGroup.getUpdatedOn() != null);
@@ -217,7 +217,7 @@ public class CategoriesManagementDAOImplTest {
 
         LOG.debug(">>>categoryGroup: " + categoryGroup);
         assertEquals(true, categoryGroup.getId() != null);
-        assertEquals(DataBaseConstants.CATEGORY_GROUP_TYPE_DEBIT, categoryGroup.getCategoryGroupType());
+        assertEquals(DataBaseConstants.CATEGORY_GROUP_TYPE.DEBIT, categoryGroup.getCategoryGroupType());
         assertEquals(catgoryGroupNewName, categoryGroup.getName());
         assertEquals(true, categoryGroup.getCreatedOn() != null);
         assertEquals(true, categoryGroup.getUpdatedOn() != null);
@@ -284,7 +284,7 @@ public class CategoriesManagementDAOImplTest {
 
         LOG.debug(">>>categoryGroup: " + categoryGroup);
         assertEquals(true, categoryGroup.getId() != null);
-        assertEquals(DataBaseConstants.CATEGORY_GROUP_TYPE_DEBIT, categoryGroup.getCategoryGroupType());
+        assertEquals(DataBaseConstants.CATEGORY_GROUP_TYPE.DEBIT, categoryGroup.getCategoryGroupType());
         assertEquals(catgoryGroupNewName, categoryGroup.getName());
         assertEquals(true, categoryGroup.getCreatedOn() != null);
         assertEquals(true, categoryGroup.getUpdatedOn() != null);
@@ -351,7 +351,7 @@ public class CategoriesManagementDAOImplTest {
 
         LOG.debug(">>>categoryGroup: " + categoryGroup);
         assertEquals(true, categoryGroup.getId() != null);
-        assertEquals(DataBaseConstants.CATEGORY_GROUP_TYPE_DEBIT, categoryGroup.getCategoryGroupType());
+        assertEquals(DataBaseConstants.CATEGORY_GROUP_TYPE.DEBIT, categoryGroup.getCategoryGroupType());
         assertEquals(catgoryGroupNewName, categoryGroup.getName());
         assertEquals(true, categoryGroup.getCreatedOn() != null);
         assertEquals(true, categoryGroup.getUpdatedOn() != null);
@@ -421,7 +421,7 @@ public class CategoriesManagementDAOImplTest {
 
         LOG.debug(">>>categoryGroup: " + categoryGroup);
         assertEquals(true, categoryGroup.getId() != null);
-        assertEquals(DataBaseConstants.CATEGORY_GROUP_TYPE_DEBIT, categoryGroup.getCategoryGroupType());
+        assertEquals(DataBaseConstants.CATEGORY_GROUP_TYPE.DEBIT, categoryGroup.getCategoryGroupType());
         assertEquals(catgoryGroupNewName, categoryGroup.getName());
         assertEquals(true, categoryGroup.getCreatedOn() != null);
         assertEquals(true, categoryGroup.getUpdatedOn() != null);
@@ -768,18 +768,18 @@ public class CategoriesManagementDAOImplTest {
             debitCategories.add(category);
         }
         categoryGroupDebit.setCategories(debitCategories);
-        LOG.debug(">>>category group id: " + categoryGroupDebit);
+        LOG.debug(">>>category group name and type: " + categoryGroupDebit);
         LOG.debug(">>>categories of category group: " + debitCategories);
         categoryGroupDAOImplForTest.saveOrUpdateCategoryGroup(categoryGroupDebit);
 
         //byName return list as it might be debit or credit and return categories
         CategoryGroup categoryGroupByNameAndTypeResult = categoryGroupDAOImplForTest
-                .getCategoryGroupByNameAndType(categoryGroupName, DataBaseConstants.CATEGORY_GROUP_TYPE_DEBIT, true);
+                .getCategoryGroupByNameAndType(categoryGroupName, DataBaseConstants.CATEGORY_GROUP_TYPE.DEBIT, true);
 
         LOG.debug(">>>category group select by id: " + categoryGroupByNameAndTypeResult);
 
         assertEquals(true, categoryGroupByNameAndTypeResult.getName().equals(categoryGroupName));
-        assertEquals(true, categoryGroupByNameAndTypeResult.getCategoryGroupType().equals(DataBaseConstants.CATEGORY_GROUP_TYPE_DEBIT));
+        assertEquals(true, categoryGroupByNameAndTypeResult.getCategoryGroupType().equals(DataBaseConstants.CATEGORY_GROUP_TYPE.DEBIT.getDiscriminator()));
 
         LOG.debug(">>>categoryGroupList: " + categoryGroupByNameAndTypeResult.getCategories());
         assertEquals(true, categoryGroupByNameAndTypeResult.getCategories().size() > 0);
