@@ -596,7 +596,6 @@ public class CategoriesManagementDAOImplTest {
     }
 
     @Test
-    //TODO test_43_seleteCategoryGroupByName
     public void test_43_seleteCategoryGroupByName() throws Exception {
         int randomInt = randomWithinRange.getRandom();
         int categoriesQty = 3;
@@ -615,15 +614,16 @@ public class CategoriesManagementDAOImplTest {
         LOG.debug(">>>categories of category group: " + debitCategories);
         categoryGroupDAOImplForTest.saveOrUpdateCategoryGroup(categoryGroupDebit);
 
-        //TODO byName return list as it might be debit or credit and return categories
-        CategoryGroup categoryGroupById = categoryGroupDAOImplForTest.getCategoryGroupById(categoryGroupId, true);
+        List<CategoryGroup> categoryGroupByNameList = categoryGroupDAOImplForTest.getCategoryGroupByName(categoryGroupDebitName, true);
 
-        LOG.debug(">>>category group select by id: " + categoryGroupById);
+        for(CategoryGroup categoryGroupByName : categoryGroupByNameList){
+            LOG.debug(">>>category group select by name: " + categoryGroupByName);
 
-        assertEquals(true, categoryGroupId == categoryGroupById.getId());
+            assertEquals(true, categoryGroupDebitName.equals(categoryGroupByName.getName()));
 
-        LOG.debug(">>>categoryGroupList: " + categoryGroupById.getCategories());
-        assertEquals(true, categoryGroupById.getCategories().size() > 0);
+            LOG.debug(">>>categoryGroupList: " + categoryGroupByName.getCategories());
+            assertEquals(true, categoryGroupByName.getCategories().size() > 0);
+        }
     }
 
     @Test
@@ -708,33 +708,80 @@ public class CategoriesManagementDAOImplTest {
     }
 
     @Test
-    //TODO test_48_seleteDifferentCategoryGroupBySameName
     public void test_48_seleteDifferentCategoryGroupBySameName() throws Exception {
         int randomInt = randomWithinRange.getRandom();
         int categoriesQty = 3;
         String categoryGroupSameName = "same categoryGroup name " + randomInt;
         CategoryGroup categoryGroupDebit = new CategoryGroupDebit(categoryGroupSameName,
                 "debit category group to select " + randomInt);
+        List<Category> debitCategories = new ArrayList<>();
+        //put service: putting category_group in category and category in category_group
+        for(int i = 0 ; i < categoriesQty;i++) {
+            Category category = new CategoryDebit(categoryGroupDebit, "cat db same name " + i + "_v" + randomInt,
+                    "credit category #" + i + " 'description'");
+            debitCategories.add(category);
+        }
+        categoryGroupDebit.setCategories(debitCategories);
+        LOG.debug(">>>category group id: " + categoryGroupDebit);
+        LOG.debug(">>>categories of category group: " + debitCategories);
+        categoryGroupDAOImplForTest.saveOrUpdateCategoryGroup(categoryGroupDebit);
+
+        CategoryGroup categoryGroupCredit = new CategoryGroupCredit(categoryGroupSameName,
+                "credit category group to select " + randomInt);
         List<Category> creditCategories = new ArrayList<>();
         //put service: putting category_group in category and category in category_group
         for(int i = 0 ; i < categoriesQty;i++) {
-            Category category = new CategoryDebit(categoryGroupDebit, "cat db " + i + "_v" + randomInt,
+            Category category = new CategoryCredit(categoryGroupCredit, "cat cr same name " + i + "_v" + randomInt,
                     "credit category #" + i + " 'description'");
             creditCategories.add(category);
         }
-        categoryGroupDebit.setCategories(creditCategories);
-        LOG.debug(">>>category group id: " + categoryGroupDebit);
+        categoryGroupCredit.setCategories(creditCategories);
+        LOG.debug(">>>category group by same name: " + categoryGroupCredit);
         LOG.debug(">>>categories of category group: " + creditCategories);
+        categoryGroupDAOImplForTest.saveOrUpdateCategoryGroup(categoryGroupCredit);
+
+        //byName return list as it might be debit or credit and return categories
+        List<CategoryGroup> categoryGroupWithSameName = categoryGroupDAOImplForTest.getCategoryGroupByName(categoryGroupSameName, true);
+
+        for(CategoryGroup categoryGroup : categoryGroupWithSameName){
+            LOG.debug(">>>category group select by id: " + categoryGroup);
+
+            assertEquals(true, categoryGroup.getName().equals(categoryGroupSameName));
+
+            LOG.debug(">>>categoryGroupList: " + categoryGroup.getCategories());
+            assertEquals(true, categoryGroup.getCategories().size() > 0);
+        }
+    }
+
+    @Test
+    public void test_49_seleteCategoryGroupByNameWithType() throws Exception {
+        int randomInt = randomWithinRange.getRandom();
+        int categoriesQty = 3;
+        String categoryGroupName = "categoryGroup nameAndType " + randomInt;
+        CategoryGroup categoryGroupDebit = new CategoryGroupDebit(categoryGroupName,
+                "debit category group to select " + randomInt);
+        List<Category> debitCategories = new ArrayList<>();
+        //put service: putting category_group in category and category in category_group
+        for(int i = 0 ; i < categoriesQty;i++) {
+            Category category = new CategoryDebit(categoryGroupDebit, "cat db same name " + i + "_v" + randomInt,
+                    "credit category #" + i + " 'description'");
+            debitCategories.add(category);
+        }
+        categoryGroupDebit.setCategories(debitCategories);
+        LOG.debug(">>>category group id: " + categoryGroupDebit);
+        LOG.debug(">>>categories of category group: " + debitCategories);
         categoryGroupDAOImplForTest.saveOrUpdateCategoryGroup(categoryGroupDebit);
 
-        //TODO byName return list as it might be debit or credit and return categories
-        CategoryGroup categoryGroupById = categoryGroupDAOImplForTest.getCategoryGroupById(categoryGroupId, true);
+        //byName return list as it might be debit or credit and return categories
+        CategoryGroup categoryGroupByNameAndTypeResult = categoryGroupDAOImplForTest
+                .getCategoryGroupByNameAndType(categoryGroupName, DataBaseConstants.CATEGORY_GROUP_TYPE_DEBIT, true);
 
-        LOG.debug(">>>category group select by id: " + categoryGroupById);
+        LOG.debug(">>>category group select by id: " + categoryGroupByNameAndTypeResult);
 
-        assertEquals(true, categoryGroupId == categoryGroupById.getId());
+        assertEquals(true, categoryGroupByNameAndTypeResult.getName().equals(categoryGroupName));
+        assertEquals(true, categoryGroupByNameAndTypeResult.getCategoryGroupType().equals(DataBaseConstants.CATEGORY_GROUP_TYPE_DEBIT));
 
-        LOG.debug(">>>categoryGroupList: " + categoryGroupById.getCategories());
-        assertEquals(true, categoryGroupById.getCategories().size() > 0);
+        LOG.debug(">>>categoryGroupList: " + categoryGroupByNameAndTypeResult.getCategories());
+        assertEquals(true, categoryGroupByNameAndTypeResult.getCategories().size() > 0);
     }
 }
