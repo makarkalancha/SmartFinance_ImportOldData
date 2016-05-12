@@ -17,7 +17,8 @@ import javax.persistence.OneToMany;
  */
 @Entity
 //@DiscriminatorValue("D")
-@DiscriminatorValue(DataBaseConstants.CATEGORY_GROUP_TYPE_DEBIT)
+//@DiscriminatorValue(DataBaseConstants.CATEGORY_GROUP_TYPE_DEBIT)
+@DiscriminatorValue(DataBaseConstants.CATEGORY_GROUP_TYPE.Values.DEBIT)
 public class CategoryGroupDebit extends CategoryGroup<CategoryDebit>{
     /**
      *http://stackoverflow.com/questions/30838526/how-to-have-a-sorted-set-of-objects-based-on-a-specific-field
@@ -83,7 +84,7 @@ public class CategoryGroupDebit extends CategoryGroup<CategoryDebit>{
 
     @Override
     public String getCategoryGroupType() {
-        return DataBaseConstants.CATEGORY_GROUP_TYPE_DEBIT;
+        return DataBaseConstants.CATEGORY_GROUP_TYPE.Values.DEBIT;
     }
 
     //    @Override

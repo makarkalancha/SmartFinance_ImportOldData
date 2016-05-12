@@ -10,7 +10,8 @@ import javax.persistence.*;
  * Created by mcalancea on 2016-04-29.
  */
 @Entity
-@DiscriminatorValue(DataBaseConstants.CATEGORY_GROUP_TYPE_DEBIT)
+//@DiscriminatorValue(DataBaseConstants.CATEGORY_GROUP_TYPE_DEBIT)
+@DiscriminatorValue(DataBaseConstants.CATEGORY_GROUP_TYPE.Values.DEBIT)
 //because CategoryDebit is used in categoryGroup SortedSet<CategoryDebit> and this collection puts only Comparable
 public class CategoryDebit extends Category implements Comparable<CategoryDebit>{
     @ManyToOne(fetch = FetchType.LAZY)
@@ -41,7 +42,7 @@ public class CategoryDebit extends Category implements Comparable<CategoryDebit>
 
     @Override
     public String getCategoryGroupType() {
-        return DataBaseConstants.CATEGORY_GROUP_TYPE_DEBIT;
+        return DataBaseConstants.CATEGORY_GROUP_TYPE.Values.DEBIT;
     }
     //when entity is transient id == null, so it's impossible to put it in Map or Set
     @Override

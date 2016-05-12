@@ -33,8 +33,24 @@ public class DataBaseConstants {
     //category_group
     public final static int CG_NAME_MAX_LGTH = 32;
     public final static int CG_DESCRIPTION_MAX_LGTH = 512;
-    public static final String CATEGORY_GROUP_TYPE_DEBIT = "D";
-    public static final String CATEGORY_GROUP_TYPE_CREDIT = "C";
+    public enum CATEGORY_GROUP_TYPE{
+        CREDIT(Values.CREDIT),
+        DEBIT(Values.DEBIT);
+
+        private final String discriminator;
+        private CATEGORY_GROUP_TYPE(String discriminator){
+            this.discriminator = discriminator;
+        }
+
+        public String getDiscriminator() {
+            return discriminator;
+        }
+
+        public static class Values{
+            public static final String DEBIT = "D";
+            public static final String CREDIT = "C";
+        }
+    }
 
     //category
     public final static int CAT_NAME_MAX_LGTH = 32;

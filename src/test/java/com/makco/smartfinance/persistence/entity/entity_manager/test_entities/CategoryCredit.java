@@ -11,7 +11,7 @@ import javax.persistence.*;
  * Created by mcalancea on 2016-04-29.
  */
 @Entity
-@DiscriminatorValue(DataBaseConstants.CATEGORY_GROUP_TYPE_CREDIT)
+@DiscriminatorValue(DataBaseConstants.CATEGORY_GROUP_TYPE.Values.CREDIT)
 public class CategoryCredit extends Category implements Comparable<CategoryCredit>{
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CATEGORY_GROUP_ID",nullable = false)
@@ -39,7 +39,7 @@ public class CategoryCredit extends Category implements Comparable<CategoryCredi
 
     @Override
     public String getCategoryGroupType() {
-        return DataBaseConstants.CATEGORY_GROUP_TYPE_CREDIT;
+        return DataBaseConstants.CATEGORY_GROUP_TYPE.Values.CREDIT;
     }
 
     @Override

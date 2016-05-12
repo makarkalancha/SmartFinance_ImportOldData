@@ -16,7 +16,8 @@ import javax.persistence.OneToMany;
  * Created by mcalancea on 2016-04-25.
  */
 @Entity
-@DiscriminatorValue(DataBaseConstants.CATEGORY_GROUP_TYPE_CREDIT)
+//@DiscriminatorValue(DataBaseConstants.CATEGORY_GROUP_TYPE_CREDIT)
+@DiscriminatorValue(DataBaseConstants.CATEGORY_GROUP_TYPE.Values.CREDIT)
 public class CategoryGroupCredit extends CategoryGroup<CategoryCredit>{
     //http://stackoverflow.com/questions/30838526/how-to-have-a-sorted-set-of-objects-based-on-a-specific-field
     //http://stackoverflow.com/questions/4334197/discriminator-wrongclassexception-jpa-with-hibernate-backend
@@ -71,7 +72,7 @@ public class CategoryGroupCredit extends CategoryGroup<CategoryCredit>{
 
     @Override
     public String getCategoryGroupType() {
-        return DataBaseConstants.CATEGORY_GROUP_TYPE_CREDIT;
+        return DataBaseConstants.CATEGORY_GROUP_TYPE.Values.CREDIT;
     }
 
     @Override

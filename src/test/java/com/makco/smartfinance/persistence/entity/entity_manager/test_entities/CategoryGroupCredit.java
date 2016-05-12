@@ -14,7 +14,8 @@ import java.util.TreeSet;
  * Created by mcalancea on 2016-04-29.
  */
 @Entity
-@DiscriminatorValue(DataBaseConstants.CATEGORY_GROUP_TYPE_CREDIT)
+//@DiscriminatorValue(DataBaseConstants.CATEGORY_GROUP_TYPE_CREDIT)
+@DiscriminatorValue(DataBaseConstants.CATEGORY_GROUP_TYPE.Values.CREDIT)
 public class CategoryGroupCredit extends CategoryGroup<CategoryCredit> {
     //http://stackoverflow.com/questions/30838526/how-to-have-a-sorted-set-of-objects-based-on-a-specific-field
     @OneToMany(mappedBy = "categoryGroup", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY) //session is using CascadeType.ALL
@@ -67,7 +68,7 @@ public class CategoryGroupCredit extends CategoryGroup<CategoryCredit> {
 
     @Override
     public String getCategoryGroupType() {
-        return DataBaseConstants.CATEGORY_GROUP_TYPE_CREDIT;
+        return DataBaseConstants.CATEGORY_GROUP_TYPE.Values.CREDIT;
     }
 
     @Override
