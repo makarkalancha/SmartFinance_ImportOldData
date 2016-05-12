@@ -75,9 +75,10 @@ public class CategoryDebit extends Category implements Comparable<CategoryDebit>
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
+                ", getCategoryGroupType='" + getCategoryGroupType() + '\'' +
+                ", CategoryGroupDebit='" + categoryGroup + '\'' +
                 ", createdOn='" + createdOn + '\'' +
                 ", updatedOn='" + updatedOn + '\'' +
-                ", CategoryGroupDebit='" + categoryGroup + '\'' +
                 '}';
     }
 

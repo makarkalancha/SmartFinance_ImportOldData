@@ -65,6 +65,8 @@ public class CategoryCredit extends Category implements Comparable<CategoryCredi
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
+                ", getCategoryGroupType='" + getCategoryGroupType() + '\'' +
+                ", categoryGroup='" + categoryGroup + '\'' +
                 ", createdOn='" + createdOn + '\'' +
                 ", updatedOn='" + updatedOn + '\'' +
                 '}';
