@@ -63,7 +63,6 @@ public class CategoryManagementModel {
                         break;
                     default:
                         throw new Exception("This type of Category Group is not supported!");
-                        break;
                 }
             }
 

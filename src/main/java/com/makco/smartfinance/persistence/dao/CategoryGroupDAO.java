@@ -14,4 +14,5 @@ public interface CategoryGroupDAO {
     List<CategoryGroup> categoryGroupList(boolean initializeCategories) throws Exception;
     <T extends CategoryGroup> List<T> categoryGroupByType(Class<T> type, boolean initializeCategories) throws Exception;
     void saveOrUpdateCategoryGroup(CategoryGroup categoryGroup) throws Exception;
+    void removeCategoryGroup(Long id) throws Exception;
 }

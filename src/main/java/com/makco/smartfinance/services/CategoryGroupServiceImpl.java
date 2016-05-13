@@ -47,6 +47,15 @@ public class CategoryGroupServiceImpl implements CategoryGroupService {
     }
 
     @Override
+    public void removeCategoryGroup(Long id) throws Exception {
+        try{
+            categoryGroupDAO.removeCategoryGroup(id);
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+
+    @Override
     public EnumSet<ErrorEnum> validate(CategoryGroup categoryGroup) throws Exception {
         EnumSet<ErrorEnum> errors = EnumSet.noneOf(ErrorEnum.class);
         try {

@@ -8,7 +8,11 @@ import com.makco.smartfinance.constants.DataBaseConstants;
  * Time: 00:37
  */
 public enum ErrorEnum {
-    Cur_CODE_DUPLICATE("Currency with this code already exists")
+    CatGr_DESC_LGTH("Category Group description cannot be greater than " + DataBaseConstants.CG_DESCRIPTION_MAX_LGTH + " characters.")
+    , CatGr_NAME_DUPLICATE("Category Group with this name already exists")
+    , CatGr_NAME_LGTH("Category Group name cannot be greater than " + DataBaseConstants.CG_NAME_MAX_LGTH + " characters.")
+    , CatGr_NAME_NULL("Category Group name cannot be empty.")
+    , Cur_CODE_DUPLICATE("Currency with this code already exists")
     , Cur_DESC_LGTH("Currency description cannot be greater than " + DataBaseConstants.CUR_DESCRIPTION_MAX_LGTH + " characters.")
     , Cur_CODE_LGTH("Currency code length must be " + DataBaseConstants.CUR_CODE_MAX_LGTH + " characters.")
     , Cur_CODE_NULL("Currency code cannot be empty.")
