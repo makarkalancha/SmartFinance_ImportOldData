@@ -16,6 +16,7 @@ public class UserInterfaceConstants {
 
     //titles
     public static final String MAIN_WINDOW_TITLE = "Hello";
+    public static final String CATEGORY_MANAGEMENT_WINDOW_TITLE = "Category Management";
     public static final String CURRENCY_WINDOW_TITLE = "Currency";
     public static final String FAMILY_MEMBER_WINDOW_TITLE = "Family Member";
     public static final String ORGANIZATION_WINDOW_TITLE = "Organization";

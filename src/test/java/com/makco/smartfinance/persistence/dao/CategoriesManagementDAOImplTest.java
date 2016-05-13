@@ -679,7 +679,8 @@ public class CategoriesManagementDAOImplTest {
         LOG.debug(">>>category group to delete: " + categoryGroupDebit);
         LOG.debug(">>>categories to delete: " + debitCategories);
 
-        List<CategoryGroupDebit> categoryGroupDebits = categoryGroupDAOImplForTest.categoryGroupDebitList(true);
+//        List<CategoryGroupDebit> categoryGroupDebits = categoryGroupDAOImplForTest.categoryGroupDebitList_old(true);
+        List<CategoryGroupDebit> categoryGroupDebits = categoryGroupDAOImplForTest.categoryGroupByType(CategoryGroupDebit.class, true);
         LOG.debug(">>>categoryGroupDebits: " + categoryGroupDebits);
         assertEquals(true, categoryGroupDebits.size() > 0);
 
@@ -716,7 +717,9 @@ public class CategoriesManagementDAOImplTest {
         LOG.debug(">>>category group to delete: " + categoryGroupCredit);
         LOG.debug(">>>categories to delete: " + creditCategories);
 
-        List<CategoryGroupCredit> categoryGroupCredits = categoryGroupDAOImplForTest.categoryGroupCreditList(true);
+//        List<CategoryGroupCredit> categoryGroupCredits = categoryGroupDAOImplForTest.categoryGroupCreditList_old(true);
+        List<CategoryGroupCredit> categoryGroupCredits = categoryGroupDAOImplForTest.categoryGroupByType(CategoryGroupCredit.class
+                ,true);
         LOG.debug(">>>categoryGroupList: " + categoryGroupCredits);
         assertEquals(true, categoryGroupCredits.size() > 0);
 
