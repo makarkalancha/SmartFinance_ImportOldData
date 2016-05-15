@@ -170,4 +170,44 @@ public class CategoryGroupDAOImpl implements CategoryGroupDAO{
             }
         }
     }
+
+    @Override
+    public List<CategoryGroup> getCategoryGroupByName(String categoryGroupName, boolean initializeCategories) throws Exception {
+        Session session = null;
+        List<CategoryGroup> list = new ArrayList<>();
+        try{
+            session = HibernateUtil.openSession();
+            session.beginTransaction();
+            list = session.createQuery("SELECT cg FROM CategoryGroup cg where cg.name = :categoryGroupName")
+                    .setString("categoryGroupName", categoryGroupName)
+                    .list();
+            //byName return list as it might be debit or credit and return categories
+            if(initializeCategories){
+                for(CategoryGroup categoryGroup : list) {
+                    //wrongClassException check entity classes in session, again eager might interfere
+                    //http://stackoverflow.com/questions/4334197/discriminator-wrongclassexception-jpa-with-hibernate-backend
+                    //http://anshuiitk.blogspot.ca/2011/04/hibernate-wrongclassexception.html
+                    //http://stackoverflow.com/questions/12199874/about-the-use-of-forcediscriminator-discriminatoroptionsforce-true
+                    //http://stackoverflow.com/questions/19928568/hibernate-best-practice-to-pull-all-lazy-collections
+                    Hibernate.initialize(categoryGroup.getCategories());
+                }
+            }
+            session.getTransaction().commit();
+        } catch (Exception e) {
+            try {
+                if (session.getTransaction().getStatus() == TransactionStatus.ACTIVE
+                        || session.getTransaction().getStatus() == TransactionStatus.MARKED_ROLLBACK)
+                    session.getTransaction().rollback();
+            } catch (Exception rbEx) {
+                LOG.error("Rollback of transaction failed, trace follows!");
+                LOG.error(rbEx, rbEx);
+            }
+            throw new RuntimeException(e);
+        } finally {
+            if(session != null){
+                session.close();
+            }
+        }
+        return list;
+    }
 }

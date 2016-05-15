@@ -17,6 +17,7 @@ public interface CategoryGroupService {
     <T extends CategoryGroup> List<T> categoryGroupByType(Class<T> type, boolean initializeCategories) throws Exception;
     void saveOrUpdateCategoryGroup(CategoryGroup categoryGroup) throws Exception;
     void removeCategoryGroup(Long id) throws Exception;
+    List<CategoryGroup> getCategoryGroupByName(String categoryGroupName, boolean initializeCategories) throws Exception;
 
     EnumSet<ErrorEnum> validate(CategoryGroup categoryGroup) throws Exception;
 }

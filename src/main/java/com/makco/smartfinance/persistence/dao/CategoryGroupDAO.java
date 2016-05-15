@@ -15,4 +15,6 @@ public interface CategoryGroupDAO {
     <T extends CategoryGroup> List<T> categoryGroupByType(Class<T> type, boolean initializeCategories) throws Exception;
     void saveOrUpdateCategoryGroup(CategoryGroup categoryGroup) throws Exception;
     void removeCategoryGroup(Long id) throws Exception;
+
+    List<CategoryGroup> getCategoryGroupByName(String categoryGroupName, boolean initializeCategories) throws Exception;
 }

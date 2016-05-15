@@ -10,6 +10,7 @@ import com.makco.smartfinance.persistence.entity.CategoryGroupDebit;
 import com.makco.smartfinance.persistence.entity.Currency;
 import com.makco.smartfinance.user_interface.validation.ErrorEnum;
 import com.makco.smartfinance.user_interface.validation.RuleSet;
+import com.makco.smartfinance.user_interface.validation.rule_sets.CategoryGroupRuleSet;
 import com.makco.smartfinance.user_interface.validation.rule_sets.CurrencyRuleSet;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -53,6 +54,26 @@ public class CategoryGroupServiceImpl implements CategoryGroupService {
         } catch (Exception e) {
             throw e;
         }
+    }
+
+    @Override
+    public void saveOrUpdateCategoryGroup(CategoryGroup categoryGroup) throws Exception {
+        try{
+            categoryGroupDAO.saveOrUpdateCategoryGroup(categoryGroup);
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+
+    @Override
+    public List<CategoryGroup> getCategoryGroupByName(String categoryGroupName, boolean initializeCategories) throws Exception {
+        List<CategoryGroup> categoryGroupList = new ArrayList<>();
+        try{
+            categoryGroupList = categoryGroupDAO.getCategoryGroupByName(categoryGroupName, initializeCategories);
+        } catch (Exception e) {
+            throw e;
+        }
+        return categoryGroupList;
     }
 
     @Override
