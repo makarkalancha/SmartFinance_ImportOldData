@@ -89,17 +89,17 @@
                         </TextArea>
                         <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="25.0">
                            <children>
-                              <Button id="save" fx:id="saveBtn" mnemonicParsing="false" onAction="#onSave" prefWidth="60.0" text="Save">
+                              <Button id="save" fx:id="saveBtnCatGr" mnemonicParsing="false" onAction="#onSaveCatGr" prefWidth="60.0" text="Save">
                                  <HBox.margin>
                                     <Insets left="50.0" right="5.0" />
                                  </HBox.margin>
                               </Button>
-                              <Button id="save" fx:id="deleteBtn" mnemonicParsing="false" onAction="#onDelete" prefWidth="60.0" text="Delete">
+                              <Button id="save" fx:id="deleteBtnCatGr" mnemonicParsing="false" onAction="#onDeleteCatGr" prefWidth="60.0" text="Delete">
                                  <HBox.margin>
                                     <Insets right="5.0" />
                                  </HBox.margin>
                               </Button>
-                              <Button id="new" fx:id="clearBtn" mnemonicParsing="false" onAction="#onClear" prefWidth="60.0" text="Clear">
+                              <Button id="new" fx:id="clearBtnCatGr" mnemonicParsing="false" onAction="#onClearCatGr" prefWidth="60.0" text="Clear">
                                  <HBox.margin>
                                     <Insets right="5.0" />
                                  </HBox.margin>
@@ -176,17 +176,17 @@
                         </TextArea>
                         <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="25.0">
                            <children>
-                              <Button id="save" fx:id="saveBtn1" mnemonicParsing="false" onAction="#onSave" prefWidth="60.0" text="Save">
+                              <Button id="save" fx:id="saveBtnCat" mnemonicParsing="false" onAction="#onSaveCat" prefWidth="60.0" text="Save">
                                  <HBox.margin>
                                     <Insets left="50.0" right="5.0" />
                                  </HBox.margin>
                               </Button>
-                              <Button id="save" fx:id="deleteBtn1" mnemonicParsing="false" onAction="#onDelete" prefWidth="60.0" text="Delete">
+                              <Button id="save" fx:id="deleteBtnCat" mnemonicParsing="false" onAction="#onDeleteCat" prefWidth="60.0" text="Delete">
                                  <HBox.margin>
                                     <Insets right="5.0" />
                                  </HBox.margin>
                               </Button>
-                              <Button id="new" fx:id="clearBtn1" mnemonicParsing="false" onAction="#onClear" prefWidth="60.0" text="Clear">
+                              <Button id="new" fx:id="clearBtnCat" mnemonicParsing="false" onAction="#onClearCat" prefWidth="60.0" text="Clear">
                                  <HBox.margin>
                                     <Insets right="5.0" />
                                  </HBox.margin>
