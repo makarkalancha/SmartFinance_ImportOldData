@@ -1,4 +1,5 @@
 //rootProject.name = 'com.makco.smartfinance'
 rootProject.name = 'SmartFinance'
-include 'database_engine'/*, 'database_layer', 'utils'*/
+include 'database_engine','userinterface_control'
+/*, 'database_layer', 'utils'*/
 //showStandardStreams = true
