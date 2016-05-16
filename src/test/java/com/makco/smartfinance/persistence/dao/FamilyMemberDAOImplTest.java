@@ -2,8 +2,6 @@ package com.makco.smartfinance.persistence.dao;
 
 import org.junit.Test;
 
-import static org.junit.Assert.*;
-
 /**
  * User: Makar Kalancha
  * Date: 20/04/2016

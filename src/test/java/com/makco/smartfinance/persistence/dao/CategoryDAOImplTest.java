@@ -1,12 +1,8 @@
 package com.makco.smartfinance.persistence.dao;
 
-import com.makco.smartfinance.persistence.entity.CategoryGroup;
-import com.makco.smartfinance.persistence.entity.CategoryGroupDebit;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
 
 /**
  * User: Makar Kalancha

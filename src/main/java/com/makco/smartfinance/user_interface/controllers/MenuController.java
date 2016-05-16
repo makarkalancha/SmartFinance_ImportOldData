@@ -9,16 +9,17 @@ import com.makco.smartfinance.user_interface.constants.UserInterfaceConstants;
 import com.makco.smartfinance.user_interface.undoredo.CareTaker;
 import com.makco.smartfinance.user_interface.undoredo.UndoRedoScreen;
 import com.makco.smartfinance.user_interface.utility_screens.DialogMessages;
-import java.net.URL;
-import java.util.ResourceBundle;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.MenuItem;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import java.net.URL;
+import java.util.ResourceBundle;
 
 /**
  * Created by mcalancea on 2016-04-01.

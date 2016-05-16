@@ -1,12 +1,14 @@
 package com.makco.smartfinance.persistence.utils;
 
 import com.makco.smartfinance.persistence.entity.DateUnit;
+import org.junit.Test;
+
 import java.time.LocalDate;
 import java.time.Month;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
-import org.junit.Test;
+
 import static org.junit.Assert.assertEquals;
 
 /**

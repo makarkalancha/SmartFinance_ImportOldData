@@ -3,6 +3,9 @@ package com.makco.smartfinance.h2db.utils;
 import com.makco.smartfinance.h2db.DBConnectionResource;
 import com.makco.smartfinance.h2db.TestContext;
 import com.makco.smartfinance.h2db.utils.schema_constants.Table;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.junit.ClassRule;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -12,9 +15,6 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Calendar;
 import java.util.Date;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.junit.ClassRule;
 
 /**
  * Created by mcalancea on 2016-03-08.

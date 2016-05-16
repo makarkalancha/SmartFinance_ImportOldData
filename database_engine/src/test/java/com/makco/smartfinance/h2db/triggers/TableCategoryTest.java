@@ -7,11 +7,6 @@ import com.makco.smartfinance.h2db.DBConnectionResource;
 import com.makco.smartfinance.h2db.utils.H2DbUtilsTest;
 import com.makco.smartfinance.h2db.utils.JsonUtils;
 import com.makco.smartfinance.h2db.utils.schema_constants.Table;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.h2.jdbc.JdbcSQLException;
@@ -23,6 +18,13 @@ import org.junit.ClassRule;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
+
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import static org.junit.Assert.assertEquals;
 
 /**

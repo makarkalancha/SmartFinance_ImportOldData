@@ -3,16 +3,6 @@ package com.makco.smartfinance.user_interface.utility_screens;
 import com.makco.smartfinance.user_interface.constants.UserInterfaceConstants;
 import com.makco.smartfinance.user_interface.utility_screens.forms.DatePickerForm;
 import com.makco.smartfinance.user_interface.validation.ErrorEnum;
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.Optional;
-import java.util.stream.Collectors;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -28,6 +18,17 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * User: Makar Kalancha

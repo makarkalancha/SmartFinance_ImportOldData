@@ -2,16 +2,10 @@ package com.makco.smartfinance.services;
 
 import com.makco.smartfinance.persistence.dao.CategoryGroupDAO;
 import com.makco.smartfinance.persistence.dao.CategoryGroupDAOImpl;
-import com.makco.smartfinance.persistence.dao.CurrencyDAO;
-import com.makco.smartfinance.persistence.dao.CurrencyDAOImpl;
 import com.makco.smartfinance.persistence.entity.CategoryGroup;
-import com.makco.smartfinance.persistence.entity.CategoryGroupCredit;
-import com.makco.smartfinance.persistence.entity.CategoryGroupDebit;
-import com.makco.smartfinance.persistence.entity.Currency;
 import com.makco.smartfinance.user_interface.validation.ErrorEnum;
 import com.makco.smartfinance.user_interface.validation.RuleSet;
 import com.makco.smartfinance.user_interface.validation.rule_sets.CategoryGroupRuleSet;
-import com.makco.smartfinance.user_interface.validation.rule_sets.CurrencyRuleSet;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

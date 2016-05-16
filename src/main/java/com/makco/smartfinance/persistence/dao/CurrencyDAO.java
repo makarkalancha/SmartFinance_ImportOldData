@@ -1,6 +1,7 @@
 package com.makco.smartfinance.persistence.dao;
 
 import com.makco.smartfinance.persistence.entity.Currency;
+
 import java.util.List;
 
 /**

@@ -6,11 +6,6 @@ import com.makco.smartfinance.h2db.utils.DBObjectType;
 import com.makco.smartfinance.h2db.utils.H2DbUtils;
 import com.makco.smartfinance.h2db.utils.schema_constants.Table;
 import com.makco.smartfinance.h2db.utils.schema_constants.Trigger;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Random;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.After;
@@ -19,6 +14,13 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Test;
+
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Random;
+
 import static org.junit.Assert.assertEquals;
 
 /**

@@ -6,13 +6,6 @@ import com.makco.smartfinance.persistence.dao.dao_implementations.DateUnitDAOImp
 import com.makco.smartfinance.persistence.entity.DateUnit;
 import com.makco.smartfinance.persistence.utils.DateUnitUtil;
 import com.makco.smartfinance.persistence.utils.TestPersistenceManager;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.Month;
-import java.time.temporal.ChronoUnit;
-import java.util.List;
-import javax.persistence.EntityManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.After;
@@ -20,6 +13,14 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import javax.persistence.EntityManager;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.Month;
+import java.time.temporal.ChronoUnit;
+import java.util.List;
 
 /**
  * User: Makar Kalancha

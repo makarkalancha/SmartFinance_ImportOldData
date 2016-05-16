@@ -2,9 +2,10 @@ package com.makco.smartfinance.user_interface.controllers;
 
 import com.makco.smartfinance.user_interface.ControlledScreen;
 import com.makco.smartfinance.user_interface.ScreensController;
+import javafx.fxml.Initializable;
+
 import java.net.URL;
 import java.util.ResourceBundle;
-import javafx.fxml.Initializable;
 
 /**
  * Created by mcalancea on 2016-04-01.

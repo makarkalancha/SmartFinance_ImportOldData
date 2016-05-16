@@ -1,12 +1,15 @@
 package com.makco.smartfinance.persistence.entity.entity_manager.test_entities;
 
-import com.makco.smartfinance.constants.DataBaseConstants;
 import com.makco.smartfinance.persistence.entity.Category;
 import com.makco.smartfinance.persistence.entity.CategoryGroup;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import java.util.Collection;
-import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 

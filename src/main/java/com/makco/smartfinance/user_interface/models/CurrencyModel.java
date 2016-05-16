@@ -4,11 +4,12 @@ import com.makco.smartfinance.persistence.entity.Currency;
 import com.makco.smartfinance.services.CurrencyService;
 import com.makco.smartfinance.services.CurrencyServiceImpl;
 import com.makco.smartfinance.user_interface.validation.ErrorEnum;
-import java.util.EnumSet;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import java.util.EnumSet;
 
 /**
  * Created by mcalancea on 2016-04-12.

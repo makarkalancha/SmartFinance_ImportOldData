@@ -6,11 +6,12 @@ import com.makco.smartfinance.persistence.entity.Organization;
 import com.makco.smartfinance.user_interface.validation.ErrorEnum;
 import com.makco.smartfinance.user_interface.validation.RuleSet;
 import com.makco.smartfinance.user_interface.validation.rule_sets.OrganizationRuleSet;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 /**
  * Created by mcalancea on 2016-04-22.

@@ -2,15 +2,13 @@ package com.makco.smartfinance.persistence.entity.entity_manager;
 
 import com.google.common.collect.Lists;
 import com.makco.smartfinance.persistence.entity.Category;
-import com.makco.smartfinance.persistence.entity.entity_manager.test_entities.*;
 import com.makco.smartfinance.persistence.entity.CategoryGroup;
-import com.makco.smartfinance.utils.RandomWithinRange;
+import com.makco.smartfinance.persistence.entity.entity_manager.test_entities.CategoryCredit;
+import com.makco.smartfinance.persistence.entity.entity_manager.test_entities.CategoryDebit;
+import com.makco.smartfinance.persistence.entity.entity_manager.test_entities.CategoryGroupCredit;
+import com.makco.smartfinance.persistence.entity.entity_manager.test_entities.CategoryGroupDebit;
 import com.makco.smartfinance.persistence.utils.rules.EntityManagerRule;
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.Persistence;
-import javax.persistence.PersistenceUtil;
-import javax.persistence.Query;
+import com.makco.smartfinance.utils.RandomWithinRange;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.After;
@@ -21,6 +19,12 @@ import org.junit.FixMethodOrder;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
+
+import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.Persistence;
+import javax.persistence.PersistenceUtil;
+import javax.persistence.Query;
 
 import static org.junit.Assert.assertEquals;
 

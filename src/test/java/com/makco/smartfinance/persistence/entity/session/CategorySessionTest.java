@@ -7,11 +7,8 @@ import com.makco.smartfinance.persistence.entity.CategoryDebit;
 import com.makco.smartfinance.persistence.entity.CategoryGroup;
 import com.makco.smartfinance.persistence.entity.CategoryGroupCredit;
 import com.makco.smartfinance.persistence.entity.CategoryGroupDebit;
-import com.makco.smartfinance.utils.RandomWithinRange;
 import com.makco.smartfinance.persistence.utils.rules.SessionRule;
-import javax.persistence.NonUniqueResultException;
-import javax.persistence.Persistence;
-import javax.persistence.PersistenceUtil;
+import com.makco.smartfinance.utils.RandomWithinRange;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Query;
@@ -24,6 +21,11 @@ import org.junit.FixMethodOrder;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
+
+import javax.persistence.NonUniqueResultException;
+import javax.persistence.Persistence;
+import javax.persistence.PersistenceUtil;
+
 import static org.junit.Assert.assertEquals;
 
 /**

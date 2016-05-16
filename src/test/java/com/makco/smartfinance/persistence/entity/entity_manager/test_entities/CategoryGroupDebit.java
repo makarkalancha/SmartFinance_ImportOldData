@@ -2,12 +2,14 @@ package com.makco.smartfinance.persistence.entity.entity_manager.test_entities;
 
 import com.makco.smartfinance.constants.DataBaseConstants;
 import com.makco.smartfinance.persistence.entity.Category;
-import com.makco.smartfinance.persistence.entity.entity_manager.test_entities.CategoryDebit;
 import com.makco.smartfinance.persistence.entity.CategoryGroup;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.OneToMany;
 import java.util.Collection;
-import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -21,7 +23,7 @@ public class CategoryGroupDebit extends CategoryGroup<CategoryDebit> {
     //http://stackoverflow.com/questions/30838526/how-to-have-a-sorted-set-of-objects-based-on-a-specific-field
     //https://vladmihalcea.com/2015/03/05/a-beginners-guide-to-jpa-and-hibernate-cascade-types/
 //    https://howtoprogramwithjava.com/hibernate-onetomany-bidirectional-relationship/
-    @OneToMany(mappedBy = "categoryGroupDebit", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)//session is using CascadeType.ALL
+    @OneToMany(mappedBy = "categoryGroup", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)//session is using CascadeType.ALL
     @javax.persistence.OrderBy("name")
     private SortedSet<CategoryDebit> debitCategories = new TreeSet<>();
 //    private SortedSet<? extends Category> debitCategories = new TreeSet<CategoryDebit>(); 

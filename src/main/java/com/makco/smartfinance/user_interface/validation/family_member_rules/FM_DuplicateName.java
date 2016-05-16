@@ -6,6 +6,7 @@ import com.makco.smartfinance.services.FamilyMemberServiceImpl;
 import com.makco.smartfinance.user_interface.utility_screens.DialogMessages;
 import com.makco.smartfinance.user_interface.validation.ErrorEnum;
 import com.makco.smartfinance.user_interface.validation.Rule;
+
 import java.util.EnumSet;
 import java.util.List;
 

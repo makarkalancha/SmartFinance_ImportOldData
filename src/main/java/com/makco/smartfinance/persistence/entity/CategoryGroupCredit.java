@@ -3,14 +3,14 @@ package com.makco.smartfinance.persistence.entity;
 import com.google.common.base.Objects;
 import com.makco.smartfinance.constants.DataBaseConstants;
 
-import java.util.Collection;
-import java.util.SortedSet;
-import java.util.TreeSet;
 import javax.persistence.CascadeType;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
+import java.util.Collection;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 /**
  * Created by mcalancea on 2016-04-25.

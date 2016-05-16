@@ -1,9 +1,6 @@
 package com.makco.smartfinance.persistence.dao;
 
 import com.makco.smartfinance.persistence.entity.CategoryGroup;
-import com.makco.smartfinance.persistence.entity.CategoryGroupCredit;
-import com.makco.smartfinance.persistence.entity.CategoryGroupDebit;
-import com.makco.smartfinance.persistence.entity.Organization;
 import com.makco.smartfinance.persistence.utils.HibernateUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

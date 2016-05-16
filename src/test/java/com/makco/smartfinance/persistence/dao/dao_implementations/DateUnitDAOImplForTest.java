@@ -4,12 +4,12 @@ import com.makco.smartfinance.constants.DataBaseConstants;
 import com.makco.smartfinance.persistence.dao.DateUnitDAO;
 import com.makco.smartfinance.persistence.entity.DateUnit;
 import com.makco.smartfinance.persistence.utils.HibernateUtilTest;
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by mcalancea on 2016-04-19.

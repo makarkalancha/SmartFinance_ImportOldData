@@ -6,11 +6,9 @@ import com.makco.smartfinance.persistence.entity.CategoryGroup;
 import com.makco.smartfinance.persistence.entity.CategoryGroupCredit;
 import com.makco.smartfinance.persistence.entity.CategoryGroupDebit;
 import com.makco.smartfinance.persistence.utils.TestPersistenceSession;
-import com.sun.org.apache.xml.internal.security.algorithms.implementations.SignatureECDSA;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Hibernate;
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.resource.transaction.spi.TransactionStatus;
 

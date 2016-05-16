@@ -4,12 +4,13 @@ import com.makco.smartfinance.persistence.entity.FamilyMember;
 import com.makco.smartfinance.services.FamilyMemberService;
 import com.makco.smartfinance.services.FamilyMemberServiceImpl;
 import com.makco.smartfinance.user_interface.validation.ErrorEnum;
-import java.util.EnumSet;
-import java.util.List;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import java.util.EnumSet;
+import java.util.List;
 
 /**
  * Created by mcalancea on 2016-04-05.

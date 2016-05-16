@@ -1,18 +1,18 @@
 package com.makco.smartfinance.user_interface;
 
-import com.makco.smartfinance.user_interface.utility_screens.DialogMessages;
 import com.makco.smartfinance.user_interface.constants.Screens;
 import com.makco.smartfinance.user_interface.undoredo.CareTaker;
-import java.util.EnumMap;
-import java.util.Optional;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import com.makco.smartfinance.user_interface.utility_screens.DialogMessages;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import java.util.EnumMap;
+import java.util.Optional;
 
 /**
  * Created by mcalancea on 2016-04-01.

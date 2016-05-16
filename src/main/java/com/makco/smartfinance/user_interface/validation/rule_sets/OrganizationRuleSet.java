@@ -9,6 +9,7 @@ import com.makco.smartfinance.user_interface.validation.organization_rules.ORG_D
 import com.makco.smartfinance.user_interface.validation.organization_rules.ORG_DuplicateName;
 import com.makco.smartfinance.user_interface.validation.organization_rules.ORG_EmptyName;
 import com.makco.smartfinance.user_interface.validation.organization_rules.ORG_NameLength;
+
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;

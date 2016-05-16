@@ -1,15 +1,16 @@
 package com.makco.smartfinance.user_interface.utility_screens.forms;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.util.StringConverter;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 /**
  * Created by mcalancea on 2016-04-19.

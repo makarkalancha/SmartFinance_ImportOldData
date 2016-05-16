@@ -9,6 +9,7 @@ import com.makco.smartfinance.user_interface.validation.family_member_rules.FM_D
 import com.makco.smartfinance.user_interface.validation.family_member_rules.FM_DuplicateName;
 import com.makco.smartfinance.user_interface.validation.family_member_rules.FM_EmptyName;
 import com.makco.smartfinance.user_interface.validation.family_member_rules.FM_NameLength;
+
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;

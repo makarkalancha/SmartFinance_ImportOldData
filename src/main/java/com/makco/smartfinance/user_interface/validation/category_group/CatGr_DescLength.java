@@ -2,7 +2,6 @@ package com.makco.smartfinance.user_interface.validation.category_group;
 
 import com.makco.smartfinance.constants.DataBaseConstants;
 import com.makco.smartfinance.persistence.entity.CategoryGroup;
-import com.makco.smartfinance.persistence.entity.FamilyMember;
 import com.makco.smartfinance.user_interface.utility_screens.DialogMessages;
 import com.makco.smartfinance.user_interface.validation.ErrorEnum;
 import com.makco.smartfinance.user_interface.validation.Rule;

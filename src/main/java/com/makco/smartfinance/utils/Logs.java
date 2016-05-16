@@ -1,8 +1,9 @@
 package com.makco.smartfinance.utils;
 
-import java.io.PrintStream;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import java.io.PrintStream;
 
 /**
  * Created by mcalancea on 2016-04-05.

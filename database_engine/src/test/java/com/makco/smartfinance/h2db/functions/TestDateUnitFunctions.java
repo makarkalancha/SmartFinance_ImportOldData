@@ -2,14 +2,15 @@ package com.makco.smartfinance.h2db.functions;
 
 import com.makco.smartfinance.h2db.utils.TestUtilDateUnit;
 import com.makco.smartfinance.h2db.utils.schema_constants.Table;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Date;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 /**
  * Created by mcalancea on 2016-02-16.

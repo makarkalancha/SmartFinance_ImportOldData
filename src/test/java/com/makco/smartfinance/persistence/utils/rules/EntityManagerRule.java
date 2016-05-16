@@ -1,13 +1,14 @@
 package com.makco.smartfinance.persistence.utils.rules;
 
 import com.makco.smartfinance.persistence.utils.TestPersistenceManager;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.rules.MethodRule;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.Statement;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 
 /**
  * Created by mcalancea on 2016-04-28.

@@ -2,9 +2,14 @@ package com.makco.smartfinance.persistence.entity.entity_manager.test_entities;
 
 import com.google.common.base.Objects;
 import com.makco.smartfinance.constants.DataBaseConstants;
-import com.makco.smartfinance.persistence.entity.*;
+import com.makco.smartfinance.persistence.entity.Category;
+import com.makco.smartfinance.persistence.entity.CategoryGroup;
 
-import javax.persistence.*;
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 /**
  * Created by mcalancea on 2016-04-29.

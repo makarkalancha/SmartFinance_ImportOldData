@@ -3,10 +3,11 @@ package com.makco.smartfinance.services;
 import com.makco.smartfinance.persistence.dao.DateUnitDAO;
 import com.makco.smartfinance.persistence.dao.DateUnitDAOImpl;
 import com.makco.smartfinance.persistence.entity.DateUnit;
-import java.util.ArrayList;
-import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by mcalancea on 2016-04-21.

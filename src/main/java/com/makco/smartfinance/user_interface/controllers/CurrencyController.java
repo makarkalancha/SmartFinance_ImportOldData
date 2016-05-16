@@ -6,20 +6,13 @@ import com.makco.smartfinance.user_interface.Command;
 import com.makco.smartfinance.user_interface.ControlledScreen;
 import com.makco.smartfinance.user_interface.ScreensController;
 import com.makco.smartfinance.user_interface.constants.UserInterfaceConstants;
-import com.makco.smartfinance.user_interface.utility_screens.DialogMessages;
-import com.makco.smartfinance.user_interface.utility_screens.forms.ProgressIndicatorForm;
 import com.makco.smartfinance.user_interface.models.CurrencyModel;
 import com.makco.smartfinance.user_interface.undoredo.CareTaker;
 import com.makco.smartfinance.user_interface.undoredo.Memento;
 import com.makco.smartfinance.user_interface.undoredo.UndoRedoScreen;
+import com.makco.smartfinance.user_interface.utility_screens.DialogMessages;
+import com.makco.smartfinance.user_interface.utility_screens.forms.ProgressIndicatorForm;
 import com.makco.smartfinance.user_interface.validation.ErrorEnum;
-import java.net.URL;
-import java.util.Calendar;
-import java.util.EnumSet;
-import java.util.ResourceBundle;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.concurrent.Service;
@@ -34,6 +27,14 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import java.net.URL;
+import java.util.Calendar;
+import java.util.EnumSet;
+import java.util.ResourceBundle;
 
 /**
  * Created by mcalancea on 2016-04-12.

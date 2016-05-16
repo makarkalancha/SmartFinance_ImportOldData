@@ -1,9 +1,9 @@
 package com.makco.smartfinance.persistence.entity.converter;
 
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 /**
  * Created by mcalancea on 2016-04-19.

@@ -3,7 +3,6 @@ package com.makco.smartfinance.h2db.utils;
 import org.flywaydb.core.api.callback.BaseFlywayCallback;
 
 import java.sql.Connection;
-import java.sql.SQLException;
 
 /**
  * User: Makar Kalancha

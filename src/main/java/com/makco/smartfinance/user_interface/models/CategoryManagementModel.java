@@ -4,7 +4,6 @@ import com.makco.smartfinance.constants.DataBaseConstants;
 import com.makco.smartfinance.persistence.entity.CategoryGroup;
 import com.makco.smartfinance.persistence.entity.CategoryGroupCredit;
 import com.makco.smartfinance.persistence.entity.CategoryGroupDebit;
-import com.makco.smartfinance.persistence.entity.Currency;
 import com.makco.smartfinance.services.CategoryGroupService;
 import com.makco.smartfinance.services.CategoryGroupServiceImpl;
 import com.makco.smartfinance.user_interface.validation.ErrorEnum;
@@ -24,18 +23,18 @@ public class CategoryManagementModel {
     private ObservableList<CategoryGroup> categoryGroups = FXCollections.observableArrayList();
     private CategoryGroup pendingCategoryGroup;
 
-    public CategoryManagementModel(){
+    public CategoryManagementModel() {
 
     }
 
-    public void refresh() throws Exception{
-        try{
+    public void refresh() throws Exception {
+        try {
             if (!categoryGroups.isEmpty()) {
                 categoryGroups.clear();
             }
             categoryGroups = FXCollections.observableArrayList(categoryGroupService.categoryGroupList(true));
             LOG.debug("categoryGroups.size: " + categoryGroups.size());
-        }catch (Exception e) {
+        } catch (Exception e) {
             throw e;
         }
     }
@@ -54,7 +53,7 @@ public class CategoryManagementModel {
                 tmpCategoryGroup = pendingCategoryGroup;
                 pendingCategoryGroup = null;
             } else {
-                switch (type){
+                switch (type) {
                     case CREDIT:
                         tmpCategoryGroup = new CategoryGroupCredit(name, description);
                         break;
@@ -98,3 +97,4 @@ public class CategoryManagementModel {
     public void setPendingCategoryGroupProperty(CategoryGroup categoryGroup) throws Exception {
         pendingCategoryGroup = categoryGroup;
     }
+}

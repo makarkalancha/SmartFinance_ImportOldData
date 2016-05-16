@@ -2,7 +2,7 @@ package com.makco.smartfinance.utils.collection;
 
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
  * User: Makar Kalancha

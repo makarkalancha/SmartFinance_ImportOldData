@@ -2,9 +2,7 @@ package com.makco.smartfinance.persistence.entity;
 
 import com.google.common.base.Objects;
 import com.makco.smartfinance.constants.DataBaseConstants;
-import java.io.Serializable;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -13,6 +11,9 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 /**
  * Created by mcalancea on 2016-03-01.

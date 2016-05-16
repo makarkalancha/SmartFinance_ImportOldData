@@ -1,16 +1,16 @@
 package com.makco.smartfinance.user_interface.workers.prestart;
 
-import com.makco.smartfinance.h2db.utils.H2DbUtils;
 import com.makco.smartfinance.constants.DataBaseConstants;
+import com.makco.smartfinance.h2db.utils.H2DbUtils;
 import com.makco.smartfinance.services.DateUnitService;
 import com.makco.smartfinance.services.DateUnitServiceImpl;
 import com.makco.smartfinance.user_interface.Command;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * User: Makar Kalancha
