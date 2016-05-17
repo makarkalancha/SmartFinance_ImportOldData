@@ -21,7 +21,7 @@ import java.util.regex.Pattern;
  */
 //http://stackoverflow.com/questions/30882634/what-is-wrong-with-this-javafx-fxml-custom-component
 public class FilterableComboBox extends ComboBox<String> {
-    private final static Logger LOG = LogManager.getLogger(FilterableComboBox.class);
+//    private final static Logger LOG = LogManager.getLogger(FilterableComboBox.class);
 
     private ObservableList<String> initialList;
     private ObservableList<String> bufferList = FXCollections.observableArrayList();

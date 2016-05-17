@@ -70,9 +70,11 @@ dependencies {
 
     //https://softnoise.wordpress.com/2014/09/07/gradle-sub-project-test-dependencies-in-multi-project-builds/
     testCompile project(path: ':database_engine', configuration: 'testOutput')
+    testCompile project(path: ':userinterface_control', configuration: 'testOutput')
 }
 
 test.dependsOn ":database_engine:test"
+test.dependsOn ":userinterface_control:test"
 
 //1st approach: dependent jars are in separate folder $libsDir\\$lib_folder
 task copyLibDependecies(type: Copy) {

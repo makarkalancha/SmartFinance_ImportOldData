@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--<?import com.makco.smartfinance.user_interface.control.* ?>-->
-
+<!--<?scenebuilder-classpath-element ../../../../TableViewDemo/bin/com/company/jfx8/example/fxmltableview/FormattedTableCellFactory.class?>-->
+<?scenebuilder-classpath-element ../../../../../../../build/libs/lib/userinterface_control-1.0.jar?>
 <?import com.makco.smartfinance.javafx.control.FilterableComboBox?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
