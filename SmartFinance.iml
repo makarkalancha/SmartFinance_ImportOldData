@@ -60,5 +60,23 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="module-library" scope="TEST">
+      <library name="Gradle: C__svn_SRC_Java_working_dir_SmartFinance_userinterface_control_build_classes_test:">
+        <CLASSES>
+          <root url="file://$MODULE_DIR$/userinterface_control/build/classes/test" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library" scope="TEST">
+      <library name="Gradle: C__svn_SRC_Java_working_dir_SmartFinance_userinterface_control_build_resources_test:">
+        <CLASSES>
+          <root url="file://$MODULE_DIR$/userinterface_control/build/resources/test" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
   </component>
 </module>
