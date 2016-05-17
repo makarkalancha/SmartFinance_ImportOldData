@@ -15,24 +15,6 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="database_engine" />
-    <orderEntry type="module-library" scope="TEST">
-      <library name="Gradle: C__svn_SRC_Java_working_dir_SmartFinance_database_engine_build_classes_test:">
-        <CLASSES>
-          <root url="file://$MODULE_DIR$/database_engine/build/classes/test" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library" scope="TEST">
-      <library name="Gradle: C__svn_SRC_Java_working_dir_SmartFinance_database_engine_build_resources_test:">
-        <CLASSES>
-          <root url="file://$MODULE_DIR$/database_engine/build/resources/test" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
     <orderEntry type="library" name="Gradle: org.apache.logging.log4j:log4j-api:2.5" level="project" />
     <orderEntry type="library" name="Gradle: org.apache.logging.log4j:log4j-core:2.5" level="project" />
     <orderEntry type="library" name="Gradle: org.hibernate:hibernate-entitymanager:5.1.0.Final" level="project" />
