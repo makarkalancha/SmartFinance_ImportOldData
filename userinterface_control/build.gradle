@@ -1,22 +1,22 @@
 
-//configurations {
-//    compile
-//    log4j2api
-//    log4j2core
-//    testOutput
-//}
+configurations {
+    compile
+    log4j2api
+    log4j2core
+    testOutput
+}
 
-//dependencies {
-////    log4j2api 'org.apache.logging.log4j:log4j-api:2.5'
-////    log4j2core 'org.apache.logging.log4j:log4j-core:2.5'
-////    compile 'org.apache.commons:commons-lang3:3.4'
-////    testOutput sourceSets.test.output
-//}
+dependencies {
+    log4j2api 'org.apache.logging.log4j:log4j-api:2.5'
+    log4j2core 'org.apache.logging.log4j:log4j-core:2.5'
+    compile 'org.apache.commons:commons-lang3:3.4'
+    testOutput sourceSets.test.output
+}
 
-//jar {
-//    processResources {
-//        from(zipTree(configurations.log4j2api.asPath))
-//        files(configurations.log4j2core.asPath.split(";")).each{from(zipTree(it.path))}
-//        files(configurations.compile.asPath.split(";")).each{from(zipTree(it.path))}
-//    }
-//}
+jar {
+    processResources {
+        from(zipTree(configurations.log4j2api.asPath))
+        files(configurations.log4j2core.asPath.split(";")).each{from(zipTree(it.path))}
+        files(configurations.compile.asPath.split(";")).each{from(zipTree(it.path))}
+    }
+}

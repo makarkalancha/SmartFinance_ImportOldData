@@ -3,7 +3,7 @@
 <!--<?import com.makco.smartfinance.user_interface.control.* ?>-->
 <!--<?scenebuilder-classpath-element ../../../../TableViewDemo/bin/com/company/jfx8/example/fxmltableview/FormattedTableCellFactory.class?>-->
 <!--<?scenebuilder-classpath-element ../../../../../../../build/libs/lib/userinterface_control-1.0.jar?>-->
-<?import com.makco.smartfinance.javafx.control.FilterableComboBox?>
+<?import com.makco.smartfinance.javafx.control.AutoCompleteComboBox?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
@@ -39,16 +39,14 @@
                      <children>
                         <HBox>
                            <children>
-                              <FilterableComboBox prefWidth="68.0" promptText="Type">
-                              <!--<ComboBox prefWidth="68.0" promptText="Type">-->
+                              <AutoCompleteComboBox prefWidth="68.0" promptText="Type">
                                  <tooltip>
                                     <Tooltip text="Choose category group type" />
                                  </tooltip>
                                  <HBox.margin>
                                     <Insets bottom="5.0" left="50.0" top="5.0" />
                                  </HBox.margin>
-                              </FilterableComboBox>
-                              <!--</ComboBox>-->
+                              </AutoCompleteComboBox>
                               <Label text="*" textFill="RED">
                                  <tooltip>
                                     <Tooltip text="Required" />
@@ -64,7 +62,7 @@
                         </HBox>
                         <HBox>
                            <children>
-                              <TextField fx:id="nameTF" promptText="Name...">
+                              <AutoCompleteComboBox fx:id="nameTF" promptText="Name...">
                                  <VBox.margin>
                                     <Insets bottom="5.0" left="50.0" right="50.0" />
                                  </VBox.margin>
@@ -74,7 +72,7 @@
                                  <HBox.margin>
                                     <Insets bottom="5.0" left="50.0" top="5.0" />
                                  </HBox.margin>
-                              </TextField>
+                              </AutoCompleteComboBox>
                               <Label text="*" textFill="RED">
                                  <font>
                                     <Font size="24.0" />
@@ -128,14 +126,14 @@
                      <children>
                         <HBox>
                            <children>
-                              <ComboBox prefWidth="150.0" promptText="Category Group">
+                              <AutoCompleteComboBox prefWidth="150.0" promptText="Category Group">
                                  <tooltip>
                                     <Tooltip text="Enter name" />
                                  </tooltip>
                                  <HBox.margin>
                                     <Insets bottom="5.0" left="50.0" top="5.0" />
                                  </HBox.margin>
-                              </ComboBox>
+                              </AutoCompleteComboBox>
                               <Label text="*" textFill="RED">
                                  <font>
                                     <Font size="24.0" />
@@ -151,7 +149,7 @@
                         </HBox>
                         <HBox>
                            <children>
-                              <TextField fx:id="nameTF1" promptText="Name...">
+                              <AutoCompleteComboBox fx:id="nameTF1" promptText="Name...">
                                  <tooltip>
                                     <Tooltip text="Empty Tooltip" />
                                  </tooltip>
@@ -161,7 +159,7 @@
                                  <VBox.margin>
                                     <Insets bottom="5.0" left="50.0" right="50.0" />
                                  </VBox.margin>
-                              </TextField>
+                              </AutoCompleteComboBox>
                               <Label text="*" textFill="RED">
                                  <font>
                                     <Font size="24.0" />

@@ -13,7 +13,7 @@ import static org.junit.Assert.assertArrayEquals;
 /**
  * Created by mcalancea on 2016-05-16.
  */
-public class FilterableComboBoxTest {
+public class AutoCompleteComboBoxTest {
     List<String> initialList = new ArrayList<>();
 
     @Before

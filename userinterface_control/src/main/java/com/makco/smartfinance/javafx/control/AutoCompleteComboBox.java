@@ -5,12 +5,10 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
-//import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -28,33 +26,17 @@ import java.util.regex.Pattern;
  * 2) remove previous unsuccessful import of jar from C:\Users\mcalancea\AppData\Roaming\Scene Builder\Library\
  * 3) import just built jar
  *
+ *  logger is not working
  */
-
-//
-//
-
-public class FilterableComboBox extends ComboBox<String> {
-//    private final static Logger LOG = LogManager.getLogger(FilterableComboBox.class);
+public class AutoCompleteComboBox extends ComboBox<String> {
 
     private ObservableList<String> initialList;
     private ObservableList<String> bufferList = FXCollections.observableArrayList();
-    private String previousValue = "";
 
-    public FilterableComboBox() {
-//        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(
-//                "filterable_combo_box.fxml"));
-//        fxmlLoader.setRoot(this);
-//        fxmlLoader.setController(this);
-//
-//        try {
-//            fxmlLoader.load();
-//        } catch (IOException exception) {
-//            throw new RuntimeException(exception);
-//        }
-
+    public AutoCompleteComboBox() {
     }
 
-    public FilterableComboBox(ObservableList<String> items) {
+    public AutoCompleteComboBox(ObservableList<String> items) {
         super(items);
         super.setEditable(true);
         this.initialList = items;
@@ -64,19 +46,13 @@ public class FilterableComboBox extends ComboBox<String> {
 
     //http://stackoverflow.com/questions/19010619/javafx-filtered-combobox
     private void configAutoFilterListener() {
-        final FilterableComboBox currentInstance = this;
+        final AutoCompleteComboBox currentInstance = this;
         this.getEditor().textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
 
-                previousValue = oldValue;
-                final TextField editor = currentInstance.getEditor();
                 final String selected = currentInstance.getSelectionModel().getSelectedItem();
 
-//                LOG.debug(">>>observable:"+observable);
-//                LOG.debug(">>>oldValue:"+oldValue);
-//                LOG.debug(">>>newValue:"+newValue);
-//                LOG.debug(">>>selected:"+selected);
                 if (selected == null || !selected.equals(newValue)) {
                     filterItems(newValue, currentInstance);
                     currentInstance.show();
@@ -98,9 +74,8 @@ public class FilterableComboBox extends ComboBox<String> {
         Platform.runLater(new Runnable() {
             @Override
             public void run(){
-//                if(StringUtils.isEmpty(filter)){
-                if (filter != null && filter.length() > 0) {
-                    bufferList = FilterableComboBox.this.readFromList(filter, initialList);
+                if(StringUtils.isEmpty(filter)){
+                    bufferList = AutoCompleteComboBox.this.readFromList(filter, initialList);
                 }else {
                     bufferList.clear();
                     bufferList.addAll(filterString(filter));
