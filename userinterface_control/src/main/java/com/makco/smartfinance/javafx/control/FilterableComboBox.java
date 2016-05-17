@@ -5,12 +5,14 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -20,6 +22,7 @@ import java.util.regex.Pattern;
  * Created by mcalancea on 2016-05-16.
  */
 //http://stackoverflow.com/questions/30882634/what-is-wrong-with-this-javafx-fxml-custom-component
+//todo custom control http://docs.oracle.com/javafx/2/fxml_get_started/custom_control.htm
 public class FilterableComboBox extends ComboBox<String> {
 //    private final static Logger LOG = LogManager.getLogger(FilterableComboBox.class);
 
@@ -28,6 +31,16 @@ public class FilterableComboBox extends ComboBox<String> {
     private String previousValue = "";
 
     public FilterableComboBox() {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(
+                "filterabel_combo_box.fxml"));
+        fxmlLoader.setRoot(this);
+        fxmlLoader.setController(this);
+
+        try {
+            fxmlLoader.load();
+        } catch (IOException exception) {
+            throw new RuntimeException(exception);
+        }
 
     }
 
