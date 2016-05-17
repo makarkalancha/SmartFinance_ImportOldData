@@ -32,7 +32,7 @@ public class FilterableComboBox extends ComboBox<String> {
 
     public FilterableComboBox() {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(
-                "filterabel_combo_box.fxml"));
+                "filterable_combo_box.fxml"));
         fxmlLoader.setRoot(this);
         fxmlLoader.setController(this);
 
