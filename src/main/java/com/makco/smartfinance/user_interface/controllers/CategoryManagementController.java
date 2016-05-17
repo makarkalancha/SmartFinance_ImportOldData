@@ -1,12 +1,12 @@
 package com.makco.smartfinance.user_interface.controllers;
 
 import com.makco.smartfinance.constants.DataBaseConstants;
-import com.makco.smartfinance.persistence.entity.Currency;
+import com.makco.smartfinance.persistence.entity.CategoryGroup;
 import com.makco.smartfinance.user_interface.Command;
 import com.makco.smartfinance.user_interface.ControlledScreen;
 import com.makco.smartfinance.user_interface.ScreensController;
 import com.makco.smartfinance.user_interface.constants.UserInterfaceConstants;
-import com.makco.smartfinance.user_interface.models.CurrencyModel;
+import com.makco.smartfinance.user_interface.models.CategoryManagementModel;
 import com.makco.smartfinance.user_interface.undoredo.CareTaker;
 import com.makco.smartfinance.user_interface.undoredo.Memento;
 import com.makco.smartfinance.user_interface.undoredo.UndoRedoScreen;
@@ -15,6 +15,7 @@ import com.makco.smartfinance.user_interface.utility_screens.forms.ProgressIndic
 import com.makco.smartfinance.user_interface.validation.ErrorEnum;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.collections.FXCollections;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javafx.concurrent.Worker;
@@ -22,18 +23,20 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.EnumSet;
+import java.util.List;
 import java.util.ResourceBundle;
 
 /**
@@ -42,126 +45,132 @@ import java.util.ResourceBundle;
 public class CategoryManagementController implements Initializable, ControlledScreen, UndoRedoScreen {
     private final static Logger LOG = LogManager.getLogger(CategoryManagementController.class);
     private ScreensController myController;
-    private CurrencyModel currencyModel = new CurrencyModel();
+    private CategoryManagementModel categoryManagementModel = new CategoryManagementModel();
 
     private ActionEvent actionEvent;
-    private Worker<Void> onDeleteWorker;
-    private Worker<EnumSet<ErrorEnum>> onSaveWorker;
-    private Worker<Void> onRefreshWorker;
+    private Worker<Void> onDeleteCategoryGroupWorker;
+    private Worker<EnumSet<ErrorEnum>> onSaveCategoryGroupWorker;
+    private Worker<Void> onRefreshCategoryGroupWorker;
+    private List<String> categoryGroupTypeStringList = new ArrayList<>();
+
     private ProgressIndicatorForm pForm = new ProgressIndicatorForm();
 
     private CareTaker careTaker;
     private BooleanProperty isNotUndo = new SimpleBooleanProperty(true);
 
     @FXML
-    private TableView<Currency> table;
+    private TableView<CategoryGroup> cgTable;
     @FXML
-    private TextField codeTF;
+    private ComboBox<String> cgTypeACCB;
     @FXML
-    private TextField nameTF;
+    private TextField cgNameTF;
     @FXML
-    private TextArea descTA;
+    private TextArea cgDescTA;
     @FXML
-    private Button clearBtn;
+    private Button cgClearBtn;
     @FXML
-    private Button saveBtn;
+    private Button cgSaveBtn;
     @FXML
-    private Button deleteBtn;
+    private Button cgDeleteBtn;
 
     public CategoryManagementController(){
         try{
-            onDeleteWorker = new Service<Void>() {
+            onDeleteCategoryGroupWorker = new Service<Void>() {
                 @Override
                 protected Task<Void> createTask() {
                     return new Task<Void>() {
                         @Override
                         protected Void call() throws Exception {
-                            currencyModel.deletePendingCurrency();
+                            categoryManagementModel.deletePendingCategoryGroup();
                             return null;
                         }
                     };
                 }
             };
-            onSaveWorker = new Service<EnumSet<ErrorEnum>>() {
+            onSaveCategoryGroupWorker = new Service<EnumSet<ErrorEnum>>() {
                 @Override
                 protected Task<EnumSet<ErrorEnum>> createTask() {
                     return new Task<EnumSet<ErrorEnum>>() {
                         @Override
                         protected EnumSet<ErrorEnum> call() throws Exception {
-                            return currencyModel.savePendingCurrency(codeTF.getText(), nameTF.getText(), descTA.getText());
+                            return categoryManagementModel.savePendingCategoryGroup(
+                                    DataBaseConstants.CATEGORY_GROUP_TYPE.valueOf(cgTypeACCB.getValue()),
+                                    cgNameTF.getText(),
+                                    cgDescTA.getText());
                         }
                     };
                 }
             };
-            onRefreshWorker = new Service<Void>() {
+            onRefreshCategoryGroupWorker = new Service<Void>() {
                 @Override
                 protected Task<Void> createTask() {
                     return new Task<Void>() {
                         @Override
                         protected Void call() throws Exception {
-                            currencyModel.refreshCurrency();
+                            categoryManagementModel.refresh();
                             return null;
                         }
                     };
                 }
             };
         }catch (Exception e){
-            //not in finally because refreshCurrency must run before populateTable
-            startService(onRefreshWorker,null);
+            //not in finally because refreshCurrency must run before populateCategoryGroupTable
+            startService(onRefreshCategoryGroupWorker,null);
             DialogMessages.showExceptionAlert(e);
         }
     }
 
     public void initializeServices(){
         try{
-            ((Service<Void>) onDeleteWorker).setOnSucceeded(event -> {
-                LOG.debug("onDeleteWorker->setOnSucceeded");
-                LOG.debug(">>>>>>>>onDeleteWorker->setOnSucceeded: pForm.getDialogStage().close()");
+            ((Service<Void>) onDeleteCategoryGroupWorker).setOnSucceeded(event -> {
+                LOG.debug("onDeleteCategoryGroupWorker->setOnSucceeded");
+                LOG.debug(">>>>>>>>onDeleteCategoryGroupWorker->setOnSucceeded: pForm.getDialogStage().close()");
                 pForm.close();
-                populateTable();
+                populateCategoryGroupTable();
             });
-            ((Service<Void>) onDeleteWorker).setOnFailed(event -> {
-                LOG.debug("onDeleteWorker->setOnFailed");
-                LOG.debug(">>>>>>>>onDeleteWorker->setOnFailed: pForm.getDialogStage().close()");
+            ((Service<Void>) onDeleteCategoryGroupWorker).setOnFailed(event -> {
+                LOG.debug("onDeleteCategoryGroupWorker->setOnFailed");
+                LOG.debug(">>>>>>>>onDeleteCategoryGroupWorker->setOnFailed: pForm.getDialogStage().close()");
                 pForm.close();
-                populateTable();
-                DialogMessages.showExceptionAlert(onDeleteWorker.getException());
+                populateCategoryGroupTable();
+                DialogMessages.showExceptionAlert(onDeleteCategoryGroupWorker.getException());
             });
-            ((Service<EnumSet<ErrorEnum>>) onSaveWorker).setOnSucceeded(event -> {
-                LOG.debug("onSaveWorker->setOnSucceeded");
-                LOG.debug(">>>>>>>>onSaveWorker->setOnSucceeded: pForm.getDialogStage().close()");
+            ((Service<EnumSet<ErrorEnum>>) onSaveCategoryGroupWorker).setOnSucceeded(event -> {
+                LOG.debug("onSaveCategoryGroupWorker->setOnSucceeded");
+                LOG.debug(">>>>>>>>onSaveCategoryGroupWorker->setOnSucceeded: pForm.getDialogStage().close()");
                 pForm.close();
-                populateTable();
-                EnumSet<ErrorEnum> errors = onSaveWorker.getValue();
+                populateCategoryGroupTable();
+                EnumSet<ErrorEnum> errors = onSaveCategoryGroupWorker.getValue();
                 if(!errors.isEmpty()) {
-                    DialogMessages.showErrorDialog("Error while saving Currency: " + codeTF.getText(),
-                            (EnumSet<ErrorEnum>) ((Service) onSaveWorker).getValue(), null);
+                    DialogMessages.showErrorDialog("Error while saving Category Group: "
+                                    + cgTypeACCB.getValue() + ", " + cgNameTF.getText(),
+                            (EnumSet<ErrorEnum>) ((Service) onSaveCategoryGroupWorker).getValue(), null);
                 }
-                onClear(actionEvent);
+                onClearCategoryGroup(actionEvent);
             });
-            ((Service<EnumSet<ErrorEnum>>) onSaveWorker).setOnFailed(event -> {
-                LOG.debug("onSaveWorker->setOnFailed");
-                LOG.debug(">>>>>>>>onSaveWorker->setOnFailed: pForm.getDialogStage().close()");
+            ((Service<EnumSet<ErrorEnum>>) onSaveCategoryGroupWorker).setOnFailed(event -> {
+                LOG.debug("onSaveCategoryGroupWorker->setOnFailed");
+                LOG.debug(">>>>>>>>onSaveCategoryGroupWorker->setOnFailed: pForm.getDialogStage().close()");
                 pForm.close();
-                populateTable();
-                DialogMessages.showExceptionAlert(onSaveWorker.getException());
+                populateCategoryGroupTable();
+                DialogMessages.showExceptionAlert(onSaveCategoryGroupWorker.getException());
             });
-            ((Service<Void>) onRefreshWorker).setOnSucceeded(event -> {
-                LOG.debug("onRefreshWorker->setOnSucceeded");
-                LOG.debug(">>>>>>>>onRefreshWorker->setOnSucceeded: pForm.getDialogStage().close()");
+            ((Service<Void>) onRefreshCategoryGroupWorker).setOnSucceeded(event -> {
+                LOG.debug("onRefreshCategoryGroupWorker->setOnSucceeded");
+                LOG.debug(">>>>>>>>onRefreshCategoryGroupWorker->setOnSucceeded: pForm.getDialogStage().close()");
                 pForm.close();
-                populateTable();
+                populateCategoryGroupTable();
             });
-            ((Service<Void>) onRefreshWorker).setOnFailed(event -> {
-                LOG.debug("onRefreshWorker->setOnFailed");
-                LOG.debug(">>>>>>>>onRefreshWorker->setOnFailed: pForm.getDialogStage().close()");
+            ((Service<Void>) onRefreshCategoryGroupWorker).setOnFailed(event -> {
+                LOG.debug("onRefreshCategoryGroupWorker->setOnFailed");
+                LOG.debug(">>>>>>>>onRefreshCategoryGroupWorker->setOnFailed: pForm.getDialogStage().close()");
                 pForm.close();
-                populateTable();
-                DialogMessages.showExceptionAlert(onRefreshWorker.getException());
+                populateCategoryGroupTable();
+                DialogMessages.showExceptionAlert(onRefreshCategoryGroupWorker.getException());
             });
         }catch (Exception e){
-            //not in finally because refreshCurrency must run before populateTable
-            startService(onRefreshWorker,null);
+            //not in finally because refreshCurrency must run before populateCategoryGroupTable
+            startService(onRefreshCategoryGroupWorker,null);
             DialogMessages.showExceptionAlert(e);
         }
     }
@@ -193,10 +202,10 @@ public class CategoryManagementController implements Initializable, ControlledSc
         try{
             careTaker.clear();
             initializeServices();
-            startService(onRefreshWorker, null);
-            table.getSelectionModel().selectedItemProperty().addListener((observable, oldSelection, newSelection) -> {
+            startService(onRefreshCategoryGroupWorker, null);
+            cgTable.getSelectionModel().selectedItemProperty().addListener((observable, oldSelection, newSelection) -> {
                 if (newSelection != null) {
-                    populateForm();
+                    populateFormCategoryGroup();
                 }
             });
             myController.setToolbar_Save(new Command() {
@@ -204,9 +213,9 @@ public class CategoryManagementController implements Initializable, ControlledSc
                 public void execute() {
                     try {
                         LOG.debug("CategoryManagementController->onSave");
-                        startService(onSaveWorker, new ActionEvent());
+                        startService(onSaveCategoryGroupWorker, new ActionEvent());
                     } catch (Exception e) {
-                        //no refreshCurrency() because there are in deletePendingCurrency, populateTable, onClear
+                        //no refresh() because there are in deletePendingCategoryGroup, populateCategoryGroupTable, onClear
                         DialogMessages.showExceptionAlert(e);
                     }
                 }
@@ -224,16 +233,27 @@ public class CategoryManagementController implements Initializable, ControlledSc
                     }
             );
         }catch (Exception e){
-            startService(onRefreshWorker,null);
+            startService(onRefreshCategoryGroupWorker,null);
             DialogMessages.showExceptionAlert(e);
         }
+    }
+
+    private List<String> getCategoryGroupTypeStringList(){
+        if(categoryGroupTypeStringList.size() == 0){
+            for(DataBaseConstants.CATEGORY_GROUP_TYPE category_group_type : DataBaseConstants.CATEGORY_GROUP_TYPE.values()){
+                categoryGroupTypeStringList.add(category_group_type.toString());
+            }
+        }
+
+        return categoryGroupTypeStringList;
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources){
         try {
-            codeTF.setPrefColumnCount(DataBaseConstants.CUR_CODE_MAX_LGTH);
-            codeTF.textProperty().addListener((observable, oldValue, newValue) -> {
+            cgTypeACCB.setItems(FXCollections.observableList(getCategoryGroupTypeStringList()));
+//            cgTypeACCB.setPrefWidth(DataBaseConstants.Cgtype_CODE_MAX_LGTH);
+            cgTypeACCB.valueProperty().addListener((observable, oldValue, newValue) -> {
                 if (isNotUndo.getValue()) {
                     saveForm();
                 } else {
@@ -241,8 +261,8 @@ public class CategoryManagementController implements Initializable, ControlledSc
                 }
             });
 
-            nameTF.setPrefColumnCount(DataBaseConstants.CUR_NAME_MAX_LGTH);
-            nameTF.textProperty().addListener((observable, oldValue, newValue) -> {
+            cgNameTF.setPrefColumnCount(DataBaseConstants.CG_NAME_MAX_LGTH);
+            cgNameTF.textProperty().addListener((observable, oldValue, newValue) -> {
                 if (isNotUndo.getValue()) {
                     saveForm();
                 } else {
@@ -250,144 +270,165 @@ public class CategoryManagementController implements Initializable, ControlledSc
                 }
             });
 
-            descTA.setPrefColumnCount(DataBaseConstants.CUR_DESCRIPTION_MAX_LGTH);
-            descTA.textProperty().addListener((observable, oldValue, newValue) -> {
+            cgDescTA.setPrefColumnCount(DataBaseConstants.CG_DESCRIPTION_MAX_LGTH);
+            cgDescTA.textProperty().addListener((observable, oldValue, newValue) -> {
                 if (isNotUndo.getValue()) {
                     saveForm();
                 } else {
                     isNotUndo.setValue(true);
                 }
             });
-            clearBtn.setDisable(true);
-            saveBtn.setDisable(false);
-            deleteBtn.setDisable(true);
+            cgClearBtn.setDisable(true);
+            cgSaveBtn.setDisable(false);
+            cgDeleteBtn.setDisable(true);
         } catch (Exception e) {
-            //not in finally because refreshCurrency must run before populateTable
-            startService(onRefreshWorker, null);
+            //not in finally because refreshCurrency must run before populateCategoryGroupTable
+            startService(onRefreshCategoryGroupWorker, null);
             DialogMessages.showExceptionAlert(e);
         }
     }
 
     @FXML
-    public void onClear(ActionEvent event){
+    public void onClearCategoryGroup(ActionEvent event){
         try{
-            codeTF.clear();
-            nameTF.clear();
-            descTA.clear();
-            clearBtn.setDisable(false);
-            saveBtn.setDisable(false);
-            deleteBtn.setDisable(true);
+            cgTypeACCB.setValue(getCategoryGroupTypeStringList().get(0));
+            cgNameTF.clear();
+            cgDescTA.clear();
+            cgClearBtn.setDisable(false);
+            cgSaveBtn.setDisable(false);
+            cgDeleteBtn.setDisable(true);
             careTaker.clear();
         }catch (Exception e){
-            startService(onRefreshWorker,null);
+            startService(onRefreshCategoryGroupWorker,null);
             DialogMessages.showExceptionAlert(e);
         }
     }
 
     @FXML
-    public void onSave(ActionEvent event){
+    public void onSaveCategoryGroup(ActionEvent event){
         try {
             LOG.debug("CategoryManagementController->onSave");
-            startService(onSaveWorker, event);
+            startService(onSaveCategoryGroupWorker, event);
             careTaker.clear();
         } catch (Exception e) {
-            //no refreshCurrency() because there are in deletePendingCurrency, populateTable, onClear
+            //no refresh() because there are in deletePendingCategoryGroup, populateCategoryGroupTable, onClear
             DialogMessages.showExceptionAlert(e);
         }
     }
 
     @FXML
-    public void onDelete(ActionEvent event){
+    public void onDeleteCategoryGroup(ActionEvent event){
         try {
-            String title = UserInterfaceConstants.CURRENCY_WINDOW_TITLE;
-            String headerText = "Currency Deletion";
-            StringBuilder contentText = new StringBuilder("Are you sure you want to delete currency ");
+            String title = UserInterfaceConstants.CATEGORY_MANAGEMENT_WINDOW_TITLE;
+            String headerText = "Category Group Deletion";
+            StringBuilder contentText = new StringBuilder("Are you sure you want to delete category group ");
             contentText.append("\"");
-            contentText.append(codeTF.getText());
+            contentText.append(cgTypeACCB.getValue());
+            contentText.append("\" and \"");
+            contentText.append(cgNameTF.getText());
             contentText.append("\"?");
             if(DialogMessages.showConfirmationDialog(title,headerText,contentText.toString(),null)) {
-                startService(onDeleteWorker, event);
-                populateTable();
-                onClear(actionEvent);
+                startService(onDeleteCategoryGroupWorker, event);
+                populateCategoryGroupTable();
+                onClearCategoryGroup(actionEvent);
             }
         } catch (Exception e) {
-            //no refreshCurrency() because there are in deletePendingCurrency, populateTable, onClear
+            //no refresh() because there are in deletePendingCategoryGroup, populateCategoryGroupTable, onClear
             DialogMessages.showExceptionAlert(e);
         }
     }
 
-    private void populateForm(){
-        try{
-            clearBtn.setDisable(false);
-            saveBtn.setDisable(false);
-            deleteBtn.setDisable(false);
-            currencyModel.setPendingCurrencyProperty(table.getSelectionModel().getSelectedItem());
+    @FXML
+    public void onClearCategory(ActionEvent event){
 
-            codeTF.setText(currencyModel.getPendingCurrency().getCode());
-            nameTF.setText(currencyModel.getPendingCurrency().getName());
-            descTA.setText(currencyModel.getPendingCurrency().getDescription());
+    }
+
+    @FXML
+    public void onSaveCategory(ActionEvent event){
+
+    }
+
+    @FXML
+    public void onDeleteCategory(ActionEvent event){
+
+    }
+
+    private void populateFormCategoryGroup(){
+        try{
+            cgClearBtn.setDisable(false);
+            cgSaveBtn.setDisable(false);
+            cgDeleteBtn.setDisable(false);
+            categoryManagementModel.setPendingCategoryGroupProperty(cgTable.getSelectionModel().getSelectedItem());
+
+            cgTypeACCB.setValue(categoryManagementModel.getPendingCategoryGroup().getCategoryGroupType());
+            cgNameTF.setText(categoryManagementModel.getPendingCategoryGroup().getName());
+            cgDescTA.setText(categoryManagementModel.getPendingCategoryGroup().getDescription());
         }catch (Exception e){
-            startService(onRefreshWorker,null);
+            startService(onRefreshCategoryGroupWorker,null);
             DialogMessages.showExceptionAlert(e);
         }
     }
 
-    private void populateTable(){
+    private void populateCategoryGroupTable(){
         try{
-            LOG.debug("currencyModel.getCurrencies().size():" + currencyModel.getCurrencies().size());
-            table.getItems().clear();
-            table.setItems(currencyModel.getCurrencies());
+            LOG.debug("categoryManagementModel.getCategoryGroups().size():" + categoryManagementModel.getCategoryGroups().size());
+            cgTable.getItems().clear();
+            //TODO if add another method getCategoryGroup(boolean) to get categoryGroup with/without categories
+            cgTable.setItems(categoryManagementModel.getCategoryGroups());
 
-            TableColumn<Currency, Long> currencyIdCol = new TableColumn<>("ID");
-            currencyIdCol.setCellValueFactory(new PropertyValueFactory<Currency, Long>("id"));
+            TableColumn<CategoryGroup, Long> categoryGroupIdCol = new TableColumn<>("ID");
+            categoryGroupIdCol.setCellValueFactory(new PropertyValueFactory<CategoryGroup, Long>("id"));
 
-            TableColumn<Currency, String> currencyCodeCol = new TableColumn<>("Code");
-            currencyCodeCol.setCellValueFactory(new PropertyValueFactory<Currency, String>("code"));
+            //todo find the way to get value from method
+            TableColumn<CategoryGroup, String> categoryGroupTypeCol = new TableColumn<>("Type");
+            categoryGroupTypeCol.setCellValueFactory(new PropertyValueFactory<CategoryGroup, String>("type"));
 
-            TableColumn<Currency, String> currencyNameCol = new TableColumn<>("Name");
-            currencyNameCol.setCellValueFactory(new PropertyValueFactory<Currency, String>("name"));
+            TableColumn<CategoryGroup, String> categoryGroupNameCol = new TableColumn<>("Name");
+            categoryGroupNameCol.setCellValueFactory(new PropertyValueFactory<CategoryGroup, String>("name"));
 
-            TableColumn<Currency, String> currencyDescCol = new TableColumn<>("Description");
-            currencyDescCol.setCellValueFactory(new PropertyValueFactory<Currency, String>("description"));
+            TableColumn<CategoryGroup, String> categoryGroupDescCol = new TableColumn<>("Description");
+            categoryGroupDescCol.setCellValueFactory(new PropertyValueFactory<CategoryGroup, String>("description"));
 
-            TableColumn<Currency, Calendar> currencyCreatedCol = new TableColumn<>("Created on");
-            currencyCreatedCol.setCellValueFactory(new PropertyValueFactory<Currency, Calendar>("createdOn"));
+            TableColumn<CategoryGroup, Calendar> categoryGroupCreatedCol = new TableColumn<>("Created on");
+            categoryGroupCreatedCol.setCellValueFactory(new PropertyValueFactory<CategoryGroup, Calendar>("createdOn"));
 
-            TableColumn<Currency, Calendar> currencyUpdatedCol = new TableColumn<>("Updated on");
-            currencyUpdatedCol.setCellValueFactory(new PropertyValueFactory<Currency, Calendar>("updatedOn"));
+            TableColumn<CategoryGroup, Calendar> categoryGroupUpdatedCol = new TableColumn<>("Updated on");
+            categoryGroupUpdatedCol.setCellValueFactory(new PropertyValueFactory<CategoryGroup, Calendar>("updatedOn"));
 
-            table.getColumns().setAll(currencyIdCol, currencyCodeCol, currencyNameCol, currencyDescCol, currencyCreatedCol, currencyUpdatedCol);
+            cgTable.getColumns().setAll(categoryGroupIdCol, categoryGroupTypeCol, categoryGroupNameCol,
+                    categoryGroupDescCol, categoryGroupCreatedCol, categoryGroupUpdatedCol);
+
         }catch (Exception e){
-            startService(onRefreshWorker,null);
+            startService(onRefreshCategoryGroupWorker,null);
             DialogMessages.showExceptionAlert(e);
         }
     }
 
     @Override
     public void saveForm() {
-        try {
-            careTaker.saveState(new CurrencyFormState(codeTF.getText(), nameTF.getText(), descTA.getText()));
-        } catch (Exception e) {
-            DialogMessages.showExceptionAlert(e);
-        }
+//        try {
+//            careTaker.saveState(new CurrencyFormState(codeTF.getText(), nameTF.getText(), descTA.getText()));
+//        } catch (Exception e) {
+//            DialogMessages.showExceptionAlert(e);
+//        }
     }
 
     @Override
     public void restoreFormState(Memento memento) {
-        try {
-            CurrencyFormState formState = (CurrencyFormState) memento;
-            codeTF.setText(formState.getCodeTFStr());
-            nameTF.setText(formState.getNameTFStr());
-            descTA.setText(formState.getDescTAStr());
-        } catch (Exception e) {
-            DialogMessages.showExceptionAlert(e);
-        }
+//        try {
+//            CurrencyFormState formState = (CurrencyFormState) memento;
+//            codeTF.setText(formState.getCodeTFStr());
+//            nameTF.setText(formState.getNameTFStr());
+//            descTA.setText(formState.getDescTAStr());
+//        } catch (Exception e) {
+//            DialogMessages.showExceptionAlert(e);
+//        }
     }
 
     @Override
     public void close() {
         try {
-            onClear(new ActionEvent());
+            onClearCategoryGroup(new ActionEvent());
             myController.setToolbar_Save(null);
             myController.setToolbar_Undo(null);
             myController.setToolbar_Redo(null);
@@ -399,34 +440,34 @@ public class CategoryManagementController implements Initializable, ControlledSc
     @Override
     public boolean askPermissionToClose() {
         boolean result = true;
-        try{
-            StringBuilder contentText = new StringBuilder();
-            if(!StringUtils.isBlank(codeTF.getText())) {
-                contentText.append("Code (");
-                contentText.append(codeTF.getText());
-                contentText.append(") is not saved. ");
-            }
-
-            if(!StringUtils.isBlank(nameTF.getText())) {
-                contentText.append("Name (");
-                contentText.append(nameTF.getText());
-                contentText.append(") is not saved. ");
-            }
-
-            if(!StringUtils.isBlank(descTA.getText())) {
-                contentText.append("Description (");
-                contentText.append(descTA.getText());
-                contentText.append(") is not saved. ");
-            }
-
-            if(contentText.length() > 0){
-                contentText.append("Are you sure you want to close this window?");
-                result = DialogMessages.showConfirmationDialog(UserInterfaceConstants.CURRENCY_WINDOW_TITLE,
-                        "Not all fields are empty", contentText.toString(), null);
-            }
-        }catch (Exception e){
-            DialogMessages.showExceptionAlert(e);
-        }
+//        try{
+//            StringBuilder contentText = new StringBuilder();
+//            if(!StringUtils.isBlank(codeTF.getText())) {
+//                contentText.append("Code (");
+//                contentText.append(codeTF.getText());
+//                contentText.append(") is not saved. ");
+//            }
+//
+//            if(!StringUtils.isBlank(nameTF.getText())) {
+//                contentText.append("Name (");
+//                contentText.append(nameTF.getText());
+//                contentText.append(") is not saved. ");
+//            }
+//
+//            if(!StringUtils.isBlank(descTA.getText())) {
+//                contentText.append("Description (");
+//                contentText.append(descTA.getText());
+//                contentText.append(") is not saved. ");
+//            }
+//
+//            if(contentText.length() > 0){
+//                contentText.append("Are you sure you want to close this window?");
+//                result = DialogMessages.showConfirmationDialog(UserInterfaceConstants.CURRENCY_WINDOW_TITLE,
+//                        "Not all fields are empty", contentText.toString(), null);
+//            }
+//        }catch (Exception e){
+//            DialogMessages.showExceptionAlert(e);
+//        }
         return result;
     }
 

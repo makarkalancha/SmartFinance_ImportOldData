@@ -3,6 +3,13 @@
 <!--<?import com.makco.smartfinance.user_interface.control.* ?>-->
 <!--<?scenebuilder-classpath-element ../../../../TableViewDemo/bin/com/company/jfx8/example/fxmltableview/FormattedTableCellFactory.class?>-->
 <!--<?scenebuilder-classpath-element ../../../../../../../build/libs/lib/userinterface_control-1.0.jar?>-->
+
+<?import com.makco.smartfinance.javafx.control.*?>
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 <?import com.makco.smartfinance.javafx.control.AutoCompleteComboBox?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
@@ -18,28 +25,32 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-<VBox fx:id="vBox" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.makco.smartfinance.user_interface.controllers.CategoryManagement">
+
+<VBox fx:id="vBox" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.makco.smartfinance.user_interface.controllers.CategoryManagementController">
    <children>
       <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="30.0" prefWidth="441.0" text="Category Management">
          <font>
             <Font size="20.0" />
          </font>
       </Label>
-      <TreeTableView prefHeight="355.0" prefWidth="580.0">
-        <columns>
-          <TreeTableColumn prefWidth="75.0" text="C1" />
-          <TreeTableColumn prefWidth="75.0" text="C2" />
-        </columns>
-      </TreeTableView>
-      <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE">
+      <TabPane prefHeight="562.0" prefWidth="580.0" tabClosingPolicy="UNAVAILABLE">
         <tabs>
           <Tab text="Category Group">
                <content>
                   <VBox prefHeight="200.0" prefWidth="100.0">
                      <children>
+                        <TableView fx:id="cgTable" prefHeight="350.0" prefWidth="580.0">
+                          <columns>
+                            <TableColumn prefWidth="75.0" text="C1" />
+                            <TableColumn prefWidth="75.0" text="C2" />
+                          </columns>
+                           <VBox.margin>
+                              <Insets top="5.0" />
+                           </VBox.margin>
+                        </TableView>
                         <HBox>
                            <children>
-                              <AutoCompleteComboBox prefWidth="68.0" promptText="Type">
+                              <AutoCompleteComboBox fx:id="cgTypeACCB" prefWidth="150.0" promptText="Type">
                                  <tooltip>
                                     <Tooltip text="Choose category group type" />
                                  </tooltip>
@@ -62,7 +73,7 @@
                         </HBox>
                         <HBox>
                            <children>
-                              <AutoCompleteComboBox fx:id="nameTF" promptText="Name...">
+                              <TextField fx:id="cgNameTF" promptText="Name...">
                                  <VBox.margin>
                                     <Insets bottom="5.0" left="50.0" right="50.0" />
                                  </VBox.margin>
@@ -72,7 +83,7 @@
                                  <HBox.margin>
                                     <Insets bottom="5.0" left="50.0" top="5.0" />
                                  </HBox.margin>
-                              </AutoCompleteComboBox>
+                              </TextField>
                               <Label text="*" textFill="RED">
                                  <font>
                                     <Font size="24.0" />
@@ -89,7 +100,7 @@
                               <Insets />
                            </VBox.margin>
                         </HBox>
-                        <TextArea id="descTA" fx:id="descTA" prefHeight="64.0" prefWidth="465.0" promptText="Description...">
+                        <TextArea id="descTA" fx:id="cgDescTA" prefHeight="64.0" prefWidth="465.0" promptText="Description...">
                            <VBox.margin>
                               <Insets bottom="5.0" left="50.0" right="50.0" />
                            </VBox.margin>
@@ -99,17 +110,17 @@
                         </TextArea>
                         <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="25.0">
                            <children>
-                              <Button id="save" fx:id="saveBtnCatGr" mnemonicParsing="false" onAction="#onSaveCatGr" prefWidth="60.0" text="Save">
+                              <Button id="save" fx:id="cgSaveBtn" mnemonicParsing="false" onAction="#onSaveCategoryGroup" prefWidth="60.0" text="Save">
                                  <HBox.margin>
                                     <Insets left="50.0" right="5.0" />
                                  </HBox.margin>
                               </Button>
-                              <Button id="save" fx:id="deleteBtnCatGr" mnemonicParsing="false" onAction="#onDeleteCatGr" prefWidth="60.0" text="Delete">
+                              <Button id="save" fx:id="cgDeleteBtn" mnemonicParsing="false" onAction="#onDeleteCategoryGroup" prefWidth="60.0" text="Delete">
                                  <HBox.margin>
                                     <Insets right="5.0" />
                                  </HBox.margin>
                               </Button>
-                              <Button id="new" fx:id="clearBtnCatGr" mnemonicParsing="false" onAction="#onClearCatGr" prefWidth="60.0" text="Clear">
+                              <Button id="new" fx:id="cgClearBtn" mnemonicParsing="false" onAction="#onClearCategoryGroup" prefWidth="60.0" text="Clear">
                                  <HBox.margin>
                                     <Insets right="5.0" />
                                  </HBox.margin>
@@ -124,6 +135,15 @@
                <content>
                   <VBox prefHeight="200.0" prefWidth="100.0">
                      <children>
+                        <TreeTableView prefHeight="350.0" prefWidth="580.0">
+                          <columns>
+                            <TreeTableColumn prefWidth="75.0" text="C1" />
+                            <TreeTableColumn prefWidth="75.0" text="C2" />
+                          </columns>
+                           <VBox.margin>
+                              <Insets top="5.0" />
+                           </VBox.margin>
+                        </TreeTableView>
                         <HBox>
                            <children>
                               <AutoCompleteComboBox prefWidth="150.0" promptText="Category Group">
@@ -149,7 +169,7 @@
                         </HBox>
                         <HBox>
                            <children>
-                              <AutoCompleteComboBox fx:id="nameTF1" promptText="Name...">
+                              <TextField fx:id="nameTF1" promptText="Name...">
                                  <tooltip>
                                     <Tooltip text="Empty Tooltip" />
                                  </tooltip>
@@ -159,7 +179,7 @@
                                  <VBox.margin>
                                     <Insets bottom="5.0" left="50.0" right="50.0" />
                                  </VBox.margin>
-                              </AutoCompleteComboBox>
+                              </TextField>
                               <Label text="*" textFill="RED">
                                  <font>
                                     <Font size="24.0" />
@@ -186,17 +206,17 @@
                         </TextArea>
                         <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="25.0">
                            <children>
-                              <Button id="save" fx:id="saveBtnCat" mnemonicParsing="false" onAction="#onSaveCat" prefWidth="60.0" text="Save">
+                              <Button id="save" fx:id="saveBtnCat" mnemonicParsing="false" onAction="#onSaveCategory" prefWidth="60.0" text="Save">
                                  <HBox.margin>
                                     <Insets left="50.0" right="5.0" />
                                  </HBox.margin>
                               </Button>
-                              <Button id="save" fx:id="deleteBtnCat" mnemonicParsing="false" onAction="#onDeleteCat" prefWidth="60.0" text="Delete">
+                              <Button id="save" fx:id="deleteBtnCat" mnemonicParsing="false" onAction="#onDeleteCategory" prefWidth="60.0" text="Delete">
                                  <HBox.margin>
                                     <Insets right="5.0" />
                                  </HBox.margin>
                               </Button>
-                              <Button id="new" fx:id="clearBtnCat" mnemonicParsing="false" onAction="#onClearCat" prefWidth="60.0" text="Clear">
+                              <Button id="new" fx:id="clearBtnCat" mnemonicParsing="false" onAction="#onClearCategory" prefWidth="60.0" text="Clear">
                                  <HBox.margin>
                                     <Insets right="5.0" />
                                  </HBox.margin>

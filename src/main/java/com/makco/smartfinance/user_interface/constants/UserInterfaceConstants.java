@@ -21,6 +21,10 @@ public class UserInterfaceConstants {
     public static final String FAMILY_MEMBER_WINDOW_TITLE = "Family Member";
     public static final String ORGANIZATION_WINDOW_TITLE = "Organization";
 
+    //category group
+    public static final String CATEGORY_GROUP_TYPE_DEBIT = "Debit";
+    public static final String CATEGORY_GROUP_TYPE_CREDIT = "Credit";
+
 
     //ico
     public static final String CALENDAR = IMG_RESOURCE_FOLDER+"/calendar_60_45.png";

@@ -77,7 +77,7 @@ public class CategoryManagementModel {
         return errors;
     }
 
-    public void deletePendingCurrency() throws Exception {
+    public void deletePendingCategoryGroup() throws Exception {
         try {
             if (pendingCategoryGroup != null && pendingCategoryGroup.getId() != null) {
                 categoryGroupService.removeCategoryGroup(pendingCategoryGroup.getId());
