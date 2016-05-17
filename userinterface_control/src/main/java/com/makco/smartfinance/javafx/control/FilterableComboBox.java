@@ -8,9 +8,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+//import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -21,8 +19,20 @@ import java.util.regex.Pattern;
 /**
  * Created by mcalancea on 2016-05-16.
  */
-//http://stackoverflow.com/questions/30882634/what-is-wrong-with-this-javafx-fxml-custom-component
-//todo custom control http://docs.oracle.com/javafx/2/fxml_get_started/custom_control.htm
+/**
+ * http://stackoverflow.com/questions/30882634/what-is-wrong-with-this-javafx-fxml-custom-component
+ * http://docs.oracle.com/javafx/2/fxml_get_started/custom_control.htm
+ *
+ * https://jaxenter.com/netbeans/making-custom-javafx-controls-available-in-the-scene-builder
+ * 1) make a build without any third-party library
+ * 2) remove previous unsuccessful import of jar from C:\Users\mcalancea\AppData\Roaming\Scene Builder\Library\
+ * 3) import just built jar
+ *
+ */
+
+//
+//
+
 public class FilterableComboBox extends ComboBox<String> {
 //    private final static Logger LOG = LogManager.getLogger(FilterableComboBox.class);
 
@@ -31,16 +41,16 @@ public class FilterableComboBox extends ComboBox<String> {
     private String previousValue = "";
 
     public FilterableComboBox() {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(
-                "filterable_combo_box.fxml"));
-        fxmlLoader.setRoot(this);
-        fxmlLoader.setController(this);
-
-        try {
-            fxmlLoader.load();
-        } catch (IOException exception) {
-            throw new RuntimeException(exception);
-        }
+//        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(
+//                "filterable_combo_box.fxml"));
+//        fxmlLoader.setRoot(this);
+//        fxmlLoader.setController(this);
+//
+//        try {
+//            fxmlLoader.load();
+//        } catch (IOException exception) {
+//            throw new RuntimeException(exception);
+//        }
 
     }
 
@@ -88,7 +98,8 @@ public class FilterableComboBox extends ComboBox<String> {
         Platform.runLater(new Runnable() {
             @Override
             public void run(){
-                if(StringUtils.isEmpty(filter)){
+//                if(StringUtils.isEmpty(filter)){
+                if (filter != null && filter.length() > 0) {
                     bufferList = FilterableComboBox.this.readFromList(filter, initialList);
                 }else {
                     bufferList.clear();

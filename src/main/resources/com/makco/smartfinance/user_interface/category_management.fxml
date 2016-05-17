@@ -2,7 +2,7 @@
 
 <!--<?import com.makco.smartfinance.user_interface.control.* ?>-->
 <!--<?scenebuilder-classpath-element ../../../../TableViewDemo/bin/com/company/jfx8/example/fxmltableview/FormattedTableCellFactory.class?>-->
-<?scenebuilder-classpath-element ../../../../../../../build/libs/lib/userinterface_control-1.0.jar?>
+<!--<?scenebuilder-classpath-element ../../../../../../../build/libs/lib/userinterface_control-1.0.jar?>-->
 <?import com.makco.smartfinance.javafx.control.FilterableComboBox?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
@@ -39,16 +39,16 @@
                      <children>
                         <HBox>
                            <children>
-                              <!--<ComboBox type="FilterableComboBox" prefWidth="68.0" promptText="Type">-->
-                              <ComboBox prefWidth="68.0" promptText="Type">
+                              <FilterableComboBox prefWidth="68.0" promptText="Type">
+                              <!--<ComboBox prefWidth="68.0" promptText="Type">-->
                                  <tooltip>
                                     <Tooltip text="Choose category group type" />
                                  </tooltip>
                                  <HBox.margin>
                                     <Insets bottom="5.0" left="50.0" top="5.0" />
                                  </HBox.margin>
-                              <!--</ComboBoxFilterableComboBox>-->
-                              </ComboBox>
+                              </FilterableComboBox>
+                              <!--</ComboBox>-->
                               <Label text="*" textFill="RED">
                                  <tooltip>
                                     <Tooltip text="Required" />
