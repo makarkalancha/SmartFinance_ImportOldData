@@ -25,6 +25,7 @@ public class CategoryGroupDAOImpl implements CategoryGroupDAO{
         try{
             session = HibernateUtil.openSession();
             session.beginTransaction();
+            //TODO p.333 12.2.6 Dynamic eager fetching
             list = session.createQuery("SELECT cg FROM CategoryGroup cg").list();
             if(initializeCategories){
                 for(CategoryGroup categoryGroup : list) {
@@ -64,6 +65,7 @@ public class CategoryGroupDAOImpl implements CategoryGroupDAO{
         try{
             session = HibernateUtil.openSession();
             session.beginTransaction();
+            //TODO p.333 12.2.6 Dynamic eager fetching
             list = session.createQuery("SELECT cg FROM CategoryGroup cg WHERE cg.class = :type ORDER BY cg.name")
                     .setParameter("type", type.newInstance().getCategoryGroupType())
                     .list();
@@ -175,6 +177,7 @@ public class CategoryGroupDAOImpl implements CategoryGroupDAO{
         try{
             session = HibernateUtil.openSession();
             session.beginTransaction();
+            //TODO p.333 12.2.6 Dynamic eager fetching
             list = session.createQuery("SELECT cg FROM CategoryGroup cg where cg.name = :categoryGroupName")
                     .setString("categoryGroupName", categoryGroupName)
                     .list();

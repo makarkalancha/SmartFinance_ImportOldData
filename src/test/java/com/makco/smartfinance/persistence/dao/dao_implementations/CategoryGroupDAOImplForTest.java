@@ -129,6 +129,7 @@ public class CategoryGroupDAOImplForTest {
         try{
             session = TestPersistenceSession.openSession();
             session.beginTransaction();
+            //TODO p.333 12.2.6 Dynamic eager fetching
             list = session.createQuery("SELECT cg FROM CategoryGroup cg where cg.name = :categoryGroupName")
                     .setString("categoryGroupName", categoryGroupName)
                     .list();
@@ -300,6 +301,7 @@ public class CategoryGroupDAOImplForTest {
         try{
             session = TestPersistenceSession.openSession();
             session.beginTransaction();
+            //TODO p.333 12.2.6 Dynamic eager fetching
             list = session.createQuery("SELECT cg FROM CategoryGroup cg WHERE cg.class = :type ORDER BY cg.name")
                     .setParameter("type", type.newInstance().getCategoryGroupType())
                     .list();
@@ -341,6 +343,7 @@ public class CategoryGroupDAOImplForTest {
         try{
             session = TestPersistenceSession.openSession();
             session.beginTransaction();
+            //TODO p.333 12.2.6 Dynamic eager fetching
             list = session.createQuery("SELECT cg FROM CategoryGroup cg").list();
             if(initializeCategories){
                 for(CategoryGroup categoryGroup : list) {
