@@ -30,18 +30,26 @@ import java.util.regex.Pattern;
  */
 public class AutoCompleteComboBox extends ComboBox<String> {
 
-    private ObservableList<String> initialList;
+    ObservableList<String> initialList = FXCollections.emptyObservableList();
     private ObservableList<String> bufferList = FXCollections.observableArrayList();
 
     public AutoCompleteComboBox() {
+        super.setEditable(true);
+        this.configAutoFilterListener();
     }
 
     public AutoCompleteComboBox(ObservableList<String> items) {
         super(items);
         super.setEditable(true);
         this.initialList = items;
-
         this.configAutoFilterListener();
+    }
+
+    private ObservableList<String> getInitialList(){
+        if(initialList.isEmpty()){
+            initialList = itemsProperty().get();
+        }
+        return initialList;
     }
 
     //http://stackoverflow.com/questions/19010619/javafx-filtered-combobox
@@ -75,7 +83,7 @@ public class AutoCompleteComboBox extends ComboBox<String> {
             @Override
             public void run(){
                 if(StringUtils.isEmpty(filter)){
-                    bufferList = AutoCompleteComboBox.this.readFromList(filter, initialList);
+                    bufferList = AutoCompleteComboBox.this.readFromList(filter, getInitialList());
                 }else {
                     bufferList.clear();
                     bufferList.addAll(filterString(filter));
@@ -105,7 +113,7 @@ public class AutoCompleteComboBox extends ComboBox<String> {
         }
 
         Pattern pattern = Pattern.compile(regex.toString(), Pattern.CASE_INSENSITIVE);
-        for (String string : initialList) {
+        for (String string : getInitialList()) {
             Matcher matcher = pattern.matcher(string);
             if (matcher.find()) {
                 result.add(string);
