@@ -18,6 +18,12 @@ import java.util.regex.Pattern;
  * Created by mcalancea on 2016-05-16.
  */
 /**
+ * autocomplete sources:
+ * http://stackoverflow.com/questions/19924852/autocomplete-combobox-in-javafx
+ * http://tech.chitgoks.com/2013/08/20/how-to-create-autocomplete-combobox-or-textfield-in-java-fx-2/
+ */
+
+/**
  * http://stackoverflow.com/questions/30882634/what-is-wrong-with-this-javafx-fxml-custom-component
  * http://docs.oracle.com/javafx/2/fxml_get_started/custom_control.htm
  *
@@ -28,17 +34,76 @@ import java.util.regex.Pattern;
  *
  *  logger is not working
  */
-public class AutoCompleteComboBox extends ComboBox<String> {
+
+/**
+ * todo bug:
+ * 1) type any letter
+ * 2) choose anything from list (without pressing enter)
+ * 3) move cursor so it is somewhere inside string (between start and end)
+ * 4) press shift+end
+ * 5) change listener keeps running even after app is closed:
+ >>>observable:StringProperty [bean: ComboBoxListViewSkin$FakeFocusTextField@30d996e[styleClass=text-input text-field], name: text, value: jacob.smith@example.com]
+ >>>oldValue:
+ >>>newValue:jacob.smith@example.com
+ >>>selected:jacob.smith@example.com
+ >>>observable:StringProperty [bean: ComboBoxListViewSkin$FakeFocusTextField@30d996e[styleClass=text-input text-field], name: text, value: jaco(]
+ >>>oldValue:jacob.smith@example.com
+ >>>newValue:jaco(
+ >>>selected:jacob.smith@example.com
+ >>>filtering...
+ >>>observable:StringProperty [bean: ComboBoxListViewSkin$FakeFocusTextField@30d996e[styleClass=text-input text-field], name: text, value: ]
+ >>>oldValue:jaco(
+ >>>newValue:
+ >>>selected:null
+ >>>filtering...
+ >>>observable:StringProperty [bean: ComboBoxListViewSkin$FakeFocusTextField@30d996e[styleClass=text-input text-field], name: text, value: j]
+ >>>oldValue:
+ >>>newValue:j
+ >>>selected:null
+ >>>filtering...
+ >>>observable:StringProperty [bean: ComboBoxListViewSkin$FakeFocusTextField@30d996e[styleClass=text-input text-field], name: text, value: jacob.smith@example.com]
+ >>>oldValue:j
+ >>>newValue:jacob.smith@example.com
+ >>>selected:jacob.smith@example.com
+ >>>observable:StringProperty [bean: ComboBoxListViewSkin$FakeFocusTextField@30d996e[styleClass=text-input text-field], name: text, value: ]
+ >>>oldValue:jacob.smith@example.com
+ >>>newValue:
+ >>>selected:null
+ >>>filtering...
+ >>>observable:StringProperty [bean: ComboBoxListViewSkin$FakeFocusTextField@30d996e[styleClass=text-input text-field], name: text, value: emma(johnson)]
+ >>>oldValue:
+ >>>newValue:emma(johnson)
+ >>>selected:emma(johnson)
+ >>>observable:StringProperty [bean: ComboBoxListViewSkin$FakeFocusTextField@30d996e[styleClass=text-input text-field], name: text, value: ]
+ >>>oldValue:emma(johnson)
+ >>>newValue:
+ >>>selected:null
+ >>>filtering...
+ >>>observable:StringProperty [bean: ComboBoxListViewSkin$FakeFocusTextField@30d996e[styleClass=text-input text-field], name: text, value: emma(johnson)]
+ >>>oldValue:
+ >>>newValue:emma(johnson)
+ >>>selected:emma(johnson)
+ >>>observable:StringProperty [bean: ComboBoxListViewSkin$FakeFocusTextField@30d996e[styleClass=text-input text-field], name: text, value: ]
+ >>>oldValue:emma(johnson)
+ >>>newValue:
+ >>>selected:null
+ >>>filtering...
+ >>>observable:StringProperty [bean: ComboBoxListViewSkin$FakeFocusTextField@30d996e[styleClass=text-input text-field], name: text, value: emma(johnson)]
+ >>>oldValue:
+ >>>newValue:emma(johnson)
+ >>>selected:emma(johnson)
+ */
+public class AutoCompleteComboBox1 extends ComboBox<String> {
 
     ObservableList<String> initialList = FXCollections.emptyObservableList();
     private ObservableList<String> bufferList = FXCollections.observableArrayList();
 
-    public AutoCompleteComboBox() {
+    public AutoCompleteComboBox1() {
         super.setEditable(true);
         this.configAutoFilterListener();
     }
 
-    public AutoCompleteComboBox(ObservableList<String> items) {
+    public AutoCompleteComboBox1(ObservableList<String> items) {
         super(items);
         super.setEditable(true);
         this.initialList = items;
@@ -54,16 +119,38 @@ public class AutoCompleteComboBox extends ComboBox<String> {
 
     //http://stackoverflow.com/questions/19010619/javafx-filtered-combobox
     private void configAutoFilterListener() {
-        final AutoCompleteComboBox currentInstance = this;
+        final AutoCompleteComboBox1 currentInstance = this;
         this.getEditor().textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
 
+/* --working block, except for bug above
                 final String selected = currentInstance.getSelectionModel().getSelectedItem();
 
                 if (selected == null || !selected.equals(newValue)) {
                     filterItems(newValue, currentInstance);
                     currentInstance.show();
+                }
+*/
+                //                previousValue = oldValue;
+//                final TextField editor = currentInstance.getEditor();
+                final String selected = currentInstance.getSelectionModel().getSelectedItem();
+
+//                String editorGetTextDebug = editor.getText();
+//
+//                if (selected == null || !selected.equals(editor.getText())) {
+                System.out.println(">>>observable:"+observable);
+                System.out.println(">>>oldValue:"+oldValue);
+                System.out.println(">>>newValue:"+newValue);
+                System.out.println(">>>selected:"+selected);
+//                if (selected == null || !selected.equals(newValue)) {
+                if (selected != null && !selected.equals(newValue)) {
+                    System.out.println(">>>filtering...");
+                    filterItems(newValue, currentInstance);
+
+//                    if (currentInstance.getItems().size() == 1) {
+//                        setUserInputToOnlyOption(currentInstance, editor);
+//                    }
                 }
             }
         });
@@ -83,13 +170,16 @@ public class AutoCompleteComboBox extends ComboBox<String> {
             @Override
             public void run(){
                 if(StringUtils.isEmpty(filter)){
-                    bufferList = AutoCompleteComboBox.this.readFromList(filter, getInitialList());
+                    bufferList = AutoCompleteComboBox1.this.readFromList(filter, getInitialList());
                 }else {
                     bufferList.clear();
                     bufferList.addAll(filterString(filter));
                 }
 
                 comboBox.setItems(bufferList);
+
+                //new added
+                comboBox.show();
             }
         });
     }

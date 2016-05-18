@@ -50,14 +50,14 @@
                         </TableView>
                         <HBox>
                            <children>
-                              <AutoCompleteComboBox fx:id="cgTypeACCB" prefWidth="150.0" promptText="Type">
+                              <AutoCompleteComboBox1 fx:id="cgTypeACCB" prefWidth="150.0" promptText="Type">
                                  <tooltip>
                                     <Tooltip text="Choose category group type" />
                                  </tooltip>
                                  <HBox.margin>
                                     <Insets bottom="5.0" left="50.0" top="5.0" />
                                  </HBox.margin>
-                              </AutoCompleteComboBox>
+                              </AutoCompleteComboBox1>
                               <Label text="*" textFill="RED">
                                  <tooltip>
                                     <Tooltip text="Required" />

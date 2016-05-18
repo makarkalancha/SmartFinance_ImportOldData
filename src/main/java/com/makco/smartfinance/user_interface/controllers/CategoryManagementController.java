@@ -1,7 +1,7 @@
 package com.makco.smartfinance.user_interface.controllers;
 
 import com.makco.smartfinance.constants.DataBaseConstants;
-import com.makco.smartfinance.javafx.control.AutoCompleteComboBox;
+import com.makco.smartfinance.javafx.control.AutoCompleteComboBox1;
 import com.makco.smartfinance.persistence.entity.CategoryGroup;
 import com.makco.smartfinance.user_interface.Command;
 import com.makco.smartfinance.user_interface.ControlledScreen;
@@ -62,7 +62,7 @@ public class CategoryManagementController implements Initializable, ControlledSc
     @FXML
     private TableView<CategoryGroup> cgTable;
     @FXML
-    private AutoCompleteComboBox cgTypeACCB;
+    private AutoCompleteComboBox1 cgTypeACCB;
     @FXML
     private TextField cgNameTF;
     @FXML
