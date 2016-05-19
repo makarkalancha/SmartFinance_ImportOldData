@@ -31,12 +31,15 @@ import java.util.regex.Pattern;
  *
  * this is "I found a solution that's working for me:"
  */
+
+/**
+ * todo buggy home / end button
+ */
 public class AutoCompleteComboBox extends ComboBox<String> implements EventHandler<KeyEvent> {
     private StringBuilder sb;
     private int lastLength;
-//    private ObservableList<String> initialList = FXCollections.observableArrayList();
     private List<String> initialList = new ArrayList<>();
-    private ObservableList<String> bufferList = FXCollections.observableArrayList();
+    private List<String> bufferList = new ArrayList<>();
 
 
     public AutoCompleteComboBox() {
@@ -59,12 +62,13 @@ public class AutoCompleteComboBox extends ComboBox<String> implements EventHandl
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
                 if(newValue){
                     // in focus
-                    System.out.println(">>>changed if: in focus");
+                    System.out.println(">>>changed if: in focus->newValue=" + newValue);
                 } else {
                     System.out.println(">>>changed else: NO focus");
                     lastLength = 0;
                     sb.delete(0, sb.length());
                     selectClosestResultBasedOnTextFieldValue(false, false);
+                    hide();
                 }
             }
         });
@@ -79,6 +83,11 @@ public class AutoCompleteComboBox extends ComboBox<String> implements EventHandl
 
     @Override
     public void handle(KeyEvent event) {
+        if(event.getCode() == KeyCode.HOME
+                || event.getCode() == KeyCode.END){
+            hide();
+        }
+
         /**
          * this variable is used to bypass the auto complete process if the length is the same.
          * this occurs if user types fast, the length of textField will record after the user
@@ -96,7 +105,7 @@ public class AutoCompleteComboBox extends ComboBox<String> implements EventHandl
         System.out.println(">>>handle button pressed: " + event.getCode());
         System.out.println(">>>handle sb before pressed button: " + sb.toString());
         System.out.println(">>>handle editorText before pressed button: " + getEditor().getText());
-
+        //todo somewhere here buttons home,end,delete, backspace bug
         if (event.isControlDown()
                 || event.getCode() == KeyCode.BACK_SPACE
                 || event.getCode() == KeyCode.RIGHT
@@ -112,7 +121,7 @@ public class AutoCompleteComboBox extends ComboBox<String> implements EventHandl
                 || event.getCode() == KeyCode.PRINTSCREEN
                 || event.getCode() == KeyCode.SCROLL_LOCK
                 || event.getCode() == KeyCode.PAUSE
-                || event.getCode() == KeyCode.TAB
+//                || event.getCode() == KeyCode.TAB
                 || event.getCode() == KeyCode.CONTROL
                 || event.getCode() == KeyCode.ALT
                 || event.getCode() == KeyCode.ALT_GRAPH
@@ -160,7 +169,7 @@ public class AutoCompleteComboBox extends ComboBox<String> implements EventHandl
      * @param inFocus - true if combobox has focus. If not, programatically press enter key to add new entry to list
      */
     private void selectClosestResultBasedOnTextFieldValue(boolean affect, boolean inFocus){
-        System.out.println(">>>selectClosestResultBasedOnTextFieldValue");
+        System.out.println(String.format(">>>selectClosestResultBasedOnTextFieldValue:affect=%b, inFocus=%b",affect, inFocus));
         System.out.println(">>>getEditor().getText():" + getEditor().getText());
         System.out.println(">>>sb:" + sb.toString());
 
@@ -185,15 +194,17 @@ public class AutoCompleteComboBox extends ComboBox<String> implements EventHandl
 
         String s = getEditor().getText();
         System.out.println(">>>Found? " + found);
-        System.out.println(">>>filterItems from selectClosestResultBasedOnTextFieldValue: getText=" + getEditor().getText());
+//        System.out.println(">>>filterItems from selectClosestResultBasedOnTextFieldValue: getText=" + getEditor().getText());
         filterItems(getEditor().getText());
         if(!found && affect){
+            System.out.println(">>>selectClosestResultBasedOnTextFieldValue->if(!found && affect){: s=" + s);
             getSelectionModel().clearSelection();
             getEditor().setText(s);
             getEditor().end();
         }
 
         if(!found){
+            System.out.println(">>>selectClosestResultBasedOnTextFieldValue->if(!found){: null");
             getEditor().setText(null);
             getSelectionModel().select(null);
             setValue(null);
@@ -202,6 +213,10 @@ public class AutoCompleteComboBox extends ComboBox<String> implements EventHandl
         if (!inFocus
                 && getEditor().getText() != null
                 && getEditor().getText().trim().length() > 0) {
+
+            System.out.println(">>>selectClosestResultBasedOnTextFieldValue->!inFocus && getEditor().getText() != null && getEditor().getText().trim().length() > 0) {: getEditor().getText()="+
+                    getEditor().getText()
+            );
             //press enter key programmatically to have this entry added
 //            KeyEvent ke = new KeyEvent(this,
 //                    KeyCode.ENTER.toString(),
@@ -223,19 +238,14 @@ public class AutoCompleteComboBox extends ComboBox<String> implements EventHandl
                     false
             );
             fireEvent(ke);
-
-//            if(getEditor().getText() != null) {
-
-//            }
         }
+//        System.out.println(">>>selectClosestResultBasedOnTextFieldValue->end of method: getText=" + getEditor().getText());
     }
 
     private List<String> getInitialList(){
         if(initialList.isEmpty()){
-//            initialList = itemsProperty().get();
             initialList.addAll(getItems());
         }
-//        System.out.println(">>getInitialList: is initialList equal to getItems:" + (initialList.equals(getItems())));
         return initialList;
     }
 
@@ -268,38 +278,21 @@ public class AutoCompleteComboBox extends ComboBox<String> implements EventHandl
     }
 
     private void filterItems(String filter) {
-//        /**
-//         * https://community.oracle.com/thread/2474433
-//         *
-//         * works correctly if runLater in here
-//         * not working if currentInstance.show(); (from method configAutoFilterListener) is in runlater
-//         *
-//         * [http://stackoverflow.com/questions/13784333/platform-runlater-and-task-in-javafx]:
-//         * Use Platform.runLater(...) for quick and simple operations and Task for complex and big operations .
-//         */
-//        Platform.runLater(new Runnable() {
-//            @Override
-//            public void run(){
-                bufferList.clear();
-                if(StringUtils.isEmpty(filter)){
-//                    bufferList = readFromList(filter, getInitialList());
-                    bufferList.addAll(getInitialList());
-                }else {
-                    bufferList.addAll(filterString(filter));
-                }
-
-                setItems(bufferList);
-                hide();
-                System.out.println(">>>bufferList.size before show: " + bufferList.size());
+        bufferList.clear();
+        if (StringUtils.isEmpty(filter)) {
+            bufferList.addAll(getInitialList());
+        } else {
+            bufferList.addAll(filterString(filter));
+        }
+        setItems(FXCollections.observableArrayList(bufferList));
+        hide();
         /**
          * http://stackoverflow.com/questions/23094062/javafx-combobox-not-refreshing-the-number-of-visible-rows
          *
          * The bug submited is fixes, unfortunally in jdk8u66 sometimes the problem still happens with the test case attached to the bug
          */
-                setVisibleRowCount(bufferList.size());
-                //new added
-                show();
-//            }
-//        });
+        setVisibleRowCount(bufferList.size());
+        //new added
+        show();
     }
 }
