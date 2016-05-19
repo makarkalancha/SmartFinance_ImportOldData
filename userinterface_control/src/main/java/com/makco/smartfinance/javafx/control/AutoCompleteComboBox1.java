@@ -18,6 +18,8 @@ import java.util.regex.Pattern;
  * Created by mcalancea on 2016-05-16.
  */
 /**
+ * version 1
+ *
  * autocomplete sources:
  * http://stackoverflow.com/questions/19924852/autocomplete-combobox-in-javafx
  * http://tech.chitgoks.com/2013/08/20/how-to-create-autocomplete-combobox-or-textfield-in-java-fx-2/

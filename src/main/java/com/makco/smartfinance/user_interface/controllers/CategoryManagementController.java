@@ -1,7 +1,7 @@
 package com.makco.smartfinance.user_interface.controllers;
 
 import com.makco.smartfinance.constants.DataBaseConstants;
-import com.makco.smartfinance.javafx.control.AutoCompleteComboBox1;
+import com.makco.smartfinance.javafx.control.AutoCompleteComboBox;
 import com.makco.smartfinance.persistence.entity.CategoryGroup;
 import com.makco.smartfinance.user_interface.Command;
 import com.makco.smartfinance.user_interface.ControlledScreen;
@@ -24,7 +24,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
@@ -62,7 +61,7 @@ public class CategoryManagementController implements Initializable, ControlledSc
     @FXML
     private TableView<CategoryGroup> cgTable;
     @FXML
-    private AutoCompleteComboBox1 cgTypeACCB;
+    private AutoCompleteComboBox cgTypeACCB;
     @FXML
     private TextField cgNameTF;
     @FXML

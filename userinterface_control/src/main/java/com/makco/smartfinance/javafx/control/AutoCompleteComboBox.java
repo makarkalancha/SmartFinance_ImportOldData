@@ -24,13 +24,14 @@ import java.util.regex.Pattern;
  */
 
 /**
+ * version 2
+ *
  * http://stackoverflow.com/questions/19924852/autocomplete-combobox-in-javafx
  * not UPDATE: If you use java8u60 or above, use this:
  *
  * this is "I found a solution that's working for me:"
- * //TODO finish this
  */
-public class AutoCompleteComboBox2 extends ComboBox<String> implements EventHandler<KeyEvent> {
+public class AutoCompleteComboBox extends ComboBox<String> implements EventHandler<KeyEvent> {
     private StringBuilder sb;
     private int lastLength;
 //    private ObservableList<String> initialList = FXCollections.observableArrayList();
@@ -38,11 +39,11 @@ public class AutoCompleteComboBox2 extends ComboBox<String> implements EventHand
     private ObservableList<String> bufferList = FXCollections.observableArrayList();
 
 
-    public AutoCompleteComboBox2() {
+    public AutoCompleteComboBox() {
         this.configAutoFilterListener();
     }
 
-    public AutoCompleteComboBox2(ObservableList<String> items) {
+    public AutoCompleteComboBox(ObservableList<String> items) {
         super(items);
         this.configAutoFilterListener();
     }
@@ -50,7 +51,7 @@ public class AutoCompleteComboBox2 extends ComboBox<String> implements EventHand
     private void configAutoFilterListener(){
         sb = new StringBuilder();
         setEditable(true);
-        setOnKeyReleased(AutoCompleteComboBox2.this);
+        setOnKeyReleased(AutoCompleteComboBox.this);
 
         //add a focus listener such that if not in focus, reset the filtered typed keys
         getEditor().focusedProperty().addListener(new ChangeListener<Boolean>() {
@@ -130,7 +131,7 @@ public class AutoCompleteComboBox2 extends ComboBox<String> implements EventHand
         try{
             sb.delete(indexRange.getStart(), sb.length());
         }catch (Exception e){
-            throw new RuntimeException("AutoCompleteComboBox2.handle",e);
+            throw new RuntimeException("AutoCompleteComboBox.handle",e);
         }
 
         System.out.println(">>>filterItems from handle: sb=" + sb.toString());
@@ -143,7 +144,7 @@ public class AutoCompleteComboBox2 extends ComboBox<String> implements EventHand
                     getEditor().setText(sb.toString() + items.get(i).substring(sb.toString().length()));
                 } catch (Exception e) {
 //                    getEditor().setText(sb.toString());
-                    throw new RuntimeException("AutoCompleteComboBox2.handle: filtering", e);
+                    throw new RuntimeException("AutoCompleteComboBox.handle: filtering", e);
                 }
                 getEditor().positionCaret(sb.toString().length());
                 getEditor().selectEnd();
