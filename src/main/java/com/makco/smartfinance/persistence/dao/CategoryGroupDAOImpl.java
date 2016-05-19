@@ -22,21 +22,17 @@ public class CategoryGroupDAOImpl implements CategoryGroupDAO{
     public List<CategoryGroup> categoryGroupList(boolean initializeCategories) throws Exception {
         Session session = null;
         List<CategoryGroup> list = new ArrayList<>();
+        //less queries
+        StringBuilder query = new StringBuilder();
+        query.append("SELECT cg FROM CategoryGroup cg ");
+        if(initializeCategories){
+            query.append("left join fetch cg.categories ");
+        }
+
         try{
             session = HibernateUtil.openSession();
             session.beginTransaction();
-            //TODO p.333 12.2.6 Dynamic eager fetching
-            list = session.createQuery("SELECT cg FROM CategoryGroup cg").list();
-            if(initializeCategories){
-                for(CategoryGroup categoryGroup : list) {
-                    //wrongClassException check entity classes in session, again eager might interfere
-                    //http://stackoverflow.com/questions/4334197/discriminator-wrongclassexception-jpa-with-hibernate-backend
-                    //http://anshuiitk.blogspot.ca/2011/04/hibernate-wrongclassexception.html
-                    //http://stackoverflow.com/questions/12199874/about-the-use-of-forcediscriminator-discriminatoroptionsforce-true
-                    //http://stackoverflow.com/questions/19928568/hibernate-best-practice-to-pull-all-lazy-collections
-                    Hibernate.initialize(categoryGroup.getCategories());
-                }
-            }
+            list = session.createQuery(query.toString()).list();
             Collections.sort(list, (CategoryGroup cg1, CategoryGroup cg2) -> cg1.getName().toLowerCase().compareTo(cg2.getName().toLowerCase()));
             session.getTransaction().commit();
         } catch (Exception e) {
@@ -62,23 +58,23 @@ public class CategoryGroupDAOImpl implements CategoryGroupDAO{
     public <T extends CategoryGroup> List<T> categoryGroupByType(Class<T> type, boolean initializeCategories) throws Exception {
         Session session = null;
         List<T> list = new ArrayList<>();
+        //todo check selectCGDebitLeftJoinFetch_credit_byType.log vs selectCGDebitHibernateInitialize_credit_byType.log
+        //same number of queries (Hibernate.initialize(categoryGroup.getCategories()) and left join fetch)
+        //but this way is cleaner
+        StringBuilder query = new StringBuilder();
+        query.append("SELECT cg FROM CategoryGroup cg ");
+        if(initializeCategories){
+            query.append("left join fetch cg.categories ");
+        }
+        query.append("WHERE cg.class = :type ORDER BY cg.name ");
+
         try{
             session = HibernateUtil.openSession();
             session.beginTransaction();
-            //TODO p.333 12.2.6 Dynamic eager fetching
-            list = session.createQuery("SELECT cg FROM CategoryGroup cg WHERE cg.class = :type ORDER BY cg.name")
+            //p.333 12.2.6 Dynamic eager fetching
+            list = session.createQuery(query.toString())
                     .setParameter("type", type.newInstance().getCategoryGroupType())
                     .list();
-            if(initializeCategories){
-                for(CategoryGroup categoryGroup : list) {
-                    //wrongClassException check entity classes in session, again eager might interfere
-                    //http://stackoverflow.com/questions/4334197/discriminator-wrongclassexception-jpa-with-hibernate-backend
-                    //http://anshuiitk.blogspot.ca/2011/04/hibernate-wrongclassexception.html
-                    //http://stackoverflow.com/questions/12199874/about-the-use-of-forcediscriminator-discriminatoroptionsforce-true
-                    //http://stackoverflow.com/questions/19928568/hibernate-best-practice-to-pull-all-lazy-collections
-                    Hibernate.initialize(categoryGroup.getCategories());
-                }
-            }
             Collections.sort(list, (CategoryGroup cg1,  CategoryGroup cg2) -> cg1.getName().toLowerCase().compareTo(cg2.getName().toLowerCase()));
             session.getTransaction().commit();
 
@@ -174,24 +170,23 @@ public class CategoryGroupDAOImpl implements CategoryGroupDAO{
     public List<CategoryGroup> getCategoryGroupByName(String categoryGroupName, boolean initializeCategories) throws Exception {
         Session session = null;
         List<CategoryGroup> list = new ArrayList<>();
+        //same number of queries (Hibernate.initialize(categoryGroup.getCategories()) and left join fetch)
+        //but this way is cleaner
+        StringBuilder query = new StringBuilder();
+        query.append("SELECT cg FROM CategoryGroup cg ");
+        if(initializeCategories){
+            query.append("left join fetch cg.categories ");
+        }
+        query.append("where cg.name = :categoryGroupName ");
+
         try{
             session = HibernateUtil.openSession();
             session.beginTransaction();
-            //TODO p.333 12.2.6 Dynamic eager fetching
-            list = session.createQuery("SELECT cg FROM CategoryGroup cg where cg.name = :categoryGroupName")
+            //p.333 12.2.6 Dynamic eager fetching
+            list = session.createQuery(query.toString())
                     .setString("categoryGroupName", categoryGroupName)
                     .list();
             //byName return list as it might be debit or credit and return categories
-            if(initializeCategories){
-                for(CategoryGroup categoryGroup : list) {
-                    //wrongClassException check entity classes in session, again eager might interfere
-                    //http://stackoverflow.com/questions/4334197/discriminator-wrongclassexception-jpa-with-hibernate-backend
-                    //http://anshuiitk.blogspot.ca/2011/04/hibernate-wrongclassexception.html
-                    //http://stackoverflow.com/questions/12199874/about-the-use-of-forcediscriminator-discriminatoroptionsforce-true
-                    //http://stackoverflow.com/questions/19928568/hibernate-best-practice-to-pull-all-lazy-collections
-                    Hibernate.initialize(categoryGroup.getCategories());
-                }
-            }
             session.getTransaction().commit();
         } catch (Exception e) {
             try {

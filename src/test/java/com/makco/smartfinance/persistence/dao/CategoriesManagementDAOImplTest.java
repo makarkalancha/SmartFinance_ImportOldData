@@ -595,7 +595,7 @@ public class CategoriesManagementDAOImplTest {
     }
 
     @Test
-    public void test_43_seleteCategoryGroupByName() throws Exception {
+    public void test_43_1_seleteCategoryGroupByName() throws Exception {
         int randomInt = randomWithinRange.getRandom();
         int categoriesQty = 3;
         String categoryGroupDebitName = "categoryGroup debit name " + randomInt;
@@ -626,7 +626,38 @@ public class CategoriesManagementDAOImplTest {
     }
 
     @Test
-    public void test_44_seleteAllCategoryGroupsWithCategories() throws Exception {
+    public void test_43_2_seleteCategoryGroupByName_withLeftJoinFetch() throws Exception {
+        int randomInt = randomWithinRange.getRandom();
+        int categoriesQty = 3;
+        String categoryGroupDebitName = "categoryGroup debit name " + randomInt;
+        CategoryGroup categoryGroupDebit = new CategoryGroupDebit(categoryGroupDebitName,
+                "debit category group to select " + randomInt);
+        List<Category> debitCategories = new ArrayList<>();
+        //put service: putting category_group in category and category in category_group
+        for(int i = 0 ; i < categoriesQty;i++) {
+            Category category = new CategoryDebit(categoryGroupDebit, "cat db " + i + "_v" + randomInt,
+                    "credit category #" + i + " 'description'");
+            debitCategories.add(category);
+        }
+        categoryGroupDebit.setCategories(debitCategories);
+        LOG.debug(">>>category group id: " + categoryGroupDebit);
+        LOG.debug(">>>categories of category group: " + debitCategories);
+        categoryGroupDAOImplForTest.saveOrUpdateCategoryGroup(categoryGroupDebit);
+
+        List<CategoryGroup> categoryGroupByNameList = categoryGroupDAOImplForTest.getCategoryGroupByName_withLeftJoinFetch(categoryGroupDebitName, true);
+
+        for(CategoryGroup categoryGroupByName : categoryGroupByNameList){
+            LOG.debug(">>>category group select by name: " + categoryGroupByName);
+
+            assertEquals(true, categoryGroupDebitName.equals(categoryGroupByName.getName()));
+
+            LOG.debug(">>>categoryGroupList: " + categoryGroupByName.getCategories());
+            assertEquals(true, categoryGroupByName.getCategories().size() > 0);
+        }
+    }
+
+    @Test
+    public void test_44_1_seleteAllCategoryGroupsWithCategories() throws Exception {
         int randomInt = randomWithinRange.getRandom();
         int categoriesQty = 3;
         CategoryGroup categoryGroupDebit = new CategoryGroupDebit("dt catGr to sel All " + randomInt,
@@ -660,7 +691,7 @@ public class CategoriesManagementDAOImplTest {
     }
 
     @Test
-    public void test_45_seleteDebitCategoryGroupsWithCategories() throws Exception {
+    public void test_45_1_seleteDebitCategoryGroupsWithCategories() throws Exception {
         int randomInt = randomWithinRange.getRandom();
         int categoriesQty = 3;
         CategoryGroup categoryGroupDebit = new CategoryGroupDebit("dt catGr to sel " + randomInt,
@@ -680,6 +711,44 @@ public class CategoriesManagementDAOImplTest {
 
 //        List<CategoryGroupDebit> categoryGroupDebits = categoryGroupDAOImplForTest.categoryGroupDebitList_old(true);
         List<CategoryGroupDebit> categoryGroupDebits = categoryGroupDAOImplForTest.categoryGroupByType(CategoryGroupDebit.class, true);
+        LOG.debug(">>>categoryGroupDebits: " + categoryGroupDebits);
+        assertEquals(true, categoryGroupDebits.size() > 0);
+
+        int qtyCategoryGroupsWithCategories = 0;
+        int qtyCategoryGroupsWithoutCategories = 0;
+        for(CategoryGroup categoryGroup : categoryGroupDebits){
+            if(categoryGroup.getCategories().size() > 0){
+                ++qtyCategoryGroupsWithCategories;
+            } else {
+                ++qtyCategoryGroupsWithoutCategories;
+            }
+        }
+        LOG.debug(">>>qtyCategoryGroupsWithCategories: " + qtyCategoryGroupsWithCategories);
+        LOG.debug(">>>qtyCategoryGroupsWithoutCategories: " + qtyCategoryGroupsWithoutCategories);
+        assertEquals(true, qtyCategoryGroupsWithCategories > 0);
+    }
+
+    @Test
+    public void test_45_2_seleteDebitCategoryGroupsWithCategories_withLeftJoinFetch() throws Exception {
+        int randomInt = randomWithinRange.getRandom();
+        int categoriesQty = 3;
+        CategoryGroup categoryGroupDebit = new CategoryGroupDebit("dt catGr to sel " + randomInt,
+                "debit category group to select " + randomInt);
+        List<Category> debitCategories = new ArrayList<>();
+        //put service: putting category_group in category and category in category_group
+        for(int i = 0 ; i < categoriesQty;i++) {
+            Category category = new CategoryDebit(categoryGroupDebit, "cat dt " + i + "_v" + randomInt,
+                    "debit category #" + i + " 'description'");
+            debitCategories.add(category);
+        }
+        categoryGroupDebit.setCategories(debitCategories);
+        categoryGroupDAOImplForTest.saveOrUpdateCategoryGroup(categoryGroupDebit);
+
+        LOG.debug(">>>category group to delete: " + categoryGroupDebit);
+        LOG.debug(">>>categories to delete: " + debitCategories);
+
+//        List<CategoryGroupDebit> categoryGroupDebits = categoryGroupDAOImplForTest.categoryGroupDebitList_old(true);
+        List<CategoryGroupDebit> categoryGroupDebits = categoryGroupDAOImplForTest.categoryGroupByType_withLeftJoinFetch(CategoryGroupDebit.class, true);
         LOG.debug(">>>categoryGroupDebits: " + categoryGroupDebits);
         assertEquals(true, categoryGroupDebits.size() > 0);
 
@@ -837,5 +906,37 @@ public class CategoriesManagementDAOImplTest {
 
         LOG.debug(">>>categoryGroupList: " + categoryGroupByNameAndTypeResult.getCategories());
         assertEquals(true, categoryGroupByNameAndTypeResult.getCategories().size() > 0);
+    }
+
+    @Test
+    public void test_44_2_seleteCategoryGroupList_withLeftJoinFetch() throws Exception {
+//        int randomInt = randomWithinRange.getRandom();
+//        int categoriesQty = 3;
+//        String categoryGroupName = "categoryGroup nameAndType " + randomInt;
+//        CategoryGroup categoryGroupDebit = new CategoryGroupDebit(categoryGroupName,
+//                "debit category group to select " + randomInt);
+//        List<Category> debitCategories = new ArrayList<>();
+//        //put service: putting category_group in category and category in category_group
+//        for(int i = 0 ; i < categoriesQty;i++) {
+//            Category category = new CategoryDebit(categoryGroupDebit, "cat db same name " + i + "_v" + randomInt,
+//                    "credit category #" + i + " 'description'");
+//            debitCategories.add(category);
+//        }
+//        categoryGroupDebit.setCategories(debitCategories);
+//        LOG.debug(">>>category group name and type: " + categoryGroupDebit);
+//        LOG.debug(">>>categories of category group: " + debitCategories);
+//        categoryGroupDAOImplForTest.saveOrUpdateCategoryGroup(categoryGroupDebit);
+
+        //byName return list as it might be debit or credit and return categories
+        List<CategoryGroup> categoryGroupByNameAndTypeResult = categoryGroupDAOImplForTest
+                .categoryGroupListWithLeftJoinFetch(true);
+
+        LOG.debug(">>>category group select by id: " + categoryGroupByNameAndTypeResult);
+
+//        assertEquals(true, categoryGroupByNameAndTypeResult.getName().equals(categoryGroupName));
+//        assertEquals(true, categoryGroupByNameAndTypeResult.getCategoryGroupType().equals(DataBaseConstants.CATEGORY_GROUP_TYPE.DEBIT.getDiscriminator()));
+//
+//        LOG.debug(">>>categoryGroupList: " + categoryGroupByNameAndTypeResult.getCategories());
+//        assertEquals(true, categoryGroupByNameAndTypeResult.getCategories().size() > 0);
     }
 }
