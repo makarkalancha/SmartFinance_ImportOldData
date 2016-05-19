@@ -87,9 +87,10 @@ public class AutoCompleteComboBox extends ComboBox<String> implements EventHandl
         if(lastLength != (getEditor().getLength() - getEditor().getSelectedText().length())){
             lastLength = getEditor().getLength() - getEditor().getSelectedText().length();
             System.out.println(">>>handle lastLengthn: " + lastLength);
-//            if(StringUtils.isEmpty(getEditor().getText())){
+            if(event.getCode() == KeyCode.BACK_SPACE
+                    || event.getCode() == KeyCode.DELETE){
                 filterItems(getEditor().getText());
-//            }
+            }
         }
 
         System.out.println(">>>handle button pressed: " + event.getCode());
@@ -288,7 +289,14 @@ public class AutoCompleteComboBox extends ComboBox<String> implements EventHandl
                 }
 
                 setItems(bufferList);
-
+                hide();
+                System.out.println(">>>bufferList.size before show: " + bufferList.size());
+        /**
+         * http://stackoverflow.com/questions/23094062/javafx-combobox-not-refreshing-the-number-of-visible-rows
+         *
+         * The bug submited is fixes, unfortunally in jdk8u66 sometimes the problem still happens with the test case attached to the bug
+         */
+                setVisibleRowCount(bufferList.size());
                 //new added
                 show();
 //            }
