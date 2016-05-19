@@ -68,7 +68,7 @@ public class ComboboxTestApp extends Application{
                 "emma(johnson)")); //20
         ObservableList<String> items = FXCollections.observableList(list);
 //        final ComboBox emailComboBox = new AutoCompleteComboBox(items);
-        final ComboBox emailComboBox = new AutoCompleteComboBox1();
+        final ComboBox emailComboBox = new AutoCompleteComboBox2();
         emailComboBox.setItems(items);
 //        final ComboBox emailComboBox = new ComboBox(items);
 
