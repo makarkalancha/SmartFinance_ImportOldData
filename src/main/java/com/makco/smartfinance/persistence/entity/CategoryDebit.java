@@ -2,6 +2,8 @@ package com.makco.smartfinance.persistence.entity;
 
 import com.google.common.base.Objects;
 import com.makco.smartfinance.constants.DataBaseConstants;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
@@ -17,11 +19,12 @@ import javax.persistence.ManyToOne;
 @DiscriminatorValue(DataBaseConstants.CATEGORY_GROUP_TYPE.Values.DEBIT)
 //because CategoryDebit is used in CategoryGroupDebit SortedSet<CategoryDebit> and this collection puts only Comparable
 public class CategoryDebit extends Category implements Comparable<CategoryDebit>{
+    private final static Logger LOG = LogManager.getLogger(CategoryDebit.class);
     /**
      * @ManyToOne is eager loaded by default (p318-289)
      */
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "CATEGORY_GROUP_ID", nullable = false)
+    @JoinColumn(name = "CATEGORY_GROUP_ID", referencedColumnName = "ID", nullable = false)
     private CategoryGroup categoryGroup;
 //    private CategoryGroupDebit categoryGroup;
 
@@ -87,6 +90,10 @@ public class CategoryDebit extends Category implements Comparable<CategoryDebit>
     //because CategoryDebit is used in CategoryGroupDebit SortedSet<CategoryDebit> and this collection puts only Comparable
     @Override
     public int compareTo(CategoryDebit that) {
+        LOG.debug("this:" + this);
+        LOG.debug("this.getName():" + this.getName());
+        LOG.debug("that:" + that);
+        LOG.debug("that.getName():" + that.getName());
         return this.getName().compareTo(that.getName());
     }
 }

@@ -17,7 +17,7 @@ import javax.persistence.ManyToOne;
 @DiscriminatorValue(DataBaseConstants.CATEGORY_GROUP_TYPE.Values.CREDIT)
 public class CategoryCredit extends Category implements Comparable<CategoryCredit>{
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "CATEGORY_GROUP_ID", nullable = false)
+    @JoinColumn(name = "CATEGORY_GROUP_ID", referencedColumnName = "ID", nullable = false)
     private CategoryGroup categoryGroup;
 
     public CategoryCredit(){
