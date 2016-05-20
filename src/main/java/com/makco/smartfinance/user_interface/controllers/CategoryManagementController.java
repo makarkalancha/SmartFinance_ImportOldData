@@ -30,6 +30,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -115,7 +116,7 @@ public class CategoryManagementController implements Initializable, ControlledSc
                 }
             };
         }catch (Exception e){
-            //not in finally because refreshCurrency must run before populateCategoryGroupTable
+            //not in finally because refreshCategoryGroup must run before populateCategoryGroupTable
             startService(onRefreshCategoryGroupWorker,null);
             DialogMessages.showExceptionAlert(e);
         }
@@ -170,7 +171,7 @@ public class CategoryManagementController implements Initializable, ControlledSc
                 DialogMessages.showExceptionAlert(onRefreshCategoryGroupWorker.getException());
             });
         }catch (Exception e){
-            //not in finally because refreshCurrency must run before populateCategoryGroupTable
+            //not in finally because refreshCategoryGroup must run before populateCategoryGroupTable
             startService(onRefreshCategoryGroupWorker,null);
             DialogMessages.showExceptionAlert(e);
         }
@@ -286,7 +287,7 @@ public class CategoryManagementController implements Initializable, ControlledSc
             cgSaveBtn.setDisable(false);
             cgDeleteBtn.setDisable(true);
         } catch (Exception e) {
-            //not in finally because refreshCurrency must run before populateCategoryGroupTable
+            //not in finally because refreshCategoryGroup must run before populateCategoryGroupTable
             startService(onRefreshCategoryGroupWorker, null);
             DialogMessages.showExceptionAlert(e);
         }
@@ -412,23 +413,23 @@ public class CategoryManagementController implements Initializable, ControlledSc
 
     @Override
     public void saveForm() {
-//        try {
-//            careTaker.saveState(new CurrencyFormState(codeTF.getText(), nameTF.getText(), descTA.getText()));
-//        } catch (Exception e) {
-//            DialogMessages.showExceptionAlert(e);
-//        }
+        try {
+            careTaker.saveState(new CategoryGroupFormState(cgTypeACCB.getValue(), cgNameTF.getText(), cgDescTA.getText()));
+        } catch (Exception e) {
+            DialogMessages.showExceptionAlert(e);
+        }
     }
 
     @Override
     public void restoreFormState(Memento memento) {
-//        try {
-//            CurrencyFormState formState = (CurrencyFormState) memento;
-//            codeTF.setText(formState.getCodeTFStr());
-//            nameTF.setText(formState.getNameTFStr());
-//            descTA.setText(formState.getDescTAStr());
-//        } catch (Exception e) {
-//            DialogMessages.showExceptionAlert(e);
-//        }
+        try {
+            CategoryGroupFormState formState = (CategoryGroupFormState) memento;
+            cgTypeACCB.setValue(formState.getCgTypeACCBStr());
+            cgNameTF.setText(formState.getCgNameTFStr());
+            cgDescTA.setText(formState.getCgDescTAStr());
+        } catch (Exception e) {
+            DialogMessages.showExceptionAlert(e);
+        }
     }
 
     @Override
@@ -446,66 +447,60 @@ public class CategoryManagementController implements Initializable, ControlledSc
     @Override
     public boolean askPermissionToClose() {
         boolean result = true;
-//        try{
-//            StringBuilder contentText = new StringBuilder();
-//            if(!StringUtils.isBlank(codeTF.getText())) {
-//                contentText.append("Code (");
-//                contentText.append(codeTF.getText());
-//                contentText.append(") is not saved. ");
-//            }
-//
-//            if(!StringUtils.isBlank(nameTF.getText())) {
-//                contentText.append("Name (");
-//                contentText.append(nameTF.getText());
-//                contentText.append(") is not saved. ");
-//            }
-//
-//            if(!StringUtils.isBlank(descTA.getText())) {
-//                contentText.append("Description (");
-//                contentText.append(descTA.getText());
-//                contentText.append(") is not saved. ");
-//            }
-//
-//            if(contentText.length() > 0){
-//                contentText.append("Are you sure you want to close this window?");
-//                result = DialogMessages.showConfirmationDialog(UserInterfaceConstants.CURRENCY_WINDOW_TITLE,
-//                        "Not all fields are empty", contentText.toString(), null);
-//            }
-//        }catch (Exception e){
-//            DialogMessages.showExceptionAlert(e);
-//        }
+        try{
+            StringBuilder contentText = new StringBuilder();
+            if(!StringUtils.isBlank(cgNameTF.getText())) {
+                contentText.append("Name (");
+                contentText.append(cgNameTF.getText());
+                contentText.append(") is not saved. ");
+            }
+
+            if(!StringUtils.isBlank(cgDescTA.getText())) {
+                contentText.append("Description (");
+                contentText.append(cgDescTA.getText());
+                contentText.append(") is not saved. ");
+            }
+
+            if(contentText.length() > 0){
+                contentText.append("Are you sure you want to close this window?");
+                result = DialogMessages.showConfirmationDialog(UserInterfaceConstants.CATEGORY_MANAGEMENT_WINDOW_TITLE,
+                        "Not all fields are empty", contentText.toString(), null);
+            }
+        }catch (Exception e){
+            DialogMessages.showExceptionAlert(e);
+        }
         return result;
     }
 
-    private static class CurrencyFormState implements Memento{
-        private final String codeTFStr;
-        private final String nameTFStr;
-        private final String descTAStr;
+    private static class CategoryGroupFormState implements Memento{
+        private final String cgTypeACCBStr;
+        private final String cgNameTFStr;
+        private final String cgDescTAStr;
 
-        public CurrencyFormState(String codeTF, String nameTF, String descTA){
-            this.codeTFStr = codeTF;
-            this.nameTFStr = nameTF;
-            this.descTAStr = descTA;
+        public CategoryGroupFormState(String cgTypeACCB, String cgNameTF, String cgDescTA){
+            this.cgTypeACCBStr = cgTypeACCB;
+            this.cgNameTFStr = cgNameTF;
+            this.cgDescTAStr = cgDescTA;
         }
 
-        public String getCodeTFStr() {
-            return codeTFStr;
+        public String getCgTypeACCBStr() {
+            return cgTypeACCBStr;
         }
 
-        public String getNameTFStr() {
-            return nameTFStr;
+        public String getCgNameTFStr() {
+            return cgNameTFStr;
         }
 
-        public String getDescTAStr() {
-            return descTAStr;
+        public String getCgDescTAStr() {
+            return cgDescTAStr;
         }
 
         @Override
         public String toString() {
-            return "CurrencyFormState{" +
-                    "codeTFStr='" + codeTFStr + '\'' +
-                    ", nameTFStr='" + nameTFStr + '\'' +
-                    ", descTAStr='" + descTAStr + '\'' +
+            return "CategoryGroupFormState{" +
+                    "cgTypeACCBStr='" + cgTypeACCBStr + '\'' +
+                    ", cgNameTFStr='" + cgNameTFStr + '\'' +
+                    ", cgDescTAStr='" + cgDescTAStr + '\'' +
                     '}';
         }
     }
