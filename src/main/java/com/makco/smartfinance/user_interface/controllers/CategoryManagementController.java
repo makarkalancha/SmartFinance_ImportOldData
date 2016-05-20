@@ -16,6 +16,7 @@ import com.makco.smartfinance.user_interface.utility_screens.forms.ProgressIndic
 import com.makco.smartfinance.user_interface.validation.ErrorEnum;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
@@ -381,9 +382,8 @@ public class CategoryManagementController implements Initializable, ControlledSc
             TableColumn<CategoryGroup, Long> categoryGroupIdCol = new TableColumn<>("ID");
             categoryGroupIdCol.setCellValueFactory(new PropertyValueFactory<CategoryGroup, Long>("id"));
 
-            //todo find the way to get value from method
             TableColumn<CategoryGroup, String> categoryGroupTypeCol = new TableColumn<>("Type");
-            categoryGroupTypeCol.setCellValueFactory(new PropertyValueFactory<CategoryGroup, String>("type"));
+            categoryGroupTypeCol.setCellValueFactory(cg -> new SimpleStringProperty(cg.getValue().getCategoryGroupType()));
 
             TableColumn<CategoryGroup, String> categoryGroupNameCol = new TableColumn<>("Name");
             categoryGroupNameCol.setCellValueFactory(new PropertyValueFactory<CategoryGroup, String>("name"));
