@@ -81,4 +81,15 @@ public class CategoryGroupServiceImpl implements CategoryGroupService {
         }
         return errors;
     }
+
+    @Override
+    public CategoryGroup getCategoryGroupById(Long id, boolean initializeCategories) throws Exception {
+        CategoryGroup categoryGroup = null;
+        try{
+            categoryGroup = categoryGroupDAO.getCategoryGroupById(id, initializeCategories);
+        } catch (Exception e) {
+            throw e;
+        }
+        return categoryGroup;
+    }
 }

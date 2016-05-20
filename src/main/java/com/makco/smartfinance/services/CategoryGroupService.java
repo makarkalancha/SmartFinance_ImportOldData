@@ -10,6 +10,7 @@ import java.util.List;
  * Created by mcalancea on 2016-05-13.
  */
 public interface CategoryGroupService {
+    CategoryGroup getCategoryGroupById(Long id, boolean initializeCategories) throws Exception;
     List<CategoryGroup> categoryGroupList(boolean initializeCategories) throws Exception;
     <T extends CategoryGroup> List<T> categoryGroupByType(Class<T> type, boolean initializeCategories) throws Exception;
     void saveOrUpdateCategoryGroup(CategoryGroup categoryGroup) throws Exception;
