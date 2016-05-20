@@ -201,32 +201,6 @@ public class CategoryGroupDAOImplForTest {
         return categoryGroup;
     }
 
-    public Category getCategoryById(Long id) throws Exception {
-        Session session = null;
-        Category category = null;
-        try{
-            session = TestPersistenceSession.openSession();
-            session.beginTransaction();
-            category = (Category) session.get(Category.class, id);
-            session.getTransaction().commit();
-        } catch (Exception e) {
-            try {
-                if (session.getTransaction().getStatus() == TransactionStatus.ACTIVE
-                        || session.getTransaction().getStatus() == TransactionStatus.MARKED_ROLLBACK)
-                    session.getTransaction().rollback();
-            } catch (Exception rbEx) {
-                LOG.error("Rollback of transaction failed, trace follows!");
-                LOG.error(rbEx, rbEx);
-            }
-            throw new RuntimeException(e);
-        } finally {
-            if(session != null){
-                session.close();
-            }
-        }
-        return category;
-    }
-
     public void removeCategoryGroup(Long id) throws Exception {
         Session session = null;
         try{
@@ -269,31 +243,7 @@ public class CategoryGroupDAOImplForTest {
         }
     }
 
-    public void removeCategory(Long id) throws Exception {
-        Session session = null;
-        try{
-            session = TestPersistenceSession.openSession();
-            session.beginTransaction();
-            Category category = (Category) session.load(Category.class, id);
-            LOG.debug(">>>removeCategoryGroup: " + category);
-            session.delete(category);
-            session.getTransaction().commit();
-        } catch (Exception e) {
-            try {
-                if (session.getTransaction().getStatus() == TransactionStatus.ACTIVE
-                        || session.getTransaction().getStatus() == TransactionStatus.MARKED_ROLLBACK)
-                    session.getTransaction().rollback();
-            } catch (Exception rbEx) {
-                LOG.error("Rollback of transaction failed, trace follows!");
-                LOG.error(rbEx, rbEx);
-            }
-            throw new RuntimeException(e);
-        } finally {
-            if(session != null){
-                session.close();
-            }
-        }
-    }
+
 
     public <T extends CategoryGroup> List<T> categoryGroupByType(Class<T> type, boolean initializeCategories) throws Exception {
         Session session = null;
@@ -494,33 +444,7 @@ public class CategoryGroupDAOImplForTest {
         return list;
     }
 
-    public List<Category> getCategoryByName(String categoryName) throws Exception {
-        Session session = null;
-        List<Category> list = new ArrayList<>();
-        try{
-            session = TestPersistenceSession.openSession();
-            session.beginTransaction();
-            list = session.createQuery("SELECT c FROM Category c where c.name = :categoryName")
-                    .setString("categoryName", categoryName)
-                    .list();
-            session.getTransaction().commit();
-        } catch (Exception e) {
-            try {
-                if (session.getTransaction().getStatus() == TransactionStatus.ACTIVE
-                        || session.getTransaction().getStatus() == TransactionStatus.MARKED_ROLLBACK)
-                    session.getTransaction().rollback();
-            } catch (Exception rbEx) {
-                LOG.error("Rollback of transaction failed, trace follows!");
-                LOG.error(rbEx, rbEx);
-            }
-            throw new RuntimeException(e);
-        } finally {
-            if(session != null){
-                session.close();
-            }
-        }
-        return list;
-    }
+
 
     public List<CategoryGroup> getCategoryGroupByName_withLeftJoinFetch(String categoryGroupName, boolean initializeCategories) throws Exception {
         Session session = null;
