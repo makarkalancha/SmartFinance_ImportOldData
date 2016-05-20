@@ -47,8 +47,8 @@ public class CategoryCredit extends Category implements Comparable<CategoryCredi
 
     @Override
     public boolean equals(Object other) {
-        if (other instanceof CategoryDebit) {
-            CategoryDebit that = (CategoryDebit) other;
+        if (other instanceof CategoryCredit) {
+            CategoryCredit that = (CategoryCredit) other;
             return Objects.equal(getCategoryGroupType(), that.getCategoryGroupType())
                     && Objects.equal(getName(), that.getName());
         }
