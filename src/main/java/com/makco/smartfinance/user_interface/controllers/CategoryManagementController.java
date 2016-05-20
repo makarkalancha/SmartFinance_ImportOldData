@@ -95,7 +95,7 @@ public class CategoryManagementController implements Initializable, ControlledSc
                         @Override
                         protected EnumSet<ErrorEnum> call() throws Exception {
                             return categoryManagementModel.savePendingCategoryGroup(
-                                    DataBaseConstants.CATEGORY_GROUP_TYPE.valueOf(cgTypeACCB.getValue()),
+                                    UserInterfaceConstants.convertCategoryGroupTypeFromUIToBackend(cgTypeACCB.getValue()),
                                     cgNameTF.getText(),
                                     cgDescTA.getText());
                         }
@@ -143,8 +143,8 @@ public class CategoryManagementController implements Initializable, ControlledSc
                 populateCategoryGroupTable();
                 EnumSet<ErrorEnum> errors = onSaveCategoryGroupWorker.getValue();
                 if(!errors.isEmpty()) {
-                    DialogMessages.showErrorDialog("Error while saving Category Group: "
-                                    + cgTypeACCB.getValue() + ", " + cgNameTF.getText(),
+                    DialogMessages.showErrorDialog("Error while saving Category Group: type "
+                                    + cgTypeACCB.getValue() + ", with name " + cgNameTF.getText(),
                             (EnumSet<ErrorEnum>) ((Service) onSaveCategoryGroupWorker).getValue(), null);
                 }
                 onClearCategoryGroup(actionEvent);
@@ -242,7 +242,8 @@ public class CategoryManagementController implements Initializable, ControlledSc
     private List<String> getCategoryGroupTypeStringList(){
         if(categoryGroupTypeStringList.size() == 0){
             for(DataBaseConstants.CATEGORY_GROUP_TYPE category_group_type : DataBaseConstants.CATEGORY_GROUP_TYPE.values()){
-                categoryGroupTypeStringList.add(category_group_type.toString());
+                categoryGroupTypeStringList.add(
+                        UserInterfaceConstants.convertCategoryGroupTypeFromBackendToUI(category_group_type.toString()));
             }
         }
 
@@ -324,10 +325,10 @@ public class CategoryManagementController implements Initializable, ControlledSc
         try {
             String title = UserInterfaceConstants.CATEGORY_MANAGEMENT_WINDOW_TITLE;
             String headerText = "Category Group Deletion";
-            StringBuilder contentText = new StringBuilder("Are you sure you want to delete category group ");
+            StringBuilder contentText = new StringBuilder("Are you sure you want to delete category group with type");
             contentText.append("\"");
             contentText.append(cgTypeACCB.getValue());
-            contentText.append("\" and \"");
+            contentText.append("\" and name \"");
             contentText.append(cgNameTF.getText());
             contentText.append("\"?");
             if(DialogMessages.showConfirmationDialog(title,headerText,contentText.toString(),null)) {
@@ -363,7 +364,9 @@ public class CategoryManagementController implements Initializable, ControlledSc
             cgDeleteBtn.setDisable(false);
             categoryManagementModel.setPendingCategoryGroupProperty(cgTable.getSelectionModel().getSelectedItem());
 
-            cgTypeACCB.setValue(categoryManagementModel.getPendingCategoryGroup().getCategoryGroupType());
+            cgTypeACCB.setValue(
+                    UserInterfaceConstants.convertCategoryGroupTypeFromBackendToUI(categoryManagementModel.getPendingCategoryGroup().getCategoryGroupType())
+            );
             cgNameTF.setText(categoryManagementModel.getPendingCategoryGroup().getName());
             cgDescTA.setText(categoryManagementModel.getPendingCategoryGroup().getDescription());
         }catch (Exception e){
@@ -383,7 +386,8 @@ public class CategoryManagementController implements Initializable, ControlledSc
             categoryGroupIdCol.setCellValueFactory(new PropertyValueFactory<CategoryGroup, Long>("id"));
 
             TableColumn<CategoryGroup, String> categoryGroupTypeCol = new TableColumn<>("Type");
-            categoryGroupTypeCol.setCellValueFactory(cg -> new SimpleStringProperty(cg.getValue().getCategoryGroupType()));
+            categoryGroupTypeCol.setCellValueFactory(cg -> new SimpleStringProperty(
+                    UserInterfaceConstants.convertCategoryGroupTypeFromBackendToUI(cg.getValue().getCategoryGroupType())));
 
             TableColumn<CategoryGroup, String> categoryGroupNameCol = new TableColumn<>("Name");
             categoryGroupNameCol.setCellValueFactory(new PropertyValueFactory<CategoryGroup, String>("name"));
