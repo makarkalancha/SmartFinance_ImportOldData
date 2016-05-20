@@ -251,6 +251,8 @@ public class CategoryManagementController implements Initializable, ControlledSc
     @Override
     public void initialize(URL location, ResourceBundle resources){
         try {
+            //http://javafx-and-me.blogspot.ca/2013/10/custom-combobox.html
+            //to show string instead of classes
             cgTypeACCB.setItems(FXCollections.observableList(getCategoryGroupTypeStringList()));
 //            cgTypeACCB.setPrefWidth(DataBaseConstants.Cgtype_CODE_MAX_LGTH);
             cgTypeACCB.valueProperty().addListener((observable, oldValue, newValue) -> {
