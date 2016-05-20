@@ -1,6 +1,7 @@
 package com.makco.smartfinance.javafx.control;
 
 import com.sun.javafx.scene.control.skin.ComboBoxListViewSkin;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -31,10 +32,6 @@ import java.util.regex.Pattern;
  *
  * this is "I found a solution that's working for me:"
  */
-
-/**
- * todo buggy home / end button
- */
 public class AutoCompleteComboBox extends ComboBox<String> implements EventHandler<KeyEvent> {
     private StringBuilder sb;
     private int lastLength;
@@ -63,6 +60,14 @@ public class AutoCompleteComboBox extends ComboBox<String> implements EventHandl
                 if(newValue){
                     // in focus
                     System.out.println(">>>changed if: in focus->newValue=" + newValue);
+                    if(!StringUtils.isEmpty(getEditor().getText())){
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                getEditor().selectAll();
+                            }
+                        });
+                    }
                 } else {
                     System.out.println(">>>changed else: NO focus");
                     lastLength = 0;
@@ -83,11 +88,6 @@ public class AutoCompleteComboBox extends ComboBox<String> implements EventHandl
 
     @Override
     public void handle(KeyEvent event) {
-//        if(event.getCode() == KeyCode.HOME
-//                || event.getCode() == KeyCode.END){
-//            hide();
-//        }
-
         /**
          * this variable is used to bypass the auto complete process if the length is the same.
          * this occurs if user types fast, the length of textField will record after the user
@@ -95,17 +95,17 @@ public class AutoCompleteComboBox extends ComboBox<String> implements EventHandl
          */
         if(lastLength != (getEditor().getLength() - getEditor().getSelectedText().length())){
             lastLength = getEditor().getLength() - getEditor().getSelectedText().length();
-            System.out.println(">>>handle lastLengthn: " + lastLength);
+//            System.out.println(">>>handle lastLength: " + lastLength);
             if(event.getCode() == KeyCode.BACK_SPACE
                     || event.getCode() == KeyCode.DELETE){
-                filterItems(getEditor().getText());
+//                System.out.println(">>>handle if lastLength: " + getEditor().getText());
+                filterItems(getEditor().getText(), true);
             }
         }
 
-        System.out.println(">>>handle button pressed: " + event.getCode());
-        System.out.println(">>>handle sb before pressed button: " + sb.toString());
-        System.out.println(">>>handle editorText before pressed button: " + getEditor().getText());
-        //todo somewhere here buttons home,end,delete, backspace bug
+//        System.out.println(">>>handle button pressed: " + event.getCode());
+//        System.out.println(">>>handle sb before pressed button: " + sb.toString());
+//        System.out.println(">>>handle editorText before pressed button: " + getEditor().getText());
         if (event.isControlDown()
                 || event.getCode() == KeyCode.BACK_SPACE
                 || event.getCode() == KeyCode.RIGHT
@@ -114,14 +114,14 @@ public class AutoCompleteComboBox extends ComboBox<String> implements EventHandl
                 || event.getCode() == KeyCode.DOWN
                 || event.getCode() == KeyCode.DELETE
                 || event.getCode() == KeyCode.INSERT
-//                || event.getCode() == KeyCode.HOME
-//                || event.getCode() == KeyCode.END
+                || event.getCode() == KeyCode.HOME
+                || event.getCode() == KeyCode.END
                 || event.getCode() == KeyCode.PAGE_UP
                 || event.getCode() == KeyCode.PAGE_DOWN
                 || event.getCode() == KeyCode.PRINTSCREEN
                 || event.getCode() == KeyCode.SCROLL_LOCK
                 || event.getCode() == KeyCode.PAUSE
-//                || event.getCode() == KeyCode.TAB
+                || event.getCode() == KeyCode.TAB
                 || event.getCode() == KeyCode.CONTROL
                 || event.getCode() == KeyCode.ALT
                 || event.getCode() == KeyCode.ALT_GRAPH
@@ -145,14 +145,14 @@ public class AutoCompleteComboBox extends ComboBox<String> implements EventHandl
         }
 
         System.out.println(">>>filterItems from handle: sb=" + sb.toString());
-        filterItems(sb.toString());
+        filterItems(sb.toString(), false);
 
         ObservableList<String> items = getItems();
         for (int i = 0; i < items.size(); i++) {
             if (items.get(i).toLowerCase().startsWith(getEditor().getText().toLowerCase())) {
                 try {
-                    System.out.println(">>>handle->setText: (sb.toString() + items.get(i).substring(sb.toString().length()))="
-                            + (sb.toString() + items.get(i).substring(sb.toString().length())));
+//                    System.out.println(">>>handle->setText: (sb.toString() + items.get(i).substring(sb.toString().length()))="
+//                            + (sb.toString() + items.get(i).substring(sb.toString().length())));
                     getEditor().setText(sb.toString() + items.get(i).substring(sb.toString().length()));
                 } catch (Exception e) {
 //                    getEditor().setText(sb.toString());
@@ -197,7 +197,7 @@ public class AutoCompleteComboBox extends ComboBox<String> implements EventHandl
         String s = getEditor().getText();
         System.out.println(">>>Found? " + found);
 //        System.out.println(">>>filterItems from selectClosestResultBasedOnTextFieldValue: getText=" + getEditor().getText());
-        filterItems(getEditor().getText());
+        filterItems(getEditor().getText(), false);
         if(!found && affect){
             System.out.println(">>>selectClosestResultBasedOnTextFieldValue->if(!found && affect){: s=" + s);
             getSelectionModel().clearSelection();
@@ -252,7 +252,6 @@ public class AutoCompleteComboBox extends ComboBox<String> implements EventHandl
     }
 
     private List<String> filterString(String filter){
-        System.out.println(">>>filterString->filter=" + filter);
         List<String> result = new ArrayList<>();
         StringBuilder regex = new StringBuilder();
         /**
@@ -277,28 +276,37 @@ public class AutoCompleteComboBox extends ComboBox<String> implements EventHandl
                 result.add(string);
             }
         }
-        System.out.println(">>>filterString->result=" + result);
+//        System.out.println(String.format(">>>filterString: filter=%s; List<String>=%s", filter, result));
         return result;
     }
 
-    private void filterItems(String filter) {
-        System.out.println(">>>filterItems->filter=" + filter);
+    private void filterItems(String filter, boolean isDeleteKeyPressed) {
         bufferList.clear();
         if (StringUtils.isEmpty(filter)) {
             bufferList.addAll(getInitialList());
         } else {
             bufferList.addAll(filterString(filter));
         }
-        setItems(FXCollections.observableArrayList(bufferList));
-//        hide();
+        hide();
         /**
-         * http://stackoverflow.com/questions/23094062/javafx-combobox-not-refreshing-the-number-of-visible-rows
-         *
-         * The bug submited is fixes, unfortunally in jdk8u66 sometimes the problem still happens with the test case attached to the bug
+         * button delete or backspace is pressed and then home/end buttons are presse
+         * probably because of observable array list when character is deleted
+         * combobox chose again the same string,
+         * so it's impossible to delete
          */
-        setVisibleRowCount(bufferList.size());
-        //new added
-        show();
-        System.out.println(">>>filterItems->bufferList=" + bufferList);
+        if(!isDeleteKeyPressed) {
+            setItems(FXCollections.observableArrayList(bufferList));
+
+            /**
+             * http://stackoverflow.com/questions/23094062/javafx-combobox-not-refreshing-the-number-of-visible-rows
+             *
+             * The bug submitted is fixes, unfortunately in jdk8u66 sometimes the problem still happens with the test case attached to the bug
+             */
+            setVisibleRowCount(bufferList.size());
+//          new added
+            show();
+        }
+        System.out.println(String.format(">>>filterItems: filter=%s; isDeleteKeyPressed=%b; getItems=%s",
+                filter, isDeleteKeyPressed, getItems()));
     }
 }
