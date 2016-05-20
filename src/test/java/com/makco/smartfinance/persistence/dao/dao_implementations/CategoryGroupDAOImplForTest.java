@@ -243,8 +243,6 @@ public class CategoryGroupDAOImplForTest {
         }
     }
 
-
-
     public <T extends CategoryGroup> List<T> categoryGroupByType(Class<T> type, boolean initializeCategories) throws Exception {
         Session session = null;
         List<T> list = new ArrayList<>();
@@ -333,7 +331,7 @@ public class CategoryGroupDAOImplForTest {
         try{
             session = TestPersistenceSession.openSession();
             session.beginTransaction();
-            //TODO p.333 12.2.6 Dynamic eager fetching
+            //p.333 12.2.6 Dynamic eager fetching -> see categoryGroupListWithLeftJoinFetch
             list = session.createQuery("SELECT cg FROM CategoryGroup cg").list();
             if(initializeCategories){
                 for(CategoryGroup categoryGroup : list) {
@@ -518,6 +516,17 @@ public class CategoryGroupDAOImplForTest {
         } finally {
             if(session != null){
                 session.close();
+            }
+        }
+        //test
+        //todo read https://developer.jboss.org/wiki/OpenSessioninView
+        LOG.debug(">>>test");
+        for(CategoryGroup categoryGroup : list){
+            LOG.debug(">>>categoryGroup: " + categoryGroup);
+            if (categoryGroup.getCategories().size() > 0) {
+                LOG.debug(">>>greaterThan0");
+            } else {
+                LOG.debug(">>>0");
             }
         }
         return list;

@@ -845,6 +845,33 @@ public class CategoriesManagementDAOImplTest {
     }
 
     @Test
+    public void test_50_seleteDebitCategory() throws Exception {
+        int randomInt = randomWithinRange.getRandom();
+        int categoriesQty = 3;
+        CategoryGroup categoryGroupDebit = new CategoryGroupDebit("dt catGr to sel " + randomInt,
+                "debit category group to select " + randomInt);
+        List<Category> debitCategories = new ArrayList<>();
+        //put service: putting category_group in category and category in category_group
+        for(int i = 0 ; i < categoriesQty;i++) {
+            Category category = new CategoryDebit(categoryGroupDebit, "cat dt " + i + "_v" + randomInt,
+                    "debit category #" + i + " 'description'");
+            debitCategories.add(category);
+        }
+        categoryGroupDebit.setCategories(debitCategories);
+        categoryGroupDAOImplForTest.saveOrUpdateCategoryGroup(categoryGroupDebit);
+
+        LOG.debug(">>>category group to delete: " + categoryGroupDebit);
+        LOG.debug(">>>categories to delete: " + debitCategories);
+
+        List<CategoryDebit> categoryDebits = categoryDAOImplForTest.categoryByType(CategoryDebit.class);
+        LOG.debug(">>>categoryDebits: " + categoryDebits);
+        assertEquals(true, categoryDebits.size() > 0);
+
+        LOG.debug(">>>qtyCategory: " + categoryDebits.size());
+        assertEquals(true, categoryDebits.size() > 0);
+    }
+
+    @Test
     public void test_46_seleteCreditCategoryGroupsWithCategories() throws Exception {
         int randomInt = randomWithinRange.getRandom();
         int categoriesQty = 3;
@@ -988,6 +1015,46 @@ public class CategoriesManagementDAOImplTest {
 
     @Test
     public void test_44_2_seleteCategoryGroupList_withLeftJoinFetch() throws Exception {
+        int randomInt = randomWithinRange.getRandom();
+        int categoriesQty = 3;
+        String categoryGroupName = "categoryGroup nameAndType " + randomInt;
+        CategoryGroup categoryGroupDebit = new CategoryGroupDebit(categoryGroupName,
+                "debit category group to select " + randomInt);
+        List<Category> debitCategories = new ArrayList<>();
+        //put service: putting category_group in category and category in category_group
+        for(int i = 0 ; i < categoriesQty;i++) {
+            Category category = new CategoryDebit(categoryGroupDebit, "cat db same name " + i + "_v" + randomInt,
+                    "credit category #" + i + " 'description'");
+            debitCategories.add(category);
+        }
+        categoryGroupDebit.setCategories(debitCategories);
+        LOG.debug(">>>category group name and type: " + categoryGroupDebit);
+        LOG.debug(">>>categories of category group: " + debitCategories);
+        categoryGroupDAOImplForTest.saveOrUpdateCategoryGroup(categoryGroupDebit);
+
+        //byName return list as it might be debit or credit and return categories
+        List<CategoryGroup> categoryGroups = categoryGroupDAOImplForTest
+                .categoryGroupListWithLeftJoinFetch(true);
+
+        LOG.debug(">>>categoryGroups: " + categoryGroups);
+        assertEquals(true, categoryGroups.size() > 0);
+
+        int qtyCategoryGroupsWithCategories = 0;
+        int qtyCategoryGroupsWithoutCategories = 0;
+        for(CategoryGroup categoryGroup : categoryGroups){
+            if(categoryGroup.getCategories().size() > 0){
+                ++qtyCategoryGroupsWithCategories;
+            } else {
+                ++qtyCategoryGroupsWithoutCategories;
+            }
+        }
+        LOG.debug(">>>qtyCategoryGroupsWithCategories: " + qtyCategoryGroupsWithCategories);
+        LOG.debug(">>>qtyCategoryGroupsWithoutCategories: " + qtyCategoryGroupsWithoutCategories);
+        assertEquals(true, qtyCategoryGroupsWithCategories > 0);
+    }
+
+    @Test
+    public void test_51_seleteCategoryList() throws Exception {
 //        int randomInt = randomWithinRange.getRandom();
 //        int categoriesQty = 3;
 //        String categoryGroupName = "categoryGroup nameAndType " + randomInt;

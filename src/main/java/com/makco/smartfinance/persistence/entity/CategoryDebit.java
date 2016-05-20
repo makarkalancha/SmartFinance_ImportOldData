@@ -24,7 +24,7 @@ public class CategoryDebit extends Category implements Comparable<CategoryDebit>
      * @ManyToOne is eager loaded by default (p318-289)
      */
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "CATEGORY_GROUP_ID", referencedColumnName = "ID", nullable = false)
+    @JoinColumn(name = "CATEGORY_GROUP_ID", /*referencedColumnName = "ID",*/ nullable = false)
     private CategoryGroup categoryGroup;
 //    private CategoryGroupDebit categoryGroup;
 
