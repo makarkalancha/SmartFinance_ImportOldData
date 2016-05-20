@@ -83,10 +83,10 @@ public class AutoCompleteComboBox extends ComboBox<String> implements EventHandl
 
     @Override
     public void handle(KeyEvent event) {
-        if(event.getCode() == KeyCode.HOME
-                || event.getCode() == KeyCode.END){
-            hide();
-        }
+//        if(event.getCode() == KeyCode.HOME
+//                || event.getCode() == KeyCode.END){
+//            hide();
+//        }
 
         /**
          * this variable is used to bypass the auto complete process if the length is the same.
@@ -114,8 +114,8 @@ public class AutoCompleteComboBox extends ComboBox<String> implements EventHandl
                 || event.getCode() == KeyCode.DOWN
                 || event.getCode() == KeyCode.DELETE
                 || event.getCode() == KeyCode.INSERT
-                || event.getCode() == KeyCode.HOME
-                || event.getCode() == KeyCode.END
+//                || event.getCode() == KeyCode.HOME
+//                || event.getCode() == KeyCode.END
                 || event.getCode() == KeyCode.PAGE_UP
                 || event.getCode() == KeyCode.PAGE_DOWN
                 || event.getCode() == KeyCode.PRINTSCREEN
@@ -151,6 +151,8 @@ public class AutoCompleteComboBox extends ComboBox<String> implements EventHandl
         for (int i = 0; i < items.size(); i++) {
             if (items.get(i).toLowerCase().startsWith(getEditor().getText().toLowerCase())) {
                 try {
+                    System.out.println(">>>handle->setText: (sb.toString() + items.get(i).substring(sb.toString().length()))="
+                            + (sb.toString() + items.get(i).substring(sb.toString().length())));
                     getEditor().setText(sb.toString() + items.get(i).substring(sb.toString().length()));
                 } catch (Exception e) {
 //                    getEditor().setText(sb.toString());
@@ -250,6 +252,7 @@ public class AutoCompleteComboBox extends ComboBox<String> implements EventHandl
     }
 
     private List<String> filterString(String filter){
+        System.out.println(">>>filterString->filter=" + filter);
         List<String> result = new ArrayList<>();
         StringBuilder regex = new StringBuilder();
         /**
@@ -274,10 +277,12 @@ public class AutoCompleteComboBox extends ComboBox<String> implements EventHandl
                 result.add(string);
             }
         }
+        System.out.println(">>>filterString->result=" + result);
         return result;
     }
 
     private void filterItems(String filter) {
+        System.out.println(">>>filterItems->filter=" + filter);
         bufferList.clear();
         if (StringUtils.isEmpty(filter)) {
             bufferList.addAll(getInitialList());
@@ -285,7 +290,7 @@ public class AutoCompleteComboBox extends ComboBox<String> implements EventHandl
             bufferList.addAll(filterString(filter));
         }
         setItems(FXCollections.observableArrayList(bufferList));
-        hide();
+//        hide();
         /**
          * http://stackoverflow.com/questions/23094062/javafx-combobox-not-refreshing-the-number-of-visible-rows
          *
@@ -294,5 +299,6 @@ public class AutoCompleteComboBox extends ComboBox<String> implements EventHandl
         setVisibleRowCount(bufferList.size());
         //new added
         show();
+        System.out.println(">>>filterItems->bufferList=" + bufferList);
     }
 }
