@@ -290,7 +290,11 @@ public class CategoryGroupDAOImplForTest {
         List<T> list = new ArrayList<>();
 
         StringBuilder query = new StringBuilder();
-        query.append("SELECT cg FROM CategoryGroup cg ");
+//        query.append("SELECT cg FROM CategoryGroupDebit cg "); //works
+//        query.append("SELECT cg FROM CategoryGroup cg ");
+        query.append("SELECT cg FROM ");
+        query.append(type.getSimpleName());
+        query.append(" cg ");
         if(initializeCategories){
             query.append("left join fetch cg.categories ");
         }
@@ -304,6 +308,18 @@ public class CategoryGroupDAOImplForTest {
                     .setParameter("type", type.newInstance().getCategoryGroupType())
                     .list();
             Collections.sort(list, (CategoryGroup cg1,  CategoryGroup cg2) -> cg1.getName().toLowerCase().compareTo(cg2.getName().toLowerCase()));
+
+//            LOG.debug(">>>query: " + query.toString());
+//            System.out.println(">>>query: " + query.toString());
+//            for(CategoryGroup categoryGroup : list){
+//                LOG.debug(">>>categoryGroup: " + categoryGroup);
+//                if (categoryGroup.getCategories().size() > 0) {
+//                    LOG.debug(">>>greaterThan0");
+//                } else {
+//                    LOG.debug(">>>0");
+//                }
+//            }
+
             session.getTransaction().commit();
 
         } catch (Exception e) {
@@ -320,6 +336,18 @@ public class CategoryGroupDAOImplForTest {
         } finally {
             if(session != null){
                 session.close();
+            }
+        }
+        //test
+        //todo read https://developer.jboss.org/wiki/OpenSessioninView
+        LOG.debug(">>>test");
+        LOG.debug(">>>query: " + query.toString());
+        for(CategoryGroup categoryGroup : list){
+            LOG.debug(">>>categoryGroup: " + categoryGroup);
+            if (categoryGroup.getCategories().size() > 0) {
+                LOG.debug(">>>greaterThan0");
+            } else {
+                LOG.debug(">>>0");
             }
         }
         return list;
@@ -442,16 +470,14 @@ public class CategoryGroupDAOImplForTest {
         return list;
     }
 
-
-
     public List<CategoryGroup> getCategoryGroupByName_withLeftJoinFetch(String categoryGroupName, boolean initializeCategories) throws Exception {
         Session session = null;
         List<CategoryGroup> list = new ArrayList<>();
 
         StringBuilder query = new StringBuilder();
-        query.append("SELECT cg FROM CategoryGroup cg ");
+        query.append("SELECT cg FROM CategoryGroup as cg ");
         if(initializeCategories){
-            query.append("left join fetch cg.categories ");
+            query.append("left join fetch cg.categories as categories ");
         }
         query.append("where cg.name = :categoryGroupName ");
 
@@ -516,17 +542,6 @@ public class CategoryGroupDAOImplForTest {
         } finally {
             if(session != null){
                 session.close();
-            }
-        }
-        //test
-        //todo read https://developer.jboss.org/wiki/OpenSessioninView
-        LOG.debug(">>>test");
-        for(CategoryGroup categoryGroup : list){
-            LOG.debug(">>>categoryGroup: " + categoryGroup);
-            if (categoryGroup.getCategories().size() > 0) {
-                LOG.debug(">>>greaterThan0");
-            } else {
-                LOG.debug(">>>0");
             }
         }
         return list;
