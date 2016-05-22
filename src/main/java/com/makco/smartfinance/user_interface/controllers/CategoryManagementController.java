@@ -380,7 +380,7 @@ public class CategoryManagementController implements Initializable, ControlledSc
         try{
             LOG.debug("categoryManagementModel.getCategoryGroups().size():" + categoryManagementModel.getCategoryGroups().size());
             cgTable.getItems().clear();
-            //TODO if add another method getCategoryGroup(boolean) to get categoryGroup with/without categories
+            // TODO if add another method getCategoryGroup(boolean) to get categoryGroup with/without categories
             cgTable.setItems(categoryManagementModel.getCategoryGroups());
 
             TableColumn<CategoryGroup, Long> categoryGroupIdCol = new TableColumn<>("ID");
