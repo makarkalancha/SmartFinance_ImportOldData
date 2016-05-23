@@ -68,15 +68,13 @@ public class CategoryDAOImplTest {
     }
 
     @Test
-    //TODO test_12_saveCategoryWithCategoryGroup
     public void test_12_saveCategoryWithCategoryGroup() throws Exception {
-
+        //see CategoryGroupDAOImplTest.test_12_saveCategoryGroupWithCategories
     }
 
     @Test
-    //TODO test_13_saveCategoriesWithCategoryGroup
     public void test_13_saveCategoriesWithCategoryGroup() throws Exception {
-
+        //see CategoryGroupDAOImplTest.test_12_saveCategoryGroupWithCategories
     }
 
     @Test
