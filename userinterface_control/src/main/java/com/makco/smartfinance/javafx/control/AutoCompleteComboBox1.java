@@ -38,7 +38,7 @@ import java.util.regex.Pattern;
  */
 
 /**
- * todo bug:
+ * bug:
  * 1) type any letter
  * 2) choose anything from list (without pressing enter)
  * 3) move cursor so it is somewhere inside string (between start and end)
