@@ -14,5 +14,5 @@ public interface CategoryGroupDAO {
     void saveOrUpdateCategoryGroup(CategoryGroup categoryGroup) throws Exception;
     void removeCategoryGroup(Long id) throws Exception;
 
-    List<CategoryGroup> getCategoryGroupByName(String categoryGroupName, boolean initializeCategories) throws Exception;
+    List<CategoryGroup> getCategoryGroupByName(String categoryGroupName) throws Exception;
 }

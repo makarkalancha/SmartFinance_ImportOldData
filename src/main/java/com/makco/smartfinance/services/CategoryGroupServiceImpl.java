@@ -62,10 +62,10 @@ public class CategoryGroupServiceImpl implements CategoryGroupService {
     }
 
     @Override
-    public List<CategoryGroup> getCategoryGroupByName(String categoryGroupName, boolean initializeCategories) throws Exception {
+    public List<CategoryGroup> getCategoryGroupByName(String categoryGroupName) throws Exception {
         List<CategoryGroup> categoryGroupList = new ArrayList<>();
         try{
-            categoryGroupList = categoryGroupDAO.getCategoryGroupByName(categoryGroupName, initializeCategories);
+            categoryGroupList = categoryGroupDAO.getCategoryGroupByName(categoryGroupName);
         } catch (Exception e) {
             throw e;
         }

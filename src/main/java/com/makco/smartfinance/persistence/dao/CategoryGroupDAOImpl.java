@@ -167,25 +167,14 @@ public class CategoryGroupDAOImpl implements CategoryGroupDAO{
     }
 
     @Override
-    //todo is used in validation only: remove categories, set to empty list or leave with exception
-    //todo change query to something like "LOWER(cg.name) = LOWER(:categoryGroupName)"
-    public List<CategoryGroup> getCategoryGroupByName(String categoryGroupName, boolean initializeCategories) throws Exception {
+    public List<CategoryGroup> getCategoryGroupByName(String categoryGroupName) throws Exception {
         Session session = null;
         List<CategoryGroup> list = new ArrayList<>();
-        //same number of queries (Hibernate.initialize(categoryGroup.getCategories()) and left join fetch)
-        //but this way is cleaner
-        StringBuilder query = new StringBuilder();
-        query.append("SELECT cg FROM CategoryGroup cg ");
-        if(initializeCategories){
-            query.append("left join fetch cg.categories ");
-        }
-        query.append("where cg.name = :categoryGroupName ");
-
         try{
             session = HibernateUtil.openSession();
             session.beginTransaction();
             //p.333 12.2.6 Dynamic eager fetching
-            list = session.createQuery(query.toString())
+            list = session.createQuery("SELECT cg FROM CategoryGroup cg where LOWER(cg.name) = LOWER(:categoryGroupName)")
                     .setString("categoryGroupName", categoryGroupName)
                     .list();
             //byName return list as it might be debit or credit and return categories

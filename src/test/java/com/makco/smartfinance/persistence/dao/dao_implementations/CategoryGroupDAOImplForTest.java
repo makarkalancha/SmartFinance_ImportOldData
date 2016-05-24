@@ -123,7 +123,8 @@ public class CategoryGroupDAOImplForTest {
         return categoryGroup;
     }
 
-    public List<CategoryGroup> getCategoryGroupByName(String categoryGroupName, boolean initializeCategories) throws Exception {
+    //NOT USED
+    public List<CategoryGroup> getCategoryGroupByName_withCategories(String categoryGroupName, boolean initializeCategories) throws Exception {
         Session session = null;
         List<CategoryGroup> list = new ArrayList<>();
         try{
@@ -163,6 +164,36 @@ public class CategoryGroupDAOImplForTest {
         return list;
     }
 
+    public List<CategoryGroup> getCategoryGroupByName_forValidation(String categoryGroupName) throws Exception {
+        Session session = null;
+        List<CategoryGroup> list = new ArrayList<>();
+        try{
+            session = TestPersistenceSession.openSession();
+            session.beginTransaction();
+            //TODO p.333 12.2.6 Dynamic eager fetching
+            list = session.createQuery("SELECT cg FROM CategoryGroup cg where LOWER(cg.name) = LOWER(:categoryGroupName)")
+                    .setString("categoryGroupName", categoryGroupName)
+                    .list();
+            session.getTransaction().commit();
+        } catch (Exception e) {
+            try {
+                if (session.getTransaction().getStatus() == TransactionStatus.ACTIVE
+                        || session.getTransaction().getStatus() == TransactionStatus.MARKED_ROLLBACK)
+                    session.getTransaction().rollback();
+            } catch (Exception rbEx) {
+                LOG.error("Rollback of transaction failed, trace follows!");
+                LOG.error(rbEx, rbEx);
+            }
+            throw new RuntimeException(e);
+        } finally {
+            if(session != null){
+                session.close();
+            }
+        }
+        return list;
+    }
+
+    //NOT USED
     public CategoryGroup getCategoryGroupByNameAndType(String categoryGroupName, DataBaseConstants.CATEGORY_GROUP_TYPE type, boolean initializeCategories) throws Exception {
         Session session = null;
         CategoryGroup categoryGroup = null;
@@ -470,6 +501,7 @@ public class CategoryGroupDAOImplForTest {
         return list;
     }
 
+    //NOT USED
     public List<CategoryGroup> getCategoryGroupByName_withLeftJoinFetch(String categoryGroupName, boolean initializeCategories) throws Exception {
         Session session = null;
         List<CategoryGroup> list = new ArrayList<>();
