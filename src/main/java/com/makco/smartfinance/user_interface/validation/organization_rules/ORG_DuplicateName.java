@@ -20,7 +20,7 @@ public class ORG_DuplicateName implements Rule<Organization> {
         EnumSet<ErrorEnum> errors = EnumSet.noneOf(ErrorEnum.class);
         try {
             List<Organization> organizations = organizationService.getOrganizationByName(organization.getName());
-            organizations.removeIf(f -> f.getId().equals(organization.getId()));
+            organizations.removeIf(org -> org.getId().equals(organization.getId()));
             if (!organizations.isEmpty()) {
                 errors.add(ErrorEnum.ORG_NAME_DUPLICATE);
             }
