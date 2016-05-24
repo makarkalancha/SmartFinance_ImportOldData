@@ -19,6 +19,7 @@ import java.util.List;
 public class CategoryGroupServiceImpl implements CategoryGroupService {
     private final static Logger LOG = LogManager.getLogger(CategoryGroupServiceImpl.class);
     private CategoryGroupDAO categoryGroupDAO = new CategoryGroupDAOImpl();
+
     @Override
     public List<CategoryGroup> categoryGroupList(boolean initializeCategories) throws Exception {
         List<CategoryGroup> categoryGroupList = new ArrayList<>();
@@ -31,6 +32,7 @@ public class CategoryGroupServiceImpl implements CategoryGroupService {
     }
 
     @Override
+    //TODO remove not used: leave only used methods and fix test methods accordingly
     public <T extends CategoryGroup> List<T> categoryGroupByType(Class<T> type, boolean initializeCategories) throws Exception {
         List<T> categoryGroupList = new ArrayList<>();
         try {

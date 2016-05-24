@@ -167,6 +167,8 @@ public class CategoryGroupDAOImpl implements CategoryGroupDAO{
     }
 
     @Override
+    //todo is used in validation only: remove categories, set to empty list or leave with exception
+    //todo change query to something like "LOWER(cg.name) = LOWER(:categoryGroupName)"
     public List<CategoryGroup> getCategoryGroupByName(String categoryGroupName, boolean initializeCategories) throws Exception {
         Session session = null;
         List<CategoryGroup> list = new ArrayList<>();
