@@ -712,9 +712,10 @@ public class CategoryGroupDAOImplTest {
         assertEquals(true, qtyCategoryGroupsWithCategories > 0);
     }
 
-//    @Test
+    @Test
     //not working without eager loading
-    public void test_44_2_seleteCategoryGroupList_withLeftJoinFetch() throws Exception {
+    //todo try to fix this method for UI to display cat_gr with categories even if cat_gr has no categories
+    public void test_44_2_seleteAllCategoryGroupsWithCategories_withLeftJoinFetch() throws Exception {
         int randomInt = randomWithinRange.getRandom();
         int categoriesQty = 3;
         String categoryGroupName = "categoryGroup nameAndType " + randomInt;
