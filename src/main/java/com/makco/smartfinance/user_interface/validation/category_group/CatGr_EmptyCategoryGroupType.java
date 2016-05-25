@@ -11,14 +11,14 @@ import java.util.EnumSet;
 /**
  * Created by mcalancea on 2016-04-08.
  */
-public class CatGr_EmptyName implements Rule<CategoryGroup> {
+public class CatGr_EmptyCategoryGroupType implements Rule<CategoryGroup> {
 
     @Override
     public EnumSet<ErrorEnum> validate(CategoryGroup categoryGroup) {
         EnumSet<ErrorEnum> errors = EnumSet.noneOf(ErrorEnum.class);
         try {
-            if (StringUtils.isBlank(categoryGroup.getName())) {
-                errors.add(ErrorEnum.CatGr_NULL_NAME);
+            if (StringUtils.isBlank(categoryGroup.getCategoryGroupType())) {
+                errors.add(ErrorEnum.CatGr_NULL_CG_TYPE);
             }
         }catch (Exception e){
             DialogMessages.showExceptionAlert(e);

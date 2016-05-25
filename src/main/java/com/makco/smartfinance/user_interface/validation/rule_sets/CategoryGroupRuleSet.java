@@ -7,6 +7,7 @@ import com.makco.smartfinance.user_interface.validation.Rule;
 import com.makco.smartfinance.user_interface.validation.RuleSet;
 import com.makco.smartfinance.user_interface.validation.category_group.CatGr_DescLength;
 import com.makco.smartfinance.user_interface.validation.category_group.CatGr_DuplicateName;
+import com.makco.smartfinance.user_interface.validation.category_group.CatGr_EmptyCategoryGroupType;
 import com.makco.smartfinance.user_interface.validation.category_group.CatGr_EmptyName;
 import com.makco.smartfinance.user_interface.validation.category_group.CatGr_NameLength;
 
@@ -24,6 +25,7 @@ public class CategoryGroupRuleSet implements RuleSet<CategoryGroup>{
         List<Rule> rules = new ArrayList<>();
         rules.add(new CatGr_DescLength());
         rules.add(new CatGr_EmptyName());
+        rules.add(new CatGr_EmptyCategoryGroupType());
         rules.add(new CatGr_NameLength());
         rules.add(new CatGr_DuplicateName());//DB call so last
         return new ArrayList<>(rules);

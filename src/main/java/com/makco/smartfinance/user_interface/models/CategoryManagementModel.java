@@ -6,6 +6,7 @@ import com.makco.smartfinance.persistence.entity.CategoryGroupCredit;
 import com.makco.smartfinance.persistence.entity.CategoryGroupDebit;
 import com.makco.smartfinance.services.CategoryGroupService;
 import com.makco.smartfinance.services.CategoryGroupServiceImpl;
+import com.makco.smartfinance.user_interface.constants.UserInterfaceConstants;
 import com.makco.smartfinance.user_interface.validation.ErrorEnum;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -43,6 +44,7 @@ public class CategoryManagementModel {
         return categoryGroups;
     }
 
+    //TODO finish validation if type is empty
     public EnumSet<ErrorEnum> savePendingCategoryGroup(DataBaseConstants.CATEGORY_GROUP_TYPE type, String name, String description) throws Exception {
         EnumSet<ErrorEnum> errors = EnumSet.noneOf(ErrorEnum.class);
         try {
@@ -53,6 +55,10 @@ public class CategoryManagementModel {
                 tmpCategoryGroup = pendingCategoryGroup;
                 pendingCategoryGroup = null;
             } else {
+
+                if()
+                DataBaseConstants.CATEGORY_GROUP_TYPE type = UserInterfaceConstants.convertCategoryGroupTypeFromUIToBackend(cgTypeACCB.getValue()),
+
                 switch (type) {
                     case CREDIT:
                         tmpCategoryGroup = new CategoryGroupCredit(name, description);

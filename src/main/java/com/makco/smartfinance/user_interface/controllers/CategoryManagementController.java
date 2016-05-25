@@ -96,7 +96,7 @@ public class CategoryManagementController implements Initializable, ControlledSc
                         @Override
                         protected EnumSet<ErrorEnum> call() throws Exception {
                             return categoryManagementModel.savePendingCategoryGroup(
-                                    UserInterfaceConstants.convertCategoryGroupTypeFromUIToBackend(cgTypeACCB.getValue()),
+                                    cgTypeACCB.getValue(),
                                     cgNameTF.getText(),
                                     cgDescTA.getText());
                         }
