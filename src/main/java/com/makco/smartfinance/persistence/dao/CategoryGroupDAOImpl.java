@@ -55,49 +55,6 @@ public class CategoryGroupDAOImpl implements CategoryGroupDAO{
     }
 
     @Override
-    public <T extends CategoryGroup> List<T> categoryGroupByType(Class<T> type, boolean initializeCategories) throws Exception {
-        Session session = null;
-        List<T> list = new ArrayList<>();
-        //todo check selectCGDebitLeftJoinFetch_credit_byType.log vs selectCGDebitHibernateInitialize_credit_byType.log
-        //same number of queries (Hibernate.initialize(categoryGroup.getCategories()) and left join fetch)
-        //but this way is cleaner
-        StringBuilder query = new StringBuilder();
-        query.append("SELECT cg FROM CategoryGroup cg ");
-        if(initializeCategories){
-            query.append("left join fetch cg.categories ");
-        }
-        query.append("WHERE cg.class = :type ORDER BY cg.name ");
-
-        try{
-            session = HibernateUtil.openSession();
-            session.beginTransaction();
-            //p.333 12.2.6 Dynamic eager fetching
-            list = session.createQuery(query.toString())
-                    .setParameter("type", type.newInstance().getCategoryGroupType())
-                    .list();
-            Collections.sort(list, (CategoryGroup cg1,  CategoryGroup cg2) -> cg1.getName().toLowerCase().compareTo(cg2.getName().toLowerCase()));
-            session.getTransaction().commit();
-
-        } catch (Exception e) {
-            //hibernate persistence p.257
-            try {
-                if (session.getTransaction().getStatus() == TransactionStatus.ACTIVE
-                        || session.getTransaction().getStatus() == TransactionStatus.MARKED_ROLLBACK)
-                    session.getTransaction().rollback();
-            } catch (Exception rbEx) {
-                LOG.error("Rollback of transaction failed, trace follows!");
-                LOG.error(rbEx, rbEx);
-            }
-            throw new RuntimeException(e);
-        } finally {
-            if(session != null){
-                session.close();
-            }
-        }
-        return list;
-    }
-
-    @Override
     public void saveOrUpdateCategoryGroup(CategoryGroup categoryGroup) throws Exception {
         Session session = null;
         try {

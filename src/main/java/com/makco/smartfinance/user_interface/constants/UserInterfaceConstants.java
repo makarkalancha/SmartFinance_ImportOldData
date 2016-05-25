@@ -4,6 +4,7 @@ import com.makco.smartfinance.constants.DataBaseConstants;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -26,27 +27,29 @@ public class UserInterfaceConstants {
     public static final String CATEGORY_GROUP_TYPE_DEBIT = "Debit";
     public static final String CATEGORY_GROUP_TYPE_CREDIT = "Credit";
     public static String convertCategoryGroupTypeFromBackendToUI(String backendText){
-        String uiText = null;
-        if(backendText.equals(DataBaseConstants.CATEGORY_GROUP_TYPE.DEBIT.toString())
+        if(StringUtils.isEmpty(backendText)) {
+            return null;
+        }else if(backendText.equals(DataBaseConstants.CATEGORY_GROUP_TYPE.DEBIT.toString())
             || backendText.equals(DataBaseConstants.CATEGORY_GROUP_TYPE.Values.DEBIT)){
-            uiText = CATEGORY_GROUP_TYPE_DEBIT;
+            return CATEGORY_GROUP_TYPE_DEBIT;
         } else if(backendText.equals(DataBaseConstants.CATEGORY_GROUP_TYPE.CREDIT.toString())
                 || backendText.equals(DataBaseConstants.CATEGORY_GROUP_TYPE.Values.CREDIT)){
-            uiText = CATEGORY_GROUP_TYPE_CREDIT;
+            return CATEGORY_GROUP_TYPE_CREDIT;
         }
 
-        return uiText;
+        return null;
     }
 
     public static DataBaseConstants.CATEGORY_GROUP_TYPE convertCategoryGroupTypeFromUIToBackend(String uiText){
-        DataBaseConstants.CATEGORY_GROUP_TYPE backendText = null;
-        if(uiText.equals(CATEGORY_GROUP_TYPE_DEBIT)){
-            backendText = DataBaseConstants.CATEGORY_GROUP_TYPE.DEBIT;
-        } else if(uiText.equals(CATEGORY_GROUP_TYPE_CREDIT)){
-            backendText = DataBaseConstants.CATEGORY_GROUP_TYPE.CREDIT;
+        if (StringUtils.isEmpty(uiText)) {
+            return null;
+        } else if (uiText.equals(CATEGORY_GROUP_TYPE_DEBIT)) {
+            return DataBaseConstants.CATEGORY_GROUP_TYPE.DEBIT;
+        } else if (uiText.equals(CATEGORY_GROUP_TYPE_CREDIT)) {
+            return DataBaseConstants.CATEGORY_GROUP_TYPE.CREDIT;
         }
 
-        return backendText;
+        return null;
     }
 
 

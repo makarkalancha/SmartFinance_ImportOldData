@@ -4,12 +4,14 @@ import com.makco.smartfinance.constants.DataBaseConstants;
 import com.makco.smartfinance.persistence.entity.CategoryGroup;
 import com.makco.smartfinance.persistence.entity.CategoryGroupCredit;
 import com.makco.smartfinance.persistence.entity.CategoryGroupDebit;
+import com.makco.smartfinance.persistence.entity.CategoryGroupFactory;
 import com.makco.smartfinance.services.CategoryGroupService;
 import com.makco.smartfinance.services.CategoryGroupServiceImpl;
 import com.makco.smartfinance.user_interface.constants.UserInterfaceConstants;
 import com.makco.smartfinance.user_interface.validation.ErrorEnum;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -23,6 +25,7 @@ public class CategoryManagementModel {
     private CategoryGroupService categoryGroupService = new CategoryGroupServiceImpl();
     private ObservableList<CategoryGroup> categoryGroups = FXCollections.observableArrayList();
     private CategoryGroup pendingCategoryGroup;
+    private CategoryGroupFactory categoryGroupFactory = new CategoryGroupFactory();
 
     public CategoryManagementModel() {
 
@@ -44,7 +47,6 @@ public class CategoryManagementModel {
         return categoryGroups;
     }
 
-    //TODO finish validation if type is empty
     public EnumSet<ErrorEnum> savePendingCategoryGroup(DataBaseConstants.CATEGORY_GROUP_TYPE type, String name, String description) throws Exception {
         EnumSet<ErrorEnum> errors = EnumSet.noneOf(ErrorEnum.class);
         try {
@@ -55,20 +57,7 @@ public class CategoryManagementModel {
                 tmpCategoryGroup = pendingCategoryGroup;
                 pendingCategoryGroup = null;
             } else {
-
-                if()
-                DataBaseConstants.CATEGORY_GROUP_TYPE type = UserInterfaceConstants.convertCategoryGroupTypeFromUIToBackend(cgTypeACCB.getValue()),
-
-                switch (type) {
-                    case CREDIT:
-                        tmpCategoryGroup = new CategoryGroupCredit(name, description);
-                        break;
-                    case DEBIT:
-                        tmpCategoryGroup = new CategoryGroupDebit(name, description);
-                        break;
-                    default:
-                        throw new Exception("This type of Category Group is not supported!");
-                }
+                tmpCategoryGroup = categoryGroupFactory.getCategoryGroup(type, name, description);
             }
 
             errors = categoryGroupService.validate(tmpCategoryGroup);

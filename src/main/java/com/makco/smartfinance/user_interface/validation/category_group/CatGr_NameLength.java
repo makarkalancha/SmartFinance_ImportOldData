@@ -17,7 +17,7 @@ public class CatGr_NameLength implements Rule<CategoryGroup> {
     public EnumSet<ErrorEnum> validate(CategoryGroup categoryGroup) throws Exception{
         EnumSet<ErrorEnum> errors = EnumSet.noneOf(ErrorEnum.class);
         try {
-            if (categoryGroup.getName().length() > DataBaseConstants.CG_NAME_MAX_LGTH) {
+            if (categoryGroup != null && categoryGroup.getName().length() > DataBaseConstants.CG_NAME_MAX_LGTH) {
                 errors.add(ErrorEnum.CatGr_NAME_LGTH);
             }
         }catch (Exception e){

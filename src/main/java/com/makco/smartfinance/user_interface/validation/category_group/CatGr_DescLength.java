@@ -17,7 +17,7 @@ public class CatGr_DescLength implements Rule<CategoryGroup> {
     public EnumSet<ErrorEnum> validate(CategoryGroup categoryGroup) throws Exception{
         EnumSet<ErrorEnum> errors = EnumSet.noneOf(ErrorEnum.class);
         try {
-            if (categoryGroup.getDescription().length() > DataBaseConstants.CG_DESCRIPTION_MAX_LGTH) {
+            if (categoryGroup != null && categoryGroup.getDescription().length() > DataBaseConstants.CG_DESCRIPTION_MAX_LGTH) {
                 errors.add(ErrorEnum.CatGr_DESC_LGTH);
             }
         }catch (Exception e){

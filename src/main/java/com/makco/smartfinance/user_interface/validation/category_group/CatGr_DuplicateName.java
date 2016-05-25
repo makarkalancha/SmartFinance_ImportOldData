@@ -19,11 +19,13 @@ public class CatGr_DuplicateName implements Rule<CategoryGroup> {
     public EnumSet<ErrorEnum> validate(CategoryGroup categoryGroup) throws Exception{
         EnumSet<ErrorEnum> errors = EnumSet.noneOf(ErrorEnum.class);
         try {
-            List<CategoryGroup> categoryGroupsByName = categoryGroupService.getCategoryGroupByName(categoryGroup.getName());
-            categoryGroupsByName.removeIf(cg -> cg.getId().equals(categoryGroup.getId()));
-            categoryGroupsByName.removeIf(cg -> !cg.getCategoryGroupType().equals(categoryGroup.getCategoryGroupType()));
-            if (!categoryGroupsByName.isEmpty()) {
-                errors.add(ErrorEnum.CatGr_NAME_DUPLICATE);
+            if (categoryGroup != null) {
+                List<CategoryGroup> categoryGroupsByName = categoryGroupService.getCategoryGroupByName(categoryGroup.getName());
+                categoryGroupsByName.removeIf(cg -> cg.getId().equals(categoryGroup.getId()));
+                categoryGroupsByName.removeIf(cg -> !cg.getCategoryGroupType().equals(categoryGroup.getCategoryGroupType()));
+                if (!categoryGroupsByName.isEmpty()) {
+                    errors.add(ErrorEnum.CatGr_NAME_DUPLICATE);
+                }
             }
         }catch (Exception e){
             throw e;

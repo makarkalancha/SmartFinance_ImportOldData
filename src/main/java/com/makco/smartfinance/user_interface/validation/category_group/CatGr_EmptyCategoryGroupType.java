@@ -17,7 +17,7 @@ public class CatGr_EmptyCategoryGroupType implements Rule<CategoryGroup> {
     public EnumSet<ErrorEnum> validate(CategoryGroup categoryGroup) throws Exception{
         EnumSet<ErrorEnum> errors = EnumSet.noneOf(ErrorEnum.class);
         try {
-            if (StringUtils.isBlank(categoryGroup.getCategoryGroupType())) {
+            if (categoryGroup == null || StringUtils.isBlank(categoryGroup.getCategoryGroupType())) {
                 errors.add(ErrorEnum.CatGr_NULL_CG_TYPE);
             }
         }catch (Exception e){

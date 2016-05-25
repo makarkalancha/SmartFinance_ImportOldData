@@ -32,18 +32,6 @@ public class CategoryGroupServiceImpl implements CategoryGroupService {
     }
 
     @Override
-    //TODO remove not used: leave only used methods and fix test methods accordingly
-    public <T extends CategoryGroup> List<T> categoryGroupByType(Class<T> type, boolean initializeCategories) throws Exception {
-        List<T> categoryGroupList = new ArrayList<>();
-        try {
-            categoryGroupList = categoryGroupDAO.categoryGroupByType(type, initializeCategories);
-        } catch (Exception e) {
-            throw e;
-        }
-        return categoryGroupList;
-    }
-
-    @Override
     public void removeCategoryGroup(Long id) throws Exception {
         try{
             categoryGroupDAO.removeCategoryGroup(id);
