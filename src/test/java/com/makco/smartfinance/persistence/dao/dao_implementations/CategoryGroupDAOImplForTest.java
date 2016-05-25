@@ -130,7 +130,7 @@ public class CategoryGroupDAOImplForTest {
         try{
             session = TestPersistenceSession.openSession();
             session.beginTransaction();
-            //TODO p.333 12.2.6 Dynamic eager fetching
+            //p.333 12.2.6 Dynamic eager fetching: see getCategoryGroupByName_withLeftJoinFetch
             list = session.createQuery("SELECT cg FROM CategoryGroup cg where cg.name = :categoryGroupName")
                     .setString("categoryGroupName", categoryGroupName)
                     .list();
@@ -170,7 +170,6 @@ public class CategoryGroupDAOImplForTest {
         try{
             session = TestPersistenceSession.openSession();
             session.beginTransaction();
-            //TODO p.333 12.2.6 Dynamic eager fetching
             list = session.createQuery("SELECT cg FROM CategoryGroup cg where LOWER(cg.name) = LOWER(:categoryGroupName)")
                     .setString("categoryGroupName", categoryGroupName)
                     .list();
@@ -280,7 +279,7 @@ public class CategoryGroupDAOImplForTest {
         try{
             session = TestPersistenceSession.openSession();
             session.beginTransaction();
-            //TODO p.333 12.2.6 Dynamic eager fetching
+            //p.333 12.2.6 Dynamic eager fetching: see categoryGroupByType_withLeftJoinFetch
             list = session.createQuery("SELECT cg FROM CategoryGroup cg WHERE cg.class = :type ORDER BY cg.name")
                     .setParameter("type", type.newInstance().getCategoryGroupType())
                     .list();
