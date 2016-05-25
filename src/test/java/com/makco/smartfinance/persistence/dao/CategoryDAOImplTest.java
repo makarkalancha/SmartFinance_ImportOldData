@@ -239,7 +239,8 @@ public class CategoryDAOImplTest {
         assertEquals(true, categoryDebits.size() > 0);
     }
 
-    @Test
+//    @Test
+    //under investigation all methods with "WithLeftJoinFetch" suffix
     public void test_47_seleteCategoryList() throws Exception {
 //        int randomInt = randomWithinRange.getRandom();
 //        int categoriesQty = 3;
