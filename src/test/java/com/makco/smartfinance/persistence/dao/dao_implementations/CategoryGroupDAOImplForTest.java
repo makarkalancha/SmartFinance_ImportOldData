@@ -545,6 +545,7 @@ public class CategoryGroupDAOImplForTest {
 
         StringBuilder query = new StringBuilder();
         query.append("SELECT cg FROM CategoryGroup cg ");
+//        query.append("SELECT cg FROM CategoryGroupDebit cg "); //left join works with concrete class
         if(initializeCategories){
             query.append("left join fetch cg.categories ");
         }

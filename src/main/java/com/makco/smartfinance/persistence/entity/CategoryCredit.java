@@ -19,6 +19,7 @@ public class CategoryCredit extends Category implements Comparable<CategoryCredi
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "CATEGORY_GROUP_ID", /*referencedColumnName = "ID",*/ nullable = false)
     private CategoryGroup categoryGroup;
+//    private CategoryGroupCredit categoryGroup;
 
     public CategoryCredit(){
 

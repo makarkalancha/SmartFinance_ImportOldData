@@ -715,6 +715,7 @@ public class CategoryGroupDAOImplTest {
     @Test
     //not working without eager loading
     //todo try to fix this method for UI to display cat_gr with categories even if cat_gr has no categories
+    //todo compare queries in test_44_1 vs test_44_2
     public void test_44_2_seleteAllCategoryGroupsWithCategories_withLeftJoinFetch() throws Exception {
         int randomInt = randomWithinRange.getRandom();
         int categoriesQty = 3;

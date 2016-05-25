@@ -13,6 +13,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.MappedSuperclass;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
@@ -26,7 +27,8 @@ import java.util.TreeSet;
 /**
  * Created by mcalancea on 2016-04-25.
  */
-@Entity
+@MappedSuperclass
+//@Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 ////http://stackoverflow.com/questions/12199874/about-the-use-of-forcediscriminator-discriminatoroptionsforce-true
 @DiscriminatorOptions(force = true)
@@ -84,6 +86,10 @@ public abstract class CategoryGroup <T extends Category>{
     @Column(name="T_UPDATEDON",insertable = false, updatable = false)
     protected Timestamp updatedOn;
 
+//    /**
+//     * Property com.makco.smartfinance.persistence.entity.CategoryGroup.categories has an unbound type and no explicit target entity.
+//     * Resolve this Generic usage issue or set an explicit target attribute (eg @OneToMany(target=) or use an explicit @Type
+//     */
 //    @OneToMany(mappedBy = "categoryGroup", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 //    @javax.persistence.OrderBy("name")
 //    protected SortedSet<T> categories = new TreeSet<>();
