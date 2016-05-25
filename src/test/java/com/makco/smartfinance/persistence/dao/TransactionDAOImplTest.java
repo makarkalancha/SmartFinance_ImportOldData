@@ -6,5 +6,5 @@ package com.makco.smartfinance.persistence.dao;
  * Time: 22:23
  */
 public class TransactionDAOImplTest {
-    //TODO p386 and section 20.1 cursor and batch processing
+    //TODO p386 and section 20.1 cursor and batch processing: list too large
 }
