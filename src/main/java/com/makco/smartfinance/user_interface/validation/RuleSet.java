@@ -8,5 +8,5 @@ import java.util.List;
  */
 public interface RuleSet<T> {
     List<Rule> getRuleSet();
-    EnumSet<ErrorEnum> validate(T t);
+    EnumSet<ErrorEnum> validate(T t) throws Exception;
 }

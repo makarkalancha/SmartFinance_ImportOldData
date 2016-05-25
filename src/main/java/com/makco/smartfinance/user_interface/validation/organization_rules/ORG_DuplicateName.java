@@ -16,7 +16,7 @@ import java.util.List;
 public class ORG_DuplicateName implements Rule<Organization> {
     private OrganizationService organizationService = new OrganizationServiceImpl();
     @Override
-    public EnumSet<ErrorEnum> validate(Organization organization) {
+    public EnumSet<ErrorEnum> validate(Organization organization) throws Exception{
         EnumSet<ErrorEnum> errors = EnumSet.noneOf(ErrorEnum.class);
         try {
             List<Organization> organizations = organizationService.getOrganizationByName(organization.getName());
@@ -25,7 +25,7 @@ public class ORG_DuplicateName implements Rule<Organization> {
                 errors.add(ErrorEnum.ORG_NAME_DUPLICATE);
             }
         }catch (Exception e){
-            DialogMessages.showExceptionAlert(e);
+            throw e;
         }
         return errors;
     }

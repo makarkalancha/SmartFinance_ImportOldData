@@ -16,7 +16,7 @@ import java.util.List;
 public class FM_DuplicateName implements Rule<FamilyMember> {
     private FamilyMemberService familyMemberService = new FamilyMemberServiceImpl();
     @Override
-    public EnumSet<ErrorEnum> validate(FamilyMember familyMember) {
+    public EnumSet<ErrorEnum> validate(FamilyMember familyMember) throws Exception{
         EnumSet<ErrorEnum> errors = EnumSet.noneOf(ErrorEnum.class);
         try {
             List<FamilyMember> familyMembers = familyMemberService.getFamilyMemberByName(familyMember.getName());
@@ -25,7 +25,7 @@ public class FM_DuplicateName implements Rule<FamilyMember> {
                 errors.add(ErrorEnum.FM_NAME_DUPLICATE);
             }
         }catch (Exception e){
-            DialogMessages.showExceptionAlert(e);
+            throw e;
         }
         return errors;
     }

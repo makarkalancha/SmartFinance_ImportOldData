@@ -14,14 +14,14 @@ import java.util.EnumSet;
 public class ORG_EmptyName implements Rule<Organization> {
 
     @Override
-    public EnumSet<ErrorEnum> validate(Organization organization) {
+    public EnumSet<ErrorEnum> validate(Organization organization) throws Exception{
         EnumSet<ErrorEnum> errors = EnumSet.noneOf(ErrorEnum.class);
         try {
             if (StringUtils.isBlank(organization.getName())) {
                 errors.add(ErrorEnum.ORG_NAME_NULL);
             }
         }catch (Exception e){
-            DialogMessages.showExceptionAlert(e);
+            throw e;
         }
         return errors;
     }

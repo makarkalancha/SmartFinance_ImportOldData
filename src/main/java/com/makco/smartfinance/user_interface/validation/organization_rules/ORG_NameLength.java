@@ -14,14 +14,14 @@ import java.util.EnumSet;
 public class ORG_NameLength implements Rule<Organization> {
 
     @Override
-    public EnumSet<ErrorEnum> validate(Organization organization) {
+    public EnumSet<ErrorEnum> validate(Organization organization) throws Exception{
         EnumSet<ErrorEnum> errors = EnumSet.noneOf(ErrorEnum.class);
         try {
             if (organization.getName().length() > DataBaseConstants.ORG_NAME_MAX_LGTH) {
                 errors.add(ErrorEnum.ORG_NAME_LGTH);
             }
         }catch (Exception e){
-            DialogMessages.showExceptionAlert(e);
+            throw e;
         }
         return errors;
     }

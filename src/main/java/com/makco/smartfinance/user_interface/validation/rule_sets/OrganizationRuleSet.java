@@ -30,14 +30,14 @@ public class OrganizationRuleSet implements RuleSet<Organization>{
     }
 
     @Override
-    public EnumSet<ErrorEnum> validate(Organization organization) {
+    public EnumSet<ErrorEnum> validate(Organization organization) throws Exception{
         EnumSet<ErrorEnum> errors = EnumSet.noneOf(ErrorEnum.class);
         try {
             for (Rule rule : getRuleSet()) {
                 errors.addAll(rule.validate(organization));
             }
         }catch (Exception e){
-            DialogMessages.showExceptionAlert(e);
+            throw e;
         }
         return errors;
     }

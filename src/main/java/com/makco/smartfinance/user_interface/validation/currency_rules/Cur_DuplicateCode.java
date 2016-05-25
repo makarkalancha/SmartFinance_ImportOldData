@@ -16,7 +16,7 @@ import java.util.List;
 public class Cur_DuplicateCode implements Rule<Currency> {
     private CurrencyService currencyService = new CurrencyServiceImpl();
     @Override
-    public EnumSet<ErrorEnum> validate(Currency currency) {
+    public EnumSet<ErrorEnum> validate(Currency currency) throws Exception{
         EnumSet<ErrorEnum> errors = EnumSet.noneOf(ErrorEnum.class);
         try {
             List<Currency> currencies = currencyService.getCurrencyByCode(currency.getCode());
@@ -25,7 +25,7 @@ public class Cur_DuplicateCode implements Rule<Currency> {
                 errors.add(ErrorEnum.Cur_CODE_DUPLICATE);
             }
         }catch (Exception e){
-            DialogMessages.showExceptionAlert(e);
+            throw e;
         }
         return errors;
     }

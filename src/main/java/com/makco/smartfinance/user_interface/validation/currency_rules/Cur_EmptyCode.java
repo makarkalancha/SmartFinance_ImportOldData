@@ -14,14 +14,14 @@ import java.util.EnumSet;
 public class Cur_EmptyCode implements Rule<Currency> {
 
     @Override
-    public EnumSet<ErrorEnum> validate(Currency currency) {
+    public EnumSet<ErrorEnum> validate(Currency currency) throws Exception{
         EnumSet<ErrorEnum> errors = EnumSet.noneOf(ErrorEnum.class);
         try {
             if (StringUtils.isBlank(currency.getCode())) {
                 errors.add(ErrorEnum.Cur_CODE_NULL);
             }
         }catch (Exception e){
-            DialogMessages.showExceptionAlert(e);
+            throw e;
         }
         return errors;
     }

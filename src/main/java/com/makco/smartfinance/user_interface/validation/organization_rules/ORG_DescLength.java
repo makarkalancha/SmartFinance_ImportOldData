@@ -14,14 +14,14 @@ import java.util.EnumSet;
 public class ORG_DescLength implements Rule<Organization> {
 
     @Override
-    public EnumSet<ErrorEnum> validate(Organization organization) {
+    public EnumSet<ErrorEnum> validate(Organization organization) throws Exception{
         EnumSet<ErrorEnum> errors = EnumSet.noneOf(ErrorEnum.class);
         try {
             if (organization.getDescription().length() > DataBaseConstants.ORG_DESCRIPTION_MAX_LGTH) {
                 errors.add(ErrorEnum.ORG_DESC_LGTH);
             }
         }catch (Exception e){
-            DialogMessages.showExceptionAlert(e);
+            throw e;
         }
         return errors;
     }

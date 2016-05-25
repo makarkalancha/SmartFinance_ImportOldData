@@ -16,7 +16,7 @@ import java.util.List;
 public class CatGr_DuplicateName implements Rule<CategoryGroup> {
     private CategoryGroupService categoryGroupService = new CategoryGroupServiceImpl();
     @Override
-    public EnumSet<ErrorEnum> validate(CategoryGroup categoryGroup) {
+    public EnumSet<ErrorEnum> validate(CategoryGroup categoryGroup) throws Exception{
         EnumSet<ErrorEnum> errors = EnumSet.noneOf(ErrorEnum.class);
         try {
             List<CategoryGroup> categoryGroupsByName = categoryGroupService.getCategoryGroupByName(categoryGroup.getName());
@@ -26,7 +26,7 @@ public class CatGr_DuplicateName implements Rule<CategoryGroup> {
                 errors.add(ErrorEnum.CatGr_NAME_DUPLICATE);
             }
         }catch (Exception e){
-            DialogMessages.showExceptionAlert(e);
+            throw e;
         }
         return errors;
     }

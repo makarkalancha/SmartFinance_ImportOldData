@@ -14,14 +14,14 @@ import java.util.EnumSet;
 public class CatGr_NameLength implements Rule<CategoryGroup> {
 
     @Override
-    public EnumSet<ErrorEnum> validate(CategoryGroup categoryGroup) {
+    public EnumSet<ErrorEnum> validate(CategoryGroup categoryGroup) throws Exception{
         EnumSet<ErrorEnum> errors = EnumSet.noneOf(ErrorEnum.class);
         try {
             if (categoryGroup.getName().length() > DataBaseConstants.CG_NAME_MAX_LGTH) {
                 errors.add(ErrorEnum.CatGr_NAME_LGTH);
             }
         }catch (Exception e){
-            DialogMessages.showExceptionAlert(e);
+            throw e;
         }
         return errors;
     }

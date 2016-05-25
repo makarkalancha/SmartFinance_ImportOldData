@@ -32,14 +32,14 @@ public class CategoryGroupRuleSet implements RuleSet<CategoryGroup>{
     }
 
     @Override
-    public EnumSet<ErrorEnum> validate(CategoryGroup categoryGroup) {
+    public EnumSet<ErrorEnum> validate(CategoryGroup categoryGroup) throws Exception{
         EnumSet<ErrorEnum> errors = EnumSet.noneOf(ErrorEnum.class);
         try {
             for (Rule rule : getRuleSet()) {
                 errors.addAll(rule.validate(categoryGroup));
             }
         }catch (Exception e){
-            DialogMessages.showExceptionAlert(e);
+            throw e;
         }
         return errors;
     }

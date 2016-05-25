@@ -14,14 +14,14 @@ import java.util.EnumSet;
 public class FM_DescLength implements Rule<FamilyMember> {
 
     @Override
-    public EnumSet<ErrorEnum> validate(FamilyMember familyMember) {
+    public EnumSet<ErrorEnum> validate(FamilyMember familyMember) throws Exception{
         EnumSet<ErrorEnum> errors = EnumSet.noneOf(ErrorEnum.class);
         try {
             if (familyMember.getDescription().length() > DataBaseConstants.FM_DESCRIPTION_MAX_LGTH) {
                 errors.add(ErrorEnum.FM_DESC_LGTH);
             }
         }catch (Exception e){
-            DialogMessages.showExceptionAlert(e);
+            throw e;
         }
         return errors;
     }

@@ -30,14 +30,14 @@ public class FamilyMemberRuleSet implements RuleSet<FamilyMember>{
     }
 
     @Override
-    public EnumSet<ErrorEnum> validate(FamilyMember familyMember) {
+    public EnumSet<ErrorEnum> validate(FamilyMember familyMember) throws Exception {
         EnumSet<ErrorEnum> errors = EnumSet.noneOf(ErrorEnum.class);
         try {
             for (Rule rule : getRuleSet()) {
                 errors.addAll(rule.validate(familyMember));
             }
         }catch (Exception e){
-            DialogMessages.showExceptionAlert(e);
+            throw e;
         }
         return errors;
     }

@@ -14,14 +14,14 @@ import java.util.EnumSet;
 public class CatGr_EmptyName implements Rule<CategoryGroup> {
 
     @Override
-    public EnumSet<ErrorEnum> validate(CategoryGroup categoryGroup) {
+    public EnumSet<ErrorEnum> validate(CategoryGroup categoryGroup) throws Exception{
         EnumSet<ErrorEnum> errors = EnumSet.noneOf(ErrorEnum.class);
         try {
             if (StringUtils.isBlank(categoryGroup.getName())) {
                 errors.add(ErrorEnum.CatGr_NULL_NAME);
             }
         }catch (Exception e){
-            DialogMessages.showExceptionAlert(e);
+            throw e;
         }
         return errors;
     }

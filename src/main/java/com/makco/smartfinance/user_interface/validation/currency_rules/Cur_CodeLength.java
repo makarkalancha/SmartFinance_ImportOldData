@@ -14,14 +14,14 @@ import java.util.EnumSet;
 public class Cur_CodeLength implements Rule<Currency> {
 
     @Override
-    public EnumSet<ErrorEnum> validate(Currency currency) {
+    public EnumSet<ErrorEnum> validate(Currency currency) throws Exception{
         EnumSet<ErrorEnum> errors = EnumSet.noneOf(ErrorEnum.class);
         try {
             if (currency.getCode().length() != DataBaseConstants.CUR_CODE_MAX_LGTH) {
                 errors.add(ErrorEnum.Cur_CODE_LGTH);
             }
         }catch (Exception e){
-            DialogMessages.showExceptionAlert(e);
+            throw e;
         }
         return errors;
     }

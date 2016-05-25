@@ -14,14 +14,14 @@ import java.util.EnumSet;
 public class CatGr_DescLength implements Rule<CategoryGroup> {
 
     @Override
-    public EnumSet<ErrorEnum> validate(CategoryGroup categoryGroup) {
+    public EnumSet<ErrorEnum> validate(CategoryGroup categoryGroup) throws Exception{
         EnumSet<ErrorEnum> errors = EnumSet.noneOf(ErrorEnum.class);
         try {
             if (categoryGroup.getDescription().length() > DataBaseConstants.CG_DESCRIPTION_MAX_LGTH) {
                 errors.add(ErrorEnum.CatGr_DESC_LGTH);
             }
         }catch (Exception e){
-            DialogMessages.showExceptionAlert(e);
+            throw e;
         }
         return errors;
     }

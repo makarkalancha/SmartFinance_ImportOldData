@@ -32,14 +32,14 @@ public class CurrencyRuleSet implements RuleSet<Currency>{
     }
 
     @Override
-    public EnumSet<ErrorEnum> validate(Currency currency) {
+    public EnumSet<ErrorEnum> validate(Currency currency) throws Exception{
         EnumSet<ErrorEnum> errors = EnumSet.noneOf(ErrorEnum.class);
         try {
             for (Rule rule : getRuleSet()) {
                 errors.addAll(rule.validate(currency));
             }
         }catch (Exception e){
-            DialogMessages.showExceptionAlert(e);
+            throw e;
         }
         return errors;
     }

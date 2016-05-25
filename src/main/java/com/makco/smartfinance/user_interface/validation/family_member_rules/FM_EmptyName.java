@@ -14,14 +14,14 @@ import java.util.EnumSet;
 public class FM_EmptyName implements Rule<FamilyMember> {
 
     @Override
-    public EnumSet<ErrorEnum> validate(FamilyMember familyMember) {
+    public EnumSet<ErrorEnum> validate(FamilyMember familyMember) throws Exception{
         EnumSet<ErrorEnum> errors = EnumSet.noneOf(ErrorEnum.class);
         try {
             if (StringUtils.isBlank(familyMember.getName())) {
                 errors.add(ErrorEnum.FM_NAME_NULL);
             }
         }catch (Exception e){
-            DialogMessages.showExceptionAlert(e);
+            throw e;
         }
         return errors;
     }
