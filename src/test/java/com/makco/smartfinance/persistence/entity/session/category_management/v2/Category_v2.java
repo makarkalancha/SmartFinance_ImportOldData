@@ -24,7 +24,7 @@ import java.sql.Timestamp;
 /**
  * Created by mcalancea on 2016-04-25.
  */
-@MappedSuperclass
+@Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorOptions(force = true)
 @DiscriminatorColumn(name = "CATEGORY_GROUP_TYPE", discriminatorType = DiscriminatorType.STRING, length=1)

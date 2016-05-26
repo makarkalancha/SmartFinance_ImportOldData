@@ -74,13 +74,12 @@ public class TestPersistenceSession {
         cfg.addAnnotatedClass(CategoryGroupCredit_v1.class);
         cfg.addAnnotatedClass(EagerCategoryDebit.class);
         cfg.addAnnotatedClass(EagerCategoryGroupDebit.class);
-        //TODO uncomment and fix the issue
-//        cfg.addAnnotatedClass(Category_v2.class);
-//        cfg.addAnnotatedClass(CategoryCredit_v2.class);
-//        cfg.addAnnotatedClass(CategoryDebit_v2.class);
-//        cfg.addAnnotatedClass(CategoryGroup_v2.class);
-//        cfg.addAnnotatedClass(CategoryGroupCredit_v2.class);
-//        cfg.addAnnotatedClass(CategoryGroupDebit_v2.class);
+        cfg.addAnnotatedClass(Category_v2.class);
+        cfg.addAnnotatedClass(CategoryCredit_v2.class);
+        cfg.addAnnotatedClass(CategoryDebit_v2.class);
+        cfg.addAnnotatedClass(CategoryGroup_v2.class);
+        cfg.addAnnotatedClass(CategoryGroupCredit_v2.class);
+        cfg.addAnnotatedClass(CategoryGroupDebit_v2.class);
         cfg.addAnnotatedClass(Currency.class);
         cfg.addAnnotatedClass(DateUnit.class);
         cfg.addAnnotatedClass(FamilyMember.class);

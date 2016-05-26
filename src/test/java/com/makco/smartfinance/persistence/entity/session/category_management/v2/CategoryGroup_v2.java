@@ -27,7 +27,8 @@ import java.util.TreeSet;
 /**
  * Created by mcalancea on 2016-04-25.
  */
-@MappedSuperclass
+//@MappedSuperclass
+@Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 ////http://stackoverflow.com/questions/12199874/about-the-use-of-forcediscriminator-discriminatoroptionsforce-true
 @DiscriminatorOptions(force = true)
