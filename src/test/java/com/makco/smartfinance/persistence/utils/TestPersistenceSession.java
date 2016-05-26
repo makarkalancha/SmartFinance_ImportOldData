@@ -1,18 +1,24 @@
 package com.makco.smartfinance.persistence.utils;
 
 import com.makco.smartfinance.constants.DataBaseConstants;
-import com.makco.smartfinance.persistence.entity.Category;
-import com.makco.smartfinance.persistence.entity.CategoryCredit;
-import com.makco.smartfinance.persistence.entity.CategoryDebit;
-import com.makco.smartfinance.persistence.entity.CategoryGroup;
-import com.makco.smartfinance.persistence.entity.CategoryGroupCredit;
-import com.makco.smartfinance.persistence.entity.CategoryGroupDebit;
 import com.makco.smartfinance.persistence.entity.Currency;
 import com.makco.smartfinance.persistence.entity.DateUnit;
 import com.makco.smartfinance.persistence.entity.FamilyMember;
 import com.makco.smartfinance.persistence.entity.Organization;
 import com.makco.smartfinance.persistence.entity.entity_manager.test_entities.EagerCategoryDebit;
 import com.makco.smartfinance.persistence.entity.entity_manager.test_entities.EagerCategoryGroupDebit;
+import com.makco.smartfinance.persistence.entity.session.category_management.v1.CategoryCredit_v1;
+import com.makco.smartfinance.persistence.entity.session.category_management.v1.CategoryDebit_v1;
+import com.makco.smartfinance.persistence.entity.session.category_management.v1.CategoryGroupCredit_v1;
+import com.makco.smartfinance.persistence.entity.session.category_management.v1.CategoryGroupDebit_v1;
+import com.makco.smartfinance.persistence.entity.session.category_management.v1.CategoryGroup_v1;
+import com.makco.smartfinance.persistence.entity.session.category_management.v1.Category_v1;
+import com.makco.smartfinance.persistence.entity.session.category_management.v2.CategoryCredit_v2;
+import com.makco.smartfinance.persistence.entity.session.category_management.v2.CategoryDebit_v2;
+import com.makco.smartfinance.persistence.entity.session.category_management.v2.CategoryGroupCredit_v2;
+import com.makco.smartfinance.persistence.entity.session.category_management.v2.CategoryGroupDebit_v2;
+import com.makco.smartfinance.persistence.entity.session.category_management.v2.CategoryGroup_v2;
+import com.makco.smartfinance.persistence.entity.session.category_management.v2.Category_v2;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
@@ -60,14 +66,21 @@ public class TestPersistenceSession {
 
     private static Configuration getConfiguration() {
         Configuration cfg = new Configuration();
-        cfg.addAnnotatedClass(Category.class);
-        cfg.addAnnotatedClass(CategoryCredit.class);
-        cfg.addAnnotatedClass(CategoryDebit.class);
+        cfg.addAnnotatedClass(Category_v1.class);
+        cfg.addAnnotatedClass(CategoryCredit_v1.class);
+        cfg.addAnnotatedClass(CategoryDebit_v1.class);
+        cfg.addAnnotatedClass(CategoryGroup_v1.class);
+        cfg.addAnnotatedClass(CategoryGroupDebit_v1.class);
+        cfg.addAnnotatedClass(CategoryGroupCredit_v1.class);
         cfg.addAnnotatedClass(EagerCategoryDebit.class);
-        cfg.addAnnotatedClass(CategoryGroup.class);
-        cfg.addAnnotatedClass(CategoryGroupCredit.class);
-        cfg.addAnnotatedClass(CategoryGroupDebit.class);
         cfg.addAnnotatedClass(EagerCategoryGroupDebit.class);
+        //TODO uncomment and fix the issue
+//        cfg.addAnnotatedClass(Category_v2.class);
+//        cfg.addAnnotatedClass(CategoryCredit_v2.class);
+//        cfg.addAnnotatedClass(CategoryDebit_v2.class);
+//        cfg.addAnnotatedClass(CategoryGroup_v2.class);
+//        cfg.addAnnotatedClass(CategoryGroupCredit_v2.class);
+//        cfg.addAnnotatedClass(CategoryGroupDebit_v2.class);
         cfg.addAnnotatedClass(Currency.class);
         cfg.addAnnotatedClass(DateUnit.class);
         cfg.addAnnotatedClass(FamilyMember.class);

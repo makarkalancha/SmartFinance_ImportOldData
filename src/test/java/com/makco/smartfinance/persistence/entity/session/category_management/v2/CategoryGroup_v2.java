@@ -1,4 +1,4 @@
-package com.makco.smartfinance.persistence.entity;
+package com.makco.smartfinance.persistence.entity.session.category_management.v2;
 
 import com.makco.smartfinance.constants.DataBaseConstants;
 import org.hibernate.annotations.DiscriminatorOptions;
@@ -27,8 +27,7 @@ import java.util.TreeSet;
 /**
  * Created by mcalancea on 2016-04-25.
  */
-//@MappedSuperclass
-@Entity
+@MappedSuperclass
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 ////http://stackoverflow.com/questions/12199874/about-the-use-of-forcediscriminator-discriminatoroptionsforce-true
 @DiscriminatorOptions(force = true)
@@ -41,7 +40,7 @@ import java.util.TreeSet;
             columnNames = {"TYPE","NAME"}
     )
 )
-public abstract class CategoryGroup <T extends Category>{
+public abstract class CategoryGroup_v2<T extends Category_v2>{
     @Id
     @org.hibernate.annotations.GenericGenerator(
             name = "CATEGORY_GROUP_SEQUENCE_GENERATOR",
@@ -86,15 +85,15 @@ public abstract class CategoryGroup <T extends Category>{
     @Column(name="T_UPDATEDON",insertable = false, updatable = false)
     protected Timestamp updatedOn;
 
-//    /**
-//     * Property com.makco.smartfinance.persistence.entity.CategoryGroup.categories has an unbound type and no explicit target entity.
-//     * Resolve this Generic usage issue or set an explicit target attribute (eg @OneToMany(target=) or use an explicit @Type
-//     */
-//    @OneToMany(mappedBy = "categoryGroup", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-//    @javax.persistence.OrderBy("name")
-//    protected SortedSet<T> categories = new TreeSet<>();
+    /**
+     * Property com.makco.smartfinance.persistence.entity.CategoryGroup.categories has an unbound type and no explicit target entity.
+     * Resolve this Generic usage issue or set an explicit target attribute (eg @OneToMany(target=) or use an explicit @Type
+     */
+    @OneToMany(mappedBy = "categoryGroup", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @javax.persistence.OrderBy("name")
+    protected SortedSet<T> categories = new TreeSet<>();
 
-    public CategoryGroup(){
+    public CategoryGroup_v2(){
 
     }
 

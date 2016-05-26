@@ -1,55 +1,46 @@
-package com.makco.smartfinance.persistence.entity;
+package com.makco.smartfinance.persistence.entity.session.category_management.v1;
 
 import com.makco.smartfinance.constants.DataBaseConstants;
 import org.hibernate.annotations.DiscriminatorOptions;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
-import javax.persistence.MappedSuperclass;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.sql.Timestamp;
-import java.util.Collection;
-import java.util.SortedSet;
-import java.util.TreeSet;
 
 /**
  * Created by mcalancea on 2016-04-25.
  */
-//@MappedSuperclass
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-////http://stackoverflow.com/questions/12199874/about-the-use-of-forcediscriminator-discriminatoroptionsforce-true
 @DiscriminatorOptions(force = true)
-@DiscriminatorColumn(name = "TYPE", discriminatorType= DiscriminatorType.STRING, length=1)
+@DiscriminatorColumn(name = "CATEGORY_GROUP_TYPE", discriminatorType = DiscriminatorType.STRING, length=1)
 @Table(
-    name="CATEGORY_GROUP",
+    name="CATEGORY",
     uniqueConstraints =
     @UniqueConstraint(
-            name="IDX_UNQ_CTGRGRP_TPNM",
-            columnNames = {"TYPE","NAME"}
+            name="IDX_UNQ_CTGR_CGIDNM",
+            columnNames = {"CATEGORY_GROUP_ID","NAME"}
     )
 )
-public abstract class CategoryGroup <T extends Category>{
+public abstract class Category_v1 {
     @Id
     @org.hibernate.annotations.GenericGenerator(
-            name = "CATEGORY_GROUP_SEQUENCE_GENERATOR",
+            name = "CATEGORY_SEQUENCE_GENERATOR",
             strategy = "enhanced-sequence",
             parameters = {
                     @org.hibernate.annotations.Parameter(
                             name = "sequence_name",
-                            value = "SEQ_CATEGORY_GROUP"
+                            value = "SEQ_CATEGORY"
                     ),
                     @org.hibernate.annotations.Parameter(
                             name = "initial_value",
@@ -57,7 +48,7 @@ public abstract class CategoryGroup <T extends Category>{
                     )
             }
     )
-    @GeneratedValue(generator = "CATEGORY_GROUP_SEQUENCE_GENERATOR")
+    @GeneratedValue(generator = "CATEGORY_SEQUENCE_GENERATOR")
     @Column(name="ID")
     protected Long id;
 
@@ -65,16 +56,16 @@ public abstract class CategoryGroup <T extends Category>{
     @NotNull
     @Size(
             min = 2,
-            max = DataBaseConstants.CG_NAME_MAX_LGTH,
-            message = "Name is required, maximum " + DataBaseConstants.CG_NAME_MAX_LGTH + " characters."
+            max = DataBaseConstants.CAT_NAME_MAX_LGTH,
+            message = "Name is required, maximum " + DataBaseConstants.CAT_NAME_MAX_LGTH + " characters."
     )
     protected String name;
 
     @Column(name = "DESCRIPTION")
     @Size(
             min = 0,
-            max = DataBaseConstants.CG_DESCRIPTION_MAX_LGTH,
-            message = "Description length is " + DataBaseConstants.CG_DESCRIPTION_MAX_LGTH + " characters."
+            max = DataBaseConstants.CAT_DESCRIPTION_MAX_LGTH,
+            message = "Description length is " + DataBaseConstants.CAT_DESCRIPTION_MAX_LGTH + " characters."
     )
     protected String description;
 
@@ -86,15 +77,7 @@ public abstract class CategoryGroup <T extends Category>{
     @Column(name="T_UPDATEDON",insertable = false, updatable = false)
     protected Timestamp updatedOn;
 
-//    /**
-//     * Property com.makco.smartfinance.persistence.entity.CategoryGroup.categories has an unbound type and no explicit target entity.
-//     * Resolve this Generic usage issue or set an explicit target attribute (eg @OneToMany(target=) or use an explicit @Type
-//     */
-//    @OneToMany(mappedBy = "categoryGroup", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-//    @javax.persistence.OrderBy("name")
-//    protected SortedSet<T> categories = new TreeSet<>();
-
-    public CategoryGroup(){
+    public Category_v1(){
 
     }
 
@@ -118,17 +101,9 @@ public abstract class CategoryGroup <T extends Category>{
         this.name = name;
     }
 
-//    public abstract void addCategory(T category);
-//
-//    public abstract void addCategories(List<T> categories);
-//
-//    public abstract void removeCategory(T category);
-//
-//    public abstract void removeCategories(List<T> categories);
+    public abstract CategoryGroup_v1 getCategoryGroup();
 
-    public abstract Collection<T> getCategories();
-
-    public abstract void setCategories(Collection<T> categories);
+    public abstract void setCategoryGroup(CategoryGroup_v1 categoryGroup);
 
     public abstract String getCategoryGroupType();
 
@@ -139,6 +114,4 @@ public abstract class CategoryGroup <T extends Category>{
     public Timestamp getUpdatedOn() {
         return updatedOn;
     }
-
-    public abstract String toStringFull();
 }

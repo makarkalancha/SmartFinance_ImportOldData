@@ -1,7 +1,6 @@
 package com.makco.smartfinance.persistence.dao.dao_implementations;
 
-import com.makco.smartfinance.persistence.entity.Category;
-import com.makco.smartfinance.persistence.entity.CategoryGroup;
+import com.makco.smartfinance.persistence.entity.session.category_management.v1.Category_v1;
 import com.makco.smartfinance.persistence.utils.TestPersistenceSession;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -24,7 +23,7 @@ public class CategoryDAOImplForTest {
         try{
             session = TestPersistenceSession.openSession();
             session.beginTransaction();
-            Category category = (Category) session.load(Category.class, id);
+            Category_v1 category = (Category_v1) session.load(Category_v1.class, id);
             LOG.debug(">>>removeCategoryGroup: " + category);
             session.delete(category);
             session.getTransaction().commit();
@@ -45,13 +44,13 @@ public class CategoryDAOImplForTest {
         }
     }
 
-    public Category getCategoryById(Long id) throws Exception {
+    public Category_v1 getCategoryById(Long id) throws Exception {
         Session session = null;
-        Category category = null;
+        Category_v1 category = null;
         try{
             session = TestPersistenceSession.openSession();
             session.beginTransaction();
-            category = (Category) session.get(Category.class, id);
+            category = (Category_v1) session.get(Category_v1.class, id);
             session.getTransaction().commit();
         } catch (Exception e) {
             try {
@@ -71,13 +70,13 @@ public class CategoryDAOImplForTest {
         return category;
     }
 
-    public List<Category> getCategoryByName(String categoryName) throws Exception {
+    public List<Category_v1> getCategoryByName(String categoryName) throws Exception {
         Session session = null;
-        List<Category> list = new ArrayList<>();
+        List<Category_v1> list = new ArrayList<>();
         try{
             session = TestPersistenceSession.openSession();
             session.beginTransaction();
-            list = session.createQuery("SELECT c FROM Category c where c.name = :categoryName")
+            list = session.createQuery("SELECT c FROM Category_v1 c where c.name = :categoryName")
                     .setString("categoryName", categoryName)
                     .list();
             session.getTransaction().commit();
@@ -99,7 +98,7 @@ public class CategoryDAOImplForTest {
         return list;
     }
 
-    public void saveOrUpdateCategory(Category category) throws Exception {
+    public void saveOrUpdateCategory(Category_v1 category) throws Exception {
         Session session = null;
         try {
             LOG.debug(">>>saveOrUpdateCategory: start");
@@ -125,7 +124,7 @@ public class CategoryDAOImplForTest {
         }
     }
 
-    public <T extends Category> List<T> categoryByType(Class<T> type) throws Exception {
+    public <T extends Category_v1> List<T> categoryByType(Class<T> type) throws Exception {
         Session session = null;
         List<T> list = new ArrayList<>();
 
@@ -133,10 +132,10 @@ public class CategoryDAOImplForTest {
             session = TestPersistenceSession.openSession();
             session.beginTransaction();
             LOG.debug("type.newInstance().getCategoryGroupType():" + type.newInstance().getCategoryGroupType());
-            list = session.createQuery("SELECT c FROM Category c WHERE c.class = :type ORDER BY c.name")
+            list = session.createQuery("SELECT c FROM Category_v1 c WHERE c.class = :type ORDER BY c.name")
                     .setParameter("type", type.newInstance().getCategoryGroupType())
                     .list();
-            Collections.sort(list, (Category c1, Category c2) -> c1.getName().toLowerCase().compareTo(c2.getName().toLowerCase()));
+            Collections.sort(list, (Category_v1 c1, Category_v1 c2) -> c1.getName().toLowerCase().compareTo(c2.getName().toLowerCase()));
             session.getTransaction().commit();
 
         } catch (Exception e) {
@@ -158,14 +157,14 @@ public class CategoryDAOImplForTest {
         return list;
     }
 
-    public List<Category> categoryList() throws Exception {
+    public List<Category_v1> categoryList() throws Exception {
         Session session = null;
-        List<Category> list = new ArrayList<>();
+        List<Category_v1> list = new ArrayList<>();
         try{
             session = TestPersistenceSession.openSession();
             session.beginTransaction();
-            list = session.createQuery("SELECT c FROM Category c").list();
-            Collections.sort(list, (Category c1,  Category c2) -> c1.getName().toLowerCase().compareTo(c2.getName().toLowerCase()));
+            list = session.createQuery("SELECT c FROM Category_v1 c").list();
+            Collections.sort(list, (Category_v1 c1,  Category_v1 c2) -> c1.getName().toLowerCase().compareTo(c2.getName().toLowerCase()));
             session.getTransaction().commit();
         } catch (Exception e) {
             //hibernate persistence p.257

@@ -1,28 +1,22 @@
-package com.makco.smartfinance.persistence.entity;
+package com.makco.smartfinance.persistence.entity.session.category_management.v1;
 
 import com.makco.smartfinance.constants.DataBaseConstants;
 import org.hibernate.annotations.DiscriminatorOptions;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
-import javax.persistence.MappedSuperclass;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.sql.Timestamp;
 import java.util.Collection;
-import java.util.SortedSet;
-import java.util.TreeSet;
 
 /**
  * Created by mcalancea on 2016-04-25.
@@ -41,7 +35,7 @@ import java.util.TreeSet;
             columnNames = {"TYPE","NAME"}
     )
 )
-public abstract class CategoryGroup <T extends Category>{
+public abstract class CategoryGroup_v1<T extends Category_v1>{
     @Id
     @org.hibernate.annotations.GenericGenerator(
             name = "CATEGORY_GROUP_SEQUENCE_GENERATOR",
@@ -94,7 +88,7 @@ public abstract class CategoryGroup <T extends Category>{
 //    @javax.persistence.OrderBy("name")
 //    protected SortedSet<T> categories = new TreeSet<>();
 
-    public CategoryGroup(){
+    public CategoryGroup_v1(){
 
     }
 
