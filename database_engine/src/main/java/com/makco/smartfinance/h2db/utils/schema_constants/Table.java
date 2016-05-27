@@ -8,7 +8,7 @@ public class Table {
         tableName, row;
     }
 
-    public enum Names{
+    public enum Names {
         _DELETED_ROWS,
         CATEGORY,
         CATEGORY_GROUP,
