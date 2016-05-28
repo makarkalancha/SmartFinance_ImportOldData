@@ -540,6 +540,7 @@ public class CategoryGroupDAOImplForTest {
     }
 
     //p.333 12.2.6 Dynamic eager fetching
+    //not working without eager loading
     public List<CategoryGroup_v1> categoryGroup_v1ListWithLeftJoinFetch(boolean initializeCategories) throws Exception {
         Session session = null;
 
@@ -577,5 +578,10 @@ public class CategoryGroupDAOImplForTest {
             }
         }
         return list;
+    }
+
+    //todo native query
+    public List<CategoryGroup_v1> categoryGroup_v1ListWithNativeQuery(boolean initializeCategories) throws Exception {
+        return null;
     }
 }
