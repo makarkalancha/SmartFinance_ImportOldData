@@ -778,7 +778,7 @@ public class CategoryGroupDAOImplTest {
 
         //byName return list as it might be debit or credit and return categories
         List<CategoryGroup_v1> categoryGroups = categoryGroupDAOImplForTest
-                .categoryGroup_v1ListWithNativeQuery(true);
+                .categoryGroup_v1ListWithNativeQuery();
 
         LOG.debug(">>>categoryGroups: " + categoryGroups);
         assertEquals(true, categoryGroups.size() > 0);

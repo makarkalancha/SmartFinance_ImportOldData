@@ -92,6 +92,10 @@ public abstract class CategoryGroup_v1<T extends Category_v1>{
 
     }
 
+    public CategoryGroup_v1(Long id, Long name){
+
+    }
+
     public Long getId() {
         return id;
     }

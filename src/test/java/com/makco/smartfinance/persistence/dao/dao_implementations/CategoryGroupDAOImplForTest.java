@@ -5,16 +5,26 @@ import com.makco.smartfinance.persistence.entity.Category;
 import com.makco.smartfinance.persistence.entity.session.category_management.v1.CategoryGroupCredit_v1;
 import com.makco.smartfinance.persistence.entity.session.category_management.v1.CategoryGroupDebit_v1;
 import com.makco.smartfinance.persistence.entity.session.category_management.v1.CategoryGroup_v1;
+import com.makco.smartfinance.persistence.entity.session.category_management.v1.Category_v1;
 import com.makco.smartfinance.persistence.utils.TestPersistenceSession;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Hibernate;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.resource.transaction.spi.TransactionStatus;
 
+import javax.persistence.ColumnResult;
+import javax.persistence.ConstructorResult;
+import javax.persistence.SqlResultSetMapping;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Created by mcalancea on 2016-05-02.
@@ -580,27 +590,48 @@ public class CategoryGroupDAOImplForTest {
         return list;
     }
 
-    //todo native query
-    public List<CategoryGroup_v1> categoryGroup_v1ListWithNativeQuery(boolean initializeCategories) throws Exception {
+    public List<CategoryGroup_v1> categoryGroup_v1ListWithNativeQuery() throws Exception {
+        //http://www.thoughts-on-java.org/result-set-mapping-hibernate-specific-mappings/
         Session session = null;
 
-        StringBuilder query = new StringBuilder();
-        query.append("SELECT cg.*, c.* FROM CategoryGroup cg ");
-//        query.append("SELECT cg FROM CategoryGroupDebit_v1 cg "); //left join works with concrete class
-        if(initializeCategories){
-            query.append("left join Category c on c.category_group_id = cg.id ");
-        }
+        StringBuilder querySB = new StringBuilder();
+        querySB.append("SELECT {cg.*}, {c.*} ");
+        querySB.append("FROM TEST.CATEGORY_GROUP cg ");
+        querySB.append("left join TEST.CATEGORY c on c.category_group_id = cg.id ");
+        //comment for prod
+        querySB.append("where cg.TYPE = 'C' or cg.TYPE = 'D'");
 
-        List<CategoryGroup_v1> list = new ArrayList<>();
+        List<CategoryGroup_v1> result = new ArrayList();
         try{
             session = TestPersistenceSession.openSession();
             session.beginTransaction();
-            //p.333 12.2.6 Dynamic eager fetching
-            list = session.createSQLQuery(query.toString())
+            Map<Long, CategoryGroup_v1> categoryGroupById = new HashMap<>();
+            List<Object[]> list = session.createSQLQuery(querySB.toString())
+                    .addEntity("cg",CategoryGroup_v1.class)
+                    .addEntity("c",Category_v1.class)
                     .list();
-            Collections.sort(list, (CategoryGroup_v1 cg1,  CategoryGroup_v1 cg2) -> cg1.getName().toLowerCase().compareTo(cg2.getName().toLowerCase()));
+            list.stream()
+                    .forEach(obj -> {
+                        CategoryGroup_v1 cg = (obj[0] != null) ? ((CategoryGroup_v1) obj[0]) : null;
+                        Category_v1 c = (obj[1] != null) ? ((Category_v1) obj[1]) : null;
+                        if(!categoryGroupById.containsKey(cg.getId())){
+                            cg.setCategories(new ArrayList<>());
+                            categoryGroupById.put(cg.getId(), cg);
+                        }
+
+                        if(c != null) {
+                            cg.getCategories().add(c);
+                        }
+                    });
             session.getTransaction().commit();
 
+            result = new ArrayList(categoryGroupById.values());
+            Collections.sort(result, (CategoryGroup_v1 cg1,  CategoryGroup_v1 cg2) -> {
+                int type = cg1.getCategoryGroupType().toLowerCase().compareTo(cg2.getCategoryGroupType().toLowerCase());
+                if(type != 0) return type;
+
+                return cg1.getName().toLowerCase().compareTo(cg2.getName().toLowerCase());
+            });
         } catch (Exception e) {
             //hibernate persistence p.257
             try {
@@ -617,6 +648,7 @@ public class CategoryGroupDAOImplForTest {
                 session.close();
             }
         }
-        return list;
+
+        return result;
     }
 }
