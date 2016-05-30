@@ -18,7 +18,7 @@ import java.util.TreeSet;
 @Entity
 //@DiscriminatorValue(DataBaseConstants.CATEGORY_GROUP_TYPE_CREDIT)
 @DiscriminatorValue(DataBaseConstants.CATEGORY_GROUP_TYPE.Values.CREDIT)
-public class CategoryGroupCredit_v2 extends CategoryGroup_v2<CategoryCredit_v2> {
+public class CategoryGroupCredit_v2 extends CategoryGroup_v2 {
     //http://stackoverflow.com/questions/30838526/how-to-have-a-sorted-set-of-objects-based-on-a-specific-field
     //http://stackoverflow.com/questions/4334197/discriminator-wrongclassexception-jpa-with-hibernate-backend
     //http://anshuiitk.blogspot.ca/2011/04/hibernate-wrongclassexception.html
@@ -49,9 +49,9 @@ public class CategoryGroupCredit_v2 extends CategoryGroup_v2<CategoryCredit_v2> 
         this.description = description;
     }
 
-    public SortedSet<CategoryCredit_v2> getDebitCategories() {
-        return new TreeSet<>(categories);
-    }
+//    public SortedSet<CategoryCredit_v2> getDebitCategories() {
+//        return new TreeSet<>(categories);
+//    }
 
 //    @Override
 //    public void addCategories(List<CategoryCredit> categories) {
@@ -72,16 +72,6 @@ public class CategoryGroupCredit_v2 extends CategoryGroup_v2<CategoryCredit_v2> 
 //    public void removeCategories(List<CategoryCredit> categories) {
 //        this.categories.removeAll(categories);
 //    }
-
-    @Override
-    public Collection<CategoryCredit_v2> getCategories() {
-        return this.categories;
-    }
-
-    @Override
-    public void setCategories(Collection<CategoryCredit_v2> categories) {
-        this.categories = new TreeSet<>(categories);
-    }
 
     @Override
     public String getCategoryGroupType() {

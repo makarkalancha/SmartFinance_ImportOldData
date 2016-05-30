@@ -41,7 +41,7 @@ import java.util.TreeSet;
             columnNames = {"TYPE","NAME"}
     )
 )
-public abstract class CategoryGroup_v2<T extends Category_v2>{
+public abstract class CategoryGroup_v2/*<T extends Category_v2>*/{
     @Id
     @org.hibernate.annotations.GenericGenerator(
             name = "CATEGORY_GROUP_SEQUENCE_GENERATOR",
@@ -92,7 +92,7 @@ public abstract class CategoryGroup_v2<T extends Category_v2>{
      */
     @OneToMany(mappedBy = "categoryGroup", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @javax.persistence.OrderBy("name")
-    protected SortedSet<T> categories = new TreeSet<>();
+    protected SortedSet<Category_v2> categories = new TreeSet<>();
 
     public CategoryGroup_v2(){
 
@@ -126,11 +126,15 @@ public abstract class CategoryGroup_v2<T extends Category_v2>{
 //
 //    public abstract void removeCategories(List<T> categories);
 
-    public abstract Collection<T> getCategories();
-
-    public abstract void setCategories(Collection<T> categories);
-
     public abstract String getCategoryGroupType();
+
+    public Collection<Category_v2> getCategories() {
+        return this.categories;
+    }
+
+    public void setCategories(Collection<Category_v2> categories) {
+        this.categories = new TreeSet<>(categories);
+    }
 
     public Timestamp getCreatedOn() {
         return createdOn;

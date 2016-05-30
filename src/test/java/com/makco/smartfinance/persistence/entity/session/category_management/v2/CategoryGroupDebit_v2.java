@@ -19,7 +19,7 @@ import java.util.TreeSet;
 //@DiscriminatorValue("D")
 //@DiscriminatorValue(DataBaseConstants.CATEGORY_GROUP_TYPE_DEBIT)
 @DiscriminatorValue(DataBaseConstants.CATEGORY_GROUP_TYPE.Values.DEBIT)
-public class CategoryGroupDebit_v2 extends CategoryGroup_v2<CategoryDebit_v2> {
+public class CategoryGroupDebit_v2 extends CategoryGroup_v2{
     /**
      *http://stackoverflow.com/questions/30838526/how-to-have-a-sorted-set-of-objects-based-on-a-specific-field
      *https://vladmihalcea.com/2015/03/05/a-beginners-guide-to-jpa-and-hibernate-cascade-types/
@@ -84,16 +84,6 @@ public class CategoryGroupDebit_v2 extends CategoryGroup_v2<CategoryDebit_v2> {
 //    public void removeCategories(List<CategoryDebit> categories) {
 //        this.categories.remove(categories);
 //    }
-
-    @Override
-    public Collection<CategoryDebit_v2> getCategories() {
-        return this.categories;
-    }
-
-    @Override
-    public void setCategories(Collection<CategoryDebit_v2> categories) {
-        this.categories = new TreeSet<>(categories);
-    }
 
     @Override
     public String getCategoryGroupType() {
