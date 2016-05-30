@@ -758,6 +758,46 @@ public class CategoryGroupDAOImplTest {
     }
 
     @Test
+    public void test_44_3_seleteAllCategoryGroupsWithCategories_withNativeQuery() throws Exception {
+        int randomInt = randomWithinRange.getRandom();
+        int categoriesQty = 3;
+        String categoryGroupName = "categoryGroup nameAndType " + randomInt;
+        CategoryGroup_v1 categoryGroupDebit = new CategoryGroupDebit_v1(categoryGroupName,
+                "debit category group to select " + randomInt);
+        List<Category_v1> debitCategories = new ArrayList<>();
+        //put service: putting category_group in category and category in category_group
+        for(int i = 0 ; i < categoriesQty;i++) {
+            Category_v1 category = new CategoryDebit_v1(categoryGroupDebit, "cat db same name " + i + "_v" + randomInt,
+                    "credit category #" + i + " 'description'");
+            debitCategories.add(category);
+        }
+        categoryGroupDebit.setCategories(debitCategories);
+        LOG.debug(">>>category group name and type: " + categoryGroupDebit);
+        LOG.debug(">>>categories of category group: " + debitCategories);
+        categoryGroupDAOImplForTest.saveOrUpdateCategoryGroup_v1(categoryGroupDebit);
+
+        //byName return list as it might be debit or credit and return categories
+        List<CategoryGroup_v1> categoryGroups = categoryGroupDAOImplForTest
+                .categoryGroup_v1ListWithNativeQuery(true);
+
+        LOG.debug(">>>categoryGroups: " + categoryGroups);
+        assertEquals(true, categoryGroups.size() > 0);
+
+        int qtyCategoryGroupsWithCategories = 0;
+        int qtyCategoryGroupsWithoutCategories = 0;
+        for(CategoryGroup_v1 categoryGroup : categoryGroups){
+            if(categoryGroup.getCategories().size() > 0){
+                ++qtyCategoryGroupsWithCategories;
+            } else {
+                ++qtyCategoryGroupsWithoutCategories;
+            }
+        }
+        LOG.debug(">>>qtyCategoryGroupsWithCategories: " + qtyCategoryGroupsWithCategories);
+        LOG.debug(">>>qtyCategoryGroupsWithoutCategories: " + qtyCategoryGroupsWithoutCategories);
+        assertEquals(true, qtyCategoryGroupsWithCategories > 0);
+    }
+
+    @Test
     public void test_43_seleteCategoryGroupByName_forValidation() throws Exception {
         int randomInt = randomWithinRange.getRandom();
         int categoriesQty = 3;

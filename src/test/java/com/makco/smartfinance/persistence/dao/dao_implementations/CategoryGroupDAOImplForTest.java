@@ -582,6 +582,41 @@ public class CategoryGroupDAOImplForTest {
 
     //todo native query
     public List<CategoryGroup_v1> categoryGroup_v1ListWithNativeQuery(boolean initializeCategories) throws Exception {
-        return null;
+        Session session = null;
+
+        StringBuilder query = new StringBuilder();
+        query.append("SELECT cg.*, c.* FROM CategoryGroup cg ");
+//        query.append("SELECT cg FROM CategoryGroupDebit_v1 cg "); //left join works with concrete class
+        if(initializeCategories){
+            query.append("left join Category c on c.category_group_id = cg.id ");
+        }
+
+        List<CategoryGroup_v1> list = new ArrayList<>();
+        try{
+            session = TestPersistenceSession.openSession();
+            session.beginTransaction();
+            //p.333 12.2.6 Dynamic eager fetching
+            list = session.createSQLQuery(query.toString())
+                    .list();
+            Collections.sort(list, (CategoryGroup_v1 cg1,  CategoryGroup_v1 cg2) -> cg1.getName().toLowerCase().compareTo(cg2.getName().toLowerCase()));
+            session.getTransaction().commit();
+
+        } catch (Exception e) {
+            //hibernate persistence p.257
+            try {
+                if (session.getTransaction().getStatus() == TransactionStatus.ACTIVE
+                        || session.getTransaction().getStatus() == TransactionStatus.MARKED_ROLLBACK)
+                    session.getTransaction().rollback();
+            } catch (Exception rbEx) {
+                LOG.error("Rollback of transaction failed, trace follows!");
+                LOG.error(rbEx, rbEx);
+            }
+            throw new RuntimeException(e);
+        } finally {
+            if(session != null){
+                session.close();
+            }
+        }
+        return list;
     }
 }
