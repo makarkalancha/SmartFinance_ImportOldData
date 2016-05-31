@@ -1,6 +1,7 @@
 package com.makco.smartfinance.persistence.dao.dao_implementations;
 
 import com.makco.smartfinance.constants.DataBaseConstants;
+import com.makco.smartfinance.h2db.utils.schema_constants.Table;
 import com.makco.smartfinance.persistence.entity.Category;
 import com.makco.smartfinance.persistence.entity.session.category_management.v1.CategoryGroupCredit_v1;
 import com.makco.smartfinance.persistence.entity.session.category_management.v1.CategoryGroupDebit_v1;
@@ -596,8 +597,12 @@ public class CategoryGroupDAOImplForTest {
 
         StringBuilder querySB = new StringBuilder();
         querySB.append("SELECT {cg.*}, {c.*} ");
-        querySB.append("FROM TEST.CATEGORY_GROUP cg ");
-        querySB.append("left join TEST.CATEGORY c on c.category_group_id = cg.id ");
+        querySB.append("FROM {h-schema}");
+        querySB.append(Table.Names.CATEGORY_GROUP);
+        querySB.append(" cg ");
+        querySB.append("left join {h-schema}");
+        querySB.append(Table.Names.CATEGORY);
+        querySB.append(" c on c.category_group_id = cg.id ");
         //comment for prod
         querySB.append("where cg.TYPE = 'C' or cg.TYPE = 'D'");
 
