@@ -52,6 +52,7 @@ public class CategoryGroupDAOImpl implements CategoryGroupDAO{
                 session.close();
             }
         }
+        //todo set empty list to categories
         return list;
     }
 
