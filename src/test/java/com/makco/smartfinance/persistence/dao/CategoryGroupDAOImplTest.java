@@ -766,8 +766,6 @@ public class CategoryGroupDAOImplTest {
      * 1 query
      * see selectAll_cGWithCats_nativeQuery.log
      */
-    //todo try to fix this method for UI to display cat_gr with categories even if cat_gr has no categories
-    //todo compare queries in test_44_1 vs test_44_3
     public void test_44_3_seleteAllCategoryGroupsWithCategories_withNativeQuery() throws Exception {
         int randomInt = randomWithinRange.getRandom();
         int categoriesQty = 3;
