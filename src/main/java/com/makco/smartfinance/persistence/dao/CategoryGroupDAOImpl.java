@@ -1,5 +1,7 @@
 package com.makco.smartfinance.persistence.dao;
 
+import com.makco.smartfinance.h2db.utils.schema_constants.Table;
+import com.makco.smartfinance.persistence.entity.Category;
 import com.makco.smartfinance.persistence.entity.CategoryGroup;
 import com.makco.smartfinance.persistence.utils.HibernateUtil;
 import org.apache.logging.log4j.LogManager;
@@ -10,7 +12,9 @@ import org.hibernate.resource.transaction.spi.TransactionStatus;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by mcalancea on 2016-05-12.
@@ -19,15 +23,12 @@ public class CategoryGroupDAOImpl implements CategoryGroupDAO{
     private final static Logger LOG = LogManager.getLogger(CategoryGroupDAOImpl.class);
 
     @Override
-    public List<CategoryGroup> categoryGroupList(boolean initializeCategories) throws Exception {
+    public List<CategoryGroup> categoryGroupList() throws Exception {
         Session session = null;
         List<CategoryGroup> list = new ArrayList<>();
         //less queries
         StringBuilder query = new StringBuilder();
         query.append("SELECT cg FROM CategoryGroup cg ");
-        if(initializeCategories){
-            query.append("left join fetch cg.categories ");
-        }
 
         try{
             session = HibernateUtil.openSession();
@@ -187,5 +188,69 @@ public class CategoryGroupDAOImpl implements CategoryGroupDAO{
             }
         }
         return categoryGroup;
+    }
+
+    @Override
+    public List<CategoryGroup> categoryGroupListWithCategories() throws Exception {
+        Session session = null;
+
+        StringBuilder querySB = new StringBuilder();
+        querySB.append("SELECT {cg.*}, {c.*} ");
+        querySB.append("FROM {h-schema}");
+        querySB.append(Table.Names.CATEGORY_GROUP);
+        querySB.append(" cg ");
+        querySB.append("left join {h-schema}");
+        querySB.append(Table.Names.CATEGORY);
+        querySB.append(" c on c.category_group_id = cg.id ");
+
+        List<CategoryGroup> result = new ArrayList();
+        try {
+            session = HibernateUtil.openSession();
+            session.beginTransaction();
+            Map<Long, CategoryGroup> categoryGroupById = new HashMap<>();
+            List<Object[]> list = session.createSQLQuery(querySB.toString())
+                    .addEntity("cg", CategoryGroup.class)
+                    .addEntity("c", Category.class)
+                    .list();
+            list.stream()
+                    .forEach(obj -> {
+                        CategoryGroup cg = (obj[0] != null) ? ((CategoryGroup) obj[0]) : null;
+                        Category c = (obj[1] != null) ? ((Category) obj[1]) : null;
+                        if (!categoryGroupById.containsKey(cg.getId())) {
+                            cg.setCategories(new ArrayList<>());
+                            categoryGroupById.put(cg.getId(), cg);
+                        }
+
+                        if (c != null) {
+                            cg.getCategories().add(c);
+                        }
+                    });
+            session.getTransaction().commit();
+
+            result = new ArrayList(categoryGroupById.values());
+            Collections.sort(result, (CategoryGroup cg1, CategoryGroup cg2) -> {
+                int type = cg1.getCategoryGroupType().toLowerCase().compareTo(cg2.getCategoryGroupType().toLowerCase());
+                if (type != 0) return type;
+
+                return cg1.getName().toLowerCase().compareTo(cg2.getName().toLowerCase());
+            });
+        } catch (Exception e) {
+            //hibernate persistence p.257
+            try {
+                if (session.getTransaction().getStatus() == TransactionStatus.ACTIVE
+                        || session.getTransaction().getStatus() == TransactionStatus.MARKED_ROLLBACK)
+                    session.getTransaction().rollback();
+            } catch (Exception rbEx) {
+                LOG.error("Rollback of transaction failed, trace follows!");
+                LOG.error(rbEx, rbEx);
+            }
+            throw new RuntimeException(e);
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+
+        return result;
     }
 }

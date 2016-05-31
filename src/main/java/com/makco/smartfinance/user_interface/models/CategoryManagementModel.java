@@ -36,7 +36,7 @@ public class CategoryManagementModel {
             if (!categoryGroups.isEmpty()) {
                 categoryGroups.clear();
             }
-            categoryGroups = FXCollections.observableArrayList(categoryGroupService.categoryGroupList(true));
+            categoryGroups = FXCollections.observableArrayList(categoryGroupService.categoryGroupList());
             LOG.debug("categoryGroups.size: " + categoryGroups.size());
         } catch (Exception e) {
             throw e;

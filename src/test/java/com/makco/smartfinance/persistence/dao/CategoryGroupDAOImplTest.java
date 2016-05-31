@@ -766,7 +766,7 @@ public class CategoryGroupDAOImplTest {
      * 1 query
      * see selectAll_cGWithCats_nativeQuery.log
      */
-    public void test_44_3_seleteAllCategoryGroupsWithCategories_withNativeQuery() throws Exception {
+    public void test_44_3_1_seleteAllCategoryGroupsWithCategories_withNativeQuery() throws Exception {
         int randomInt = randomWithinRange.getRandom();
         int categoriesQty = 3;
         String categoryGroupName = "categoryGroup nameAndType " + randomInt;
@@ -817,6 +817,21 @@ public class CategoryGroupDAOImplTest {
         LOG.debug(">>>qtyCategoryGroupsCreditWithoutCategories: " + qtyCategoryGroupsCreditWithoutCategories);
         LOG.debug(">>>qtyCategoryGroupsOtherWithoutCategories: " + qtyCategoryGroupsOtherWithoutCategories);
         assertEquals(true, qtyCategoryGroupsWithCategories > 0);
+    }
+
+    @Test
+    public void test_44_3_2_seleteAllCategoryGroupsWithCategories_withNativeQuery_emptyCGAndCatTables() throws Exception {
+        List<CategoryGroup_v1> categoryGroups = categoryGroupDAOImplForTest.categoryGroup_v1List(false);
+        for(CategoryGroup_v1 categoryGroup : categoryGroups) {
+            categoryGroupDAOImplForTest.removeCategoryGroup_v1(categoryGroup.getId());
+        }
+
+        //byName return list as it might be debit or credit and return categories
+        List<CategoryGroup_v1> categoryGroupList = categoryGroupDAOImplForTest
+                .categoryGroup_v1ListWithNativeQuery();
+
+        LOG.debug(">>>categoryGroups: " + categoryGroupList);
+        assertEquals(true, categoryGroupList.size() == 0);
     }
 
     @Test

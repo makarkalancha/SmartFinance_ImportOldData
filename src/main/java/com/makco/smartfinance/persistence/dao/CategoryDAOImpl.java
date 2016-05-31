@@ -1,5 +1,6 @@
 package com.makco.smartfinance.persistence.dao;
 
+import com.makco.smartfinance.h2db.utils.schema_constants.Table;
 import com.makco.smartfinance.persistence.entity.Category;
 import com.makco.smartfinance.persistence.entity.CategoryGroup;
 import com.makco.smartfinance.persistence.utils.HibernateUtil;
@@ -10,7 +11,9 @@ import org.hibernate.resource.transaction.spi.TransactionStatus;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by mcalancea on 2016-05-20.
