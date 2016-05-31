@@ -565,6 +565,10 @@ public class CategoryGroupDAOImplTest {
     }
 
     @Test
+    /**
+     * 1+n select issue
+     * see selectAll_cGWithCats_.log
+     */
     public void test_44_1_seleteAllCategoryGroupsWithCategories() throws Exception {
         int randomInt = randomWithinRange.getRandom();
         int categoriesQty = 3;
@@ -715,9 +719,9 @@ public class CategoryGroupDAOImplTest {
 
     @Test
     (expected = LazyInitializationException.class)
-    //not working without eager loading
-    //todo try to fix this method for UI to display cat_gr with categories even if cat_gr has no categories
-    //todo compare queries in test_44_1 vs test_44_2
+    /**
+     * not working without eager loading
+     */
     public void test_44_2_seleteAllCategoryGroupsWithCategories_withLeftJoinFetch() throws Exception {
         int randomInt = randomWithinRange.getRandom();
         int categoriesQty = 3;
@@ -758,6 +762,12 @@ public class CategoryGroupDAOImplTest {
     }
 
     @Test
+    /**
+     * 1 query
+     * see selectAll_cGWithCats_nativeQuery.log
+     */
+    //todo try to fix this method for UI to display cat_gr with categories even if cat_gr has no categories
+    //todo compare queries in test_44_1 vs test_44_3
     public void test_44_3_seleteAllCategoryGroupsWithCategories_withNativeQuery() throws Exception {
         int randomInt = randomWithinRange.getRandom();
         int categoriesQty = 3;
@@ -785,15 +795,29 @@ public class CategoryGroupDAOImplTest {
 
         int qtyCategoryGroupsWithCategories = 0;
         int qtyCategoryGroupsWithoutCategories = 0;
+        int qtyCategoryGroupsDebitWithoutCategories = 0;
+        int qtyCategoryGroupsCreditWithoutCategories = 0;
+        int qtyCategoryGroupsOtherWithoutCategories = 0;
         for(CategoryGroup_v1 categoryGroup : categoryGroups){
             if(categoryGroup.getCategories().size() > 0){
                 ++qtyCategoryGroupsWithCategories;
             } else {
                 ++qtyCategoryGroupsWithoutCategories;
             }
+
+            if(categoryGroup instanceof CategoryGroupDebit_v1){
+                ++qtyCategoryGroupsDebitWithoutCategories;
+            } else if(categoryGroup instanceof CategoryGroupCredit_v1){
+                ++qtyCategoryGroupsCreditWithoutCategories;
+            } else {
+                ++qtyCategoryGroupsOtherWithoutCategories;
+            }
         }
         LOG.debug(">>>qtyCategoryGroupsWithCategories: " + qtyCategoryGroupsWithCategories);
         LOG.debug(">>>qtyCategoryGroupsWithoutCategories: " + qtyCategoryGroupsWithoutCategories);
+        LOG.debug(">>>qtyCategoryGroupsDebitWithoutCategories: " + qtyCategoryGroupsDebitWithoutCategories);
+        LOG.debug(">>>qtyCategoryGroupsCreditWithoutCategories: " + qtyCategoryGroupsCreditWithoutCategories);
+        LOG.debug(">>>qtyCategoryGroupsOtherWithoutCategories: " + qtyCategoryGroupsOtherWithoutCategories);
         assertEquals(true, qtyCategoryGroupsWithCategories > 0);
     }
 
