@@ -23,7 +23,7 @@ public class CategoryGroupDAOImpl implements CategoryGroupDAO{
     private final static Logger LOG = LogManager.getLogger(CategoryGroupDAOImpl.class);
 
     @Override
-    public List<CategoryGroup> categoryGroupList() throws Exception {
+    public List<CategoryGroup> categoryGroupListWithoutCategories() throws Exception {
         Session session = null;
         List<CategoryGroup> list = new ArrayList<>();
         //less queries
@@ -34,7 +34,6 @@ public class CategoryGroupDAOImpl implements CategoryGroupDAO{
             session = HibernateUtil.openSession();
             session.beginTransaction();
             list = session.createQuery(query.toString()).list();
-            Collections.sort(list, (CategoryGroup cg1, CategoryGroup cg2) -> cg1.getName().toLowerCase().compareTo(cg2.getName().toLowerCase()));
             session.getTransaction().commit();
         } catch (Exception e) {
             //hibernate persistence p.257
@@ -52,7 +51,8 @@ public class CategoryGroupDAOImpl implements CategoryGroupDAO{
                 session.close();
             }
         }
-        //todo set empty list to categories
+        Collections.sort(list, (CategoryGroup cg1, CategoryGroup cg2) -> cg1.getName().toLowerCase().compareTo(cg2.getName().toLowerCase()));
+        list.forEach(categoryGroup -> categoryGroup.setCategories(new ArrayList<>()));
         return list;
     }
 
@@ -227,14 +227,7 @@ public class CategoryGroupDAOImpl implements CategoryGroupDAO{
                         }
                     });
             session.getTransaction().commit();
-
             result = new ArrayList(categoryGroupById.values());
-            Collections.sort(result, (CategoryGroup cg1, CategoryGroup cg2) -> {
-                int type = cg1.getCategoryGroupType().toLowerCase().compareTo(cg2.getCategoryGroupType().toLowerCase());
-                if (type != 0) return type;
-
-                return cg1.getName().toLowerCase().compareTo(cg2.getName().toLowerCase());
-            });
         } catch (Exception e) {
             //hibernate persistence p.257
             try {
@@ -251,7 +244,12 @@ public class CategoryGroupDAOImpl implements CategoryGroupDAO{
                 session.close();
             }
         }
+        Collections.sort(result, (CategoryGroup cg1, CategoryGroup cg2) -> {
+            int type = cg1.getCategoryGroupType().toLowerCase().compareTo(cg2.getCategoryGroupType().toLowerCase());
+            if (type != 0) return type;
 
+            return cg1.getName().toLowerCase().compareTo(cg2.getName().toLowerCase());
+        });
         return result;
     }
 }

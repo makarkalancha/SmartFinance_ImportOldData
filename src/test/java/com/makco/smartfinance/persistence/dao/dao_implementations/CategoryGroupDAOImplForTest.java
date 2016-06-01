@@ -3,10 +3,12 @@ package com.makco.smartfinance.persistence.dao.dao_implementations;
 import com.makco.smartfinance.constants.DataBaseConstants;
 import com.makco.smartfinance.h2db.utils.schema_constants.Table;
 import com.makco.smartfinance.persistence.entity.Category;
+import com.makco.smartfinance.persistence.entity.CategoryGroup;
 import com.makco.smartfinance.persistence.entity.session.category_management.v1.CategoryGroupCredit_v1;
 import com.makco.smartfinance.persistence.entity.session.category_management.v1.CategoryGroupDebit_v1;
 import com.makco.smartfinance.persistence.entity.session.category_management.v1.CategoryGroup_v1;
 import com.makco.smartfinance.persistence.entity.session.category_management.v1.Category_v1;
+import com.makco.smartfinance.persistence.utils.HibernateUtil;
 import com.makco.smartfinance.persistence.utils.TestPersistenceSession;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -433,6 +435,39 @@ public class CategoryGroupDAOImplForTest {
         return list;
     }
 
+    public List<CategoryGroup_v1> categoryGroup_v1List_withoutBoolean() throws Exception {
+        Session session = null;
+        List<CategoryGroup_v1> list = new ArrayList<>();
+        //less queries
+        StringBuilder query = new StringBuilder();
+        query.append("SELECT cg FROM CategoryGroup_v1 cg ");
+
+        try{
+            session = TestPersistenceSession.openSession();
+            session.beginTransaction();
+            list = session.createQuery(query.toString()).list();
+            session.getTransaction().commit();
+        } catch (Exception e) {
+            //hibernate persistence p.257
+            try {
+                if (session.getTransaction().getStatus() == TransactionStatus.ACTIVE
+                        || session.getTransaction().getStatus() == TransactionStatus.MARKED_ROLLBACK)
+                    session.getTransaction().rollback();
+            } catch (Exception rbEx) {
+                LOG.error("Rollback of transaction failed, trace follows!");
+                LOG.error(rbEx, rbEx);
+            }
+            throw new RuntimeException(e);
+        } finally {
+            if(session != null){
+                session.close();
+            }
+        }
+        Collections.sort(list, (CategoryGroup_v1 cg1, CategoryGroup_v1 cg2) -> cg1.getName().toLowerCase().compareTo(cg2.getName().toLowerCase()));
+        list.forEach(categoryGroup -> categoryGroup.setCategories(new ArrayList<>()));
+        return list;
+    }
+
     public List<CategoryGroupCredit_v1> categoryGroupCredit_v1List_old(boolean initializeCategories) throws Exception {
         Session session = null;
         List<CategoryGroupCredit_v1> list = new ArrayList<>();
@@ -631,12 +666,6 @@ public class CategoryGroupDAOImplForTest {
             session.getTransaction().commit();
 
             result = new ArrayList(categoryGroupById.values());
-            Collections.sort(result, (CategoryGroup_v1 cg1,  CategoryGroup_v1 cg2) -> {
-                int type = cg1.getCategoryGroupType().toLowerCase().compareTo(cg2.getCategoryGroupType().toLowerCase());
-                if(type != 0) return type;
-
-                return cg1.getName().toLowerCase().compareTo(cg2.getName().toLowerCase());
-            });
         } catch (Exception e) {
             //hibernate persistence p.257
             try {
@@ -653,7 +682,12 @@ public class CategoryGroupDAOImplForTest {
                 session.close();
             }
         }
+        Collections.sort(result, (CategoryGroup_v1 cg1,  CategoryGroup_v1 cg2) -> {
+            int type = cg1.getCategoryGroupType().toLowerCase().compareTo(cg2.getCategoryGroupType().toLowerCase());
+            if(type != 0) return type;
 
+            return cg1.getName().toLowerCase().compareTo(cg2.getName().toLowerCase());
+        });
         return result;
     }
 }

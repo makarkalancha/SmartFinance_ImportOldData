@@ -3,6 +3,7 @@ package com.makco.smartfinance.persistence.dao;
 import com.makco.smartfinance.constants.DataBaseConstants;
 import com.makco.smartfinance.persistence.dao.dao_implementations.CategoryDAOImplForTest;
 import com.makco.smartfinance.persistence.dao.dao_implementations.CategoryGroupDAOImplForTest;
+import com.makco.smartfinance.persistence.entity.CategoryGroup;
 import com.makco.smartfinance.persistence.entity.session.category_management.v1.CategoryCredit_v1;
 import com.makco.smartfinance.persistence.entity.session.category_management.v1.CategoryDebit_v1;
 import com.makco.smartfinance.persistence.entity.session.category_management.v1.CategoryGroupCredit_v1;
@@ -495,7 +496,7 @@ public class CategoryGroupDAOImplTest {
     }
 
     @Test
-    public void test_41_seleteAllCategoryGroups() throws Exception {
+    public void test_41_1_seleteAllCategoryGroups() throws Exception {
         int randomInt = randomWithinRange.getRandom();
         int categoriesQty = 3;
         CategoryGroup_v1 categoryGroupCredit = new CategoryGroupCredit_v1("cr catGr to sel " + randomInt,
@@ -531,6 +532,10 @@ public class CategoryGroupDAOImplTest {
         List<CategoryGroup_v1> categoryGroups = categoryGroupDAOImplForTest.categoryGroup_v1List(false);
         LOG.debug(">>>categoryGroup_v1List: " + categoryGroups);
         assertEquals(true, categoryGroups.size() > 0);
+//        //lazy initialization exception
+//        for(CategoryGroup_v1 categoryGroup : categoryGroups){
+//            assertEquals(true, categoryGroup.getCategories().size() == 0);
+//        }
     }
 
     @Test
@@ -599,6 +604,120 @@ public class CategoryGroupDAOImplTest {
         }
         LOG.debug(">>>qtyCategoryGroupsWithCategories: " + qtyCategoryGroupsWithCategories);
         LOG.debug(">>>qtyCategoryGroupsWithoutCategories: " + qtyCategoryGroupsWithoutCategories);
+        assertEquals(true, qtyCategoryGroupsWithCategories > 0);
+    }
+
+    @Test
+    public void test_41_2_seleteAllCategoryGroups_noCategories() throws Exception {
+        int randomInt = randomWithinRange.getRandom();
+        int categoriesQty = 3;
+        CategoryGroup_v1 categoryGroupCredit = new CategoryGroupCredit_v1("cr catGr to sel " + randomInt,
+                "credit category group to select " + randomInt);
+        List<Category_v1> creditCategories = new ArrayList<>();
+        //put service: putting category_group in category and category in category_group
+        for(int i = 0 ; i < categoriesQty;i++) {
+            Category_v1 category = new CategoryCredit_v1(categoryGroupCredit, "cat cr " + i + "_v" + randomInt,
+                    "credit category #" + i + " 'description'");
+            creditCategories.add(category);
+        }
+        categoryGroupCredit.setCategories(creditCategories);
+        categoryGroupDAOImplForTest.saveOrUpdateCategoryGroup_v1(categoryGroupCredit);
+
+        LOG.debug(">>>category group credit to delete: " + categoryGroupCredit);
+        LOG.debug(">>>credit categories to delete: " + creditCategories);
+
+        CategoryGroup_v1 categoryGroupDebit = new CategoryGroupDebit_v1("dt catGr to sel " + randomInt,
+                "debit category group to select " + randomInt);
+        List<Category_v1> debitCategories = new ArrayList<>();
+        //put service: putting category_group in category and category in category_group
+        for(int i = 0 ; i < categoriesQty;i++) {
+            Category_v1 category = new CategoryDebit_v1(categoryGroupDebit, "cat dt " + i + "_v" + randomInt,
+                    "debit category #" + i + " 'description'");
+            debitCategories.add(category);
+        }
+        categoryGroupDebit.setCategories(debitCategories);
+        categoryGroupDAOImplForTest.saveOrUpdateCategoryGroup_v1(categoryGroupDebit);
+
+        LOG.debug(">>>category group debit to delete: " + categoryGroupDebit);
+        LOG.debug(">>>debit categories to delete: " + debitCategories);
+
+        List<CategoryGroup_v1> categoryGroups = categoryGroupDAOImplForTest.categoryGroup_v1List_withoutBoolean();
+        LOG.debug(">>>categoryGroup_v1List: " + categoryGroups);
+        assertEquals(true, categoryGroups.size() > 0);
+        for(CategoryGroup_v1 categoryGroup : categoryGroups){
+            assertEquals(true, categoryGroup.getCategories().size() == 0);
+        }
+    }
+
+    @Test
+    public void test_47_seleteAllCategoryGroups_noCategories_withCategories() throws Exception {
+        int randomInt = randomWithinRange.getRandom();
+        int categoriesQty = 3;
+        CategoryGroup_v1 categoryGroupCredit = new CategoryGroupCredit_v1("cr catGr to sel " + randomInt,
+                "credit category group to select " + randomInt);
+        List<Category_v1> creditCategories = new ArrayList<>();
+        //put service: putting category_group in category and category in category_group
+        for(int i = 0 ; i < categoriesQty;i++) {
+            Category_v1 category = new CategoryCredit_v1(categoryGroupCredit, "cat cr " + i + "_v" + randomInt,
+                    "credit category #" + i + " 'description'");
+            creditCategories.add(category);
+        }
+        categoryGroupCredit.setCategories(creditCategories);
+        categoryGroupDAOImplForTest.saveOrUpdateCategoryGroup_v1(categoryGroupCredit);
+
+        LOG.debug(">>>category group credit to delete: " + categoryGroupCredit);
+        LOG.debug(">>>credit categories to delete: " + creditCategories);
+
+        CategoryGroup_v1 categoryGroupDebit = new CategoryGroupDebit_v1("dt catGr to sel " + randomInt,
+                "debit category group to select " + randomInt);
+        List<Category_v1> debitCategories = new ArrayList<>();
+        //put service: putting category_group in category and category in category_group
+        for(int i = 0 ; i < categoriesQty;i++) {
+            Category_v1 category = new CategoryDebit_v1(categoryGroupDebit, "cat dt " + i + "_v" + randomInt,
+                    "debit category #" + i + " 'description'");
+            debitCategories.add(category);
+        }
+        categoryGroupDebit.setCategories(debitCategories);
+        categoryGroupDAOImplForTest.saveOrUpdateCategoryGroup_v1(categoryGroupDebit);
+
+        LOG.debug(">>>category group debit to delete: " + categoryGroupDebit);
+        LOG.debug(">>>debit categories to delete: " + debitCategories);
+
+        List<CategoryGroup_v1> categoryGroupsNoCategories = categoryGroupDAOImplForTest.categoryGroup_v1List_withoutBoolean();
+        LOG.debug(">>>categoryGroup_v1List: " + categoryGroupsNoCategories);
+        assertEquals(true, categoryGroupsNoCategories.size() > 0);
+        for(CategoryGroup_v1 categoryGroup : categoryGroupsNoCategories){
+            assertEquals(true, categoryGroup.getCategories().size() == 0);
+        }
+
+        List<CategoryGroup_v1> categoryGroupsWithCategories = categoryGroupDAOImplForTest.categoryGroup_v1ListWithNativeQuery();
+        LOG.debug(">>>categoryGroup_v1List: " + categoryGroupsWithCategories);
+        assertEquals(true, categoryGroupsWithCategories.size() > 0);
+        int qtyCategoryGroupsWithCategories = 0;
+        int qtyCategoryGroupsWithoutCategories = 0;
+        int qtyCategoryGroupsDebitWithoutCategories = 0;
+        int qtyCategoryGroupsCreditWithoutCategories = 0;
+        int qtyCategoryGroupsOtherWithoutCategories = 0;
+        for(CategoryGroup_v1 categoryGroup : categoryGroupsWithCategories){
+            if(categoryGroup.getCategories().size() > 0){
+                ++qtyCategoryGroupsWithCategories;
+            } else {
+                ++qtyCategoryGroupsWithoutCategories;
+            }
+
+            if(categoryGroup instanceof CategoryGroupDebit_v1){
+                ++qtyCategoryGroupsDebitWithoutCategories;
+            } else if(categoryGroup instanceof CategoryGroupCredit_v1){
+                ++qtyCategoryGroupsCreditWithoutCategories;
+            } else {
+                ++qtyCategoryGroupsOtherWithoutCategories;
+            }
+        }
+        LOG.debug(">>>qtyCategoryGroupsWithCategories: " + qtyCategoryGroupsWithCategories);
+        LOG.debug(">>>qtyCategoryGroupsWithoutCategories: " + qtyCategoryGroupsWithoutCategories);
+        LOG.debug(">>>qtyCategoryGroupsDebitWithoutCategories: " + qtyCategoryGroupsDebitWithoutCategories);
+        LOG.debug(">>>qtyCategoryGroupsCreditWithoutCategories: " + qtyCategoryGroupsCreditWithoutCategories);
+        LOG.debug(">>>qtyCategoryGroupsOtherWithoutCategories: " + qtyCategoryGroupsOtherWithoutCategories);
         assertEquals(true, qtyCategoryGroupsWithCategories > 0);
     }
 

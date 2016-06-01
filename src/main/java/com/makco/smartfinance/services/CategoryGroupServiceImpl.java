@@ -21,10 +21,21 @@ public class CategoryGroupServiceImpl implements CategoryGroupService {
     private CategoryGroupDAO categoryGroupDAO = new CategoryGroupDAOImpl();
 
     @Override
-    public List<CategoryGroup> categoryGroupList() throws Exception {
+    public List<CategoryGroup> categoryGroupListWithoutCategories() throws Exception {
         List<CategoryGroup> categoryGroupList = new ArrayList<>();
         try {
-            categoryGroupList = categoryGroupDAO.categoryGroupList();
+            categoryGroupList = categoryGroupDAO.categoryGroupListWithoutCategories();
+        } catch (Exception e) {
+            throw e;
+        }
+        return categoryGroupList;
+    }
+
+    @Override
+    public List<CategoryGroup> categoryGroupListWithCategories() throws Exception {
+        List<CategoryGroup> categoryGroupList = new ArrayList<>();
+        try {
+            categoryGroupList = categoryGroupDAO.categoryGroupListWithCategories();
         } catch (Exception e) {
             throw e;
         }

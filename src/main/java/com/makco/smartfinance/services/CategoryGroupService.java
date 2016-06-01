@@ -11,7 +11,8 @@ import java.util.List;
  */
 public interface CategoryGroupService {
     CategoryGroup getCategoryGroupById(Long id, boolean initializeCategories) throws Exception;
-    List<CategoryGroup> categoryGroupList() throws Exception;
+    List<CategoryGroup> categoryGroupListWithoutCategories() throws Exception;
+    List<CategoryGroup> categoryGroupListWithCategories() throws Exception;
     void saveOrUpdateCategoryGroup(CategoryGroup categoryGroup) throws Exception;
     void removeCategoryGroup(Long id) throws Exception;
     List<CategoryGroup> getCategoryGroupByName(String categoryGroupName) throws Exception;
