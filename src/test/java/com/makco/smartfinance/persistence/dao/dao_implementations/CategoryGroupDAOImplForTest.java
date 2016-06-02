@@ -371,8 +371,6 @@ public class CategoryGroupDAOImplForTest {
                 session.close();
             }
         }
-        //test
-        //todo read https://developer.jboss.org/wiki/OpenSessioninView
         LOG.debug(">>>test");
         LOG.debug(">>>query: " + query.toString());
         for(CategoryGroup CategoryGroup : list){

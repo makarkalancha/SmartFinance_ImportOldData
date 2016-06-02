@@ -165,17 +165,6 @@ public class CategoryDAOImplTest {
     }
 
     @Test
-    //TODO test_41_seleteAllCategories
-    public void test_41_seleteAllCategories() throws Exception {
-    }
-
-    @Test
-    //TODO test_42_seleteCategoryById
-    public void test_42_seleteCategoryById() throws Exception {
-
-    }
-
-    @Test
     public void test_43_seleteCategoryByNameAndItsCategoryGroup() throws Exception {
         int randomInt = randomWithinRange.getRandom();
         CategoryGroup_v1 categoryGroupCredit = new CategoryGroupCredit_v1("cr catGr to sel " + randomInt,
@@ -198,18 +187,6 @@ public class CategoryDAOImplTest {
         for (Category_v1 cat : categoryByNameList) {
             assertEquals(true, categoryName.equals(cat.getName()));
         }
-    }
-
-    @Test
-    //TODO test_44_seleteAllDebitCategories
-    public void test_44_seleteAllDebitCategories() throws Exception {
-
-    }
-
-    @Test
-    //TODO test_45_seleteAllCreditCategories
-    public void test_45_seleteAllCreditCategories() throws Exception {
-
     }
 
     @Test
