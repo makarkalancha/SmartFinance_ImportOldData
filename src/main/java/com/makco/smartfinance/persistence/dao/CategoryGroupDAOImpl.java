@@ -229,7 +229,8 @@ public class CategoryGroupDAOImpl implements CategoryGroupDAO{
             }
         }
         Collections.sort(result, (CategoryGroup cg1, CategoryGroup cg2) -> {
-            int type = cg1.getCategoryGroupType().toLowerCase().compareTo(cg2.getCategoryGroupType().toLowerCase());
+            int type = cg1.getCategoryGroupType().getDiscriminator().toLowerCase().compareTo(
+                    cg2.getCategoryGroupType().getDiscriminator().toLowerCase());
             if (type != 0) return type;
 
             return cg1.getName().toLowerCase().compareTo(cg2.getName().toLowerCase());

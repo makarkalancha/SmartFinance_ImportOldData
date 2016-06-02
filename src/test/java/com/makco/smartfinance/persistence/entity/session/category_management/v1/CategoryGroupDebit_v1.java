@@ -96,8 +96,8 @@ public class CategoryGroupDebit_v1 extends CategoryGroup_v1<CategoryDebit_v1> {
     }
 
     @Override
-    public String getCategoryGroupType() {
-        return DataBaseConstants.CATEGORY_GROUP_TYPE.Values.DEBIT;
+    public DataBaseConstants.CATEGORY_GROUP_TYPE getCategoryGroupType() {
+        return DataBaseConstants.CATEGORY_GROUP_TYPE.DEBIT;
     }
 
     //    @Override

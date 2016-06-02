@@ -12,10 +12,10 @@ public class CategoryFactory {
         if (categoryGroup != null && categoryGroup.getCategoryGroupType() != null) {
             switch (categoryGroup.getCategoryGroupType()) {
                 case CREDIT:
-                    categoryResult = new CategoryGroupCredit(name, description);
+                    categoryResult = new CategoryCredit(categoryGroup, name, description);
                     break;
                 case DEBIT:
-                    categoryResult = new CategoryGroupDebit(name, description);
+                    categoryResult = new CategoryDebit(categoryGroup, name, description);
                     break;
                 default:
                     throw new Exception("This type of Category Group is not supported!");

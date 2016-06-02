@@ -673,7 +673,8 @@ public class CategoryGroup_v1DAOImplForTest {
             }
         }
         Collections.sort(result, (CategoryGroup_v1 cg1,  CategoryGroup_v1 cg2) -> {
-            int type = cg1.getCategoryGroupType().toLowerCase().compareTo(cg2.getCategoryGroupType().toLowerCase());
+            int type = cg1.getCategoryGroupType().getDiscriminator().toLowerCase().compareTo(
+                    cg2.getCategoryGroupType().getDiscriminator().toLowerCase());
             if(type != 0) return type;
 
             return cg1.getName().toLowerCase().compareTo(cg2.getName().toLowerCase());

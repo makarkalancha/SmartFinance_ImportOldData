@@ -111,7 +111,7 @@ public abstract class CategoryGroup_v1<T extends Category_v1>{
 
     public abstract void setCategories(Collection<T> categories);
 
-    public abstract String getCategoryGroupType();
+    public abstract DataBaseConstants.CATEGORY_GROUP_TYPE getCategoryGroupType();
 
     public Timestamp getCreatedOn() {
         return createdOn;

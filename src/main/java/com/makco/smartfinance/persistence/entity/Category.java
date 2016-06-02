@@ -82,9 +82,9 @@ public abstract class Category {
 
     }
 
-    public Category(CategoryGroup categoryGroup, String name, String description){
-        categoryGroup
-    }
+//    public Category(CategoryGroup categoryGroup, String name, String description){
+//        this.categoryGroup = categoryGroup;
+//    }
 
     public Long getId() {
         return id;

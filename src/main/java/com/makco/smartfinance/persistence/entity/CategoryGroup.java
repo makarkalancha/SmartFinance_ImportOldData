@@ -113,7 +113,7 @@ public abstract class CategoryGroup <T extends Category>{
 
     public abstract void setCategories(Collection<T> categories);
 
-    public abstract String getCategoryGroupType();
+    public abstract DataBaseConstants.CATEGORY_GROUP_TYPE getCategoryGroupType();
 
     public Timestamp getCreatedOn() {
         return createdOn;

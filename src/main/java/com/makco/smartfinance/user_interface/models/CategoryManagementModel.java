@@ -9,6 +9,7 @@ import com.makco.smartfinance.services.CategoryGroupService;
 import com.makco.smartfinance.services.CategoryGroupServiceImpl;
 import com.makco.smartfinance.services.CategoryService;
 import com.makco.smartfinance.services.CategoryServiceImpl;
+import com.makco.smartfinance.user_interface.constants.UserInterfaceConstants;
 import com.makco.smartfinance.user_interface.validation.ErrorEnum;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -16,6 +17,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by mcalancea on 2016-05-13.
@@ -26,16 +29,18 @@ public class CategoryManagementModel {
     private CategoryService categoryService = new CategoryServiceImpl();
     private ObservableList<CategoryGroup> categoryGroupsWithoutCategories = FXCollections.observableArrayList();
     private ObservableList<Category> categories = FXCollections.observableArrayList();
-    private CategoryGroup pendingGroupCategory;
+    private CategoryGroup pendingCategoryGroup;
     private Category pendingCategory;
     private CategoryGroupFactory categoryGroupFactory = new CategoryGroupFactory();
     private CategoryFactory categoryFactory = new CategoryFactory();
+    private Map<String, CategoryGroup> categoryGroupUINameToCategoryGroup = new HashMap<>();
+
 
     public CategoryManagementModel() {
 
     }
 
-    public void refresh() throws Exception {
+    public void refreshCategoryGroupTab() throws Exception {
         try {
             if (!categoryGroupsWithoutCategories.isEmpty()) {
                 categoryGroupsWithoutCategories.clear();
@@ -45,6 +50,42 @@ public class CategoryManagementModel {
         } catch (Exception e) {
             throw e;
         }
+    }
+
+    public void refreshCategoryTab() throws Exception {
+        try {
+            if (!categories.isEmpty()) {
+                categories.clear();
+            }
+            categories = FXCollections.observableArrayList(categoryService.categoryList());
+            LOG.debug("categories.size: " + categories.size());
+            refreshCategoryGroupTab();
+            categoryGroupsWithoutCategories.forEach(cg -> {
+                categoryGroupUINameToCategoryGroup.put(convertCategoryGroupFromBackendToUI(cg), cg);
+            });
+
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+
+    //category
+    public String convertCategoryGroupFromBackendToUI(CategoryGroup categoryGroup){
+        if(categoryGroup != null) {
+            StringBuilder result = new StringBuilder();
+            result.append(categoryGroup.getName());
+            result.append(" (");
+            result.append(categoryGroup.getCategoryGroupType().getDiscriminator());
+            result.append(")");
+
+            return result.toString();
+        }
+
+        return "";
+    }
+
+    public CategoryGroup convertCategoryGroupFromUIToBackendTo(String uiText){
+        return categoryGroupUINameToCategoryGroup.get(uiText);
     }
 
     public ObservableList<CategoryGroup> getCategoryGroupsWithoutCategories() throws Exception {
@@ -59,11 +100,11 @@ public class CategoryManagementModel {
         EnumSet<ErrorEnum> errors = EnumSet.noneOf(ErrorEnum.class);
         try {
             CategoryGroup tmpCategoryGroup;
-            if (pendingGroupCategory != null) {
-                pendingGroupCategory.setName(name);
-                pendingGroupCategory.setDescription(description);
-                tmpCategoryGroup = pendingGroupCategory;
-                pendingGroupCategory = null;
+            if (pendingCategoryGroup != null) {
+                pendingCategoryGroup.setName(name);
+                pendingCategoryGroup.setDescription(description);
+                tmpCategoryGroup = pendingCategoryGroup;
+                pendingCategoryGroup = null;
             } else {
                 tmpCategoryGroup = categoryGroupFactory.getCategoryGroup(type, name, description);
             }
@@ -75,7 +116,7 @@ public class CategoryManagementModel {
         } catch (Exception e) {
             throw e;
         } finally {
-            refresh();
+            refreshCategoryGroupTab();
         }
         return errors;
     }
@@ -96,26 +137,26 @@ public class CategoryManagementModel {
 
             errors = categoryService.validate(tmpCategory);
             if (errors.isEmpty()) {
-                categoryGroupService.saveOrUpdateCategoryGroup(tmpCategory);
+                categoryService.saveOrUpdateCategory(tmpCategory);
             }
         } catch (Exception e) {
             throw e;
         } finally {
-            refresh();
+            refreshCategoryGroupTab();
         }
         return errors;
     }
 
     public void deletePendingCategoryGroup() throws Exception {
         try {
-            if (pendingGroupCategory != null && pendingGroupCategory.getId() != null) {
-                categoryGroupService.removeCategoryGroup(pendingGroupCategory.getId());
-                pendingGroupCategory = null;
+            if (pendingCategoryGroup != null && pendingCategoryGroup.getId() != null) {
+                categoryGroupService.removeCategoryGroup(pendingCategoryGroup.getId());
+                pendingCategoryGroup = null;
             }
         } catch (Exception e) {
             throw e;
         } finally {
-            refresh();
+            refreshCategoryGroupTab();
         }
     }
 
@@ -128,15 +169,23 @@ public class CategoryManagementModel {
         } catch (Exception e) {
             throw e;
         } finally {
-            refresh();
+            refreshCategoryGroupTab();
         }
     }
 
-    public CategoryGroup getPendingGroupCategory() throws Exception {
-        return pendingGroupCategory;
+    public CategoryGroup getPendingCategoryGroup() throws Exception {
+        return pendingCategoryGroup;
     }
 
     public void setPendingCategoryGroupProperty(CategoryGroup categoryGroup) throws Exception {
-        pendingGroupCategory = categoryGroup;
+        pendingCategoryGroup = categoryGroup;
+    }
+
+    public Category getPendingCategory() throws Exception {
+        return pendingCategory;
+    }
+
+    public void setPendingCategoryProperty(Category category) throws Exception {
+        pendingCategory = category;
     }
 }

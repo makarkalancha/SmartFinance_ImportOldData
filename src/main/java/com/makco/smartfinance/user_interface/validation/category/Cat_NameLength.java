@@ -1,24 +1,25 @@
-package com.makco.smartfinance.user_interface.validation.category_group;
+package com.makco.smartfinance.user_interface.validation.category;
 
+import com.makco.smartfinance.constants.DataBaseConstants;
+import com.makco.smartfinance.persistence.entity.Category;
 import com.makco.smartfinance.persistence.entity.CategoryGroup;
 import com.makco.smartfinance.user_interface.utility_screens.DialogMessages;
 import com.makco.smartfinance.user_interface.validation.ErrorEnum;
 import com.makco.smartfinance.user_interface.validation.Rule;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.EnumSet;
 
 /**
  * Created by mcalancea on 2016-04-08.
  */
-public class CatGr_EmptyCategoryGroupType implements Rule<CategoryGroup> {
+public class Cat_NameLength implements Rule<Category> {
 
     @Override
-    public EnumSet<ErrorEnum> validate(CategoryGroup categoryGroup) throws Exception{
+    public EnumSet<ErrorEnum> validate(Category category) throws Exception{
         EnumSet<ErrorEnum> errors = EnumSet.noneOf(ErrorEnum.class);
         try {
-            if (categoryGroup == null || StringUtils.isBlank(categoryGroup.getCategoryGroupType().getDiscriminator())) {
-                errors.add(ErrorEnum.CatGr_NULL_CG_TYPE);
+            if (category != null && category.getName().length() > DataBaseConstants.CAT_NAME_MAX_LGTH) {
+                errors.add(ErrorEnum.Cat_NAME_LGTH);
             }
         }catch (Exception e){
             throw e;

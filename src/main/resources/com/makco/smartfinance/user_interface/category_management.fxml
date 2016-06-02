@@ -4,7 +4,6 @@
 <!--<?scenebuilder-classpath-element ../../../../TableViewDemo/bin/com/company/jfx8/example/fxmltableview/FormattedTableCellFactory.class?>-->
 <!--<?scenebuilder-classpath-element ../../../../../../../build/libs/lib/userinterface_control-1.0.jar?>-->
 
-<?import com.makco.smartfinance.javafx.control.*?>
 <?import java.lang.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
@@ -33,7 +32,7 @@
             <Font size="20.0" />
          </font>
       </Label>
-      <TabPane prefHeight="562.0" prefWidth="580.0" tabClosingPolicy="UNAVAILABLE">
+      <TabPane fx:id="tabPane" prefHeight="562.0" prefWidth="580.0" tabClosingPolicy="UNAVAILABLE">
         <tabs>
           <Tab text="Category Group">
                <content>

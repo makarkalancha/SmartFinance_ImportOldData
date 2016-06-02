@@ -1,6 +1,7 @@
 package com.makco.smartfinance.user_interface.constants;
 
 import com.makco.smartfinance.constants.DataBaseConstants;
+import com.makco.smartfinance.persistence.entity.CategoryGroup;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
@@ -30,7 +31,7 @@ public class UserInterfaceConstants {
         if(StringUtils.isEmpty(backendText)) {
             return null;
         }else if(backendText.equals(DataBaseConstants.CATEGORY_GROUP_TYPE.DEBIT.toString())
-            || backendText.equals(DataBaseConstants.CATEGORY_GROUP_TYPE.Values.DEBIT)){
+                || backendText.equals(DataBaseConstants.CATEGORY_GROUP_TYPE.Values.DEBIT)){
             return CATEGORY_GROUP_TYPE_DEBIT;
         } else if(backendText.equals(DataBaseConstants.CATEGORY_GROUP_TYPE.CREDIT.toString())
                 || backendText.equals(DataBaseConstants.CATEGORY_GROUP_TYPE.Values.CREDIT)){
@@ -51,7 +52,6 @@ public class UserInterfaceConstants {
 
         return null;
     }
-
 
     //ico
     public static final String CALENDAR = IMG_RESOURCE_FOLDER+"/calendar_60_45.png";

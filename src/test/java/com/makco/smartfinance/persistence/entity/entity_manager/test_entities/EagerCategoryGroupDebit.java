@@ -1,5 +1,6 @@
 package com.makco.smartfinance.persistence.entity.entity_manager.test_entities;
 
+import com.makco.smartfinance.constants.DataBaseConstants;
 import com.makco.smartfinance.persistence.entity.Category;
 import com.makco.smartfinance.persistence.entity.CategoryGroup;
 
@@ -73,8 +74,9 @@ public class EagerCategoryGroupDebit extends CategoryGroup<EagerCategoryDebit> {
     }
 
     @Override
-    public String getCategoryGroupType() {
-        return "E";
+    public DataBaseConstants.CATEGORY_GROUP_TYPE getCategoryGroupType() {
+//        return "E";
+        return null;
     }
 
     @Override

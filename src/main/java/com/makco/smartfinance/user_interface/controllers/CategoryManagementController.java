@@ -18,6 +18,8 @@ import com.makco.smartfinance.user_interface.validation.ErrorEnum;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
@@ -26,11 +28,15 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TreeTableColumn;
+import javafx.scene.control.TreeTableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.util.StringConverter;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -47,7 +53,9 @@ import java.util.ResourceBundle;
  */
 public class CategoryManagementController implements Initializable, ControlledScreen, UndoRedoScreen {
     private final static Logger LOG = LogManager.getLogger(CategoryManagementController.class);
-    private ScreensController myController;
+    private final static int CATEGORY_GROUP_TAB_INDEX = 0;
+    private final static int CATEGORY_TAB_INDEX = 1;
+    private ScreensController screensController;
     private CategoryManagementModel categoryManagementModel = new CategoryManagementModel();
 
     private ActionEvent actionEvent;
@@ -61,9 +69,12 @@ public class CategoryManagementController implements Initializable, ControlledSc
 
     private ProgressIndicatorForm pForm = new ProgressIndicatorForm();
 
+    private int selectedTabIndex;
     private CareTaker careTaker;
     private BooleanProperty isNotUndo = new SimpleBooleanProperty(true);
 
+    @FXML
+    private TabPane tabPane;
     @FXML
     private TableView<CategoryGroup> cgTable;
     @FXML
@@ -79,8 +90,9 @@ public class CategoryManagementController implements Initializable, ControlledSc
     @FXML
     private Button cgDeleteBtn;
 
+    //todo Can not set javafx.scene.control.TableView field com.makco.smartfinance.user_interface.controllers.CategoryManagementController.cTable to javafx.scene.control.TreeTableColumn
     @FXML
-    private TableView<Category> cTable;
+    private TreeTableView<CategoryGroup, Category> cTable;
     @FXML
     private AutoCompleteComboBox cCategoryGroupACCB;
     @FXML
@@ -115,7 +127,7 @@ public class CategoryManagementController implements Initializable, ControlledSc
                         @Override
                         protected EnumSet<ErrorEnum> call() throws Exception {
                             return categoryManagementModel.savePendingCategoryGroup(
-                                    UserInterfaceConstants.convertCategoryGroupTypeFromUIToBackend(cgTypeACCB.getValue()),
+                                    UserInterfaceConstants.convertCategoryGroupTypeFromUIToBackend(cgTypeACCB.getValue().toString()),
                                     cgNameTF.getText(),
                                     cgDescTA.getText());
                         }
@@ -128,13 +140,19 @@ public class CategoryManagementController implements Initializable, ControlledSc
                     return new Task<Void>() {
                         @Override
                         protected Void call() throws Exception {
-                            categoryManagementModel.refresh();
+                            categoryManagementModel.refreshCategoryGroupTab();
                             return null;
                         }
                     };
                 }
             };
+        }catch (Exception e){
+            //not in finally because refreshCategoryGroup must run before populateCategoryGroupTable
+            startService(onRefreshCategoryGroupWorker,null);
+            DialogMessages.showExceptionAlert(e);
+        }
 
+        try{
             onDeleteCategoryWorker = new Service<Void>() {
                 @Override
                 protected Task<Void> createTask() {
@@ -154,9 +172,9 @@ public class CategoryManagementController implements Initializable, ControlledSc
                         @Override
                         protected EnumSet<ErrorEnum> call() throws Exception {
                             return categoryManagementModel.savePendingCategory(
-                                    UserInterfaceConstants.convertCategoryGroupTypeFromUIToBackend(cgTypeACCB.getValue()),
-                                    cgNameTF.getText(),
-                                    cgDescTA.getText());
+                                    categoryManagementModel.convertCategoryGroupFromUIToBackendTo(cCategoryGroupACCB.getValue().toString()),
+                                    cNameTF.getText(),
+                                    cDescTA.getText());
                         }
                     };
                 }
@@ -167,15 +185,15 @@ public class CategoryManagementController implements Initializable, ControlledSc
                     return new Task<Void>() {
                         @Override
                         protected Void call() throws Exception {
-                            categoryManagementModel.refresh();
+                            categoryManagementModel.refreshCategoryTab();
                             return null;
                         }
                     };
                 }
             };
         }catch (Exception e){
-            //not in finally because refreshCategoryGroup must run before populateCategoryGroupTable
-            startService(onRefreshCategoryGroupWorker,null);
+            //not in finally because refreshCategory must run before populateCategoryGroupTable
+            startService(onRefreshCategoryWorker,null);
             DialogMessages.showExceptionAlert(e);
         }
     }
@@ -280,6 +298,106 @@ public class CategoryManagementController implements Initializable, ControlledSc
             startService(onRefreshCategoryGroupWorker,null);
             DialogMessages.showExceptionAlert(e);
         }
+
+        try{
+            ((Service<Void>) onDeleteCategoryWorker).setOnSucceeded(event -> {
+                LOG.debug("onDeleteCategoryWorker->setOnSucceeded");
+                LOG.debug(">>>>>>>>onDeleteCategoryWorker->setOnSucceeded: pForm.getDialogStage().close()");
+                pForm.close();
+                populateCategoryTable();
+            });
+            ((Service<Void>) onDeleteCategoryWorker).setOnFailed(event -> {
+                LOG.debug("onDeleteCategoryWorker->setOnFailed");
+                LOG.debug(">>>>>>>>onDeleteCategoryWorker->setOnFailed: pForm.getDialogStage().close()");
+                pForm.close();
+                populateCategoryTable();
+                DialogMessages.showExceptionAlert(onDeleteCategoryWorker.getException());
+            });
+            ((Service<EnumSet<ErrorEnum>>) onSaveCategoryWorker).setOnSucceeded(event -> {
+                LOG.debug("onSaveCategoryWorker->setOnSucceeded");
+                LOG.debug(">>>>>>>>onSaveCategoryWorker->setOnSucceeded: pForm.getDialogStage().close()");
+                pForm.close();
+                populateCategoryTable();
+                EnumSet<ErrorEnum> errors = onSaveCategoryWorker.getValue();
+                if(!errors.isEmpty()) {
+                    DialogMessages.showErrorDialog("Error while saving Category: category group "
+                                    + cCategoryGroupACCB.getValue() + ", with name " + cNameTF.getText(),
+                            (EnumSet<ErrorEnum>) ((Service) onSaveCategoryGroupWorker).getValue(), null);
+                }
+                onClearCategoryGroup(actionEvent);
+            });
+            ((Service<EnumSet<ErrorEnum>>) onSaveCategoryWorker).setOnFailed(event -> {
+                LOG.debug("onSaveCategoryWorker->setOnFailed");
+                LOG.debug(">>>>>>>>onSaveCategoryWorker->setOnFailed: pForm.getDialogStage().close()");
+                pForm.close();
+                populateCategoryTable();
+                DialogMessages.showExceptionAlert(onSaveCategoryWorker.getException());
+            });
+            ((Service<Void>) onRefreshCategoryWorker).setOnSucceeded(event -> {
+                LOG.debug("onRefreshCategoryWorker->setOnSucceeded");
+                LOG.debug(">>>>>>>>onRefreshCategoryWorker->setOnSucceeded: pForm.getDialogStage().close()");
+                pForm.close();
+                populateCategoryTable();
+            });
+            ((Service<Void>) onRefreshCategoryWorker).setOnFailed(event -> {
+                LOG.debug("onRefreshCategoryWorker->setOnFailed");
+                LOG.debug(">>>>>>>>onRefreshCategoryWorker->setOnFailed: pForm.getDialogStage().close()");
+                pForm.close();
+                populateCategoryTable();
+                DialogMessages.showExceptionAlert(onRefreshCategoryWorker.getException());
+            });
+
+            ((Service<Void>) onDeleteCategoryWorker).setOnSucceeded(event -> {
+                LOG.debug("onDeleteCategoryWorker->setOnSucceeded");
+                LOG.debug(">>>>>>>>onDeleteCategoryWorker->setOnSucceeded: pForm.getDialogStage().close()");
+                pForm.close();
+                populateCategoryTable();
+            });
+            ((Service<Void>) onDeleteCategoryWorker).setOnFailed(event -> {
+                LOG.debug("onDeleteCategoryWorker->setOnFailed");
+                LOG.debug(">>>>>>>>onDeleteCategoryWorker->setOnFailed: pForm.getDialogStage().close()");
+                pForm.close();
+                populateCategoryTable();
+                DialogMessages.showExceptionAlert(onDeleteCategoryWorker.getException());
+            });
+            ((Service<EnumSet<ErrorEnum>>) onSaveCategoryWorker).setOnSucceeded(event -> {
+                LOG.debug("onSaveCategoryWorker->setOnSucceeded");
+                LOG.debug(">>>>>>>>onSaveCategoryWorker->setOnSucceeded: pForm.getDialogStage().close()");
+                pForm.close();
+                populateCategoryTable();
+                EnumSet<ErrorEnum> errors = onSaveCategoryWorker.getValue();
+                if(!errors.isEmpty()) {
+                    DialogMessages.showErrorDialog("Error while saving Category: category group "
+                                    + cCategoryGroupACCB.getValue() + ", with name " + cNameTF.getText(),
+                            (EnumSet<ErrorEnum>) ((Service) onSaveCategoryGroupWorker).getValue(), null);
+                }
+                onClearCategoryGroup(actionEvent);
+            });
+            ((Service<EnumSet<ErrorEnum>>) onSaveCategoryWorker).setOnFailed(event -> {
+                LOG.debug("onSaveCategoryWorker->setOnFailed");
+                LOG.debug(">>>>>>>>onSaveCategoryWorker->setOnFailed: pForm.getDialogStage().close()");
+                pForm.close();
+                populateCategoryTable();
+                DialogMessages.showExceptionAlert(onSaveCategoryWorker.getException());
+            });
+            ((Service<Void>) onRefreshCategoryWorker).setOnSucceeded(event -> {
+                LOG.debug("onRefreshCategoryWorker->setOnSucceeded");
+                LOG.debug(">>>>>>>>onRefreshCategoryWorker->setOnSucceeded: pForm.getDialogStage().close()");
+                pForm.close();
+                populateCategoryTable();
+            });
+            ((Service<Void>) onRefreshCategoryWorker).setOnFailed(event -> {
+                LOG.debug("onRefreshCategoryWorker->setOnFailed");
+                LOG.debug(">>>>>>>>onRefreshCategoryWorker->setOnFailed: pForm.getDialogStage().close()");
+                pForm.close();
+                populateCategoryTable();
+                DialogMessages.showExceptionAlert(onRefreshCategoryWorker.getException());
+            });
+        }catch (Exception e){
+            //not in finally because refreshCategoryGroup must run before populateCategoryGroupTable
+            startService(onRefreshCategoryWorker,null);
+            DialogMessages.showExceptionAlert(e);
+        }
     }
 
     private <V> void startService(Worker<V> worker, ActionEvent event){
@@ -297,8 +415,8 @@ public class CategoryManagementController implements Initializable, ControlledSc
     @Override
     public void setScreenPage(ScreensController screenPage) {
         try{
-            myController = screenPage;
-            careTaker = myController.getCareTaker();
+            screensController = screenPage;
+            careTaker = screensController.getCareTaker();
         }catch (Exception e){
             DialogMessages.showExceptionAlert(e);
         }
@@ -310,37 +428,49 @@ public class CategoryManagementController implements Initializable, ControlledSc
             careTaker.clear();
             initializeServices();
             startService(onRefreshCategoryGroupWorker, null);
+            startService(onRefreshCategoryWorker, null);
             cgTable.getSelectionModel().selectedItemProperty().addListener((observable, oldSelection, newSelection) -> {
                 if (newSelection != null) {
                     populateFormCategoryGroup();
                 }
             });
-            myController.setToolbar_Save(new Command() {
+            cTable.getSelectionModel().selectedItemProperty().addListener((observable, oldSelection, newSelection) -> {
+                if (newSelection != null) {
+                    populateFormCategory();
+                }
+            });
+            screensController.setToolbar_Save(new Command() {
                 @Override
                 public void execute() {
                     try {
-                        LOG.debug("CategoryManagementController->onSave");
-                        startService(onSaveCategoryGroupWorker, new ActionEvent());
+                        if(tabPane.getSelectionModel().getSelectedIndex() == CATEGORY_GROUP_TAB_INDEX) {
+                            LOG.debug("CategoryGroup->onSave");
+                            startService(onSaveCategoryGroupWorker, new ActionEvent());
+                        } else if(tabPane.getSelectionModel().getSelectedIndex() == CATEGORY_TAB_INDEX) {
+                            LOG.debug("Category->onSave");
+                            startService(onSaveCategoryWorker, new ActionEvent());
+                        }
                     } catch (Exception e) {
-                        //no refresh() because there are in deletePendingCategoryGroup, populateCategoryGroupTable, onClear
                         DialogMessages.showExceptionAlert(e);
                     }
                 }
             });
-            myController.setToolbar_Undo(new Command() {
+            screensController.setToolbar_Undo(new Command() {
                 @Override
                 public void execute() {
                     isNotUndo.setValue(false);
                     restoreFormState(careTaker.undoState());
                 }
             });
-            myController.setToolbar_Redo(() -> {
+            screensController.setToolbar_Redo(() -> {
                         isNotUndo.setValue(false);
                         restoreFormState(careTaker.redoState());
                     }
             );
         }catch (Exception e){
             startService(onRefreshCategoryGroupWorker,null);
+            //todo throw exception here to see if startService for category is needed
+//            startService(onRefreshCategoryWorker,null);
             DialogMessages.showExceptionAlert(e);
         }
     }
@@ -358,6 +488,16 @@ public class CategoryManagementController implements Initializable, ControlledSc
 
     @Override
     public void initialize(URL location, ResourceBundle resources){
+        try{
+            tabPane.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue) -> {
+                selectedTabIndex = (int) newValue;
+                careTaker.clear();
+            });
+        }catch (Exception e){
+            //not in finally because refreshCategoryGroup must run before populateCategoryGroupTable
+            DialogMessages.showExceptionAlert(e);
+        }
+
         try {
             //http://javafx-and-me.blogspot.ca/2013/10/custom-combobox.html
             //to show string instead of classes
@@ -396,6 +536,60 @@ public class CategoryManagementController implements Initializable, ControlledSc
             startService(onRefreshCategoryGroupWorker, null);
             DialogMessages.showExceptionAlert(e);
         }
+
+        try {
+            cCategoryGroupACCB.setItems(FXCollections.observableList(categoryManagementModel.getCategoryGroupsWithoutCategories()));
+            cCategoryGroupACCB.setConverter(new StringConverter<CategoryGroup>() {
+
+                @Override
+                public String toString(CategoryGroup object) {
+                    if (object == null) {
+                        return null;
+                    }
+                    return categoryManagementModel.convertCategoryGroupFromBackendToUI(object);
+                }
+
+                @Override
+                public CategoryGroup fromString(String string) {
+                    if(StringUtils.isEmpty(string)) {
+                        return null;
+                    }
+                    return categoryManagementModel.convertCategoryGroupFromUIToBackendTo(string);
+                }
+            });
+            cCategoryGroupACCB.valueProperty().addListener((observable, oldValue, newValue) -> {
+                if (isNotUndo.getValue()) {
+                    saveForm();
+                } else {
+                    isNotUndo.setValue(true);
+                }
+            });
+
+            cNameTF.setPrefColumnCount(DataBaseConstants.CAT_NAME_MAX_LGTH);
+            cNameTF.textProperty().addListener((observable, oldValue, newValue) -> {
+                if (isNotUndo.getValue()) {
+                    saveForm();
+                } else {
+                    isNotUndo.setValue(true);
+                }
+            });
+
+            cDescTA.setPrefColumnCount(DataBaseConstants.CAT_DESCRIPTION_MAX_LGTH);
+            cDescTA.textProperty().addListener((observable, oldValue, newValue) -> {
+                if (isNotUndo.getValue()) {
+                    saveForm();
+                } else {
+                    isNotUndo.setValue(true);
+                }
+            });
+            cClearBtn.setDisable(true);
+            cSaveBtn.setDisable(false);
+            cDeleteBtn.setDisable(true);
+        } catch (Exception e) {
+            //not in finally because onRefreshCategoryWorker must run before populateCategoryTable
+            startService(onRefreshCategoryWorker, null);
+            DialogMessages.showExceptionAlert(e);
+        }
     }
 
     @FXML
@@ -417,11 +611,11 @@ public class CategoryManagementController implements Initializable, ControlledSc
     @FXML
     public void onSaveCategoryGroup(ActionEvent event){
         try {
-            LOG.debug("CategoryManagementController->onSave");
+            LOG.debug("Category Group->onSave");
             startService(onSaveCategoryGroupWorker, event);
             careTaker.clear();
         } catch (Exception e) {
-            //no refresh() because there are in deletePendingCategoryGroup, populateCategoryGroupTable, onClear
+            //no refreshCategoryGroupTab() because there are in deletePendingCategoryGroup, populateCategoryGroupTable, onClear
             DialogMessages.showExceptionAlert(e);
         }
     }
@@ -443,24 +637,59 @@ public class CategoryManagementController implements Initializable, ControlledSc
                 onClearCategoryGroup(actionEvent);
             }
         } catch (Exception e) {
-            //no refresh() because there are in deletePendingCategoryGroup, populateCategoryGroupTable, onClear
+            //no refreshCategoryGroupTab() because there are in deletePendingCategoryGroup, populateCategoryGroupTable, onClear
             DialogMessages.showExceptionAlert(e);
         }
     }
 
     @FXML
     public void onClearCategory(ActionEvent event){
-
+        try{
+            cCategoryGroupACCB.setValue(categoryManagementModel.getCategoryGroupsWithoutCategories().get(0));
+            cNameTF.clear();
+            cDescTA.clear();
+            cClearBtn.setDisable(false);
+            cSaveBtn.setDisable(false);
+            cDeleteBtn.setDisable(true);
+            careTaker.clear();
+        }catch (Exception e){
+            startService(onRefreshCategoryWorker,null);
+            DialogMessages.showExceptionAlert(e);
+        }
     }
 
     @FXML
     public void onSaveCategory(ActionEvent event){
-
+        try {
+            LOG.debug("Category->onSave");
+            startService(onSaveCategoryWorker, event);
+            careTaker.clear();
+        } catch (Exception e) {
+            //no refreshCategoryTab() because there are in deletePendingCategory, populateCategoryTable, onClear
+            DialogMessages.showExceptionAlert(e);
+        }
     }
 
     @FXML
     public void onDeleteCategory(ActionEvent event){
-
+        try {
+            String title = UserInterfaceConstants.CATEGORY_MANAGEMENT_WINDOW_TITLE;
+            String headerText = "Category Deletion";
+            StringBuilder contentText = new StringBuilder("Are you sure you want to delete category with category group");
+            contentText.append("\"");
+            contentText.append(cCategoryGroupACCB.getValue());
+            contentText.append("\" and name \"");
+            contentText.append(cNameTF.getText());
+            contentText.append("\"?");
+            if(DialogMessages.showConfirmationDialog(title,headerText,contentText.toString(),null)) {
+                startService(onDeleteCategoryWorker, event);
+                populateCategoryTable();
+                onClearCategory(actionEvent);
+            }
+        } catch (Exception e) {
+            //no refreshCategoryTab() because there are in deletePendingCategory, populateCategoryTable, onClear
+            DialogMessages.showExceptionAlert(e);
+        }
     }
 
     private void populateFormCategoryGroup(){
@@ -471,10 +700,30 @@ public class CategoryManagementController implements Initializable, ControlledSc
             categoryManagementModel.setPendingCategoryGroupProperty(cgTable.getSelectionModel().getSelectedItem());
 
             cgTypeACCB.setValue(
-                    UserInterfaceConstants.convertCategoryGroupTypeFromBackendToUI(categoryManagementModel.getPendingGroupCategory().getCategoryGroupType())
+                    UserInterfaceConstants.convertCategoryGroupTypeFromBackendToUI(
+                            categoryManagementModel.getPendingCategoryGroup().getCategoryGroupType().getDiscriminator())
             );
-            cgNameTF.setText(categoryManagementModel.getPendingGroupCategory().getName());
-            cgDescTA.setText(categoryManagementModel.getPendingGroupCategory().getDescription());
+            cgNameTF.setText(categoryManagementModel.getPendingCategoryGroup().getName());
+            cgDescTA.setText(categoryManagementModel.getPendingCategoryGroup().getDescription());
+        }catch (Exception e){
+            startService(onRefreshCategoryGroupWorker,null);
+            DialogMessages.showExceptionAlert(e);
+        }
+    }
+
+    private void populateFormCategory(){
+        try{
+            cClearBtn.setDisable(false);
+            cSaveBtn.setDisable(false);
+            cDeleteBtn.setDisable(false);
+            categoryManagementModel.setPendingCategoryProperty(cTable.getSelectionModel().getSelectedItem());
+
+            cCategoryGroupACCB.setValue(
+                    categoryManagementModel.convertCategoryGroupFromBackendToUI(
+                            categoryManagementModel.getPendingCategory().getCategoryGroup())
+            );
+            cNameTF.setText(categoryManagementModel.getPendingCategory().getName());
+            cDescTA.setText(categoryManagementModel.getPendingCategory().getDescription());
         }catch (Exception e){
             startService(onRefreshCategoryGroupWorker,null);
             DialogMessages.showExceptionAlert(e);
@@ -492,7 +741,8 @@ public class CategoryManagementController implements Initializable, ControlledSc
 
             TableColumn<CategoryGroup, String> categoryGroupTypeCol = new TableColumn<>("Type");
             categoryGroupTypeCol.setCellValueFactory(cg -> new SimpleStringProperty(
-                    UserInterfaceConstants.convertCategoryGroupTypeFromBackendToUI(cg.getValue().getCategoryGroupType())));
+                    UserInterfaceConstants.convertCategoryGroupTypeFromBackendToUI(
+                            cg.getValue().getCategoryGroupType().getDiscriminator())));
 
             TableColumn<CategoryGroup, String> categoryGroupNameCol = new TableColumn<>("Name");
             categoryGroupNameCol.setCellValueFactory(new PropertyValueFactory<CategoryGroup, String>("name"));
@@ -533,7 +783,8 @@ public class CategoryManagementController implements Initializable, ControlledSc
                     UserInterfaceConstants.convertCategoryGroupTypeFromBackendToUI(c.getValue().getCategoryGroupType())));
 
             TableColumn<Category, String> categoryCategoryGroupCol = new TableColumn<>("Category Group");
-            categoryCategoryGroupCol.setCellValueFactory(new PropertyValueFactory<Category, String>("name"));
+            categoryCategoryGroupCol.setCellValueFactory(c -> new SimpleStringProperty(
+                    categoryManagementModel.convertCategoryGroupFromBackendToUI(c.getValue().getCategoryGroup())));
 
             TableColumn<Category, String> categoryNameCol = new TableColumn<>("Name");
             categoryNameCol.setCellValueFactory(new PropertyValueFactory<Category, String>("name"));
@@ -559,7 +810,11 @@ public class CategoryManagementController implements Initializable, ControlledSc
     @Override
     public void saveForm() {
         try {
-            careTaker.saveState(new CategoryGroupFormState(cgTypeACCB.getValue(), cgNameTF.getText(), cgDescTA.getText()));
+            if(selectedTabIndex == CATEGORY_GROUP_TAB_INDEX) {
+                careTaker.saveState(new CategoryGroupFormState(cgTypeACCB.getValue().toString(), cgNameTF.getText(), cgDescTA.getText()));
+            }else if(selectedTabIndex == CATEGORY_TAB_INDEX) {
+                careTaker.saveState(new CategoryFormState(cgTypeACCB.getValue().toString(), cgNameTF.getText(), cgDescTA.getText()));
+            }
         } catch (Exception e) {
             DialogMessages.showExceptionAlert(e);
         }
@@ -568,10 +823,17 @@ public class CategoryManagementController implements Initializable, ControlledSc
     @Override
     public void restoreFormState(Memento memento) {
         try {
-            CategoryGroupFormState formState = (CategoryGroupFormState) memento;
-            cgTypeACCB.setValue(formState.getCgTypeACCBStr());
-            cgNameTF.setText(formState.getCgNameTFStr());
-            cgDescTA.setText(formState.getCgDescTAStr());
+            if(selectedTabIndex == CATEGORY_GROUP_TAB_INDEX) {
+                CategoryGroupFormState formState = (CategoryGroupFormState) memento;
+                cgTypeACCB.setValue(formState.getCgTypeACCBStr());
+                cgNameTF.setText(formState.getCgNameTFStr());
+                cgDescTA.setText(formState.getCgDescTAStr());
+            }else if(selectedTabIndex == CATEGORY_TAB_INDEX) {
+                CategoryFormState formState = (CategoryFormState) memento;
+                cCategoryGroupACCB.setValue(formState.getCCategoryGroupACCBStr());
+                cNameTF.setText(formState.getCNameTFStr());
+                cDescTA.setText(formState.getCDescTAStr());
+            }
         } catch (Exception e) {
             DialogMessages.showExceptionAlert(e);
         }
@@ -581,9 +843,10 @@ public class CategoryManagementController implements Initializable, ControlledSc
     public void close() {
         try {
             onClearCategoryGroup(new ActionEvent());
-            myController.setToolbar_Save(null);
-            myController.setToolbar_Undo(null);
-            myController.setToolbar_Redo(null);
+            onClearCategory(new ActionEvent());
+            screensController.setToolbar_Save(null);
+            screensController.setToolbar_Undo(null);
+            screensController.setToolbar_Redo(null);
         } catch (Exception e) {
             DialogMessages.showExceptionAlert(e);
         }
@@ -595,14 +858,26 @@ public class CategoryManagementController implements Initializable, ControlledSc
         try{
             StringBuilder contentText = new StringBuilder();
             if(!StringUtils.isBlank(cgNameTF.getText())) {
-                contentText.append("Name (");
+                contentText.append("Category Group Name (");
                 contentText.append(cgNameTF.getText());
                 contentText.append(") is not saved. ");
             }
 
             if(!StringUtils.isBlank(cgDescTA.getText())) {
-                contentText.append("Description (");
+                contentText.append("Category Group Description (");
                 contentText.append(cgDescTA.getText());
+                contentText.append(") is not saved. ");
+            }
+
+            if(!StringUtils.isBlank(cNameTF.getText())) {
+                contentText.append("Category Name (");
+                contentText.append(cNameTF.getText());
+                contentText.append(") is not saved. ");
+            }
+
+            if(!StringUtils.isBlank(cDescTA.getText())) {
+                contentText.append("Category Description (");
+                contentText.append(cDescTA.getText());
                 contentText.append(") is not saved. ");
             }
 
@@ -646,6 +921,39 @@ public class CategoryManagementController implements Initializable, ControlledSc
                     "cgTypeACCBStr='" + cgTypeACCBStr + '\'' +
                     ", cgNameTFStr='" + cgNameTFStr + '\'' +
                     ", cgDescTAStr='" + cgDescTAStr + '\'' +
+                    '}';
+        }
+    }
+
+    private static class CategoryFormState implements Memento{
+        private final String cCategoryGroupACCBStr;
+        private final String cNameTFStr;
+        private final String cDescTAStr;
+
+        public CategoryFormState(String cCategoryGroupACCB, String cNameTF, String cDescTA){
+            this.cCategoryGroupACCBStr = cCategoryGroupACCB;
+            this.cNameTFStr = cNameTF;
+            this.cDescTAStr = cDescTA;
+        }
+
+        public String getCCategoryGroupACCBStr() {
+            return cCategoryGroupACCBStr;
+        }
+
+        public String getCNameTFStr() {
+            return cNameTFStr;
+        }
+
+        public String getCDescTAStr() {
+            return cDescTAStr;
+        }
+
+        @Override
+        public String toString() {
+            return "CategoryFormState{" +
+                    "cCategoryGroupACCBStr='" + cCategoryGroupACCBStr + '\'' +
+                    ", cNameTFStr='" + cNameTFStr + '\'' +
+                    ", cDescTAStr='" + cDescTAStr + '\'' +
                     '}';
         }
     }

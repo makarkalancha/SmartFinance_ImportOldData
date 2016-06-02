@@ -84,8 +84,8 @@ public class CategoryGroupCredit_v1 extends CategoryGroup_v1<CategoryCredit_v1> 
     }
 
     @Override
-    public String getCategoryGroupType() {
-        return DataBaseConstants.CATEGORY_GROUP_TYPE.Values.CREDIT;
+    public DataBaseConstants.CATEGORY_GROUP_TYPE getCategoryGroupType() {
+        return DataBaseConstants.CATEGORY_GROUP_TYPE.CREDIT;
     }
 
     @Override
