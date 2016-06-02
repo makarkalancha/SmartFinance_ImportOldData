@@ -11,15 +11,15 @@ import javax.persistence.ManyToOne;
 
 /**
  * Created by mcalancea on 2016-04-25.
+ * v1 (see tests)
+ * because CategoryDebit is used in CategoryGroupCredit SortedSet<CategoryCredit> and this collection puts only Comparable
  */
 @Entity
-//@DiscriminatorValue(DataBaseConstants.CREDIT)
 @DiscriminatorValue(DataBaseConstants.CATEGORY_GROUP_TYPE.Values.CREDIT)
 public class CategoryCredit extends Category implements Comparable<CategoryCredit>{
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "CATEGORY_GROUP_ID", /*referencedColumnName = "ID",*/ nullable = false)
+    @JoinColumn(name = "CATEGORY_GROUP_ID", referencedColumnName = "ID", nullable = false)
     private CategoryGroup categoryGroup;
-//    private CategoryGroupCredit categoryGroup;
 
     public CategoryCredit(){
 
@@ -46,6 +46,10 @@ public class CategoryCredit extends Category implements Comparable<CategoryCredi
         return DataBaseConstants.CATEGORY_GROUP_TYPE.Values.CREDIT;
     }
 
+    /**
+     * when entity is transient id == null, so it's impossible to put it in Map or Set
+     * redundant check getCategoryGroupType(), because there's already check for instance of CategoryDebit
+     */
     @Override
     public boolean equals(Object other) {
         if (other instanceof CategoryCredit) {
@@ -74,7 +78,6 @@ public class CategoryCredit extends Category implements Comparable<CategoryCredi
                 '}';
     }
 
-    //because CategoryDebit is used in CategoryGroupDebit SortedSet<CategoryDebit> and this collection puts only Comparable
     @Override
     public int compareTo(CategoryCredit that) {
         return this.getName().compareTo(that.getName());

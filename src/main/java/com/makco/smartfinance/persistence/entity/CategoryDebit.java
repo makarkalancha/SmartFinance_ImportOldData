@@ -13,20 +13,16 @@ import javax.persistence.ManyToOne;
 
 /**
  * Created by mcalancea on 2016-04-25.
+ * v1 (see tests)
+ * because CategoryDebit is used in CategoryGroupDebit SortedSet<CategoryDebit> and this collection puts only Comparable
  */
 @Entity
-//@DiscriminatorValue(DataBaseConstants.CATEGORY_GROUP_TYPE_DEBIT)
 @DiscriminatorValue(DataBaseConstants.CATEGORY_GROUP_TYPE.Values.DEBIT)
-//because CategoryDebit is used in CategoryGroupDebit SortedSet<CategoryDebit> and this collection puts only Comparable
 public class CategoryDebit extends Category implements Comparable<CategoryDebit>{
     private final static Logger LOG = LogManager.getLogger(CategoryDebit.class);
-    /**
-     * @ManyToOne is eager loaded by default (p318-289)
-     */
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "CATEGORY_GROUP_ID", /*referencedColumnName = "ID",*/ nullable = false)
+    @JoinColumn(name = "CATEGORY_GROUP_ID", referencedColumnName = "ID", nullable = false)
     private CategoryGroup categoryGroup;
-//    private CategoryGroupDebit categoryGroup;
 
     public CategoryDebit(){
 
@@ -46,7 +42,6 @@ public class CategoryDebit extends Category implements Comparable<CategoryDebit>
     @Override
     public void setCategoryGroup(CategoryGroup categoryGroup) {
         this.categoryGroup = (CategoryGroupDebit) categoryGroup;
-//        this.categoryGroup = categoryGroup;
     }
 
     @Override
@@ -54,8 +49,10 @@ public class CategoryDebit extends Category implements Comparable<CategoryDebit>
         return DataBaseConstants.CATEGORY_GROUP_TYPE.Values.DEBIT;
     }
 
-    //when entity is transient id == null, so it's impossible to put it in Map or Set
-    //redundant check getCategoryGroupType(), because there's already check for instance of CategoryDebit
+    /**
+     * when entity is transient id == null, so it's impossible to put it in Map or Set
+     * redundant check getCategoryGroupType(), because there's already check for instance of CategoryDebit
+     */
     @Override
     public boolean equals(Object other) {
         if (other instanceof CategoryDebit) {

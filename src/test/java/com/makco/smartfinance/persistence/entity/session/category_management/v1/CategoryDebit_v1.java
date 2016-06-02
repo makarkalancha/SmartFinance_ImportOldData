@@ -13,18 +13,17 @@ import javax.persistence.ManyToOne;
 
 /**
  * Created by mcalancea on 2016-04-25.
+ * because CategoryDebit is used in CategoryGroupDebit SortedSet<CategoryDebit> and this collection puts only Comparable
  */
 @Entity
-//@DiscriminatorValue(DataBaseConstants.CATEGORY_GROUP_TYPE_DEBIT)
 @DiscriminatorValue(DataBaseConstants.CATEGORY_GROUP_TYPE.Values.DEBIT)
-//because CategoryDebit is used in CategoryGroupDebit SortedSet<CategoryDebit> and this collection puts only Comparable
 public class CategoryDebit_v1 extends Category_v1 implements Comparable<CategoryDebit_v1>{
     private final static Logger LOG = LogManager.getLogger(CategoryDebit_v1.class);
     /**
      * @ManyToOne is eager loaded by default (p318-289)
      */
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "CATEGORY_GROUP_ID", /*referencedColumnName = "ID",*/ nullable = false)
+    @JoinColumn(name = "CATEGORY_GROUP_ID", referencedColumnName = "ID", nullable = false)
     private CategoryGroup_v1 categoryGroup;
 //    private CategoryGroupDebit categoryGroup;
 
@@ -54,8 +53,10 @@ public class CategoryDebit_v1 extends Category_v1 implements Comparable<Category
         return DataBaseConstants.CATEGORY_GROUP_TYPE.Values.DEBIT;
     }
 
-    //when entity is transient id == null, so it's impossible to put it in Map or Set
-    //redundant check getCategoryGroupType(), because there's already check for instance of CategoryDebit
+    /**
+     * when entity is transient id == null, so it's impossible to put it in Map or Set
+     * redundant check getCategoryGroupType(), because there's already check for instance of CategoryDebit
+     */
     @Override
     public boolean equals(Object other) {
         if (other instanceof CategoryDebit_v1) {

@@ -19,6 +19,7 @@ import java.sql.Timestamp;
 
 /**
  * Created by mcalancea on 2016-04-25.
+ * v1 (see tests)
  */
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
