@@ -25,30 +25,25 @@ import java.util.regex.Pattern;
  */
 
 /**
- * version 3
- * using generic type,
- * so implement setConverter(new StringConverter<T>() {
- *     public String toString(T object){}
- *     public T fromString(String string)
- * })
+ * version 2
  *
  * http://stackoverflow.com/questions/19924852/autocomplete-combobox-in-javafx
  * not UPDATE: If you use java8u60 or above, use this:
  *
  * this is "I found a solution that's working for me:"
  */
-public class AutoCompleteComboBox<T> extends ComboBox<T> implements EventHandler<KeyEvent> {
+public class AutoCompleteComboBox2 extends ComboBox<String> implements EventHandler<KeyEvent> {
     private StringBuilder sb;
     private int lastLength;
-    private List<T> initialList = new ArrayList<>();
-    private List<T> bufferList = new ArrayList<>();
+    private List<String> initialList = new ArrayList<>();
+    private List<String> bufferList = new ArrayList<>();
 
 
-    public AutoCompleteComboBox() {
+    public AutoCompleteComboBox2() {
         this.configAutoFilterListener();
     }
 
-    public AutoCompleteComboBox(ObservableList<T> items) {
+    public AutoCompleteComboBox2(ObservableList<String> items) {
         super(items);
         this.configAutoFilterListener();
     }
@@ -56,7 +51,7 @@ public class AutoCompleteComboBox<T> extends ComboBox<T> implements EventHandler
     private void configAutoFilterListener(){
         sb = new StringBuilder();
         setEditable(true);
-        setOnKeyReleased(AutoCompleteComboBox.this);
+        setOnKeyReleased(AutoCompleteComboBox2.this);
 
         //add a focus listener such that if not in focus, reset the filtered typed keys
         getEditor().focusedProperty().addListener(new ChangeListener<Boolean>() {
@@ -152,14 +147,13 @@ public class AutoCompleteComboBox<T> extends ComboBox<T> implements EventHandler
         System.out.println(">>>filterItems from handle: sb=" + sb.toString());
         filterItems(sb.toString(), false);
 
-        ObservableList<T> items = getItems();
+        ObservableList<String> items = getItems();
         for (int i = 0; i < items.size(); i++) {
-            String itemAsString = items.get(i).toString();
-            if (itemAsString.toLowerCase().startsWith(getEditor().getText().toLowerCase())) {
+            if (items.get(i).toLowerCase().startsWith(getEditor().getText().toLowerCase())) {
                 try {
 //                    System.out.println(">>>handle->setText: (sb.toString() + items.get(i).substring(sb.toString().length()))="
 //                            + (sb.toString() + items.get(i).substring(sb.toString().length())));
-                    getEditor().setText(sb.toString() + itemAsString.substring(sb.toString().length()));
+                    getEditor().setText(sb.toString() + items.get(i).substring(sb.toString().length()));
                 } catch (Exception e) {
 //                    getEditor().setText(sb.toString());
                     throw new RuntimeException("AutoCompleteComboBox.handle: filtering", e);
@@ -181,13 +175,12 @@ public class AutoCompleteComboBox<T> extends ComboBox<T> implements EventHandler
         System.out.println(">>>getEditor().getText():" + getEditor().getText());
         System.out.println(">>>sb:" + sb.toString());
 
-        ObservableList<T> items = getItems();
+        ObservableList<String> items = getItems();
         boolean found = false;
         for (int i = 0; i < items.size(); i++) {
-            String itemAsString = items.get(i).toString();
-            if(itemAsString != null
+            if(items.get(i) != null
                     && getEditor().getText() != null
-                    && getEditor().getText().equals(itemAsString)) {
+                    && getEditor().getText().equals(items.get(i))) {
 
                 try{
                     ListView<String> lv = ((ComboBoxListViewSkin) getSkin()).getListView();
@@ -251,15 +244,15 @@ public class AutoCompleteComboBox<T> extends ComboBox<T> implements EventHandler
 //        System.out.println(">>>selectClosestResultBasedOnTextFieldValue->end of method: getText=" + getEditor().getText());
     }
 
-    private List<T> getInitialList(){
+    private List<String> getInitialList(){
         if(initialList.isEmpty()){
             initialList.addAll(getItems());
         }
         return initialList;
     }
 
-    private List<T> filterString(String filter){
-        List<T> result = new ArrayList<>();
+    private List<String> filterString(String filter){
+        List<String> result = new ArrayList<>();
         StringBuilder regex = new StringBuilder();
         /**
          * accidently pasted "Platform.runLater(new Runnable() {" and regex crashes because of "("
@@ -277,11 +270,10 @@ public class AutoCompleteComboBox<T> extends ComboBox<T> implements EventHandler
         }
 
         Pattern pattern = Pattern.compile(regex.toString(), Pattern.CASE_INSENSITIVE);
-        for (T item : getInitialList()) {
-            String itemAsString = item.toString().toLowerCase();
-            Matcher matcher = pattern.matcher(itemAsString);
+        for (String string : getInitialList()) {
+            Matcher matcher = pattern.matcher(string);
             if (matcher.find()) {
-                result.add(item);
+                result.add(string);
             }
         }
 //        System.out.println(String.format(">>>filterString: filter=%s; List<String>=%s", filter, result));

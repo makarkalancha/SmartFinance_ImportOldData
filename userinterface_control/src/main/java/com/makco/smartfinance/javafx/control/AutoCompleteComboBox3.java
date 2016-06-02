@@ -37,18 +37,18 @@ import java.util.regex.Pattern;
  *
  * this is "I found a solution that's working for me:"
  */
-public class AutoCompleteComboBox<T> extends ComboBox<T> implements EventHandler<KeyEvent> {
+public class AutoCompleteComboBox3<T> extends ComboBox<T> implements EventHandler<KeyEvent> {
     private StringBuilder sb;
     private int lastLength;
     private List<T> initialList = new ArrayList<>();
     private List<T> bufferList = new ArrayList<>();
 
 
-    public AutoCompleteComboBox() {
+    public AutoCompleteComboBox3() {
         this.configAutoFilterListener();
     }
 
-    public AutoCompleteComboBox(ObservableList<T> items) {
+    public AutoCompleteComboBox3(ObservableList<T> items) {
         super(items);
         this.configAutoFilterListener();
     }
@@ -56,7 +56,7 @@ public class AutoCompleteComboBox<T> extends ComboBox<T> implements EventHandler
     private void configAutoFilterListener(){
         sb = new StringBuilder();
         setEditable(true);
-        setOnKeyReleased(AutoCompleteComboBox.this);
+        setOnKeyReleased(AutoCompleteComboBox3.this);
 
         //add a focus listener such that if not in focus, reset the filtered typed keys
         getEditor().focusedProperty().addListener(new ChangeListener<Boolean>() {
