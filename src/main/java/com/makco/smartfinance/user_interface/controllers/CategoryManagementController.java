@@ -2,6 +2,7 @@ package com.makco.smartfinance.user_interface.controllers;
 
 import com.makco.smartfinance.constants.DataBaseConstants;
 import com.makco.smartfinance.javafx.control.AutoCompleteComboBox;
+import com.makco.smartfinance.persistence.entity.Category;
 import com.makco.smartfinance.persistence.entity.CategoryGroup;
 import com.makco.smartfinance.user_interface.Command;
 import com.makco.smartfinance.user_interface.ControlledScreen;
@@ -54,6 +55,9 @@ public class CategoryManagementController implements Initializable, ControlledSc
     private Worker<EnumSet<ErrorEnum>> onSaveCategoryGroupWorker;
     private Worker<Void> onRefreshCategoryGroupWorker;
     private List<String> categoryGroupTypeStringList = new ArrayList<>();
+    private Worker<Void> onDeleteCategoryWorker;
+    private Worker<EnumSet<ErrorEnum>> onSaveCategoryWorker;
+    private Worker<Void> onRefreshCategoryWorker;
 
     private ProgressIndicatorForm pForm = new ProgressIndicatorForm();
 
@@ -74,6 +78,21 @@ public class CategoryManagementController implements Initializable, ControlledSc
     private Button cgSaveBtn;
     @FXML
     private Button cgDeleteBtn;
+
+    @FXML
+    private TableView<Category> cTable;
+    @FXML
+    private AutoCompleteComboBox cCategoryGroupACCB;
+    @FXML
+    private TextField cNameTF;
+    @FXML
+    private TextArea cDescTA;
+    @FXML
+    private Button cClearBtn;
+    @FXML
+    private Button cSaveBtn;
+    @FXML
+    private Button cDeleteBtn;
 
     public CategoryManagementController(){
         try{
@@ -115,6 +134,45 @@ public class CategoryManagementController implements Initializable, ControlledSc
                     };
                 }
             };
+
+            onDeleteCategoryWorker = new Service<Void>() {
+                @Override
+                protected Task<Void> createTask() {
+                    return new Task<Void>() {
+                        @Override
+                        protected Void call() throws Exception {
+                            categoryManagementModel.deletePendingCategory();
+                            return null;
+                        }
+                    };
+                }
+            };
+            onSaveCategoryWorker = new Service<EnumSet<ErrorEnum>>() {
+                @Override
+                protected Task<EnumSet<ErrorEnum>> createTask() {
+                    return new Task<EnumSet<ErrorEnum>>() {
+                        @Override
+                        protected EnumSet<ErrorEnum> call() throws Exception {
+                            return categoryManagementModel.savePendingCategory(
+                                    UserInterfaceConstants.convertCategoryGroupTypeFromUIToBackend(cgTypeACCB.getValue()),
+                                    cgNameTF.getText(),
+                                    cgDescTA.getText());
+                        }
+                    };
+                }
+            };
+            onRefreshCategoryWorker = new Service<Void>() {
+                @Override
+                protected Task<Void> createTask() {
+                    return new Task<Void>() {
+                        @Override
+                        protected Void call() throws Exception {
+                            categoryManagementModel.refresh();
+                            return null;
+                        }
+                    };
+                }
+            };
         }catch (Exception e){
             //not in finally because refreshCategoryGroup must run before populateCategoryGroupTable
             startService(onRefreshCategoryGroupWorker,null);
@@ -125,6 +183,53 @@ public class CategoryManagementController implements Initializable, ControlledSc
     public void initializeServices(){
         try{
             ((Service<Void>) onDeleteCategoryGroupWorker).setOnSucceeded(event -> {
+                LOG.debug("onDeleteCategoryGroupWorker->setOnSucceeded");
+                LOG.debug(">>>>>>>>onDeleteCategoryGroupWorker->setOnSucceeded: pForm.getDialogStage().close()");
+                pForm.close();
+                populateCategoryGroupTable();
+            });
+            ((Service<Void>) onDeleteCategoryGroupWorker).setOnFailed(event -> {
+                LOG.debug("onDeleteCategoryGroupWorker->setOnFailed");
+                LOG.debug(">>>>>>>>onDeleteCategoryGroupWorker->setOnFailed: pForm.getDialogStage().close()");
+                pForm.close();
+                populateCategoryGroupTable();
+                DialogMessages.showExceptionAlert(onDeleteCategoryGroupWorker.getException());
+            });
+            ((Service<EnumSet<ErrorEnum>>) onSaveCategoryGroupWorker).setOnSucceeded(event -> {
+                LOG.debug("onSaveCategoryGroupWorker->setOnSucceeded");
+                LOG.debug(">>>>>>>>onSaveCategoryGroupWorker->setOnSucceeded: pForm.getDialogStage().close()");
+                pForm.close();
+                populateCategoryGroupTable();
+                EnumSet<ErrorEnum> errors = onSaveCategoryGroupWorker.getValue();
+                if(!errors.isEmpty()) {
+                    DialogMessages.showErrorDialog("Error while saving Category Group: type "
+                                    + cgTypeACCB.getValue() + ", with name " + cgNameTF.getText(),
+                            (EnumSet<ErrorEnum>) ((Service) onSaveCategoryGroupWorker).getValue(), null);
+                }
+                onClearCategoryGroup(actionEvent);
+            });
+            ((Service<EnumSet<ErrorEnum>>) onSaveCategoryGroupWorker).setOnFailed(event -> {
+                LOG.debug("onSaveCategoryGroupWorker->setOnFailed");
+                LOG.debug(">>>>>>>>onSaveCategoryGroupWorker->setOnFailed: pForm.getDialogStage().close()");
+                pForm.close();
+                populateCategoryGroupTable();
+                DialogMessages.showExceptionAlert(onSaveCategoryGroupWorker.getException());
+            });
+            ((Service<Void>) onRefreshCategoryGroupWorker).setOnSucceeded(event -> {
+                LOG.debug("onRefreshCategoryGroupWorker->setOnSucceeded");
+                LOG.debug(">>>>>>>>onRefreshCategoryGroupWorker->setOnSucceeded: pForm.getDialogStage().close()");
+                pForm.close();
+                populateCategoryGroupTable();
+            });
+            ((Service<Void>) onRefreshCategoryGroupWorker).setOnFailed(event -> {
+                LOG.debug("onRefreshCategoryGroupWorker->setOnFailed");
+                LOG.debug(">>>>>>>>onRefreshCategoryGroupWorker->setOnFailed: pForm.getDialogStage().close()");
+                pForm.close();
+                populateCategoryGroupTable();
+                DialogMessages.showExceptionAlert(onRefreshCategoryGroupWorker.getException());
+            });
+
+            ((Service<Void>) onDeleteCategoryWorker).setOnSucceeded(event -> {
                 LOG.debug("onDeleteCategoryGroupWorker->setOnSucceeded");
                 LOG.debug(">>>>>>>>onDeleteCategoryGroupWorker->setOnSucceeded: pForm.getDialogStage().close()");
                 pForm.close();
@@ -366,10 +471,10 @@ public class CategoryManagementController implements Initializable, ControlledSc
             categoryManagementModel.setPendingCategoryGroupProperty(cgTable.getSelectionModel().getSelectedItem());
 
             cgTypeACCB.setValue(
-                    UserInterfaceConstants.convertCategoryGroupTypeFromBackendToUI(categoryManagementModel.getPendingCategoryGroup().getCategoryGroupType())
+                    UserInterfaceConstants.convertCategoryGroupTypeFromBackendToUI(categoryManagementModel.getPendingGroupCategory().getCategoryGroupType())
             );
-            cgNameTF.setText(categoryManagementModel.getPendingCategoryGroup().getName());
-            cgDescTA.setText(categoryManagementModel.getPendingCategoryGroup().getDescription());
+            cgNameTF.setText(categoryManagementModel.getPendingGroupCategory().getName());
+            cgDescTA.setText(categoryManagementModel.getPendingGroupCategory().getDescription());
         }catch (Exception e){
             startService(onRefreshCategoryGroupWorker,null);
             DialogMessages.showExceptionAlert(e);
@@ -378,10 +483,9 @@ public class CategoryManagementController implements Initializable, ControlledSc
 
     private void populateCategoryGroupTable(){
         try{
-            LOG.debug("categoryManagementModel.getCategoryGroups().size():" + categoryManagementModel.getCategoryGroups().size());
+            LOG.debug("categoryManagementModel.getCategoryGroupsWithoutCategories().size():" + categoryManagementModel.getCategoryGroupsWithoutCategories().size());
             cgTable.getItems().clear();
-            // TODO if add another method getCategoryGroup(boolean) to get categoryGroup with/without categories
-            cgTable.setItems(categoryManagementModel.getCategoryGroups());
+            cgTable.setItems(categoryManagementModel.getCategoryGroupsWithoutCategories());
 
             TableColumn<CategoryGroup, Long> categoryGroupIdCol = new TableColumn<>("ID");
             categoryGroupIdCol.setCellValueFactory(new PropertyValueFactory<CategoryGroup, Long>("id"));
@@ -404,6 +508,47 @@ public class CategoryManagementController implements Initializable, ControlledSc
 
             cgTable.getColumns().setAll(categoryGroupIdCol, categoryGroupTypeCol, categoryGroupNameCol,
                     categoryGroupDescCol, categoryGroupCreatedCol, categoryGroupUpdatedCol);
+
+        }catch (Exception e){
+            startService(onRefreshCategoryGroupWorker,null);
+            DialogMessages.showExceptionAlert(e);
+        }
+    }
+
+    private void populateCategoryTable(){
+        /**
+         * todo column names if table is empty
+         * http://docs.oracle.com/javafx/2/ui_controls/table-view.htm
+         */
+        try{
+            LOG.debug("categoryManagementModel.getCategories().size():" + categoryManagementModel.getCategories().size());
+            cTable.getItems().clear();
+            cTable.setItems(categoryManagementModel.getCategories());
+
+            TableColumn<Category, Long> categoryIdCol = new TableColumn<>("ID");
+            categoryIdCol.setCellValueFactory(new PropertyValueFactory<Category, Long>("id"));
+
+            TableColumn<Category, String> categoryTypeCol = new TableColumn<>("Type");
+            categoryTypeCol.setCellValueFactory(c -> new SimpleStringProperty(
+                    UserInterfaceConstants.convertCategoryGroupTypeFromBackendToUI(c.getValue().getCategoryGroupType())));
+
+            TableColumn<Category, String> categoryCategoryGroupCol = new TableColumn<>("Category Group");
+            categoryCategoryGroupCol.setCellValueFactory(new PropertyValueFactory<Category, String>("name"));
+
+            TableColumn<Category, String> categoryNameCol = new TableColumn<>("Name");
+            categoryNameCol.setCellValueFactory(new PropertyValueFactory<Category, String>("name"));
+
+            TableColumn<Category, String> categoryDescCol = new TableColumn<>("Description");
+            categoryDescCol.setCellValueFactory(new PropertyValueFactory<Category, String>("description"));
+
+            TableColumn<Category, Calendar> categoryCreatedCol = new TableColumn<>("Created on");
+            categoryCreatedCol.setCellValueFactory(new PropertyValueFactory<Category, Calendar>("createdOn"));
+
+            TableColumn<Category, Calendar> categoryUpdatedCol = new TableColumn<>("Updated on");
+            categoryUpdatedCol.setCellValueFactory(new PropertyValueFactory<Category, Calendar>("updatedOn"));
+
+            cTable.getColumns().setAll(categoryIdCol, categoryTypeCol, categoryNameCol,
+                    categoryDescCol, categoryCreatedCol, categoryUpdatedCol);
 
         }catch (Exception e){
             startService(onRefreshCategoryGroupWorker,null);

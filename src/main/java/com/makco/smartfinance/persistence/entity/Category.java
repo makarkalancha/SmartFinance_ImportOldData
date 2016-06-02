@@ -82,6 +82,10 @@ public abstract class Category {
 
     }
 
+    public Category(CategoryGroup categoryGroup, String name, String description){
+        categoryGroup
+    }
+
     public Long getId() {
         return id;
     }
