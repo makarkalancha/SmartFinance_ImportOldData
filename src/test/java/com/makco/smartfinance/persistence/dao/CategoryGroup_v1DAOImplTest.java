@@ -35,19 +35,16 @@ import static org.junit.Assert.assertEquals;
  * Time: 23:52
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-//category_group & category DAO
 public class CategoryGroup_v1DAOImplTest {
     private static final Logger LOG = LogManager.getLogger(CategoryGroup_v1DAOImplTest.class);
     private static final String categoryGroupName = "categoryGroup_name";
     private static final String categoryGroupDesc = "categoryGroup_description";
-    private static final String categoryDesc = "category_description";
 
     private static int MIN = 1;
     private static int MAX = 1_000_000;
     private static RandomWithinRange randomWithinRange = new RandomWithinRange(MIN, MAX);
 
     private CategoryGroup_v1DAOImplForTest categoryGroupDAOImplForTest = new CategoryGroup_v1DAOImplForTest();
-//    private CategoryDAOImplForTest categoryDAOImplForTest = new CategoryDAOImplForTest();
 
     @Test
     public void test_11_saveOrUpdateCategoryGroupDebit_v1() throws Exception {
@@ -64,8 +61,6 @@ public class CategoryGroup_v1DAOImplTest {
         assertEquals(true, categoryGroup.getCreatedOn() != null);
         assertEquals(true, categoryGroup.getUpdatedOn() != null);
     }
-
-
 
     @Test
     public void test_12_saveCategoryGroupWithCategories() throws Exception {
@@ -169,8 +164,6 @@ public class CategoryGroup_v1DAOImplTest {
         assertEquals(true, categoryGroup.getUpdatedOn() != null);
         assertEquals(true, !categoryGroup.getUpdatedOn().equals(categoryGroup.getCreatedOn()));
     }
-
-
 
     @Test
     //with CategoryGroup_v1 EAGER loading of Categories it works

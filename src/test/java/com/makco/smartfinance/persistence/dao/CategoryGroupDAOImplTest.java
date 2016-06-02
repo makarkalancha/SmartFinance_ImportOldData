@@ -35,19 +35,16 @@ import static org.junit.Assert.assertEquals;
  * Time: 23:52
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-//category_group & category DAO
 public class CategoryGroupDAOImplTest {
     private static final Logger LOG = LogManager.getLogger(CategoryGroupDAOImplTest.class);
     private static final String categoryGroupName = "categoryGroup_name";
     private static final String categoryGroupDesc = "categoryGroup_description";
-    private static final String categoryDesc = "category_description";
 
     private static int MIN = 1;
     private static int MAX = 1_000_000;
     private static RandomWithinRange randomWithinRange = new RandomWithinRange(MIN, MAX);
 
     private CategoryGroupDAOImplForTest categoryGroupDAOImplForTest = new CategoryGroupDAOImplForTest();
-//    private CategoryDAOImplForTest categoryDAOImplForTest = new CategoryDAOImplForTest();
 
     @Test
     public void test_11_saveOrUpdateCategoryGroupDebit() throws Exception {
@@ -64,8 +61,6 @@ public class CategoryGroupDAOImplTest {
         assertEquals(true, categoryGroup.getCreatedOn() != null);
         assertEquals(true, categoryGroup.getUpdatedOn() != null);
     }
-
-
 
     @Test
     public void test_12_saveCategoryGroupWithCategories() throws Exception {
@@ -103,7 +98,6 @@ public class CategoryGroupDAOImplTest {
 
     //java.lang.ClassCastException: com.makco.smartfinance.persistence.entity.CategoryGroupDebit cannot be cast to com.makco.smartfinance.persistence.entity.CategoryGroupCredit
     @Test(expected = ClassCastException.class)
-//    @Test
     public void test_13_saveCategoryGroupWithCategoriesFromAnotherGroupType() throws Exception {
         int randomInt = randomWithinRange.getRandom();
         String name = categoryGroupName + randomInt;
@@ -169,8 +163,6 @@ public class CategoryGroupDAOImplTest {
         assertEquals(true, categoryGroup.getUpdatedOn() != null);
         assertEquals(true, !categoryGroup.getUpdatedOn().equals(categoryGroup.getCreatedOn()));
     }
-
-
 
     @Test
     //with CategoryGroup EAGER loading of Categories it works
