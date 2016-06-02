@@ -88,23 +88,7 @@ public class CategoryGroupDAOImpl implements CategoryGroupDAO{
         try{
             session = HibernateUtil.openSession();
             session.beginTransaction();
-            /**
-             * session.load()
-             * - It will always return a “proxy” (Hibernate term) without hitting the database.
-             * In Hibernate, proxy is an object with the given identifier value, its properties are not initialized yet,
-             * it just look like a temporary fake object.
-             * - If no row found , it will throws an ObjectNotFoundException.
-
-             */
-            CategoryGroup categoryGroup = (CategoryGroup) session.load(CategoryGroup.class, id);
-            /**
-             * session.get()
-             * - It always hit the database and return the real object, an object that represent the database row,
-             * not proxy.
-             * - If no row found , it return null.
-
-             */
-//            CategoryGroup categoryGroup = (CategoryGroup) session.get(CategoryGroup.class, id);
+            CategoryGroup categoryGroup = (CategoryGroup) session.get(CategoryGroup.class, id);
             LOG.debug(">>>removeCategoryGroup: " + categoryGroup);
             session.delete(categoryGroup);
             session.getTransaction().commit();

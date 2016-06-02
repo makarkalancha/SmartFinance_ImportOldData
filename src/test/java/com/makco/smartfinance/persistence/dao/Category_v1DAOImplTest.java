@@ -26,8 +26,8 @@ import static org.junit.Assert.assertEquals;
  * Date: 30/04/2016
  * Time: 23:52
  */
-public class CategoryDAOImplTest {
-    private static final Logger LOG = LogManager.getLogger(CategoryDAOImplTest.class);
+public class Category_v1DAOImplTest {
+    private static final Logger LOG = LogManager.getLogger(Category_v1DAOImplTest.class);
     private static final String categoryGroupName = "categoryGroup_name";
     private static final String categoryGroupDesc = "categoryGroup_description";
     private static final String categoryDesc = "category_description";

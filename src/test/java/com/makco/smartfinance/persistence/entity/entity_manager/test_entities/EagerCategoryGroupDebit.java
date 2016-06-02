@@ -19,7 +19,13 @@ import java.util.TreeSet;
 @Entity
 @DiscriminatorValue("E")
 public class EagerCategoryGroupDebit extends CategoryGroup<EagerCategoryDebit> {
-    @OneToMany(mappedBy = "categoryGroup", cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)//session is using CascadeType.ALL
+//    @OneToMany(mappedBy = "categoryGroup", cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    /**
+     * test_44_3_2_seleteAllCategoryGroupsWithCategories_withNativeQuery_emptyCGAndCatTables
+     * fails when remove EagerCategoryGroupDebit with categories FK constraint violation
+     * so it's not only that session is using CascadeType.ALL
+     */
+    @OneToMany(mappedBy = "categoryGroup", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @OrderBy("name")
     private SortedSet<EagerCategoryDebit> debitCategories = new TreeSet<>();
 
@@ -106,7 +112,6 @@ public class EagerCategoryGroupDebit extends CategoryGroup<EagerCategoryDebit> {
                 '}';
     }
 
-    @Override
     public String toStringFull() {
         return "CategoryGroupDebit{" +
                 "id='" + id + '\'' +

@@ -108,7 +108,6 @@ public class CategoryGroupCredit extends CategoryGroup<CategoryCredit> {
                 '}';
     }
 
-    @Override
     public String toStringFull() {
         return "CategoryGroupCredit{" +
                 "id='" + id + '\'' +

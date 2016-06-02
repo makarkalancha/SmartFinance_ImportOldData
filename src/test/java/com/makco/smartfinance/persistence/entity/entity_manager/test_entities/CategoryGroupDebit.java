@@ -142,7 +142,6 @@ public class CategoryGroupDebit extends CategoryGroup<CategoryDebit> {
                 '}';
     }
 
-    @Override
     public String toStringFull() {
         return "CategoryGroupDebit{" +
                 "id='" + id + '\'' +
