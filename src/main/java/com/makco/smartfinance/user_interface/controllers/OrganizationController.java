@@ -42,7 +42,7 @@ import java.util.ResourceBundle;
 //http://www.devx.com/Java/Article/48193/0/page/2
 public class OrganizationController implements Initializable, ControlledScreen, UndoRedoScreen {
     private final static Logger LOG = LogManager.getLogger(OrganizationController.class);
-    private ScreensController myController;
+    private ScreensController screensController;
     private OrganizationModel organizationModel = new OrganizationModel();
 
     private ActionEvent actionEvent;
@@ -183,8 +183,8 @@ public class OrganizationController implements Initializable, ControlledScreen, 
     @Override
     public void setScreenPage(ScreensController screenPage) {
         try {
-            myController = screenPage;
-            careTaker = myController.getCareTaker();
+            screensController = screenPage;
+            careTaker = screensController.getCareTaker();
         } catch (Exception e) {
             DialogMessages.showExceptionAlert(e);
         }
@@ -202,7 +202,7 @@ public class OrganizationController implements Initializable, ControlledScreen, 
                 }
             });
 
-            myController.setToolbar_Save(new Command() {
+            screensController.setToolbar_Save(new Command() {
                 @Override
                 public void execute() {
                     try {
@@ -214,14 +214,14 @@ public class OrganizationController implements Initializable, ControlledScreen, 
                     }
                 }
             });
-            myController.setToolbar_Undo(new Command() {
+            screensController.setToolbar_Undo(new Command() {
                 @Override
                 public void execute() {
                     isNotUndo.setValue(false);
                     restoreFormState(careTaker.undoState());
                 }
             });
-            myController.setToolbar_Redo(() -> {
+            screensController.setToolbar_Redo(() -> {
                         isNotUndo.setValue(false);
                         restoreFormState(careTaker.redoState());
                     }
@@ -375,9 +375,9 @@ public class OrganizationController implements Initializable, ControlledScreen, 
     public void close(){
         try {
             onClear(new ActionEvent());
-            myController.setToolbar_Save(null);
-            myController.setToolbar_Undo(null);
-            myController.setToolbar_Redo(null);
+            screensController.setToolbar_Save(null);
+            screensController.setToolbar_Undo(null);
+            screensController.setToolbar_Redo(null);
         } catch (Exception e) {
             DialogMessages.showExceptionAlert(e);
         }

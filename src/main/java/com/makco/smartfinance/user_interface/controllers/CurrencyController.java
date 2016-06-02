@@ -41,7 +41,7 @@ import java.util.ResourceBundle;
  */
 public class CurrencyController implements Initializable, ControlledScreen, UndoRedoScreen {
     private final static Logger LOG = LogManager.getLogger(CurrencyController.class);
-    private ScreensController myController;
+    private ScreensController screensController;
     private CurrencyModel currencyModel = new CurrencyModel();
 
     private ActionEvent actionEvent;
@@ -181,8 +181,8 @@ public class CurrencyController implements Initializable, ControlledScreen, Undo
     @Override
     public void setScreenPage(ScreensController screenPage) {
         try{
-            myController = screenPage;
-            careTaker = myController.getCareTaker();
+            screensController = screenPage;
+            careTaker = screensController.getCareTaker();
         }catch (Exception e){
             DialogMessages.showExceptionAlert(e);
         }
@@ -199,7 +199,7 @@ public class CurrencyController implements Initializable, ControlledScreen, Undo
                     populateForm();
                 }
             });
-            myController.setToolbar_Save(new Command() {
+            screensController.setToolbar_Save(new Command() {
                 @Override
                 public void execute() {
                     try {
@@ -211,14 +211,14 @@ public class CurrencyController implements Initializable, ControlledScreen, Undo
                     }
                 }
             });
-            myController.setToolbar_Undo(new Command() {
+            screensController.setToolbar_Undo(new Command() {
                 @Override
                 public void execute() {
                     isNotUndo.setValue(false);
                     restoreFormState(careTaker.undoState());
                 }
             });
-            myController.setToolbar_Redo(() -> {
+            screensController.setToolbar_Redo(() -> {
                         isNotUndo.setValue(false);
                         restoreFormState(careTaker.redoState());
                     }
@@ -388,9 +388,9 @@ public class CurrencyController implements Initializable, ControlledScreen, Undo
     public void close() {
         try {
             onClear(new ActionEvent());
-            myController.setToolbar_Save(null);
-            myController.setToolbar_Undo(null);
-            myController.setToolbar_Redo(null);
+            screensController.setToolbar_Save(null);
+            screensController.setToolbar_Undo(null);
+            screensController.setToolbar_Redo(null);
         } catch (Exception e) {
             DialogMessages.showExceptionAlert(e);
         }

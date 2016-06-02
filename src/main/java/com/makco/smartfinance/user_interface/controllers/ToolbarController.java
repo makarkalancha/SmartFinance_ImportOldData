@@ -26,7 +26,7 @@ import java.util.ResourceBundle;
  */
 public class ToolbarController implements Initializable, ControlledScreen {
     private final static Logger LOG = LogManager.getLogger(ToolbarController.class);
-    private ScreensController myController;
+    private ScreensController screensController;
     private CareTaker careTaker;
     private UndoRedoScreen undoRedoScreen;
 
@@ -48,11 +48,11 @@ public class ToolbarController implements Initializable, ControlledScreen {
     @Override
     public void setScreenPage(ScreensController screenPage) {
         try {
-            myController = screenPage;
-            careTaker = myController.getCareTaker();
-            toolbar_Save = myController.getToolbar_Save();
-            toolbar_Undo = myController.getToolbar_Undo();
-            toolbar_Redo = myController.getToolbar_Redo();
+            screensController = screenPage;
+            careTaker = screensController.getCareTaker();
+            toolbar_Save = screensController.getToolbar_Save();
+            toolbar_Undo = screensController.getToolbar_Undo();
+            toolbar_Redo = screensController.getToolbar_Redo();
         } catch (Exception e) {
             DialogMessages.showExceptionAlert(e);
         }
@@ -86,9 +86,9 @@ public class ToolbarController implements Initializable, ControlledScreen {
     @Override
     public void refresh() {
         try{
-            toolbar_Save = myController.getToolbar_Save();
-            toolbar_Undo = myController.getToolbar_Undo();
-            toolbar_Redo = myController.getToolbar_Redo();
+            toolbar_Save = screensController.getToolbar_Save();
+            toolbar_Undo = screensController.getToolbar_Undo();
+            toolbar_Redo = screensController.getToolbar_Redo();
 
             isUndoEmpty.bind(careTaker.isUndoEmptyProperty());
             isRedoEmpty.bind(careTaker.isRedoEmptyProperty());

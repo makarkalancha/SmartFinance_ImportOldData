@@ -11,11 +11,11 @@ import java.util.ResourceBundle;
  * Created by mcalancea on 2016-04-01.
  */
 public class MainController implements Initializable, ControlledScreen {
-    private ScreensController myController;
+    private ScreensController screensController;
 
     @Override
     public void setScreenPage(ScreensController screenPage) {
-        myController = screenPage;
+        screensController = screenPage;
     }
 
     @Override

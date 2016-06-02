@@ -26,7 +26,7 @@ import java.util.ResourceBundle;
  */
 public class MenuController implements Initializable, ControlledScreen {
     private final static Logger LOG = LogManager.getLogger(MenuController.class);
-    private ScreensController myController;
+    private ScreensController screensController;
     private CareTaker careTaker;
     private UndoRedoScreen undoRedoScreen;
 
@@ -50,11 +50,11 @@ public class MenuController implements Initializable, ControlledScreen {
     @Override
     public void setScreenPage(ScreensController screenPage) {
         try {
-            myController = screenPage;
-            careTaker = myController.getCareTaker();
-            mi_Save = myController.getToolbar_Save();
-            mi_Undo = myController.getToolbar_Undo();
-            mi_Redo = myController.getToolbar_Redo();
+            screensController = screenPage;
+            careTaker = screensController.getCareTaker();
+            mi_Save = screensController.getToolbar_Save();
+            mi_Undo = screensController.getToolbar_Undo();
+            mi_Redo = screensController.getToolbar_Redo();
         } catch (Exception e) {
             DialogMessages.showExceptionAlert(e);
         }
@@ -85,37 +85,37 @@ public class MenuController implements Initializable, ControlledScreen {
 
     @FXML
     public void toScene1(ActionEvent event){
-        myController.setScreen(Screens.SCREEN1);
+        screensController.setScreen(Screens.SCREEN1);
     }
 
     @FXML
     public void toScene2(ActionEvent event){
-        myController.setScreen(Screens.SCREEN2);
+        screensController.setScreen(Screens.SCREEN2);
     }
 
     @FXML
     public void toMain(ActionEvent event){
-        myController.setScreen(Screens.MAIN);
+        screensController.setScreen(Screens.MAIN);
     }
 
     @FXML
     public void toCategoryManagement(ActionEvent event){
-        myController.setScreen(Screens.CATEGORY_MANAGEMENT);
+        screensController.setScreen(Screens.CATEGORY_MANAGEMENT);
     }
 
     @FXML
     public void toCurrency(ActionEvent event){
-        myController.setScreen(Screens.CURRENCY);
+        screensController.setScreen(Screens.CURRENCY);
     }
 
     @FXML
     public void toFamilyMember(ActionEvent event){
-        myController.setScreen(Screens.FAMILY_MEMBER);
+        screensController.setScreen(Screens.FAMILY_MEMBER);
     }
 
     @FXML
     public void toOrganization(ActionEvent event){
-        myController.setScreen(Screens.ORGANIZATION);
+        screensController.setScreen(Screens.ORGANIZATION);
     }
 
     @FXML
@@ -126,9 +126,9 @@ public class MenuController implements Initializable, ControlledScreen {
     @Override
     public void refresh() {
         try{
-            mi_Save = myController.getToolbar_Save();
-            mi_Undo = myController.getToolbar_Undo();
-            mi_Redo = myController.getToolbar_Redo();
+            mi_Save = screensController.getToolbar_Save();
+            mi_Undo = screensController.getToolbar_Undo();
+            mi_Redo = screensController.getToolbar_Redo();
 
             isUndoEmpty.bind(careTaker.isUndoEmptyProperty());
             isRedoEmpty.bind(careTaker.isRedoEmptyProperty());

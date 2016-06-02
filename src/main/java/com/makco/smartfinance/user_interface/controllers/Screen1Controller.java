@@ -14,11 +14,11 @@ import java.util.ResourceBundle;
  * Created by mcalancea on 2016-04-01.
  */
 public class Screen1Controller implements Initializable, ControlledScreen {
-    private ScreensController myController;
+    private ScreensController screensController;
 
     @Override
     public void setScreenPage(ScreensController screenPage) {
-        myController = screenPage;
+        screensController = screenPage;
     }
 
     @Override
@@ -28,12 +28,12 @@ public class Screen1Controller implements Initializable, ControlledScreen {
 
     @FXML
     public void handleButtonAction(ActionEvent event){
-        myController.setScreen(Screens.SCREEN2);
+        screensController.setScreen(Screens.SCREEN2);
     }
 
     @FXML
     public void toMain(ActionEvent event){
-        myController.setScreen(Screens.MAIN);
+        screensController.setScreen(Screens.MAIN);
     }
 
     @Override
