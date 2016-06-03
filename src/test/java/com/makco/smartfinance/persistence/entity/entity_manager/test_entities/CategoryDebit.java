@@ -46,8 +46,8 @@ public class CategoryDebit extends Category implements Comparable<CategoryDebit>
     }
 
     @Override
-    public String getCategoryGroupType() {
-        return DataBaseConstants.CATEGORY_GROUP_TYPE.Values.DEBIT;
+    public DataBaseConstants.CATEGORY_GROUP_TYPE getCategoryGroupType() {
+        return DataBaseConstants.CATEGORY_GROUP_TYPE.DEBIT;
     }
     //when entity is transient id == null, so it's impossible to put it in Map or Set
     @Override

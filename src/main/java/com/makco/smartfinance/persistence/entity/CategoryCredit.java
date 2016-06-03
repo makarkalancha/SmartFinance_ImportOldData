@@ -42,8 +42,8 @@ public class CategoryCredit extends Category implements Comparable<CategoryCredi
     }
 
     @Override
-    public String getCategoryGroupType() {
-        return DataBaseConstants.CATEGORY_GROUP_TYPE.Values.CREDIT;
+    public DataBaseConstants.CATEGORY_GROUP_TYPE getCategoryGroupType() {
+        return DataBaseConstants.CATEGORY_GROUP_TYPE.CREDIT;
     }
 
     /**

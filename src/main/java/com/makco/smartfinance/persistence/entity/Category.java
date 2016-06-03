@@ -110,7 +110,7 @@ public abstract class Category {
 
     public abstract void setCategoryGroup(CategoryGroup categoryGroup);
 
-    public abstract String getCategoryGroupType();
+    public abstract DataBaseConstants.CATEGORY_GROUP_TYPE getCategoryGroupType();
 
     public Timestamp getCreatedOn() {
         return createdOn;

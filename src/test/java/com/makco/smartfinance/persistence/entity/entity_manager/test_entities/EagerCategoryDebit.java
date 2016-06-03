@@ -1,6 +1,7 @@
 package com.makco.smartfinance.persistence.entity.entity_manager.test_entities;
 
 import com.google.common.base.Objects;
+import com.makco.smartfinance.constants.DataBaseConstants;
 import com.makco.smartfinance.persistence.entity.Category;
 import com.makco.smartfinance.persistence.entity.CategoryGroup;
 
@@ -44,8 +45,9 @@ public class EagerCategoryDebit extends Category implements Comparable<EagerCate
     }
 
     @Override
-    public String getCategoryGroupType() {
-        return "E";
+    public DataBaseConstants.CATEGORY_GROUP_TYPE getCategoryGroupType() {
+//        return "E";
+        return null;
     }
     //when entity is transient id == null, so it's impossible to put it in Map or Set
     @Override

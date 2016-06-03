@@ -8,6 +8,7 @@ import com.makco.smartfinance.user_interface.Command;
 import com.makco.smartfinance.user_interface.ControlledScreen;
 import com.makco.smartfinance.user_interface.ScreensController;
 import com.makco.smartfinance.user_interface.constants.UserInterfaceConstants;
+import com.makco.smartfinance.user_interface.decorator.CategoryManagmentDecorator;
 import com.makco.smartfinance.user_interface.models.CategoryManagementModel;
 import com.makco.smartfinance.user_interface.undoredo.CareTaker;
 import com.makco.smartfinance.user_interface.undoredo.Memento;
@@ -16,10 +17,10 @@ import com.makco.smartfinance.user_interface.utility_screens.DialogMessages;
 import com.makco.smartfinance.user_interface.utility_screens.forms.ProgressIndicatorForm;
 import com.makco.smartfinance.user_interface.validation.ErrorEnum;
 import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
@@ -33,6 +34,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableColumn;
 import javafx.scene.control.TreeTableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -44,8 +46,10 @@ import org.apache.logging.log4j.Logger;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.EnumSet;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 /**
@@ -92,7 +96,7 @@ public class CategoryManagementController implements Initializable, ControlledSc
 
     //todo Can not set javafx.scene.control.TableView field com.makco.smartfinance.user_interface.controllers.CategoryManagementController.cTable to javafx.scene.control.TreeTableColumn
     @FXML
-    private TreeTableView<CategoryGroup, Category> cTable;
+    private TreeTableView<CategoryManagmentDecorator> cTable;
     @FXML
     private AutoCompleteComboBox cCategoryGroupACCB;
     @FXML
@@ -434,6 +438,8 @@ public class CategoryManagementController implements Initializable, ControlledSc
                     populateFormCategoryGroup();
                 }
             });
+            cgTypeACCB.setItems(FXCollections.observableList(getCategoryGroupTypeStringList()));
+            cCategoryGroupACCB.setItems(categoryManagementModel.getCategoryGroupsWithoutCategories());
             cTable.getSelectionModel().selectedItemProperty().addListener((observable, oldSelection, newSelection) -> {
                 if (newSelection != null) {
                     populateFormCategory();
@@ -501,7 +507,7 @@ public class CategoryManagementController implements Initializable, ControlledSc
         try {
             //http://javafx-and-me.blogspot.ca/2013/10/custom-combobox.html
             //to show string instead of classes
-            cgTypeACCB.setItems(FXCollections.observableList(getCategoryGroupTypeStringList()));
+//            cgTypeACCB.setItems(FXCollections.observableList(getCategoryGroupTypeStringList()));
 //            cgTypeACCB.setPrefWidth(DataBaseConstants.Cgtype_CODE_MAX_LGTH);
             cgTypeACCB.valueProperty().addListener((observable, oldValue, newValue) -> {
                 if (isNotUndo.getValue()) {
@@ -538,7 +544,8 @@ public class CategoryManagementController implements Initializable, ControlledSc
         }
 
         try {
-            cCategoryGroupACCB.setItems(FXCollections.observableList(categoryManagementModel.getCategoryGroupsWithoutCategories()));
+//            cCategoryGroupACCB.setItems(categoryManagementModel.getCategoryGroupsWithoutCategories());
+            cCategoryGroupACCB.setEditable(true);
             cCategoryGroupACCB.setConverter(new StringConverter<CategoryGroup>() {
 
                 @Override
@@ -716,11 +723,14 @@ public class CategoryManagementController implements Initializable, ControlledSc
             cClearBtn.setDisable(false);
             cSaveBtn.setDisable(false);
             cDeleteBtn.setDisable(false);
-            categoryManagementModel.setPendingCategoryProperty(cTable.getSelectionModel().getSelectedItem());
+            categoryManagementModel.setPendingCategoryProperty(cTable.getSelectionModel().getSelectedItem().getValue().getCategory());
 
+//            cCategoryGroupACCB.setValue(
+//                    categoryManagementModel.convertCategoryGroupFromBackendToUI(
+//                            categoryManagementModel.getPendingCategory().getCategoryGroup())
+//            );
             cCategoryGroupACCB.setValue(
-                    categoryManagementModel.convertCategoryGroupFromBackendToUI(
-                            categoryManagementModel.getPendingCategory().getCategoryGroup())
+                categoryManagementModel.getPendingCategory().getCategoryGroup()
             );
             cNameTF.setText(categoryManagementModel.getPendingCategory().getName());
             cDescTA.setText(categoryManagementModel.getPendingCategory().getDescription());
@@ -771,35 +781,74 @@ public class CategoryManagementController implements Initializable, ControlledSc
          * http://docs.oracle.com/javafx/2/ui_controls/table-view.htm
          */
         try{
-            LOG.debug("categoryManagementModel.getCategories().size():" + categoryManagementModel.getCategories().size());
-            cTable.getItems().clear();
-            cTable.setItems(categoryManagementModel.getCategories());
+            LOG.debug("categoryManagementModel.getCategories().size():" + categoryManagementModel.getCategoryManagmentDecoratorMultimap().size());
+//            cTable.getItems().clear();
+            cTable.setRoot(null);
+//            cTable.setItems(categoryManagementModel.getCategories());
+            for(Map.Entry<CategoryManagmentDecorator, Collection<CategoryManagmentDecorator>>  categoryGroupEntry :
+                    categoryManagementModel.getCategoryManagmentDecoratorMultimap().asMap().entrySet()){
+                CategoryManagmentDecorator key = categoryGroupEntry.getKey();
+                Collection<CategoryManagmentDecorator> value = categoryGroupEntry.getValue();
 
-            TableColumn<Category, Long> categoryIdCol = new TableColumn<>("ID");
-            categoryIdCol.setCellValueFactory(new PropertyValueFactory<Category, Long>("id"));
+                TreeItem<CategoryManagmentDecorator> categoryGroupTreeItem = new TreeItem<>(key);
+                categoryGroupTreeItem.setExpanded(true);
+                value.stream()
+                        .forEach((category) -> {
+                            categoryGroupTreeItem.getChildren().add(new TreeItem<>(category));
+                        });
+                cTable.setRoot(categoryGroupTreeItem);
+            }
 
-            TableColumn<Category, String> categoryTypeCol = new TableColumn<>("Type");
+            TreeTableColumn<CategoryManagmentDecorator, Long> categoryIdCol = new TreeTableColumn<>("ID");
+            categoryIdCol.setCellValueFactory(
+                    (TreeTableColumn.CellDataFeatures<CategoryManagmentDecorator,Long> param) ->
+                            new ReadOnlyObjectWrapper<Long>(param.getValue().getValue().getId())
+            );
+
+            TreeTableColumn<CategoryManagmentDecorator, String> categoryTypeCol = new TreeTableColumn<>("Type");
             categoryTypeCol.setCellValueFactory(c -> new SimpleStringProperty(
-                    UserInterfaceConstants.convertCategoryGroupTypeFromBackendToUI(c.getValue().getCategoryGroupType())));
+                UserInterfaceConstants.convertCategoryGroupTypeFromBackendToUI(
+                        c.getValue().getValue().getCategoryGroupType()
+                )
+            ));
 
-            TableColumn<Category, String> categoryCategoryGroupCol = new TableColumn<>("Category Group");
-            categoryCategoryGroupCol.setCellValueFactory(c -> new SimpleStringProperty(
-                    categoryManagementModel.convertCategoryGroupFromBackendToUI(c.getValue().getCategoryGroup())));
+//            TreeTableColumn<CategoryManagmentDecorator, String> categoryCategoryGroupCol = new TreeTableColumn<>("Category Group");
+//            categoryCategoryGroupCol.setCellValueFactory(c -> new SimpleStringProperty(
+//                    categoryManagementModel.convertCategoryGroupFromBackendToUI(
+//                            c.getValue().getValue().getCategoryGroup()
+//                    )
+//            ));
 
-            TableColumn<Category, String> categoryNameCol = new TableColumn<>("Name");
-            categoryNameCol.setCellValueFactory(new PropertyValueFactory<Category, String>("name"));
+            TreeTableColumn<CategoryManagmentDecorator, String> categoryNameCol = new TreeTableColumn<>("Name");
+            categoryNameCol.setCellValueFactory(
+                    (TreeTableColumn.CellDataFeatures<CategoryManagmentDecorator, String> param) ->
+                            new ReadOnlyStringWrapper(param.getValue().getValue().getName())
+            );
 
-            TableColumn<Category, String> categoryDescCol = new TableColumn<>("Description");
-            categoryDescCol.setCellValueFactory(new PropertyValueFactory<Category, String>("description"));
+            TreeTableColumn<CategoryManagmentDecorator, String> categoryDescCol = new TreeTableColumn<>("Description");
+            categoryDescCol.setCellValueFactory(
+                    (TreeTableColumn.CellDataFeatures<CategoryManagmentDecorator, String> param) ->
+                            new ReadOnlyStringWrapper(param.getValue().getValue().getDescription())
+            );
 
-            TableColumn<Category, Calendar> categoryCreatedCol = new TableColumn<>("Created on");
-            categoryCreatedCol.setCellValueFactory(new PropertyValueFactory<Category, Calendar>("createdOn"));
+            TreeTableColumn<CategoryManagmentDecorator, Calendar> categoryCreatedCol = new TreeTableColumn<>("Created on");
+            categoryCreatedCol.setCellValueFactory(
+                (TreeTableColumn.CellDataFeatures<CategoryManagmentDecorator, Calendar> param) -> {
+                    return new ReadOnlyObjectWrapper<Calendar>(param.getValue().getValue().getCreatedOn());
+                }
+            );
 
-            TableColumn<Category, Calendar> categoryUpdatedCol = new TableColumn<>("Updated on");
-            categoryUpdatedCol.setCellValueFactory(new PropertyValueFactory<Category, Calendar>("updatedOn"));
+            TreeTableColumn<CategoryManagmentDecorator, Calendar> categoryUpdatedCol = new TreeTableColumn<>("Updated on");
+            categoryUpdatedCol.setCellValueFactory(
+                    (TreeTableColumn.CellDataFeatures<CategoryManagmentDecorator, Calendar> param) -> {
+                        return new ReadOnlyObjectWrapper<Calendar>(param.getValue().getValue().getUpdatedOn());
+                    }
+            );
 
             cTable.getColumns().setAll(categoryIdCol, categoryTypeCol, categoryNameCol,
                     categoryDescCol, categoryCreatedCol, categoryUpdatedCol);
+
+
 
         }catch (Exception e){
             startService(onRefreshCategoryGroupWorker,null);
@@ -813,7 +862,7 @@ public class CategoryManagementController implements Initializable, ControlledSc
             if(selectedTabIndex == CATEGORY_GROUP_TAB_INDEX) {
                 careTaker.saveState(new CategoryGroupFormState(cgTypeACCB.getValue().toString(), cgNameTF.getText(), cgDescTA.getText()));
             }else if(selectedTabIndex == CATEGORY_TAB_INDEX) {
-                careTaker.saveState(new CategoryFormState(cgTypeACCB.getValue().toString(), cgNameTF.getText(), cgDescTA.getText()));
+                careTaker.saveState(new CategoryFormState(cCategoryGroupACCB.getValue().toString(), cNameTF.getText(), cDescTA.getText()));
             }
         } catch (Exception e) {
             DialogMessages.showExceptionAlert(e);
@@ -830,7 +879,8 @@ public class CategoryManagementController implements Initializable, ControlledSc
                 cgDescTA.setText(formState.getCgDescTAStr());
             }else if(selectedTabIndex == CATEGORY_TAB_INDEX) {
                 CategoryFormState formState = (CategoryFormState) memento;
-                cCategoryGroupACCB.setValue(formState.getCCategoryGroupACCBStr());
+//                cCategoryGroupACCB.setValue(formState.getCCategoryGroupACCBStr());
+                cCategoryGroupACCB.setValue(categoryManagementModel.convertCategoryGroupFromUIToBackendTo(formState.getCCategoryGroupACCBStr()));
                 cNameTF.setText(formState.getCNameTFStr());
                 cDescTA.setText(formState.getCDescTAStr());
             }
