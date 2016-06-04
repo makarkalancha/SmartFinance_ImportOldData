@@ -172,7 +172,7 @@ public class CategoryManagementModel {
         } catch (Exception e) {
             throw e;
         } finally {
-            refreshCategoryGroupTab();
+            refreshCategoryTab();
         }
         return errors;
     }
@@ -199,7 +199,7 @@ public class CategoryManagementModel {
         } catch (Exception e) {
             throw e;
         } finally {
-            refreshCategoryGroupTab();
+            refreshCategoryTab();
         }
     }
 

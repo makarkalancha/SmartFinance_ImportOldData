@@ -2,7 +2,6 @@ package com.makco.smartfinance.user_interface.controllers;
 
 import com.makco.smartfinance.constants.DataBaseConstants;
 import com.makco.smartfinance.javafx.control.AutoCompleteComboBox;
-import com.makco.smartfinance.persistence.entity.Category;
 import com.makco.smartfinance.persistence.entity.CategoryGroup;
 import com.makco.smartfinance.user_interface.Command;
 import com.makco.smartfinance.user_interface.ControlledScreen;
@@ -98,7 +97,7 @@ public class CategoryManagementController implements Initializable, ControlledSc
     @FXML
     private TreeTableView<CategoryManagmentDecorator> cTable;
     @FXML
-    private AutoCompleteComboBox cCategoryGroupACCB;
+    private AutoCompleteComboBox<CategoryGroup> cCategoryGroupACCB;
     @FXML
     private TextField cNameTF;
     @FXML
@@ -862,7 +861,7 @@ public class CategoryManagementController implements Initializable, ControlledSc
             if(selectedTabIndex == CATEGORY_GROUP_TAB_INDEX) {
                 careTaker.saveState(new CategoryGroupFormState(cgTypeACCB.getValue().toString(), cgNameTF.getText(), cgDescTA.getText()));
             }else if(selectedTabIndex == CATEGORY_TAB_INDEX) {
-                careTaker.saveState(new CategoryFormState(cCategoryGroupACCB.getValue().toString(), cNameTF.getText(), cDescTA.getText()));
+                careTaker.saveState(new CategoryFormState(cCategoryGroupACCB.getValue(), cNameTF.getText(), cDescTA.getText()));
             }
         } catch (Exception e) {
             DialogMessages.showExceptionAlert(e);
@@ -880,7 +879,8 @@ public class CategoryManagementController implements Initializable, ControlledSc
             }else if(selectedTabIndex == CATEGORY_TAB_INDEX) {
                 CategoryFormState formState = (CategoryFormState) memento;
 //                cCategoryGroupACCB.setValue(formState.getCCategoryGroupACCBStr());
-                cCategoryGroupACCB.setValue(categoryManagementModel.convertCategoryGroupFromUIToBackendTo(formState.getCCategoryGroupACCBStr()));
+//                cCategoryGroupACCB.setValue(categoryManagementModel.convertCategoryGroupFromUIToBackendTo(formState.getCCategoryGroupACCBStr()));
+                cCategoryGroupACCB.setValue(formState.getCCategoryGroupACCB());
                 cNameTF.setText(formState.getCNameTFStr());
                 cDescTA.setText(formState.getCDescTAStr());
             }
@@ -976,17 +976,17 @@ public class CategoryManagementController implements Initializable, ControlledSc
     }
 
     private static class CategoryFormState implements Memento{
-        private final String cCategoryGroupACCBStr;
+        private final CategoryGroup cCategoryGroupACCBStr;
         private final String cNameTFStr;
         private final String cDescTAStr;
 
-        public CategoryFormState(String cCategoryGroupACCB, String cNameTF, String cDescTA){
+        public CategoryFormState(CategoryGroup cCategoryGroupACCB, String cNameTF, String cDescTA){
             this.cCategoryGroupACCBStr = cCategoryGroupACCB;
             this.cNameTFStr = cNameTF;
             this.cDescTAStr = cDescTA;
         }
 
-        public String getCCategoryGroupACCBStr() {
+        public CategoryGroup getCCategoryGroupACCB() {
             return cCategoryGroupACCBStr;
         }
 
