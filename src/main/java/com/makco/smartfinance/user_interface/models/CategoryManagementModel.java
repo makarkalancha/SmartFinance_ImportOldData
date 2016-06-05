@@ -64,7 +64,11 @@ public class CategoryManagementModel {
             if (!categoryGroupsWithoutCategories.isEmpty()) {
                 categoryGroupsWithoutCategories.clear();
             }
-            categoryGroupsWithoutCategories = FXCollections.observableArrayList(categoryGroupService.categoryGroupListWithoutCategories());
+//            categoryGroupsWithoutCategories = FXCollections.observableArrayList(categoryGroupService.categoryGroupListWithoutCategories());
+            categoryGroupsWithoutCategories.addAll(categoryGroupService.categoryGroupListWithoutCategories());
+            categoryGroupsWithoutCategories.forEach(cg -> {
+                categoryGroupUINameToCategoryGroup.put(convertCategoryGroupFromBackendToUI(cg), cg);
+            });
             LOG.debug("categoryGroupsWithoutCategories.size: " + categoryGroupsWithoutCategories.size());
         } catch (Exception e) {
             throw e;
@@ -100,7 +104,6 @@ public class CategoryManagementModel {
         }
     }
 
-    //category
     public String convertCategoryGroupFromBackendToUI(CategoryGroup categoryGroup){
         if(categoryGroup != null) {
             StringBuilder result = new StringBuilder();
