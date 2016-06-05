@@ -777,10 +777,6 @@ public class CategoryManagementController implements Initializable, ControlledSc
     }
 
     private void populateCategoryTable(){
-        /**
-         * todo column names if table is empty
-         * http://docs.oracle.com/javafx/2/ui_controls/table-view.htm
-         */
         try{
             LOG.debug("categoryManagementModel.getCategories().size():" + categoryManagementModel.getCategoryManagmentDecoratorMultimap().size());
 //            cTable.getItems().clear();
