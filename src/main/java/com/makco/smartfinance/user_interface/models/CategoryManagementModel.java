@@ -52,6 +52,7 @@ public class CategoryManagementModel {
 
     public void refreshCategoryGroupTab() throws Exception {
         try {
+            LOG.debug("model->refreshCategoryGroupTab");
             if (!categoryGroupsWithoutCategories.isEmpty()) {
                 categoryGroupsWithoutCategories.clear();
             }
@@ -64,6 +65,7 @@ public class CategoryManagementModel {
 
     public void refreshCategoryTab() throws Exception {
         try {
+            LOG.debug("model->refreshCategoryTab");
 //            if (!categories.isEmpty()) {
 //                categories.clear();
 //            }

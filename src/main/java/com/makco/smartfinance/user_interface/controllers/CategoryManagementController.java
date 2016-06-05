@@ -428,6 +428,7 @@ public class CategoryManagementController implements Initializable, ControlledSc
     @Override
     public void refresh() {
         try{
+            LOG.debug("contoller->refresh");
             careTaker.clear();
             initializeServices();
             startService(onRefreshCategoryGroupWorker, null);
