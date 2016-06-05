@@ -81,7 +81,7 @@ public class CategoryManagementController implements Initializable, ControlledSc
     @FXML
     private TableView<CategoryGroup> cgTable;
     @FXML
-    private AutoCompleteComboBox cgTypeACCB;
+    private AutoCompleteComboBox<String> cgTypeACCB;
     @FXML
     private TextField cgNameTF;
     @FXML
@@ -130,7 +130,7 @@ public class CategoryManagementController implements Initializable, ControlledSc
                         @Override
                         protected EnumSet<ErrorEnum> call() throws Exception {
                             return categoryManagementModel.savePendingCategoryGroup(
-                                    UserInterfaceConstants.convertCategoryGroupTypeFromUIToBackend(cgTypeACCB.getValue().toString()),
+                                    UserInterfaceConstants.convertCategoryGroupTypeFromUIToBackend(cgTypeACCB.getValue()),
                                     cgNameTF.getText(),
                                     cgDescTA.getText());
                         }
@@ -327,7 +327,7 @@ public class CategoryManagementController implements Initializable, ControlledSc
                                     + cCategoryGroupACCB.getValue() + ", with name " + cNameTF.getText(),
                             (EnumSet<ErrorEnum>) ((Service) onSaveCategoryGroupWorker).getValue(), null);
                 }
-                onClearCategoryGroup(actionEvent);
+                onClearCategory(actionEvent);
             });
             ((Service<EnumSet<ErrorEnum>>) onSaveCategoryWorker).setOnFailed(event -> {
                 LOG.debug("onSaveCategoryWorker->setOnFailed");
@@ -374,7 +374,7 @@ public class CategoryManagementController implements Initializable, ControlledSc
                                     + cCategoryGroupACCB.getValue() + ", with name " + cNameTF.getText(),
                             (EnumSet<ErrorEnum>) ((Service) onSaveCategoryGroupWorker).getValue(), null);
                 }
-                onClearCategoryGroup(actionEvent);
+                onClearCategory(actionEvent);
             });
             ((Service<EnumSet<ErrorEnum>>) onSaveCategoryWorker).setOnFailed(event -> {
                 LOG.debug("onSaveCategoryWorker->setOnFailed");
@@ -735,7 +735,7 @@ public class CategoryManagementController implements Initializable, ControlledSc
             cNameTF.setText(categoryManagementModel.getPendingCategory().getName());
             cDescTA.setText(categoryManagementModel.getPendingCategory().getDescription());
         }catch (Exception e){
-            startService(onRefreshCategoryGroupWorker,null);
+            startService(onRefreshCategoryWorker,null);
             DialogMessages.showExceptionAlert(e);
         }
     }
@@ -847,11 +847,8 @@ public class CategoryManagementController implements Initializable, ControlledSc
 
             cTable.getColumns().setAll(categoryIdCol, categoryTypeCol, categoryNameCol,
                     categoryDescCol, categoryCreatedCol, categoryUpdatedCol);
-
-
-
         }catch (Exception e){
-            startService(onRefreshCategoryGroupWorker,null);
+            startService(onRefreshCategoryWorker,null);
             DialogMessages.showExceptionAlert(e);
         }
     }
@@ -860,7 +857,7 @@ public class CategoryManagementController implements Initializable, ControlledSc
     public void saveForm() {
         try {
             if(selectedTabIndex == CATEGORY_GROUP_TAB_INDEX) {
-                careTaker.saveState(new CategoryGroupFormState(cgTypeACCB.getValue().toString(), cgNameTF.getText(), cgDescTA.getText()));
+                careTaker.saveState(new CategoryGroupFormState(cgTypeACCB.getValue(), cgNameTF.getText(), cgDescTA.getText()));
             }else if(selectedTabIndex == CATEGORY_TAB_INDEX) {
                 careTaker.saveState(new CategoryFormState(cCategoryGroupACCB.getValue(), cNameTF.getText(), cDescTA.getText()));
             }

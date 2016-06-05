@@ -18,6 +18,7 @@ import com.makco.smartfinance.user_interface.decorator.CategoryManagementDecorat
 import com.makco.smartfinance.user_interface.decorator.CategoryManagmentDecorator;
 import com.makco.smartfinance.user_interface.validation.ErrorEnum;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -47,7 +48,14 @@ public class CategoryManagementModel {
     private Multimap<CategoryManagmentDecorator, CategoryManagmentDecorator> categoryManagmentDecoratorMultimap = ArrayListMultimap.create();
 
     public CategoryManagementModel() {
-
+//        categoryGroupsWithoutCategories.addListener(new ListChangeListener<CategoryGroup>() {
+//            @Override
+//            public void onChanged(Change<? extends CategoryGroup> c) {
+//                categoryGroupsWithoutCategories.forEach(cg -> {
+//                    categoryGroupUINameToCategoryGroup.put(convertCategoryGroupFromBackendToUI(cg), cg);
+//                });
+//            }
+//        });
     }
 
     public void refreshCategoryGroupTab() throws Exception {
@@ -71,10 +79,10 @@ public class CategoryManagementModel {
 //            }
 //            categories = FXCollections.observableArrayList(categoryService.categoryList());
 //            LOG.debug("categories.size: " + categories.size());
-            refreshCategoryGroupTab();
-            categoryGroupsWithoutCategories.forEach(cg -> {
-                categoryGroupUINameToCategoryGroup.put(convertCategoryGroupFromBackendToUI(cg), cg);
-            });
+//            refreshCategoryGroupTab();
+//            categoryGroupsWithoutCategories.forEach(cg -> {
+//                categoryGroupUINameToCategoryGroup.put(convertCategoryGroupFromBackendToUI(cg), cg);
+//            });
 
             if (!categoryManagmentDecoratorMultimap.isEmpty()) {
                 categoryManagmentDecoratorMultimap.clear();
