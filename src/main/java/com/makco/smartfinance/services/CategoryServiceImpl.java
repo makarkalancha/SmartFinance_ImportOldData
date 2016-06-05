@@ -9,6 +9,7 @@ import com.makco.smartfinance.persistence.entity.CategoryGroup;
 import com.makco.smartfinance.user_interface.validation.ErrorEnum;
 import com.makco.smartfinance.user_interface.validation.RuleSet;
 import com.makco.smartfinance.user_interface.validation.rule_sets.CategoryGroupRuleSet;
+import com.makco.smartfinance.user_interface.validation.rule_sets.CategoryRuleSet;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -88,7 +89,7 @@ public class CategoryServiceImpl implements CategoryService {
     public EnumSet<ErrorEnum> validate(Category category) throws Exception {
         EnumSet<ErrorEnum> errors = EnumSet.noneOf(ErrorEnum.class);
         try {
-            RuleSet ruleSet = new CategoryGroupRuleSet();
+            RuleSet ruleSet = new CategoryRuleSet();
             errors = ruleSet.validate(category);
         } catch (Exception e) {
             throw e;

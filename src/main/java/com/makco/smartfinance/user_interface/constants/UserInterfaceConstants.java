@@ -53,6 +53,9 @@ public class UserInterfaceConstants {
         return null;
     }
 
+    //category
+    public static final String CATEGORY_ROOT_NODE = "All Categories";
+
     //ico
     public static final String CALENDAR = IMG_RESOURCE_FOLDER+"/calendar_60_45.png";
     public static final String MAIN_WINDOW_ICO = IMG_RESOURCE_FOLDER+"/wallet.png";

@@ -29,6 +29,7 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -45,6 +46,7 @@ public class CategoryManagementModel {
     private CategoryGroupFactory categoryGroupFactory = new CategoryGroupFactory();
     private CategoryFactory categoryFactory = new CategoryFactory();
     private Map<String, CategoryGroup> categoryGroupUINameToCategoryGroup = new HashMap<>();
+    private ObservableList<String> categoryGroupsUINames = FXCollections.observableArrayList();
     private Multimap<CategoryManagmentDecorator, CategoryManagmentDecorator> categoryManagmentDecoratorMultimap = ArrayListMultimap.create();
 
     public CategoryManagementModel() {
@@ -69,6 +71,7 @@ public class CategoryManagementModel {
             categoryGroupsWithoutCategories.forEach(cg -> {
                 categoryGroupUINameToCategoryGroup.put(convertCategoryGroupFromBackendToUI(cg), cg);
             });
+            categoryGroupsUINames.addAll(categoryGroupUINameToCategoryGroup.keySet());
             LOG.debug("categoryGroupsWithoutCategories.size: " + categoryGroupsWithoutCategories.size());
         } catch (Exception e) {
             throw e;
@@ -116,6 +119,10 @@ public class CategoryManagementModel {
         }
 
         return "";
+    }
+
+    public ObservableList<String> getCategoryGroupUIName(){
+        return categoryGroupsUINames;
     }
 
     public CategoryGroup convertCategoryGroupFromUIToBackendTo(String uiText){

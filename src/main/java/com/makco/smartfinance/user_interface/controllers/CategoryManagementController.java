@@ -7,6 +7,8 @@ import com.makco.smartfinance.user_interface.Command;
 import com.makco.smartfinance.user_interface.ControlledScreen;
 import com.makco.smartfinance.user_interface.ScreensController;
 import com.makco.smartfinance.user_interface.constants.UserInterfaceConstants;
+import com.makco.smartfinance.user_interface.decorator.CategoryManagementDecoratorCategoryGroup;
+import com.makco.smartfinance.user_interface.decorator.CategoryManagementDecoratorRoot;
 import com.makco.smartfinance.user_interface.decorator.CategoryManagmentDecorator;
 import com.makco.smartfinance.user_interface.models.CategoryManagementModel;
 import com.makco.smartfinance.user_interface.undoredo.CareTaker;
@@ -81,7 +83,7 @@ public class CategoryManagementController implements Initializable, ControlledSc
     @FXML
     private TableView<CategoryGroup> cgTable;
     @FXML
-    private AutoCompleteComboBox<String> cgTypeACCB;
+    private AutoCompleteComboBox cgTypeACCB;
     @FXML
     private TextField cgNameTF;
     @FXML
@@ -93,11 +95,10 @@ public class CategoryManagementController implements Initializable, ControlledSc
     @FXML
     private Button cgDeleteBtn;
 
-    //todo Can not set javafx.scene.control.TableView field com.makco.smartfinance.user_interface.controllers.CategoryManagementController.cTable to javafx.scene.control.TreeTableColumn
     @FXML
     private TreeTableView<CategoryManagmentDecorator> cTable;
     @FXML
-    private AutoCompleteComboBox<CategoryGroup> cCategoryGroupACCB;
+    private AutoCompleteComboBox cCategoryGroupACCB;
     @FXML
     private TextField cNameTF;
     @FXML
@@ -439,7 +440,7 @@ public class CategoryManagementController implements Initializable, ControlledSc
                 }
             });
             cgTypeACCB.setItems(FXCollections.observableList(getCategoryGroupTypeStringList()));
-            cCategoryGroupACCB.setItems(categoryManagementModel.getCategoryGroupsWithoutCategories());
+            cCategoryGroupACCB.setItems(categoryManagementModel.getCategoryGroupUIName());
             cTable.getSelectionModel().selectedItemProperty().addListener((observable, oldSelection, newSelection) -> {
                 if (newSelection != null) {
                     populateFormCategory();
@@ -546,24 +547,24 @@ public class CategoryManagementController implements Initializable, ControlledSc
         try {
 //            cCategoryGroupACCB.setItems(categoryManagementModel.getCategoryGroupsWithoutCategories());
             cCategoryGroupACCB.setEditable(true);
-            cCategoryGroupACCB.setConverter(new StringConverter<CategoryGroup>() {
-
-                @Override
-                public String toString(CategoryGroup object) {
-                    if (object == null) {
-                        return null;
-                    }
-                    return categoryManagementModel.convertCategoryGroupFromBackendToUI(object);
-                }
-
-                @Override
-                public CategoryGroup fromString(String string) {
-                    if(StringUtils.isEmpty(string)) {
-                        return null;
-                    }
-                    return categoryManagementModel.convertCategoryGroupFromUIToBackendTo(string);
-                }
-            });
+//            cCategoryGroupACCB.setConverter(new StringConverter<CategoryGroup>() {
+//
+//                @Override
+//                public String toString(CategoryGroup object) {
+//                    if (object == null) {
+//                        return null;
+//                    }
+//                    return categoryManagementModel.convertCategoryGroupFromBackendToUI(object);
+//                }
+//
+//                @Override
+//                public CategoryGroup fromString(String string) {
+//                    if(StringUtils.isEmpty(string)) {
+//                        return null;
+//                    }
+//                    return categoryManagementModel.convertCategoryGroupFromUIToBackendTo(string);
+//                }
+//            });
             cCategoryGroupACCB.valueProperty().addListener((observable, oldValue, newValue) -> {
                 if (isNotUndo.getValue()) {
                     saveForm();
@@ -652,7 +653,7 @@ public class CategoryManagementController implements Initializable, ControlledSc
     @FXML
     public void onClearCategory(ActionEvent event){
         try{
-            cCategoryGroupACCB.setValue(categoryManagementModel.getCategoryGroupsWithoutCategories().get(0));
+            cCategoryGroupACCB.setValue(categoryManagementModel.getCategoryGroupUIName().get(0));
             cNameTF.clear();
             cDescTA.clear();
             cClearBtn.setDisable(false);
@@ -730,7 +731,7 @@ public class CategoryManagementController implements Initializable, ControlledSc
 //                            categoryManagementModel.getPendingCategory().getCategoryGroup())
 //            );
             cCategoryGroupACCB.setValue(
-                categoryManagementModel.getPendingCategory().getCategoryGroup()
+                categoryManagementModel.convertCategoryGroupFromBackendToUI(categoryManagementModel.getPendingCategory().getCategoryGroup())
             );
             cNameTF.setText(categoryManagementModel.getPendingCategory().getName());
             cDescTA.setText(categoryManagementModel.getPendingCategory().getDescription());
@@ -785,19 +786,18 @@ public class CategoryManagementController implements Initializable, ControlledSc
 //            cTable.getItems().clear();
             cTable.setRoot(null);
 //            cTable.setItems(categoryManagementModel.getCategories());
-            for(Map.Entry<CategoryManagmentDecorator, Collection<CategoryManagmentDecorator>>  categoryGroupEntry :
-                    categoryManagementModel.getCategoryManagmentDecoratorMultimap().asMap().entrySet()){
-                CategoryManagmentDecorator key = categoryGroupEntry.getKey();
-                Collection<CategoryManagmentDecorator> value = categoryGroupEntry.getValue();
 
-                TreeItem<CategoryManagmentDecorator> categoryGroupTreeItem = new TreeItem<>(key);
-                categoryGroupTreeItem.setExpanded(true);
-                value.stream()
-                        .forEach((category) -> {
-                            categoryGroupTreeItem.getChildren().add(new TreeItem<>(category));
-                        });
-                cTable.setRoot(categoryGroupTreeItem);
+            TreeItem<CategoryManagmentDecorator> rootNode = new TreeItem<>(new CategoryManagementDecoratorRoot(UserInterfaceConstants.CATEGORY_ROOT_NODE));
+            for(Map.Entry<CategoryManagmentDecorator, Collection<CategoryManagmentDecorator>>  categoryGroupEntry :
+                categoryManagementModel.getCategoryManagmentDecoratorMultimap().asMap().entrySet()){
+                TreeItem<CategoryManagmentDecorator> categoryGroupNode = new TreeItem<>(categoryGroupEntry.getKey());
+                for(CategoryManagmentDecorator categoryDecorators : categoryGroupEntry.getValue()){
+                    TreeItem<CategoryManagmentDecorator> categoryNode = new TreeItem<>(categoryDecorators);
+                    categoryGroupNode.getChildren().add(categoryNode);
+                }
+                rootNode.getChildren().add(categoryGroupNode);
             }
+            cTable.setRoot(rootNode);
 
             TreeTableColumn<CategoryManagmentDecorator, Long> categoryIdCol = new TreeTableColumn<>("ID");
             categoryIdCol.setCellValueFactory(
@@ -974,17 +974,17 @@ public class CategoryManagementController implements Initializable, ControlledSc
     }
 
     private static class CategoryFormState implements Memento{
-        private final CategoryGroup cCategoryGroupACCBStr;
+        private final String cCategoryGroupACCBStr;
         private final String cNameTFStr;
         private final String cDescTAStr;
 
-        public CategoryFormState(CategoryGroup cCategoryGroupACCB, String cNameTF, String cDescTA){
+        public CategoryFormState(String cCategoryGroupACCB, String cNameTF, String cDescTA){
             this.cCategoryGroupACCBStr = cCategoryGroupACCB;
             this.cNameTFStr = cNameTF;
             this.cDescTAStr = cDescTA;
         }
 
-        public CategoryGroup getCCategoryGroupACCB() {
+        public String getCCategoryGroupACCB() {
             return cCategoryGroupACCBStr;
         }
 
