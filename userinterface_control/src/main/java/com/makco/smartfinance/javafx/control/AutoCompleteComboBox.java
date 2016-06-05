@@ -53,6 +53,12 @@ public class AutoCompleteComboBox<T> extends ComboBox<T> implements EventHandler
         this.configAutoFilterListener();
     }
 
+    /**
+     * todo fix autocomplete combobox
+     * http://stackoverflow.com/questions/19242747/javafx-editable-combobox-showing-tostring-on-item-selection
+     * http://java-buddy.blogspot.ca/2013/06/javafx-combobox-for-custom-object.html
+     */
+
     private void configAutoFilterListener(){
         sb = new StringBuilder();
         setEditable(true);
