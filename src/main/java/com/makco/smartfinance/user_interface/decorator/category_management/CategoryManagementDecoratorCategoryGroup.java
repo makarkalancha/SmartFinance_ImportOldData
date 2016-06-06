@@ -1,4 +1,4 @@
-package com.makco.smartfinance.user_interface.decorator;
+package com.makco.smartfinance.user_interface.decorator.category_management;
 
 import com.google.common.base.Objects;
 import com.makco.smartfinance.constants.DataBaseConstants;
@@ -8,7 +8,7 @@ import com.makco.smartfinance.persistence.entity.CategoryGroup;
 /**
  * Created by mcalancea on 2016-06-03.
  */
-public class CategoryManagementDecoratorCategoryGroup implements CategoryManagmentDecorator {
+public class CategoryManagementDecoratorCategoryGroup implements CategoryManagementDecorator {
     private String name;
     private String description;
     private DataBaseConstants.CATEGORY_GROUP_TYPE type;
@@ -57,8 +57,8 @@ public class CategoryManagementDecoratorCategoryGroup implements CategoryManagme
 
     @Override
     public boolean equals(Object other) {
-        if (other instanceof CategoryManagementDecoratorCategoryGroup) {
-            CategoryManagementDecoratorCategoryGroup that = (CategoryManagementDecoratorCategoryGroup) other;
+        if (other instanceof CategoryManagementDecorator) {
+            CategoryManagementDecorator that = (CategoryManagementDecorator) other;
             return Objects.equal(getId(), that.getId())
                     && Objects.equal(getName(), that.getName())
                     && Objects.equal(getDescription(), that.getDescription())

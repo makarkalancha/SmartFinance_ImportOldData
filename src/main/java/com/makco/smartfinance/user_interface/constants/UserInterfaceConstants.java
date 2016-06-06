@@ -23,6 +23,7 @@ public class UserInterfaceConstants {
 
     //titles
     public static final String MAIN_WINDOW_TITLE = "Hello";
+    public static final String ACCOUNT_MANAGEMENT_WINDOW_TITLE = "Account Management";
     public static final String CATEGORY_MANAGEMENT_WINDOW_TITLE = "Category Management";
     public static final String CURRENCY_WINDOW_TITLE = "Currency";
     public static final String FAMILY_MEMBER_WINDOW_TITLE = "Family Member";
@@ -59,6 +60,38 @@ public class UserInterfaceConstants {
 
     //category
     public static final String CATEGORY_ROOT_NODE = "All Categories";
+
+    //account group
+    public static final String ACCOUNT_GROUP_TYPE_DEBIT = "Debit";
+    public static final String ACCOUNT_GROUP_TYPE_CREDIT = "Credit";
+    public static String convertAccountGroupTypeFromBackendToUI(String backendText){
+        if(StringUtils.isEmpty(backendText)) {
+            return null;
+        }else if(backendText.equals(DataBaseConstants.ACCOUNT_GROUP_TYPE.DEBIT.toString())
+                || backendText.equals(DataBaseConstants.ACCOUNT_GROUP_TYPE.Values.DEBIT)){
+            return ACCOUNT_GROUP_TYPE_DEBIT;
+        } else if(backendText.equals(DataBaseConstants.ACCOUNT_GROUP_TYPE.CREDIT.toString())
+                || backendText.equals(DataBaseConstants.ACCOUNT_GROUP_TYPE.Values.CREDIT)){
+            return ACCOUNT_GROUP_TYPE_CREDIT;
+        }
+
+        return null;
+    }
+
+    public static DataBaseConstants.ACCOUNT_GROUP_TYPE convertAccountGroupTypeFromUIToBackend(String uiText){
+        if (StringUtils.isEmpty(uiText)) {
+            return null;
+        } else if (uiText.equals(ACCOUNT_GROUP_TYPE_DEBIT)) {
+            return DataBaseConstants.ACCOUNT_GROUP_TYPE.DEBIT;
+        } else if (uiText.equals(ACCOUNT_GROUP_TYPE_CREDIT)) {
+            return DataBaseConstants.ACCOUNT_GROUP_TYPE.CREDIT;
+        }
+
+        return null;
+    }
+
+    //account
+    public static final String ACCOUNT_ROOT_NODE = "All Accounts";
 
     //ico
     public static final String CALENDAR = IMG_RESOURCE_FOLDER+"/calendar_60_45.png";

@@ -1,4 +1,4 @@
-package com.makco.smartfinance.user_interface.decorator;
+package com.makco.smartfinance.user_interface.decorator.category_management;
 
 import com.makco.smartfinance.persistence.entity.Category;
 
@@ -7,7 +7,7 @@ import com.makco.smartfinance.persistence.entity.Category;
  * Date: 05/06/2016
  * Time: 17:53
  */
-public class CategoryManagementDecoratorRoot implements CategoryManagmentDecorator {
+public class CategoryManagementDecoratorRoot implements CategoryManagementDecorator {
     private String name;
 
     public CategoryManagementDecoratorRoot(String name) {

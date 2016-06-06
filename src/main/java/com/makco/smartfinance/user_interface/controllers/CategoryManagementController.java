@@ -7,10 +7,9 @@ import com.makco.smartfinance.user_interface.Command;
 import com.makco.smartfinance.user_interface.ControlledScreen;
 import com.makco.smartfinance.user_interface.ScreensController;
 import com.makco.smartfinance.user_interface.constants.UserInterfaceConstants;
-import com.makco.smartfinance.user_interface.decorator.CategoryManagementDecoratorCategory;
-import com.makco.smartfinance.user_interface.decorator.CategoryManagementDecoratorCategoryGroup;
-import com.makco.smartfinance.user_interface.decorator.CategoryManagementDecoratorRoot;
-import com.makco.smartfinance.user_interface.decorator.CategoryManagmentDecorator;
+import com.makco.smartfinance.user_interface.decorator.category_management.CategoryManagementDecorator;
+import com.makco.smartfinance.user_interface.decorator.category_management.CategoryManagementDecoratorCategory;
+import com.makco.smartfinance.user_interface.decorator.category_management.CategoryManagementDecoratorRoot;
 import com.makco.smartfinance.user_interface.models.CategoryManagementModel;
 import com.makco.smartfinance.user_interface.undoredo.CareTaker;
 import com.makco.smartfinance.user_interface.undoredo.Memento;
@@ -41,7 +40,6 @@ import javafx.scene.control.TreeTableCell;
 import javafx.scene.control.TreeTableColumn;
 import javafx.scene.control.TreeTableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.util.StringConverter;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -101,7 +99,7 @@ public class CategoryManagementController implements Initializable, ControlledSc
     private Button cgDeleteBtn;
 
     @FXML
-    private TreeTableView<CategoryManagmentDecorator> cTable;
+    private TreeTableView<CategoryManagementDecorator> cTable;
     @FXML
     private AutoCompleteComboBox cCategoryGroupACCB;
     @FXML
@@ -704,26 +702,26 @@ public class CategoryManagementController implements Initializable, ControlledSc
 
     private void populateCategoryTable(){
         try{
-            LOG.debug("categoryManagementModel.getCategories().size():" + categoryManagementModel.getCategoryManagmentDecoratorMultimap().size());
+            LOG.debug("categoryManagementModel.getCategories().size():" + categoryManagementModel.getCategoryManagementDecoratorMultimap().size());
 //            cTable.getItems().clear();
             cTable.setRoot(null);
 //            cTable.setItems(categoryManagementModel.getCategories());
 
-            TreeItem<CategoryManagmentDecorator> rootNode = new TreeItem<>(new CategoryManagementDecoratorRoot(UserInterfaceConstants.CATEGORY_ROOT_NODE));
-            for(Map.Entry<CategoryManagmentDecorator, Collection<CategoryManagmentDecorator>>  categoryGroupEntry :
-                categoryManagementModel.getCategoryManagmentDecoratorMultimap().asMap().entrySet()){
-                TreeItem<CategoryManagmentDecorator> categoryGroupNode = new TreeItem<>(categoryGroupEntry.getKey());
-                for(CategoryManagmentDecorator categoryDecorators : categoryGroupEntry.getValue()){
-                    TreeItem<CategoryManagmentDecorator> categoryNode = new TreeItem<>(categoryDecorators);
+            TreeItem<CategoryManagementDecorator> rootNode = new TreeItem<>(new CategoryManagementDecoratorRoot(UserInterfaceConstants.CATEGORY_ROOT_NODE));
+            for(Map.Entry<CategoryManagementDecorator, Collection<CategoryManagementDecorator>>  categoryGroupEntry :
+                categoryManagementModel.getCategoryManagementDecoratorMultimap().asMap().entrySet()){
+                TreeItem<CategoryManagementDecorator> categoryGroupNode = new TreeItem<>(categoryGroupEntry.getKey());
+                for(CategoryManagementDecorator categoryDecorators : categoryGroupEntry.getValue()){
+                    TreeItem<CategoryManagementDecorator> categoryNode = new TreeItem<>(categoryDecorators);
                     categoryGroupNode.getChildren().add(categoryNode);
                 }
                 rootNode.getChildren().add(categoryGroupNode);
             }
             cTable.setRoot(rootNode);
 
-            TreeTableColumn<CategoryManagmentDecorator, Long> categoryIdCol = new TreeTableColumn<>("ID");
+            TreeTableColumn<CategoryManagementDecorator, Long> categoryIdCol = new TreeTableColumn<>("ID");
             categoryIdCol.setCellValueFactory(
-                    (TreeTableColumn.CellDataFeatures<CategoryManagmentDecorator,Long> param) ->
+                    (TreeTableColumn.CellDataFeatures<CategoryManagementDecorator,Long> param) ->
                             new ReadOnlyObjectWrapper<Long>(param.getValue().getValue().getId())
             );
             categoryIdCol.setCellFactory(column -> {
@@ -744,7 +742,7 @@ public class CategoryManagementController implements Initializable, ControlledSc
 //                };
 //            });
 
-            TreeTableColumn<CategoryManagmentDecorator, String> categoryTypeCol = new TreeTableColumn<>("Type");
+            TreeTableColumn<CategoryManagementDecorator, String> categoryTypeCol = new TreeTableColumn<>("Type");
             categoryTypeCol.setCellValueFactory(c -> new SimpleStringProperty(
                 UserInterfaceConstants.convertCategoryGroupTypeFromBackendToUI(
                         c.getValue().getValue().getCategoryGroupType()
@@ -761,9 +759,9 @@ public class CategoryManagementController implements Initializable, ControlledSc
 //                    )
 //            ));
 
-            TreeTableColumn<CategoryManagmentDecorator, String> categoryNameCol = new TreeTableColumn<>("Name");
+            TreeTableColumn<CategoryManagementDecorator, String> categoryNameCol = new TreeTableColumn<>("Name");
             categoryNameCol.setCellValueFactory(
-                    (TreeTableColumn.CellDataFeatures<CategoryManagmentDecorator, String> param) ->
+                    (TreeTableColumn.CellDataFeatures<CategoryManagementDecorator, String> param) ->
                             new ReadOnlyStringWrapper(param.getValue().getValue().getName())
             );
             categoryNameCol.setCellFactory(column -> {
@@ -785,18 +783,18 @@ public class CategoryManagementController implements Initializable, ControlledSc
 //                };
 //            });
 
-            TreeTableColumn<CategoryManagmentDecorator, String> categoryDescCol = new TreeTableColumn<>("Description");
+            TreeTableColumn<CategoryManagementDecorator, String> categoryDescCol = new TreeTableColumn<>("Description");
             categoryDescCol.setCellValueFactory(
-                    (TreeTableColumn.CellDataFeatures<CategoryManagmentDecorator, String> param) ->
+                    (TreeTableColumn.CellDataFeatures<CategoryManagementDecorator, String> param) ->
                             new ReadOnlyStringWrapper(param.getValue().getValue().getDescription())
             );
             categoryDescCol.setCellFactory(column -> {
                 return new CustomTreeTableCell<String>();
             });
 
-            TreeTableColumn<CategoryManagmentDecorator, String> categoryCreatedCol = new TreeTableColumn<>("Created on");
+            TreeTableColumn<CategoryManagementDecorator, String> categoryCreatedCol = new TreeTableColumn<>("Created on");
             categoryCreatedCol.setCellValueFactory(
-                (TreeTableColumn.CellDataFeatures<CategoryManagmentDecorator, String> param) -> {
+                (TreeTableColumn.CellDataFeatures<CategoryManagementDecorator, String> param) -> {
                     return new ReadOnlyObjectWrapper<String>(param.getValue().getValue().getCreatedOn());
                 }
             );
@@ -804,9 +802,9 @@ public class CategoryManagementController implements Initializable, ControlledSc
                 return new CustomTreeTableCell<String>();
             });
 
-            TreeTableColumn<CategoryManagmentDecorator, String> categoryUpdatedCol = new TreeTableColumn<>("Updated on");
+            TreeTableColumn<CategoryManagementDecorator, String> categoryUpdatedCol = new TreeTableColumn<>("Updated on");
             categoryUpdatedCol.setCellValueFactory(
-                    (TreeTableColumn.CellDataFeatures<CategoryManagmentDecorator, String> param) -> {
+                    (TreeTableColumn.CellDataFeatures<CategoryManagementDecorator, String> param) -> {
                         return new ReadOnlyObjectWrapper<String>(param.getValue().getValue().getUpdatedOn());
                     }
             );
@@ -975,7 +973,7 @@ public class CategoryManagementController implements Initializable, ControlledSc
         }
     }
 
-    private static class CustomTreeTableCell <T> extends TreeTableCell<CategoryManagmentDecorator, T> {
+    private static class CustomTreeTableCell <T> extends TreeTableCell<CategoryManagementDecorator, T> {
         @Override
         protected void updateItem(T item, boolean empty) {
             if(item != null) {

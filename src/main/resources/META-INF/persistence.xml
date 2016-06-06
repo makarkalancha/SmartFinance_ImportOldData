@@ -9,6 +9,12 @@
     <!-- "RESOURCE_LOCAL" for Java SE application and to "JTA" for Java EE application -->
     <persistence-unit name="finance" transaction-type="RESOURCE_LOCAL">
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+        <class>com.makco.smartfinance.persistence.entity.Account</class>
+        <class>com.makco.smartfinance.persistence.entity.AccountCredit</class>
+        <class>com.makco.smartfinance.persistence.entity.AccountDebit</class>
+        <class>com.makco.smartfinance.persistence.entity.AccountGroup</class>
+        <class>com.makco.smartfinance.persistence.entity.AccountGroupCredit</class>
+        <class>com.makco.smartfinance.persistence.entity.AccountGroupDebit</class>
         <class>com.makco.smartfinance.persistence.entity.Category</class>
         <class>com.makco.smartfinance.persistence.entity.CategoryCredit</class>
         <class>com.makco.smartfinance.persistence.entity.CategoryDebit</class>

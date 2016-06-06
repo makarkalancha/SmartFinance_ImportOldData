@@ -6,30 +6,25 @@ import com.makco.smartfinance.constants.DataBaseConstants;
 import com.makco.smartfinance.persistence.entity.Category;
 import com.makco.smartfinance.persistence.entity.CategoryFactory;
 import com.makco.smartfinance.persistence.entity.CategoryGroup;
-import com.makco.smartfinance.persistence.entity.CategoryGroupDebit;
 import com.makco.smartfinance.persistence.entity.CategoryGroupFactory;
 import com.makco.smartfinance.services.CategoryGroupService;
 import com.makco.smartfinance.services.CategoryGroupServiceImpl;
 import com.makco.smartfinance.services.CategoryService;
 import com.makco.smartfinance.services.CategoryServiceImpl;
-import com.makco.smartfinance.user_interface.constants.UserInterfaceConstants;
-import com.makco.smartfinance.user_interface.decorator.CategoryManagementDecoratorCategory;
-import com.makco.smartfinance.user_interface.decorator.CategoryManagementDecoratorCategoryGroup;
-import com.makco.smartfinance.user_interface.decorator.CategoryManagmentDecorator;
+import com.makco.smartfinance.user_interface.decorator.category_management.CategoryManagementDecoratorCategory;
+import com.makco.smartfinance.user_interface.decorator.category_management.CategoryManagementDecoratorCategoryGroup;
+import com.makco.smartfinance.user_interface.decorator.category_management.CategoryManagementDecorator;
 import com.makco.smartfinance.user_interface.validation.ErrorEnum;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -47,7 +42,7 @@ public class CategoryManagementModel {
     private CategoryFactory categoryFactory = new CategoryFactory();
     private Map<String, CategoryGroup> categoryGroupUINameToCategoryGroup = new HashMap<>();
     private ObservableList<String> categoryGroupsUINames = FXCollections.observableArrayList();
-    private Multimap<CategoryManagmentDecorator, CategoryManagmentDecorator> categoryManagmentDecoratorMultimap = ArrayListMultimap.create();
+    private Multimap<CategoryManagementDecorator, CategoryManagementDecorator> categoryManagementDecoratorMultimap = ArrayListMultimap.create();
 
     public CategoryManagementModel() {
 //        categoryGroupsWithoutCategories.addListener(new ListChangeListener<CategoryGroup>() {
@@ -87,8 +82,8 @@ public class CategoryManagementModel {
 //                categoryGroupUINameToCategoryGroup.put(convertCategoryGroupFromBackendToUI(cg), cg);
 //            });
 
-            if (!categoryManagmentDecoratorMultimap.isEmpty()) {
-                categoryManagmentDecoratorMultimap.clear();
+            if (!categoryManagementDecoratorMultimap.isEmpty()) {
+                categoryManagementDecoratorMultimap.clear();
             }
             List<CategoryGroup> categoryGroupsWithCategoriesList = FXCollections.observableArrayList(categoryGroupService.categoryGroupListWithCategories());
             categoryGroupsWithCategoriesList.forEach(cg -> {
@@ -96,7 +91,7 @@ public class CategoryManagementModel {
                 List<CategoryManagementDecoratorCategory> categoryManagementDecoratorCategories = categories.stream()
                     .map(cat -> new CategoryManagementDecoratorCategory((Category) cat))
                     .collect(Collectors.toList());
-                categoryManagmentDecoratorMultimap.putAll(new CategoryManagementDecoratorCategoryGroup(cg), categoryManagementDecoratorCategories);
+                categoryManagementDecoratorMultimap.putAll(new CategoryManagementDecoratorCategoryGroup(cg), categoryManagementDecoratorCategories);
             });
         } catch (Exception e) {
             throw e;
@@ -133,8 +128,8 @@ public class CategoryManagementModel {
 //        return categoryGroupsWithCategoriesList;
 //    }
 
-    public Multimap<CategoryManagmentDecorator, CategoryManagmentDecorator> getCategoryManagmentDecoratorMultimap(){
-        return categoryManagmentDecoratorMultimap;
+    public Multimap<CategoryManagementDecorator, CategoryManagementDecorator> getCategoryManagementDecoratorMultimap(){
+        return categoryManagementDecoratorMultimap;
     }
 
 
