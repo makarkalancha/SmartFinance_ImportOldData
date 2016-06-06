@@ -87,10 +87,6 @@ public class CategoryDebit extends Category implements Comparable<CategoryDebit>
     //because CategoryDebit is used in CategoryGroupDebit SortedSet<CategoryDebit> and this collection puts only Comparable
     @Override
     public int compareTo(CategoryDebit that) {
-        LOG.debug("this:" + this);
-        LOG.debug("this.getName():" + this.getName());
-        LOG.debug("that:" + that);
-        LOG.debug("that.getName():" + that.getName());
         return this.getName().compareTo(that.getName());
     }
 }

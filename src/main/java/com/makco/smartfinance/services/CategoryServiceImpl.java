@@ -46,17 +46,6 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public List<Category> categoryList() throws Exception {
-        List<Category> categories = null;
-        try {
-            categories = categoryDAO.categoryList();
-        } catch (Exception e) {
-            throw e;
-        }
-        return categories;
-    }
-
-    @Override
     public void saveOrUpdateCategory(Category category) throws Exception {
         try {
             categoryDAO.saveOrUpdateCategory(category);

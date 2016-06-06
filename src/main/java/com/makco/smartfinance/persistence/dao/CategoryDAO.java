@@ -11,7 +11,6 @@ import java.util.List;
  */
 public interface CategoryDAO {
     Category getCategoryById(Long id) throws Exception;
-    List<Category> categoryList() throws Exception;
     <T extends Category> List<T> categoryByType(Class<T> type) throws Exception;
     void saveOrUpdateCategory(Category category) throws Exception;
     void removeCategory(Long id) throws Exception;

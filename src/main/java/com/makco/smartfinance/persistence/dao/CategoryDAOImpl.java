@@ -56,11 +56,6 @@ public class CategoryDAOImpl implements CategoryDAO {
     }
 
     @Override
-    public List<Category> categoryList() throws Exception {
-        return null;
-    }
-
-    @Override
     public void saveOrUpdateCategory(Category category) throws Exception {
         Session session = null;
         try {
