@@ -700,6 +700,10 @@ public class AccountManagementController implements Initializable, ControlledScr
         }
     }
 
+    /**
+     * todo after save table is not updated
+     */
+
     private void populateAccountTable(){
         try{
             LOG.debug("accountManagementModel.getCategories().size():" + accountManagementModel.getAccountManagementDecoratorMultimap().size());
