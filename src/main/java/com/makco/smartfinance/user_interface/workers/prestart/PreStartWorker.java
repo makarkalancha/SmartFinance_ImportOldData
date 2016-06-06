@@ -53,7 +53,7 @@ public class PreStartWorker extends Service<Void>{
                 updateMessage("Starting...");
                 for (int i = 1; i <= total; i++) {
                     updateTitle("Example Service (" + i + ")");
-                    updateMessage("Processed " + i + " of " + total + " items.");
+                    updateMessage("Processed " + i + " of " + total + " items: " + commands[i - 1].toString());
                     commands[i - 1].execute();
                     updateProgress(i, total);
                     Thread.sleep(interval);
@@ -71,6 +71,11 @@ public class PreStartWorker extends Service<Void>{
             DateUnitService dateUnitService = new DateUnitServiceImpl();
             PreStartWorker.this.isEmpty.set(dateUnitService.isEmpty());
         }
+
+        @Override
+        public String toString(){
+            return "Date Unit Table Check";
+        }
     }
 
     private class DBBackup implements Command {
@@ -79,6 +84,11 @@ public class PreStartWorker extends Service<Void>{
             LOG.debug("Main: backup");
             H2DbUtils.backup("start");
         }
+
+        @Override
+        public String toString(){
+            return "Data Base Backup";
+        }
     }
 
     private class DBMigrate implements Command {
@@ -86,6 +96,11 @@ public class PreStartWorker extends Service<Void>{
         public void execute() throws Exception {
             LOG.debug("Main: migrate");
             H2DbUtils.migrate(DataBaseConstants.SCHEMA);
+        }
+
+        @Override
+        public String toString(){
+            return "Data Base Migration";
         }
     }
 }
