@@ -8,7 +8,16 @@ import com.makco.smartfinance.constants.DataBaseConstants;
  * Time: 00:37
  */
 public enum ErrorEnum {
-    Cat_DESC_LGTH("Category description cannot be greater than " + DataBaseConstants.CAT_DESCRIPTION_MAX_LGTH + " characters.")
+    Acc_DESC_LGTH("Account description cannot be greater than " + DataBaseConstants.ACC_DESCRIPTION_MAX_LGTH + " characters.")
+    , Acc_NAME_DUPLICATE("Account with this name and type already exists.")
+    , Acc_NAME_LGTH("Account name cannot be greater than " + DataBaseConstants.ACC_NAME_MAX_LGTH + " characters.")
+    , Acc_NULL_NAME("Account name cannot be empty.")
+    , AccGr_DESC_LGTH("Account Group description cannot be greater than " + DataBaseConstants.AG_DESCRIPTION_MAX_LGTH + " characters.")
+    , AccGr_NAME_DUPLICATE("Account Group with this name already exists.")
+    , AccGr_NAME_LGTH("Account Group name cannot be greater than " + DataBaseConstants.AG_NAME_MAX_LGTH + " characters.")
+    , AccGr_NULL_NAME("Account Group name cannot be empty.")
+    , AccGr_NULL_AG_TYPE("Account Group type cannot be empty.")
+    , Cat_DESC_LGTH("Category description cannot be greater than " + DataBaseConstants.CAT_DESCRIPTION_MAX_LGTH + " characters.")
     , Cat_NAME_DUPLICATE("Category with this name and type already exists.")
     , Cat_NAME_LGTH("Category name cannot be greater than " + DataBaseConstants.CAT_NAME_MAX_LGTH + " characters.")
     , Cat_NULL_NAME("Category name cannot be empty.")

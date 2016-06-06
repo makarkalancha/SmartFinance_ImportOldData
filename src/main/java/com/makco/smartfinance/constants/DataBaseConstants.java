@@ -56,4 +56,30 @@ public class DataBaseConstants {
     public final static int CAT_NAME_MAX_LGTH = 32;
     public final static int CAT_DESCRIPTION_MAX_LGTH = 512;
 
+    //account_group
+    public final static int AG_NAME_MAX_LGTH = 32;
+    public final static int AG_DESCRIPTION_MAX_LGTH = 512;
+    public enum ACCOUNT_GROUP_TYPE{
+        CREDIT(Values.CREDIT),
+        DEBIT(Values.DEBIT);
+
+        private final String discriminator;
+        private ACCOUNT_GROUP_TYPE(String discriminator){
+            this.discriminator = discriminator;
+        }
+
+        public String getDiscriminator() {
+            return discriminator;
+        }
+
+        public static class Values{
+            public static final String DEBIT = "D";
+            public static final String CREDIT = "C";
+        }
+    }
+
+    //account
+    public final static int ACC_NAME_MAX_LGTH = 32;
+    public final static int ACC_DESCRIPTION_MAX_LGTH = 512;
+
 }
