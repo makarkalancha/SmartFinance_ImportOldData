@@ -10,6 +10,8 @@ public class Table {
 
     public enum Names {
         _DELETED_ROWS,
+        ACCOUNT,
+        ACCOUNT_GROUP,
         CATEGORY,
         CATEGORY_GROUP,
         CURRENCY,
@@ -184,6 +186,55 @@ public class Table {
 
         @Override
         public CATEGORY getColumnNameByIndex(){
+            return this;
+        }
+    };
+
+    public enum ACCOUNT_GROUP implements IEnumRow {
+        ID(0),
+        TYPE(1),
+        NAME(2),
+        DESCRIPTION(3),
+        T_CREATEDON(4),
+        T_UPDATEDON(5);
+
+        private int columnIndex;
+        private ACCOUNT_GROUP(int columnIndex) {
+            this.columnIndex = columnIndex;
+        }
+
+        @Override
+        public int getColumnIndex(){
+            return this.columnIndex;
+        }
+
+        @Override
+        public ACCOUNT_GROUP getColumnNameByIndex(){
+            return this;
+        }
+    };
+
+    public enum ACCOUNT implements IEnumRow {
+        ID(0),
+        ACCOUNT_GROUP_ID(1),
+        ACCOUNT_GROUP_TYPE(2),
+        NAME(3),
+        DESCRIPTION(4),
+        T_CREATEDON(5),
+        T_UPDATEDON(6);
+
+        private int columnIndex;
+        private ACCOUNT(int columnIndex) {
+            this.columnIndex = columnIndex;
+        }
+
+        @Override
+        public int getColumnIndex(){
+            return this.columnIndex;
+        }
+
+        @Override
+        public ACCOUNT getColumnNameByIndex(){
             return this;
         }
     };
