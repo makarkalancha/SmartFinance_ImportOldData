@@ -99,6 +99,11 @@ public class MenuController implements Initializable, ControlledScreen {
     }
 
     @FXML
+    public void toAccountManagement(ActionEvent event){
+        screensController.setScreen(Screens.ACCOUNT_MANAGEMENT);
+    }
+
+    @FXML
     public void toCategoryManagement(ActionEvent event){
         screensController.setScreen(Screens.CATEGORY_MANAGEMENT);
     }

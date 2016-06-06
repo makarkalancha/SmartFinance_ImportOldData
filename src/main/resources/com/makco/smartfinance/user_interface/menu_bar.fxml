@@ -40,6 +40,7 @@
         <Menu mnemonicParsing="false" text="Navigate">
             <items>
                 <MenuItem mnemonicParsing="false" onAction="#toMain" text="Main" />
+                <MenuItem mnemonicParsing="false" onAction="#toAccountManagement" text="Account Management" />
                 <MenuItem mnemonicParsing="false" onAction="#toCategoryManagement" text="Category Management" />
                 <MenuItem mnemonicParsing="false" onAction="#toCurrency" text="Currency" />
                 <MenuItem mnemonicParsing="false" onAction="#toFamilyMember" text="Family Members" />
