@@ -5,8 +5,6 @@ import com.makco.smartfinance.constants.DataBaseConstants;
 import com.makco.smartfinance.persistence.entity.Category;
 import com.makco.smartfinance.persistence.entity.CategoryGroup;
 
-import java.util.Calendar;
-
 /**
  * Created by mcalancea on 2016-06-03.
  */
@@ -42,12 +40,12 @@ public class CategoryManagementDecoratorCategoryGroup implements CategoryManagme
     }
 
     @Override
-    public Calendar getCreatedOn() {
+    public String getCreatedOn() {
         return null;
     }
 
     @Override
-    public Calendar getUpdatedOn() {
+    public String getUpdatedOn() {
         return null;
     }
 

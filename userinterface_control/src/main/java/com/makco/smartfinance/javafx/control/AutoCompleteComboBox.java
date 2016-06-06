@@ -5,6 +5,7 @@ import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.scene.control.ComboBox;
@@ -37,6 +38,15 @@ public class AutoCompleteComboBox extends ComboBox<String> implements EventHandl
     private int lastLength;
     private List<String> initialList = new ArrayList<>();
     private List<String> bufferList = new ArrayList<>();
+    {
+        getItems().addListener(new ListChangeListener<String>() {
+            @Override
+            public void onChanged(Change<? extends String> c) {
+                initialList.clear();
+                initialList.addAll(getItems());
+            }
+        });
+    }
 
 
     public AutoCompleteComboBox() {

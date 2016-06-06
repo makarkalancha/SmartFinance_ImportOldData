@@ -63,15 +63,11 @@ public class CategoryManagementModel {
     public void refreshCategoryGroupTab() throws Exception {
         try {
             LOG.debug("model->refreshCategoryGroupTab");
-            if (!categoryGroupsWithoutCategories.isEmpty()) {
-                categoryGroupsWithoutCategories.clear();
-            }
-//            categoryGroupsWithoutCategories = FXCollections.observableArrayList(categoryGroupService.categoryGroupListWithoutCategories());
-            categoryGroupsWithoutCategories.addAll(categoryGroupService.categoryGroupListWithoutCategories());
+            categoryGroupsWithoutCategories = FXCollections.observableArrayList(categoryGroupService.categoryGroupListWithoutCategories());
             categoryGroupsWithoutCategories.forEach(cg -> {
                 categoryGroupUINameToCategoryGroup.put(convertCategoryGroupFromBackendToUI(cg), cg);
             });
-            categoryGroupsUINames.addAll(categoryGroupUINameToCategoryGroup.keySet());
+            categoryGroupsUINames = FXCollections.observableArrayList(categoryGroupUINameToCategoryGroup.keySet());
             LOG.debug("categoryGroupsWithoutCategories.size: " + categoryGroupsWithoutCategories.size());
         } catch (Exception e) {
             throw e;

@@ -7,6 +7,7 @@ import com.makco.smartfinance.user_interface.Command;
 import com.makco.smartfinance.user_interface.ControlledScreen;
 import com.makco.smartfinance.user_interface.ScreensController;
 import com.makco.smartfinance.user_interface.constants.UserInterfaceConstants;
+import com.makco.smartfinance.user_interface.decorator.CategoryManagementDecoratorCategory;
 import com.makco.smartfinance.user_interface.decorator.CategoryManagementDecoratorCategoryGroup;
 import com.makco.smartfinance.user_interface.decorator.CategoryManagementDecoratorRoot;
 import com.makco.smartfinance.user_interface.decorator.CategoryManagmentDecorator;
@@ -250,53 +251,6 @@ public class CategoryManagementController implements Initializable, ControlledSc
                 populateCategoryGroupTable();
                 DialogMessages.showExceptionAlert(onRefreshCategoryGroupWorker.getException());
             });
-
-            ((Service<Void>) onDeleteCategoryWorker).setOnSucceeded(event -> {
-                LOG.debug("onDeleteCategoryGroupWorker->setOnSucceeded");
-                LOG.debug(">>>>>>>>onDeleteCategoryGroupWorker->setOnSucceeded: pForm.getDialogStage().close()");
-                pForm.close();
-                populateCategoryGroupTable();
-            });
-            ((Service<Void>) onDeleteCategoryGroupWorker).setOnFailed(event -> {
-                LOG.debug("onDeleteCategoryGroupWorker->setOnFailed");
-                LOG.debug(">>>>>>>>onDeleteCategoryGroupWorker->setOnFailed: pForm.getDialogStage().close()");
-                pForm.close();
-                populateCategoryGroupTable();
-                DialogMessages.showExceptionAlert(onDeleteCategoryGroupWorker.getException());
-            });
-            ((Service<EnumSet<ErrorEnum>>) onSaveCategoryGroupWorker).setOnSucceeded(event -> {
-                LOG.debug("onSaveCategoryGroupWorker->setOnSucceeded");
-                LOG.debug(">>>>>>>>onSaveCategoryGroupWorker->setOnSucceeded: pForm.getDialogStage().close()");
-                pForm.close();
-                populateCategoryGroupTable();
-                EnumSet<ErrorEnum> errors = onSaveCategoryGroupWorker.getValue();
-                if(!errors.isEmpty()) {
-                    DialogMessages.showErrorDialog("Error while saving Category Group: type "
-                                    + cgTypeACCB.getValue() + ", with name " + cgNameTF.getText(),
-                            (EnumSet<ErrorEnum>) ((Service) onSaveCategoryGroupWorker).getValue(), null);
-                }
-                onClearCategoryGroup(actionEvent);
-            });
-            ((Service<EnumSet<ErrorEnum>>) onSaveCategoryGroupWorker).setOnFailed(event -> {
-                LOG.debug("onSaveCategoryGroupWorker->setOnFailed");
-                LOG.debug(">>>>>>>>onSaveCategoryGroupWorker->setOnFailed: pForm.getDialogStage().close()");
-                pForm.close();
-                populateCategoryGroupTable();
-                DialogMessages.showExceptionAlert(onSaveCategoryGroupWorker.getException());
-            });
-            ((Service<Void>) onRefreshCategoryGroupWorker).setOnSucceeded(event -> {
-                LOG.debug("onRefreshCategoryGroupWorker->setOnSucceeded");
-                LOG.debug(">>>>>>>>onRefreshCategoryGroupWorker->setOnSucceeded: pForm.getDialogStage().close()");
-                pForm.close();
-                populateCategoryGroupTable();
-            });
-            ((Service<Void>) onRefreshCategoryGroupWorker).setOnFailed(event -> {
-                LOG.debug("onRefreshCategoryGroupWorker->setOnFailed");
-                LOG.debug(">>>>>>>>onRefreshCategoryGroupWorker->setOnFailed: pForm.getDialogStage().close()");
-                pForm.close();
-                populateCategoryGroupTable();
-                DialogMessages.showExceptionAlert(onRefreshCategoryGroupWorker.getException());
-            });
         }catch (Exception e){
             //not in finally because refreshCategoryGroup must run before populateCategoryGroupTable
             startService(onRefreshCategoryGroupWorker,null);
@@ -324,9 +278,11 @@ public class CategoryManagementController implements Initializable, ControlledSc
                 populateCategoryTable();
                 EnumSet<ErrorEnum> errors = onSaveCategoryWorker.getValue();
                 if(!errors.isEmpty()) {
+                    String catGr = cCategoryGroupACCB.getValue();
+                    String cat = cNameTF.getText();
                     DialogMessages.showErrorDialog("Error while saving Category: category group "
                                     + cCategoryGroupACCB.getValue() + ", with name " + cNameTF.getText(),
-                            (EnumSet<ErrorEnum>) ((Service) onSaveCategoryGroupWorker).getValue(), null);
+                            (EnumSet<ErrorEnum>) ((Service) onSaveCategoryWorker).getValue(), null);
                 }
                 onClearCategory(actionEvent);
             });
@@ -342,6 +298,7 @@ public class CategoryManagementController implements Initializable, ControlledSc
                 LOG.debug(">>>>>>>>onRefreshCategoryWorker->setOnSucceeded: pForm.getDialogStage().close()");
                 pForm.close();
                 populateCategoryTable();
+                cCategoryGroupACCB.setItems(categoryManagementModel.getCategoryGroupUIName());
             });
             ((Service<Void>) onRefreshCategoryWorker).setOnFailed(event -> {
                 LOG.debug("onRefreshCategoryWorker->setOnFailed");
@@ -349,53 +306,7 @@ public class CategoryManagementController implements Initializable, ControlledSc
                 pForm.close();
                 populateCategoryTable();
                 DialogMessages.showExceptionAlert(onRefreshCategoryWorker.getException());
-            });
-
-            ((Service<Void>) onDeleteCategoryWorker).setOnSucceeded(event -> {
-                LOG.debug("onDeleteCategoryWorker->setOnSucceeded");
-                LOG.debug(">>>>>>>>onDeleteCategoryWorker->setOnSucceeded: pForm.getDialogStage().close()");
-                pForm.close();
-                populateCategoryTable();
-            });
-            ((Service<Void>) onDeleteCategoryWorker).setOnFailed(event -> {
-                LOG.debug("onDeleteCategoryWorker->setOnFailed");
-                LOG.debug(">>>>>>>>onDeleteCategoryWorker->setOnFailed: pForm.getDialogStage().close()");
-                pForm.close();
-                populateCategoryTable();
-                DialogMessages.showExceptionAlert(onDeleteCategoryWorker.getException());
-            });
-            ((Service<EnumSet<ErrorEnum>>) onSaveCategoryWorker).setOnSucceeded(event -> {
-                LOG.debug("onSaveCategoryWorker->setOnSucceeded");
-                LOG.debug(">>>>>>>>onSaveCategoryWorker->setOnSucceeded: pForm.getDialogStage().close()");
-                pForm.close();
-                populateCategoryTable();
-                EnumSet<ErrorEnum> errors = onSaveCategoryWorker.getValue();
-                if(!errors.isEmpty()) {
-                    DialogMessages.showErrorDialog("Error while saving Category: category group "
-                                    + cCategoryGroupACCB.getValue() + ", with name " + cNameTF.getText(),
-                            (EnumSet<ErrorEnum>) ((Service) onSaveCategoryGroupWorker).getValue(), null);
-                }
-                onClearCategory(actionEvent);
-            });
-            ((Service<EnumSet<ErrorEnum>>) onSaveCategoryWorker).setOnFailed(event -> {
-                LOG.debug("onSaveCategoryWorker->setOnFailed");
-                LOG.debug(">>>>>>>>onSaveCategoryWorker->setOnFailed: pForm.getDialogStage().close()");
-                pForm.close();
-                populateCategoryTable();
-                DialogMessages.showExceptionAlert(onSaveCategoryWorker.getException());
-            });
-            ((Service<Void>) onRefreshCategoryWorker).setOnSucceeded(event -> {
-                LOG.debug("onRefreshCategoryWorker->setOnSucceeded");
-                LOG.debug(">>>>>>>>onRefreshCategoryWorker->setOnSucceeded: pForm.getDialogStage().close()");
-                pForm.close();
-                populateCategoryTable();
-            });
-            ((Service<Void>) onRefreshCategoryWorker).setOnFailed(event -> {
-                LOG.debug("onRefreshCategoryWorker->setOnFailed");
-                LOG.debug(">>>>>>>>onRefreshCategoryWorker->setOnFailed: pForm.getDialogStage().close()");
-                pForm.close();
-                populateCategoryTable();
-                DialogMessages.showExceptionAlert(onRefreshCategoryWorker.getException());
+                cCategoryGroupACCB.setItems(categoryManagementModel.getCategoryGroupUIName());
             });
         }catch (Exception e){
             //not in finally because refreshCategoryGroup must run before populateCategoryGroupTable
@@ -440,10 +351,12 @@ public class CategoryManagementController implements Initializable, ControlledSc
                 }
             });
             cgTypeACCB.setItems(FXCollections.observableList(getCategoryGroupTypeStringList()));
-            cCategoryGroupACCB.setItems(categoryManagementModel.getCategoryGroupUIName());
+//            cCategoryGroupACCB.setItems(categoryManagementModel.getCategoryGroupUIName());
             cTable.getSelectionModel().selectedItemProperty().addListener((observable, oldSelection, newSelection) -> {
-                if (newSelection != null) {
+                if (newSelection != null && newSelection.getValue() instanceof CategoryManagementDecoratorCategory) {
                     populateFormCategory();
+                } else {
+                    onClearCategory(null);
                 }
             });
             screensController.setToolbar_Save(new Command() {
@@ -499,6 +412,15 @@ public class CategoryManagementController implements Initializable, ControlledSc
             tabPane.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue) -> {
                 selectedTabIndex = (int) newValue;
                 careTaker.clear();
+                if(oldValue != newValue){
+                    onClearCategoryGroup(null);
+                    onClearCategory(null);
+
+                    if((int)newValue == CATEGORY_TAB_INDEX){
+                        startService(onRefreshCategoryWorker, null);
+                    }
+                }
+
             });
         }catch (Exception e){
             //not in finally because refreshCategoryGroup must run before populateCategoryGroupTable
@@ -827,17 +749,17 @@ public class CategoryManagementController implements Initializable, ControlledSc
                             new ReadOnlyStringWrapper(param.getValue().getValue().getDescription())
             );
 
-            TreeTableColumn<CategoryManagmentDecorator, Calendar> categoryCreatedCol = new TreeTableColumn<>("Created on");
+            TreeTableColumn<CategoryManagmentDecorator, String> categoryCreatedCol = new TreeTableColumn<>("Created on");
             categoryCreatedCol.setCellValueFactory(
-                (TreeTableColumn.CellDataFeatures<CategoryManagmentDecorator, Calendar> param) -> {
-                    return new ReadOnlyObjectWrapper<Calendar>(param.getValue().getValue().getCreatedOn());
+                (TreeTableColumn.CellDataFeatures<CategoryManagmentDecorator, String> param) -> {
+                    return new ReadOnlyObjectWrapper<String>(param.getValue().getValue().getCreatedOn());
                 }
             );
 
-            TreeTableColumn<CategoryManagmentDecorator, Calendar> categoryUpdatedCol = new TreeTableColumn<>("Updated on");
+            TreeTableColumn<CategoryManagmentDecorator, String> categoryUpdatedCol = new TreeTableColumn<>("Updated on");
             categoryUpdatedCol.setCellValueFactory(
-                    (TreeTableColumn.CellDataFeatures<CategoryManagmentDecorator, Calendar> param) -> {
-                        return new ReadOnlyObjectWrapper<Calendar>(param.getValue().getValue().getUpdatedOn());
+                    (TreeTableColumn.CellDataFeatures<CategoryManagmentDecorator, String> param) -> {
+                        return new ReadOnlyObjectWrapper<String>(param.getValue().getValue().getUpdatedOn());
                     }
             );
 

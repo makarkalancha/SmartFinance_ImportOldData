@@ -3,8 +3,9 @@ package com.makco.smartfinance.user_interface.decorator;
 import com.google.common.base.Objects;
 import com.makco.smartfinance.constants.DataBaseConstants;
 import com.makco.smartfinance.persistence.entity.Category;
-import com.makco.smartfinance.persistence.entity.CategoryGroup;
+import com.makco.smartfinance.user_interface.constants.UserInterfaceConstants;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 /**
@@ -15,8 +16,8 @@ public class CategoryManagementDecoratorCategory implements CategoryManagmentDec
     private DataBaseConstants.CATEGORY_GROUP_TYPE type;
     private String name;
     private String description;
-    private Calendar createdOn;
-    private Calendar updatedOn;
+    private String createdOn;
+    private String updatedOn;
     private Category category;
 
     public CategoryManagementDecoratorCategory(Category category){
@@ -25,13 +26,8 @@ public class CategoryManagementDecoratorCategory implements CategoryManagmentDec
         this.name = category.getName();
         this.description = category.getDescription();
 
-        Calendar calendarCreated = Calendar.getInstance();
-        calendarCreated.setTime(category.getCreatedOn());
-        this.createdOn = calendarCreated;
-
-        Calendar calendarUpdated = Calendar.getInstance();
-        calendarUpdated.setTime(category.getUpdatedOn());
-        this.updatedOn = calendarUpdated;
+        this.createdOn = UserInterfaceConstants.FULL_DATE_FORMAT.format(category.getCreatedOn());
+        this.updatedOn = UserInterfaceConstants.FULL_DATE_FORMAT.format(category.getUpdatedOn());
 
         this.category = category;
     }
@@ -57,12 +53,12 @@ public class CategoryManagementDecoratorCategory implements CategoryManagmentDec
     }
 
     @Override
-    public Calendar getCreatedOn() {
+    public String getCreatedOn() {
         return createdOn;
     }
 
     @Override
-    public Calendar getUpdatedOn() {
+    public String getUpdatedOn() {
         return updatedOn;
     }
 

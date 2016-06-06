@@ -2,8 +2,6 @@ package com.makco.smartfinance.user_interface.decorator;
 
 import com.makco.smartfinance.persistence.entity.Category;
 
-import java.util.Calendar;
-
 /**
  * User: Makar Kalancha
  * Date: 05/06/2016
@@ -28,7 +26,7 @@ public class CategoryManagementDecoratorRoot implements CategoryManagmentDecorat
 
     @Override
     public String getName() {
-        return null;
+        return name;
     }
 
     @Override
@@ -37,12 +35,12 @@ public class CategoryManagementDecoratorRoot implements CategoryManagmentDecorat
     }
 
     @Override
-    public Calendar getCreatedOn() {
+    public String getCreatedOn() {
         return null;
     }
 
     @Override
-    public Calendar getUpdatedOn() {
+    public String getUpdatedOn() {
         return null;
     }
 

@@ -9,11 +9,15 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.text.SimpleDateFormat;
+
 /**
  * Created by mcalancea on 2016-04-05.
  */
 public class UserInterfaceConstants {
     private final static Logger LOG = LogManager.getLogger(UserInterfaceConstants.class);
+
+    public static final SimpleDateFormat FULL_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
 
     public static final String IMG_RESOURCE_FOLDER = "images";
 
