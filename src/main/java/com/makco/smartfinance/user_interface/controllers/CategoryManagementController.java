@@ -37,6 +37,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeTableCell;
 import javafx.scene.control.TreeTableColumn;
 import javafx.scene.control.TreeTableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -61,14 +62,17 @@ public class CategoryManagementController implements Initializable, ControlledSc
     private final static Logger LOG = LogManager.getLogger(CategoryManagementController.class);
     private final static int CATEGORY_GROUP_TAB_INDEX = 0;
     private final static int CATEGORY_TAB_INDEX = 1;
+    private final static String CATEGORY_TAB_NON_CATEGORY_BGCOLOR = "-fx-background-color: rgb(201,201,201)";
     private ScreensController screensController;
     private CategoryManagementModel categoryManagementModel = new CategoryManagementModel();
 
     private ActionEvent actionEvent;
+
     private Worker<Void> onDeleteCategoryGroupWorker;
     private Worker<EnumSet<ErrorEnum>> onSaveCategoryGroupWorker;
     private Worker<Void> onRefreshCategoryGroupWorker;
     private List<String> categoryGroupTypeStringList = new ArrayList<>();
+
     private Worker<Void> onDeleteCategoryWorker;
     private Worker<EnumSet<ErrorEnum>> onSaveCategoryWorker;
     private Worker<Void> onRefreshCategoryWorker;
@@ -278,8 +282,6 @@ public class CategoryManagementController implements Initializable, ControlledSc
                 populateCategoryTable();
                 EnumSet<ErrorEnum> errors = onSaveCategoryWorker.getValue();
                 if(!errors.isEmpty()) {
-                    String catGr = cCategoryGroupACCB.getValue();
-                    String cat = cNameTF.getText();
                     DialogMessages.showErrorDialog("Error while saving Category: category group "
                                     + cCategoryGroupACCB.getValue() + ", with name " + cNameTF.getText(),
                             (EnumSet<ErrorEnum>) ((Service) onSaveCategoryWorker).getValue(), null);
@@ -313,6 +315,8 @@ public class CategoryManagementController implements Initializable, ControlledSc
             startService(onRefreshCategoryWorker,null);
             DialogMessages.showExceptionAlert(e);
         }
+
+//        getsc
     }
 
     private <V> void startService(Worker<V> worker, ActionEvent event){
@@ -722,6 +726,23 @@ public class CategoryManagementController implements Initializable, ControlledSc
                     (TreeTableColumn.CellDataFeatures<CategoryManagmentDecorator,Long> param) ->
                             new ReadOnlyObjectWrapper<Long>(param.getValue().getValue().getId())
             );
+            categoryIdCol.setCellFactory(column -> {
+                return new CustomTreeTableCell<Long>();
+            });
+//                return new TreeTableCell<CategoryManagmentDecorator, Long>(){
+//                    @Override
+//                    protected void updateItem(Long item, boolean empty) {
+//                        if(getTreeTableRow().getItem() instanceof CategoryManagementDecoratorCategory){
+//                            setText(item.toString());
+//                            setStyle("");
+//                        } else {
+//                            setStyle(CATEGORY_TAB_NON_CATEGORY_BGCOLOR);
+//                        }
+//                    }
+//
+//
+//                };
+//            });
 
             TreeTableColumn<CategoryManagmentDecorator, String> categoryTypeCol = new TreeTableColumn<>("Type");
             categoryTypeCol.setCellValueFactory(c -> new SimpleStringProperty(
@@ -729,6 +750,9 @@ public class CategoryManagementController implements Initializable, ControlledSc
                         c.getValue().getValue().getCategoryGroupType()
                 )
             ));
+            categoryTypeCol.setCellFactory(column -> {
+                return new CustomTreeTableCell<String>();
+            });
 
 //            TreeTableColumn<CategoryManagmentDecorator, String> categoryCategoryGroupCol = new TreeTableColumn<>("Category Group");
 //            categoryCategoryGroupCol.setCellValueFactory(c -> new SimpleStringProperty(
@@ -742,12 +766,33 @@ public class CategoryManagementController implements Initializable, ControlledSc
                     (TreeTableColumn.CellDataFeatures<CategoryManagmentDecorator, String> param) ->
                             new ReadOnlyStringWrapper(param.getValue().getValue().getName())
             );
+            categoryNameCol.setCellFactory(column -> {
+                return new CustomTreeTableCell<String>();
+            });
+//            categoryNameCol.setCellFactory(column -> {
+//                return new TreeTableCell<CategoryManagmentDecorator, String>(){
+//                    @Override
+//                    protected void updateItem(String item, boolean empty) {
+//                        setText(item);
+//                        if(getTreeTableRow().getItem() instanceof CategoryManagementDecoratorCategory){
+//                            setStyle("");
+//                        } else {
+//                            setStyle(CATEGORY_TAB_NON_CATEGORY_BGCOLOR);
+//                        }
+//                    }
+//
+//
+//                };
+//            });
 
             TreeTableColumn<CategoryManagmentDecorator, String> categoryDescCol = new TreeTableColumn<>("Description");
             categoryDescCol.setCellValueFactory(
                     (TreeTableColumn.CellDataFeatures<CategoryManagmentDecorator, String> param) ->
                             new ReadOnlyStringWrapper(param.getValue().getValue().getDescription())
             );
+            categoryDescCol.setCellFactory(column -> {
+                return new CustomTreeTableCell<String>();
+            });
 
             TreeTableColumn<CategoryManagmentDecorator, String> categoryCreatedCol = new TreeTableColumn<>("Created on");
             categoryCreatedCol.setCellValueFactory(
@@ -755,6 +800,9 @@ public class CategoryManagementController implements Initializable, ControlledSc
                     return new ReadOnlyObjectWrapper<String>(param.getValue().getValue().getCreatedOn());
                 }
             );
+            categoryCreatedCol.setCellFactory(column -> {
+                return new CustomTreeTableCell<String>();
+            });
 
             TreeTableColumn<CategoryManagmentDecorator, String> categoryUpdatedCol = new TreeTableColumn<>("Updated on");
             categoryUpdatedCol.setCellValueFactory(
@@ -762,6 +810,9 @@ public class CategoryManagementController implements Initializable, ControlledSc
                         return new ReadOnlyObjectWrapper<String>(param.getValue().getValue().getUpdatedOn());
                     }
             );
+            categoryUpdatedCol.setCellFactory(column -> {
+                return new CustomTreeTableCell<String>();
+            });
 
             cTable.getColumns().setAll(categoryIdCol, categoryTypeCol, categoryNameCol,
                     categoryDescCol, categoryCreatedCol, categoryUpdatedCol);
@@ -921,6 +972,20 @@ public class CategoryManagementController implements Initializable, ControlledSc
                     ", cNameTFStr='" + cNameTFStr + '\'' +
                     ", cDescTAStr='" + cDescTAStr + '\'' +
                     '}';
+        }
+    }
+
+    private static class CustomTreeTableCell <T> extends TreeTableCell<CategoryManagmentDecorator, T> {
+        @Override
+        protected void updateItem(T item, boolean empty) {
+            if(item != null) {
+                setText(item.toString());
+            }
+            if (getTreeTableRow().getItem() instanceof CategoryManagementDecoratorCategory) {
+                setStyle("");
+            } else {
+                setStyle(CATEGORY_TAB_NON_CATEGORY_BGCOLOR);
+            }
         }
     }
 }
