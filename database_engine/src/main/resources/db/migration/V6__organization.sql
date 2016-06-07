@@ -25,3 +25,7 @@ BEFORE DELETE
 ON ORGANIZATION
 FOR EACH ROW
 CALL "com.makco.smartfinance.h2db.triggers.TriggerOrganization";
+
+GRANT SELECT, INSERT, UPDATE, DELETE ON
+ORGANIZATION
+TO client;

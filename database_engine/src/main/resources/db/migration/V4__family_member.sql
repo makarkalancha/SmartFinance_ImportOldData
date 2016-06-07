@@ -27,3 +27,7 @@ BEFORE DELETE
 ON FAMILY_MEMBER
 FOR EACH ROW
 CALL "com.makco.smartfinance.h2db.triggers.TriggerFamilyMember";
+
+GRANT SELECT, INSERT, UPDATE, DELETE ON
+FAMILY_MEMBER
+TO client;

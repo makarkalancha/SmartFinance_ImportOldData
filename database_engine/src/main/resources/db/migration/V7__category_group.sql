@@ -27,3 +27,7 @@ BEFORE DELETE
 ON CATEGORY_GROUP
 FOR EACH ROW
 CALL "com.makco.smartfinance.h2db.triggers.TriggerCategoryGroup";
+
+GRANT SELECT, INSERT, UPDATE, DELETE ON
+CATEGORY_GROUP
+TO client;

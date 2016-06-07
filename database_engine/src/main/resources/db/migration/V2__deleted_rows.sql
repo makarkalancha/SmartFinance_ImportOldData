@@ -12,3 +12,7 @@ BEFORE INSERT
 ON _DELETED_ROWS
 FOR EACH ROW
 CALL "com.makco.smartfinance.h2db.triggers.TriggerDeleteRows";
+
+GRANT SELECT, INSERT ON
+_DELETED_ROWS
+TO client;

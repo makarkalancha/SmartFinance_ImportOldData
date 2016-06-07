@@ -32,3 +32,7 @@ BEFORE INSERT
 ON DATEUNIT
 FOR EACH ROW
 CALL "com.makco.smartfinance.h2db.triggers.TriggerDateUnit";
+
+GRANT SELECT, INSERT ON
+DATEUNIT
+TO client;

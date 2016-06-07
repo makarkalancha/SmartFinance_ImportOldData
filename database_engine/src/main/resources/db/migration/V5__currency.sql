@@ -26,3 +26,7 @@ BEFORE DELETE
 ON CURRENCY
 FOR EACH ROW
 CALL "com.makco.smartfinance.h2db.triggers.TriggerCurrency";
+
+GRANT SELECT, INSERT, UPDATE, DELETE ON
+CURRENCY
+TO client;

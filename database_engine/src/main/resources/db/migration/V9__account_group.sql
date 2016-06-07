@@ -27,3 +27,7 @@ BEFORE DELETE
 ON ACCOUNT_GROUP
 FOR EACH ROW
 CALL "com.makco.smartfinance.h2db.triggers.TriggerAccountGroup";
+
+GRANT SELECT, INSERT, UPDATE, DELETE ON
+ACCOUNT_GROUP
+TO client;

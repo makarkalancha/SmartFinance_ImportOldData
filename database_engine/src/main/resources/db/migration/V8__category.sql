@@ -29,3 +29,7 @@ BEFORE DELETE
 ON CATEGORY
 FOR EACH ROW
 CALL "com.makco.smartfinance.h2db.triggers.TriggerCategory";
+
+GRANT SELECT, INSERT, UPDATE, DELETE ON
+CATEGORY
+TO client;
