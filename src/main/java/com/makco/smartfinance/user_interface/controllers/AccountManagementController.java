@@ -707,14 +707,14 @@ public class AccountManagementController implements Initializable, ControlledScr
     private void populateAccountTable(){
         try{
             LOG.debug("accountManagementModel.getCategories().size():" + accountManagementModel.getAccountManagementDecoratorMultimap().size());
-//            aTable.getItems().clear();
             aTable.setRoot(null);
-//            aTable.setItems(accountManagementModel.getCategories());
 
             TreeItem<AccountManagementDecorator> rootNode = new TreeItem<>(new AccountManagementDecoratorRoot(UserInterfaceConstants.ACCOUNT_ROOT_NODE));
+            rootNode.setExpanded(true);
             for(Map.Entry<AccountManagementDecorator, Collection<AccountManagementDecorator>>  accountGroupEntry :
                 accountManagementModel.getAccountManagementDecoratorMultimap().asMap().entrySet()){
                 TreeItem<AccountManagementDecorator> accountGroupNode = new TreeItem<>(accountGroupEntry.getKey());
+                accountGroupNode.setExpanded(true);
                 for(AccountManagementDecorator accountDecorators : accountGroupEntry.getValue()){
                     TreeItem<AccountManagementDecorator> accountNode = new TreeItem<>(accountDecorators);
                     accountGroupNode.getChildren().add(accountNode);

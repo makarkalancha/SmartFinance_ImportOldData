@@ -708,9 +708,11 @@ public class CategoryManagementController implements Initializable, ControlledSc
 //            cTable.setItems(categoryManagementModel.getCategories());
 
             TreeItem<CategoryManagementDecorator> rootNode = new TreeItem<>(new CategoryManagementDecoratorRoot(UserInterfaceConstants.CATEGORY_ROOT_NODE));
+            rootNode.setExpanded(true);
             for(Map.Entry<CategoryManagementDecorator, Collection<CategoryManagementDecorator>>  categoryGroupEntry :
                 categoryManagementModel.getCategoryManagementDecoratorMultimap().asMap().entrySet()){
                 TreeItem<CategoryManagementDecorator> categoryGroupNode = new TreeItem<>(categoryGroupEntry.getKey());
+                categoryGroupNode.setExpanded(true);
                 for(CategoryManagementDecorator categoryDecorators : categoryGroupEntry.getValue()){
                     TreeItem<CategoryManagementDecorator> categoryNode = new TreeItem<>(categoryDecorators);
                     categoryGroupNode.getChildren().add(categoryNode);
