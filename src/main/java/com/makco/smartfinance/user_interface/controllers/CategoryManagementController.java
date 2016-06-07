@@ -60,7 +60,6 @@ public class CategoryManagementController implements Initializable, ControlledSc
     private final static Logger LOG = LogManager.getLogger(CategoryManagementController.class);
     private final static int CATEGORY_GROUP_TAB_INDEX = 0;
     private final static int CATEGORY_TAB_INDEX = 1;
-    private final static String CATEGORY_TAB_NON_CATEGORY_BGCOLOR = "-fx-background-color: rgb(201,201,201)";
     private ScreensController screensController;
     private CategoryManagementModel categoryManagementModel = new CategoryManagementModel();
 
@@ -577,7 +576,11 @@ public class CategoryManagementController implements Initializable, ControlledSc
     @FXML
     public void onClearCategory(ActionEvent event){
         try{
-            cCategoryGroupACCB.setValue(categoryManagementModel.getCategoryGroupUIName().get(0));
+            if(categoryManagementModel.getCategoryGroupUIName().size() > 0){
+                cCategoryGroupACCB.setValue(categoryManagementModel.getCategoryGroupUIName().get(0));
+            }else{
+                cCategoryGroupACCB.setValue("");
+            }
             cNameTF.clear();
             cDescTA.clear();
             cClearBtn.setDisable(false);
@@ -984,7 +987,7 @@ public class CategoryManagementController implements Initializable, ControlledSc
             if (getTreeTableRow().getItem() instanceof CategoryManagementDecoratorCategory) {
                 setStyle("");
             } else {
-                setStyle(CATEGORY_TAB_NON_CATEGORY_BGCOLOR);
+                setStyle(UserInterfaceConstants.CATEGORY_TAB_NON_CATEGORY_BGCOLOR);
             }
         }
     }

@@ -60,7 +60,6 @@ public class AccountManagementController implements Initializable, ControlledScr
     private final static Logger LOG = LogManager.getLogger(AccountManagementController.class);
     private final static int ACCOUNT_GROUP_TAB_INDEX = 0;
     private final static int ACCOUNT_TAB_INDEX = 1;
-    private final static String ACCOUNT_TAB_NON_ACCOUNT_BGCOLOR = "-fx-background-color: rgb(201,201,201)";
     private ScreensController screensController;
     private AccountManagementModel accountManagementModel = new AccountManagementModel();
 
@@ -577,7 +576,11 @@ public class AccountManagementController implements Initializable, ControlledScr
     @FXML
     public void onClearAccount(ActionEvent event){
         try{
-            aAccountGroupACCB.setValue(accountManagementModel.getAccountGroupUIName().get(0));
+            if(accountManagementModel.getAccountGroupUIName().size() > 0){
+                aAccountGroupACCB.setValue(accountManagementModel.getAccountGroupUIName().get(0));
+            }else{
+                aAccountGroupACCB.setValue("");
+            }
             aNameTF.clear();
             aDescTA.clear();
             aClearBtn.setDisable(false);
@@ -986,7 +989,7 @@ public class AccountManagementController implements Initializable, ControlledScr
             if (getTreeTableRow().getItem() instanceof AccountManagementDecoratorAccount) {
                 setStyle("");
             } else {
-                setStyle(ACCOUNT_TAB_NON_ACCOUNT_BGCOLOR);
+                setStyle(UserInterfaceConstants.ACCOUNT_TAB_NON_ACCOUNT_BGCOLOR);
             }
         }
     }
