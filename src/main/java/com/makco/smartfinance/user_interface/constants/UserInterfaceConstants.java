@@ -60,6 +60,7 @@ public class UserInterfaceConstants {
 
     //category
     public static final String CATEGORY_ROOT_NODE = "All Categories";
+    public final static String CATEGORY_TAB_NON_CATEGORY_BGCOLOR = "-fx-background-color: rgb(221,221,221)";
 
     //account group
     public static final String ACCOUNT_GROUP_TYPE_DEBIT = "Debit";
@@ -92,6 +93,7 @@ public class UserInterfaceConstants {
 
     //account
     public static final String ACCOUNT_ROOT_NODE = "All Accounts";
+    public final static String ACCOUNT_TAB_NON_ACCOUNT_BGCOLOR = "-fx-background-color: rgb(221,221,221)";
 
     //ico
     public static final String CALENDAR = IMG_RESOURCE_FOLDER+"/calendar_60_45.png";
