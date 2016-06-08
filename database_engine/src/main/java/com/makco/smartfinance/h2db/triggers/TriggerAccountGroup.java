@@ -39,9 +39,9 @@ public class TriggerAccountGroup extends AbstractTrigger {
                 (String) oldRow[Table.ACCOUNT_GROUP.NAME.getColumnIndex()]);
         rowJson.addProperty(Table.ACCOUNT_GROUP.DESCRIPTION.toString(),
                 (String) oldRow[Table.ACCOUNT_GROUP.DESCRIPTION.getColumnIndex()]);
-        rowJson.addProperty(Table.ACCOUNT_GROUP.T_CREATEDON.toString(), JsonUtils.getSimpleDateFormat()
+        rowJson.addProperty(Table.ACCOUNT_GROUP.T_CREATEDON.toString(), JsonUtils.getSimpleDateTimeFormat()
                 .format((Date) oldRow[Table.ACCOUNT_GROUP.T_CREATEDON.getColumnIndex()]));
-        rowJson.addProperty(Table.ACCOUNT_GROUP.T_UPDATEDON.toString(), JsonUtils.getSimpleDateFormat()
+        rowJson.addProperty(Table.ACCOUNT_GROUP.T_UPDATEDON.toString(), JsonUtils.getSimpleDateTimeFormat()
                 .format((Date) oldRow[Table.ACCOUNT_GROUP.T_UPDATEDON.getColumnIndex()]));
     }
 }

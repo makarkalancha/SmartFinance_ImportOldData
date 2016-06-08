@@ -42,9 +42,9 @@ public class TriggerCategoryGroup extends AbstractTrigger {
                 (String) oldRow[Table.CATEGORY_GROUP.NAME.getColumnIndex()]);
         rowJson.addProperty(Table.CATEGORY_GROUP.DESCRIPTION.toString(),
                 (String) oldRow[Table.CATEGORY_GROUP.DESCRIPTION.getColumnIndex()]);
-        rowJson.addProperty(Table.CATEGORY_GROUP.T_CREATEDON.toString(), JsonUtils.getSimpleDateFormat()
+        rowJson.addProperty(Table.CATEGORY_GROUP.T_CREATEDON.toString(), JsonUtils.getSimpleDateTimeFormat()
                 .format((Date) oldRow[Table.CATEGORY_GROUP.T_CREATEDON.getColumnIndex()]));
-        rowJson.addProperty(Table.CATEGORY_GROUP.T_UPDATEDON.toString(), JsonUtils.getSimpleDateFormat()
+        rowJson.addProperty(Table.CATEGORY_GROUP.T_UPDATEDON.toString(), JsonUtils.getSimpleDateTimeFormat()
                 .format((Date) oldRow[Table.CATEGORY_GROUP.T_UPDATEDON.getColumnIndex()]));
     }
 }

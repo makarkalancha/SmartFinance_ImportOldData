@@ -1,3 +1,5 @@
+--http://www.revenuquebec.ca/en/entreprises/taxes/tpstvhtvq/default.aspx
+--http://www.revenuquebec.ca/en/entreprises/taxes/tpstvhtvq/reglesdebase/default.aspx
 CREATE SEQUENCE IF NOT EXISTS SEQ_TAX;
 CREATE TABLE TAX(
 ID BIGINT DEFAULT SEQ_TAX.NEXTVAL PRIMARY KEY,

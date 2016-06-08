@@ -36,9 +36,9 @@ public class TriggerCurrency extends AbstractTrigger {
         rowJson.addProperty(Table.CURRENCY.CODE.toString(), (String) oldRow[Table.CURRENCY.CODE.getColumnIndex()]);
         rowJson.addProperty(Table.CURRENCY.NAME.toString(), (String) oldRow[Table.CURRENCY.NAME.getColumnIndex()]);
         rowJson.addProperty(Table.CURRENCY.DESCRIPTION.toString(), (String) oldRow[Table.CURRENCY.DESCRIPTION.getColumnIndex()]);
-        rowJson.addProperty(Table.CURRENCY.T_CREATEDON.toString(), JsonUtils.getSimpleDateFormat()
+        rowJson.addProperty(Table.CURRENCY.T_CREATEDON.toString(), JsonUtils.getSimpleDateTimeFormat()
                 .format((Date) oldRow[Table.CURRENCY.T_CREATEDON.getColumnIndex()]));
-        rowJson.addProperty(Table.CURRENCY.T_UPDATEDON.toString(), JsonUtils.getSimpleDateFormat()
+        rowJson.addProperty(Table.CURRENCY.T_UPDATEDON.toString(), JsonUtils.getSimpleDateTimeFormat()
                 .format((Date) oldRow[Table.CURRENCY.T_UPDATEDON.getColumnIndex()]));
     }
 }

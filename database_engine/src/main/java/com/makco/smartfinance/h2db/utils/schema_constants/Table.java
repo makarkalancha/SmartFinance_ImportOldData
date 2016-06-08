@@ -17,7 +17,8 @@ public class Table {
         CURRENCY,
         DATEUNIT,
         FAMILY_MEMBER,
-        ORGANIZATION;
+        ORGANIZATION,
+        TAX;
     }
 
     public enum _DELETED_ROWS implements IEnumRow {
@@ -235,6 +236,33 @@ public class Table {
 
         @Override
         public ACCOUNT getColumnNameByIndex(){
+            return this;
+        }
+    };
+
+    public enum TAX implements IEnumRow {
+        ID(0),
+        NAME(1),
+        DESCRIPTION(2),
+        RATE(3),
+        FORMULA(4),
+        STARTDATE(5),
+        ENDDATE(6),
+        T_CREATEDON(7),
+        T_UPDATEDON(8);
+
+        private int columnIndex;
+        private TAX(int columnIndex) {
+            this.columnIndex = columnIndex;
+        }
+
+        @Override
+        public int getColumnIndex(){
+            return this.columnIndex;
+        }
+
+        @Override
+        public TAX getColumnNameByIndex(){
             return this;
         }
     };

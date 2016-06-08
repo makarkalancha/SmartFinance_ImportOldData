@@ -40,9 +40,9 @@ public class TriggerAccount extends AbstractTrigger {
         rowJson.addProperty(Table.ACCOUNT.NAME.toString(), (String) oldRow[Table.ACCOUNT.NAME.getColumnIndex()]);
         rowJson.addProperty(Table.ACCOUNT.DESCRIPTION.toString(),
                 (String) oldRow[Table.ACCOUNT.DESCRIPTION.getColumnIndex()]);
-        rowJson.addProperty(Table.ACCOUNT.T_CREATEDON.toString(), JsonUtils.getSimpleDateFormat()
+        rowJson.addProperty(Table.ACCOUNT.T_CREATEDON.toString(), JsonUtils.getSimpleDateTimeFormat()
                 .format((Date) oldRow[Table.ACCOUNT.T_CREATEDON.getColumnIndex()]));
-        rowJson.addProperty(Table.ACCOUNT.T_UPDATEDON.toString(), JsonUtils.getSimpleDateFormat()
+        rowJson.addProperty(Table.ACCOUNT.T_UPDATEDON.toString(), JsonUtils.getSimpleDateTimeFormat()
                 .format((Date) oldRow[Table.ACCOUNT.T_UPDATEDON.getColumnIndex()]));
     }
 }

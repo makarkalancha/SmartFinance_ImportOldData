@@ -35,9 +35,9 @@ public class TriggerOrganization extends AbstractTrigger {
         rowJson.addProperty(Table.ORGANIZATION.ID.toString(), (Long) oldRow[Table.ORGANIZATION.ID.getColumnIndex()]);
         rowJson.addProperty(Table.ORGANIZATION.NAME.toString(), (String) oldRow[Table.ORGANIZATION.NAME.getColumnIndex()]);
         rowJson.addProperty(Table.ORGANIZATION.DESCRIPTION.toString(), (String) oldRow[Table.ORGANIZATION.DESCRIPTION.getColumnIndex()]);
-        rowJson.addProperty(Table.ORGANIZATION.T_CREATEDON.toString(), JsonUtils.getSimpleDateFormat()
+        rowJson.addProperty(Table.ORGANIZATION.T_CREATEDON.toString(), JsonUtils.getSimpleDateTimeFormat()
                 .format((Date) oldRow[Table.ORGANIZATION.T_CREATEDON.getColumnIndex()]));
-        rowJson.addProperty(Table.ORGANIZATION.T_UPDATEDON.toString(), JsonUtils.getSimpleDateFormat()
+        rowJson.addProperty(Table.ORGANIZATION.T_UPDATEDON.toString(), JsonUtils.getSimpleDateTimeFormat()
                 .format((Date) oldRow[Table.ORGANIZATION.T_UPDATEDON.getColumnIndex()]));
     }
 }
