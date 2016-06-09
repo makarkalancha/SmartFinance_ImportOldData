@@ -36,8 +36,6 @@
                      <children>
                         <TableView fx:id="agTable" prefHeight="350.0" prefWidth="580.0">
                           <columns>
-                            <TableColumn prefWidth="75.0" text="C1" />
-                            <TableColumn prefWidth="75.0" text="C2" />
                           </columns>
                            <VBox.margin>
                               <Insets top="5.0" />
