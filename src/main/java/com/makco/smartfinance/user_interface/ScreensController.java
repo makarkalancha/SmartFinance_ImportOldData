@@ -37,6 +37,9 @@ public class ScreensController extends BorderPane {
 
     public ScreensController(){
         super();
+
+
+
         setPrefHeight(USE_COMPUTED_SIZE);
         setPrefWidth(USE_COMPUTED_SIZE);
 //        setStyle("-fx-background-color: #336699;");

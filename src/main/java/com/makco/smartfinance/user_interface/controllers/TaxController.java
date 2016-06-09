@@ -13,7 +13,6 @@ import com.makco.smartfinance.user_interface.undoredo.UndoRedoScreen;
 import com.makco.smartfinance.user_interface.utility_screens.DialogMessages;
 import com.makco.smartfinance.user_interface.utility_screens.forms.ProgressIndicatorForm;
 import com.makco.smartfinance.user_interface.validation.ErrorEnum;
-import com.makco.smartfinance.utils.DateUtils;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.concurrent.Service;
@@ -37,7 +36,6 @@ import java.math.BigDecimal;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.EnumSet;
 import java.util.ResourceBundle;
 
@@ -67,7 +65,7 @@ public class TaxController implements Initializable, ControlledScreen, UndoRedoS
     @FXML
     private TextField rateTF;
     @FXML
-    private TextField formulaTF;
+    private TextArea formulaTA;
     @FXML
     private DatePicker startDP;
     @FXML
@@ -99,7 +97,7 @@ public class TaxController implements Initializable, ControlledScreen, UndoRedoS
                     return new Task<EnumSet<ErrorEnum>>() {
                         @Override
                         protected EnumSet<ErrorEnum> call() throws Exception {
-                            return taxModel.savePendingTax(nameTF.getText(), descTA.getText(), rateTF.getText(), formulaTF.getText(), startDP.getValue(), endDP.getValue());
+                            return taxModel.savePendingTax(nameTF.getText(), descTA.getText(), rateTF.getText(), formulaTA.getText(), startDP.getValue(), endDP.getValue());
                         }
                     };
                 }
@@ -330,7 +328,7 @@ public class TaxController implements Initializable, ControlledScreen, UndoRedoS
             nameTF.setText(taxModel.getPendingTax().getName());
             descTA.setText(taxModel.getPendingTax().getDescription());
             rateTF.setText(taxModel.getPendingTax().getRate().toString());
-            formulaTF.setText(taxModel.getPendingTax().getFormula());
+            formulaTA.setText(taxModel.getPendingTax().getFormula());
             startDP.setValue(taxModel.getPendingTax().getStartDate());
             endDP.setValue(taxModel.getPendingTax().getEndDate());
         } catch (Exception e) {
@@ -383,7 +381,7 @@ public class TaxController implements Initializable, ControlledScreen, UndoRedoS
     @Override
     public void saveForm() {
         try {
-            careTaker.saveState(new TaxFormState(nameTF.getText(), descTA.getText(), rateTF.getText(), formulaTF.getText(),
+            careTaker.saveState(new TaxFormState(nameTF.getText(), descTA.getText(), rateTF.getText(), formulaTA.getText(),
                     startDP.getValue(), endDP.getValue()));
         } catch (Exception e) {
             DialogMessages.showExceptionAlert(e);
@@ -397,7 +395,7 @@ public class TaxController implements Initializable, ControlledScreen, UndoRedoS
             nameTF.setText(formState.getNameTFStr());
             descTA.setText(formState.getDescTAStr());
             rateTF.setText(formState.getRateTFStr());
-            formulaTF.setText(formState.getFormulaTFStr());
+            formulaTA.setText(formState.getFormulaTFStr());
             startDP.setValue(formState.getStartDateDPLocD());
             endDP.setValue(formState.getEndDateDPLocD());
         } catch (Exception e) {

@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
+<!--todo change with gridpane like tax-->
 <!--<?import com.makco.smartfinance.user_interface.control.* ?>-->
 <!--<?scenebuilder-classpath-element ../../../../TableViewDemo/bin/com/company/jfx8/example/fxmltableview/FormattedTableCellFactory.class?>-->
 <!--<?scenebuilder-classpath-element ../../../../../../../build/libs/lib/userinterface_control-1.0.jar?>-->
 
+<?import com.makco.smartfinance.javafx.control.*?>
 <?import java.lang.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
@@ -27,7 +28,7 @@
 
 <VBox fx:id="vBox" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.makco.smartfinance.user_interface.controllers.CategoryManagementController">
    <children>
-      <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="30.0" prefWidth="441.0" text="Category Management">
+      <Label alignment="CENTER" contentDisplay="CENTER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="441.0" text="Category Management">
          <font>
             <Font size="20.0" />
          </font>
@@ -135,7 +136,7 @@
                         <TreeTableView fx:id="cTable" prefHeight="350.0" prefWidth="580.0">
                           <columns>
                             <TreeTableColumn prefWidth="75.0" text="C1" />
-                            <TreeTableColumn  prefWidth="75.0" text="C2" />
+                            <TreeTableColumn prefWidth="75.0" text="C2" />
                           </columns>
                            <VBox.margin>
                               <Insets top="5.0" />

@@ -19,8 +19,10 @@ import javafx.concurrent.Service;
 import javafx.concurrent.Worker;
 import javafx.event.Event;
 import javafx.event.EventHandler;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import org.apache.logging.log4j.LogManager;
@@ -77,6 +79,7 @@ public class Main extends Application{
         MainMapLookup.setMainArguments(args);
         Application.launch(args);
     }
+
     //http://www.devx.com/Java/Article/48193/0/page/2
     @Override
     public void start(Stage primaryStage){
@@ -156,6 +159,13 @@ public class Main extends Application{
 
             this.primaryStage.getIcons().add(new Image(UserInterfaceConstants.MAIN_WINDOW_ICO));
             this.primaryStage.setTitle(UserInterfaceConstants.MAIN_WINDOW_TITLE);
+
+            /**
+             * http://stackoverflow.com/questions/6864540/how-to-set-a-javafx-stage-frame-to-maximized
+             * full screen, maximized
+             */
+            primaryStage.setMaximized(true);
+
             ////http://stackoverflow.com/questions/19602727/how-to-reference-javafx-fxml-files-in-resource-folder
             Scene scene = new Scene(mainContainer);
             primaryStage.setScene(scene);
