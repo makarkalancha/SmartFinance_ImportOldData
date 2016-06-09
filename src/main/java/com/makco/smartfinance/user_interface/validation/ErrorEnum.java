@@ -42,7 +42,11 @@ public enum ErrorEnum {
     , ORG_NAME_DUPLICATE("Organization with this name already exists.")
     , ORG_NAME_LGTH("Organization name cannot be greater than " + DataBaseConstants.ORG_NAME_MAX_LGTH + " characters.")
     , ORG_NAME_NULL("Organization name cannot be empty.")
-
+    , TAX_DESC_LGTH("Tax description cannot be greater than " + DataBaseConstants.TAX_DESCRIPTION_MAX_LGTH + " characters.")
+    , TAX_NAME_DUPLICATE("Tax with this name already exists.")
+    , TAX_NAME_LGTH("Tax name cannot be greater than " + DataBaseConstants.TAX_NAME_MAX_LGTH + " characters.")
+    , TAX_NAME_NULL("Tax name cannot be empty.")
+    , TAX_START_LT_EQ_END("Tax start date must be less or equal to end date.")
     ;
     String message;
     private ErrorEnum(String mess){
