@@ -152,7 +152,7 @@ public class Main extends Application{
             for (Screens scr : Screens.values()) {
                 mainContainer.loadScreen(scr);
             }
-            mainContainer.setScreen(Screens.ACCOUNT_MANAGEMENT);
+            mainContainer.setScreen(Screens.TAX);
 
             this.primaryStage.getIcons().add(new Image(UserInterfaceConstants.MAIN_WINDOW_ICO));
             this.primaryStage.setTitle(UserInterfaceConstants.MAIN_WINDOW_TITLE);

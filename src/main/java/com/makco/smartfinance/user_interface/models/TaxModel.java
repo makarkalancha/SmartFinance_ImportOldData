@@ -58,12 +58,12 @@ public class TaxModel {
                 pendingTax.setDescription(description);
                 pendingTax.setRate(rate);
                 pendingTax.setFormula(formula);
-                pendingTax.setStartDate(DateUtils.convertLocalDateToUtilDate(startDate));
-                pendingTax.setEndDate(DateUtils.convertLocalDateToUtilDate(endDate));
+                pendingTax.setStartDate(startDate);
+                pendingTax.setEndDate(endDate);
                 tmpTax = pendingTax;
                 pendingTax = null;
             } else {
-                tmpTax = new Tax(name, description, rate, formula, DateUtils.convertLocalDateToUtilDate(startDate), DateUtils.convertLocalDateToUtilDate(endDate));
+                tmpTax = new Tax(name, description, rate, formula, startDate, endDate);
             }
 
             errors = taxService.validate(tmpTax);

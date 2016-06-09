@@ -25,6 +25,7 @@
         <class>com.makco.smartfinance.persistence.entity.DateUnit</class>
         <class>com.makco.smartfinance.persistence.entity.FamilyMember</class>
         <class>com.makco.smartfinance.persistence.entity.Organization</class>
+        <class>com.makco.smartfinance.persistence.entity.Tax</class>
         <exclude-unlisted-classes>true</exclude-unlisted-classes>
         <properties>
             <property name="javax.persistence.jdbc.url" value="jdbc:h2:~/smart_finance/finance;IFEXISTS=TRUE"/>

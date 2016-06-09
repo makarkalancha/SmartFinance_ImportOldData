@@ -13,6 +13,7 @@ import com.makco.smartfinance.user_interface.undoredo.UndoRedoScreen;
 import com.makco.smartfinance.user_interface.utility_screens.DialogMessages;
 import com.makco.smartfinance.user_interface.utility_screens.forms.ProgressIndicatorForm;
 import com.makco.smartfinance.user_interface.validation.ErrorEnum;
+import com.makco.smartfinance.utils.DateUtils;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.concurrent.Service;
@@ -32,8 +33,11 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.math.BigDecimal;
 import java.net.URL;
+import java.time.LocalDate;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.EnumSet;
 import java.util.ResourceBundle;
 
@@ -325,6 +329,10 @@ public class TaxController implements Initializable, ControlledScreen, UndoRedoS
 
             nameTF.setText(taxModel.getPendingTax().getName());
             descTA.setText(taxModel.getPendingTax().getDescription());
+            rateTF.setText(taxModel.getPendingTax().getRate().toString());
+            formulaTF.setText(taxModel.getPendingTax().getFormula());
+            startDP.setValue(taxModel.getPendingTax().getStartDate());
+            endDP.setValue(taxModel.getPendingTax().getEndDate());
         } catch (Exception e) {
             startService(onRefreshWorker, null);
             DialogMessages.showExceptionAlert(e);
@@ -346,13 +354,26 @@ public class TaxController implements Initializable, ControlledScreen, UndoRedoS
             TableColumn<Tax, String> taxDescCol = new TableColumn<>("Description");
             taxDescCol.setCellValueFactory(new PropertyValueFactory<Tax, String>("description"));
 
+            TableColumn<Tax, BigDecimal> taxRateCol = new TableColumn<>("Rate");
+            taxRateCol.setCellValueFactory(new PropertyValueFactory<Tax, BigDecimal>("rate"));
+
+            TableColumn<Tax, String> taxFormulaCol = new TableColumn<>("Formula");
+            taxFormulaCol.setCellValueFactory(new PropertyValueFactory<Tax, String>("formula"));
+
+            TableColumn<Tax, LocalDate> taxStartDateCol = new TableColumn<>("Start Date");
+            taxStartDateCol.setCellValueFactory(new PropertyValueFactory<Tax, LocalDate>("startDate"));
+
+            TableColumn<Tax, LocalDate> taxEndDateCol = new TableColumn<>("End Date");
+            taxEndDateCol.setCellValueFactory(new PropertyValueFactory<Tax, LocalDate>("endDate"));
+
             TableColumn<Tax, Calendar> taxCreatedCol = new TableColumn<>("Created on");
             taxCreatedCol.setCellValueFactory(new PropertyValueFactory<Tax, Calendar>("createdOn"));
 
             TableColumn<Tax, Calendar> taxUpdatedCol = new TableColumn<>("Updated on");
             taxUpdatedCol.setCellValueFactory(new PropertyValueFactory<Tax, Calendar>("updatedOn"));
 
-            table.getColumns().setAll(taxIdCol, taxNameCol, taxDescCol, taxCreatedCol, taxUpdatedCol);
+            table.getColumns().setAll(taxIdCol, taxNameCol, taxDescCol, taxRateCol, taxFormulaCol,
+                    taxStartDateCol, taxEndDateCol, taxCreatedCol, taxUpdatedCol);
         } catch (Exception e) {
             startService(onRefreshWorker, null);
             DialogMessages.showExceptionAlert(e);
@@ -362,7 +383,8 @@ public class TaxController implements Initializable, ControlledScreen, UndoRedoS
     @Override
     public void saveForm() {
         try {
-            careTaker.saveState(new TaxFormState(nameTF.getText(), descTA.getText()));
+            careTaker.saveState(new TaxFormState(nameTF.getText(), descTA.getText(), rateTF.getText(), formulaTF.getText(),
+                    startDP.getValue(), endDP.getValue()));
         } catch (Exception e) {
             DialogMessages.showExceptionAlert(e);
         }
@@ -374,6 +396,10 @@ public class TaxController implements Initializable, ControlledScreen, UndoRedoS
             TaxFormState formState = (TaxFormState) memento;
             nameTF.setText(formState.getNameTFStr());
             descTA.setText(formState.getDescTAStr());
+            rateTF.setText(formState.getRateTFStr());
+            formulaTF.setText(formState.getFormulaTFStr());
+            startDP.setValue(formState.getStartDateDPLocD());
+            endDP.setValue(formState.getEndDateDPLocD());
         } catch (Exception e) {
             DialogMessages.showExceptionAlert(e);
         }
@@ -422,10 +448,18 @@ public class TaxController implements Initializable, ControlledScreen, UndoRedoS
     private static class TaxFormState implements Memento{
         private final String nameTFStr;
         private final String descTAStr;
+        private final String rateTFStr;
+        private final String formulaTFStr;
+        private final LocalDate startDateDPLocD;
+        private final LocalDate endDateDPLocD;
 
-        public TaxFormState(String nameTF, String descTA){
+        public TaxFormState(String nameTF, String descTA, String rateTF, String formulaTF, LocalDate startDateDP, LocalDate endDateDP){
             this.nameTFStr = nameTF;
             this.descTAStr = descTA;
+            this.rateTFStr = rateTF;
+            this.formulaTFStr = formulaTF;
+            this.startDateDPLocD = startDateDP;
+            this.endDateDPLocD = endDateDP;
         }
 
         public String getNameTFStr() {
@@ -436,11 +470,31 @@ public class TaxController implements Initializable, ControlledScreen, UndoRedoS
             return descTAStr;
         }
 
+        public LocalDate getEndDateDPLocD() {
+            return endDateDPLocD;
+        }
+
+        public String getFormulaTFStr() {
+            return formulaTFStr;
+        }
+
+        public String getRateTFStr() {
+            return rateTFStr;
+        }
+
+        public LocalDate getStartDateDPLocD() {
+            return startDateDPLocD;
+        }
+
         @Override
         public String toString() {
             return "TaxFormState{" +
-                    "nameTF='" + nameTFStr + '\'' +
-                    ", descTA='" + descTAStr + '\'' +
+                    ", nameTFStr='" + nameTFStr + '\'' +
+                    ", descTAStr='" + descTAStr + '\'' +
+                    ", rateTFStr='" + rateTFStr + '\'' +
+                    ", formulaTFStr='" + formulaTFStr + '\'' +
+                    ", startDateDPLocD='" + startDateDPLocD + '\'' +
+                    ", endDateDPLocD='" + endDateDPLocD + '\'' +
                     '}';
         }
     }

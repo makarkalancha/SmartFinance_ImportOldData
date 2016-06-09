@@ -13,6 +13,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Date;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -80,10 +81,10 @@ public class Tax implements Serializable {
     private String formula;
 
     @Column(name = "STARTDATE")
-    private Date startDate;
+    private LocalDate startDate;
 
     @Column(name = "ENDDATE")
-    private Date endDate;
+    private LocalDate endDate;
 
     @org.hibernate.annotations.CreationTimestamp
     @Column(name = "T_CREATEDON", insertable = false, updatable = false)
@@ -97,7 +98,7 @@ public class Tax implements Serializable {
 
     }
 
-    public Tax(String name, String description, BigDecimal rate, String formula, Date startDate, Date endDate) {
+    public Tax(String name, String description, BigDecimal rate, String formula, LocalDate startDate, LocalDate endDate) {
         this.name = name;
         this.description = description;
         this.rate = rate;
@@ -128,11 +129,11 @@ public class Tax implements Serializable {
         this.name = name;
     }
 
-    public Date getEndDate() {
+    public LocalDate getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(Date endDate) {
+    public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
     }
 
@@ -152,11 +153,11 @@ public class Tax implements Serializable {
         this.rate = rate;
     }
 
-    public Date getStartDate() {
+    public LocalDate getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(Date startDate) {
+    public void setStartDate(LocalDate startDate) {
         this.startDate = startDate;
     }
 

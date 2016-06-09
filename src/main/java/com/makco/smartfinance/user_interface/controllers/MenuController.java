@@ -124,6 +124,11 @@ public class MenuController implements Initializable, ControlledScreen {
     }
 
     @FXML
+    public void toTax(ActionEvent event){
+        screensController.setScreen(Screens.TAX);
+    }
+
+    @FXML
     public void quit(ActionEvent event) {
         Main.quit(event);
     }
