@@ -390,8 +390,10 @@ public class CategoryManagementController implements Initializable, ControlledSc
             );
         }catch (Exception e){
             startService(onRefreshCategoryGroupWorker,null);
-            //todo throw exception here to see if startService for category is needed
-//            startService(onRefreshCategoryWorker,null);
+            /**
+             * startService(onRefreshCategoryWorker,null);
+             * is not needed there were no changes in behavior with / without it
+             */
             DialogMessages.showExceptionAlert(e);
         }
     }

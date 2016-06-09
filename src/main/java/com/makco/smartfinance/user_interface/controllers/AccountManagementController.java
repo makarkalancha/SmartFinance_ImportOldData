@@ -390,8 +390,6 @@ public class AccountManagementController implements Initializable, ControlledScr
             );
         }catch (Exception e){
             startService(onRefreshAccountGroupWorker,null);
-            //todo throw exception here to see if startService for account is needed
-//            startService(onRefreshAccountWorker,null);
             DialogMessages.showExceptionAlert(e);
         }
     }
@@ -702,10 +700,6 @@ public class AccountManagementController implements Initializable, ControlledScr
             DialogMessages.showExceptionAlert(e);
         }
     }
-
-    /**
-     * todo after save table is not updated
-     */
 
     private void populateAccountTable(){
         try{
