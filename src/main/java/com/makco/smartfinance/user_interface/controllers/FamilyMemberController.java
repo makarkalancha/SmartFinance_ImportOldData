@@ -333,6 +333,12 @@ public class FamilyMemberController implements Initializable, ControlledScreen, 
             table.getItems().clear();
             table.setItems(familyMemberModel.getFamilyMembers());
 
+            /**
+             * todo auto width for columns
+             * http://stackoverflow.com/questions/10152828/javafx-2-automatic-column-width
+             */
+
+
             TableColumn<FamilyMember, Long> familyMemberIdCol = new TableColumn<>("ID");
             familyMemberIdCol.setCellValueFactory(new PropertyValueFactory<FamilyMember, Long>("id"));
 
