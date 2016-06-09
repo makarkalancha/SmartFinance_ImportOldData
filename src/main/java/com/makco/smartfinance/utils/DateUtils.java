@@ -12,19 +12,30 @@ import java.util.Date;
  */
 public class DateUtils {
     public static Date convertLocalDateToUtilDate(LocalDate localDate) throws Exception {
-        return Date.from(localDate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
+        return (localDate != null) ?
+                Date.from(localDate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant()) :
+                null;
     }
 
     public static LocalDateTime convertUtilDateToLocalDateTime(Date date) throws Exception {
+        if(date == null){
+            return null;
+        }
         Instant instant = Instant.ofEpochMilli(date.getTime());
         return LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
     }
 
     public static LocalDate convertUtilDateToLocalDate(Date date) throws Exception {
+        if(date == null){
+            return null;
+        }
         return convertUtilDateToLocalDateTime(date).toLocalDate();
     }
 
     public static LocalTime convertUtilDateToLocalTime(Date date) throws Exception {
+        if(date == null){
+            return null;
+        }
         return convertUtilDateToLocalDateTime(date).toLocalTime();
     }
 }
