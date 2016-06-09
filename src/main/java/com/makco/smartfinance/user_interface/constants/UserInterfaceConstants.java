@@ -17,7 +17,9 @@ import java.text.SimpleDateFormat;
 public class UserInterfaceConstants {
     private final static Logger LOG = LogManager.getLogger(UserInterfaceConstants.class);
 
-    public static final SimpleDateFormat FULL_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+    public static final SimpleDateFormat FULL_DATE_TIME_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+    public static final SimpleDateFormat DATE_TIME_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
 
     public static final String IMG_RESOURCE_FOLDER = "images";
 

@@ -124,7 +124,7 @@ public class TableTaxTest {
         ){
             //https://en.wikipedia.org/wiki/Goods_and_services_tax_%28Canada%29
             Date startDate = Date.from(LocalDate.of(2008, Month.JANUARY, 1).atStartOfDay(ZoneId.systemDefault()).toInstant());
-            long idJustInserted = insert("GST (2008)", "the goods and services tax", new BigDecimal(5.0), "{num} * tax / 100", startDate, null);
+            long idJustInserted = insert("GST (2008)", "the goods and services tax", new BigDecimal("5.0"), "{num} * tax / 100", startDate, null);
             LOG.debug("idJustInserted > 0: idJustInserted=" + idJustInserted);
             assert (idJustInserted > 0);
             selectDatesPS.setLong(1, idJustInserted);
@@ -208,7 +208,7 @@ public class TableTaxTest {
             //https://en.wikipedia.org/wiki/Goods_and_services_tax_%28Canada%29
             Date startDate = Date.from(LocalDate.of(2006, Month.JULY, 1).atStartOfDay(ZoneId.systemDefault()).toInstant());
             Date endDate = Date.from(LocalDate.of(2007, Month.DECEMBER, 31).atStartOfDay(ZoneId.systemDefault()).toInstant());
-            long idJustInserted = insert("HST (2006)", "The harmonized sales tax", new BigDecimal(14.0), "{num} * tax / 100", startDate, endDate);
+            long idJustInserted = insert("HST (2006)", "The harmonized sales tax", new BigDecimal("14.0"), "{num} * tax / 100", startDate, endDate);
             //"QST" duplicate update, 1st update in method  testTax_21_update
             //Unique index or primary key violation: "IDX_UNQ_TX_NM ON TEST.TAX(NAME)"
             update(idJustInserted, "QST");
@@ -270,7 +270,7 @@ public class TableTaxTest {
         row[0] = 1L;
         row[1] = "name of a tax";
         row[2] = "desc of a tax";
-        row[3] = new BigDecimal(1.0);
+        row[3] = new BigDecimal("1.0");
         row[4] = "formula";
         row[5] = SIMPLE_DATE_FORMAT.parse("2001-02-03");
         row[6] = SIMPLE_DATE_FORMAT.parse("2003-02-02");
@@ -329,7 +329,7 @@ public class TableTaxTest {
         assertEquals("desc of a tax", description);
         JsonElement jsonElementRate = rowJsonObject.get(Table.TAX.RATE.toString());
         BigDecimal rate = JsonUtils.getNullableFromJsonElementAsBigDecimal(jsonElementRate);
-        assertEquals(new BigDecimal(1.0), rate);
+        assertEquals(new BigDecimal("1.0"), rate);
         Date startDate = SIMPLE_DATE_FORMAT.parse(rowJsonObject.get(Table.TAX.STARTDATE.toString()).getAsString());
         assertEquals(SIMPLE_DATE_FORMAT.parse("2001-02-03"), startDate);
         Date endDate = SIMPLE_DATE_FORMAT.parse(rowJsonObject.get(Table.TAX.ENDDATE.toString()).getAsString());

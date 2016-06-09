@@ -4,8 +4,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;
 
 import java.math.BigDecimal;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 

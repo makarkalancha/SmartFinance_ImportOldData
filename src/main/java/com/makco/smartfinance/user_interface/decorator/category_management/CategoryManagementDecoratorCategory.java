@@ -23,8 +23,8 @@ public class CategoryManagementDecoratorCategory implements CategoryManagementDe
         this.name = category.getName();
         this.description = category.getDescription();
 
-        this.createdOn = UserInterfaceConstants.FULL_DATE_FORMAT.format(category.getCreatedOn());
-        this.updatedOn = UserInterfaceConstants.FULL_DATE_FORMAT.format(category.getUpdatedOn());
+        this.createdOn = UserInterfaceConstants.FULL_DATE_TIME_FORMAT.format(category.getCreatedOn());
+        this.updatedOn = UserInterfaceConstants.FULL_DATE_TIME_FORMAT.format(category.getUpdatedOn());
 
         this.category = category;
     }

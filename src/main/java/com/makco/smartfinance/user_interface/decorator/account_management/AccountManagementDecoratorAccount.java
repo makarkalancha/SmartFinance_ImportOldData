@@ -23,8 +23,8 @@ public class AccountManagementDecoratorAccount implements AccountManagementDecor
         this.name = account.getName();
         this.description = account.getDescription();
 
-        this.createdOn = UserInterfaceConstants.FULL_DATE_FORMAT.format(account.getCreatedOn());
-        this.updatedOn = UserInterfaceConstants.FULL_DATE_FORMAT.format(account.getUpdatedOn());
+        this.createdOn = UserInterfaceConstants.FULL_DATE_TIME_FORMAT.format(account.getCreatedOn());
+        this.updatedOn = UserInterfaceConstants.FULL_DATE_TIME_FORMAT.format(account.getUpdatedOn());
 
         this.account = account;
     }

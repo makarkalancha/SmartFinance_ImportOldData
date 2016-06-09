@@ -9,6 +9,7 @@ import com.makco.smartfinance.user_interface.utility_screens.forms.ProgressIndic
 import com.makco.smartfinance.user_interface.workers.QuitWorker;
 import com.makco.smartfinance.user_interface.workers.prestart.InsertDateUnitWorker;
 import com.makco.smartfinance.user_interface.workers.prestart.PreStartWorker;
+import com.makco.smartfinance.utils.BigDecimalUtils;
 import com.makco.smartfinance.utils.Logs;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -26,6 +27,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.lookup.MainMapLookup;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.time.LocalDate;
 import java.time.temporal.WeekFields;
 import java.util.Locale;
@@ -80,6 +83,9 @@ public class Main extends Application{
         try {
             this.primaryStage = primaryStage;
             LOG.debug("First day of the week: "+ WeekFields.of(Locale.getDefault()).getFirstDayOfWeek());
+
+            LOG.debug("decimal separator: >" + BigDecimalUtils.getDecimalSeparator() + "<");
+            LOG.debug("group separator: >" + BigDecimalUtils.getGroupingSeparator() + "<");
             ((Service<Void>) preStartWorker).setOnSucceeded(event -> {
                 if (isEmpty.get()) {
                     pFormStart.close();
