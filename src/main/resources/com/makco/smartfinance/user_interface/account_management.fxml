@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
         <!--todo change with gridpane like tax-->
-<?import com.makco.smartfinance.javafx.control.*?>
 <?import java.lang.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
