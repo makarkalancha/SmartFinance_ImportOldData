@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--todo change with gridpane like tax-->
+<!--======================================================================        -->
+<!--example of gridpane use is in tax.fxml-->
+<!--======================================================================        -->
 <?import java.lang.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
