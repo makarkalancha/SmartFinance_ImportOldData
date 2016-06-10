@@ -164,7 +164,7 @@ public class Main extends Application{
              * http://stackoverflow.com/questions/6864540/how-to-set-a-javafx-stage-frame-to-maximized
              * full screen, maximized
              */
-            primaryStage.setMaximized(true);
+//            primaryStage.setMaximized(true);
 
             ////http://stackoverflow.com/questions/19602727/how-to-reference-javafx-fxml-files-in-resource-folder
             Scene scene = new Scene(mainContainer);

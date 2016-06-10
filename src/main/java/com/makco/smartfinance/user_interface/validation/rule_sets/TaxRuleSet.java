@@ -8,6 +8,7 @@ import com.makco.smartfinance.user_interface.validation.tax_rules.TAX_DescLength
 import com.makco.smartfinance.user_interface.validation.tax_rules.TAX_DuplicateName;
 import com.makco.smartfinance.user_interface.validation.tax_rules.TAX_EmptyName;
 import com.makco.smartfinance.user_interface.validation.tax_rules.TAX_NameLength;
+import com.makco.smartfinance.user_interface.validation.tax_rules.TAX_StartLTEQEndDate;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
@@ -24,6 +25,7 @@ public class TaxRuleSet implements RuleSet<Tax>{
         rules.add(new TAX_EmptyName());
         rules.add(new TAX_NameLength());
         rules.add(new TAX_DescLength());
+        rules.add(new TAX_StartLTEQEndDate());
         rules.add(new TAX_DuplicateName());//DB call so last
         return new ArrayList<>(rules);
     }

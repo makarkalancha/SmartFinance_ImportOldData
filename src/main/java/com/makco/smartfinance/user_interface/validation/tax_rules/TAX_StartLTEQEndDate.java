@@ -5,6 +5,7 @@ import com.makco.smartfinance.persistence.entity.Tax;
 import com.makco.smartfinance.user_interface.validation.ErrorEnum;
 import com.makco.smartfinance.user_interface.validation.Rule;
 
+import java.time.LocalDate;
 import java.util.EnumSet;
 
 /**
@@ -17,7 +18,9 @@ public class TAX_StartLTEQEndDate implements Rule<Tax> {
     public EnumSet<ErrorEnum> validate(Tax tax) throws Exception{
         EnumSet<ErrorEnum> errors = EnumSet.noneOf(ErrorEnum.class);
         try {
-            if (tax.getStartDate().compareTo(tax.getEndDate()) <= 0)  {
+            LocalDate start = tax.getStartDate();
+            LocalDate end = tax.getEndDate();
+            if (start != null && end != null && start.isAfter(end))  {
                 errors.add(ErrorEnum.TAX_START_LT_EQ_END);
             }
         }catch (Exception e){

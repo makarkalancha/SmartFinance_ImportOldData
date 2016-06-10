@@ -1,5 +1,6 @@
 package com.makco.smartfinance.user_interface.utility_screens.forms;
 
+import com.makco.smartfinance.user_interface.constants.UserInterfaceConstants;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.scene.control.DatePicker;
@@ -18,15 +19,15 @@ import java.time.format.DateTimeFormatter;
 public class DatePickerForm {
     private final static Logger LOG = LogManager.getLogger(DatePickerForm.class);
     private final DatePicker datePicker;
-    private final String pattern = "yyyy-MM-dd";
-
-    public final static String USER_FRIENDLY_PATTERN = "YYYY-MM-DD";
+//    private final String pattern = "yyyy-MM-dd";
+//
+//    public final static String USER_FRIENDLY_PATTERN = "YYYY-MM-DD";
 
     public DatePickerForm() {
         this.datePicker = new DatePicker();
-        this.datePicker.setPromptText(USER_FRIENDLY_PATTERN); //human readable, not a java developer
+        this.datePicker.setPromptText(UserInterfaceConstants.USER_FRIENDLY_PATTERN); //human readable, not a java developer
         this.datePicker.setConverter(new StringConverter<LocalDate>() {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern(UserInterfaceConstants.DATE_PATTERN);
             @Override
             public String toString(LocalDate localDate) {
                 if(localDate != null) {

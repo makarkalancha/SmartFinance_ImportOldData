@@ -1,5 +1,7 @@
 package com.makco.smartfinance.utils;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -39,6 +41,9 @@ public class BigDecimalUtils {
     }
 
     public static BigDecimal convertStringToBigDecimal(String string) throws Exception{
+        if(StringUtils.isEmpty(string)){
+            return null;
+        }
         return (BigDecimal) decimalFormat.parse(string);
     }
 

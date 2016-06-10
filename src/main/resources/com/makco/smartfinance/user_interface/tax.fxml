@@ -94,9 +94,10 @@
                         <Insets left="5.0" />
                      </HBox.margin>
                   </Label>
+                  <Label fx:id="useDecSepLbl" />
                </children>
             </HBox>
-            <TextArea fx:id="formulaTA" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="65.0" prefWidth="465.0" promptText="Formula..." GridPane.rowIndex="3">
+            <TextArea fx:id="formulaTA" editable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="65.0" prefWidth="465.0" promptText="Formula..." GridPane.rowIndex="3">
                <tooltip>
                   <Tooltip text="Enter formula" />
                </tooltip>

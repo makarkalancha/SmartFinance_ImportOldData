@@ -27,4 +27,26 @@ public class BigDecimalUtilsTest {
         expectedValue.setScale(3, BigDecimal.ROUND_HALF_UP);
         assertEquals(expectedValue,actualValue);
     }
+
+    @Test
+    public void testConvertStringToBigDecimal1() throws Exception {
+        String decimalString = new StringBuilder()
+                .append("3")
+                .append(BigDecimalUtils.getDecimalSeparator())
+                .append("500001")
+                .toString()
+                ;
+        BigDecimal actualValue = BigDecimalUtils.convertStringToBigDecimal(decimalString);
+        BigDecimal expectedValue = new BigDecimal("3.5");
+        expectedValue.setScale(3, BigDecimal.ROUND_HALF_UP);
+        assertEquals(expectedValue,actualValue);
+    }
+
+    @Test
+    public void testConvertStringToBigDecimal_null() throws Exception {
+        String decimalString = null;
+        BigDecimal actualValue = BigDecimalUtils.convertStringToBigDecimal(decimalString);
+        BigDecimal expectedValue = null;
+        assertEquals(expectedValue,actualValue);
+    }
 }

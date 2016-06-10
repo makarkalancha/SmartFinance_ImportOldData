@@ -13,8 +13,11 @@ import com.makco.smartfinance.user_interface.undoredo.UndoRedoScreen;
 import com.makco.smartfinance.user_interface.utility_screens.DialogMessages;
 import com.makco.smartfinance.user_interface.utility_screens.forms.ProgressIndicatorForm;
 import com.makco.smartfinance.user_interface.validation.ErrorEnum;
+import com.makco.smartfinance.utils.BigDecimalUtils;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javafx.concurrent.Worker;
@@ -22,19 +25,25 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.util.Callback;
+import javafx.util.StringConverter;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.math.BigDecimal;
 import java.net.URL;
+import java.text.NumberFormat;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.EnumSet;
 import java.util.ResourceBundle;
@@ -64,6 +73,8 @@ public class TaxController implements Initializable, ControlledScreen, UndoRedoS
     private TextArea descTA;
     @FXML
     private TextField rateTF;
+    @FXML
+    private Label useDecSepLbl;
     @FXML
     private TextArea formulaTA;
     @FXML
@@ -145,8 +156,9 @@ public class TaxController implements Initializable, ControlledScreen, UndoRedoS
                 if (!errors.isEmpty()) {
                     DialogMessages.showErrorDialog("Error while saving Tax: " + nameTF.getText(),
                             (EnumSet<ErrorEnum>) ((Service) onSaveWorker).getValue(), null);
+                } else {
+                    onClear(actionEvent);
                 }
-                onClear(actionEvent);
             });
             ((Service<EnumSet<ErrorEnum>>) onSaveWorker).setOnFailed(event -> {
                 LOG.debug("onSaveWorker->setOnFailed");
@@ -244,7 +256,8 @@ public class TaxController implements Initializable, ControlledScreen, UndoRedoS
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         try {
-            nameTF.setPrefColumnCount(DataBaseConstants.ORG_NAME_MAX_LGTH);
+            useDecSepLbl.setText(String.format(UserInterfaceConstants.TAX_DECIMAL_SEPARATOR, BigDecimalUtils.getDecimalSeparator()));
+            nameTF.setPrefColumnCount(DataBaseConstants.TAX_NAME_MAX_LGTH);
             nameTF.textProperty().addListener((observable, oldValue, newValue) -> {
                 if (isNotUndo.getValue()) {
                     saveForm();
@@ -253,7 +266,7 @@ public class TaxController implements Initializable, ControlledScreen, UndoRedoS
                 }
             });
 
-            descTA.setPrefColumnCount(DataBaseConstants.ORG_DESCRIPTION_MAX_LGTH);
+            descTA.setPrefColumnCount(DataBaseConstants.TAX_DESCRIPTION_MAX_LGTH);
             descTA.textProperty().addListener((observable, oldValue, newValue) -> {
                 if (isNotUndo.getValue()) {
                     saveForm();
@@ -261,7 +274,106 @@ public class TaxController implements Initializable, ControlledScreen, UndoRedoS
                     isNotUndo.setValue(true);
                 }
             });
-            clearBtn.setDisable(true);
+            rateTF.textProperty().addListener((observable, oldValue, newValue) -> {
+                /**
+                 * check if string contains invalid decimal separator
+                 */
+//                if(newValue.contains())
+                if (isNotUndo.getValue()) {
+                    saveForm();
+                } else {
+                    isNotUndo.setValue(true);
+                }
+            });
+            formulaTA.setPrefColumnCount(DataBaseConstants.TAX_FORMULA_MAX_LGTH);
+            formulaTA.textProperty().addListener((observable, oldValue, newValue) -> {
+                if (isNotUndo.getValue()) {
+                    saveForm();
+                } else {
+                    isNotUndo.setValue(true);
+                }
+            });
+            startDP.setPromptText(UserInterfaceConstants.USER_FRIENDLY_PATTERN); //human readable, not a java developer
+            startDP.setConverter(new StringConverter<LocalDate>() {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern(UserInterfaceConstants.DATE_PATTERN);
+                @Override
+                public String toString(LocalDate localDate) {
+                    if(localDate != null) {
+                        return formatter.format(localDate);
+                    } else {
+                        return "";
+                    }
+                }
+
+                @Override
+                public LocalDate fromString(String string) {
+                    if(!StringUtils.isBlank(string)) {
+                        return LocalDate.parse(string, formatter);
+                    } else {
+                        return null;
+                    }
+                }
+            });
+            startDP.valueProperty().addListener((observable, oldValue, newValue) -> {
+                if(newValue != null){
+                    endDP.setDisable(false);
+                }
+
+                if (isNotUndo.getValue()) {
+                    saveForm();
+                } else {
+                    isNotUndo.setValue(true);
+                }
+            });
+
+            endDP.setPromptText(UserInterfaceConstants.USER_FRIENDLY_PATTERN); //human readable, not a java developer
+            endDP.setConverter(new StringConverter<LocalDate>() {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern(UserInterfaceConstants.DATE_PATTERN);
+                @Override
+                public String toString(LocalDate localDate) {
+                    if(localDate != null) {
+                        return formatter.format(localDate);
+                    } else {
+                        return "";
+                    }
+                }
+
+                @Override
+                public LocalDate fromString(String string) {
+                    if(!StringUtils.isBlank(string)) {
+                        return LocalDate.parse(string, formatter);
+                    } else {
+                        return null;
+                    }
+                }
+            });
+            final Callback<DatePicker, DateCell> dayCellFactory =
+                    new Callback<DatePicker, DateCell>() {
+                        @Override
+                        public DateCell call(DatePicker param) {
+                            return new DateCell(){
+                                @Override
+                                public void updateItem(LocalDate item, boolean empty) {
+                                    super.updateItem(item, empty);
+
+                                    if(item.isBefore(startDP.getValue().plusDays(1))){
+                                        setDisable(true);
+                                        setStyle(UserInterfaceConstants.TAX_INACTIVE_DAYS_BGCOLOR);
+                                    }
+                                }
+                            };
+                        }
+                    };
+            endDP.setDayCellFactory(dayCellFactory);
+            endDP.setDisable(true);
+            endDP.valueProperty().addListener((observable, oldValue, newValue) -> {
+                if (isNotUndo.getValue()) {
+                    saveForm();
+                } else {
+                    isNotUndo.setValue(true);
+                }
+            });
+            clearBtn.setDisable(false);
             saveBtn.setDisable(false);
             deleteBtn.setDisable(true);
         } catch (Exception e) {
@@ -276,6 +388,10 @@ public class TaxController implements Initializable, ControlledScreen, UndoRedoS
         try {
             nameTF.clear();
             descTA.clear();
+            rateTF.clear();
+            formulaTA.clear();
+            startDP.setValue(null);
+            endDP.setValue(null);
             clearBtn.setDisable(false);
             saveBtn.setDisable(false);
             deleteBtn.setDisable(true);
@@ -327,7 +443,7 @@ public class TaxController implements Initializable, ControlledScreen, UndoRedoS
 
             nameTF.setText(taxModel.getPendingTax().getName());
             descTA.setText(taxModel.getPendingTax().getDescription());
-            rateTF.setText(taxModel.getPendingTax().getRate().toString());
+            rateTF.setText(UserInterfaceConstants.NUMBER_FORMAT.format(taxModel.getPendingTax().getRate().doubleValue()));
             formulaTA.setText(taxModel.getPendingTax().getFormula());
             startDP.setValue(taxModel.getPendingTax().getStartDate());
             endDP.setValue(taxModel.getPendingTax().getEndDate());
@@ -352,8 +468,18 @@ public class TaxController implements Initializable, ControlledScreen, UndoRedoS
             TableColumn<Tax, String> taxDescCol = new TableColumn<>("Description");
             taxDescCol.setCellValueFactory(new PropertyValueFactory<Tax, String>("description"));
 
-            TableColumn<Tax, BigDecimal> taxRateCol = new TableColumn<>("Rate");
-            taxRateCol.setCellValueFactory(new PropertyValueFactory<Tax, BigDecimal>("rate"));
+//            TableColumn<Tax, BigDecimal> taxRateCol = new TableColumn<>("Rate");
+//            taxRateCol.setCellValueFactory(new PropertyValueFactory<Tax, BigDecimal>("rate"));
+            TableColumn<Tax, String> taxRateCol = new TableColumn<>("Rate");
+            taxRateCol.setCellValueFactory(c -> {
+                BigDecimal rate = c.getValue().getRate();
+                if(rate == null){
+                    return null;
+                }
+                return new SimpleStringProperty(
+                        UserInterfaceConstants.NUMBER_FORMAT.format(c.getValue().getRate().doubleValue())
+                );
+            });
 
             TableColumn<Tax, String> taxFormulaCol = new TableColumn<>("Formula");
             taxFormulaCol.setCellValueFactory(new PropertyValueFactory<Tax, String>("formula"));
@@ -429,6 +555,30 @@ public class TaxController implements Initializable, ControlledScreen, UndoRedoS
             if(!StringUtils.isBlank(descTA.getText())) {
                 contentText.append("Description (");
                 contentText.append(descTA.getText());
+                contentText.append(") is not saved. ");
+            }
+
+            if(!StringUtils.isBlank(rateTF.getText())) {
+                contentText.append("Rate (");
+                contentText.append(rateTF.getText());
+                contentText.append(") is not saved. ");
+            }
+
+            if(!StringUtils.isBlank(formulaTA.getText())) {
+                contentText.append("Formula (");
+                contentText.append(formulaTA.getText());
+                contentText.append(") is not saved. ");
+            }
+
+            if(!StringUtils.isBlank(startDP.getEditor().getText())) {
+                contentText.append("Start date (");
+                contentText.append(startDP.getValue());
+                contentText.append(") is not saved. ");
+            }
+
+            if(!StringUtils.isBlank(endDP.getEditor().getText())) {
+                contentText.append("End date (");
+                contentText.append(endDP.getValue());
                 contentText.append(") is not saved. ");
             }
 

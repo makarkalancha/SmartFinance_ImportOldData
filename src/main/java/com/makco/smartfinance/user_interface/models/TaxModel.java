@@ -50,7 +50,12 @@ public class TaxModel {
 
     public EnumSet<ErrorEnum> savePendingTax(String name, String description, String rateStr, String formula, LocalDate startDate, LocalDate endDate) throws Exception {
         EnumSet<ErrorEnum> errors = EnumSet.noneOf(ErrorEnum.class);
-        BigDecimal rate = BigDecimalUtils.convertStringToBigDecimal(rateStr);
+        BigDecimal rate = null;
+        try{
+            rate = BigDecimalUtils.convertStringToBigDecimal(rateStr);
+        }catch (Exception e){
+            errors.add(ErrorEnum.TAX_DESC_LGTH);
+        }
         try {
             Tax tmpTax;
             if (pendingTax != null) {

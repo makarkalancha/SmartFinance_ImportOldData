@@ -9,6 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 
 /**
@@ -17,9 +18,17 @@ import java.text.SimpleDateFormat;
 public class UserInterfaceConstants {
     private final static Logger LOG = LogManager.getLogger(UserInterfaceConstants.class);
 
+    public static final NumberFormat NUMBER_FORMAT = NumberFormat.getInstance();
+    //todo set constant of 6
+    static {
+        NUMBER_FORMAT.setMaximumFractionDigits(6);
+    }
+
     public static final SimpleDateFormat FULL_DATE_TIME_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
     public static final SimpleDateFormat DATE_TIME_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-    public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
+    public static final String DATE_PATTERN = "yyyy-MM-dd";
+    public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat(DATE_PATTERN);
+    public static final String USER_FRIENDLY_PATTERN = "YYYY-MM-DD";
 
     public static final String IMG_RESOURCE_FOLDER = "images";
 
@@ -96,6 +105,10 @@ public class UserInterfaceConstants {
     //account
     public static final String ACCOUNT_ROOT_NODE = "All Accounts";
     public final static String ACCOUNT_TAB_NON_ACCOUNT_BGCOLOR = "-fx-background-color: rgb(221,221,221)";
+
+    //tax
+    public final static String TAX_INACTIVE_DAYS_BGCOLOR = "-fx-background-color: #ffc0cb;";
+    public final static String TAX_DECIMAL_SEPARATOR = "(use %c as decimal separator)";
 
     //ico
     public static final String CALENDAR = IMG_RESOURCE_FOLDER+"/calendar_60_45.png";
