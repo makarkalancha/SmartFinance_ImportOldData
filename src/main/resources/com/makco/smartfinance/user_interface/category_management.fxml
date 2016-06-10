@@ -98,7 +98,7 @@
                               <Insets />
                            </VBox.margin>
                         </HBox>
-                        <TextArea id="descTA" fx:id="cgDescTA" prefHeight="64.0" prefWidth="465.0" promptText="Description...">
+                        <TextArea fx:id="cgDescTA" prefHeight="64.0" prefWidth="465.0" promptText="Description...">
                            <VBox.margin>
                               <Insets bottom="5.0" left="50.0" right="50.0" />
                            </VBox.margin>
@@ -108,17 +108,17 @@
                         </TextArea>
                         <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="25.0">
                            <children>
-                              <Button id="save" fx:id="cgSaveBtn" mnemonicParsing="false" onAction="#onSaveCategoryGroup" prefWidth="60.0" text="Save">
+                              <Button fx:id="cgSaveBtn" mnemonicParsing="false" onAction="#onSaveCategoryGroup" prefWidth="60.0" text="Save">
                                  <HBox.margin>
                                     <Insets left="50.0" right="5.0" />
                                  </HBox.margin>
                               </Button>
-                              <Button id="save" fx:id="cgDeleteBtn" mnemonicParsing="false" onAction="#onDeleteCategoryGroup" prefWidth="60.0" text="Delete">
+                              <Button fx:id="cgDeleteBtn" mnemonicParsing="false" onAction="#onDeleteCategoryGroup" prefWidth="60.0" text="Delete">
                                  <HBox.margin>
                                     <Insets right="5.0" />
                                  </HBox.margin>
                               </Button>
-                              <Button id="new" fx:id="cgClearBtn" mnemonicParsing="false" onAction="#onClearCategoryGroup" prefWidth="60.0" text="Clear">
+                              <Button fx:id="cgClearBtn" mnemonicParsing="false" onAction="#onClearCategoryGroup" prefWidth="60.0" text="Clear">
                                  <HBox.margin>
                                     <Insets right="5.0" />
                                  </HBox.margin>
@@ -194,7 +194,7 @@
                               <Insets />
                            </VBox.margin>
                         </HBox>
-                        <TextArea id="descTA" fx:id="cDescTA" prefHeight="64.0" prefWidth="465.0" promptText="Description...">
+                        <TextArea fx:id="cDescTA" prefHeight="64.0" prefWidth="465.0" promptText="Description...">
                            <tooltip>
                               <Tooltip text="Enter Description" />
                            </tooltip>
@@ -204,17 +204,17 @@
                         </TextArea>
                         <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="25.0">
                            <children>
-                              <Button id="save" fx:id="cSaveBtn" mnemonicParsing="false" onAction="#onSaveCategory" prefWidth="60.0" text="Save">
+                              <Button fx:id="cSaveBtn" mnemonicParsing="false" onAction="#onSaveCategory" prefWidth="60.0" text="Save">
                                  <HBox.margin>
                                     <Insets left="50.0" right="5.0" />
                                  </HBox.margin>
                               </Button>
-                              <Button id="save" fx:id="cDeleteBtn" mnemonicParsing="false" onAction="#onDeleteCategory" prefWidth="60.0" text="Delete">
+                              <Button fx:id="cDeleteBtn" mnemonicParsing="false" onAction="#onDeleteCategory" prefWidth="60.0" text="Delete">
                                  <HBox.margin>
                                     <Insets right="5.0" />
                                  </HBox.margin>
                               </Button>
-                              <Button id="new" fx:id="cClearBtn" mnemonicParsing="false" onAction="#onClearCategory" prefWidth="60.0" text="Clear">
+                              <Button fx:id="cClearBtn" mnemonicParsing="false" onAction="#onClearCategory" prefWidth="60.0" text="Clear">
                                  <HBox.margin>
                                     <Insets right="5.0" />
                                  </HBox.margin>

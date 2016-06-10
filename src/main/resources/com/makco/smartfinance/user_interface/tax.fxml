@@ -116,17 +116,17 @@
             </DatePicker>
             <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" GridPane.rowIndex="6">
                <children>
-                  <Button id="save" fx:id="saveBtn" mnemonicParsing="false" onAction="#onSave" prefWidth="60.0" text="Save">
+                  <Button fx:id="saveBtn" mnemonicParsing="false" onAction="#onSave" prefWidth="60.0" text="Save">
                      <HBox.margin>
                         <Insets right="5.0" />
                      </HBox.margin>
                   </Button>
-                  <Button id="save" fx:id="deleteBtn" mnemonicParsing="false" onAction="#onDelete" prefWidth="60.0" text="Delete">
+                  <Button fx:id="deleteBtn" mnemonicParsing="false" onAction="#onDelete" prefWidth="60.0" text="Delete">
                      <HBox.margin>
                         <Insets right="5.0" />
                      </HBox.margin>
                   </Button>
-                  <Button id="new" fx:id="clearBtn" mnemonicParsing="false" onAction="#onClear" prefWidth="60.0" text="Clear">
+                  <Button fx:id="clearBtn" mnemonicParsing="false" onAction="#onClear" prefWidth="60.0" text="Clear">
                      <HBox.margin>
                         <Insets right="5.0" />
                      </HBox.margin>
