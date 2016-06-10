@@ -229,8 +229,9 @@ public class AccountManagementController implements Initializable, ControlledScr
                     DialogMessages.showErrorDialog("Error while saving Account Group: type "
                                     + agTypeACCB.getValue() + ", with name " + agNameTF.getText(),
                             (EnumSet<ErrorEnum>) ((Service) onSaveAccountGroupWorker).getValue(), null);
+                }else{
+                    onClearAccountGroup(actionEvent);
                 }
-                onClearAccountGroup(actionEvent);
             });
             ((Service<EnumSet<ErrorEnum>>) onSaveAccountGroupWorker).setOnFailed(event -> {
                 LOG.debug("onSaveAccountGroupWorker->setOnFailed");
@@ -282,8 +283,9 @@ public class AccountManagementController implements Initializable, ControlledScr
                     DialogMessages.showErrorDialog("Error while saving Account: account group "
                                     + aAccountGroupACCB.getValue() + ", with name " + aNameTF.getText(),
                             (EnumSet<ErrorEnum>) ((Service) onSaveAccountWorker).getValue(), null);
+                }else {
+                    onClearAccount(actionEvent);
                 }
-                onClearAccount(actionEvent);
             });
             ((Service<EnumSet<ErrorEnum>>) onSaveAccountWorker).setOnFailed(event -> {
                 LOG.debug("onSaveAccountWorker->setOnFailed");
@@ -456,7 +458,7 @@ public class AccountManagementController implements Initializable, ControlledScr
                     isNotUndo.setValue(true);
                 }
             });
-            agClearBtn.setDisable(true);
+            agClearBtn.setDisable(false);
             agSaveBtn.setDisable(false);
             agDeleteBtn.setDisable(true);
         } catch (Exception e) {
@@ -511,7 +513,7 @@ public class AccountManagementController implements Initializable, ControlledScr
                     isNotUndo.setValue(true);
                 }
             });
-            aClearBtn.setDisable(true);
+            aClearBtn.setDisable(false);
             aSaveBtn.setDisable(false);
             aDeleteBtn.setDisable(true);
         } catch (Exception e) {

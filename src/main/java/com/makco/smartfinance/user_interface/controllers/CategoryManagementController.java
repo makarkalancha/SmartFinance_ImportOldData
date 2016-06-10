@@ -229,8 +229,9 @@ public class CategoryManagementController implements Initializable, ControlledSc
                     DialogMessages.showErrorDialog("Error while saving Category Group: type "
                                     + cgTypeACCB.getValue() + ", with name " + cgNameTF.getText(),
                             (EnumSet<ErrorEnum>) ((Service) onSaveCategoryGroupWorker).getValue(), null);
+                } else{
+                    onClearCategoryGroup(actionEvent);
                 }
-                onClearCategoryGroup(actionEvent);
             });
             ((Service<EnumSet<ErrorEnum>>) onSaveCategoryGroupWorker).setOnFailed(event -> {
                 LOG.debug("onSaveCategoryGroupWorker->setOnFailed");
@@ -282,8 +283,9 @@ public class CategoryManagementController implements Initializable, ControlledSc
                     DialogMessages.showErrorDialog("Error while saving Category: category group "
                                     + cCategoryGroupACCB.getValue() + ", with name " + cNameTF.getText(),
                             (EnumSet<ErrorEnum>) ((Service) onSaveCategoryWorker).getValue(), null);
+                } else {
+                    onClearCategory(actionEvent);
                 }
-                onClearCategory(actionEvent);
             });
             ((Service<EnumSet<ErrorEnum>>) onSaveCategoryWorker).setOnFailed(event -> {
                 LOG.debug("onSaveCategoryWorker->setOnFailed");
@@ -460,7 +462,7 @@ public class CategoryManagementController implements Initializable, ControlledSc
                     isNotUndo.setValue(true);
                 }
             });
-            cgClearBtn.setDisable(true);
+            cgClearBtn.setDisable(false);
             cgSaveBtn.setDisable(false);
             cgDeleteBtn.setDisable(true);
         } catch (Exception e) {
@@ -515,7 +517,7 @@ public class CategoryManagementController implements Initializable, ControlledSc
                     isNotUndo.setValue(true);
                 }
             });
-            cClearBtn.setDisable(true);
+            cClearBtn.setDisable(false);
             cSaveBtn.setDisable(false);
             cDeleteBtn.setDisable(true);
         } catch (Exception e) {

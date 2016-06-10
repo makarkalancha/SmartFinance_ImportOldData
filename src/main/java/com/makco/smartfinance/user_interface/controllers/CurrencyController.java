@@ -136,8 +136,9 @@ public class CurrencyController implements Initializable, ControlledScreen, Undo
                 if(!errors.isEmpty()) {
                     DialogMessages.showErrorDialog("Error while saving Currency: " + codeTF.getText(),
                             (EnumSet<ErrorEnum>) ((Service) onSaveWorker).getValue(), null);
+                } else {
+                    onClear(actionEvent);
                 }
-                onClear(actionEvent);
             });
             ((Service<EnumSet<ErrorEnum>>) onSaveWorker).setOnFailed(event -> {
                 LOG.debug("onSaveWorker->setOnFailed");
@@ -258,7 +259,7 @@ public class CurrencyController implements Initializable, ControlledScreen, Undo
                     isNotUndo.setValue(true);
                 }
             });
-            clearBtn.setDisable(true);
+            clearBtn.setDisable(false);
             saveBtn.setDisable(false);
             deleteBtn.setDisable(true);
         } catch (Exception e) {
