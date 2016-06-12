@@ -56,14 +56,14 @@ import java.util.ResourceBundle;
 /**
  * Created by mcalancea on 2016-06-06.
  */
-public class AccountManagementController implements Initializable, ControlledScreen, UndoRedoScreen {
+public class AccountManagementController /*implements Initializable, ControlledScreen, UndoRedoScreen*/ extends AbstractControlledScreen {
     private final static Logger LOG = LogManager.getLogger(AccountManagementController.class);
     private final static int ACCOUNT_GROUP_TAB_INDEX = 0;
     private final static int ACCOUNT_TAB_INDEX = 1;
-    private ScreensController screensController;
+//    private ScreensController screensController;
     private AccountManagementModel accountManagementModel = new AccountManagementModel();
 
-    private ActionEvent actionEvent;
+//    private ActionEvent actionEvent;
 
     private Worker<Void> onDeleteAccountGroupWorker;
     private Worker<EnumSet<ErrorEnum>> onSaveAccountGroupWorker;
@@ -77,8 +77,8 @@ public class AccountManagementController implements Initializable, ControlledScr
     private ProgressIndicatorForm pForm = new ProgressIndicatorForm();
 
     private int selectedTabIndex;
-    private CareTaker careTaker;
-    private BooleanProperty isNotUndo = new SimpleBooleanProperty(true);
+//    private CareTaker careTaker;
+//    private BooleanProperty isNotUndo = new SimpleBooleanProperty(true);
 
     @FXML
     private TabPane tabPane;
@@ -226,6 +226,7 @@ public class AccountManagementController implements Initializable, ControlledScr
                 populateAccountGroupTable();
                 EnumSet<ErrorEnum> errors = onSaveAccountGroupWorker.getValue();
                 if(!errors.isEmpty()) {
+                    highlightInvalidFields(errors);
                     DialogMessages.showErrorDialog("Error while saving Account Group: type "
                                     + agTypeACCB.getValue() + ", with name " + agNameTF.getText(),
                             (EnumSet<ErrorEnum>) ((Service) onSaveAccountGroupWorker).getValue(), null);
@@ -280,6 +281,7 @@ public class AccountManagementController implements Initializable, ControlledScr
                 populateAccountTable();
                 EnumSet<ErrorEnum> errors = onSaveAccountWorker.getValue();
                 if(!errors.isEmpty()) {
+                    highlightInvalidFields(errors);
                     DialogMessages.showErrorDialog("Error while saving Account: account group "
                                     + aAccountGroupACCB.getValue() + ", with name " + aNameTF.getText(),
                             (EnumSet<ErrorEnum>) ((Service) onSaveAccountWorker).getValue(), null);
@@ -330,15 +332,15 @@ public class AccountManagementController implements Initializable, ControlledScr
         }
     }
 
-    @Override
-    public void setScreenPage(ScreensController screenPage) {
-        try{
-            screensController = screenPage;
-            careTaker = screensController.getCareTaker();
-        }catch (Exception e){
-            DialogMessages.showExceptionAlert(e);
-        }
-    }
+//    @Override
+//    public void setScreenPage(ScreensController screenPage) {
+//        try{
+//            screensController = screenPage;
+//            careTaker = screensController.getCareTaker();
+//        }catch (Exception e){
+//            DialogMessages.showExceptionAlert(e);
+//        }
+//    }
 
     @Override
     public void refresh() {
@@ -461,6 +463,19 @@ public class AccountManagementController implements Initializable, ControlledScr
             agClearBtn.setDisable(false);
             agSaveBtn.setDisable(false);
             agDeleteBtn.setDisable(true);
+
+            /**
+             * !!!todo text area background content
+             * http://stackoverflow.com/questions/21936585/transparent-background-of-a-textarea-in-javafx-8
+             */
+            errorControlDictionary.put(ErrorEnum.AccGr_DESC_LGTH, agDescTA);
+            errorControlDictionary.put(ErrorEnum.AccGr_NAME_DUPLICATE, agNameTF);
+            errorControlDictionary.put(ErrorEnum.AccGr_NAME_LGTH, agNameTF);
+            errorControlDictionary.put(ErrorEnum.AccGr_NULL_AG_TYPE, agTypeACCB);
+            errorControlDictionary.put(ErrorEnum.AccGr_NULL_NAME, agNameTF);
+
+            erroneousControlSet.add(agDescTA);
+            erroneousControlSet.add(agNameTF);
         } catch (Exception e) {
             //not in finally because refreshAccountGroup must run before populateAccountGroupTable
             startService(onRefreshAccountGroupWorker, null);
@@ -516,6 +531,20 @@ public class AccountManagementController implements Initializable, ControlledScr
             aClearBtn.setDisable(false);
             aSaveBtn.setDisable(false);
             aDeleteBtn.setDisable(true);
+
+            /**
+             * !!!todo text area background content
+             * http://stackoverflow.com/questions/21936585/transparent-background-of-a-textarea-in-javafx-8
+             */
+            errorControlDictionary.put(ErrorEnum.Acc_AG_EMPTY, aAccountGroupACCB);
+            errorControlDictionary.put(ErrorEnum.Acc_DESC_LGTH, aDescTA);
+            errorControlDictionary.put(ErrorEnum.Acc_NAME_DUPLICATE, aNameTF);
+            errorControlDictionary.put(ErrorEnum.Acc_NAME_LGTH, aNameTF);
+            errorControlDictionary.put(ErrorEnum.Acc_NULL_NAME, aNameTF);
+
+            erroneousControlSet.add(aAccountGroupACCB);
+            erroneousControlSet.add(aDescTA);
+            erroneousControlSet.add(aNameTF);
         } catch (Exception e) {
             //not in finally because onRefreshAccountWorker must run before populateAccountTable
             startService(onRefreshAccountWorker, null);

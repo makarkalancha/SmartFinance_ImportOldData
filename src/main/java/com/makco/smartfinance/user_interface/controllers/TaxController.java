@@ -62,19 +62,19 @@ import java.util.Set;
 /**
  * Created by mcalancea on 2016-06-09.
  */
-public class TaxController implements Initializable, ControlledScreen, UndoRedoScreen {
+public class TaxController /*implements Initializable, ControlledScreen, UndoRedoScreen*/ extends AbstractControlledScreen {
     private final static Logger LOG = LogManager.getLogger(TaxController.class);
-    private ScreensController screensController;
+//    private ScreensController screensController;
     private TaxModel taxModel = new TaxModel();
 
-    private ActionEvent actionEvent;
+//    private ActionEvent actionEvent;
     private Worker<Void> onDeleteWorker;
     private Worker<EnumSet<ErrorEnum>> onSaveWorker;
     private Worker<Void> onRefreshWorker;
     private ProgressIndicatorForm pForm = new ProgressIndicatorForm();
 
-    private CareTaker careTaker;
-    private BooleanProperty isNotUndo = new SimpleBooleanProperty(true);
+//    private CareTaker careTaker;
+//    private BooleanProperty isNotUndo = new SimpleBooleanProperty(true);
 
     @FXML
     private TableView<Tax> table;
@@ -143,61 +143,47 @@ public class TaxController implements Initializable, ControlledScreen, UndoRedoS
         }
     }
 
-    private Map<ErrorEnum, Control> errorControlDictionary = new EnumMap<ErrorEnum, Control>(ErrorEnum.class);
-    private Set<Control> erroneousControlSet = new HashSet<>();
+//    private Map<ErrorEnum, Control> errorControlDictionary = new EnumMap<ErrorEnum, Control>(ErrorEnum.class);
+//    private Set<Control> erroneousControlSet = new HashSet<>();
 
-    private void clearErrorHighlight(){
-        erroneousControlSet.forEach(control -> {
-            if(control instanceof TextArea){
-                Region reg = (Region) control.lookup(".content");
-//                    region.setStyle(UserInterfaceConstants.INVALID_CONTROL_BGCOLOR);
-                reg.getStyleClass().remove(UserInterfaceConstants.INVALID_CONTROL_CLASS_);
-            } else {
-//                    control.setStyle(UserInterfaceConstants.INVALID_CONTROL_BGCOLOR);
-                control.getStyleClass().remove(UserInterfaceConstants.INVALID_CONTROL_CLASS_);
-            }
-        });
-    }
+//    private void clearErrorHighlight(){
+//        erroneousControlSet.forEach(control -> {
+//            if(control instanceof TextArea){
+//                Region reg = (Region) control.lookup(".content");
+////                    region.setStyle(UserInterfaceConstants.INVALID_CONTROL_BGCOLOR);
+//                reg.getStyleClass().remove(UserInterfaceConstants.INVALID_CONTROL_CLASS_);
+//            } else {
+////                    control.setStyle(UserInterfaceConstants.INVALID_CONTROL_BGCOLOR);
+//                control.getStyleClass().remove(UserInterfaceConstants.INVALID_CONTROL_CLASS_);
+//            }
+//        });
+//    }
 
-    private void highlightInvalidFields(EnumSet<ErrorEnum> errors){
-        clearErrorHighlight();
-//        LOG.debug(">>>highlightInvalidFields before nameTF.getStyleClass(): "+nameTF.getStyleClass());
-//        nameTF.getStyleClass().remove(UserInterfaceConstants.INVALID_CONTROL_CLASS_);
-//        LOG.debug(">>>highlightInvalidFields after nameTF.getStyleClass(): "+nameTF.getStyleClass());
+//    private void highlightInvalidFields(EnumSet<ErrorEnum> errors){
+//        clearErrorHighlight();
+////        LOG.debug(">>>highlightInvalidFields before nameTF.getStyleClass(): "+nameTF.getStyleClass());
+////        nameTF.getStyleClass().remove(UserInterfaceConstants.INVALID_CONTROL_CLASS_);
+////        LOG.debug(">>>highlightInvalidFields after nameTF.getStyleClass(): "+nameTF.getStyleClass());
+////
+////        Region region = (Region) descTA.lookup(".content");
+////        LOG.debug(">>>highlightInvalidFields before region.getStyleClass(): " + region.getStyleClass());
+////        region.getStyleClass().remove(UserInterfaceConstants.INVALID_CONTROL_CLASS_);
+////        LOG.debug(">>>highlightInvalidFields after region.getStyleClass(): " + region.getStyleClass());
+////
+////        rateTF.getStyleClass().remove(UserInterfaceConstants.INVALID_CONTROL_CLASS_);
+////        startDP.getStyleClass().remove(UserInterfaceConstants.INVALID_CONTROL_CLASS_);
 //
-//        Region region = (Region) descTA.lookup(".content");
-//        LOG.debug(">>>highlightInvalidFields before region.getStyleClass(): " + region.getStyleClass());
-//        region.getStyleClass().remove(UserInterfaceConstants.INVALID_CONTROL_CLASS_);
-//        LOG.debug(">>>highlightInvalidFields after region.getStyleClass(): " + region.getStyleClass());
-//
-//        rateTF.getStyleClass().remove(UserInterfaceConstants.INVALID_CONTROL_CLASS_);
-//        startDP.getStyleClass().remove(UserInterfaceConstants.INVALID_CONTROL_CLASS_);
-
-        errors.forEach(error -> {
-            Control control = errorControlDictionary.get(error);
-            if(control != null){
-                LOG.debug(">>>>style: error="+error+"; getStyle="+control.getStyle()+"; getStyleClass="+control.getStyleClass());
-                if(control instanceof TextArea){
-                    Region reg = (Region) control.lookup(".content");
-//                    region.setStyle(UserInterfaceConstants.INVALID_CONTROL_BGCOLOR);
-                    reg.getStyleClass().add(UserInterfaceConstants.INVALID_CONTROL_CLASS_);
-                } else {
-//                    control.setStyle(UserInterfaceConstants.INVALID_CONTROL_BGCOLOR);
-                    control.getStyleClass().add(UserInterfaceConstants.INVALID_CONTROL_CLASS_);
-                }
-            }
-        });
-    }
-
-//    private void unhighlightInvalidFields(EnumSet<ErrorEnum> errors){
-//        errorControlDictionary.values()...forEach(error -> {
+//        errors.forEach(error -> {
 //            Control control = errorControlDictionary.get(error);
 //            if(control != null){
+//                LOG.debug(">>>>style: error="+error+"; getStyle="+control.getStyle()+"; getStyleClass="+control.getStyleClass());
 //                if(control instanceof TextArea){
-//                    Region region = (Region) control.lookup(".content");
-//                    region.getStyleClass().remove(UserInterfaceConstants.INVALID_CONTROL_CLASS_);
+//                    Region reg = (Region) control.lookup(".content");
+////                    region.setStyle(UserInterfaceConstants.INVALID_CONTROL_BGCOLOR);
+//                    reg.getStyleClass().add(UserInterfaceConstants.INVALID_CONTROL_CLASS_);
 //                } else {
-//                    control.getStyleClass().remove(UserInterfaceConstants.INVALID_CONTROL_BGCOLOR);
+////                    control.setStyle(UserInterfaceConstants.INVALID_CONTROL_BGCOLOR);
+//                    control.getStyleClass().add(UserInterfaceConstants.INVALID_CONTROL_CLASS_);
 //                }
 //            }
 //        });
@@ -277,15 +263,15 @@ public class TaxController implements Initializable, ControlledScreen, UndoRedoS
         }
     }
 
-    @Override
-    public void setScreenPage(ScreensController screenPage) {
-        try {
-            screensController = screenPage;
-            careTaker = screensController.getCareTaker();
-        } catch (Exception e) {
-            DialogMessages.showExceptionAlert(e);
-        }
-    }
+//    @Override
+//    public void setScreenPage(ScreensController screenPage) {
+//        try {
+//            screensController = screenPage;
+//            careTaker = screensController.getCareTaker();
+//        } catch (Exception e) {
+//            DialogMessages.showExceptionAlert(e);
+//        }
+//    }
 
     @Override
     public void refresh() {
