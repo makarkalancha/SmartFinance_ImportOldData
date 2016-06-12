@@ -25,6 +25,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.Control;
 import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
@@ -45,7 +46,9 @@ import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
+import java.util.EnumMap;
 import java.util.EnumSet;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 /**
@@ -132,6 +135,34 @@ public class TaxController implements Initializable, ControlledScreen, UndoRedoS
         }
     }
 
+    private Map<ErrorEnum, Control> errorControlDictionary = new EnumMap<ErrorEnum, Control>(ErrorEnum.class);
+//    {
+//        errorControlDictionary.put(ErrorEnum.TAX_DESC_LGTH, descTA.getcon);
+//        errorControlDictionary.put(ErrorEnum.TAX_NAME_DUPLICATE, nameTF);
+//        errorControlDictionary.put(ErrorEnum.TAX_NAME_LGTH, nameTF);
+//        errorControlDictionary.put(ErrorEnum.TAX_NAME_NULL, nameTF);
+//        errorControlDictionary.put(ErrorEnum.TAX_RATE, rateTF);
+//        errorControlDictionary.put(ErrorEnum.TAX_START_LT_EQ_END, startDP);
+//    }
+
+    private void highlightInvalidFields(EnumSet<ErrorEnum> errors){
+        errors.forEach(error -> {
+            Control control = errorControlDictionary.get(error);
+            if(control != null){
+                control.setStyle(UserInterfaceConstants.INVALID_CONTROL_BGCOLOR);
+            }
+        });
+    }
+
+    private void unhighlightInvalidFields(EnumSet<ErrorEnum> errors){
+        errors.forEach(error -> {
+            Control control = errorControlDictionary.get(error);
+            if(control != null){
+                control.setStyle(UserInterfaceConstants.INVALID_CONTROL_BGCOLOR);
+            }
+        });
+    }
+
     public void initializeServices() {
         try {
             ((Service<Void>) onDeleteWorker).setOnSucceeded(event -> {
@@ -154,8 +185,12 @@ public class TaxController implements Initializable, ControlledScreen, UndoRedoS
                 populateTable();
                 EnumSet<ErrorEnum> errors = ((Service<EnumSet<ErrorEnum>>) onSaveWorker).getValue();
                 if (!errors.isEmpty()) {
+                    highlightInvalidFields(errors);
                     DialogMessages.showErrorDialog("Error while saving Tax: " + nameTF.getText(),
                             (EnumSet<ErrorEnum>) ((Service) onSaveWorker).getValue(), null);
+//                    Control control = new TextField();
+//                    control.setStyle("-fx-background-color: red");
+//                    nameTF.setStyle(UserInterfaceConstants.INVALID_CONTROL_BGCOLOR);
                 } else {
                     onClear(actionEvent);
                 }
@@ -376,6 +411,18 @@ public class TaxController implements Initializable, ControlledScreen, UndoRedoS
             clearBtn.setDisable(false);
             saveBtn.setDisable(false);
             deleteBtn.setDisable(true);
+
+
+            /**
+             * !!!todo text area background content
+             * http://stackoverflow.com/questions/21936585/transparent-background-of-a-textarea-in-javafx-8
+             */
+            errorControlDictionary.put(ErrorEnum.TAX_DESC_LGTH, descTA);
+            errorControlDictionary.put(ErrorEnum.TAX_NAME_DUPLICATE, nameTF);
+            errorControlDictionary.put(ErrorEnum.TAX_NAME_LGTH, nameTF);
+            errorControlDictionary.put(ErrorEnum.TAX_NAME_NULL, nameTF);
+            errorControlDictionary.put(ErrorEnum.TAX_RATE, rateTF);
+            errorControlDictionary.put(ErrorEnum.TAX_START_LT_EQ_END, startDP);
         } catch (Exception e) {
             //not in finally because refreshTax must run before populateTable
             startService(onRefreshWorker, null);
@@ -387,10 +434,14 @@ public class TaxController implements Initializable, ControlledScreen, UndoRedoS
     public void onClear(ActionEvent event) {
         try {
             nameTF.clear();
+            nameTF.setStyle(null);
             descTA.clear();
+            descTA.setStyle(null);
             rateTF.clear();
+            rateTF.setStyle(null);
             formulaTA.clear();
             startDP.setValue(null);
+            startDP.setStyle(null);
             endDP.setValue(null);
             clearBtn.setDisable(false);
             saveBtn.setDisable(false);

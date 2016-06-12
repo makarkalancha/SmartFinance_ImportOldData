@@ -23,6 +23,7 @@ public class UserInterfaceConstants {
     static {
         NUMBER_FORMAT.setMaximumFractionDigits(6);
     }
+    public final static String INVALID_CONTROL_BGCOLOR = ".content {-fx-background-color: #ffc0cb;}";
 
     public static final SimpleDateFormat FULL_DATE_TIME_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
     public static final SimpleDateFormat DATE_TIME_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
