@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.makco.smartfinance.javafx.control.*?>
 <?import java.lang.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
@@ -28,11 +29,11 @@
             <Font size="20.0" />
          </font>
       </Label>
-      <TabPane fx:id="tabPane" prefHeight="562.0" prefWidth="580.0" tabClosingPolicy="UNAVAILABLE">
+      <TabPane fx:id="tabPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="570.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE">
         <tabs>
           <Tab text="Account Group">
                <content>
-                  <VBox prefHeight="200.0" prefWidth="100.0">
+                  <VBox minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="600.0">
                      <children>
                         <TableView fx:id="agTable" prefHeight="350.0" prefWidth="580.0">
                           <columns>
@@ -41,85 +42,59 @@
                               <Insets top="5.0" />
                            </VBox.margin>
                         </TableView>
-                        <HBox>
+                        <GridPane hgap="5.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="165.0" prefWidth="525.0" vgap="5.0">
+                          <columnConstraints>
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                          </columnConstraints>
+                          <rowConstraints>
+                            <RowConstraints minHeight="25.0" prefHeight="35.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="25.0" prefHeight="35.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="75.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="25.0" prefHeight="35.0" vgrow="SOMETIMES" />
+                          </rowConstraints>
                            <children>
-                              <AutoCompleteComboBox fx:id="agTypeACCB" prefWidth="150.0" promptText="Type">
+                              <AutoCompleteComboBox fx:id="agTypeACCB" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="150.0" promptText="Type" style="-fx-border-color: red;">
                                  <tooltip>
                                     <Tooltip text="Choose account group type" />
                                  </tooltip>
-                                 <HBox.margin>
-                                    <Insets bottom="5.0" left="50.0" top="5.0" />
-                                 </HBox.margin>
                               </AutoCompleteComboBox>
-                              <Label text="*" textFill="RED">
-                                 <tooltip>
-                                    <Tooltip text="Required" />
-                                 </tooltip>
-                                 <HBox.margin>
-                                    <Insets left="5.0" />
-                                 </HBox.margin>
-                                 <font>
-                                    <Font size="24.0" />
-                                 </font>
-                              </Label>
-                           </children>
-                        </HBox>
-                        <HBox>
-                           <children>
-                              <TextField fx:id="agNameTF" promptText="Name...">
-                                 <VBox.margin>
-                                    <Insets bottom="5.0" left="50.0" right="50.0" />
-                                 </VBox.margin>
+                              <TextField fx:id="agNameTF" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="330.0" promptText="Name..." style="-fx-border-color: red;" GridPane.rowIndex="1">
                                  <tooltip>
                                     <Tooltip text="Empty Tooltip" />
                                  </tooltip>
-                                 <HBox.margin>
-                                    <Insets bottom="5.0" left="50.0" top="5.0" />
-                                 </HBox.margin>
                               </TextField>
-                              <Label text="*" textFill="RED">
-                                 <font>
-                                    <Font size="24.0" />
-                                 </font>
+                              <TextArea fx:id="agDescTA" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="65.0" prefWidth="465.0" promptText="Description..." GridPane.rowIndex="2">
                                  <tooltip>
-                                    <Tooltip text="Required" />
+                                    <Tooltip text="Enter Description" />
                                  </tooltip>
-                                 <HBox.margin>
-                                    <Insets left="5.0" />
-                                 </HBox.margin>
-                              </Label>
+                              </TextArea>
+                              <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="25.0" GridPane.rowIndex="3">
+                                 <children>
+                                    <Button fx:id="agSaveBtn" mnemonicParsing="false" onAction="#onSaveAccountGroup" prefWidth="60.0" text="Save">
+                                       <HBox.margin>
+                                          <Insets right="5.0" />
+                                       </HBox.margin>
+                                    </Button>
+                                    <Button fx:id="agDeleteBtn" mnemonicParsing="false" onAction="#onDeleteAccountGroup" prefWidth="60.0" text="Delete">
+                                       <HBox.margin>
+                                          <Insets right="5.0" />
+                                       </HBox.margin>
+                                    </Button>
+                                    <Button fx:id="agClearBtn" mnemonicParsing="false" onAction="#onClearAccountGroup" prefWidth="60.0" text="Clear">
+                                       <HBox.margin>
+                                          <Insets right="5.0" />
+                                       </HBox.margin>
+                                    </Button>
+                                 </children>
+                              </HBox>
                            </children>
                            <VBox.margin>
-                              <Insets />
+                              <Insets bottom="5.0" left="50.0" right="5.0" top="5.0" />
                            </VBox.margin>
-                        </HBox>
-                        <TextArea fx:id="agDescTA" prefHeight="64.0" prefWidth="465.0" promptText="Description...">
-                           <VBox.margin>
-                              <Insets bottom="5.0" left="50.0" right="50.0" />
-                           </VBox.margin>
-                           <tooltip>
-                              <Tooltip text="Enter Description" />
-                           </tooltip>
-                        </TextArea>
-                        <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="25.0">
-                           <children>
-                              <Button fx:id="agSaveBtn" mnemonicParsing="false" onAction="#onSaveAccountGroup" prefWidth="60.0" text="Save">
-                                 <HBox.margin>
-                                    <Insets left="50.0" right="5.0" />
-                                 </HBox.margin>
-                              </Button>
-                              <Button fx:id="agDeleteBtn" mnemonicParsing="false" onAction="#onDeleteAccountGroup" prefWidth="60.0" text="Delete">
-                                 <HBox.margin>
-                                    <Insets right="5.0" />
-                                 </HBox.margin>
-                              </Button>
-                              <Button fx:id="agClearBtn" mnemonicParsing="false" onAction="#onClearAccountGroup" prefWidth="60.0" text="Clear">
-                                 <HBox.margin>
-                                    <Insets right="5.0" />
-                                 </HBox.margin>
-                              </Button>
-                           </children>
-                        </HBox>
+                           <padding>
+                              <Insets bottom="5.0" top="5.0" />
+                           </padding>
+                        </GridPane>
                      </children>
                   </VBox>
                </content>
@@ -128,94 +103,64 @@
                <content>
                   <VBox prefHeight="200.0" prefWidth="100.0">
                      <children>
-                        <TreeTableView fx:id="aTable" prefHeight="350.0" prefWidth="580.0">
-                          <columns>
-                            <TreeTableColumn prefWidth="75.0" text="C1" />
-                            <TreeTableColumn prefWidth="75.0" text="C2" />
-                          </columns>
+                        <TreeTableView fx:id="aTable" minHeight="-Infinity" minWidth="-Infinity" prefHeight="350.0" prefWidth="580.0">
                            <VBox.margin>
                               <Insets top="5.0" />
                            </VBox.margin>
                         </TreeTableView>
-                        <HBox>
+                        <GridPane hgap="5.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="165.0" prefWidth="525.0" vgap="5.0">
+                          <columnConstraints>
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                          </columnConstraints>
+                          <rowConstraints>
+                            <RowConstraints minHeight="25.0" prefHeight="35.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="35.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="65.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="25.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                          </rowConstraints>
                            <children>
-                              <AutoCompleteComboBox fx:id="aAccountGroupACCB" prefWidth="150.0" promptText="Account Group">
+                              <AutoCompleteComboBox fx:id="aAccountGroupACCB" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="150.0" promptText="Account Group" style="-fx-border-color: red;">
                                  <tooltip>
                                     <Tooltip text="Enter name" />
                                  </tooltip>
-                                 <HBox.margin>
-                                    <Insets bottom="5.0" left="50.0" top="5.0" />
-                                 </HBox.margin>
                               </AutoCompleteComboBox>
-                              <Label text="*" textFill="RED">
-                                 <font>
-                                    <Font size="24.0" />
-                                 </font>
-                                 <tooltip>
-                                    <Tooltip text="Required" />
-                                 </tooltip>
-                                 <HBox.margin>
-                                    <Insets left="5.0" />
-                                 </HBox.margin>
-                              </Label>
-                           </children>
-                        </HBox>
-                        <HBox>
-                           <children>
-                              <TextField fx:id="aNameTF" promptText="Name...">
+                              <TextField fx:id="aNameTF" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="330.0" promptText="Name..." style="-fx-border-color: red;" GridPane.rowIndex="1">
                                  <tooltip>
                                     <Tooltip text="Empty Tooltip" />
                                  </tooltip>
-                                 <HBox.margin>
-                                    <Insets bottom="5.0" left="50.0" top="5.0" />
-                                 </HBox.margin>
-                                 <VBox.margin>
-                                    <Insets bottom="5.0" left="50.0" right="50.0" />
-                                 </VBox.margin>
                               </TextField>
-                              <Label text="*" textFill="RED">
-                                 <font>
-                                    <Font size="24.0" />
-                                 </font>
+                              <TextArea fx:id="aDescTA" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="65.0" prefWidth="465.0" promptText="Description..." GridPane.rowIndex="2">
                                  <tooltip>
-                                    <Tooltip text="Required" />
+                                    <Tooltip text="Enter Description" />
                                  </tooltip>
-                                 <HBox.margin>
-                                    <Insets left="5.0" />
-                                 </HBox.margin>
-                              </Label>
+                              </TextArea>
+                              <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="25.0" GridPane.rowIndex="3">
+                                 <children>
+                                    <Button fx:id="aSaveBtn" mnemonicParsing="false" onAction="#onSaveAccount" prefWidth="60.0" text="Save">
+                                       <HBox.margin>
+                                          <Insets right="5.0" />
+                                       </HBox.margin>
+                                    </Button>
+                                    <Button fx:id="aDeleteBtn" mnemonicParsing="false" onAction="#onDeleteAccount" prefWidth="60.0" text="Delete">
+                                       <HBox.margin>
+                                          <Insets right="5.0" />
+                                       </HBox.margin>
+                                    </Button>
+                                    <Button fx:id="aClearBtn" mnemonicParsing="false" onAction="#onClearAccount" prefWidth="60.0" text="Clear">
+                                       <HBox.margin>
+                                          <Insets right="5.0" />
+                                       </HBox.margin>
+                                    </Button>
+                                 </children>
+                              </HBox>
                            </children>
                            <VBox.margin>
-                              <Insets />
+                              <Insets bottom="5.0" left="50.0" right="5.0" top="5.0" />
                            </VBox.margin>
-                        </HBox>
-                        <TextArea fx:id="aDescTA" prefHeight="64.0" prefWidth="465.0" promptText="Description...">
-                           <tooltip>
-                              <Tooltip text="Enter Description" />
-                           </tooltip>
-                           <VBox.margin>
-                              <Insets bottom="5.0" left="50.0" right="50.0" />
-                           </VBox.margin>
-                        </TextArea>
-                        <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="25.0">
-                           <children>
-                              <Button fx:id="aSaveBtn" mnemonicParsing="false" onAction="#onSaveAccount" prefWidth="60.0" text="Save">
-                                 <HBox.margin>
-                                    <Insets left="50.0" right="5.0" />
-                                 </HBox.margin>
-                              </Button>
-                              <Button fx:id="aDeleteBtn" mnemonicParsing="false" onAction="#onDeleteAccount" prefWidth="60.0" text="Delete">
-                                 <HBox.margin>
-                                    <Insets right="5.0" />
-                                 </HBox.margin>
-                              </Button>
-                              <Button fx:id="aClearBtn" mnemonicParsing="false" onAction="#onClearAccount" prefWidth="60.0" text="Clear">
-                                 <HBox.margin>
-                                    <Insets right="5.0" />
-                                 </HBox.margin>
-                              </Button>
-                           </children>
-                        </HBox>
+                           <padding>
+                              <Insets bottom="5.0" top="5.0" />
+                           </padding>
+                        </GridPane>
                      </children>
                   </VBox>
                </content>

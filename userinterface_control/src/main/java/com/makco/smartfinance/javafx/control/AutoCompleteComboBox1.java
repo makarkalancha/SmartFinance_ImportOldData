@@ -26,18 +26,6 @@ import java.util.regex.Pattern;
  */
 
 /**
- * http://stackoverflow.com/questions/30882634/what-is-wrong-with-this-javafx-fxml-custom-component
- * http://docs.oracle.com/javafx/2/fxml_get_started/custom_control.htm
- *
- * https://jaxenter.com/netbeans/making-custom-javafx-controls-available-in-the-scene-builder
- * 1) make a build without any third-party library
- * 2) remove previous unsuccessful import of jar from C:\Users\mcalancea\AppData\Roaming\Scene Builder\Library\
- * 3) import just built jar
- *
- *  logger is not working
- */
-
-/**
  * bug:
  * 1) type any letter
  * 2) choose anything from list (without pressing enter)

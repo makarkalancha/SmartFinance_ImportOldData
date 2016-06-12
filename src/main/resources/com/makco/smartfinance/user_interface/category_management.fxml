@@ -33,98 +33,72 @@
             <Font size="20.0" />
          </font>
       </Label>
-      <TabPane fx:id="tabPane" prefHeight="562.0" prefWidth="580.0" tabClosingPolicy="UNAVAILABLE">
+      <TabPane fx:id="tabPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="570.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE">
         <tabs>
           <Tab text="Category Group">
                <content>
-                  <VBox prefHeight="200.0" prefWidth="100.0">
+                  <VBox minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="600.0">
                      <children>
-                        <TableView fx:id="cgTable" prefHeight="350.0" prefWidth="580.0">
+                        <TableView fx:id="cgTable" minHeight="-Infinity" minWidth="-Infinity" prefHeight="350.0" prefWidth="580.0">
                           <columns>
                           </columns>
                            <VBox.margin>
                               <Insets top="5.0" />
                            </VBox.margin>
                         </TableView>
-                        <HBox>
+                        <GridPane hgap="5.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="165.0" prefWidth="525.0" vgap="5.0">
+                          <columnConstraints>
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                          </columnConstraints>
+                          <rowConstraints>
+                            <RowConstraints minHeight="25.0" prefHeight="35.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="25.0" prefHeight="35.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="65.0" prefHeight="75.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                          </rowConstraints>
                            <children>
-                              <AutoCompleteComboBox fx:id="cgTypeACCB" prefWidth="150.0" promptText="Type">
+                              <AutoCompleteComboBox fx:id="cgTypeACCB" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="150.0" promptText="Type" style="-fx-border-color: red;">
                                  <tooltip>
                                     <Tooltip text="Choose category group type" />
                                  </tooltip>
-                                 <HBox.margin>
-                                    <Insets bottom="5.0" left="50.0" top="5.0" />
-                                 </HBox.margin>
                               </AutoCompleteComboBox>
-                              <Label text="*" textFill="RED">
-                                 <tooltip>
-                                    <Tooltip text="Required" />
-                                 </tooltip>
-                                 <HBox.margin>
-                                    <Insets left="5.0" />
-                                 </HBox.margin>
-                                 <font>
-                                    <Font size="24.0" />
-                                 </font>
-                              </Label>
-                           </children>
-                        </HBox>
-                        <HBox>
-                           <children>
-                              <TextField fx:id="cgNameTF" promptText="Name...">
-                                 <VBox.margin>
-                                    <Insets bottom="5.0" left="50.0" right="50.0" />
-                                 </VBox.margin>
+                              <TextField fx:id="cgNameTF" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="330.0" promptText="Name..." style="-fx-border-color: red;" GridPane.rowIndex="1">
                                  <tooltip>
                                     <Tooltip text="Empty Tooltip" />
                                  </tooltip>
-                                 <HBox.margin>
-                                    <Insets bottom="5.0" left="50.0" top="5.0" />
-                                 </HBox.margin>
                               </TextField>
-                              <Label text="*" textFill="RED">
-                                 <font>
-                                    <Font size="24.0" />
-                                 </font>
+                              <TextArea fx:id="cgDescTA" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="65.0" prefWidth="465.0" promptText="Description..." GridPane.rowIndex="2">
                                  <tooltip>
-                                    <Tooltip text="Required" />
+                                    <Tooltip text="Enter Description" />
                                  </tooltip>
-                                 <HBox.margin>
-                                    <Insets left="5.0" />
-                                 </HBox.margin>
-                              </Label>
+                              </TextArea>
+                              <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="25.0" GridPane.rowIndex="3">
+                                 <children>
+                                    <Button fx:id="cgSaveBtn" mnemonicParsing="false" onAction="#onSaveCategoryGroup" prefWidth="60.0" text="Save">
+                                       <HBox.margin>
+                                          <Insets right="5.0" />
+                                       </HBox.margin>
+                                    </Button>
+                                    <Button fx:id="cgDeleteBtn" mnemonicParsing="false" onAction="#onDeleteCategoryGroup" prefWidth="60.0" text="Delete">
+                                       <HBox.margin>
+                                          <Insets right="5.0" />
+                                       </HBox.margin>
+                                    </Button>
+                                    <Button fx:id="cgClearBtn" mnemonicParsing="false" onAction="#onClearCategoryGroup" prefWidth="60.0" text="Clear">
+                                       <HBox.margin>
+                                          <Insets right="5.0" />
+                                       </HBox.margin>
+                                    </Button>
+                                 </children>
+                              </HBox>
                            </children>
                            <VBox.margin>
-                              <Insets />
+                              <Insets bottom="5.0" left="50.0" right="5.0" top="5.0" />
                            </VBox.margin>
-                        </HBox>
-                        <TextArea fx:id="cgDescTA" prefHeight="64.0" prefWidth="465.0" promptText="Description...">
-                           <VBox.margin>
-                              <Insets bottom="5.0" left="50.0" right="50.0" />
-                           </VBox.margin>
-                           <tooltip>
-                              <Tooltip text="Enter Description" />
-                           </tooltip>
-                        </TextArea>
-                        <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="25.0">
-                           <children>
-                              <Button fx:id="cgSaveBtn" mnemonicParsing="false" onAction="#onSaveCategoryGroup" prefWidth="60.0" text="Save">
-                                 <HBox.margin>
-                                    <Insets left="50.0" right="5.0" />
-                                 </HBox.margin>
-                              </Button>
-                              <Button fx:id="cgDeleteBtn" mnemonicParsing="false" onAction="#onDeleteCategoryGroup" prefWidth="60.0" text="Delete">
-                                 <HBox.margin>
-                                    <Insets right="5.0" />
-                                 </HBox.margin>
-                              </Button>
-                              <Button fx:id="cgClearBtn" mnemonicParsing="false" onAction="#onClearCategoryGroup" prefWidth="60.0" text="Clear">
-                                 <HBox.margin>
-                                    <Insets right="5.0" />
-                                 </HBox.margin>
-                              </Button>
-                           </children>
-                        </HBox>
+                           <padding>
+                              <Insets bottom="5.0" top="5.0" />
+                           </padding>
+                        </GridPane>
                      </children>
                   </VBox>
                </content>
@@ -133,94 +107,64 @@
                <content>
                   <VBox prefHeight="200.0" prefWidth="100.0">
                      <children>
-                        <TreeTableView fx:id="cTable" prefHeight="350.0" prefWidth="580.0">
-                          <columns>
-                            <TreeTableColumn prefWidth="75.0" text="C1" />
-                            <TreeTableColumn prefWidth="75.0" text="C2" />
-                          </columns>
+                        <TreeTableView fx:id="cTable" minHeight="-Infinity" minWidth="-Infinity" prefHeight="350.0" prefWidth="580.0">
                            <VBox.margin>
                               <Insets top="5.0" />
                            </VBox.margin>
                         </TreeTableView>
-                        <HBox>
+                        <GridPane hgap="5.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="165.0" prefWidth="525.0" vgap="5.0">
+                          <columnConstraints>
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                          </columnConstraints>
+                          <rowConstraints>
+                            <RowConstraints minHeight="25.0" prefHeight="35.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="25.0" prefHeight="35.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="65.0" prefHeight="75.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="25.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                          </rowConstraints>
                            <children>
-                              <AutoCompleteComboBox fx:id="cCategoryGroupACCB" prefWidth="150.0" promptText="Category Group">
+                              <AutoCompleteComboBox fx:id="cCategoryGroupACCB" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="150.0" promptText="Category Group" style="-fx-border-color: red;">
                                  <tooltip>
                                     <Tooltip text="Enter name" />
                                  </tooltip>
-                                 <HBox.margin>
-                                    <Insets bottom="5.0" left="50.0" top="5.0" />
-                                 </HBox.margin>
                               </AutoCompleteComboBox>
-                              <Label text="*" textFill="RED">
-                                 <font>
-                                    <Font size="24.0" />
-                                 </font>
-                                 <tooltip>
-                                    <Tooltip text="Required" />
-                                 </tooltip>
-                                 <HBox.margin>
-                                    <Insets left="5.0" />
-                                 </HBox.margin>
-                              </Label>
-                           </children>
-                        </HBox>
-                        <HBox>
-                           <children>
-                              <TextField fx:id="cNameTF" promptText="Name...">
+                              <TextField fx:id="cNameTF" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="330.0" promptText="Name..." style="-fx-border-color: red;" GridPane.rowIndex="1">
                                  <tooltip>
                                     <Tooltip text="Empty Tooltip" />
                                  </tooltip>
-                                 <HBox.margin>
-                                    <Insets bottom="5.0" left="50.0" top="5.0" />
-                                 </HBox.margin>
-                                 <VBox.margin>
-                                    <Insets bottom="5.0" left="50.0" right="50.0" />
-                                 </VBox.margin>
                               </TextField>
-                              <Label text="*" textFill="RED">
-                                 <font>
-                                    <Font size="24.0" />
-                                 </font>
+                              <TextArea fx:id="cDescTA" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="65.0" prefWidth="465.0" promptText="Description..." GridPane.rowIndex="2">
                                  <tooltip>
-                                    <Tooltip text="Required" />
+                                    <Tooltip text="Enter Description" />
                                  </tooltip>
-                                 <HBox.margin>
-                                    <Insets left="5.0" />
-                                 </HBox.margin>
-                              </Label>
+                              </TextArea>
+                              <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="25.0" GridPane.rowIndex="3">
+                                 <children>
+                                    <Button fx:id="cSaveBtn" mnemonicParsing="false" onAction="#onSaveCategory" prefWidth="60.0" text="Save">
+                                       <HBox.margin>
+                                          <Insets right="5.0" />
+                                       </HBox.margin>
+                                    </Button>
+                                    <Button fx:id="cDeleteBtn" mnemonicParsing="false" onAction="#onDeleteCategory" prefWidth="60.0" text="Delete">
+                                       <HBox.margin>
+                                          <Insets right="5.0" />
+                                       </HBox.margin>
+                                    </Button>
+                                    <Button fx:id="cClearBtn" mnemonicParsing="false" onAction="#onClearCategory" prefWidth="60.0" text="Clear">
+                                       <HBox.margin>
+                                          <Insets right="5.0" />
+                                       </HBox.margin>
+                                    </Button>
+                                 </children>
+                              </HBox>
                            </children>
                            <VBox.margin>
-                              <Insets />
+                              <Insets bottom="5.0" left="50.0" right="5.0" top="5.0" />
                            </VBox.margin>
-                        </HBox>
-                        <TextArea fx:id="cDescTA" prefHeight="64.0" prefWidth="465.0" promptText="Description...">
-                           <tooltip>
-                              <Tooltip text="Enter Description" />
-                           </tooltip>
-                           <VBox.margin>
-                              <Insets bottom="5.0" left="50.0" right="50.0" />
-                           </VBox.margin>
-                        </TextArea>
-                        <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="25.0">
-                           <children>
-                              <Button fx:id="cSaveBtn" mnemonicParsing="false" onAction="#onSaveCategory" prefWidth="60.0" text="Save">
-                                 <HBox.margin>
-                                    <Insets left="50.0" right="5.0" />
-                                 </HBox.margin>
-                              </Button>
-                              <Button fx:id="cDeleteBtn" mnemonicParsing="false" onAction="#onDeleteCategory" prefWidth="60.0" text="Delete">
-                                 <HBox.margin>
-                                    <Insets right="5.0" />
-                                 </HBox.margin>
-                              </Button>
-                              <Button fx:id="cClearBtn" mnemonicParsing="false" onAction="#onClearCategory" prefWidth="60.0" text="Clear">
-                                 <HBox.margin>
-                                    <Insets right="5.0" />
-                                 </HBox.margin>
-                              </Button>
-                           </children>
-                        </HBox>
+                           <padding>
+                              <Insets bottom="5.0" top="5.0" />
+                           </padding>
+                        </GridPane>
                      </children>
                   </VBox>
                </content>
