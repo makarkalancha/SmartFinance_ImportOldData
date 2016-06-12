@@ -24,6 +24,7 @@ import javafx.concurrent.Worker;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Control;
 import javafx.scene.control.DateCell;
@@ -34,6 +35,11 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.Region;
+import javafx.scene.paint.Color;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
 import org.apache.commons.lang3.StringUtils;
@@ -48,8 +54,10 @@ import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.EnumMap;
 import java.util.EnumSet;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.Set;
 
 /**
  * Created by mcalancea on 2016-06-09.
@@ -136,32 +144,64 @@ public class TaxController implements Initializable, ControlledScreen, UndoRedoS
     }
 
     private Map<ErrorEnum, Control> errorControlDictionary = new EnumMap<ErrorEnum, Control>(ErrorEnum.class);
-//    {
-//        errorControlDictionary.put(ErrorEnum.TAX_DESC_LGTH, descTA.getcon);
-//        errorControlDictionary.put(ErrorEnum.TAX_NAME_DUPLICATE, nameTF);
-//        errorControlDictionary.put(ErrorEnum.TAX_NAME_LGTH, nameTF);
-//        errorControlDictionary.put(ErrorEnum.TAX_NAME_NULL, nameTF);
-//        errorControlDictionary.put(ErrorEnum.TAX_RATE, rateTF);
-//        errorControlDictionary.put(ErrorEnum.TAX_START_LT_EQ_END, startDP);
-//    }
+    private Set<Control> erroneousControlSet = new HashSet<>();
+
+    private void clearErrorHighlight(){
+        erroneousControlSet.forEach(control -> {
+            if(control instanceof TextArea){
+                Region reg = (Region) control.lookup(".content");
+//                    region.setStyle(UserInterfaceConstants.INVALID_CONTROL_BGCOLOR);
+                reg.getStyleClass().remove(UserInterfaceConstants.INVALID_CONTROL_CLASS_);
+            } else {
+//                    control.setStyle(UserInterfaceConstants.INVALID_CONTROL_BGCOLOR);
+                control.getStyleClass().remove(UserInterfaceConstants.INVALID_CONTROL_CLASS_);
+            }
+        });
+    }
 
     private void highlightInvalidFields(EnumSet<ErrorEnum> errors){
+        clearErrorHighlight();
+//        LOG.debug(">>>highlightInvalidFields before nameTF.getStyleClass(): "+nameTF.getStyleClass());
+//        nameTF.getStyleClass().remove(UserInterfaceConstants.INVALID_CONTROL_CLASS_);
+//        LOG.debug(">>>highlightInvalidFields after nameTF.getStyleClass(): "+nameTF.getStyleClass());
+//
+//        Region region = (Region) descTA.lookup(".content");
+//        LOG.debug(">>>highlightInvalidFields before region.getStyleClass(): " + region.getStyleClass());
+//        region.getStyleClass().remove(UserInterfaceConstants.INVALID_CONTROL_CLASS_);
+//        LOG.debug(">>>highlightInvalidFields after region.getStyleClass(): " + region.getStyleClass());
+//
+//        rateTF.getStyleClass().remove(UserInterfaceConstants.INVALID_CONTROL_CLASS_);
+//        startDP.getStyleClass().remove(UserInterfaceConstants.INVALID_CONTROL_CLASS_);
+
         errors.forEach(error -> {
             Control control = errorControlDictionary.get(error);
             if(control != null){
-                control.setStyle(UserInterfaceConstants.INVALID_CONTROL_BGCOLOR);
+                LOG.debug(">>>>style: error="+error+"; getStyle="+control.getStyle()+"; getStyleClass="+control.getStyleClass());
+                if(control instanceof TextArea){
+                    Region reg = (Region) control.lookup(".content");
+//                    region.setStyle(UserInterfaceConstants.INVALID_CONTROL_BGCOLOR);
+                    reg.getStyleClass().add(UserInterfaceConstants.INVALID_CONTROL_CLASS_);
+                } else {
+//                    control.setStyle(UserInterfaceConstants.INVALID_CONTROL_BGCOLOR);
+                    control.getStyleClass().add(UserInterfaceConstants.INVALID_CONTROL_CLASS_);
+                }
             }
         });
     }
 
-    private void unhighlightInvalidFields(EnumSet<ErrorEnum> errors){
-        errors.forEach(error -> {
-            Control control = errorControlDictionary.get(error);
-            if(control != null){
-                control.setStyle(UserInterfaceConstants.INVALID_CONTROL_BGCOLOR);
-            }
-        });
-    }
+//    private void unhighlightInvalidFields(EnumSet<ErrorEnum> errors){
+//        errorControlDictionary.values()...forEach(error -> {
+//            Control control = errorControlDictionary.get(error);
+//            if(control != null){
+//                if(control instanceof TextArea){
+//                    Region region = (Region) control.lookup(".content");
+//                    region.getStyleClass().remove(UserInterfaceConstants.INVALID_CONTROL_CLASS_);
+//                } else {
+//                    control.getStyleClass().remove(UserInterfaceConstants.INVALID_CONTROL_BGCOLOR);
+//                }
+//            }
+//        });
+//    }
 
     public void initializeServices() {
         try {
@@ -423,6 +463,11 @@ public class TaxController implements Initializable, ControlledScreen, UndoRedoS
             errorControlDictionary.put(ErrorEnum.TAX_NAME_NULL, nameTF);
             errorControlDictionary.put(ErrorEnum.TAX_RATE, rateTF);
             errorControlDictionary.put(ErrorEnum.TAX_START_LT_EQ_END, startDP);
+
+            erroneousControlSet.add(nameTF);
+            erroneousControlSet.add(descTA);
+            erroneousControlSet.add(rateTF);
+            erroneousControlSet.add(startDP);
         } catch (Exception e) {
             //not in finally because refreshTax must run before populateTable
             startService(onRefreshWorker, null);
@@ -433,16 +478,15 @@ public class TaxController implements Initializable, ControlledScreen, UndoRedoS
     @FXML
     public void onClear(ActionEvent event) {
         try {
+            clearErrorHighlight();
+
             nameTF.clear();
-            nameTF.setStyle(null);
             descTA.clear();
-            descTA.setStyle(null);
             rateTF.clear();
-            rateTF.setStyle(null);
             formulaTA.clear();
             startDP.setValue(null);
-            startDP.setStyle(null);
             endDP.setValue(null);
+
             clearBtn.setDisable(false);
             saveBtn.setDisable(false);
             deleteBtn.setDisable(true);

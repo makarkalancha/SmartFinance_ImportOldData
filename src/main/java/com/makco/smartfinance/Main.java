@@ -168,6 +168,7 @@ public class Main extends Application{
 
             ////http://stackoverflow.com/questions/19602727/how-to-reference-javafx-fxml-files-in-resource-folder
             Scene scene = new Scene(mainContainer);
+            scene.getStylesheets().add(Main.class.getResource("style.css").toExternalForm());
             primaryStage.setScene(scene);
             LOG.debug(">>>>primaryStage.show()->hello: start");
             primaryStage.show();
