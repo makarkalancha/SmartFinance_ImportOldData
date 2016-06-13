@@ -555,6 +555,7 @@ public class AccountManagementController /*implements Initializable, ControlledS
     @FXML
     public void onClearAccountGroup(ActionEvent event){
         try{
+            clearErrorHighlight();
             agTypeACCB.setValue(getAccountGroupTypeStringList().get(0));
             agNameTF.clear();
             agDescTA.clear();
@@ -605,6 +606,7 @@ public class AccountManagementController /*implements Initializable, ControlledS
     @FXML
     public void onClearAccount(ActionEvent event){
         try{
+            clearErrorHighlight();
             if(accountManagementModel.getAccountGroupUIName().size() > 0){
                 aAccountGroupACCB.setValue(accountManagementModel.getAccountGroupUIName().get(0));
             }else{

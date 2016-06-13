@@ -11,10 +11,15 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Control;
 import javafx.scene.control.TextArea;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.Region;
+import javafx.scene.paint.Color;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -60,7 +65,7 @@ public abstract class AbstractControlledScreen implements Initializable, Control
             } else if(control instanceof ComboBox){
                 LOG.debug(">>>clearErrorHighlight before control.getStyleClass(): " + control.getStyleClass());
 //                Region reg = (Region) control.lookup(".combo-box");
-                Region reg = (Region) control.lookup(".combo-box-base");
+                Region reg = (Region) control.lookup(".combo-box > .text-input");
 //                LOG.debug(">>>clearErrorHighlight before reg1.getStyleClass(): " + reg1.getStyleClass());
 //                Region reg2 = (Region) reg1.lookup(".list-cell");
 //                    region.setStyle(UserInterfaceConstants.INVALID_CONTROL_BGCOLOR);
@@ -97,19 +102,8 @@ public abstract class AbstractControlledScreen implements Initializable, Control
 //                    region.setStyle(UserInterfaceConstants.INVALID_CONTROL_BGCOLOR);
                     reg.getStyleClass().add(UserInterfaceConstants.INVALID_CONTROL_CLASS_);
                 } else if(control instanceof ComboBox){
-//                    Region reg = (Region) control.lookup(".list-cell");
-//                    region.setStyle(UserInterfaceConstants.INVALID_CONTROL_BGCOLOR);
-//                    reg.getStyleClass().add(UserInterfaceConstants.INVALID_CONTROL_CLASS_);
-
-                    LOG.debug(">>>clearErrorHighlight before control.getStyleClass(): " + control.getStyleClass());
-//                Region reg = (Region) control.lookup(".combo-box > .list-cell");
-//                Region reg = (Region) control.lookup(".combo-box");
-                    Region reg = (Region) control.lookup(".combo-box-base");
-//                LOG.debug(">>>clearErrorHighlight before reg1.getStyleClass(): " + reg1.getStyleClass());
-//                Region reg2 = (Region) reg1.lookup(".list-cell");
-//                    region.setStyle(UserInterfaceConstants.INVALID_CONTROL_BGCOLOR);
-                    LOG.debug(">>>clearErrorHighlight before reg.getStyleClass(): " + reg.getStyleClass());
-                    LOG.debug(">>>clearErrorHighlight before reg.getStyle(): " + reg.getStyle());
+//                    Region reg = (Region) control.lookup(".combo-box > .text-input");
+                    Region reg = (Region) control.lookup(".text-input");
                     reg.getStyleClass().add(UserInterfaceConstants.INVALID_CONTROL_CLASS_);
                 } else {
 //                    control.setStyle(UserInterfaceConstants.INVALID_CONTROL_BGCOLOR);
