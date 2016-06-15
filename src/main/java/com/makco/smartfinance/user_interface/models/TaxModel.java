@@ -5,7 +5,6 @@ import com.makco.smartfinance.services.TaxService;
 import com.makco.smartfinance.services.TaxServiceImpl;
 import com.makco.smartfinance.user_interface.validation.ErrorEnum;
 import com.makco.smartfinance.utils.BigDecimalUtils;
-import com.makco.smartfinance.utils.DateUtils;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.apache.logging.log4j.LogManager;
@@ -13,8 +12,6 @@ import org.apache.logging.log4j.Logger;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.Date;
 import java.util.EnumSet;
 
 /**

@@ -1,7 +1,5 @@
 package com.makco.smartfinance.persistence.entity;
 
-import com.makco.smartfinance.constants.DataBaseConstants;
-
 /**
  * Created by mcalancea on 2016-06-02.
  */

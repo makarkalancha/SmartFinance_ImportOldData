@@ -11,16 +11,11 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
-import javafx.geometry.Insets;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Control;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.Region;
-import javafx.scene.paint.Color;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

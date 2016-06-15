@@ -3,26 +3,20 @@ package com.makco.smartfinance.persistence.entity;
 import com.makco.smartfinance.constants.DataBaseConstants;
 import org.hibernate.annotations.DiscriminatorOptions;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
-import javax.persistence.MappedSuperclass;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.sql.Timestamp;
 import java.util.Collection;
-import java.util.SortedSet;
-import java.util.TreeSet;
 
 /**
  * Created by mcalancea on 2016-04-25.

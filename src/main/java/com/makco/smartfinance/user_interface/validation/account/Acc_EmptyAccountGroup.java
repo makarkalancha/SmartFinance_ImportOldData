@@ -1,7 +1,6 @@
 package com.makco.smartfinance.user_interface.validation.account;
 
 import com.makco.smartfinance.persistence.entity.Account;
-import com.makco.smartfinance.persistence.entity.Category;
 import com.makco.smartfinance.user_interface.validation.ErrorEnum;
 import com.makco.smartfinance.user_interface.validation.Rule;
 

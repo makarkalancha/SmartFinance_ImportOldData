@@ -19,18 +19,14 @@ import javafx.concurrent.Service;
 import javafx.concurrent.Worker;
 import javafx.event.Event;
 import javafx.event.EventHandler;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.lookup.MainMapLookup;
 
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
 import java.time.LocalDate;
 import java.time.temporal.WeekFields;
 import java.util.Locale;

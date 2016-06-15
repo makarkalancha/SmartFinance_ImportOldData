@@ -1,8 +1,6 @@
 package com.makco.smartfinance.persistence.dao;
 
 import com.makco.smartfinance.persistence.entity.Category;
-import com.makco.smartfinance.persistence.entity.CategoryGroup;
-import com.makco.smartfinance.persistence.entity.Organization;
 
 import java.util.List;
 

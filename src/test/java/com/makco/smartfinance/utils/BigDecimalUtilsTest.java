@@ -1,11 +1,10 @@
 package com.makco.smartfinance.utils;
 
-import org.apache.commons.lang3.text.StrBuilder;
 import org.junit.Test;
 
 import java.math.BigDecimal;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Created by mcalancea on 2016-06-09.

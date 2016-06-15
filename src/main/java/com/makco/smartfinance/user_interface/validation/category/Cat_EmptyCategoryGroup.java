@@ -1,10 +1,8 @@
 package com.makco.smartfinance.user_interface.validation.category;
 
 import com.makco.smartfinance.persistence.entity.Category;
-import com.makco.smartfinance.persistence.entity.CategoryGroup;
 import com.makco.smartfinance.user_interface.validation.ErrorEnum;
 import com.makco.smartfinance.user_interface.validation.Rule;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.EnumSet;
 

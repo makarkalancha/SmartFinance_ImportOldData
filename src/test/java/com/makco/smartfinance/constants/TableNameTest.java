@@ -1,7 +1,5 @@
 package com.makco.smartfinance.constants;
 
-import static org.junit.Assert.*;
-
 /**
  * Created by mcalancea on 2016-05-27.
  */

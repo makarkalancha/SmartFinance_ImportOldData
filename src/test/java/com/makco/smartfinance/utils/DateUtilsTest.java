@@ -3,14 +3,13 @@ package com.makco.smartfinance.utils;
 import com.makco.smartfinance.user_interface.constants.UserInterfaceConstants;
 import org.junit.Test;
 
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.Month;
 import java.util.Date;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Created by mcalancea on 2016-06-09.

@@ -7,11 +7,6 @@ import org.apache.logging.log4j.Logger;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 
 /**
  * Created by mcalancea on 2016-04-25.

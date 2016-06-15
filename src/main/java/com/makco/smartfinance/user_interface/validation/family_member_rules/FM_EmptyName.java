@@ -1,7 +1,6 @@
 package com.makco.smartfinance.user_interface.validation.family_member_rules;
 
 import com.makco.smartfinance.persistence.entity.FamilyMember;
-import com.makco.smartfinance.user_interface.utility_screens.DialogMessages;
 import com.makco.smartfinance.user_interface.validation.ErrorEnum;
 import com.makco.smartfinance.user_interface.validation.Rule;
 import org.apache.commons.lang3.StringUtils;

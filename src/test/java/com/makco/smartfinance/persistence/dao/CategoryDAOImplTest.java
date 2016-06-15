@@ -1,8 +1,8 @@
 package com.makco.smartfinance.persistence.dao;
 
 import com.makco.smartfinance.constants.DataBaseConstants;
-import com.makco.smartfinance.persistence.dao.dao_implementations.Category_v1DAOImplForTest;
 import com.makco.smartfinance.persistence.dao.dao_implementations.CategoryGroup_v1DAOImplForTest;
+import com.makco.smartfinance.persistence.dao.dao_implementations.Category_v1DAOImplForTest;
 import com.makco.smartfinance.persistence.entity.session.category_management.v1.CategoryCredit_v1;
 import com.makco.smartfinance.persistence.entity.session.category_management.v1.CategoryDebit_v1;
 import com.makco.smartfinance.persistence.entity.session.category_management.v1.CategoryGroupCredit_v1;

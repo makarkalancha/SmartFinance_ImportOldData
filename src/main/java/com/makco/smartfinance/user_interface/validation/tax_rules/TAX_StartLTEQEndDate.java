@@ -1,6 +1,5 @@
 package com.makco.smartfinance.user_interface.validation.tax_rules;
 
-import com.makco.smartfinance.constants.DataBaseConstants;
 import com.makco.smartfinance.persistence.entity.Tax;
 import com.makco.smartfinance.user_interface.validation.ErrorEnum;
 import com.makco.smartfinance.user_interface.validation.Rule;

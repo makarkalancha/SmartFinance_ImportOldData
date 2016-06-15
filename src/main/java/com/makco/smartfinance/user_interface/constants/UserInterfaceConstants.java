@@ -1,7 +1,6 @@
 package com.makco.smartfinance.user_interface.constants;
 
 import com.makco.smartfinance.constants.DataBaseConstants;
-import com.makco.smartfinance.persistence.entity.CategoryGroup;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;

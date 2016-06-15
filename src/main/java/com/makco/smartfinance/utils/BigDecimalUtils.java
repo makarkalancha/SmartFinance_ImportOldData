@@ -5,7 +5,6 @@ import org.apache.commons.lang3.StringUtils;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
-import java.text.NumberFormat;
 
 /**
  * Created by mcalancea on 2016-06-09.
