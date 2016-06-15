@@ -4,23 +4,17 @@ import com.makco.smartfinance.constants.DataBaseConstants;
 import com.makco.smartfinance.javafx.control.AutoCompleteComboBox;
 import com.makco.smartfinance.persistence.entity.AccountGroup;
 import com.makco.smartfinance.user_interface.Command;
-import com.makco.smartfinance.user_interface.ControlledScreen;
-import com.makco.smartfinance.user_interface.ScreensController;
 import com.makco.smartfinance.user_interface.constants.UserInterfaceConstants;
 import com.makco.smartfinance.user_interface.decorator.account_management.AccountManagementDecorator;
 import com.makco.smartfinance.user_interface.decorator.account_management.AccountManagementDecoratorAccount;
 import com.makco.smartfinance.user_interface.decorator.account_management.AccountManagementDecoratorRoot;
 import com.makco.smartfinance.user_interface.models.AccountManagementModel;
-import com.makco.smartfinance.user_interface.undoredo.CareTaker;
 import com.makco.smartfinance.user_interface.undoredo.Memento;
-import com.makco.smartfinance.user_interface.undoredo.UndoRedoScreen;
 import com.makco.smartfinance.user_interface.utility_screens.DialogMessages;
 import com.makco.smartfinance.user_interface.utility_screens.forms.ProgressIndicatorForm;
 import com.makco.smartfinance.user_interface.validation.ErrorEnum;
-import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.ReadOnlyStringWrapper;
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.concurrent.Service;
@@ -28,7 +22,6 @@ import javafx.concurrent.Task;
 import javafx.concurrent.Worker;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
@@ -56,14 +49,11 @@ import java.util.ResourceBundle;
 /**
  * Created by mcalancea on 2016-06-06.
  */
-public class AccountManagementController /*implements Initializable, ControlledScreen, UndoRedoScreen*/ extends AbstractControlledScreen {
+public class AccountManagementController extends AbstractControlledScreen {
     private final static Logger LOG = LogManager.getLogger(AccountManagementController.class);
     private final static int ACCOUNT_GROUP_TAB_INDEX = 0;
     private final static int ACCOUNT_TAB_INDEX = 1;
-//    private ScreensController screensController;
     private AccountManagementModel accountManagementModel = new AccountManagementModel();
-
-//    private ActionEvent actionEvent;
 
     private Worker<Void> onDeleteAccountGroupWorker;
     private Worker<EnumSet<ErrorEnum>> onSaveAccountGroupWorker;
@@ -77,8 +67,6 @@ public class AccountManagementController /*implements Initializable, ControlledS
     private ProgressIndicatorForm pForm = new ProgressIndicatorForm();
 
     private int selectedTabIndex;
-//    private CareTaker careTaker;
-//    private BooleanProperty isNotUndo = new SimpleBooleanProperty(true);
 
     @FXML
     private TabPane tabPane;
@@ -331,16 +319,6 @@ public class AccountManagementController /*implements Initializable, ControlledS
             ((Service<V>)worker).restart();
         }
     }
-
-//    @Override
-//    public void setScreenPage(ScreensController screenPage) {
-//        try{
-//            screensController = screenPage;
-//            careTaker = screensController.getCareTaker();
-//        }catch (Exception e){
-//            DialogMessages.showExceptionAlert(e);
-//        }
-//    }
 
     @Override
     public void refresh() {
