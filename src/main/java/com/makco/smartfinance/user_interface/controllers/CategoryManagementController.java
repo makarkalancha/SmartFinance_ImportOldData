@@ -56,14 +56,11 @@ import java.util.ResourceBundle;
 /**
  * Created by mcalancea on 2016-05-13.
  */
-public class CategoryManagementController implements Initializable, ControlledScreen, UndoRedoScreen {
+public class CategoryManagementController extends AbstractControlledScreen {
     private final static Logger LOG = LogManager.getLogger(CategoryManagementController.class);
     private final static int CATEGORY_GROUP_TAB_INDEX = 0;
     private final static int CATEGORY_TAB_INDEX = 1;
-    private ScreensController screensController;
     private CategoryManagementModel categoryManagementModel = new CategoryManagementModel();
-
-    private ActionEvent actionEvent;
 
     private Worker<Void> onDeleteCategoryGroupWorker;
     private Worker<EnumSet<ErrorEnum>> onSaveCategoryGroupWorker;
@@ -77,8 +74,6 @@ public class CategoryManagementController implements Initializable, ControlledSc
     private ProgressIndicatorForm pForm = new ProgressIndicatorForm();
 
     private int selectedTabIndex;
-    private CareTaker careTaker;
-    private BooleanProperty isNotUndo = new SimpleBooleanProperty(true);
 
     @FXML
     private TabPane tabPane;
@@ -226,6 +221,7 @@ public class CategoryManagementController implements Initializable, ControlledSc
                 populateCategoryGroupTable();
                 EnumSet<ErrorEnum> errors = onSaveCategoryGroupWorker.getValue();
                 if(!errors.isEmpty()) {
+                    highlightInvalidFields(errors);
                     DialogMessages.showErrorDialog("Error while saving Category Group: type "
                                     + cgTypeACCB.getValue() + ", with name " + cgNameTF.getText(),
                             (EnumSet<ErrorEnum>) ((Service) onSaveCategoryGroupWorker).getValue(), null);
@@ -280,6 +276,7 @@ public class CategoryManagementController implements Initializable, ControlledSc
                 populateCategoryTable();
                 EnumSet<ErrorEnum> errors = onSaveCategoryWorker.getValue();
                 if(!errors.isEmpty()) {
+                    highlightInvalidFields(errors);
                     DialogMessages.showErrorDialog("Error while saving Category: category group "
                                     + cCategoryGroupACCB.getValue() + ", with name " + cNameTF.getText(),
                             (EnumSet<ErrorEnum>) ((Service) onSaveCategoryWorker).getValue(), null);
@@ -327,16 +324,6 @@ public class CategoryManagementController implements Initializable, ControlledSc
         Service<V> service = ((Service<V>)worker);
         if(service != null){
             ((Service<V>)worker).restart();
-        }
-    }
-
-    @Override
-    public void setScreenPage(ScreensController screenPage) {
-        try{
-            screensController = screenPage;
-            careTaker = screensController.getCareTaker();
-        }catch (Exception e){
-            DialogMessages.showExceptionAlert(e);
         }
     }
 
@@ -465,6 +452,16 @@ public class CategoryManagementController implements Initializable, ControlledSc
             cgClearBtn.setDisable(false);
             cgSaveBtn.setDisable(false);
             cgDeleteBtn.setDisable(true);
+
+            errorControlDictionary.put(ErrorEnum.CatGr_DESC_LGTH, cgDescTA);
+            errorControlDictionary.put(ErrorEnum.CatGr_NAME_DUPLICATE, cgNameTF);
+            errorControlDictionary.put(ErrorEnum.CatGr_NAME_LGTH, cgNameTF);
+            errorControlDictionary.put(ErrorEnum.CatGr_NULL_NAME, cgNameTF);
+            errorControlDictionary.put(ErrorEnum.CatGr_NULL_CG_TYPE, cgTypeACCB);
+
+            erroneousControlSet.add(cgTypeACCB);
+            erroneousControlSet.add(cgNameTF);
+            erroneousControlSet.add(cgDescTA);
         } catch (Exception e) {
             //not in finally because refreshCategoryGroup must run before populateCategoryGroupTable
             startService(onRefreshCategoryGroupWorker, null);
@@ -520,6 +517,16 @@ public class CategoryManagementController implements Initializable, ControlledSc
             cClearBtn.setDisable(false);
             cSaveBtn.setDisable(false);
             cDeleteBtn.setDisable(true);
+
+            errorControlDictionary.put(ErrorEnum.Cat_CG_EMPTY, cCategoryGroupACCB);
+            errorControlDictionary.put(ErrorEnum.Cat_DESC_LGTH, cDescTA);
+            errorControlDictionary.put(ErrorEnum.Cat_NAME_DUPLICATE, cNameTF);
+            errorControlDictionary.put(ErrorEnum.Cat_NAME_LGTH, cNameTF);
+            errorControlDictionary.put(ErrorEnum.Cat_NULL_NAME, cNameTF);
+
+            erroneousControlSet.add(cCategoryGroupACCB);
+            erroneousControlSet.add(cNameTF);
+            erroneousControlSet.add(cDescTA);
         } catch (Exception e) {
             //not in finally because onRefreshCategoryWorker must run before populateCategoryTable
             startService(onRefreshCategoryWorker, null);
@@ -530,6 +537,8 @@ public class CategoryManagementController implements Initializable, ControlledSc
     @FXML
     public void onClearCategoryGroup(ActionEvent event){
         try{
+            clearErrorHighlight();
+
             cgTypeACCB.setValue(getCategoryGroupTypeStringList().get(0));
             cgNameTF.clear();
             cgDescTA.clear();
@@ -580,6 +589,8 @@ public class CategoryManagementController implements Initializable, ControlledSc
     @FXML
     public void onClearCategory(ActionEvent event){
         try{
+            clearErrorHighlight();
+
             if(categoryManagementModel.getCategoryGroupUIName().size() > 0){
                 cCategoryGroupACCB.setValue(categoryManagementModel.getCategoryGroupUIName().get(0));
             }else{
