@@ -15,6 +15,7 @@ import javafx.geometry.Insets;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Control;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
@@ -60,20 +61,12 @@ public abstract class AbstractControlledScreen implements Initializable, Control
         erroneousControlSet.forEach(control -> {
             if(control instanceof TextArea){
                 Region reg = (Region) control.lookup(".content");
-//                    region.setStyle(UserInterfaceConstants.INVALID_CONTROL_BGCOLOR);
                 reg.getStyleClass().remove(UserInterfaceConstants.INVALID_CONTROL_CLASS_);
             } else if(control instanceof ComboBox){
                 LOG.debug(">>>clearErrorHighlight before control.getStyleClass(): " + control.getStyleClass());
-//                Region reg = (Region) control.lookup(".combo-box");
-                Region reg = (Region) control.lookup(".combo-box > .text-input");
-//                LOG.debug(">>>clearErrorHighlight before reg1.getStyleClass(): " + reg1.getStyleClass());
-//                Region reg2 = (Region) reg1.lookup(".list-cell");
-//                    region.setStyle(UserInterfaceConstants.INVALID_CONTROL_BGCOLOR);
-                LOG.debug(">>>clearErrorHighlight before reg.getStyleClass(): " + reg.getStyleClass());
-                LOG.debug(">>>clearErrorHighlight before reg.getStyle(): " + reg.getStyle());
+                TextField reg = ((ComboBox) control).getEditor();
                 reg.getStyleClass().remove(UserInterfaceConstants.INVALID_CONTROL_CLASS_);
             } else {
-//                    control.setStyle(UserInterfaceConstants.INVALID_CONTROL_BGCOLOR);
                 control.getStyleClass().remove(UserInterfaceConstants.INVALID_CONTROL_CLASS_);
             }
         });
@@ -96,17 +89,13 @@ public abstract class AbstractControlledScreen implements Initializable, Control
         errors.forEach(error -> {
             Control control = errorControlDictionary.get(error);
             if(control != null){
-                LOG.debug(">>>>style: error="+error+"; getStyle="+control.getStyle()+"; getStyleClass="+control.getStyleClass());
                 if(control instanceof TextArea){
                     Region reg = (Region) control.lookup(".content");
-//                    region.setStyle(UserInterfaceConstants.INVALID_CONTROL_BGCOLOR);
                     reg.getStyleClass().add(UserInterfaceConstants.INVALID_CONTROL_CLASS_);
                 } else if(control instanceof ComboBox){
-//                    Region reg = (Region) control.lookup(".combo-box > .text-input");
-                    Region reg = (Region) control.lookup(".text-input");
+                    TextField reg = ((ComboBox) control).getEditor();
                     reg.getStyleClass().add(UserInterfaceConstants.INVALID_CONTROL_CLASS_);
                 } else {
-//                    control.setStyle(UserInterfaceConstants.INVALID_CONTROL_BGCOLOR);
                     control.getStyleClass().add(UserInterfaceConstants.INVALID_CONTROL_CLASS_);
                 }
             }

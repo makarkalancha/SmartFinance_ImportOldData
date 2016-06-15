@@ -474,6 +474,7 @@ public class AccountManagementController /*implements Initializable, ControlledS
             errorControlDictionary.put(ErrorEnum.AccGr_NULL_AG_TYPE, agTypeACCB);
             errorControlDictionary.put(ErrorEnum.AccGr_NULL_NAME, agNameTF);
 
+            erroneousControlSet.add(agTypeACCB);
             erroneousControlSet.add(agDescTA);
             erroneousControlSet.add(agNameTF);
         } catch (Exception e) {
