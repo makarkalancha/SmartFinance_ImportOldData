@@ -9,6 +9,7 @@ import com.makco.smartfinance.user_interface.utility_screens.DialogMessages;
 import com.makco.smartfinance.user_interface.validation.ErrorEnum;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
@@ -84,9 +85,15 @@ public abstract class AbstractControlledScreen implements Initializable, Control
         errors.forEach(error -> {
             Control control = errorControlDictionary.get(error);
             if(control != null){
+                /**
+                 * todo fix a bug: if there are several bugs on the same field like currency.code (length must be 3
+                 * and not null) then it must be removed twice, so put in set
+                 */
                 if(control instanceof TextArea){
                     Region reg = (Region) control.lookup(".content");
-                    reg.getStyleClass().add(UserInterfaceConstants.INVALID_CONTROL_CLASS_);
+                    Set<String> setClass = new HashSet<>(reg.getStyleClass());
+                    setClass.add(UserInterfaceConstants.INVALID_CONTROL_CLASS_);
+                    reg.getStyleClass() = FXCollections.observableArrayList();
                 } else if(control instanceof ComboBox){
                     TextField reg = ((ComboBox) control).getEditor();
                     reg.getStyleClass().add(UserInterfaceConstants.INVALID_CONTROL_CLASS_);

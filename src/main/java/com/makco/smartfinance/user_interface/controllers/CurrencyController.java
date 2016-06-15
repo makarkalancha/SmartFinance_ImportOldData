@@ -39,19 +39,14 @@ import java.util.ResourceBundle;
 /**
  * Created by mcalancea on 2016-04-12.
  */
-public class CurrencyController implements Initializable, ControlledScreen, UndoRedoScreen {
+public class CurrencyController extends AbstractControlledScreen {
     private final static Logger LOG = LogManager.getLogger(CurrencyController.class);
-    private ScreensController screensController;
     private CurrencyModel currencyModel = new CurrencyModel();
 
-    private ActionEvent actionEvent;
     private Worker<Void> onDeleteWorker;
     private Worker<EnumSet<ErrorEnum>> onSaveWorker;
     private Worker<Void> onRefreshWorker;
     private ProgressIndicatorForm pForm = new ProgressIndicatorForm();
-
-    private CareTaker careTaker;
-    private BooleanProperty isNotUndo = new SimpleBooleanProperty(true);
 
     @FXML
     private TableView<Currency> table;
@@ -134,6 +129,7 @@ public class CurrencyController implements Initializable, ControlledScreen, Undo
                 populateTable();
                 EnumSet<ErrorEnum> errors = onSaveWorker.getValue();
                 if(!errors.isEmpty()) {
+                    highlightInvalidFields(errors);
                     DialogMessages.showErrorDialog("Error while saving Currency: " + codeTF.getText(),
                             (EnumSet<ErrorEnum>) ((Service) onSaveWorker).getValue(), null);
                 } else {
@@ -176,16 +172,6 @@ public class CurrencyController implements Initializable, ControlledScreen, Undo
         Service<V> service = ((Service<V>)worker);
         if(service != null){
             ((Service<V>)worker).restart();
-        }
-    }
-
-    @Override
-    public void setScreenPage(ScreensController screenPage) {
-        try{
-            screensController = screenPage;
-            careTaker = screensController.getCareTaker();
-        }catch (Exception e){
-            DialogMessages.showExceptionAlert(e);
         }
     }
 
@@ -262,6 +248,16 @@ public class CurrencyController implements Initializable, ControlledScreen, Undo
             clearBtn.setDisable(false);
             saveBtn.setDisable(false);
             deleteBtn.setDisable(true);
+
+            errorControlDictionary.put(ErrorEnum.Cur_CODE_DUPLICATE, codeTF);
+            errorControlDictionary.put(ErrorEnum.Cur_DESC_LGTH, descTA);
+            errorControlDictionary.put(ErrorEnum.Cur_CODE_LGTH, codeTF);
+            errorControlDictionary.put(ErrorEnum.Cur_CODE_NULL, codeTF);
+            errorControlDictionary.put(ErrorEnum.Cur_NAME_LGTH, nameTF);
+
+            erroneousControlSet.add(codeTF);
+            erroneousControlSet.add(nameTF);
+            erroneousControlSet.add(descTA);
         } catch (Exception e) {
             //not in finally because refreshCurrency must run before populateTable
             startService(onRefreshWorker, null);
@@ -272,6 +268,8 @@ public class CurrencyController implements Initializable, ControlledScreen, Undo
     @FXML
     public void onClear(ActionEvent event){
         try{
+            clearErrorHighlight();
+
             codeTF.clear();
             nameTF.clear();
             descTA.clear();
