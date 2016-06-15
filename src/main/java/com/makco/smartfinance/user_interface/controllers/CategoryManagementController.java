@@ -173,7 +173,7 @@ public class CategoryManagementController extends AbstractControlledScreen {
                         @Override
                         protected EnumSet<ErrorEnum> call() throws Exception {
                             return categoryManagementModel.savePendingCategory(
-                                    categoryManagementModel.convertCategoryGroupFromUIToBackendTo(cCategoryGroupACCB.getValue().toString()),
+                                    categoryManagementModel.convertCategoryGroupFromUIToBackendTo(cCategoryGroupACCB.getValue()),
                                     cNameTF.getText(),
                                     cDescTA.getText());
                         }
