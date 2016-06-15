@@ -166,7 +166,7 @@ public class AccountManagementController extends AbstractControlledScreen {
                         @Override
                         protected EnumSet<ErrorEnum> call() throws Exception {
                             return accountManagementModel.savePendingAccount(
-                                    accountManagementModel.convertAccountGroupFromUIToBackendTo(aAccountGroupACCB.getValue().toString()),
+                                    accountManagementModel.convertAccountGroupFromUIToBackendTo(aAccountGroupACCB.getValue()),
                                     aNameTF.getText(),
                                     aDescTA.getText());
                         }
