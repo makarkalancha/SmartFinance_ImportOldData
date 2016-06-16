@@ -7,9 +7,11 @@ import com.makco.smartfinance.user_interface.undoredo.CareTaker;
 import com.makco.smartfinance.user_interface.undoredo.UndoRedoScreen;
 import com.makco.smartfinance.user_interface.utility_screens.DialogMessages;
 import com.makco.smartfinance.user_interface.validation.ErrorEnum;
+import com.makco.smartfinance.utils.collection.CollectionUtils;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableSet;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
@@ -20,6 +22,7 @@ import javafx.scene.layout.Region;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.Collection;
 import java.util.EnumMap;
 import java.util.EnumSet;
 import java.util.HashSet;
@@ -62,7 +65,7 @@ public abstract class AbstractControlledScreen implements Initializable, Control
                 LOG.debug(">>>clearErrorHighlight before control.getStyleClass(): " + control.getStyleClass());
                 TextField reg = ((ComboBox) control).getEditor();
                 reg.getStyleClass().remove(UserInterfaceConstants.INVALID_CONTROL_CLASS_);
-            } else {
+            } else if(control instanceof TextField){
                 control.getStyleClass().remove(UserInterfaceConstants.INVALID_CONTROL_CLASS_);
             }
         });
@@ -91,14 +94,18 @@ public abstract class AbstractControlledScreen implements Initializable, Control
                  */
                 if(control instanceof TextArea){
                     Region reg = (Region) control.lookup(".content");
-                    Set<String> setClass = new HashSet<>(reg.getStyleClass());
-                    setClass.add(UserInterfaceConstants.INVALID_CONTROL_CLASS_);
-                    reg.getStyleClass() = FXCollections.observableArrayList();
+                    reg.getStyleClass().add(UserInterfaceConstants.INVALID_CONTROL_CLASS_);
+
+                    reg.getStyleClass().setAll(CollectionUtils.convertCollectionToObservableSet(reg.getStyleClass()));
                 } else if(control instanceof ComboBox){
                     TextField reg = ((ComboBox) control).getEditor();
                     reg.getStyleClass().add(UserInterfaceConstants.INVALID_CONTROL_CLASS_);
-                } else {
+
+                    reg.getStyleClass().setAll(CollectionUtils.convertCollectionToObservableSet(reg.getStyleClass()));
+                } else if(control instanceof TextField){
                     control.getStyleClass().add(UserInterfaceConstants.INVALID_CONTROL_CLASS_);
+
+                    control.getStyleClass().setAll(CollectionUtils.convertCollectionToObservableSet(control.getStyleClass()));
                 }
             }
         });
