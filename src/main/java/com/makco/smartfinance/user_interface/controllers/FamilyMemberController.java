@@ -40,19 +40,19 @@ import java.util.ResourceBundle;
  * Created by mcalancea on 2016-04-01.
  */
 //http://www.devx.com/Java/Article/48193/0/page/2
-public class FamilyMemberController implements Initializable, ControlledScreen, UndoRedoScreen {
+public class FamilyMemberController /*implements Initializable, ControlledScreen, UndoRedoScreen*/ extends AbstractControlledScreen {
     private final static Logger LOG = LogManager.getLogger(FamilyMemberController.class);
-    private ScreensController screensController;
+//    private ScreensController screensController;
     private FamilyMemberModel familyMemberModel = new FamilyMemberModel();
 
-    private ActionEvent actionEvent;
+//    private ActionEvent actionEvent;
     private Worker<Void> onDeleteWorker;
     private Worker<EnumSet<ErrorEnum>> onSaveWorker;
     private Worker<Void> onRefreshWorker;
     private ProgressIndicatorForm pForm = new ProgressIndicatorForm();
 
-    private CareTaker careTaker;
-    private BooleanProperty isNotUndo = new SimpleBooleanProperty(true);
+//    private CareTaker careTaker;
+//    private BooleanProperty isNotUndo = new SimpleBooleanProperty(true);
 
     @FXML
     private TableView<FamilyMember> table;
@@ -133,6 +133,7 @@ public class FamilyMemberController implements Initializable, ControlledScreen, 
                 populateTable();
                 EnumSet<ErrorEnum> errors = ((Service<EnumSet<ErrorEnum>>) onSaveWorker).getValue();
                 if (!errors.isEmpty()) {
+                    highlightInvalidFields(errors);
                     DialogMessages.showErrorDialog("Error while saving Family Member: " + nameTF.getText(),
                             (EnumSet<ErrorEnum>) ((Service) onSaveWorker).getValue(), null);
                 } else {
@@ -181,15 +182,15 @@ public class FamilyMemberController implements Initializable, ControlledScreen, 
         }
     }
 
-    @Override
-    public void setScreenPage(ScreensController screenPage) {
-        try {
-            screensController = screenPage;
-            careTaker = screensController.getCareTaker();
-        } catch (Exception e) {
-            DialogMessages.showExceptionAlert(e);
-        }
-    }
+//    @Override
+//    public void setScreenPage(ScreensController screenPage) {
+//        try {
+//            screensController = screenPage;
+//            careTaker = screensController.getCareTaker();
+//        } catch (Exception e) {
+//            DialogMessages.showExceptionAlert(e);
+//        }
+//    }
 
     @Override
     public void refresh() {
@@ -255,6 +256,14 @@ public class FamilyMemberController implements Initializable, ControlledScreen, 
             clearBtn.setDisable(false);
             saveBtn.setDisable(false);
             deleteBtn.setDisable(true);
+
+            errorControlDictionary.put(ErrorEnum.FM_DESC_LGTH, descTA);
+            errorControlDictionary.put(ErrorEnum.FM_NAME_DUPLICATE, nameTF);
+            errorControlDictionary.put(ErrorEnum.FM_NAME_LGTH, nameTF);
+            errorControlDictionary.put(ErrorEnum.FM_NAME_NULL, nameTF);
+
+            erroneousControlSet.add(nameTF);
+            erroneousControlSet.add(descTA);
         } catch (Exception e) {
             //not in finally because refreshFamilyMembers must run before populateTable
             startService(onRefreshWorker, null);
@@ -265,6 +274,8 @@ public class FamilyMemberController implements Initializable, ControlledScreen, 
     @FXML
     public void onClear(ActionEvent event) {
         try {
+            clearErrorHighlight();
+
             nameTF.clear();
             descTA.clear();
             clearBtn.setDisable(false);
