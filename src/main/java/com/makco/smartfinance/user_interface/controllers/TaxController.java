@@ -78,6 +78,8 @@ public class TaxController /*implements Initializable, ControlledScreen, UndoRed
     private Button saveBtn;
     @FXML
     private Button deleteBtn;
+    @FXML
+    private Button frmEdtBtn;
 
     public TaxController() {
         try {
@@ -440,6 +442,12 @@ public class TaxController /*implements Initializable, ControlledScreen, UndoRed
             DialogMessages.showExceptionAlert(e);
         }
     }
+
+    @FXML
+    public void onFormulaEditorBtn (ActionEvent event) {
+        //TODO http://code.makery.ch/library/javafx-8-tutorial/part3/
+    }
+
 
     @FXML
     public void onClear(ActionEvent event) {
