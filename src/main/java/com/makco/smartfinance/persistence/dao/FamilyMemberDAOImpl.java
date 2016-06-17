@@ -100,6 +100,10 @@ public class FamilyMemberDAOImpl implements FamilyMemberDAO {
         try{
             session = HibernateUtil.openSession();
             session.beginTransaction();
+            /**
+             * http://what-when-how.com/hibernate/optimizing-fetching-and-caching-hibernate/
+             * If you call get() instead of load() you trigger a database hit and no proxy is returned.
+             */
             familyMember = (FamilyMember) session.get(FamilyMember.class, id);
             session.getTransaction().commit();
 
