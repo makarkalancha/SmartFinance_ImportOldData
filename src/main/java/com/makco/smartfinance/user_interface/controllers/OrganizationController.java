@@ -40,19 +40,14 @@ import java.util.ResourceBundle;
  * Created by mcalancea on 2016-04-01.
  */
 //http://www.devx.com/Java/Article/48193/0/page/2
-public class OrganizationController implements Initializable, ControlledScreen, UndoRedoScreen {
+public class OrganizationController extends AbstractControlledScreen {
     private final static Logger LOG = LogManager.getLogger(OrganizationController.class);
-    private ScreensController screensController;
     private OrganizationModel organizationModel = new OrganizationModel();
 
-    private ActionEvent actionEvent;
     private Worker<Void> onDeleteWorker;
     private Worker<EnumSet<ErrorEnum>> onSaveWorker;
     private Worker<Void> onRefreshWorker;
     private ProgressIndicatorForm pForm = new ProgressIndicatorForm();
-
-    private CareTaker careTaker;
-    private BooleanProperty isNotUndo = new SimpleBooleanProperty(true);
 
     @FXML
     private TableView<Organization> table;
@@ -133,6 +128,7 @@ public class OrganizationController implements Initializable, ControlledScreen, 
                 populateTable();
                 EnumSet<ErrorEnum> errors = ((Service<EnumSet<ErrorEnum>>) onSaveWorker).getValue();
                 if (!errors.isEmpty()) {
+                    highlightInvalidFields(errors);
                     DialogMessages.showErrorDialog("Error while saving Organization: " + nameTF.getText(),
                             (EnumSet<ErrorEnum>) ((Service) onSaveWorker).getValue(), null);
                 } else {
@@ -178,16 +174,6 @@ public class OrganizationController implements Initializable, ControlledScreen, 
         } else {
             LOG.debug("service IS NOT NULL");
             ((Service<V>) worker).restart();
-        }
-    }
-
-    @Override
-    public void setScreenPage(ScreensController screenPage) {
-        try {
-            screensController = screenPage;
-            careTaker = screensController.getCareTaker();
-        } catch (Exception e) {
-            DialogMessages.showExceptionAlert(e);
         }
     }
 
@@ -255,6 +241,15 @@ public class OrganizationController implements Initializable, ControlledScreen, 
             clearBtn.setDisable(false);
             saveBtn.setDisable(false);
             deleteBtn.setDisable(true);
+
+
+            errorControlDictionary.put(ErrorEnum.ORG_DESC_LGTH, descTA);
+            errorControlDictionary.put(ErrorEnum.ORG_NAME_DUPLICATE, nameTF);
+            errorControlDictionary.put(ErrorEnum.ORG_NAME_LGTH, nameTF);
+            errorControlDictionary.put(ErrorEnum.ORG_NAME_NULL, nameTF);
+
+            erroneousControlSet.add(nameTF);
+            erroneousControlSet.add(descTA);
         } catch (Exception e) {
             //not in finally because refreshOrganization must run before populateTable
             startService(onRefreshWorker, null);
@@ -265,6 +260,8 @@ public class OrganizationController implements Initializable, ControlledScreen, 
     @FXML
     public void onClear(ActionEvent event) {
         try {
+            clearErrorHighlight();
+
             nameTF.clear();
             descTA.clear();
             clearBtn.setDisable(false);
