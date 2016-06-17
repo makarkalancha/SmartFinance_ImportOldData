@@ -71,6 +71,10 @@ public class Tax implements Serializable {
     @Column(name = "RATE")
     private BigDecimal rate;
 
+    /**
+     * todo prefix postfix formula
+     * http://interactivepython.org/runestone/static/pythonds/BasicDS/InfixPrefixandPostfixExpressions.html
+     */
     @Column(name = "FORMULA")
     @Size(
             min = 0,
