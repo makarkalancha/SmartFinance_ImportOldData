@@ -48,16 +48,14 @@ public class OrganizationModel {
                 pendingOrganization.setName(name);
                 pendingOrganization.setDescription(description);
                 tmpOrganization = pendingOrganization;
-                pendingOrganization = null;
             } else {
                 tmpOrganization = new Organization(name, description);
             }
 
             errors = organizationService.validate(tmpOrganization);
-            if (!errors.isEmpty()) {
-
-            } else {
+            if (errors.isEmpty()) {
                 organizationService.saveOrUpdateOrganization(tmpOrganization);
+                pendingOrganization = null;
             }
         } catch (Exception e) {
             throw e;

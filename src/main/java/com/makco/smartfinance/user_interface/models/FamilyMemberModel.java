@@ -49,7 +49,6 @@ public class FamilyMemberModel {
                 pendingFamilyMember.setName(name);
                 pendingFamilyMember.setDescription(description);
                 tmpFamilyMember = pendingFamilyMember;
-                pendingFamilyMember = null;
             } else {
                 tmpFamilyMember = new FamilyMember(name, description);
             }
@@ -59,6 +58,7 @@ public class FamilyMemberModel {
 
             } else {
                 familyMemberService.saveOrUpdateFamilyMember(tmpFamilyMember);
+                pendingFamilyMember = null;
             }
         } catch (Exception e) {
             throw e;

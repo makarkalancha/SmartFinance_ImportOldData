@@ -136,7 +136,6 @@ public class AccountManagementModel {
                 pendingAccountGroup.setName(name);
                 pendingAccountGroup.setDescription(description);
                 tmpAccountGroup = pendingAccountGroup;
-                pendingAccountGroup = null;
             } else {
                 tmpAccountGroup = accountGroupFactory.getAccountGroup(type, name, description);
             }
@@ -144,6 +143,7 @@ public class AccountManagementModel {
             errors = accountGroupService.validate(tmpAccountGroup);
             if (errors.isEmpty()) {
                 accountGroupService.saveOrUpdateAccountGroup(tmpAccountGroup);
+                pendingAccountGroup = null;
             }
         } catch (Exception e) {
             throw e;
@@ -162,7 +162,6 @@ public class AccountManagementModel {
                 pendingAccount.setName(name);
                 pendingAccount.setDescription(description);
                 tmpAccount = pendingAccount;
-                pendingAccount = null;
             } else {
                 tmpAccount = accountFactory.getAccount(accountGroup, name, description);
             }
@@ -170,6 +169,7 @@ public class AccountManagementModel {
             errors = accountService.validate(tmpAccount);
             if (errors.isEmpty()) {
                 accountService.saveOrUpdateAccount(tmpAccount);
+                pendingAccount = null;
             }
         } catch (Exception e) {
             throw e;

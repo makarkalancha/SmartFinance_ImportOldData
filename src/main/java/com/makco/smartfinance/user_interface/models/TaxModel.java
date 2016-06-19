@@ -63,16 +63,14 @@ public class TaxModel {
                 pendingTax.setStartDate(startDate);
                 pendingTax.setEndDate(endDate);
                 tmpTax = pendingTax;
-                pendingTax = null;
             } else {
                 tmpTax = new Tax(name, description, rate, formula, startDate, endDate);
             }
 
             errors = taxService.validate(tmpTax);
-            if (!errors.isEmpty()) {
-
-            } else {
+            if (errors.isEmpty()) {
                 taxService.saveOrUpdateTax(tmpTax);
+                pendingTax = null;
             }
         } catch (Exception e) {
             throw e;

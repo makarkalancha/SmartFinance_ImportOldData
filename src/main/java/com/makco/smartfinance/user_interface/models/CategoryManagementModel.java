@@ -145,7 +145,6 @@ public class CategoryManagementModel {
                 pendingCategoryGroup.setName(name);
                 pendingCategoryGroup.setDescription(description);
                 tmpCategoryGroup = pendingCategoryGroup;
-                pendingCategoryGroup = null;
             } else {
                 tmpCategoryGroup = categoryGroupFactory.getCategoryGroup(type, name, description);
             }
@@ -153,6 +152,7 @@ public class CategoryManagementModel {
             errors = categoryGroupService.validate(tmpCategoryGroup);
             if (errors.isEmpty()) {
                 categoryGroupService.saveOrUpdateCategoryGroup(tmpCategoryGroup);
+                pendingCategoryGroup = null;
             }
         } catch (Exception e) {
             throw e;
@@ -171,7 +171,6 @@ public class CategoryManagementModel {
                 pendingCategory.setName(name);
                 pendingCategory.setDescription(description);
                 tmpCategory = pendingCategory;
-                pendingCategory = null;
             } else {
                 tmpCategory = categoryFactory.getCategory(categoryGroup, name, description);
             }
@@ -179,6 +178,7 @@ public class CategoryManagementModel {
             errors = categoryService.validate(tmpCategory);
             if (errors.isEmpty()) {
                 categoryService.saveOrUpdateCategory(tmpCategory);
+                pendingCategory = null;
             }
         } catch (Exception e) {
             throw e;

@@ -50,7 +50,6 @@ public class CurrencyModel {
                 pendingCurrency.setName(name);
                 pendingCurrency.setDescription(description);
                 tmpCurrency = pendingCurrency;
-                pendingCurrency = null;
             } else {
                 tmpCurrency = new Currency(code, name, description);
             }
@@ -58,6 +57,7 @@ public class CurrencyModel {
             errors = currencyService.validate(tmpCurrency);
             if (errors.isEmpty()) {
                 currencyService.saveOrUpdateCurrency(tmpCurrency);
+                pendingCurrency = null;
             }
         } catch (Exception e) {
             throw e;
