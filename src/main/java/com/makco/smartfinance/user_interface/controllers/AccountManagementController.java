@@ -442,10 +442,6 @@ public class AccountManagementController extends AbstractControlledScreen {
             agSaveBtn.setDisable(false);
             agDeleteBtn.setDisable(true);
 
-            /**
-             * !!!todo text area background content
-             * http://stackoverflow.com/questions/21936585/transparent-background-of-a-textarea-in-javafx-8
-             */
             errorControlDictionary.put(ErrorEnum.AccGr_DESC_LGTH, agDescTA);
             errorControlDictionary.put(ErrorEnum.AccGr_NAME_DUPLICATE, agNameTF);
             errorControlDictionary.put(ErrorEnum.AccGr_NAME_LGTH, agNameTF);
@@ -511,10 +507,6 @@ public class AccountManagementController extends AbstractControlledScreen {
             aSaveBtn.setDisable(false);
             aDeleteBtn.setDisable(true);
 
-            /**
-             * !!!todo text area background content
-             * http://stackoverflow.com/questions/21936585/transparent-background-of-a-textarea-in-javafx-8
-             */
             errorControlDictionary.put(ErrorEnum.Acc_AG_EMPTY, aAccountGroupACCB);
             errorControlDictionary.put(ErrorEnum.Acc_DESC_LGTH, aDescTA);
             errorControlDictionary.put(ErrorEnum.Acc_NAME_DUPLICATE, aNameTF);
