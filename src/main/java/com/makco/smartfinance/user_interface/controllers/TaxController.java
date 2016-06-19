@@ -420,11 +420,6 @@ public class TaxController /*implements Initializable, ControlledScreen, UndoRed
             saveBtn.setDisable(false);
             deleteBtn.setDisable(true);
 
-
-            /**
-             * !!!todo text area background content
-             * http://stackoverflow.com/questions/21936585/transparent-background-of-a-textarea-in-javafx-8
-             */
             errorControlDictionary.put(ErrorEnum.TAX_DESC_LGTH, descTA);
             errorControlDictionary.put(ErrorEnum.TAX_NAME_DUPLICATE, nameTF);
             errorControlDictionary.put(ErrorEnum.TAX_NAME_LGTH, nameTF);
