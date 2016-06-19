@@ -88,10 +88,6 @@ public abstract class AbstractControlledScreen implements Initializable, Control
         errors.forEach(error -> {
             Control control = errorControlDictionary.get(error);
             if(control != null){
-                /**
-                 * todo fix a bug: if there are several bugs on the same field like currency.code (length must be 3
-                 * and not null) then it must be removed twice, so put in set
-                 */
                 if(control instanceof TextArea){
                     Region reg = (Region) control.lookup(".content");
                     reg.getStyleClass().add(UserInterfaceConstants.INVALID_CONTROL_CLASS_);
