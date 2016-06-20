@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.makco.smartfinance.javafx.control.*?>
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 <?import com.makco.smartfinance.javafx.control.AutoCompleteComboBox?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
@@ -10,6 +16,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
+
 <VBox fx:id="vBox" alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.makco.smartfinance.user_interface.controllers.TaxFormulaEditorController">
    <children>
       <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="30.0" prefWidth="441.0" text="Tax Formula Editor">
@@ -37,7 +44,7 @@
             <Insets bottom="5.0" top="5.0" />
          </padding>
          <children>
-            <TextArea fx:id="formulaTA" prefHeight="93.0" prefWidth="342.0" promptText="Formula..." />
+            <TextArea promptText="Formula..." />
             <VBox GridPane.columnIndex="1">
                <children>
                   <AutoCompleteComboBox promptText="Tax ">
