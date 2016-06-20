@@ -22,9 +22,12 @@ public class UserInterfaceConstants {
     static {
         NUMBER_FORMAT.setMaximumFractionDigits(6);
     }
-    public final static String INVALID_CONTROL_BGCOLOR = "-fx-background-color: #ffc0cb;";
-    public final static String INVALID_CONTROL_CLASS_BGCOLOR = ".error {-fx-background-color: #ffc0cb;}";
-    public final static String INVALID_CONTROL_CLASS_ = "error_control_background";
+
+    public static final String FXML_PATH = "/com/makco/smartfinance/user_interface/";
+
+//    public final static String INVALID_CONTROL_BGCOLOR = "-fx-background-color: #ffc0cb;";
+//    public final static String INVALID_CONTROL_CLASS_BGCOLOR = ".error {-fx-background-color: #ffc0cb;}";
+    public final static String INVALID_CONTROL_CSS_CLASS = "error_control_background";
 
     public static final SimpleDateFormat FULL_DATE_TIME_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
     public static final SimpleDateFormat DATE_TIME_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -41,6 +44,8 @@ public class UserInterfaceConstants {
     public static final String CURRENCY_WINDOW_TITLE = "Currency";
     public static final String FAMILY_MEMBER_WINDOW_TITLE = "Family Member";
     public static final String ORGANIZATION_WINDOW_TITLE = "Organization";
+    public static final String TAX_WINDOW_TITLE = "Tax";
+    public static final String TAX_FORMULA_EDITOR_WINDOW_TITLE = "Tax Formula Editor";
 
     //category group
     public static final String CATEGORY_GROUP_TYPE_DEBIT = "Debit";

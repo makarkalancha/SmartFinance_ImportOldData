@@ -1,8 +1,10 @@
 package com.makco.smartfinance.user_interface.controllers;
 
+import com.makco.smartfinance.Main;
 import com.makco.smartfinance.constants.DataBaseConstants;
 import com.makco.smartfinance.persistence.entity.Tax;
 import com.makco.smartfinance.user_interface.Command;
+import com.makco.smartfinance.user_interface.constants.ExtraScreens;
 import com.makco.smartfinance.user_interface.constants.UserInterfaceConstants;
 import com.makco.smartfinance.user_interface.models.TaxModel;
 import com.makco.smartfinance.user_interface.undoredo.Memento;
@@ -17,7 +19,9 @@ import javafx.concurrent.Worker;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
@@ -26,18 +30,23 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.EnumSet;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 /**
@@ -134,10 +143,10 @@ public class TaxController /*implements Initializable, ControlledScreen, UndoRed
 //            if(control instanceof TextArea){
 //                Region reg = (Region) control.lookup(".content");
 ////                    region.setStyle(UserInterfaceConstants.INVALID_CONTROL_BGCOLOR);
-//                reg.getStyleClass().remove(UserInterfaceConstants.INVALID_CONTROL_CLASS_);
+//                reg.getStyleClass().remove(UserInterfaceConstants.INVALID_CONTROL_CSS_CLASS);
 //            } else {
 ////                    control.setStyle(UserInterfaceConstants.INVALID_CONTROL_BGCOLOR);
-//                control.getStyleClass().remove(UserInterfaceConstants.INVALID_CONTROL_CLASS_);
+//                control.getStyleClass().remove(UserInterfaceConstants.INVALID_CONTROL_CSS_CLASS);
 //            }
 //        });
 //    }
@@ -145,16 +154,16 @@ public class TaxController /*implements Initializable, ControlledScreen, UndoRed
 //    private void highlightInvalidFields(EnumSet<ErrorEnum> errors){
 //        clearErrorHighlight();
 ////        LOG.debug(">>>highlightInvalidFields before nameTF.getStyleClass(): "+nameTF.getStyleClass());
-////        nameTF.getStyleClass().remove(UserInterfaceConstants.INVALID_CONTROL_CLASS_);
+////        nameTF.getStyleClass().remove(UserInterfaceConstants.INVALID_CONTROL_CSS_CLASS);
 ////        LOG.debug(">>>highlightInvalidFields after nameTF.getStyleClass(): "+nameTF.getStyleClass());
 ////
 ////        Region region = (Region) descTA.lookup(".content");
 ////        LOG.debug(">>>highlightInvalidFields before region.getStyleClass(): " + region.getStyleClass());
-////        region.getStyleClass().remove(UserInterfaceConstants.INVALID_CONTROL_CLASS_);
+////        region.getStyleClass().remove(UserInterfaceConstants.INVALID_CONTROL_CSS_CLASS);
 ////        LOG.debug(">>>highlightInvalidFields after region.getStyleClass(): " + region.getStyleClass());
 ////
-////        rateTF.getStyleClass().remove(UserInterfaceConstants.INVALID_CONTROL_CLASS_);
-////        startDP.getStyleClass().remove(UserInterfaceConstants.INVALID_CONTROL_CLASS_);
+////        rateTF.getStyleClass().remove(UserInterfaceConstants.INVALID_CONTROL_CSS_CLASS);
+////        startDP.getStyleClass().remove(UserInterfaceConstants.INVALID_CONTROL_CSS_CLASS);
 //
 //        errors.forEach(error -> {
 //            Control control = errorControlDictionary.get(error);
@@ -163,10 +172,10 @@ public class TaxController /*implements Initializable, ControlledScreen, UndoRed
 //                if(control instanceof TextArea){
 //                    Region reg = (Region) control.lookup(".content");
 ////                    region.setStyle(UserInterfaceConstants.INVALID_CONTROL_BGCOLOR);
-//                    reg.getStyleClass().add(UserInterfaceConstants.INVALID_CONTROL_CLASS_);
+//                    reg.getStyleClass().add(UserInterfaceConstants.INVALID_CONTROL_CSS_CLASS);
 //                } else {
 ////                    control.setStyle(UserInterfaceConstants.INVALID_CONTROL_BGCOLOR);
-//                    control.getStyleClass().add(UserInterfaceConstants.INVALID_CONTROL_CLASS_);
+//                    control.getStyleClass().add(UserInterfaceConstants.INVALID_CONTROL_CSS_CLASS);
 //                }
 //            }
 //        });
@@ -444,11 +453,39 @@ public class TaxController /*implements Initializable, ControlledScreen, UndoRed
         //TODO http://code.makery.ch/library/javafx-8-tutorial/part3/
         try{
             //Load the fxml file and create a new stage for the popup dialog.
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("tax_formula_editor.fxml"));
-            loader.setLocation();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(ExtraScreens.TAX_FORMULA_EDITOR.getFullFxmlFilePath()));
+            VBox vBox = (VBox) loader.load();
+
+            //Create the dialog Stage
+            Stage dialogStage = new Stage();
+            dialogStage.setTitle(UserInterfaceConstants.TAX_FORMULA_EDITOR_WINDOW_TITLE);
+            dialogStage.initModality(Modality.WINDOW_MODAL);
+//            dialogStage.initOwner(this);
+            Scene scene = new Scene(vBox);
+            dialogStage.setScene(scene);
+
+            //Set the tax into the controller
+            TaxFormulaEditorController taxFormulaEditorController = loader.getController();
+            taxFormulaEditorController.setDialogStage(dialogStage);
+            taxFormulaEditorController.setTax(taxModel.getPendingTax());
+
+            dialogStage.showAndWait();
+
+            Optional<ButtonType> result = dialogStage.showAndWait();
+            if (result.get() == ButtonType.OK){
+                return true;
+            } else {
+                return false;
+            }
+
+            return taxFormulaEditorController.isOkClicked();
+
+        }catch (Exception e){
+            startService(onRefreshWorker, null);
+            DialogMessages.showExceptionAlert(e);
+            return false;
         }
     }
-
 
     @FXML
     public void onClear(ActionEvent event) {
@@ -487,7 +524,7 @@ public class TaxController /*implements Initializable, ControlledScreen, UndoRed
     @FXML
     public void onDelete(ActionEvent event) {
         try {
-            String title = UserInterfaceConstants.ORGANIZATION_WINDOW_TITLE;
+            String title = UserInterfaceConstants.TAX_WINDOW_TITLE;
             String headerText = "Tax Deletion";
             StringBuilder contentText = new StringBuilder("Are you sure you want to delete tax ");
             contentText.append("\"");
@@ -654,7 +691,7 @@ public class TaxController /*implements Initializable, ControlledScreen, UndoRed
 
             if(contentText.length() > 0){
                 contentText.append("Are you sure you want to close this window?");
-                result = DialogMessages.showConfirmationDialog(UserInterfaceConstants.ORGANIZATION_WINDOW_TITLE,
+                result = DialogMessages.showConfirmationDialog(UserInterfaceConstants.TAX_WINDOW_TITLE,
                         "Not all fields are empty", contentText.toString(), null);
             }
         }catch (Exception e){
