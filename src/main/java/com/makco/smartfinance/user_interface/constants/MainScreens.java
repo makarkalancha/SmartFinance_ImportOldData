@@ -3,7 +3,7 @@ package com.makco.smartfinance.user_interface.constants;
 /**
  * Created by mcalancea on 2016-04-04.
  */
-public enum Screens {
+public enum MainScreens {
     ACCOUNT_MANAGEMENT("account_management.fxml"),
     CATEGORY_MANAGEMENT("category_management.fxml"),
     CURRENCY("currency.fxml"),
@@ -15,7 +15,7 @@ public enum Screens {
     TAX("tax.fxml");
 
     private String fxmlFilePath;
-    private Screens(String fxmlFilePath) {
+    private MainScreens(String fxmlFilePath) {
         this.fxmlFilePath = fxmlFilePath;
     }
 
