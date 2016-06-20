@@ -1,7 +1,7 @@
 package com.makco.smartfinance;
 
 import com.makco.smartfinance.user_interface.ScreensController;
-import com.makco.smartfinance.user_interface.constants.Screens;
+import com.makco.smartfinance.user_interface.constants.MainScreens;
 import com.makco.smartfinance.user_interface.constants.UserInterfaceConstants;
 import com.makco.smartfinance.user_interface.utility_screens.DialogMessages;
 import com.makco.smartfinance.user_interface.utility_screens.forms.ProgressBarForm;
@@ -148,10 +148,10 @@ public class Main extends Application{
             });
 
             ScreensController mainContainer = new ScreensController();
-            for (Screens scr : Screens.values()) {
+            for (MainScreens scr : MainScreens.values()) {
                 mainContainer.loadScreen(scr);
             }
-            mainContainer.setScreen(Screens.CURRENCY);
+            mainContainer.setScreen(MainScreens.TAX);
 
             this.primaryStage.getIcons().add(new Image(UserInterfaceConstants.MAIN_WINDOW_ICO));
             this.primaryStage.setTitle(UserInterfaceConstants.MAIN_WINDOW_TITLE);

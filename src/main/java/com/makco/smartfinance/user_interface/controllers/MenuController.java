@@ -4,7 +4,7 @@ import com.makco.smartfinance.Main;
 import com.makco.smartfinance.user_interface.Command;
 import com.makco.smartfinance.user_interface.ControlledScreen;
 import com.makco.smartfinance.user_interface.ScreensController;
-import com.makco.smartfinance.user_interface.constants.Screens;
+import com.makco.smartfinance.user_interface.constants.MainScreens;
 import com.makco.smartfinance.user_interface.constants.UserInterfaceConstants;
 import com.makco.smartfinance.user_interface.undoredo.CareTaker;
 import com.makco.smartfinance.user_interface.undoredo.UndoRedoScreen;
@@ -85,47 +85,47 @@ public class MenuController implements Initializable, ControlledScreen {
 
     @FXML
     public void toScene1(ActionEvent event){
-        screensController.setScreen(Screens.SCREEN1);
+        screensController.setScreen(MainScreens.SCREEN1);
     }
 
     @FXML
     public void toScene2(ActionEvent event){
-        screensController.setScreen(Screens.SCREEN2);
+        screensController.setScreen(MainScreens.SCREEN2);
     }
 
     @FXML
     public void toMain(ActionEvent event){
-        screensController.setScreen(Screens.MAIN);
+        screensController.setScreen(MainScreens.MAIN);
     }
 
     @FXML
     public void toAccountManagement(ActionEvent event){
-        screensController.setScreen(Screens.ACCOUNT_MANAGEMENT);
+        screensController.setScreen(MainScreens.ACCOUNT_MANAGEMENT);
     }
 
     @FXML
     public void toCategoryManagement(ActionEvent event){
-        screensController.setScreen(Screens.CATEGORY_MANAGEMENT);
+        screensController.setScreen(MainScreens.CATEGORY_MANAGEMENT);
     }
 
     @FXML
     public void toCurrency(ActionEvent event){
-        screensController.setScreen(Screens.CURRENCY);
+        screensController.setScreen(MainScreens.CURRENCY);
     }
 
     @FXML
     public void toFamilyMember(ActionEvent event){
-        screensController.setScreen(Screens.FAMILY_MEMBER);
+        screensController.setScreen(MainScreens.FAMILY_MEMBER);
     }
 
     @FXML
     public void toOrganization(ActionEvent event){
-        screensController.setScreen(Screens.ORGANIZATION);
+        screensController.setScreen(MainScreens.ORGANIZATION);
     }
 
     @FXML
     public void toTax(ActionEvent event){
-        screensController.setScreen(Screens.TAX);
+        screensController.setScreen(MainScreens.TAX);
     }
 
     @FXML

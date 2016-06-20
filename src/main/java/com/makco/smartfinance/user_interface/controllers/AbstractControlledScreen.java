@@ -10,8 +10,6 @@ import com.makco.smartfinance.user_interface.validation.ErrorEnum;
 import com.makco.smartfinance.utils.collection.CollectionUtils;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableSet;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
@@ -22,7 +20,6 @@ import javafx.scene.layout.Region;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.Collection;
 import java.util.EnumMap;
 import java.util.EnumSet;
 import java.util.HashSet;
@@ -60,13 +57,13 @@ public abstract class AbstractControlledScreen implements Initializable, Control
         erroneousControlSet.forEach(control -> {
             if(control instanceof TextArea){
                 Region reg = (Region) control.lookup(".content");
-                reg.getStyleClass().remove(UserInterfaceConstants.INVALID_CONTROL_CLASS_);
+                reg.getStyleClass().remove(UserInterfaceConstants.INVALID_CONTROL_CSS_CLASS);
             } else if(control instanceof ComboBox){
                 LOG.debug(">>>clearErrorHighlight before control.getStyleClass(): " + control.getStyleClass());
                 TextField reg = ((ComboBox) control).getEditor();
-                reg.getStyleClass().remove(UserInterfaceConstants.INVALID_CONTROL_CLASS_);
+                reg.getStyleClass().remove(UserInterfaceConstants.INVALID_CONTROL_CSS_CLASS);
             } else if(control instanceof TextField){
-                control.getStyleClass().remove(UserInterfaceConstants.INVALID_CONTROL_CLASS_);
+                control.getStyleClass().remove(UserInterfaceConstants.INVALID_CONTROL_CSS_CLASS);
             }
         });
     }
@@ -74,32 +71,32 @@ public abstract class AbstractControlledScreen implements Initializable, Control
     protected void highlightInvalidFields(EnumSet<ErrorEnum> errors){
         clearErrorHighlight();
 //        LOG.debug(">>>highlightInvalidFields before nameTF.getStyleClass(): "+nameTF.getStyleClass());
-//        nameTF.getStyleClass().remove(UserInterfaceConstants.INVALID_CONTROL_CLASS_);
+//        nameTF.getStyleClass().remove(UserInterfaceConstants.INVALID_CONTROL_CSS_CLASS);
 //        LOG.debug(">>>highlightInvalidFields after nameTF.getStyleClass(): "+nameTF.getStyleClass());
 //
 //        Region region = (Region) descTA.lookup(".content");
 //        LOG.debug(">>>highlightInvalidFields before region.getStyleClass(): " + region.getStyleClass());
-//        region.getStyleClass().remove(UserInterfaceConstants.INVALID_CONTROL_CLASS_);
+//        region.getStyleClass().remove(UserInterfaceConstants.INVALID_CONTROL_CSS_CLASS);
 //        LOG.debug(">>>highlightInvalidFields after region.getStyleClass(): " + region.getStyleClass());
 //
-//        rateTF.getStyleClass().remove(UserInterfaceConstants.INVALID_CONTROL_CLASS_);
-//        startDP.getStyleClass().remove(UserInterfaceConstants.INVALID_CONTROL_CLASS_);
+//        rateTF.getStyleClass().remove(UserInterfaceConstants.INVALID_CONTROL_CSS_CLASS);
+//        startDP.getStyleClass().remove(UserInterfaceConstants.INVALID_CONTROL_CSS_CLASS);
 
         errors.forEach(error -> {
             Control control = errorControlDictionary.get(error);
             if(control != null){
                 if(control instanceof TextArea){
                     Region reg = (Region) control.lookup(".content");
-                    reg.getStyleClass().add(UserInterfaceConstants.INVALID_CONTROL_CLASS_);
+                    reg.getStyleClass().add(UserInterfaceConstants.INVALID_CONTROL_CSS_CLASS);
 
                     reg.getStyleClass().setAll(CollectionUtils.convertCollectionToObservableSet(reg.getStyleClass()));
                 } else if(control instanceof ComboBox){
                     TextField reg = ((ComboBox) control).getEditor();
-                    reg.getStyleClass().add(UserInterfaceConstants.INVALID_CONTROL_CLASS_);
+                    reg.getStyleClass().add(UserInterfaceConstants.INVALID_CONTROL_CSS_CLASS);
 
                     reg.getStyleClass().setAll(CollectionUtils.convertCollectionToObservableSet(reg.getStyleClass()));
                 } else if(control instanceof TextField){
-                    control.getStyleClass().add(UserInterfaceConstants.INVALID_CONTROL_CLASS_);
+                    control.getStyleClass().add(UserInterfaceConstants.INVALID_CONTROL_CSS_CLASS);
 
                     control.getStyleClass().setAll(CollectionUtils.convertCollectionToObservableSet(control.getStyleClass()));
                 }

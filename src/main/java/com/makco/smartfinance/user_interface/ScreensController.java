@@ -1,6 +1,6 @@
 package com.makco.smartfinance.user_interface;
 
-import com.makco.smartfinance.user_interface.constants.Screens;
+import com.makco.smartfinance.user_interface.constants.MainScreens;
 import com.makco.smartfinance.user_interface.undoredo.CareTaker;
 import com.makco.smartfinance.user_interface.utility_screens.DialogMessages;
 import javafx.fxml.FXMLLoader;
@@ -20,8 +20,8 @@ import java.util.Optional;
 //public class ScreensController extends VBox {
 public class ScreensController extends BorderPane {
     private final static Logger LOG = LogManager.getLogger(ScreensController.class);
-    private final EnumMap<Screens, NodeControlledScrBundle> screens = new EnumMap<>(Screens.class);
-    private Screens currentScreen = Screens.MAIN;
+    private final EnumMap<MainScreens, NodeControlledScrBundle> screens = new EnumMap<>(MainScreens.class);
+    private MainScreens currentScreen = MainScreens.MAIN;
     private final CareTaker careTaker = new CareTaker();
 
     private ControlledScreen menubar;
@@ -51,7 +51,7 @@ public class ScreensController extends BorderPane {
         LOG.debug("ScreensController.constr");
     }
 
-    private void addScreen(final Screens screen, final NodeControlledScrBundle nodeControlledScrBundle) {
+    private void addScreen(final MainScreens screen, final NodeControlledScrBundle nodeControlledScrBundle) {
         screens.put(screen, nodeControlledScrBundle);
         LOG.debug(String.format("ScreensController.addScreen: name=%s; Node.screen=%s", screen.toString(), nodeControlledScrBundle.toString()));
     }
@@ -114,7 +114,7 @@ public class ScreensController extends BorderPane {
     //loads the fxml file, add teh screen to the screens collection and
     //finally injects the screenPane to the contoller
 //    public boolean loadScreen(final String name, final String resource){
-    public boolean loadScreen(final Screens screen){
+    public boolean loadScreen(final MainScreens screen){
         LOG.debug(String.format("ScreensController.loadScreen: name=%s; resource=%s", screen, screen.getFxmlFilePath()));
         try{
             FXMLLoader myLoader = new FXMLLoader(getClass().getResource(screen.getFxmlFilePath()));
@@ -134,7 +134,7 @@ public class ScreensController extends BorderPane {
     //First it makes sure the screen has been already loaded. Then if there is more than
     //one screen the new screen is been added second, and then the current screen is removed.
     //If there isn't any screen being displayed, the new screen is just added to the root.
-    public boolean setScreen(final Screens screen) {
+    public boolean setScreen(final MainScreens screen) {
         boolean result = false;
         LOG.debug(String.format("ScreensController.setScreen: name=%s", screen.toString()));
         LOG.debug(String.format("getChildren().size()=%d", getChildren().size()));
@@ -174,7 +174,7 @@ public class ScreensController extends BorderPane {
     }
 
     //this method will remove the screen with the given name from the collection of screens
-    public boolean unloadScreen(final Screens screen){
+    public boolean unloadScreen(final MainScreens screen){
         LOG.debug(String.format("ScreensController.unloadScreen: name=%s", screen.toString()));
         if(screens.remove(screen) == null) {
             DialogMessages.showExceptionAlert(new Exception(screen.toString() + "->screen didn't exist"));
