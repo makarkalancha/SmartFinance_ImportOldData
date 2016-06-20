@@ -16,7 +16,6 @@ import javafx.concurrent.Task;
 import javafx.concurrent.Worker;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
@@ -41,10 +40,10 @@ import java.util.EnumSet;
 import java.util.ResourceBundle;
 
 /**
- * Created by mcalancea on 2016-06-09.
+ * Created by mcalancea on 2016-06-19.
  */
-public class TaxController /*implements Initializable, ControlledScreen, UndoRedoScreen*/ extends AbstractControlledScreen {
-    private final static Logger LOG = LogManager.getLogger(TaxController.class);
+public class TaxFormulaEditorController /*implements Initializable, ControlledScreen, UndoRedoScreen*/ extends AbstractControlledScreen {
+    private final static Logger LOG = LogManager.getLogger(TaxFormulaEditorController.class);
 //    private ScreensController screensController;
     private TaxModel taxModel = new TaxModel();
 
@@ -82,7 +81,7 @@ public class TaxController /*implements Initializable, ControlledScreen, UndoRed
     @FXML
     private Button frmEdtBtn;
 
-    public TaxController() {
+    public TaxFormulaEditorController() {
         try {
             onDeleteWorker = new Service<Void>() {
                 @Override
@@ -442,11 +441,6 @@ public class TaxController /*implements Initializable, ControlledScreen, UndoRed
     @FXML
     public void onFormulaEditorBtn (ActionEvent event) {
         //TODO http://code.makery.ch/library/javafx-8-tutorial/part3/
-        try{
-            //Load the fxml file and create a new stage for the popup dialog.
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("tax_formula_editor.fxml"));
-            loader.setLocation();
-        }
     }
 
 
