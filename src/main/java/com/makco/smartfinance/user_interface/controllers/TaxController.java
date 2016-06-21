@@ -225,6 +225,11 @@ public class TaxController /*implements Initializable, ControlledScreen, UndoRed
                 LOG.debug(">>>>>>>>onRefreshWorker->setOnSucceeded: pForm.getDialogStage().close()");
                 pForm.close();
                 populateTable();
+
+                /**
+                 * todo remove it after testing
+                 */
+                frmEdtBtn.fire();
             });
             ((Service<Void>) onRefreshWorker).setOnFailed(event -> {
                 LOG.debug("onRefreshWorker->setOnFailed");

@@ -50,6 +50,10 @@ public class TaxFormulaEditorController {
             .append(BigDecimalUtils.getDecimalSeparator())
             .append("]+")
             .toString();
+    private final static String FORMULA_VALID_CHARS = new StringBuilder()
+            .append("1234567890/*+-()")
+            .append(BigDecimalUtils.getDecimalSeparator())
+            .toString();
 
     private Stage dialogStage;
 //    private Tax tax;
@@ -67,8 +71,13 @@ public class TaxFormulaEditorController {
         charsLbl.setText(UserInterfaceConstants.TAX_FORMULA_VALID_CHARACTERS);
         formulaTA.textProperty().addListener((observable, oldValue, newValue) -> {
             //todo enter only allowed characters
-            LOG.debug(newValue);
+            LOG.debug(oldValue + "->" + newValue);
             LOG.debug(newValue.matches(FORMULA_PATTERN));
+            if(StringUtils.containsOnly(newValue,FORMULA_VALID_CHARS)){
+                LOG.debug("new is valid->" + newValue);
+            }else{
+                LOG.debug("new is NOT valid->" + newValue);
+            }
         });
     }
 
