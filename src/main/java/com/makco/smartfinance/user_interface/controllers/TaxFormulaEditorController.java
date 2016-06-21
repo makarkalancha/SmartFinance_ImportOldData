@@ -45,28 +45,56 @@ import java.util.ResourceBundle;
  */
 public class TaxFormulaEditorController {
     private final static Logger LOG = LogManager.getLogger(TaxFormulaEditorController.class);
+    private final static String FORMULA_PATTERN = new StringBuilder()
+            .append("[\\d\\/\\*\\+\\-")
+            .append(BigDecimalUtils.getDecimalSeparator())
+            .append("]+")
+            .toString();
 
     private Stage dialogStage;
-    private Tax tax;
-    private boolean isOkClicked;
+//    private Tax tax;
+    private boolean isOkClicked = false;
 
     @FXML
     private TextArea formulaTA;
+    @FXML
+    private Button okBtn;
+    @FXML
+    private Label charsLbl;
 
     @FXML
     private void initialize(){
-
+        charsLbl.setText(UserInterfaceConstants.TAX_FORMULA_VALID_CHARACTERS);
+        formulaTA.textProperty().addListener((observable, oldValue, newValue) -> {
+            LOG.debug(newValue);
+            LOG.debug(newValue.matches(FORMULA_PATTERN));
+        });
     }
 
     public void setDialogStage(Stage dialogStage) {
         this.dialogStage = dialogStage;
     }
 
-    public void setTax(Tax tax) {
-        this.tax = tax;
+
+    public String getFormula(){
+        return formulaTA.getText();
     }
 
     public boolean isOkClicked(){
         return isOkClicked;
+    }
+
+    @FXML
+    public void onOKButton(ActionEvent event){
+        if(isValid()){
+            isOkClicked = true;
+            dialogStage.close();
+        }
+    }
+
+    //todo validation instead of true
+    private boolean isValid(){
+        String formula = formulaTA.getText();
+        return !StringUtils.isEmpty(formula);
     }
 }

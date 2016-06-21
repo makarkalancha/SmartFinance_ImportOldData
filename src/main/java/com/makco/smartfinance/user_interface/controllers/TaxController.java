@@ -467,23 +467,18 @@ public class TaxController /*implements Initializable, ControlledScreen, UndoRed
             //Set the tax into the controller
             TaxFormulaEditorController taxFormulaEditorController = loader.getController();
             taxFormulaEditorController.setDialogStage(dialogStage);
-            taxFormulaEditorController.setTax(taxModel.getPendingTax());
+//            taxFormulaEditorController.setTax(taxModel.getPendingTax());
 
             dialogStage.showAndWait();
 
-            Optional<ButtonType> result = dialogStage.showAndWait();
-            if (result.get() == ButtonType.OK){
-                return true;
-            } else {
-                return false;
+            if (taxFormulaEditorController.isOkClicked()){
+                formulaTA.setText(taxFormulaEditorController.getFormula());
             }
-
-            return taxFormulaEditorController.isOkClicked();
 
         }catch (Exception e){
             startService(onRefreshWorker, null);
             DialogMessages.showExceptionAlert(e);
-            return false;
+//            return false;
         }
     }
 

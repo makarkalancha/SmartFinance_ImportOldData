@@ -1,6 +1,7 @@
 package com.makco.smartfinance.user_interface.constants;
 
 import com.makco.smartfinance.constants.DataBaseConstants;
+import com.makco.smartfinance.utils.BigDecimalUtils;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
@@ -116,6 +117,12 @@ public class UserInterfaceConstants {
     //tax
     public final static String TAX_INACTIVE_DAYS_BGCOLOR = "-fx-background-color: #ffc0cb;";
     public final static String TAX_DECIMAL_SEPARATOR = "(use %c as decimal separator)";
+
+    //tax formula
+    public final static String TAX_FORMULA_VALID_CHARACTERS = new StringBuilder()
+            .append("Characters: 0-9 + - * / ( ) ")
+            .append(BigDecimalUtils.getDecimalSeparator())
+            .toString();
 
     //ico
     public static final String CALENDAR = IMG_RESOURCE_FOLDER+"/calendar_60_45.png";

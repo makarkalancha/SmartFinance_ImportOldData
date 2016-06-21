@@ -59,7 +59,7 @@
                   <Label fx:id="useDecSepLbl" />
                </children>
             </HBox>
-            <TextArea fx:id="formulaTA" prefHeight="200.0" prefWidth="200.0" promptText="Formla" GridPane.rowIndex="3" />
+            <TextArea fx:id="formulaTA" editable="false" prefHeight="200.0" prefWidth="200.0" promptText="Formla" GridPane.rowIndex="3" />
             <Button fx:id="frmEdtBtn" mnemonicParsing="false" onAction="#onFormulaEditorBtn" text="Formula Editor" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
                <HBox.margin>
                   <Insets bottom="15.0" left="5.0" right="5.0" top="15.0" />

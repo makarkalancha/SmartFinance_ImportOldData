@@ -31,6 +31,9 @@ import java.time.LocalDateTime;
         )
 )
 public class Tax implements Serializable {
+    public static final String RATE_PLACEHOLDER = "{rate}";
+    public static final String TAX_ID_PATTERN = "{id\\d+}";
+
 
     @Id
     @org.hibernate.annotations.GenericGenerator(

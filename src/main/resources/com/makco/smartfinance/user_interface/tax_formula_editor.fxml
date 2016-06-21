@@ -24,6 +24,7 @@
             <Font size="20.0" />
          </font>
       </Label>
+      <Label fx:id="charsLbl" contentDisplay="CENTER" prefHeight="30.0" prefWidth="441.0" />
       <GridPane hgap="5.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="285.0" prefWidth="525.0" vgap="5.0">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="342.0" minWidth="10.0" prefWidth="342.0" />
@@ -44,14 +45,9 @@
             <Insets bottom="5.0" top="5.0" />
          </padding>
          <children>
-            <TextArea promptText="Formula..." />
+            <TextArea fx:id="formulaTA" promptText="Formula..." />
             <VBox GridPane.columnIndex="1">
                <children>
-                  <AutoCompleteComboBox promptText="Tax ">
-                     <VBox.margin>
-                        <Insets bottom="5.0" top="5.0" />
-                     </VBox.margin>
-                  </AutoCompleteComboBox>
                   <Button mnemonicParsing="false" prefWidth="70.0" text="Rate">
                      <VBox.margin>
                         <Insets bottom="5.0" top="5.0" />
@@ -64,6 +60,7 @@
                   </Button>
                </children>
             </VBox>
+            <Button fx:id="okBtn" mnemonicParsing="false" onAction="#onOKButton" prefWidth="70.0" text="OK" GridPane.rowIndex="1" />
          </children>
       </GridPane>
    </children>
