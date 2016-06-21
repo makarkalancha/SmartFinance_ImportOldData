@@ -66,6 +66,7 @@ public class TaxFormulaEditorController {
     private void initialize(){
         charsLbl.setText(UserInterfaceConstants.TAX_FORMULA_VALID_CHARACTERS);
         formulaTA.textProperty().addListener((observable, oldValue, newValue) -> {
+            //todo enter only allowed characters
             LOG.debug(newValue);
             LOG.debug(newValue.matches(FORMULA_PATTERN));
         });
