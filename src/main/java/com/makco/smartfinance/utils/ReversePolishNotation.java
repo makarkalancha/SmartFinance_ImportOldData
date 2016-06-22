@@ -13,7 +13,9 @@ public class ReversePolishNotation {
         StringBuilder reversePolishNotation = new StringBuilder();
         Stack<Character> characterStack = new DequeStack<>();
 //        arithmeticNotation.chars().forEach(intConsumer -> {
-        for(char intConsumer : arithmeticNotation.toCharArray()) {
+        char[] chars = arithmeticNotation.toCharArray();
+        for (int i = 0; i < chars.length; i++) {
+
             System.out.println(">>intConsumer:" + intConsumer);
             switch ((char) intConsumer) {
                 case '+':
