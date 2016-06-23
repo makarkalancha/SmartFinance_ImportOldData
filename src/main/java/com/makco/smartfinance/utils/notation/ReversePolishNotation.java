@@ -1,9 +1,7 @@
-package com.makco.smartfinance.utils;
+package com.makco.smartfinance.utils.notation;
 
 import com.makco.smartfinance.utils.collection.DequeStack;
 import com.makco.smartfinance.utils.collection.Stack;
-import org.apache.commons.lang3.CharSetUtils;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +10,7 @@ import java.util.List;
  * Created by mcalancea on 21 Jun 2016.
  */
 public class ReversePolishNotation {
-    private Stack<String> operandStack = new DequeStack<>();
+    private Stack<String> operatorStack = new DequeStack<>(); //operator +-... and operand 3, 2, 4, a, b, c ...
     private List<String> operandOperatorList = new ArrayList<>();
     private String allowedCharacters = "/*-+()";
     private char decimalSeparator;
@@ -70,34 +68,34 @@ public class ReversePolishNotation {
                     element.equals("/") ||
                     element.equals("(")
                     ) {
-                operandStack.push(element);
+                operatorStack.push(element);
             } else if (element.equals(")")) {
-                if (!operandStack.isEmpty() && operandStack.peek().equals("(")) {
-                    operandStack.pop(); //remove "("
+                if (!operatorStack.isEmpty() && operatorStack.peek().equals("(")) {
+                    operatorStack.pop(); //remove "("
                 }
-                if (!operandStack.isEmpty() && !operandStack.peek().equals("(")) {
-                    reversePolishNotation.append(operandStack.pop());
+                if (!operatorStack.isEmpty() && !operatorStack.peek().equals("(")) {
+                    reversePolishNotation.append(operatorStack.pop());
                 }
             } else {
                 reversePolishNotation.append(element);
 
-                if (!operandStack.isEmpty() && operandOperatorList.size() > (i + 1)) {
+                if (!operatorStack.isEmpty() && operandOperatorList.size() > (i + 1)) {
                     String nextOperand = operandOperatorList.get(i + 1);
-                    if (operandStack.peek().equals("+") || operandStack.peek().equals("-")) {
+                    if (operatorStack.peek().equals("+") || operatorStack.peek().equals("-")) {
                         if (!nextOperand.equals("(") &&
                                 !nextOperand.equals("*") &&
                                 !nextOperand.equals("/")) {
-                            reversePolishNotation.append(operandStack.pop());
+                            reversePolishNotation.append(operatorStack.pop());
                         }
-                    }else if (!nextOperand.equals("(") && (operandStack.peek().equals("*") || operandStack.peek().equals("/"))) {
-                        reversePolishNotation.append(operandStack.pop());
+                    }else if (!nextOperand.equals("(") && (operatorStack.peek().equals("*") || operatorStack.peek().equals("/"))) {
+                        reversePolishNotation.append(operatorStack.pop());
                     }
                 }
             }
 
             if (i == (operandOperatorList.size() - 1)) {
-                while(!operandStack.isEmpty()){
-                    reversePolishNotation.append(operandStack.pop());
+                while(!operatorStack.isEmpty()){
+                    reversePolishNotation.append(operatorStack.pop());
                 }
             }
         }
