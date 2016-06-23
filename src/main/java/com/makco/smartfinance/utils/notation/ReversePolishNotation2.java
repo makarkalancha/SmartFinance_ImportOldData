@@ -15,7 +15,7 @@ public class ReversePolishNotation2 {
     private Stack<String> operatorStack = new DequeStack<>(); //operator +-... and operand 3, 2, 4, a, b, c ...
     private List<String> operandOperatorList = new ArrayList<>();
     private StringBuilder reversePolishNotation = new StringBuilder();
-    private String allowedCharacters = "/*-+()";
+    private String allowedOperators = "/*-+()";
     private String operators = "/*-+";
     private char decimalSeparator;
     private String arithmeticNotation;
@@ -41,11 +41,14 @@ public class ReversePolishNotation2 {
         this.arithmeticNotation = arithmeticNotation;
     }
 
-    private void convertStringToOperandList(){
+    /*
+    todo make this method return errors, so it should validate formula
+     */
+    private void convertStringTooperandOperatorList(){
         StringBuilder operand = new StringBuilder();
         for (int i = 0; i < arithmeticNotation.length(); i++) {
             char charInString = arithmeticNotation.charAt(i);
-            if (allowedCharacters.indexOf(charInString) > -1) {
+            if (allowedOperators.indexOf(charInString) > -1) {
 
                 if (operand.length() > 0) {
                     operandOperatorList.add(operand.toString());
@@ -104,7 +107,7 @@ public class ReversePolishNotation2 {
     }
 
     public String convertToReversePolishNotation(){
-        convertStringToOperandList();
+        convertStringTooperandOperatorList();
         System.out.println(operandOperatorList);
 
         for (int i = 0; i < operandOperatorList.size(); i++) {

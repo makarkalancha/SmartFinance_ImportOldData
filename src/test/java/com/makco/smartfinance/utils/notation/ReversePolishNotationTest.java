@@ -1,5 +1,6 @@
-package com.makco.smartfinance.utils;
+package com.makco.smartfinance.utils.notation;
 
+import com.makco.smartfinance.utils.BigDecimalUtils;
 import com.makco.smartfinance.utils.notation.ReversePolishNotation2;
 import org.junit.Test;
 
@@ -126,5 +127,22 @@ public class ReversePolishNotationTest {
         String expectedResult = "11 12 13 14 15 16 + / - * +";
         assertEquals(expectedResult, factResult);
     }
+
+    /*
+     * todo read
+     * http://www.ibm.com/developerworks/library/j-w3eval/
+     * https://www.quora.com/How-do-you-write-a-Java-program-to-evaluate-a-given-arithmetic-expression-to-get-the-maximum-possible-answer
+     * https://www.google.ca/search?q=java+8+execute+string+formulas&ie=utf-8&oe=utf-8&gws_rd=cr&ei=nT9sV7a_GcGte4j-mJgB#q=java+8+validate+arithmetic+expression
+     */
+    @Test
+    public void test_convert_13() throws Exception{
+        String formula = "(11+22)*31-42/(555+67)";
+        ReversePolishNotation2 rpn = new ReversePolishNotation2(formula, BigDecimalUtils.getDecimalSeparator());
+        String factResult = rpn.convertToReversePolishNotation();
+        String expectedResult = "11 22 + 31 * 42 555 67 + / -";
+        assertEquals(expectedResult, factResult);
+    }
+
+
 
 }
