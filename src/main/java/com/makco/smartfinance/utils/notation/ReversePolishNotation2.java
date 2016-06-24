@@ -1,11 +1,13 @@
 package com.makco.smartfinance.utils.notation;
 
+import com.makco.smartfinance.user_interface.validation.ErrorEnum;
 import com.makco.smartfinance.utils.collection.DequeStack;
 import com.makco.smartfinance.utils.collection.Stack;
 import com.makco.smartfinance.utils.notation.operator.OperatorFactory;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
 
 /**
@@ -44,27 +46,33 @@ public class ReversePolishNotation2 {
     /*
     todo make this method return errors, so it should validate formula
      */
-    private void convertStringTooperandOperatorList(){
-        StringBuilder operand = new StringBuilder();
-        for (int i = 0; i < arithmeticNotation.length(); i++) {
-            char charInString = arithmeticNotation.charAt(i);
-            if (allowedOperators.indexOf(charInString) > -1) {
+    private EnumSet<ErrorEnum> convertStringTooperandOperatorList(){
+        EnumSet<ErrorEnum> errors = EnumSet.noneOf(ErrorEnum.class);
+        try {
+            StringBuilder operand = new StringBuilder();
+            for (int i = 0; i < arithmeticNotation.length(); i++) {
+                char charInString = arithmeticNotation.charAt(i);
+                if (allowedOperators.indexOf(charInString) > -1) {
 
-                if (operand.length() > 0) {
-                    operandOperatorList.add(operand.toString());
-                    operand = new StringBuilder();
+                    if (operand.length() > 0) {
+                        operandOperatorList.add(operand.toString());
+                        operand = new StringBuilder();
+                    }
+
+                    operandOperatorList.add(Character.toString(charInString));
+
+                } else {
+                    operand.append(charInString);
                 }
-
-                operandOperatorList.add(Character.toString(charInString));
-
-            } else {
-                operand.append(charInString);
             }
-        }
 
-        if (operand.length() > 0) {
-            operandOperatorList.add(operand.toString());
+            if (operand.length() > 0) {
+                operandOperatorList.add(operand.toString());
+            }
+        }catch (Exception e){
+            throw e;
         }
+        return errors;
     }
 
     private void getOperator(Operator operator){
