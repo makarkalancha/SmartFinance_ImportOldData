@@ -2,10 +2,12 @@ package com.makco.smartfinance.utils.notation.operator;
 
 import com.makco.smartfinance.utils.notation.Operator;
 
+import java.math.BigDecimal;
+
 /**
  * Created by mcalancea on 23 Jun 2016.
  */
-public class Divide implements Operator {
+public class Divide implements Operator{
     @Override
     public String getOperatorSymbol() {
         return "/";
@@ -19,5 +21,10 @@ public class Divide implements Operator {
     @Override
     public boolean isUnaryOperator() {
         return false;
+    }
+
+    @Override
+    public BigDecimal evaluate(BigDecimal first, BigDecimal second) {
+        return first.divide(second, 6, BigDecimal.ROUND_HALF_UP);
     }
 }
