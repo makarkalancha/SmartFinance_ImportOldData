@@ -15,4 +15,9 @@ public class Divide implements Operator {
     public int getPrecedence() {
         return 2;
     }
+
+    @Override
+    public boolean isUnaryOperator() {
+        return false;
+    }
 }

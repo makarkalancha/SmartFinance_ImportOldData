@@ -15,4 +15,9 @@ public class Substract implements Operator {
     public int getPrecedence() {
         return 1;
     }
+
+    @Override
+    public boolean isUnaryOperator() {
+        return true;
+    }
 }

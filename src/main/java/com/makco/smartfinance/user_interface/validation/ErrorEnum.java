@@ -1,6 +1,7 @@
 package com.makco.smartfinance.user_interface.validation;
 
 import com.makco.smartfinance.constants.DataBaseConstants;
+import com.makco.smartfinance.utils.notation.Operator;
 
 /**
  * User: Makar Kalancha
@@ -37,6 +38,7 @@ public enum ErrorEnum {
     , FM_NAME_DUPLICATE("Family Member with this name already exists.")
     , FM_NAME_LGTH("Family Member name cannot be greater than " + DataBaseConstants.FM_NAME_MAX_LGTH + " characters.")
     , FM_NAME_NULL("Family Member name cannot be empty.")
+    , FRM_END("It's illegal to use operators (" + Operator.TYPES + ") at the end of formula.")
     , MAIN_ERROR("Error while opening the application")
     , ORG_DESC_LGTH("Organization description cannot be greater than " + DataBaseConstants.ORG_DESCRIPTION_MAX_LGTH + " characters.")
     , ORG_NAME_DUPLICATE("Organization with this name already exists.")

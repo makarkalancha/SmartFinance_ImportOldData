@@ -18,7 +18,7 @@ public class ReversePolishNotation2 {
     private List<String> operandOperatorList = new ArrayList<>();
     private StringBuilder reversePolishNotation = new StringBuilder();
     private String allowedOperators = "/*-+()";
-    private String operators = "/*-+";
+    private String unaryOperators = "-+";
     private char decimalSeparator;
     private String arithmeticNotation;
 
@@ -53,6 +53,15 @@ public class ReversePolishNotation2 {
             for (int i = 0; i < arithmeticNotation.length(); i++) {
                 char charInString = arithmeticNotation.charAt(i);
                 if (allowedOperators.indexOf(charInString) > -1) {
+
+                    if(i==0 && unaryOperators.indexOf(charInString) > -1){
+
+                    }
+
+                    if (i == (arithmeticNotation.length() - 1) && unaryOperators.indexOf(Operator.TYPES) > -1) {
+                        errors.add(ErrorEnum.FRM_END);
+
+                    }
 
                     if (operand.length() > 0) {
                         operandOperatorList.add(operand.toString());
@@ -120,7 +129,7 @@ public class ReversePolishNotation2 {
 
         for (int i = 0; i < operandOperatorList.size(); i++) {
             String element = operandOperatorList.get(i);
-            if (StringUtils.containsOnly(element, operators)) {
+            if (StringUtils.containsOnly(element, Operator.TYPES)) {
                 Operator operator = OperatorFactory.buildOperator(element);
                 getOperator(operator);
             } else if (element.equals("(")) {

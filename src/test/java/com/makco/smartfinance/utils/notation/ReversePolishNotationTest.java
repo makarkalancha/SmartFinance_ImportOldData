@@ -162,6 +162,12 @@ public class ReversePolishNotationTest {
     }
 
     @Test
+    public void testOperation_unioperation_4() throws Exception{
+        int result = -3+-+4;
+        assertEquals(-7, result);
+    }
+
+    @Test
     public void testOperation_unioperation_syntaxError_1() throws Exception{
         //int result = -3-++4;
     }
