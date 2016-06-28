@@ -49,7 +49,7 @@ public class ReversePolishNotation2 {
     /*
     todo make this method return errors, so it should validate formula
      */
-    private EnumSet<ErrorEnum> convertStringTooperandOperatorList(){
+    private EnumSet<ErrorEnum> convertStringToOperandOperatorList(){
         EnumSet<ErrorEnum> errors = EnumSet.noneOf(ErrorEnum.class);
         try {
             StringBuilder operand = new StringBuilder();
@@ -57,21 +57,24 @@ public class ReversePolishNotation2 {
                 char charInString = arithmeticNotation.charAt(i);
                 if (allowedOperators.indexOf(charInString) > -1) {
 
-                    if(i==0 && unaryOperators.indexOf(charInString) > -1){
-
-                    }
-
-                    if (i == (arithmeticNotation.length() - 1) && unaryOperators.indexOf(Operator.TYPES) > -1) {
-                        errors.add(ErrorEnum.FRM_END);
-
-                    }
-
                     if (operand.length() > 0) {
                         operandOperatorList.add(operand.toString());
                         operand = new StringBuilder();
                     }
 
-                    operandOperatorList.add(Character.toString(charInString));
+                    if(unaryOperators.indexOf(charInString) > -1 && (i==0 || unaryOperators.indexOf(operandOperatorList.get(operandOperatorList.size()-1)) > -1)){
+                        operand.append(charInString);
+                    } else {
+
+//                    if (i == (arithmeticNotation.length() - 1) && unaryOperators.indexOf(Operator.TYPES) > -1) {
+//                        errors.add(ErrorEnum.FRM_END);
+//
+//                    }
+
+
+
+                        operandOperatorList.add(Character.toString(charInString));
+                    }
 
                 } else {
                     operand.append(charInString);
@@ -127,7 +130,7 @@ public class ReversePolishNotation2 {
     }
 
     public String convertToReversePolishNotation(){
-        convertStringTooperandOperatorList();
+        convertStringToOperandOperatorList();
         System.out.println(operandOperatorList);
 
         for (int i = 0; i < operandOperatorList.size(); i++) {
@@ -205,7 +208,7 @@ public class ReversePolishNotation2 {
     }
 
     public BigDecimal evaluateReversePolishNotation(){
-        convertStringTooperandOperatorList();
+        convertStringToOperandOperatorList();
         System.out.println(operandOperatorList);
 
         for (int i = 0; i < operandOperatorList.size(); i++) {
@@ -234,7 +237,7 @@ public class ReversePolishNotation2 {
         if(valueStack.size() == 1){
             resultBigDecimal =  valueStack.pop();
         } else {
-            throw new RuntimeException("value stack contains more elements than 1");
+            throw new RuntimeException("value stack contains more elements than 1: " + valueStack);
         }
 
         System.out.println(">>>resultBigDecimal: " + resultBigDecimal);
