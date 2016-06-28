@@ -18,7 +18,7 @@ public class ReversePolishNotationTest {
     @Test
     public void test_convert_1() throws Exception{
         String formula = "1+2";
-        ReversePolishNotation2 rpn = new ReversePolishNotation2(formula, BigDecimalUtils.getDecimalSeparator());
+        ReversePolishNotation2 rpn = new ReversePolishNotation2(formula, BigDecimalUtils.getDecimalSeparator(), 6);
         String factResult = rpn.convertToReversePolishNotation();
         String expectedResult = "1 2 +";
         assertEquals(expectedResult, factResult);
@@ -27,7 +27,7 @@ public class ReversePolishNotationTest {
     @Test
     public void test_evaluate_1() throws Exception{
         String formula = "1+2";
-        ReversePolishNotation2 rpn = new ReversePolishNotation2(formula, BigDecimalUtils.getDecimalSeparator());
+        ReversePolishNotation2 rpn = new ReversePolishNotation2(formula, BigDecimalUtils.getDecimalSeparator(), 6);
         BigDecimal factResult = rpn.evaluateReversePolishNotation();
         assertEquals(new BigDecimal("3"), factResult);
     }
@@ -35,7 +35,7 @@ public class ReversePolishNotationTest {
     @Test
     public void test_convert_2() throws Exception{
         String formula = "1+2-3";
-        ReversePolishNotation2 rpn = new ReversePolishNotation2(formula, BigDecimalUtils.getDecimalSeparator());
+        ReversePolishNotation2 rpn = new ReversePolishNotation2(formula, BigDecimalUtils.getDecimalSeparator(), 6);
         String factResult = rpn.convertToReversePolishNotation();
         String expectedResult = "1 2 + 3 -";
         assertEquals(expectedResult, factResult);
@@ -44,7 +44,7 @@ public class ReversePolishNotationTest {
     @Test
     public void test_evaluate_2() throws Exception{
         String formula = "1+2-3";
-        ReversePolishNotation2 rpn = new ReversePolishNotation2(formula, BigDecimalUtils.getDecimalSeparator());
+        ReversePolishNotation2 rpn = new ReversePolishNotation2(formula, BigDecimalUtils.getDecimalSeparator(), 6);
         BigDecimal factResult = rpn.evaluateReversePolishNotation();
         assertEquals(new BigDecimal("0"), factResult);
     }
@@ -52,7 +52,7 @@ public class ReversePolishNotationTest {
     @Test
     public void test_convert_3() throws Exception{
         String formula = "1*2/3";
-        ReversePolishNotation2 rpn = new ReversePolishNotation2(formula, BigDecimalUtils.getDecimalSeparator());
+        ReversePolishNotation2 rpn = new ReversePolishNotation2(formula, BigDecimalUtils.getDecimalSeparator(), 6);
         String factResult = rpn.convertToReversePolishNotation();
         String expectedResult = "1 2 * 3 /";
         assertEquals(expectedResult, factResult);
@@ -61,7 +61,7 @@ public class ReversePolishNotationTest {
     @Test
     public void test_evaluate_3() throws Exception{
         String formula = "1*2/3";
-        ReversePolishNotation2 rpn = new ReversePolishNotation2(formula, BigDecimalUtils.getDecimalSeparator());
+        ReversePolishNotation2 rpn = new ReversePolishNotation2(formula, BigDecimalUtils.getDecimalSeparator(), 6);
         BigDecimal factResult = rpn.evaluateReversePolishNotation();
         assertEquals(new BigDecimal("0.666667"), factResult);
     }
@@ -69,7 +69,7 @@ public class ReversePolishNotationTest {
     @Test
     public void test_convert_4() throws Exception{
         String formula = "1+2*3";
-        ReversePolishNotation2 rpn = new ReversePolishNotation2(formula, BigDecimalUtils.getDecimalSeparator());
+        ReversePolishNotation2 rpn = new ReversePolishNotation2(formula, BigDecimalUtils.getDecimalSeparator(), 6);
         String factResult = rpn.convertToReversePolishNotation();
         String expectedResult = "1 2 3 * +";
         assertEquals(expectedResult, factResult);
@@ -78,7 +78,7 @@ public class ReversePolishNotationTest {
     @Test
     public void test_evaluate_4() throws Exception{
         String formula = "1+2*3";
-        ReversePolishNotation2 rpn = new ReversePolishNotation2(formula, BigDecimalUtils.getDecimalSeparator());
+        ReversePolishNotation2 rpn = new ReversePolishNotation2(formula, BigDecimalUtils.getDecimalSeparator(), 6);
         BigDecimal factResult = rpn.evaluateReversePolishNotation();
         assertEquals(new BigDecimal("7"), factResult);
     }
@@ -86,7 +86,7 @@ public class ReversePolishNotationTest {
     @Test
     public void test_convert_5() throws Exception{
         String formula = "1*2+3";
-        ReversePolishNotation2 rpn = new ReversePolishNotation2(formula, BigDecimalUtils.getDecimalSeparator());
+        ReversePolishNotation2 rpn = new ReversePolishNotation2(formula, BigDecimalUtils.getDecimalSeparator(), 6);
         String factResult = rpn.convertToReversePolishNotation();
         String expectedResult = "1 2 * 3 +";
         assertEquals(expectedResult, factResult);
@@ -95,7 +95,7 @@ public class ReversePolishNotationTest {
     @Test
     public void test_evaluate_5() throws Exception{
         String formula = "1*2+3";
-        ReversePolishNotation2 rpn = new ReversePolishNotation2(formula, BigDecimalUtils.getDecimalSeparator());
+        ReversePolishNotation2 rpn = new ReversePolishNotation2(formula, BigDecimalUtils.getDecimalSeparator(), 6);
         BigDecimal factResult = rpn.evaluateReversePolishNotation();
         assertEquals(new BigDecimal("5"), factResult);
     }
@@ -103,7 +103,7 @@ public class ReversePolishNotationTest {
     @Test
     public void test_convert_6() throws Exception{
         String formula = "1*(2+3)";
-        ReversePolishNotation2 rpn = new ReversePolishNotation2(formula, BigDecimalUtils.getDecimalSeparator());
+        ReversePolishNotation2 rpn = new ReversePolishNotation2(formula, BigDecimalUtils.getDecimalSeparator(), 6);
         String factResult = rpn.convertToReversePolishNotation();
         String expectedResult = "1 2 3 + *";
         assertEquals(expectedResult, factResult);
@@ -112,7 +112,7 @@ public class ReversePolishNotationTest {
     @Test
     public void test_evaluate_6() throws Exception{
         String formula = "1*(2+3)";
-        ReversePolishNotation2 rpn = new ReversePolishNotation2(formula, BigDecimalUtils.getDecimalSeparator());
+        ReversePolishNotation2 rpn = new ReversePolishNotation2(formula, BigDecimalUtils.getDecimalSeparator(), 6);
         BigDecimal factResult = rpn.evaluateReversePolishNotation();
         assertEquals(new BigDecimal("5"), factResult);
     }
@@ -120,7 +120,7 @@ public class ReversePolishNotationTest {
     @Test
     public void test_convert_7() throws Exception{
         String formula = "1*2+3*4";
-        ReversePolishNotation2 rpn = new ReversePolishNotation2(formula, BigDecimalUtils.getDecimalSeparator());
+        ReversePolishNotation2 rpn = new ReversePolishNotation2(formula, BigDecimalUtils.getDecimalSeparator(), 6);
         String factResult = rpn.convertToReversePolishNotation();
         String expectedResult = "1 2 * 3 4 * +";
         assertEquals(expectedResult, factResult);
@@ -129,7 +129,7 @@ public class ReversePolishNotationTest {
     @Test
     public void test_evaluate_7() throws Exception{
         String formula = "1*2+3*4";
-        ReversePolishNotation2 rpn = new ReversePolishNotation2(formula, BigDecimalUtils.getDecimalSeparator());
+        ReversePolishNotation2 rpn = new ReversePolishNotation2(formula, BigDecimalUtils.getDecimalSeparator(), 6);
         BigDecimal factResult = rpn.evaluateReversePolishNotation();
         assertEquals(new BigDecimal("14"), factResult);
     }
@@ -144,7 +144,7 @@ public class ReversePolishNotationTest {
     @Test
     public void test_convert_8() throws Exception{
         String formula = "(1+2)*(3-4)";
-        ReversePolishNotation2 rpn = new ReversePolishNotation2(formula, BigDecimalUtils.getDecimalSeparator());
+        ReversePolishNotation2 rpn = new ReversePolishNotation2(formula, BigDecimalUtils.getDecimalSeparator(), 6);
         String factResult = rpn.convertToReversePolishNotation();
         String expectedResult = "1 2 + 3 4 - *";
         assertEquals(expectedResult, factResult);
@@ -153,7 +153,7 @@ public class ReversePolishNotationTest {
     @Test
     public void test_evaluate_8() throws Exception{
         String formula = "(1+2)*(3-4)";
-        ReversePolishNotation2 rpn = new ReversePolishNotation2(formula, BigDecimalUtils.getDecimalSeparator());
+        ReversePolishNotation2 rpn = new ReversePolishNotation2(formula, BigDecimalUtils.getDecimalSeparator(), 6);
         BigDecimal factResult = rpn.evaluateReversePolishNotation();
         assertEquals(new BigDecimal("-3"), factResult);
     }
@@ -161,7 +161,7 @@ public class ReversePolishNotationTest {
     @Test
     public void test_convert_9() throws Exception{
         String formula = "((1+2)*3)-4";
-        ReversePolishNotation2 rpn = new ReversePolishNotation2(formula, BigDecimalUtils.getDecimalSeparator());
+        ReversePolishNotation2 rpn = new ReversePolishNotation2(formula, BigDecimalUtils.getDecimalSeparator(), 6);
         String factResult = rpn.convertToReversePolishNotation();
         String expectedResult = "1 2 + 3 * 4 -";
         assertEquals(expectedResult, factResult);
@@ -170,7 +170,7 @@ public class ReversePolishNotationTest {
     @Test
     public void test_evaluate_9() throws Exception{
         String formula = "((1+2)*3)-4";
-        ReversePolishNotation2 rpn = new ReversePolishNotation2(formula, BigDecimalUtils.getDecimalSeparator());
+        ReversePolishNotation2 rpn = new ReversePolishNotation2(formula, BigDecimalUtils.getDecimalSeparator(), 6);
         BigDecimal factResult = rpn.evaluateReversePolishNotation();
         assertEquals(new BigDecimal("5"), factResult);
     }
@@ -178,7 +178,7 @@ public class ReversePolishNotationTest {
     @Test
     public void test_convert_10() throws Exception{
         String formula = "1+2*(3-4/(5+6))";
-        ReversePolishNotation2 rpn = new ReversePolishNotation2(formula, BigDecimalUtils.getDecimalSeparator());
+        ReversePolishNotation2 rpn = new ReversePolishNotation2(formula, BigDecimalUtils.getDecimalSeparator(), 6);
         String factResult = rpn.convertToReversePolishNotation();
         String expectedResult = "1 2 3 4 5 6 + / - * +";
         assertEquals(expectedResult, factResult);
@@ -187,7 +187,7 @@ public class ReversePolishNotationTest {
     @Test
     public void test_evaluate_10() throws Exception{
         String formula = "1+2*(3-4/(5+6))";
-        ReversePolishNotation2 rpn = new ReversePolishNotation2(formula, BigDecimalUtils.getDecimalSeparator());
+        ReversePolishNotation2 rpn = new ReversePolishNotation2(formula, BigDecimalUtils.getDecimalSeparator(), 6);
         BigDecimal factResult = rpn.evaluateReversePolishNotation();
         assertEquals(new BigDecimal("6.272728"), factResult);
     }
@@ -195,7 +195,7 @@ public class ReversePolishNotationTest {
     @Test
     public void test_convert_11() throws Exception{
         String formula = "11+12*(13-14/(15+16))";
-        ReversePolishNotation2 rpn = new ReversePolishNotation2(formula, BigDecimalUtils.getDecimalSeparator());
+        ReversePolishNotation2 rpn = new ReversePolishNotation2(formula, BigDecimalUtils.getDecimalSeparator(), 6);
         String factResult = rpn.convertToReversePolishNotation();
         String expectedResult = "11 12 13 14 15 16 + / - * +";
         assertEquals(expectedResult, factResult);
@@ -204,7 +204,7 @@ public class ReversePolishNotationTest {
     @Test
     public void test_evaluate_11() throws Exception{
         String formula = "11+12*(13-14/(15+16))";
-        ReversePolishNotation2 rpn = new ReversePolishNotation2(formula, BigDecimalUtils.getDecimalSeparator());
+        ReversePolishNotation2 rpn = new ReversePolishNotation2(formula, BigDecimalUtils.getDecimalSeparator(), 6);
         BigDecimal factResult = rpn.evaluateReversePolishNotation();
         /*
         not "161.580645", because 14 / 31 = 0.451613 and not 0.4516129032258065
@@ -218,7 +218,7 @@ public class ReversePolishNotationTest {
 //    @Test
 //    public void test_convert_12_invalid_formula() throws Exception{
 //        String formula = "1+*2";
-//        ReversePolishNotation2 rpn = new ReversePolishNotation2(formula, BigDecimalUtils.getDecimalSeparator());
+//        ReversePolishNotation2 rpn = new ReversePolishNotation2(formula, BigDecimalUtils.getDecimalSeparator(), 6);
 //        String factResult = rpn.convertToReversePolishNotation();
 //        String expectedResult = "11 12 13 14 15 16 + / - * +";
 //        assertEquals(expectedResult, factResult);
@@ -227,7 +227,7 @@ public class ReversePolishNotationTest {
     @Test(expected = RuntimeException.class)
     public void test_evaluate_12() throws Exception{
         String formula = "1+*2";
-        ReversePolishNotation2 rpn = new ReversePolishNotation2(formula, BigDecimalUtils.getDecimalSeparator());
+        ReversePolishNotation2 rpn = new ReversePolishNotation2(formula, BigDecimalUtils.getDecimalSeparator(), 6);
         rpn.evaluateReversePolishNotation();
     }
 
@@ -240,7 +240,7 @@ public class ReversePolishNotationTest {
     @Test
     public void test_convert_13() throws Exception{
         String formula = "(11+22)*31-42/(555+67)";
-        ReversePolishNotation2 rpn = new ReversePolishNotation2(formula, BigDecimalUtils.getDecimalSeparator());
+        ReversePolishNotation2 rpn = new ReversePolishNotation2(formula, BigDecimalUtils.getDecimalSeparator(), 6);
         String factResult = rpn.convertToReversePolishNotation();
         String expectedResult = "11 22 + 31 * 42 555 67 + / -";
         assertEquals(expectedResult, factResult);
@@ -249,7 +249,7 @@ public class ReversePolishNotationTest {
     @Test
     public void test_evaluate_13() throws Exception{
         String formula = "(11+22)*31-42/(555+67)";
-        ReversePolishNotation2 rpn = new ReversePolishNotation2(formula, BigDecimalUtils.getDecimalSeparator());
+        ReversePolishNotation2 rpn = new ReversePolishNotation2(formula, BigDecimalUtils.getDecimalSeparator(), 6);
         BigDecimal factResult = rpn.evaluateReversePolishNotation();
         assertEquals(new BigDecimal("1022.932476"), factResult);
     }
@@ -263,7 +263,7 @@ public class ReversePolishNotationTest {
     @Test
     public void test_convert_14() throws Exception{
         String formula = "-3+-3";
-        ReversePolishNotation2 rpn = new ReversePolishNotation2(formula, BigDecimalUtils.getDecimalSeparator());
+        ReversePolishNotation2 rpn = new ReversePolishNotation2(formula, BigDecimalUtils.getDecimalSeparator(), 6);
         String factResult = rpn.convertToReversePolishNotation();
         String expectedResult = "-3 -3 +";
         assertEquals(expectedResult, factResult);
@@ -272,7 +272,7 @@ public class ReversePolishNotationTest {
     @Test
     public void test_evaluate_14() throws Exception{
         String formula = "-3+-3";
-        ReversePolishNotation2 rpn = new ReversePolishNotation2(formula, BigDecimalUtils.getDecimalSeparator());
+        ReversePolishNotation2 rpn = new ReversePolishNotation2(formula, BigDecimalUtils.getDecimalSeparator(), 6);
         BigDecimal factResult = rpn.evaluateReversePolishNotation();
         assertEquals(new BigDecimal("-6"), factResult);
     }
@@ -286,7 +286,7 @@ public class ReversePolishNotationTest {
     @Test
     public void test_convert_15() throws Exception{
         String formula = "-3-+4";
-        ReversePolishNotation2 rpn = new ReversePolishNotation2(formula, BigDecimalUtils.getDecimalSeparator());
+        ReversePolishNotation2 rpn = new ReversePolishNotation2(formula, BigDecimalUtils.getDecimalSeparator(), 6);
         String factResult = rpn.convertToReversePolishNotation();
         String expectedResult = "-3 +4 -";
         assertEquals(expectedResult, factResult);
@@ -295,7 +295,7 @@ public class ReversePolishNotationTest {
     @Test
     public void test_evaluate_15() throws Exception{
         String formula = "-3-+4";
-        ReversePolishNotation2 rpn = new ReversePolishNotation2(formula, BigDecimalUtils.getDecimalSeparator());
+        ReversePolishNotation2 rpn = new ReversePolishNotation2(formula, BigDecimalUtils.getDecimalSeparator(), 6);
         BigDecimal factResult = rpn.evaluateReversePolishNotation();
         assertEquals(new BigDecimal("-7"), factResult);
     }
@@ -312,7 +312,7 @@ public class ReversePolishNotationTest {
 //    @Test
 //    public void test_convert_16() throws Exception{
 //        String formula = "-3-+-4";
-//        ReversePolishNotation2 rpn = new ReversePolishNotation2(formula, BigDecimalUtils.getDecimalSeparator());
+//        ReversePolishNotation2 rpn = new ReversePolishNotation2(formula, BigDecimalUtils.getDecimalSeparator(), 6);
 //        String factResult = rpn.convertToReversePolishNotation();
 //        String expectedResult = "-3 +-4 -";
 //        assertEquals(expectedResult, factResult);
@@ -321,7 +321,7 @@ public class ReversePolishNotationTest {
     @Test(expected = RuntimeException.class)
     public void test_evaluate_16() throws Exception{
         String formula = "-3-+-4";
-        ReversePolishNotation2 rpn = new ReversePolishNotation2(formula, BigDecimalUtils.getDecimalSeparator());
+        ReversePolishNotation2 rpn = new ReversePolishNotation2(formula, BigDecimalUtils.getDecimalSeparator(), 6);
         rpn.evaluateReversePolishNotation();
     }
 
@@ -337,7 +337,7 @@ public class ReversePolishNotationTest {
 //    @Test
 //    public void test_convert_17() throws Exception{
 //        String formula = "-3+-+4";
-//        ReversePolishNotation2 rpn = new ReversePolishNotation2(formula, BigDecimalUtils.getDecimalSeparator());
+//        ReversePolishNotation2 rpn = new ReversePolishNotation2(formula, BigDecimalUtils.getDecimalSeparator(), 6);
 //        String factResult = rpn.convertToReversePolishNotation();
 //        String expectedResult = "-3 -+4 +";
 //        assertEquals(expectedResult, factResult);
@@ -346,7 +346,7 @@ public class ReversePolishNotationTest {
     @Test(expected = RuntimeException.class)
     public void test_evaluate_17() throws Exception{
         String formula = "-3+-+4";
-        ReversePolishNotation2 rpn = new ReversePolishNotation2(formula, BigDecimalUtils.getDecimalSeparator());
+        ReversePolishNotation2 rpn = new ReversePolishNotation2(formula, BigDecimalUtils.getDecimalSeparator(), 6);
         rpn.evaluateReversePolishNotation();
     }
 
@@ -360,7 +360,7 @@ public class ReversePolishNotationTest {
 //    @Test
 //    public void test_convert_18() throws Exception{
 //        String formula = "-3-++4";
-//        ReversePolishNotation2 rpn = new ReversePolishNotation2(formula, BigDecimalUtils.getDecimalSeparator());
+//        ReversePolishNotation2 rpn = new ReversePolishNotation2(formula, BigDecimalUtils.getDecimalSeparator(), 6);
 //        String factResult = rpn.convertToReversePolishNotation();
 //        String expectedResult = "-3 ++4 -";
 //        assertEquals(expectedResult, factResult);
@@ -369,7 +369,7 @@ public class ReversePolishNotationTest {
     @Test(expected = RuntimeException.class)
     public void test_evaluate_18() throws Exception{
         String formula = "-3-++4";
-        ReversePolishNotation2 rpn = new ReversePolishNotation2(formula, BigDecimalUtils.getDecimalSeparator());
+        ReversePolishNotation2 rpn = new ReversePolishNotation2(formula, BigDecimalUtils.getDecimalSeparator(), 6);
         rpn.evaluateReversePolishNotation();
     }
 
@@ -383,7 +383,7 @@ public class ReversePolishNotationTest {
 //    @Test
 //    public void test_convert_19() throws Exception{
 //        String formula = "-3+--4";
-//        ReversePolishNotation2 rpn = new ReversePolishNotation2(formula, BigDecimalUtils.getDecimalSeparator());
+//        ReversePolishNotation2 rpn = new ReversePolishNotation2(formula, BigDecimalUtils.getDecimalSeparator(), 6);
 //        String factResult = rpn.convertToReversePolishNotation();
 //        String expectedResult = "-3 --4 +";
 //        assertEquals(expectedResult, factResult);
@@ -392,7 +392,7 @@ public class ReversePolishNotationTest {
     @Test(expected = RuntimeException.class)
     public void test_evaluate_19() throws Exception{
         String formula = "-3+--4";
-        ReversePolishNotation2 rpn = new ReversePolishNotation2(formula, BigDecimalUtils.getDecimalSeparator());
+        ReversePolishNotation2 rpn = new ReversePolishNotation2(formula, BigDecimalUtils.getDecimalSeparator(), 6);
         rpn.evaluateReversePolishNotation();
     }
 
@@ -406,7 +406,7 @@ public class ReversePolishNotationTest {
 //    @Test
 //    public void test_convert_20() throws Exception{
 //        String formula = "-3**4";
-//        ReversePolishNotation2 rpn = new ReversePolishNotation2(formula, BigDecimalUtils.getDecimalSeparator());
+//        ReversePolishNotation2 rpn = new ReversePolishNotation2(formula, BigDecimalUtils.getDecimalSeparator(), 6);
 //        String factResult = rpn.convertToReversePolishNotation();
 //        String expectedResult = "-3 *4 *";
 //        assertEquals(expectedResult, factResult);
@@ -415,7 +415,7 @@ public class ReversePolishNotationTest {
     @Test(expected = RuntimeException.class)
     public void test_evaluate_20() throws Exception{
         String formula = "-3**4";
-        ReversePolishNotation2 rpn = new ReversePolishNotation2(formula, BigDecimalUtils.getDecimalSeparator());
+        ReversePolishNotation2 rpn = new ReversePolishNotation2(formula, BigDecimalUtils.getDecimalSeparator(), 6);
         rpn.evaluateReversePolishNotation();
     }
 
@@ -429,7 +429,7 @@ public class ReversePolishNotationTest {
 //    @Test
 //    public void test_convert_21() throws Exception{
 //        String formula = "-3//4";
-//        ReversePolishNotation2 rpn = new ReversePolishNotation2(formula, BigDecimalUtils.getDecimalSeparator());
+//        ReversePolishNotation2 rpn = new ReversePolishNotation2(formula, BigDecimalUtils.getDecimalSeparator(), 6);
 //        String factResult = rpn.convertToReversePolishNotation();
 //        String expectedResult = "-3 /4 /";
 //        assertEquals(expectedResult, factResult);
@@ -438,7 +438,7 @@ public class ReversePolishNotationTest {
     @Test(expected = RuntimeException.class)
     public void test_evaluate_21() throws Exception{
         String formula = "-3//4";
-        ReversePolishNotation2 rpn = new ReversePolishNotation2(formula, BigDecimalUtils.getDecimalSeparator());
+        ReversePolishNotation2 rpn = new ReversePolishNotation2(formula, BigDecimalUtils.getDecimalSeparator(), 6);
         rpn.evaluateReversePolishNotation();
     }
 

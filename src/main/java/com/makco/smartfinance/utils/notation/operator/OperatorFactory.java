@@ -6,7 +6,7 @@ import com.makco.smartfinance.utils.notation.Operator;
  * Created by mcalancea on 23 Jun 2016.
  */
 public class OperatorFactory {
-    public static Operator buildOperator(String operator){
+    public static Operator buildOperator(String operator, int roundScale){
         if(operator.equals("+")){
             return new Add();
         } else if(operator.equals("-")){
@@ -14,7 +14,7 @@ public class OperatorFactory {
         } else if(operator.equals("*")){
             return new Multiply();
         } else if(operator.equals("/")){
-            return new Divide();
+            return new Divide(roundScale);
         }
         return null;
     }

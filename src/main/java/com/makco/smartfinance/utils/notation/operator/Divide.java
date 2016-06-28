@@ -8,6 +8,12 @@ import java.math.BigDecimal;
  * Created by mcalancea on 23 Jun 2016.
  */
 public class Divide implements Operator{
+    private final int scale;
+
+    public Divide(int scale){
+        this.scale = scale;
+    }
+
     @Override
     public String getOperatorSymbol() {
         return "/";
@@ -25,6 +31,6 @@ public class Divide implements Operator{
 
     @Override
     public BigDecimal evaluate(BigDecimal first, BigDecimal second) {
-        return first.divide(second, 6, BigDecimal.ROUND_HALF_UP);
+        return first.divide(second, scale, BigDecimal.ROUND_HALF_UP);
     }
 }

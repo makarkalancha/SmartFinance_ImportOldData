@@ -23,11 +23,13 @@ public class ReversePolishNotation2 {
     private String allowedOperators = "/*-+()";
     private String unaryOperators = "-+";
     private char decimalSeparator;
+    private int scale;
     private String arithmeticNotation;
 
-    public ReversePolishNotation2(String arithmeticNotation, char decimalSeparator){
+    public ReversePolishNotation2(String arithmeticNotation, char decimalSeparator, int scale){
         this.arithmeticNotation = arithmeticNotation;
         this.decimalSeparator = decimalSeparator;
+        this.scale = scale;
     }
 
     public char getDecimalSeparator() {
@@ -141,7 +143,7 @@ public class ReversePolishNotation2 {
         for (int i = 0; i < operandOperatorList.size(); i++) {
             String element = operandOperatorList.get(i);
             if (StringUtils.containsOnly(element, Operator.TYPES)) {
-                Operator operator = OperatorFactory.buildOperator(element);
+                Operator operator = OperatorFactory.buildOperator(element, scale);
                 getOperator(operator);
             } else if (element.equals("(")) {
                 operatorStack.push(element);
@@ -180,7 +182,7 @@ public class ReversePolishNotation2 {
                     operatorStack.push(topOperator);
                     break;
                 } else if (operator.getPrecedence() <= precedence2) {
-                    Operator topOperatorObj = OperatorFactory.buildOperator(topOperator);
+                    Operator topOperatorObj = OperatorFactory.buildOperator(topOperator, scale);
                     BigDecimal second = valueStack.pop();
                     BigDecimal first = valueStack.pop();
                     BigDecimal result = topOperatorObj.evaluate(first, second);
@@ -196,7 +198,7 @@ public class ReversePolishNotation2 {
         while(!operatorStack.isEmpty()){
             String topOperator = operatorStack.pop();
             if(!topOperator.equals("(")){
-                Operator topOperatorObj = OperatorFactory.buildOperator(topOperator);
+                Operator topOperatorObj = OperatorFactory.buildOperator(topOperator, scale);
                 BigDecimal second = valueStack.pop();
                 BigDecimal first = valueStack.pop();
                 BigDecimal result = topOperatorObj.evaluate(first, second);
@@ -214,7 +216,7 @@ public class ReversePolishNotation2 {
         for (int i = 0; i < operandOperatorList.size(); i++) {
             String element = operandOperatorList.get(i);
             if (StringUtils.containsOnly(element, Operator.TYPES)) {
-                Operator operator = OperatorFactory.buildOperator(element);
+                Operator operator = OperatorFactory.buildOperator(element, scale);
                 evaluateOperation(operator);
             } else if (element.equals("(")) {
                 operatorStack.push(element);
@@ -232,7 +234,7 @@ public class ReversePolishNotation2 {
             /*
             if first or second is null, then NullPointerException is thrown
              */
-            Operator topOperatorObj = OperatorFactory.buildOperator(operatorStack.pop());
+            Operator topOperatorObj = OperatorFactory.buildOperator(operatorStack.pop(), scale);
             BigDecimal second = valueStack.pop();
             BigDecimal first = valueStack.pop();
             BigDecimal result = topOperatorObj.evaluate(first, second);
