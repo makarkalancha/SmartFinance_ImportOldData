@@ -57,12 +57,15 @@ public class ReversePolishNotation2 {
                 char charInString = arithmeticNotation.charAt(i);
                 if (allowedOperators.indexOf(charInString) > -1) {
 
-                    if (operand.length() > 0) {
-                        operandOperatorList.add(operand.toString());
-                        operand = new StringBuilder();
-                    }
 
-                    if(unaryOperators.indexOf(charInString) > -1 && (i==0 || unaryOperators.indexOf(operandOperatorList.get(operandOperatorList.size()-1)) > -1)){
+
+
+                    if(unaryOperators.indexOf(charInString) > -1 &&
+                            (i == 0 ||
+//                                    unaryOperators.indexOf(operandOperatorList.get(operandOperatorList.size()-1)) > -1)){
+                                    (operand.length() == 0 &&
+                                            operandOperatorList.size() > 0 &&
+                                            unaryOperators.indexOf(operandOperatorList.get(operandOperatorList.size()-1)) > -1))){
                         operand.append(charInString);
                     } else {
 
@@ -70,8 +73,10 @@ public class ReversePolishNotation2 {
 //                        errors.add(ErrorEnum.FRM_END);
 //
 //                    }
-
-
+                        if (operand.length() > 0) {
+                            operandOperatorList.add(operand.toString());
+                            operand = new StringBuilder();
+                        }
 
                         operandOperatorList.add(Character.toString(charInString));
                     }
@@ -175,8 +180,6 @@ public class ReversePolishNotation2 {
                     operatorStack.push(topOperator);
                     break;
                 } else if (operator.getPrecedence() <= precedence2) {
-//                        reversePolishNotation.append(" ");
-//                        reversePolishNotation.append(topOperator);
                     Operator topOperatorObj = OperatorFactory.buildOperator(topOperator);
                     BigDecimal second = valueStack.pop();
                     BigDecimal first = valueStack.pop();
@@ -193,9 +196,6 @@ public class ReversePolishNotation2 {
         while(!operatorStack.isEmpty()){
             String topOperator = operatorStack.pop();
             if(!topOperator.equals("(")){
-//                reversePolishNotation.append(" ");
-//                reversePolishNotation.append(topOperator);
-
                 Operator topOperatorObj = OperatorFactory.buildOperator(topOperator);
                 BigDecimal second = valueStack.pop();
                 BigDecimal first = valueStack.pop();
@@ -221,12 +221,17 @@ public class ReversePolishNotation2 {
             } else if (element.equals(")")) {
                 getParentForEvaluation();
             } else {
-                valueStack.push(new BigDecimal(element));
+                try {
+                    valueStack.push(new BigDecimal(element));
+                }catch (NumberFormatException e){
+                    throw new RuntimeException("BigDecimal illegal value: " + element);
+                }
             }
         }
         while(!operatorStack.isEmpty()){
-//            reversePolishNotation.append(" ");
-//            reversePolishNotation.append(operatorStack.pop());
+            /*
+            if first or second is null, then NullPointerException is thrown
+             */
             Operator topOperatorObj = OperatorFactory.buildOperator(operatorStack.pop());
             BigDecimal second = valueStack.pop();
             BigDecimal first = valueStack.pop();
