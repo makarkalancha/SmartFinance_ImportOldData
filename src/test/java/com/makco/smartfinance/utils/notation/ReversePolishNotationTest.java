@@ -5,6 +5,7 @@ import com.makco.smartfinance.utils.notation.ReversePolishNotation2;
 import org.junit.Test;
 
 import java.math.BigDecimal;
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.*;
 
@@ -442,4 +443,87 @@ public class ReversePolishNotationTest {
         rpn.evaluateReversePolishNotation();
     }
 
+    @Test
+    public void smoke_test() throws Exception{
+        int cycles = 100_000;
+        Double[] doubleArray = {
+                (double)(1+2),
+                (double)(5+2),
+                (double)(1+2-3),
+                (double)(1*2/3),
+                (double)(1+2*3),
+                (double)(1*2+3),
+                (double)(1*(2+3)),
+                (double)(1*2+3*4),
+                (double)((1+2)*(3-4)),
+                (double)(((1+2)*3)-4),
+                (double)(1+2*(3-4/(5+6))),
+                (double)(11+12*(13-14/(15+16))),
+                (double)((11+22)*31-42/(555+67)),
+                (double)(-3+-3),
+                (double)(-3-+4)
+        };
+
+        double sumDouble = 0d;
+        long start_double = System.nanoTime();
+        for (int i = 0; i < cycles; i++) {
+            double result = doubleArray[i % doubleArray.length];
+            sumDouble += result;
+            if (i % 10_000 == 0) {
+                System.out.println("j=" + (i % doubleArray.length) + " " + result + " -> i=" + i);
+            }
+
+        }
+        long end_double = System.nanoTime();
+        long elapsed_double = end_double - start_double;
+        long minutes1 = TimeUnit.NANOSECONDS.toMinutes(elapsed_double);
+        long seconds1 = TimeUnit.NANOSECONDS.toSeconds(elapsed_double - TimeUnit.MINUTES.toNanos(minutes1));
+        long millis1 = TimeUnit.NANOSECONDS.toMillis(elapsed_double - TimeUnit.MINUTES.toNanos(minutes1) - TimeUnit.SECONDS.toNanos(seconds1));
+        long nanos1 = elapsed_double - TimeUnit.MINUTES.toNanos(minutes1) - TimeUnit.SECONDS.toNanos(seconds1) - TimeUnit.MILLISECONDS.toNanos(millis1);
+
+        String[] stringArray = {
+                "1+2",
+                "5+2",
+                "1+2-3",
+                "1*2/3",
+                "1+2*3",
+                "1*2+3",
+                "1*(2+3)",
+                "1*2+3*4",
+                "(1+2)*(3-4)",
+                "((1+2)*3)-4",
+                "1+2*(3-4/(5+6))",
+                "11+12*(13-14/(15+16))",
+                "(11+22)*31-42/(555+67)",
+                "-3+-3",
+                "-3-+4"
+        };
+
+        BigDecimal sumBigDecimal = new BigDecimal("0");
+        long start_string = System.nanoTime();
+        for (int i = 0; i < cycles; i++) {
+            ReversePolishNotation2 rpn = new ReversePolishNotation2(stringArray[i % doubleArray.length],
+                    BigDecimalUtils.getDecimalSeparator(),
+                    6);
+            BigDecimal result = rpn.evaluateReversePolishNotation();
+
+            sumBigDecimal = sumBigDecimal.add(result);
+
+            if (i % 10_000 == 0) {
+                System.out.println("j=" + (i % doubleArray.length) + " " + result + " -> i=" + i);
+            }
+
+        }
+        long end_string = System.nanoTime();
+        long elapsed_string = end_string - start_string;
+        long minutes2 = TimeUnit.NANOSECONDS.toMinutes(elapsed_string);
+        long seconds2 = TimeUnit.NANOSECONDS.toSeconds(elapsed_string - TimeUnit.MINUTES.toNanos(minutes2));
+        long millis2 = TimeUnit.NANOSECONDS.toMillis(elapsed_string - TimeUnit.MINUTES.toNanos(minutes2) - TimeUnit.SECONDS.toNanos(seconds2));
+        long nanos2 = elapsed_string - TimeUnit.MINUTES.toNanos(minutes2) - TimeUnit.SECONDS.toNanos(seconds2) - TimeUnit.MILLISECONDS.toNanos(millis2);
+
+        System.out.println(String.format("double array elapsed [mm:ss:millis.nanos]: %s:%s:%s.%s", minutes1, seconds1, millis1, nanos1));
+        System.out.println(String.format("string RPN elapsed [mm:ss:millis.nanos]: %s:%s:%s.%s", minutes2, seconds2, millis2, nanos2));
+
+        System.out.println(String.format("doubleSum vs bigDecimalSum: %s ~ %s", sumDouble, sumBigDecimal));
+    }
 }

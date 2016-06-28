@@ -138,7 +138,7 @@ public class ReversePolishNotation2 {
 
     public String convertToReversePolishNotation(){
         convertStringToOperandOperatorList();
-        System.out.println(operandOperatorList);
+//        System.out.println(operandOperatorList);
 
         for (int i = 0; i < operandOperatorList.size(); i++) {
             String element = operandOperatorList.get(i);
@@ -160,7 +160,7 @@ public class ReversePolishNotation2 {
             reversePolishNotation.append(" ");
             reversePolishNotation.append(operatorStack.pop());
         }
-        System.out.println(">>>reversePolishNotation: " + reversePolishNotation.toString());
+//        System.out.println(">>>reversePolishNotation: " + reversePolishNotation.toString());
         return reversePolishNotation.toString();
     }
 
@@ -211,7 +211,7 @@ public class ReversePolishNotation2 {
 
     public BigDecimal evaluateReversePolishNotation(){
         convertStringToOperandOperatorList();
-        System.out.println(operandOperatorList);
+//        System.out.println(operandOperatorList);
 
         for (int i = 0; i < operandOperatorList.size(); i++) {
             String element = operandOperatorList.get(i);
@@ -247,7 +247,7 @@ public class ReversePolishNotation2 {
             throw new RuntimeException("value stack contains more elements than 1: " + valueStack);
         }
 
-        System.out.println(">>>resultBigDecimal: " + resultBigDecimal);
+//        System.out.println(">>>resultBigDecimal: " + resultBigDecimal);
         return resultBigDecimal;
     }
 
