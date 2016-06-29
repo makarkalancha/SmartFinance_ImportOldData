@@ -86,5 +86,7 @@ public class DataBaseConstants {
     public final static int TAX_NAME_MAX_LGTH = 32;
     public final static int TAX_DESCRIPTION_MAX_LGTH = 512;
     public final static int TAX_FORMULA_MAX_LGTH = 512;
+    public final static String TAX_RATE_PLACEHOLDER = "{RATE}";
+    public final static String TAX_NUMBER_PLACEHOLDER = "{NUM}";
 
 }

@@ -65,4 +65,8 @@ public class BigDecimalUtils {
     public static char getGroupingSeparator() {
         return groupingSeparator;
     }
+
+    public static int getBigDecimalDefaultScale() {
+        return bigDecimalScaleOf_2;
+    }
 }

@@ -8,11 +8,11 @@ import java.util.List;
 
 /**
  * Created by mcalancea on 21 Jun 2016.
+ * version 1
  */
 public class ReversePolishNotation1 {
     private Stack<String> operatorStack = new DequeStack<>(); //operator +-... and operand 3, 2, 4, a, b, c ...
     private List<String> operandOperatorList = new ArrayList<>();
-    private StringBuilder reversePolishNotation = new StringBuilder();
     private String allowedCharacters = "/*-+()";
     private char decimalSeparator;
     private String arithmeticNotation;
@@ -44,10 +44,8 @@ public class ReversePolishNotation1 {
             char charInString = arithmeticNotation.charAt(i);
             if (allowedCharacters.indexOf(charInString) > -1) {
 
-                if (operand.length() > 0) {
-                    operandOperatorList.add(operand.toString());
-                    operand = new StringBuilder();
-                }
+                operandOperatorList.add(operand.toString());
+                operand = new StringBuilder();
 
                 operandOperatorList.add(Character.toString(charInString));
 
@@ -55,75 +53,52 @@ public class ReversePolishNotation1 {
                 operand.append(charInString);
             }
         }
-
-        if (operand.length() > 0) {
-            operandOperatorList.add(operand.toString());
-        }
-    }
-
-    private void getOperator(String operator, int precedence1){
-        while(!operatorStack.isEmpty()){
-            String topOperator = operatorStack.pop();
-            if(topOperator.equals("(")){
-                operatorStack.push(topOperator);
-                break;
-            } else {
-                int precedence2 = 0;
-                if(topOperator.equals("+") || topOperator.equals("-")){
-                    precedence2 = 1;
-                }else if(topOperator.equals("/") || topOperator.equals("*")){
-                    precedence2 = 2;
-                }
-
-                if(precedence1 > precedence2){
-                    operatorStack.push(topOperator);
-                    break;
-                } else if(precedence1 <= precedence2){
-                    reversePolishNotation.append(" ");
-                    reversePolishNotation.append(topOperator);
-                }
-            }
-        }
-
-        operatorStack.push(operator);
-    }
-
-    public void getParent(){
-        while(!operatorStack.isEmpty()){
-            String topOperator = operatorStack.pop();
-            if(!topOperator.equals("(")){
-                reversePolishNotation.append(" ");
-                reversePolishNotation.append(topOperator);
-            }else {
-                break;
-            }
-        }
+        operandOperatorList.add(operand.toString());
     }
 
     public String convertToReversePolishNotation(){
         convertStringToOperandList();
         System.out.println(operandOperatorList);
 
+        StringBuilder reversePolishNotation = new StringBuilder();
         for (int i = 0; i < operandOperatorList.size(); i++) {
             String element = operandOperatorList.get(i);
-            if (element.equals("+") || element.equals("-")){
-                getOperator(element, 1);
-            } else if(element.equals("*") || element.equals("/")){
-                getOperator(element, 2);
-            } else if (element.equals("(")) {
+            if (element.equals("+") ||
+                    element.equals("-") ||
+                    element.equals("*") ||
+                    element.equals("/") ||
+                    element.equals("(")
+                    ) {
                 operatorStack.push(element);
             } else if (element.equals(")")) {
-                getParent();
-            } else {
-                if(reversePolishNotation.length() > 0) {
-                    reversePolishNotation.append(" ");
+                if (!operatorStack.isEmpty() && operatorStack.peek().equals("(")) {
+                    operatorStack.pop(); //remove "("
                 }
+                if (!operatorStack.isEmpty() && !operatorStack.peek().equals("(")) {
+                    reversePolishNotation.append(operatorStack.pop());
+                }
+            } else {
                 reversePolishNotation.append(element);
+
+                if (!operatorStack.isEmpty() && operandOperatorList.size() > (i + 1)) {
+                    String nextOperand = operandOperatorList.get(i + 1);
+                    if (operatorStack.peek().equals("+") || operatorStack.peek().equals("-")) {
+                        if (!nextOperand.equals("(") &&
+                                !nextOperand.equals("*") &&
+                                !nextOperand.equals("/")) {
+                            reversePolishNotation.append(operatorStack.pop());
+                        }
+                    }else if (!nextOperand.equals("(") && (operatorStack.peek().equals("*") || operatorStack.peek().equals("/"))) {
+                        reversePolishNotation.append(operatorStack.pop());
+                    }
+                }
             }
-        }
-        while(!operatorStack.isEmpty()){
-            reversePolishNotation.append(" ");
-            reversePolishNotation.append(operatorStack.pop());
+
+            if (i == (operandOperatorList.size() - 1)) {
+                while(!operatorStack.isEmpty()){
+                    reversePolishNotation.append(operatorStack.pop());
+                }
+            }
         }
         System.out.println(">>>reversePolishNotation: " + reversePolishNotation.toString());
         return reversePolishNotation.toString();

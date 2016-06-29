@@ -12,10 +12,10 @@ import java.util.EnumSet;
 import java.util.List;
 
 /**
- * Created by mcalancea on 29 Jun 2016.
- * originated from version3
+ * Created by mcalancea on 21 Jun 2016.
+ * version 3
  */
-public class ReversePolishNotation {
+public class ReversePolishNotation3 {
     private Stack<String> operatorStack = new DequeStack<>(); //operator +-... and operand 3, 2, 4, a, b, c ...
     private Stack<BigDecimal> valueStack = new DequeStack<>();
     private List<String> operandOperatorList = new ArrayList<>();
@@ -27,7 +27,7 @@ public class ReversePolishNotation {
     private int scale;
     private String arithmeticNotation;
 
-    public ReversePolishNotation(String arithmeticNotation, char decimalSeparator, int scale){
+    public ReversePolishNotation3(String arithmeticNotation, char decimalSeparator, int scale){
         this.arithmeticNotation = arithmeticNotation;
         this.decimalSeparator = decimalSeparator;
         this.scale = scale;
