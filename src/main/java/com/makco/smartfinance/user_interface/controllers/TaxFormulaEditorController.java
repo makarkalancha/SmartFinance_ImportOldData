@@ -46,7 +46,7 @@ import java.util.ResourceBundle;
 public class TaxFormulaEditorController {
     private final static Logger LOG = LogManager.getLogger(TaxFormulaEditorController.class);
     private final static String FORMULA_PATTERN = new StringBuilder()
-            .append("[\\d\\/\\*\\+\\-")
+            .append("[\\d\\/\\*\\+\\-\\(\\)")
             .append(BigDecimalUtils.getDecimalSeparator())
             .append("]+")
             .toString();
@@ -63,6 +63,8 @@ public class TaxFormulaEditorController {
     private TextArea formulaTA;
     @FXML
     private Button okBtn;
+    @FXML
+    private Button numBtn;
     @FXML
     private Label charsLbl;
 
@@ -101,6 +103,17 @@ public class TaxFormulaEditorController {
             dialogStage.close();
         }
     }
+
+    @FXML
+    public void onNumBtn(ActionEvent event){
+        /*
+        todo impelemnt number placeholder: add something like {NUM} to formula
+        which shall be replaced with real number before passing formula to
+        ReversePolishNotation
+         */
+    }
+
+
 
     //todo validation instead of true
     private boolean isValid(){
