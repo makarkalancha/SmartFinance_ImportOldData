@@ -52,44 +52,28 @@ public class TaxFormulaEditorController {
     private void initialize(){
         charsLbl.setText(UserInterfaceConstants.TAX_FORMULA_VALID_CHARACTERS);
 
-
-        numberTF.getStyleClass().add(UserInterfaceConstants.INVALID_CONTROL_CSS_CLASS);
-        LOG.debug(">>>before reg.getStyleClass(): "+numberTF.getStyleClass());
-//        numberTF.getStyleClass().add("error_control_border");
-//        numberTF.getStyleClass().setAll(CollectionUtils.convertCollectionToObservableSet(numberTF.getStyleClass()));
-
         formulaTA.textProperty().addListener((observable, oldValue, newValue) -> {
-
-//            Region reg = (Region) formulaTA.lookup(".content");
-//            reg.getStyleClass().add(UserInterfaceConstants.INVALID_CONTROL_CSS_CLASS);
-//            reg.getStyleClass().setAll(CollectionUtils.convertCollectionToObservableSet(reg.getStyleClass()));
-//            numberTF.getStyleClass().add(UserInterfaceConstants.INVALID_CONTROL_CSS_CLASS);
-//            numberTF.getStyleClass().setAll(CollectionUtils.convertCollectionToObservableSet(numberTF.getStyleClass()));
-
             //todo enter only allowed characters
+
+            LOG.debug(">>>after numberTF.getStyleClass(): "+numberTF.getStyleClass());
+
             LOG.debug(oldValue + "->" + newValue);
             LOG.debug(newValue.matches(FORMULA_PATTERN));
+
             String tmp = newValue.replace(DataBaseConstants.TAX_NUMBER_PLACEHOLDER, "");
             tmp = tmp.replace(DataBaseConstants.TAX_RATE_PLACEHOLDER, "");
 
             Region reg = (Region) formulaTA.lookup(".content");
-            LOG.debug(">>>before reg.getStyleClass(): "+reg.getStyleClass());
             if (StringUtils.containsOnly(tmp, FORMULA_VALID_CHARS)) {
                 LOG.debug("new is valid->" + newValue);
 
-                reg.getStyleClass().remove(UserInterfaceConstants.INVALID_CONTROL_CSS_CLASS);
-
-                numberTF.getStyleClass().remove(UserInterfaceConstants.INVALID_CONTROL_CSS_CLASS);
+                reg.setStyle("");
             } else {
                 LOG.debug("new is NOT valid->" + newValue);
 
-                reg.getStyleClass().add(UserInterfaceConstants.INVALID_CONTROL_CSS_CLASS);
-                reg.getStyleClass().setAll(CollectionUtils.convertCollectionToObservableSet(reg.getStyleClass()));
+                reg.setStyle(UserInterfaceConstants.INVALID_CONTROL_BGCOLOR);
 
-                numberTF.getStyleClass().add(UserInterfaceConstants.INVALID_CONTROL_CSS_CLASS);
-                numberTF.getStyleClass().setAll(CollectionUtils.convertCollectionToObservableSet(numberTF.getStyleClass()));
             }
-            LOG.debug(">>>after reg.getStyleClass(): "+reg.getStyleClass());
         });
     }
 
