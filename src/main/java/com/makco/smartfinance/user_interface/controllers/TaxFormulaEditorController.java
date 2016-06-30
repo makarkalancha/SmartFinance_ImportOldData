@@ -72,9 +72,13 @@ public class TaxFormulaEditorController {
 
             String tmp = newValue.replace(DataBaseConstants.TAX_NUMBER_PLACEHOLDER, "");
             tmp = tmp.replace(DataBaseConstants.TAX_RATE_PLACEHOLDER, "");
+            tmp = StringUtils.replaceChars(tmp, FORMULA_VALID_CHARS, "");
+
+            LOG.debug("tmp->" + tmp);
 
             Region reg = (Region) formulaTA.lookup(".content");
-            if (StringUtils.containsOnly(tmp, FORMULA_VALID_CHARS)) {
+//            if (StringUtils.containsOnly(tmp, FORMULA_VALID_CHARS)) {
+            if(tmp.length() == 0){
                 LOG.debug("new is valid->" + newValue);
 
                 reg.setStyle("");
@@ -84,6 +88,7 @@ public class TaxFormulaEditorController {
                 reg.setStyle(UserInterfaceConstants.INVALID_CONTROL_BGCOLOR);
 
             }
+            newValue = tmp;
         });
     }
 
