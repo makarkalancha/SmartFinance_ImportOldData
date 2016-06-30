@@ -3,11 +3,14 @@ package com.makco.smartfinance.user_interface.controllers;
 import com.makco.smartfinance.constants.DataBaseConstants;
 import com.makco.smartfinance.user_interface.constants.UserInterfaceConstants;
 import com.makco.smartfinance.utils.BigDecimalUtils;
+import com.makco.smartfinance.utils.collection.CollectionUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.Region;
 import javafx.stage.Stage;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
@@ -42,19 +45,51 @@ public class TaxFormulaEditorController {
     private Button rateBtn;
     @FXML
     private Label charsLbl;
+    @FXML
+    private TextField numberTF;
 
     @FXML
     private void initialize(){
         charsLbl.setText(UserInterfaceConstants.TAX_FORMULA_VALID_CHARACTERS);
+
+
+        numberTF.getStyleClass().add(UserInterfaceConstants.INVALID_CONTROL_CSS_CLASS);
+        LOG.debug(">>>before reg.getStyleClass(): "+numberTF.getStyleClass());
+//        numberTF.getStyleClass().add("error_control_border");
+//        numberTF.getStyleClass().setAll(CollectionUtils.convertCollectionToObservableSet(numberTF.getStyleClass()));
+
         formulaTA.textProperty().addListener((observable, oldValue, newValue) -> {
+
+//            Region reg = (Region) formulaTA.lookup(".content");
+//            reg.getStyleClass().add(UserInterfaceConstants.INVALID_CONTROL_CSS_CLASS);
+//            reg.getStyleClass().setAll(CollectionUtils.convertCollectionToObservableSet(reg.getStyleClass()));
+//            numberTF.getStyleClass().add(UserInterfaceConstants.INVALID_CONTROL_CSS_CLASS);
+//            numberTF.getStyleClass().setAll(CollectionUtils.convertCollectionToObservableSet(numberTF.getStyleClass()));
+
             //todo enter only allowed characters
             LOG.debug(oldValue + "->" + newValue);
             LOG.debug(newValue.matches(FORMULA_PATTERN));
-            if(StringUtils.containsOnly(newValue,FORMULA_VALID_CHARS)){
+            String tmp = newValue.replace(DataBaseConstants.TAX_NUMBER_PLACEHOLDER, "");
+            tmp = tmp.replace(DataBaseConstants.TAX_RATE_PLACEHOLDER, "");
+
+            Region reg = (Region) formulaTA.lookup(".content");
+            LOG.debug(">>>before reg.getStyleClass(): "+reg.getStyleClass());
+            if (StringUtils.containsOnly(tmp, FORMULA_VALID_CHARS)) {
                 LOG.debug("new is valid->" + newValue);
-            }else{
+
+                reg.getStyleClass().remove(UserInterfaceConstants.INVALID_CONTROL_CSS_CLASS);
+
+                numberTF.getStyleClass().remove(UserInterfaceConstants.INVALID_CONTROL_CSS_CLASS);
+            } else {
                 LOG.debug("new is NOT valid->" + newValue);
+
+                reg.getStyleClass().add(UserInterfaceConstants.INVALID_CONTROL_CSS_CLASS);
+                reg.getStyleClass().setAll(CollectionUtils.convertCollectionToObservableSet(reg.getStyleClass()));
+
+                numberTF.getStyleClass().add(UserInterfaceConstants.INVALID_CONTROL_CSS_CLASS);
+                numberTF.getStyleClass().setAll(CollectionUtils.convertCollectionToObservableSet(numberTF.getStyleClass()));
             }
+            LOG.debug(">>>after reg.getStyleClass(): "+reg.getStyleClass());
         });
     }
 
