@@ -70,7 +70,7 @@
                <opaqueInsets>
                   <Insets />
                </opaqueInsets></TextField>
-            <Button mnemonicParsing="false" prefWidth="70.0" text="Validate">
+            <Button mnemonicParsing="false" prefWidth="70.0" text="Validate" onAction="#onValidateBtn" >
                <HBox.margin>
                   <Insets left="10.0" />
                </HBox.margin>
@@ -85,7 +85,7 @@
             <Insets bottom="5.0" left="14.0" right="5.0" top="5.0" />
          </padding>
       </HBox>
-      <TextArea editable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="160.0" prefWidth="520.0" wrapText="true">
+      <TextArea fx:id="validationResultTA" editable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="160.0" prefWidth="520.0" wrapText="true">
          <VBox.margin>
             <Insets bottom="5.0" left="50.0" right="5.0" />
          </VBox.margin>

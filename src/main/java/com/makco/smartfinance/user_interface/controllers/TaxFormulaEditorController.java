@@ -1,6 +1,7 @@
 package com.makco.smartfinance.user_interface.controllers;
 
 import com.makco.smartfinance.constants.DataBaseConstants;
+import com.makco.smartfinance.persistence.entity.Tax;
 import com.makco.smartfinance.user_interface.constants.UserInterfaceConstants;
 import com.makco.smartfinance.utils.BigDecimalUtils;
 import com.makco.smartfinance.utils.collection.CollectionUtils;
@@ -15,6 +16,8 @@ import javafx.stage.Stage;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import java.math.BigDecimal;
 
 /**
  * Created by mcalancea on 2016-06-19.
@@ -32,7 +35,7 @@ public class TaxFormulaEditorController {
             .toString();
 
     private Stage dialogStage;
-//    private Tax tax;
+    private Tax tax;
     private boolean isOkClicked = false;
 
     @FXML
@@ -47,6 +50,8 @@ public class TaxFormulaEditorController {
     private Label charsLbl;
     @FXML
     private TextField numberTF;
+    @FXML
+    private TextArea validationResultTA;
 
     @FXML
     private void initialize(){
@@ -77,8 +82,9 @@ public class TaxFormulaEditorController {
         });
     }
 
-    public void setDialogStage(Stage dialogStage) {
+    public void setDialogStage(Stage dialogStage, Tax tax) {
         this.dialogStage = dialogStage;
+        this.tax = tax;
     }
 
 
@@ -107,6 +113,21 @@ public class TaxFormulaEditorController {
     public void onRateBtn(ActionEvent event){
         formulaTA.appendText(DataBaseConstants.TAX_RATE_PLACEHOLDER);
     }
+
+    @FXML
+    public void onValidateBtn(ActionEvent event){
+        String formula = formulaTA.getText();
+        tax.setFormula(formula);
+        String editedFormula = formula.replace(DataBaseConstants.TAX_RATE_PLACEHOLDER, tax.getRate().toString());
+        editedFormula = editedFormula.replace(DataBaseConstants.TAX_NUMBER_PLACEHOLDER, numberTF.getText());
+        StringBuilder resultSB = new StringBuilder(editedFormula);
+        resultSB.append(" = ");
+        resultSB.append(tax.calculateFormula(new BigDecimal(numberTF.getText())));
+
+        validationResultTA.setText(resultSB.toString());
+    }
+
+
 
     //todo validation instead of true
     private boolean isValid(){
