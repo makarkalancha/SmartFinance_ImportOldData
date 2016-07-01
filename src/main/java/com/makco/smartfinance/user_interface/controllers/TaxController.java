@@ -30,6 +30,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -464,14 +465,24 @@ public class TaxController /*implements Initializable, ControlledScreen, UndoRed
             //Create the dialog Stage
             Stage dialogStage = new Stage();
             dialogStage.setTitle(UserInterfaceConstants.TAX_FORMULA_EDITOR_WINDOW_TITLE);
+            dialogStage.getIcons().add(new Image(UserInterfaceConstants.MAIN_WINDOW_ICO));
             dialogStage.initModality(Modality.WINDOW_MODAL);
 //            dialogStage.initOwner(this);
             Scene scene = new Scene(vBox);
             dialogStage.setScene(scene);
 
             //Set the tax into the controller
+            String rateTmpString = (StringUtils.isBlank(rateTF.getText())) ? "0" : rateTF.getText();
+            Tax taxFromControllerForm = new Tax(
+                    nameTF.getText(),
+                    descTA.getText(),
+                    new BigDecimal(rateTmpString),
+                    formulaTA.getText(),
+                    startDP.getValue(),
+                    endDP.getValue());
             TaxFormulaEditorController taxFormulaEditorController = loader.getController();
-            taxFormulaEditorController.setDialogStage(dialogStage);
+            taxFormulaEditorController.setDialogStage(dialogStage, taxFromControllerForm);
+
 //            taxFormulaEditorController.setTax(taxModel.getPendingTax());
 
             dialogStage.showAndWait();

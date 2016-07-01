@@ -36,6 +36,11 @@ import java.util.Optional;
  * Created by mcalancea on 2016-03-28.
  */
 
+/*
+todo tableview style for invoice-transactions
+http://code.makery.ch/blog/javafx-8-tableview-cell-renderer/
+ */
+
 //exception will appear with progress bar
 public class Main extends Application{
     private final static Logger LOG;

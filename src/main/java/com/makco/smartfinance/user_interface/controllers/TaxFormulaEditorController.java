@@ -1,6 +1,7 @@
 package com.makco.smartfinance.user_interface.controllers;
 
 import com.makco.smartfinance.constants.DataBaseConstants;
+import com.makco.smartfinance.persistence.entity.Tax;
 import com.makco.smartfinance.user_interface.constants.UserInterfaceConstants;
 import com.makco.smartfinance.utils.BigDecimalUtils;
 import com.makco.smartfinance.utils.collection.CollectionUtils;
@@ -15,6 +16,8 @@ import javafx.stage.Stage;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import java.math.BigDecimal;
 
 /**
  * Created by mcalancea on 2016-06-19.
@@ -32,7 +35,7 @@ public class TaxFormulaEditorController {
             .toString();
 
     private Stage dialogStage;
-//    private Tax tax;
+    private Tax tax;
     private boolean isOkClicked = false;
 
     @FXML
@@ -44,60 +47,54 @@ public class TaxFormulaEditorController {
     @FXML
     private Button rateBtn;
     @FXML
-    private Button validateBtn;
-    @FXML
     private Label charsLbl;
     @FXML
     private TextField numberTF;
+    @FXML
+    private TextArea validationResultTA;
 
     @FXML
     private void initialize(){
         charsLbl.setText(UserInterfaceConstants.TAX_FORMULA_VALID_CHARACTERS);
 
-
-        numberTF.getStyleClass().add(UserInterfaceConstants.INVALID_CONTROL_CSS_CLASS);
-        LOG.debug(">>>before reg.getStyleClass(): "+numberTF.getStyleClass());
-//        numberTF.getStyleClass().add("error_control_border");
-//        numberTF.getStyleClass().setAll(CollectionUtils.convertCollectionToObservableSet(numberTF.getStyleClass()));
-
         formulaTA.textProperty().addListener((observable, oldValue, newValue) -> {
+            /*
+            todo enter only allowed characters and block buttons OK and VALIDATE when error
+            color still is needed because you cannot type but paste an invalid formula
+            you can
+            */
 
-//            Region reg = (Region) formulaTA.lookup(".content");
-//            reg.getStyleClass().add(UserInterfaceConstants.INVALID_CONTROL_CSS_CLASS);
-//            reg.getStyleClass().setAll(CollectionUtils.convertCollectionToObservableSet(reg.getStyleClass()));
-//            numberTF.getStyleClass().add(UserInterfaceConstants.INVALID_CONTROL_CSS_CLASS);
-//            numberTF.getStyleClass().setAll(CollectionUtils.convertCollectionToObservableSet(numberTF.getStyleClass()));
 
-            //todo enter only allowed characters
+            LOG.debug(">>>after numberTF.getStyleClass(): "+numberTF.getStyleClass());
+
             LOG.debug(oldValue + "->" + newValue);
             LOG.debug(newValue.matches(FORMULA_PATTERN));
+
             String tmp = newValue.replace(DataBaseConstants.TAX_NUMBER_PLACEHOLDER, "");
             tmp = tmp.replace(DataBaseConstants.TAX_RATE_PLACEHOLDER, "");
+            tmp = StringUtils.replaceChars(tmp, FORMULA_VALID_CHARS, "");
+
+            LOG.debug("tmp->" + tmp);
 
             Region reg = (Region) formulaTA.lookup(".content");
-            LOG.debug(">>>before reg.getStyleClass(): "+reg.getStyleClass());
-            if (StringUtils.containsOnly(tmp, FORMULA_VALID_CHARS)) {
+//            if (StringUtils.containsOnly(tmp, FORMULA_VALID_CHARS)) {
+            if(tmp.length() == 0){
                 LOG.debug("new is valid->" + newValue);
 
-                reg.getStyleClass().remove(UserInterfaceConstants.INVALID_CONTROL_CSS_CLASS);
-
-                numberTF.getStyleClass().remove(UserInterfaceConstants.INVALID_CONTROL_CSS_CLASS);
+                reg.setStyle("");
             } else {
                 LOG.debug("new is NOT valid->" + newValue);
 
-                reg.getStyleClass().add(UserInterfaceConstants.INVALID_CONTROL_CSS_CLASS);
-                reg.getStyleClass().setAll(CollectionUtils.convertCollectionToObservableSet(reg.getStyleClass()));
+                reg.setStyle(UserInterfaceConstants.INVALID_CONTROL_BGCOLOR);
 
-                numberTF.getStyleClass().add(UserInterfaceConstants.INVALID_CONTROL_CSS_CLASS);
-                numberTF.getStyleClass().setAll(CollectionUtils.convertCollectionToObservableSet(numberTF.getStyleClass()));
-//                valitf
             }
-            LOG.debug(">>>after reg.getStyleClass(): "+reg.getStyleClass());
+            newValue = tmp;
         });
     }
 
-    public void setDialogStage(Stage dialogStage) {
+    public void setDialogStage(Stage dialogStage, Tax tax) {
         this.dialogStage = dialogStage;
+        this.tax = tax;
     }
 
 
@@ -126,6 +123,21 @@ public class TaxFormulaEditorController {
     public void onRateBtn(ActionEvent event){
         formulaTA.appendText(DataBaseConstants.TAX_RATE_PLACEHOLDER);
     }
+
+    @FXML
+    public void onValidateBtn(ActionEvent event){
+        String formula = formulaTA.getText();
+        tax.setFormula(formula);
+        String editedFormula = formula.replace(DataBaseConstants.TAX_RATE_PLACEHOLDER, tax.getRate().toString());
+        editedFormula = editedFormula.replace(DataBaseConstants.TAX_NUMBER_PLACEHOLDER, numberTF.getText());
+        StringBuilder resultSB = new StringBuilder(editedFormula);
+        resultSB.append(" = ");
+        resultSB.append(tax.calculateFormula(new BigDecimal(numberTF.getText())));
+
+        validationResultTA.setText(resultSB.toString());
+    }
+
+
 
     //todo validation instead of true
     private boolean isValid(){

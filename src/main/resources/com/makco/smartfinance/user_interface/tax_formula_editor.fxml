@@ -70,7 +70,7 @@
                <opaqueInsets>
                   <Insets />
                </opaqueInsets></TextField>
-            <Button fx:id="validateBtn" mnemonicParsing="false" prefWidth="70.0" text="Validate">
+            <Button mnemonicParsing="false" prefWidth="70.0" text="Validate">
                <HBox.margin>
                   <Insets left="10.0" />
                </HBox.margin>
