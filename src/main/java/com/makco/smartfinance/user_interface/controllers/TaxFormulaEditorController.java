@@ -44,6 +44,8 @@ public class TaxFormulaEditorController {
     @FXML
     private Button rateBtn;
     @FXML
+    private Button validateBtn;
+    @FXML
     private Label charsLbl;
     @FXML
     private TextField numberTF;
@@ -88,6 +90,7 @@ public class TaxFormulaEditorController {
 
                 numberTF.getStyleClass().add(UserInterfaceConstants.INVALID_CONTROL_CSS_CLASS);
                 numberTF.getStyleClass().setAll(CollectionUtils.convertCollectionToObservableSet(numberTF.getStyleClass()));
+//                valitf
             }
             LOG.debug(">>>after reg.getStyleClass(): "+reg.getStyleClass());
         });
