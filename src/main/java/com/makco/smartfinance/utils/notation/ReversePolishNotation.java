@@ -1,6 +1,7 @@
 package com.makco.smartfinance.utils.notation;
 
 import com.makco.smartfinance.user_interface.validation.ErrorEnum;
+import com.makco.smartfinance.utils.BigDecimalUtils;
 import com.makco.smartfinance.utils.collection.DequeStack;
 import com.makco.smartfinance.utils.collection.Stack;
 import com.makco.smartfinance.utils.notation.operator.OperatorFactory;
@@ -225,8 +226,8 @@ public class ReversePolishNotation {
                 getParentForEvaluation();
             } else {
                 try {
-                    valueStack.push(new BigDecimal(element));
-                }catch (NumberFormatException e){
+                    valueStack.push(BigDecimalUtils.convertStringToBigDecimal(element, scale));
+                }catch (Exception e){
                     throw new RuntimeException("BigDecimal illegal value: " + element);
                 }
             }

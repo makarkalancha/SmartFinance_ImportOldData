@@ -18,6 +18,8 @@ import java.text.SimpleDateFormat;
 public class UserInterfaceConstants {
     private final static Logger LOG = LogManager.getLogger(UserInterfaceConstants.class);
 
+
+    public static final int SCALE = 2;
     public static final NumberFormat NUMBER_FORMAT = NumberFormat.getInstance();
     //todo set constant of 6
     static {

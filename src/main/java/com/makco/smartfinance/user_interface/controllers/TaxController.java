@@ -230,7 +230,7 @@ public class TaxController /*implements Initializable, ControlledScreen, UndoRed
                 /**
                  * todo remove it after testing
                  */
-                frmEdtBtn.fire();
+//                frmEdtBtn.fire();
             });
             ((Service<Void>) onRefreshWorker).setOnFailed(event -> {
                 LOG.debug("onRefreshWorker->setOnFailed");
@@ -472,11 +472,10 @@ public class TaxController /*implements Initializable, ControlledScreen, UndoRed
             dialogStage.setScene(scene);
 
             //Set the tax into the controller
-            String rateTmpString = (StringUtils.isBlank(rateTF.getText())) ? "0" : rateTF.getText();
             Tax taxFromControllerForm = new Tax(
                     nameTF.getText(),
                     descTA.getText(),
-                    new BigDecimal(rateTmpString),
+                    BigDecimalUtils.convertStringToBigDecimal(rateTF.getText(), UserInterfaceConstants.SCALE),
                     formulaTA.getText(),
                     startDP.getValue(),
                     endDP.getValue());

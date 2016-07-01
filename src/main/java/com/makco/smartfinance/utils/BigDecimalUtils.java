@@ -46,17 +46,23 @@ public class BigDecimalUtils {
         return (BigDecimal) decimalFormat.parse(string);
     }
 
-    public static BigDecimal convertStringToBigDecimalWithScaleOf2(String string) throws Exception{
+    public static BigDecimal convertStringToBigDecimal(String string, int scale) throws Exception{
         BigDecimal bigDecimal = convertStringToBigDecimal(string);
-        bigDecimal.setScale(bigDecimalScaleOf_2);
+        bigDecimal.setScale(scale);
         return bigDecimal;
     }
 
-    public static BigDecimal convertStringToBigDecimalWithScaleOf4(String string) throws Exception{
-        BigDecimal bigDecimal = convertStringToBigDecimal(string);
-        bigDecimal.setScale(bigDecimalScaleOf_4);
-        return bigDecimal;
-    }
+//    public static BigDecimal convertStringToBigDecimalWithScaleOf2(String string) throws Exception{
+//        BigDecimal bigDecimal = convertStringToBigDecimal(string);
+//        bigDecimal.setScale(bigDecimalScaleOf_2);
+//        return bigDecimal;
+//    }
+//
+//    public static BigDecimal convertStringToBigDecimalWithScaleOf4(String string) throws Exception{
+//        BigDecimal bigDecimal = convertStringToBigDecimal(string);
+//        bigDecimal.setScale(bigDecimalScaleOf_4);
+//        return bigDecimal;
+//    }
 
     public static char getDecimalSeparator() {
         return decimalSeparator;

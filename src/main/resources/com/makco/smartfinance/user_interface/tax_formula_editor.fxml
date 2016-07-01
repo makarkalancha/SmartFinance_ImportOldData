@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
@@ -13,6 +18,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
+
 <VBox fx:id="vBox" alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="460.0" prefWidth="626.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.makco.smartfinance.user_interface.controllers.TaxFormulaEditorController">
    <children>
       <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="30.0" prefWidth="441.0" text="Tax Formula Editor">
@@ -66,11 +72,11 @@
       <Separator prefWidth="200.0" />
       <HBox>
          <children>
-            <TextField fx:id="numberTF" promptText="Number" style="-fx-border-color: #ff0000;">
+            <TextField fx:id="numberTF" promptText="Number">
                <opaqueInsets>
                   <Insets />
                </opaqueInsets></TextField>
-            <Button mnemonicParsing="false" prefWidth="70.0" text="Validate">
+            <Button fx:id="validateBtn" mnemonicParsing="false" onAction="#onValidateBtn" prefWidth="70.0" text="Validate">
                <HBox.margin>
                   <Insets left="10.0" />
                </HBox.margin>
@@ -85,7 +91,7 @@
             <Insets bottom="5.0" left="14.0" right="5.0" top="5.0" />
          </padding>
       </HBox>
-      <TextArea editable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="160.0" prefWidth="520.0" wrapText="true">
+      <TextArea fx:id="validationResultTA" editable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="160.0" prefWidth="520.0" wrapText="true">
          <VBox.margin>
             <Insets bottom="5.0" left="50.0" right="5.0" />
          </VBox.margin>

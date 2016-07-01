@@ -3,6 +3,7 @@ package com.makco.smartfinance.user_interface.controllers;
 import com.makco.smartfinance.constants.DataBaseConstants;
 import com.makco.smartfinance.persistence.entity.Tax;
 import com.makco.smartfinance.user_interface.constants.UserInterfaceConstants;
+import com.makco.smartfinance.user_interface.utility_screens.DialogMessages;
 import com.makco.smartfinance.utils.BigDecimalUtils;
 import com.makco.smartfinance.utils.collection.CollectionUtils;
 import javafx.event.ActionEvent;
@@ -47,6 +48,8 @@ public class TaxFormulaEditorController {
     @FXML
     private Button rateBtn;
     @FXML
+    private Button validateBtn;
+    @FXML
     private Label charsLbl;
     @FXML
     private TextField numberTF;
@@ -64,9 +67,6 @@ public class TaxFormulaEditorController {
             you can
             */
 
-
-            LOG.debug(">>>after numberTF.getStyleClass(): "+numberTF.getStyleClass());
-
             LOG.debug(oldValue + "->" + newValue);
             LOG.debug(newValue.matches(FORMULA_PATTERN));
 
@@ -79,16 +79,26 @@ public class TaxFormulaEditorController {
             Region reg = (Region) formulaTA.lookup(".content");
 //            if (StringUtils.containsOnly(tmp, FORMULA_VALID_CHARS)) {
             if(tmp.length() == 0){
+                validateBtn.setDisable(false);
+                okBtn.setDisable(false);
+
                 LOG.debug("new is valid->" + newValue);
 
                 reg.setStyle("");
             } else {
+                validateBtn.setDisable(true);
+                okBtn.setDisable(true);
+
                 LOG.debug("new is NOT valid->" + newValue);
 
                 reg.setStyle(UserInterfaceConstants.INVALID_CONTROL_BGCOLOR);
 
             }
             newValue = tmp;
+        });
+
+        validationResultTA.textProperty().addListener((observable, oldValue, newValue) -> {
+            LOG.debug(oldValue + "->" + newValue);
         });
     }
 
@@ -116,25 +126,37 @@ public class TaxFormulaEditorController {
 
     @FXML
     public void onNumBtn(ActionEvent event){
+        //todo setfocus to formulaTA
         formulaTA.appendText(DataBaseConstants.TAX_NUMBER_PLACEHOLDER);
     }
 
     @FXML
     public void onRateBtn(ActionEvent event){
+        //todo setfocus to formulaTA
         formulaTA.appendText(DataBaseConstants.TAX_RATE_PLACEHOLDER);
     }
 
     @FXML
     public void onValidateBtn(ActionEvent event){
-        String formula = formulaTA.getText();
-        tax.setFormula(formula);
-        String editedFormula = formula.replace(DataBaseConstants.TAX_RATE_PLACEHOLDER, tax.getRate().toString());
-        editedFormula = editedFormula.replace(DataBaseConstants.TAX_NUMBER_PLACEHOLDER, numberTF.getText());
-        StringBuilder resultSB = new StringBuilder(editedFormula);
-        resultSB.append(" = ");
-        resultSB.append(tax.calculateFormula(new BigDecimal(numberTF.getText())));
+        /*
+        todo BigDecimalUtils.convertStringToBigDecimal issue cannot convert 0,1 to 0.1,
+        instead sets value to 0
+        formula: 0,1(num)+0,5(rate)-1
+        */
 
-        validationResultTA.setText(resultSB.toString());
+        try {
+            String formula = formulaTA.getText();
+            tax.setFormula(formula);
+            String editedFormula = formula.replace(DataBaseConstants.TAX_RATE_PLACEHOLDER, tax.getRate().toString());
+            editedFormula = editedFormula.replace(DataBaseConstants.TAX_NUMBER_PLACEHOLDER, numberTF.getText());
+            StringBuilder resultSB = new StringBuilder(editedFormula);
+            resultSB.append(" = ");
+            resultSB.append(tax.calculateFormula(BigDecimalUtils.convertStringToBigDecimal(numberTF.getText(), UserInterfaceConstants.SCALE)));
+
+            validationResultTA.setText(resultSB.toString());
+        }catch (Exception e){
+            DialogMessages.showExceptionAlert(e);
+        }
     }
 
 
