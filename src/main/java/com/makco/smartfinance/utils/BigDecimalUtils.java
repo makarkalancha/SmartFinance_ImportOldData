@@ -41,7 +41,7 @@ public class BigDecimalUtils {
 
     public static BigDecimal convertStringToBigDecimal(String string) throws Exception{
         if(StringUtils.isEmpty(string)){
-            return null;
+            return new BigDecimal("0");
         }
         return (BigDecimal) decimalFormat.parse(string);
     }
@@ -51,18 +51,6 @@ public class BigDecimalUtils {
         bigDecimal.setScale(scale);
         return bigDecimal;
     }
-
-//    public static BigDecimal convertStringToBigDecimalWithScaleOf2(String string) throws Exception{
-//        BigDecimal bigDecimal = convertStringToBigDecimal(string);
-//        bigDecimal.setScale(bigDecimalScaleOf_2);
-//        return bigDecimal;
-//    }
-//
-//    public static BigDecimal convertStringToBigDecimalWithScaleOf4(String string) throws Exception{
-//        BigDecimal bigDecimal = convertStringToBigDecimal(string);
-//        bigDecimal.setScale(bigDecimalScaleOf_4);
-//        return bigDecimal;
-//    }
 
     public static char getDecimalSeparator() {
         return decimalSeparator;

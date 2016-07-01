@@ -18,6 +18,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
 import java.math.BigDecimal;
 
 /**
@@ -126,24 +128,18 @@ public class TaxFormulaEditorController {
 
     @FXML
     public void onNumBtn(ActionEvent event){
-        //todo setfocus to formulaTA
         formulaTA.appendText(DataBaseConstants.TAX_NUMBER_PLACEHOLDER);
+        formulaTA.requestFocus();
     }
 
     @FXML
     public void onRateBtn(ActionEvent event){
-        //todo setfocus to formulaTA
         formulaTA.appendText(DataBaseConstants.TAX_RATE_PLACEHOLDER);
+        formulaTA.requestFocus();
     }
 
     @FXML
     public void onValidateBtn(ActionEvent event){
-        /*
-        todo BigDecimalUtils.convertStringToBigDecimal issue cannot convert 0,1 to 0.1,
-        instead sets value to 0
-        formula: 0,1(num)+0,5(rate)-1
-        */
-
         try {
             String formula = formulaTA.getText();
             tax.setFormula(formula);
@@ -151,7 +147,17 @@ public class TaxFormulaEditorController {
             editedFormula = editedFormula.replace(DataBaseConstants.TAX_NUMBER_PLACEHOLDER, numberTF.getText());
             StringBuilder resultSB = new StringBuilder(editedFormula);
             resultSB.append(" = ");
-            resultSB.append(tax.calculateFormula(BigDecimalUtils.convertStringToBigDecimal(numberTF.getText(), UserInterfaceConstants.SCALE)));
+            BigDecimal resultTaxCalculation = tax.calculateFormula(BigDecimalUtils.convertStringToBigDecimal(numberTF.getText(), UserInterfaceConstants.SCALE));
+            resultSB.append(resultTaxCalculation);
+
+            ScriptEngineManager scriptEngineManager = new ScriptEngineManager();
+            ScriptEngine scriptEngine = scriptEngineManager.getEngineByName("nashorn");
+            Object nashornResult = scriptEngine.eval(editedFormula);
+
+            resultSB.append("\r\n");
+            resultSB.append(resultTaxCalculation);
+            resultSB.append(" = ");
+            resultSB.append(nashornResult);
 
             validationResultTA.setText(resultSB.toString());
         }catch (Exception e){

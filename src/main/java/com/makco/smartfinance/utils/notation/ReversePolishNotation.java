@@ -226,7 +226,7 @@ public class ReversePolishNotation {
                 getParentForEvaluation();
             } else {
                 try {
-                    valueStack.push(BigDecimalUtils.convertStringToBigDecimal(element, scale));
+                    valueStack.push(new BigDecimal(element));
                 }catch (Exception e){
                     throw new RuntimeException("BigDecimal illegal value: " + element);
                 }
