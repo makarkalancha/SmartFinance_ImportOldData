@@ -42,41 +42,5 @@
     <orderEntry type="library" scope="TEST" name="Gradle: junit:junit:4.11" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.hamcrest:hamcrest-core:1.3" level="project" />
     <orderEntry type="module" module-name="userinterface_control" />
-    <orderEntry type="module-library" scope="TEST">
-      <library name="Gradle: C__svn_SRC_Java_working_dir_SmartFinance_database_engine_build_classes_test:">
-        <CLASSES>
-          <root url="file://$MODULE_DIR$/database_engine/build/classes/test" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library" scope="TEST">
-      <library name="Gradle: C__svn_SRC_Java_working_dir_SmartFinance_database_engine_build_resources_test:">
-        <CLASSES>
-          <root url="file://$MODULE_DIR$/database_engine/build/resources/test" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library" scope="TEST">
-      <library name="Gradle: C__svn_SRC_Java_working_dir_SmartFinance_userinterface_control_build_classes_test:">
-        <CLASSES>
-          <root url="file://$MODULE_DIR$/userinterface_control/build/classes/test" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library" scope="TEST">
-      <library name="Gradle: C__svn_SRC_Java_working_dir_SmartFinance_userinterface_control_build_resources_test:">
-        <CLASSES>
-          <root url="file://$MODULE_DIR$/userinterface_control/build/resources/test" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
   </component>
 </module>

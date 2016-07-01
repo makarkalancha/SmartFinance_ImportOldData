@@ -6,7 +6,7 @@
         <option name="distributionType" value="LOCAL" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
         <option name="gradleHome" value="$PROJECT_DIR$/../../apps_web/gradle-2.11/bin" />
-        <option name="gradleJvm" value="1.8_0_77" />
+        <option name="gradleJvm" value="1.8.0_92" />
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
