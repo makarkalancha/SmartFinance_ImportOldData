@@ -456,7 +456,6 @@ public class TaxController /*implements Initializable, ControlledScreen, UndoRed
 
     @FXML
     public void onFormulaEditorBtn (ActionEvent event) {
-        //TODO http://code.makery.ch/library/javafx-8-tutorial/part3/
         try{
             //Load the fxml file and create a new stage for the popup dialog.
             FXMLLoader loader = new FXMLLoader(getClass().getResource(ExtraScreens.TAX_FORMULA_EDITOR.getFullFxmlFilePath()));

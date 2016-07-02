@@ -30,7 +30,7 @@ public class UserInterfaceConstants {
 
     public final static String INVALID_CONTROL_BGCOLOR = "-fx-background-color: #ffc0cb;";
 //    public final static String INVALID_CONTROL_CLASS_BGCOLOR = ".error {-fx-background-color: #ffc0cb;}";
-//    public final static String INVALID_CONTROL_CSS_CLASS = "error_control_background";
+    public final static String INVALID_CONTROL_CSS_CLASS = "error_control_background";
 
     public static final SimpleDateFormat FULL_DATE_TIME_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
     public static final SimpleDateFormat DATE_TIME_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

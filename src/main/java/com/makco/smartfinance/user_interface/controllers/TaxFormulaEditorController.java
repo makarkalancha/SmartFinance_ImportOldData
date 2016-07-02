@@ -154,10 +154,29 @@ public class TaxFormulaEditorController {
             ScriptEngine scriptEngine = scriptEngineManager.getEngineByName("nashorn");
             Object nashornResult = scriptEngine.eval(editedFormula);
 
-            resultSB.append("\r\n");
+            resultSB.append("\n------------------------------------------\nValidation check:\n");
             resultSB.append(resultTaxCalculation);
             resultSB.append(" = ");
             resultSB.append(nashornResult);
+
+            Region reg = (Region) validationResultTA.lookup(".content");
+            //todo set style
+            if(resultTaxCalculation.equals(nashornResult)){
+                LOG.debug(">>>validationResult-> TRUE");
+
+//                validationResultTA.getStyleClass().add(UserInterfaceConstants.INVALID_CONTROL_CSS_CLASS);
+
+                validationResultTA.setStyle("");
+            } else {
+                LOG.debug(">>>validationResult-> FALSE");
+
+
+//                reg.getStyleClass().add(UserInterfaceConstants.INVALID_CONTROL_CSS_CLASS);
+//                reg.getStyleClass().setAll(CollectionUtils.convertCollectionToObservableSet(reg.getStyleClass()));
+
+                validationResultTA.setStyle(UserInterfaceConstants.INVALID_CONTROL_BGCOLOR);
+            }
+            LOG.debug(">>>validationResultTA:" + reg.getStyleClass());
 
             validationResultTA.setText(resultSB.toString());
         }catch (Exception e){

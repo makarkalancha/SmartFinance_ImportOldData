@@ -50,7 +50,8 @@ public class ReversePolishNotation3 {
     }
 
     /*
-    todo make this method return errors, so it should validate formula
+    make this method return errors, so it should validate formula
+    not done, no point for now
      */
     private EnumSet<ErrorEnum> convertStringToOperandOperatorList(){
         EnumSet<ErrorEnum> errors = EnumSet.noneOf(ErrorEnum.class);

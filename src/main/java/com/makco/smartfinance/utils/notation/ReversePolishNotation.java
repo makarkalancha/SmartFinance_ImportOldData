@@ -14,7 +14,7 @@ import java.util.List;
 
 /**
  * Created by mcalancea on 29 Jun 2016.
- * originated from version3
+ * originated from version4
  */
 public class ReversePolishNotation {
     private Stack<String> operatorStack = new DequeStack<>(); //operator +-... and operand 3, 2, 4, a, b, c ...
@@ -38,32 +38,20 @@ public class ReversePolishNotation {
         return decimalSeparator;
     }
 
-    public void setDecimalSeparator(char decimalSeparator) {
-        this.decimalSeparator = decimalSeparator;
-    }
-
     public String getArithmeticNotation() {
         return arithmeticNotation;
     }
 
-    public void setArithmeticNotation(String arithmeticNotation) {
-        this.arithmeticNotation = arithmeticNotation;
+    public int getScale() {
+        return scale;
     }
 
-    /*
-    todo make this method return errors, so it should validate formula
-     */
-    private EnumSet<ErrorEnum> convertStringToOperandOperatorList(){
-        EnumSet<ErrorEnum> errors = EnumSet.noneOf(ErrorEnum.class);
+    private void convertStringToOperandOperatorList(){
         try {
             StringBuilder operand = new StringBuilder();
             for (int i = 0; i < arithmeticNotation.length(); i++) {
                 char charInString = arithmeticNotation.charAt(i);
                 if (allowedOperators.indexOf(charInString) > -1) {
-
-
-
-
                     if(unaryOperators.indexOf(charInString) > -1 &&
                             (i == 0 ||
 //                                    unaryOperators.indexOf(operandOperatorList.get(operandOperatorList.size()-1)) > -1)){
@@ -96,7 +84,6 @@ public class ReversePolishNotation {
         }catch (Exception e){
             throw e;
         }
-        return errors;
     }
 
     private void getOperator(Operator operator){
