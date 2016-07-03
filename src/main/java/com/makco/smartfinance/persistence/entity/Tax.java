@@ -2,6 +2,7 @@ package com.makco.smartfinance.persistence.entity;
 
 import com.google.common.base.Objects;
 import com.makco.smartfinance.constants.DataBaseConstants;
+import com.makco.smartfinance.user_interface.constants.UserInterfaceConstants;
 import com.makco.smartfinance.utils.BigDecimalUtils;
 import com.makco.smartfinance.utils.notation.ReversePolishNotation;
 import com.makco.smartfinance.utils.notation.ReversePolishNotation1;
@@ -175,7 +176,7 @@ public class Tax implements Serializable {
         String mathExpressionToCalculate = formula.replace(DataBaseConstants.TAX_NUMBER_PLACEHOLDER, bigDecimal.toString());
         mathExpressionToCalculate = mathExpressionToCalculate.replace(DataBaseConstants.TAX_RATE_PLACEHOLDER, rate.toString());
         ReversePolishNotation rpn = new ReversePolishNotation(mathExpressionToCalculate, BigDecimalUtils.getDecimalSeparator(),
-                BigDecimalUtils.getBigDecimalDefaultScale());
+                UserInterfaceConstants.SCALE);
         result = rpn.evaluateReversePolishNotation();
         return result;
     }

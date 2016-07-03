@@ -14,10 +14,8 @@ public class BigDecimalUtils {
     private static DecimalFormatSymbols decimalFormatSymbols = new DecimalFormatSymbols();
     private static char groupingSeparator = ',';
     private static char decimalSeparator = '.';
-    private static int bigDecimalScaleOf_2 = 2;
-    private static int bigDecimalScaleOf_4 = 4;
 
-    /**
+    /*
      * http://stackoverflow.com/questions/12711493/custom-formatted-number-with-period-and-comma
      * Commas are always used for grouping in the pattern definition, regardless of how they appear in the target locale.
      * Similarly, periods are always used for decimals. This appears illogical, but one must remember this is a pattern
@@ -26,7 +24,7 @@ public class BigDecimalUtils {
     private static String pattern = "#,##0.0#";
     private static DecimalFormat decimalFormat;
     static {
-        /**
+        /*
          * http://stackoverflow.com/questions/4713166/decimal-separator-in-numberformat
          * http://stackoverflow.com/questions/18231802/how-can-i-parse-a-string-to-bigdecimal
          */
@@ -52,15 +50,21 @@ public class BigDecimalUtils {
         return bigDecimal;
     }
 
+    public static BigDecimal roundBigDecimal(String string, int scale) throws Exception{
+        BigDecimal bigDecimal = new BigDecimal(string);
+        bigDecimal.setScale(scale);
+        return bigDecimal;
+    }
+
+    public static String formatDecimalNumber(BigDecimal bigDecimal/*, int scale*/) throws Exception{
+        return decimalFormat.format(bigDecimal);
+    }
+
     public static char getDecimalSeparator() {
         return decimalSeparator;
     }
 
     public static char getGroupingSeparator() {
         return groupingSeparator;
-    }
-
-    public static int getBigDecimalDefaultScale() {
-        return bigDecimalScaleOf_2;
     }
 }

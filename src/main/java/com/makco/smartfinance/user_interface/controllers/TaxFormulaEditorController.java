@@ -70,17 +70,17 @@ public class TaxFormulaEditorController {
             */
 
             LOG.debug(oldValue + "->" + newValue);
-            LOG.debug(newValue.matches(FORMULA_PATTERN));
+//            LOG.debug(newValue.matches(FORMULA_PATTERN));
 
             String tmp = newValue.replace(DataBaseConstants.TAX_NUMBER_PLACEHOLDER, "");
             tmp = tmp.replace(DataBaseConstants.TAX_RATE_PLACEHOLDER, "");
-            tmp = StringUtils.replaceChars(tmp, FORMULA_VALID_CHARS, "");
+//            tmp = StringUtils.replaceChars(tmp, FORMULA_VALID_CHARS, "");
 
-            LOG.debug("tmp->" + tmp);
+//            LOG.debug("tmp->" + tmp);
 
             Region reg = (Region) formulaTA.lookup(".content");
-//            if (StringUtils.containsOnly(tmp, FORMULA_VALID_CHARS)) {
-            if(tmp.length() == 0){
+            if (StringUtils.containsOnly(tmp, FORMULA_VALID_CHARS)) {
+//            if(tmp.length() == 0){
                 validateBtn.setDisable(false);
                 okBtn.setDisable(false);
 
@@ -96,13 +96,13 @@ public class TaxFormulaEditorController {
                 reg.setStyle(UserInterfaceConstants.INVALID_CONTROL_BGCOLOR);
 
             }
-            newValue = tmp;
         });
     }
 
     public void setDialogStage(Stage dialogStage, Tax tax) {
         this.dialogStage = dialogStage;
         this.tax = tax;
+        formulaTA.setText(tax.getFormula());
     }
 
 
@@ -139,29 +139,43 @@ public class TaxFormulaEditorController {
         try {
             String formula = formulaTA.getText();
             tax.setFormula(formula);
-            String editedFormula = formula.replace(DataBaseConstants.TAX_RATE_PLACEHOLDER, tax.getRate().toString());
+
+            String editedFormulaForCalculation = formula.replace(DataBaseConstants.TAX_RATE_PLACEHOLDER,
+                    tax.getRate().toString());
+            editedFormulaForCalculation = editedFormulaForCalculation.replace(DataBaseConstants.TAX_NUMBER_PLACEHOLDER,
+                    numberTF.getText());
+
+            String editedFormula = formula.replace(DataBaseConstants.TAX_RATE_PLACEHOLDER,
+                    BigDecimalUtils.formatDecimalNumber(tax.getRate()));
             editedFormula = editedFormula.replace(DataBaseConstants.TAX_NUMBER_PLACEHOLDER, numberTF.getText());
+
             StringBuilder resultSB = new StringBuilder(editedFormula);
             resultSB.append(" = ");
-            BigDecimal resultTaxCalculation = tax.calculateFormula(BigDecimalUtils.convertStringToBigDecimal(numberTF.getText(), UserInterfaceConstants.SCALE));
-            resultSB.append(resultTaxCalculation);
+            BigDecimal resultTaxCalculation = tax.calculateFormula(
+                    BigDecimalUtils.convertStringToBigDecimal(numberTF.getText(), UserInterfaceConstants.SCALE));
+            resultSB.append(BigDecimalUtils.formatDecimalNumber(resultTaxCalculation));
 
             ScriptEngineManager scriptEngineManager = new ScriptEngineManager();
             ScriptEngine scriptEngine = scriptEngineManager.getEngineByName("nashorn");
-            Object nashornResult = scriptEngine.eval(editedFormula);
-            BigDecimal nashornResultBD = new BigDecimal(nashornResult.toString());
+            Object nashornResult = scriptEngine.eval(editedFormulaForCalculation);
+            BigDecimal nashornResultBD = BigDecimalUtils.roundBigDecimal(nashornResult.toString(),
+                    UserInterfaceConstants.SCALE);
 
             resultSB.append("\n------------------------------------------\nValidation check:\n");
-            resultSB.append(resultTaxCalculation);
+            resultSB.append(BigDecimalUtils.formatDecimalNumber(resultTaxCalculation));
             resultSB.append(" = ");
-            resultSB.append(nashornResultBD);
+            resultSB.append(BigDecimalUtils.formatDecimalNumber(nashornResultBD));
 
             Region reg = (Region) validationResultTA.lookup(".content");
             //todo set style
-            if(resultTaxCalculation.equals(nashornResultBD)){
+            if(resultTaxCalculation.compareTo(nashornResultBD) == 0){
+                okBtn.setDisable(false);
+
                 reg.setStyle("");
                 resultSB.append("\nValidation PASSED.");
             } else {
+                okBtn.setDisable(true);
+
                 reg.setStyle(UserInterfaceConstants.INVALID_CONTROL_BGCOLOR);
                 resultSB.append("\nValidation FAILED.");
             }
