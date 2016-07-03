@@ -79,22 +79,25 @@ public class TaxFormulaEditorController {
 //            LOG.debug("tmp->" + tmp);
 
             Region reg = (Region) formulaTA.lookup(".content");
-            if (StringUtils.containsOnly(tmp, FORMULA_VALID_CHARS)) {
-//            if(tmp.length() == 0){
-                validateBtn.setDisable(false);
-                okBtn.setDisable(false);
+            if (reg != null) {
+                if (StringUtils.containsOnly(tmp, FORMULA_VALID_CHARS)) {
+                    //            if(tmp.length() == 0){
+                    validateBtn.setDisable(false);
+                    okBtn.setDisable(false);
 
-                LOG.debug("new is valid->" + newValue);
+                    LOG.debug("new is valid->" + newValue);
+                    LOG.debug("new is valid->" + reg.getStyle());
 
-                reg.setStyle("");
-            } else {
-                validateBtn.setDisable(true);
-                okBtn.setDisable(true);
+                    reg.setStyle("");
+                } else {
+                    validateBtn.setDisable(true);
+                    okBtn.setDisable(true);
 
-                LOG.debug("new is NOT valid->" + newValue);
+                    LOG.debug("new is NOT valid->" + newValue);
 
-                reg.setStyle(UserInterfaceConstants.INVALID_CONTROL_BGCOLOR);
+                    reg.setStyle(UserInterfaceConstants.INVALID_CONTROL_BGCOLOR);
 
+                }
             }
         });
     }
@@ -103,6 +106,8 @@ public class TaxFormulaEditorController {
         this.dialogStage = dialogStage;
         this.tax = tax;
         formulaTA.setText(tax.getFormula());
+
+        LOG.debug(">>>tax.id->" + tax.getId());
     }
 
 
@@ -116,10 +121,8 @@ public class TaxFormulaEditorController {
 
     @FXML
     public void onOKButton(ActionEvent event){
-        if(isValid()){
-            isOkClicked = true;
-            dialogStage.close();
-        }
+        isOkClicked = true;
+        dialogStage.close();
     }
 
     @FXML
@@ -167,7 +170,6 @@ public class TaxFormulaEditorController {
             resultSB.append(BigDecimalUtils.formatDecimalNumber(nashornResultBD));
 
             Region reg = (Region) validationResultTA.lookup(".content");
-            //todo set style
             if(resultTaxCalculation.compareTo(nashornResultBD) == 0){
                 okBtn.setDisable(false);
 
@@ -183,13 +185,5 @@ public class TaxFormulaEditorController {
         }catch (Exception e){
             DialogMessages.showExceptionAlert(e);
         }
-    }
-
-
-
-    //todo validation instead of true
-    private boolean isValid(){
-        String formula = formulaTA.getText();
-        return !StringUtils.isEmpty(formula);
     }
 }

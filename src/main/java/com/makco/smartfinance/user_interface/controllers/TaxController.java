@@ -471,13 +471,20 @@ public class TaxController /*implements Initializable, ControlledScreen, UndoRed
             dialogStage.setScene(scene);
 
             //Set the tax into the controller
-            Tax taxFromControllerForm = new Tax(
-                    nameTF.getText(),
-                    descTA.getText(),
-                    BigDecimalUtils.convertStringToBigDecimal(rateTF.getText(), UserInterfaceConstants.SCALE),
-                    formulaTA.getText(),
-                    startDP.getValue(),
-                    endDP.getValue());
+            Tax taxFromControllerForm = null;
+            if(taxModel.getPendingTax() != null){
+                taxFromControllerForm = taxModel.getPendingTax();
+                taxFromControllerForm.setRate(BigDecimalUtils.convertStringToBigDecimal(rateTF.getText(), UserInterfaceConstants.SCALE));
+            } else {
+                taxFromControllerForm = new Tax(
+                        nameTF.getText(),
+                        descTA.getText(),
+                        BigDecimalUtils.convertStringToBigDecimal(rateTF.getText(), UserInterfaceConstants.SCALE),
+                        formulaTA.getText(),
+                        startDP.getValue(),
+                        endDP.getValue());
+            }
+
             TaxFormulaEditorController taxFormulaEditorController = loader.getController();
             taxFormulaEditorController.setDialogStage(dialogStage, taxFromControllerForm);
 

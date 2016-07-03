@@ -34,7 +34,7 @@
         </columnConstraints>
         <rowConstraints>
           <RowConstraints />
-          <RowConstraints minHeight="29.0" prefHeight="75.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="29.0" prefHeight="125.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <VBox.margin>
             <Insets bottom="5.0" left="50.0" right="5.0" />
@@ -56,12 +56,30 @@
                   </Button>
                   <Button fx:id="rateBtn" mnemonicParsing="false" onAction="#onRateBtn" prefWidth="70.0" text="Rate">
                      <VBox.margin>
-                        <Insets bottom="5.0" top="5.0" />
+                        <Insets top="5.0" />
                      </VBox.margin>
                      <tooltip>
                         <Tooltip text="Tax rate" />
                      </tooltip>
                   </Button>
+                  <MenuButton mnemonicParsing="false" text="Taxes">
+                    <items>
+                      <MenuItem mnemonicParsing="false" text="Action 1" />
+                      <MenuItem mnemonicParsing="false" text="Action 2" />
+                    </items>
+                     <VBox.margin>
+                        <Insets top="5.0" />
+                     </VBox.margin>
+                  </MenuButton>
+                  <SplitMenuButton mnemonicParsing="false" text="Taxes">
+                    <items>
+                      <MenuItem mnemonicParsing="false" text="Action 1" />
+                      <MenuItem mnemonicParsing="false" text="Action 2" />
+                    </items>
+                     <VBox.margin>
+                        <Insets top="5.0" />
+                     </VBox.margin>
+                  </SplitMenuButton>
                </children>
             </VBox>
          </children>
