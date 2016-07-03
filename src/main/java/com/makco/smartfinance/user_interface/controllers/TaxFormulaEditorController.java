@@ -98,10 +98,6 @@ public class TaxFormulaEditorController {
             }
             newValue = tmp;
         });
-
-        validationResultTA.textProperty().addListener((observable, oldValue, newValue) -> {
-            LOG.debug(oldValue + "->" + newValue);
-        });
     }
 
     public void setDialogStage(Stage dialogStage, Tax tax) {
@@ -153,31 +149,22 @@ public class TaxFormulaEditorController {
             ScriptEngineManager scriptEngineManager = new ScriptEngineManager();
             ScriptEngine scriptEngine = scriptEngineManager.getEngineByName("nashorn");
             Object nashornResult = scriptEngine.eval(editedFormula);
+            BigDecimal nashornResultBD = new BigDecimal(nashornResult.toString());
 
             resultSB.append("\n------------------------------------------\nValidation check:\n");
             resultSB.append(resultTaxCalculation);
             resultSB.append(" = ");
-            resultSB.append(nashornResult);
+            resultSB.append(nashornResultBD);
 
             Region reg = (Region) validationResultTA.lookup(".content");
             //todo set style
-            if(resultTaxCalculation.equals(nashornResult)){
-                LOG.debug(">>>validationResult-> TRUE");
-
-//                validationResultTA.getStyleClass().add(UserInterfaceConstants.INVALID_CONTROL_CSS_CLASS);
-
-                validationResultTA.setStyle("");
+            if(resultTaxCalculation.equals(nashornResultBD)){
+                reg.setStyle("");
+                resultSB.append("\nValidation PASSED.");
             } else {
-                LOG.debug(">>>validationResult-> FALSE");
-
-
-//                reg.getStyleClass().add(UserInterfaceConstants.INVALID_CONTROL_CSS_CLASS);
-//                reg.getStyleClass().setAll(CollectionUtils.convertCollectionToObservableSet(reg.getStyleClass()));
-
-                validationResultTA.setStyle(UserInterfaceConstants.INVALID_CONTROL_BGCOLOR);
+                reg.setStyle(UserInterfaceConstants.INVALID_CONTROL_BGCOLOR);
+                resultSB.append("\nValidation FAILED.");
             }
-            LOG.debug(">>>validationResultTA:" + reg.getStyleClass());
-
             validationResultTA.setText(resultSB.toString());
         }catch (Exception e){
             DialogMessages.showExceptionAlert(e);
