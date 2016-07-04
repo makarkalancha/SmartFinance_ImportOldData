@@ -26,7 +26,9 @@ import org.apache.logging.log4j.Logger;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import java.math.BigDecimal;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by mcalancea on 2016-06-19.
@@ -47,6 +49,7 @@ public class TaxFormulaEditorController {
     private Tax tax;
     private List<Tax> taxes;
     private boolean isOkClicked = false;
+    private Set<Tax> childTaxes = new HashSet<>();
 
     @FXML
     private TextArea formulaTA;
@@ -141,7 +144,8 @@ public class TaxFormulaEditorController {
                     );
                     formulaTA.requestFocus();
 
-                    taxes.add(newValue);
+                    childTaxes.add(newValue);
+                    LOG.debug(">>>childTaxes->" + childTaxes);
                 }
         );
     }
@@ -152,6 +156,7 @@ public class TaxFormulaEditorController {
         this.taxes = taxes;
         formulaTA.setText(tax.getFormula());
         taxLV.setItems(FXCollections.observableArrayList(taxes));
+        childTaxes = new HashSet<>(tax.getChildTaxes());
 
         LOG.debug(">>>tax.id->" + tax.getId());
         LOG.debug(">>>taxes->" + taxes);
@@ -160,6 +165,10 @@ public class TaxFormulaEditorController {
 
     public String getFormula(){
         return formulaTA.getText();
+    }
+
+    public Set<Tax> getChildTaxes(){
+        return childTaxes;
     }
 
     public boolean isOkClicked(){

@@ -12,6 +12,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Collection;
 import java.util.EnumSet;
 
 /**
@@ -44,13 +45,13 @@ public class TaxModel {
     }
 
 
-
-    public EnumSet<ErrorEnum> savePendingTax(String name, String description, String rateStr, String formula, LocalDate startDate, LocalDate endDate) throws Exception {
+    public EnumSet<ErrorEnum> savePendingTax(String name, String description, String rateStr, String formula,
+                                             LocalDate startDate, LocalDate endDate, Collection<Tax> childTaxes) throws Exception {
         EnumSet<ErrorEnum> errors = EnumSet.noneOf(ErrorEnum.class);
         BigDecimal rate = null;
-        try{
+        try {
             rate = BigDecimalUtils.convertStringToBigDecimal(rateStr);
-        }catch (Exception e){
+        } catch (Exception e) {
             errors.add(ErrorEnum.TAX_DESC_LGTH);
         }
         try {
@@ -62,9 +63,10 @@ public class TaxModel {
                 pendingTax.setFormula(formula);
                 pendingTax.setStartDate(startDate);
                 pendingTax.setEndDate(endDate);
+                pendingTax.setChildTaxes(childTaxes);
                 tmpTax = pendingTax;
             } else {
-                tmpTax = new Tax(name, description, rate, formula, startDate, endDate);
+                tmpTax = new Tax(name, description, rate, formula, startDate, endDate, childTaxes);
             }
 
             errors = taxService.validate(tmpTax);

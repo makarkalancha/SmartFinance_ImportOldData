@@ -48,9 +48,11 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.EnumSet;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.Set;
 
 /**
  * Created by mcalancea on 2016-06-09.
@@ -85,6 +87,7 @@ public class TaxController /*implements Initializable, ControlledScreen, UndoRed
     private DatePicker startDP;
     @FXML
     private DatePicker endDP;
+    private Set<Tax> childTaxes = new HashSet<>();
     @FXML
     private Button clearBtn;
     @FXML
@@ -114,7 +117,9 @@ public class TaxController /*implements Initializable, ControlledScreen, UndoRed
                     return new Task<EnumSet<ErrorEnum>>() {
                         @Override
                         protected EnumSet<ErrorEnum> call() throws Exception {
-                            return taxModel.savePendingTax(nameTF.getText(), descTA.getText(), rateTF.getText(), formulaTA.getText(), startDP.getValue(), endDP.getValue());
+                            return taxModel.savePendingTax(
+                                    nameTF.getText(), descTA.getText(), rateTF.getText(), formulaTA.getText(),
+                                    startDP.getValue(), endDP.getValue(), childTaxes);
                         }
                     };
                 }
@@ -486,7 +491,8 @@ public class TaxController /*implements Initializable, ControlledScreen, UndoRed
                         BigDecimalUtils.convertStringToBigDecimal(rateTF.getText(), UserInterfaceConstants.SCALE),
                         formulaTA.getText(),
                         startDP.getValue(),
-                        endDP.getValue());
+                        endDP.getValue(),
+                        childTaxes);
             }
 
             TaxFormulaEditorController taxFormulaEditorController = loader.getController();
@@ -499,6 +505,7 @@ public class TaxController /*implements Initializable, ControlledScreen, UndoRed
             if (taxFormulaEditorController.isOkClicked()){
                 formulaTA.setText(taxFormulaEditorController.getFormula());
                 //todo return taxes child list
+                childTaxes = new HashSet<>(taxFormulaEditorController.getChildTaxes());
             }
 
         }catch (Exception e){
@@ -575,6 +582,8 @@ public class TaxController /*implements Initializable, ControlledScreen, UndoRed
             formulaTA.setText(taxModel.getPendingTax().getFormula());
             startDP.setValue(taxModel.getPendingTax().getStartDate());
             endDP.setValue(taxModel.getPendingTax().getEndDate());
+
+            childTaxes = new HashSet<>(taxModel.getPendingTax().getChildTaxes());
         } catch (Exception e) {
             startService(onRefreshWorker, null);
             DialogMessages.showExceptionAlert(e);

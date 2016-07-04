@@ -4,6 +4,7 @@ import com.makco.smartfinance.constants.DataBaseConstants;
 import org.junit.Test;
 
 import java.math.BigDecimal;
+import java.util.HashSet;
 
 import static org.junit.Assert.*;
 
@@ -24,7 +25,8 @@ public class TaxTest {
                     .append(")")
                     .toString(),
                 null,
-                null
+                null,
+                new HashSet<>()
         );
         System.out.println(">>>Formula:" + tax.getFormula());
         BigDecimal result = tax.calculateFormula(new BigDecimal("100"));

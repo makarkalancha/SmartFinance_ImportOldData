@@ -127,13 +127,15 @@ public class Tax implements Serializable {
 
     }
 
-    public Tax(String name, String description, BigDecimal rate, String formula, LocalDate startDate, LocalDate endDate) {
+    public Tax(String name, String description, BigDecimal rate, String formula,
+               LocalDate startDate, LocalDate endDate, Collection<Tax> childTaxes) {
         this.name = name;
         this.description = description;
         this.rate = rate;
         this.formula = formula;
         this.startDate = startDate;
         this.endDate = endDate;
+        this.childTaxes = new HashSet<>(childTaxes);
     }
 
     public String getDescription() {
