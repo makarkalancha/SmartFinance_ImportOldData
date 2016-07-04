@@ -1,5 +1,6 @@
 package com.makco.smartfinance.user_interface.controllers;
 
+import com.makco.smartfinance.constants.DataBaseConstants;
 import com.makco.smartfinance.persistence.utils.TestPersistenceManager;
 import jdk.nashorn.api.scripting.NashornScriptEngine;
 import org.junit.BeforeClass;
@@ -51,6 +52,15 @@ public class TaxFormulaEditorControllerTest {
         String formula1 = "5/2";
         double result = (Double) scriptEngine.eval(formula1);
         assertEquals(2.5, result, DELTA);
+    }
+
+    @Test
+    public void test_placeholder_replacement() throws Exception{
+//        String newPlaceholder = DataBaseConstants.TAX_CHILD_ID_PLACEHOLDER.replace("%d","\\d+");
+        String newPlaceholder = "\\{TAX\\d+\\}";
+        String formula = "{TAX123}sdf";
+        String result = formula.replaceAll(newPlaceholder, "");
+        assertEquals("sdf", result);
     }
 
 }

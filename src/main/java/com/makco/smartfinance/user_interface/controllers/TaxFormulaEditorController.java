@@ -85,9 +85,7 @@ public class TaxFormulaEditorController {
             tmp = tmp.replace(DataBaseConstants.TAX_RATE_PLACEHOLDER, "");
             //!!!todo put TAX_CHILD_ID_PLACEHOLDER
             tmp = tmp.replace(DataBaseConstants.TAX_RATE_PLACEHOLDER, "");
-//            tmp = StringUtils.replaceChars(tmp, FORMULA_VALID_CHARS, "");
-
-//            LOG.debug("tmp->" + tmp);
+            tmp = tmp.replaceAll(DataBaseConstants.TAX_CHILD_ID_PLACEHOLDER_PATTERN, "");
 
             Region reg = (Region) formulaTA.lookup(".content");
             if (reg != null) {
@@ -140,7 +138,7 @@ public class TaxFormulaEditorController {
                 (observable, oldValue, newValue) -> {
                     LOG.debug(">>>" + oldValue + ": " + newValue);
                     formulaTA.appendText(
-                            String.format(DataBaseConstants.TAX_CHILD_ID_PLACEHOLDER, newValue.getId())
+                            DataBaseConstants.getTaxChildIdPlaceholder(newValue.getId())
                     );
                     formulaTA.requestFocus();
                 }

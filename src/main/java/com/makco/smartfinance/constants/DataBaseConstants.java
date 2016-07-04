@@ -88,6 +88,14 @@ public class DataBaseConstants {
     public final static int TAX_FORMULA_MAX_LGTH = 512;
     public final static String TAX_RATE_PLACEHOLDER = "{RATE}";
     public final static String TAX_NUMBER_PLACEHOLDER = "{NUM}";
-    public final static String TAX_CHILD_ID_PLACEHOLDER = "{TAX%d}";
+    //http://stackoverflow.com/questions/513600/should-i-use-javas-string-format-if-performance-is-important
+    public final static String getTaxChildIdPlaceholder(long taxId){
+        StringBuilder placeholder = new StringBuilder();
+        placeholder.append("{TAX");
+        placeholder.append(taxId);
+        placeholder.append("}");
+        return placeholder.toString();
+    }
+    public final static String TAX_CHILD_ID_PLACEHOLDER_PATTERN = "\\{TAX\\d+\\}";
 
 }
