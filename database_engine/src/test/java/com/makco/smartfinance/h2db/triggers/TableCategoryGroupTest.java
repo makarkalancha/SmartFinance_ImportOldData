@@ -336,7 +336,7 @@ public class TableCategoryGroupTest {
         String querySelect = "SELECT MIN(" + Table.CATEGORY_GROUP.ID + ") FROM " + Table.Names.CATEGORY_GROUP;
         String queryDelete = "DELETE FROM " + Table.Names.CATEGORY_GROUP + " WHERE " +
                 Table.CATEGORY_GROUP.ID + " = ?";
-        String querySelectDeletedRow = "SELECT JSON_ROW FROM _DELETED_ROWS WHERE ID = (SELECT MAX(ID) FROM _DELETED_ROWS WHERE SCHEMA_NAME = 'TEST' AND TABLE_NAME = 'CATEGORY_GROUP')";
+        String querySelectDeletedRow = "SELECT JSON_ROW FROM _DELETED_ROWS WHERE ID = (SELECT MAX(ID) FROM _DELETED_ROWS WHERE SCHEMA_NAME = 'TEST' AND TABLE_NAME = '" + Table.Names.CATEGORY_GROUP + "')";
 
         LOG.debug(querySelect);
         LOG.debug(queryDelete);

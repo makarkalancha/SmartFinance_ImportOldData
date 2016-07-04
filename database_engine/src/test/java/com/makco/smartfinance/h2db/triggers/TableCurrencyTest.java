@@ -203,7 +203,7 @@ public class TableCurrencyTest {
         String querySelect = "SELECT MIN(" + Table.CURRENCY.ID + ") FROM " + Table.Names.CURRENCY;
         String queryDelete = "DELETE FROM " + Table.Names.CURRENCY + " WHERE " +
                 Table.CURRENCY.ID + " = ?";
-        String querySelectDeletedRow = "SELECT JSON_ROW FROM _DELETED_ROWS WHERE ID = (SELECT MAX(ID) FROM _DELETED_ROWS WHERE SCHEMA_NAME = 'TEST' AND TABLE_NAME = 'CURRENCY')";
+        String querySelectDeletedRow = "SELECT JSON_ROW FROM _DELETED_ROWS WHERE ID = (SELECT MAX(ID) FROM _DELETED_ROWS WHERE SCHEMA_NAME = 'TEST' AND TABLE_NAME = '" + Table.Names.CURRENCY + "')";
 
         LOG.debug(querySelect);
         LOG.debug(queryDelete);

@@ -206,7 +206,7 @@ public class TableFamilyMemberTest {
         String querySelect = "SELECT MIN(" + Table.FAMILY_MEMBER.ID + ") FROM " + Table.Names.FAMILY_MEMBER;
         String queryDelete = "DELETE FROM " + Table.Names.FAMILY_MEMBER + " WHERE " +
                 Table.FAMILY_MEMBER.ID + " = ?";
-        String querySelectDeletedRow = "SELECT JSON_ROW FROM _DELETED_ROWS WHERE ID = (SELECT MAX(ID) FROM _DELETED_ROWS WHERE SCHEMA_NAME = 'TEST' AND TABLE_NAME = 'FAMILY_MEMBER')";
+        String querySelectDeletedRow = "SELECT JSON_ROW FROM _DELETED_ROWS WHERE ID = (SELECT MAX(ID) FROM _DELETED_ROWS WHERE SCHEMA_NAME = 'TEST' AND TABLE_NAME = '" + Table.Names.FAMILY_MEMBER + "')";
 
         LOG.debug(querySelect);
         LOG.debug(queryDelete);
