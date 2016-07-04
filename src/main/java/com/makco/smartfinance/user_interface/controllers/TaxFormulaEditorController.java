@@ -6,14 +6,19 @@ import com.makco.smartfinance.user_interface.constants.UserInterfaceConstants;
 import com.makco.smartfinance.user_interface.utility_screens.DialogMessages;
 import com.makco.smartfinance.utils.BigDecimalUtils;
 import com.makco.smartfinance.utils.collection.CollectionUtils;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Region;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -21,6 +26,7 @@ import org.apache.logging.log4j.Logger;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * Created by mcalancea on 2016-06-19.
@@ -39,6 +45,7 @@ public class TaxFormulaEditorController {
 
     private Stage dialogStage;
     private Tax tax;
+    private List<Tax> taxes;
     private boolean isOkClicked = false;
 
     @FXML
@@ -46,7 +53,7 @@ public class TaxFormulaEditorController {
     @FXML
     private Button okBtn;
     @FXML
-    private Button numBtn;
+    private Button operandBtn;
     @FXML
     private Button rateBtn;
     @FXML
@@ -57,6 +64,8 @@ public class TaxFormulaEditorController {
     private TextField numberTF;
     @FXML
     private TextArea validationResultTA;
+    @FXML
+    private ListView<Tax> taxLV;
 
     @FXML
     private void initialize(){
@@ -73,6 +82,8 @@ public class TaxFormulaEditorController {
 //            LOG.debug(newValue.matches(FORMULA_PATTERN));
 
             String tmp = newValue.replace(DataBaseConstants.TAX_NUMBER_PLACEHOLDER, "");
+            tmp = tmp.replace(DataBaseConstants.TAX_RATE_PLACEHOLDER, "");
+            //!!!todo put TAX_CHILD_ID_PLACEHOLDER
             tmp = tmp.replace(DataBaseConstants.TAX_RATE_PLACEHOLDER, "");
 //            tmp = StringUtils.replaceChars(tmp, FORMULA_VALID_CHARS, "");
 
@@ -100,14 +111,51 @@ public class TaxFormulaEditorController {
                 }
             }
         });
+
+        taxLV.setCellFactory(new Callback<ListView<Tax>, ListCell<Tax>>() {
+            @Override
+            public ListCell<Tax> call(ListView<Tax> param) {
+                ListCell<Tax>listCell = new ListCell<Tax>(){
+
+                    @Override
+                    protected void updateItem(Tax item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (item != null) {
+                            BigDecimal rate = item.getRate();
+                            setText(
+                                    new StringBuilder(item.getName())
+                                            .append(" (")
+                                            .append((rate == null) ? 0 : rate)
+                                            .append("%)")
+                                    .toString()
+                            );
+                        }
+                    }
+                };
+                return listCell;
+            }
+        });
+
+        taxLV.getSelectionModel().selectedItemProperty().addListener(
+                (observable, oldValue, newValue) -> {
+                    LOG.debug(">>>" + oldValue + ": " + newValue);
+                    formulaTA.appendText(
+                            String.format(DataBaseConstants.TAX_CHILD_ID_PLACEHOLDER, newValue.getId())
+                    );
+                    formulaTA.requestFocus();
+                }
+        );
     }
 
-    public void setDialogStage(Stage dialogStage, Tax tax) {
+    public void setDialogStage(Stage dialogStage, Tax tax, List<Tax> taxes) {
         this.dialogStage = dialogStage;
         this.tax = tax;
+        this.taxes = taxes;
         formulaTA.setText(tax.getFormula());
+        taxLV.setItems(FXCollections.observableArrayList(taxes));
 
         LOG.debug(">>>tax.id->" + tax.getId());
+        LOG.debug(">>>taxes->" + taxes);
     }
 
 
@@ -126,7 +174,7 @@ public class TaxFormulaEditorController {
     }
 
     @FXML
-    public void onNumBtn(ActionEvent event){
+    public void onOperandBtn(ActionEvent event){
         formulaTA.appendText(DataBaseConstants.TAX_NUMBER_PLACEHOLDER);
         formulaTA.requestFocus();
     }

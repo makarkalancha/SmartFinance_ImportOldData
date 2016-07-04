@@ -46,7 +46,7 @@
             <TextArea fx:id="formulaTA" promptText="Formula..." wrapText="true" GridPane.rowIndex="1" />
             <VBox alignment="CENTER_LEFT" GridPane.columnIndex="1" GridPane.rowIndex="1">
                <children>
-                  <Button fx:id="numBtn" mnemonicParsing="false" onAction="#onNumBtn" prefWidth="70.0" text="Operand">
+                  <Button fx:id="operandBtn" mnemonicParsing="false" onAction="#onOperandBtn" prefWidth="70.0" text="Operand">
                      <VBox.margin>
                         <Insets />
                      </VBox.margin>
@@ -62,24 +62,11 @@
                         <Tooltip text="Tax rate" />
                      </tooltip>
                   </Button>
-                  <MenuButton mnemonicParsing="false" text="Taxes">
-                    <items>
-                      <MenuItem mnemonicParsing="false" text="Action 1" />
-                      <MenuItem mnemonicParsing="false" text="Action 2" />
-                    </items>
+                  <ListView fx:id="taxLV">
                      <VBox.margin>
                         <Insets top="5.0" />
                      </VBox.margin>
-                  </MenuButton>
-                  <SplitMenuButton mnemonicParsing="false" text="Taxes">
-                    <items>
-                      <MenuItem mnemonicParsing="false" text="Action 1" />
-                      <MenuItem mnemonicParsing="false" text="Action 2" />
-                    </items>
-                     <VBox.margin>
-                        <Insets top="5.0" />
-                     </VBox.margin>
-                  </SplitMenuButton>
+                  </ListView>
                </children>
             </VBox>
          </children>

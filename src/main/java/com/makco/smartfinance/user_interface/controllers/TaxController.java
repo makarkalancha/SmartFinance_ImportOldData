@@ -45,8 +45,10 @@ import java.math.BigDecimal;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.EnumSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -472,9 +474,11 @@ public class TaxController /*implements Initializable, ControlledScreen, UndoRed
 
             //Set the tax into the controller
             Tax taxFromControllerForm = null;
+            List<Tax> taxes = new ArrayList<>(taxModel.getTaxes());
             if(taxModel.getPendingTax() != null){
                 taxFromControllerForm = taxModel.getPendingTax();
                 taxFromControllerForm.setRate(BigDecimalUtils.convertStringToBigDecimal(rateTF.getText(), UserInterfaceConstants.SCALE));
+                taxes.remove(taxFromControllerForm);
             } else {
                 taxFromControllerForm = new Tax(
                         nameTF.getText(),
@@ -486,7 +490,7 @@ public class TaxController /*implements Initializable, ControlledScreen, UndoRed
             }
 
             TaxFormulaEditorController taxFormulaEditorController = loader.getController();
-            taxFormulaEditorController.setDialogStage(dialogStage, taxFromControllerForm);
+            taxFormulaEditorController.setDialogStage(dialogStage, taxFromControllerForm, taxes);
 
 //            taxFormulaEditorController.setTax(taxModel.getPendingTax());
 
