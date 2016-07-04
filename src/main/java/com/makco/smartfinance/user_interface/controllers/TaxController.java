@@ -498,6 +498,7 @@ public class TaxController /*implements Initializable, ControlledScreen, UndoRed
 
             if (taxFormulaEditorController.isOkClicked()){
                 formulaTA.setText(taxFormulaEditorController.getFormula());
+                //todo return taxes child list
             }
 
         }catch (Exception e){

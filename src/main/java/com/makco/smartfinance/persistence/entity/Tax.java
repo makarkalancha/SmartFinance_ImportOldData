@@ -20,9 +20,13 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by mcalancea on 2016-06-08.
+ * http://viralpatel.net/blogs/hibernate-self-join-annotation-mapping-many-to-many-example/
  */
 
 @Entity
@@ -104,6 +108,8 @@ public class Tax implements Serializable {
     @Column(name = "T_UPDATEDON", insertable = false, updatable = false)
     private Timestamp updatedOn;
 
+    private Set<Tax> childTaxes = new HashSet<>();
+
     public Tax() {
 
     }
@@ -169,6 +175,14 @@ public class Tax implements Serializable {
 
     public void setStartDate(LocalDate startDate) {
         this.startDate = startDate;
+    }
+
+    public Set<Tax> getChildTaxes() {
+        return this.childTaxes;
+    }
+
+    public void setChildTaxes(Collection<Tax> childTaxes) {
+        this.childTaxes = new HashSet<>(childTaxes);
     }
 
     public BigDecimal calculateFormula(BigDecimal bigDecimal){

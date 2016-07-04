@@ -83,7 +83,6 @@ public class TaxFormulaEditorController {
 
             String tmp = newValue.replace(DataBaseConstants.TAX_NUMBER_PLACEHOLDER, "");
             tmp = tmp.replace(DataBaseConstants.TAX_RATE_PLACEHOLDER, "");
-            //!!!todo put TAX_CHILD_ID_PLACEHOLDER
             tmp = tmp.replace(DataBaseConstants.TAX_RATE_PLACEHOLDER, "");
             tmp = tmp.replaceAll(DataBaseConstants.TAX_CHILD_ID_PLACEHOLDER_PATTERN, "");
 
@@ -141,6 +140,8 @@ public class TaxFormulaEditorController {
                             DataBaseConstants.getTaxChildIdPlaceholder(newValue.getId())
                     );
                     formulaTA.requestFocus();
+
+                    taxes.add(newValue);
                 }
         );
     }

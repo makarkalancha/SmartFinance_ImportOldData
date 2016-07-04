@@ -14,6 +14,7 @@ public class Table {
         ACCOUNT_GROUP,
         CATEGORY,
         CATEGORY_GROUP,
+        CHILD_TAX,
         CURRENCY,
         DATEUNIT,
         FAMILY_MEMBER,
@@ -263,6 +264,28 @@ public class Table {
 
         @Override
         public TAX getColumnNameByIndex(){
+            return this;
+        }
+    };
+
+    public enum CHILD_TAX implements IEnumRow {
+        TAX_ID(0),
+        CHILD_TAX_ID(1),
+        T_CREATEDON(2),
+        T_UPDATEDON(3);
+
+        private int columnIndex;
+        private CHILD_TAX(int columnIndex) {
+            this.columnIndex = columnIndex;
+        }
+
+        @Override
+        public int getColumnIndex(){
+            return this.columnIndex;
+        }
+
+        @Override
+        public CHILD_TAX getColumnNameByIndex(){
             return this;
         }
     };
