@@ -114,7 +114,7 @@ public class Tax implements Serializable {
 
     //http://viralpatel.net/blogs/hibernate-self-join-annotation-mapping-many-to-many-example/
     @ManyToMany(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
-    @JoinTable(name = "CHILD_TAX",
+    @JoinTable(name = "TAX_CHILD",
             joinColumns = {@JoinColumn(name="TAX_ID")},
             inverseJoinColumns = {@JoinColumn(name="CHILD_TAX_ID")}
     )
