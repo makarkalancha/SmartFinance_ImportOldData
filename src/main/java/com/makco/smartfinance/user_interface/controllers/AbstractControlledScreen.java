@@ -66,16 +66,16 @@ public abstract class AbstractControlledScreen implements Initializable, Control
                 LOG.debug(">>>clearErrorHighlight before control.getStyleClass(): " + control.getStyleClass());
                 TextField reg = ((ComboBox) control).getEditor();
                 //version 1 using getStyleClass().add, that is not working in listener (tax formula editor, formulaTA)
-//                reg.getStyleClass().remove(UserInterfaceConstants.INVALID_CONTROL_CSS_CLASS);
+                reg.getStyleClass().remove(UserInterfaceConstants.INVALID_CONTROL_CSS_CLASS);
 
-                //version 2 using setStyle(), only this approach is working in listener (tax formula editor, formulaTA)
-                reg.setStyle("");
+//                //version 2 using setStyle(), only this approach is working in listener (tax formula editor, formulaTA)
+//                reg.setStyle("");
             } else if(control instanceof TextField){
                 //version 1 using getStyleClass().add, that is not working in listener (tax formula editor, formulaTA)
-//                control.getStyleClass().remove(UserInterfaceConstants.INVALID_CONTROL_CSS_CLASS);
+                control.getStyleClass().remove(UserInterfaceConstants.INVALID_CONTROL_CSS_CLASS);
 
-                //version 2 using setStyle(), only this approach is working in listener (tax formula editor, formulaTA)
-                control.setStyle("");
+//                //version 2 using setStyle(), only this approach is working in listener (tax formula editor, formulaTA)
+//                control.setStyle("");
             }
         });
     }
@@ -99,33 +99,30 @@ public abstract class AbstractControlledScreen implements Initializable, Control
             if(control != null){
                 if(control instanceof TextArea){
                     Region reg = (Region) control.lookup(".content");
-                    /*
                     //version 1 using getStyleClass().add, that is not working in listener (tax formula editor, formulaTA)
                     reg.getStyleClass().add(UserInterfaceConstants.INVALID_CONTROL_CSS_CLASS);
                     reg.getStyleClass().setAll(CollectionUtils.convertCollectionToObservableSet(reg.getStyleClass()));
-                    */
 
-                    //version 2 using setStyle(), only this approach is working in listener (tax formula editor, formulaTA)
-                    reg.setStyle(UserInterfaceConstants.INVALID_CONTROL_BGCOLOR);
+//                    //version 2 using setStyle(), only this approach is working in listener (tax formula editor, formulaTA)
+//                    //removes red border around required fields
+//                    reg.setStyle(UserInterfaceConstants.INVALID_CONTROL_BGCOLOR);
                 } else if(control instanceof ComboBox){
                     TextField reg = ((ComboBox) control).getEditor();
-                    /*
                     //version 1 using getStyleClass().add, that is not working in listener (tax formula editor, formulaTA)
                     reg.getStyleClass().add(UserInterfaceConstants.INVALID_CONTROL_CSS_CLASS);
                     reg.getStyleClass().setAll(CollectionUtils.convertCollectionToObservableSet(reg.getStyleClass()));
-                    */
 
-                    //version 2 using setStyle(), only this approach is working in listener (tax formula editor, formulaTA)
-                    reg.setStyle(UserInterfaceConstants.INVALID_CONTROL_BGCOLOR);
+//                    //version 2 using setStyle(), only this approach is working in listener (tax formula editor, formulaTA)
+//                    //removes red border around required fields
+//                    reg.setStyle(UserInterfaceConstants.INVALID_CONTROL_BGCOLOR);
                 } else if(control instanceof TextField){
-                    /*
                     //version 1 using getStyleClass().add, that is not working in listener (tax formula editor, formulaTA)
                     control.getStyleClass().add(UserInterfaceConstants.INVALID_CONTROL_CSS_CLASS);
                     control.getStyleClass().setAll(CollectionUtils.convertCollectionToObservableSet(control.getStyleClass()));
-                    */
 
-                    //version 2 using setStyle(), only this approach is working in listener (tax formula editor, formulaTA)
-                    control.setStyle(UserInterfaceConstants.INVALID_CONTROL_BGCOLOR);
+//                    //version 2 using setStyle(), only this approach is working in listener (tax formula editor, formulaTA)
+//                    //removes red border around required fields
+//                    control.setStyle(UserInterfaceConstants.INVALID_CONTROL_BGCOLOR);
                 }
             }
         });
