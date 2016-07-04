@@ -7,10 +7,15 @@ import com.makco.smartfinance.utils.BigDecimalUtils;
 import com.makco.smartfinance.utils.notation.ReversePolishNotation;
 import com.makco.smartfinance.utils.notation.ReversePolishNotation1;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
@@ -26,7 +31,6 @@ import java.util.Set;
 
 /**
  * Created by mcalancea on 2016-06-08.
- * http://viralpatel.net/blogs/hibernate-self-join-annotation-mapping-many-to-many-example/
  */
 
 @Entity
@@ -108,7 +112,16 @@ public class Tax implements Serializable {
     @Column(name = "T_UPDATEDON", insertable = false, updatable = false)
     private Timestamp updatedOn;
 
+    //http://viralpatel.net/blogs/hibernate-self-join-annotation-mapping-many-to-many-example/
+    @ManyToMany(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
+    @JoinTable(name = "CHILD_TAX",
+            joinColumns = {@JoinColumn(name="TAX_ID")},
+            inverseJoinColumns = {@JoinColumn(name="CHILD_TAX_ID")}
+    )
     private Set<Tax> childTaxes = new HashSet<>();
+
+    @ManyToMany(mappedBy = "childTaxes")
+    private Set<Tax> parentTaxes = new HashSet<>();
 
     public Tax() {
 
@@ -185,6 +198,14 @@ public class Tax implements Serializable {
         this.childTaxes = new HashSet<>(childTaxes);
     }
 
+    public Set<Tax> getParentTaxes() {
+        return this.parentTaxes;
+    }
+
+    public void setParentTaxes(Collection<Tax> parentTaxes) {
+        this.parentTaxes = new HashSet<>(parentTaxes);
+    }
+
     public BigDecimal calculateFormula(BigDecimal bigDecimal){
         BigDecimal result = new BigDecimal("0");
         String mathExpressionToCalculate = formula.replace(DataBaseConstants.TAX_NUMBER_PLACEHOLDER, bigDecimal.toString());
@@ -219,6 +240,7 @@ public class Tax implements Serializable {
                 ", formula='" + formula + '\'' +
                 ", startDate=" + startDate +
                 ", endDate=" + endDate +
+                ", childTaxes=" + childTaxes +
                 ", createdOn=" + createdOn +
                 ", updatedOn=" + updatedOn +
                 '}';
