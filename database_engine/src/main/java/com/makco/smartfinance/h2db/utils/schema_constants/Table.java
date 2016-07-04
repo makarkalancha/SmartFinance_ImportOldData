@@ -271,8 +271,7 @@ public class Table {
     public enum CHILD_TAX implements IEnumRow {
         TAX_ID(0),
         CHILD_TAX_ID(1),
-        T_CREATEDON(2),
-        T_UPDATEDON(3);
+        T_CREATEDON(2);
 
         private int columnIndex;
         private CHILD_TAX(int columnIndex) {

@@ -23,12 +23,11 @@ public class TriggerChildTax extends AbstractTrigger {
     @Override
     protected void insert(Connection connection, Object[] oldRow, Object[] newRow) throws SQLException {
         newRow[Table.CHILD_TAX.T_CREATEDON.getColumnIndex()] = Timestamp.valueOf(now);
-        newRow[Table.CHILD_TAX.T_UPDATEDON.getColumnIndex()] = Timestamp.valueOf(now);
     }
 
     @Override
     protected void update(Connection connection, Object[] oldRow, Object[] newRow) throws SQLException {
-        newRow[Table.CHILD_TAX.T_UPDATEDON.getColumnIndex()] = Timestamp.valueOf(now);
+
     }
 
     @Override
@@ -37,7 +36,5 @@ public class TriggerChildTax extends AbstractTrigger {
         rowJson.addProperty(Table.CHILD_TAX.CHILD_TAX_ID.toString(), (Long) oldRow[Table.CHILD_TAX.CHILD_TAX_ID.getColumnIndex()]);
         rowJson.addProperty(Table.CHILD_TAX.T_CREATEDON.toString(), JsonUtils.getSimpleDateTimeFormat()
                 .format((Date) oldRow[Table.CHILD_TAX.T_CREATEDON.getColumnIndex()]));
-        rowJson.addProperty(Table.CHILD_TAX.T_UPDATEDON.toString(), JsonUtils.getSimpleDateTimeFormat()
-                .format((Date) oldRow[Table.CHILD_TAX.T_UPDATEDON.getColumnIndex()]));
     }
 }
