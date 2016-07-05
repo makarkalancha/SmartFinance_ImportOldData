@@ -16,6 +16,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.MapKeyColumn;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
@@ -26,8 +27,11 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Created by mcalancea on 2016-06-08.
@@ -126,7 +130,9 @@ public class Tax implements Serializable {
             joinColumns = {@JoinColumn(name="TAX_ID")},
             inverseJoinColumns = {@JoinColumn(name="CHILD_TAX_ID")}
     )
-    private Set<Tax> childTaxes = new HashSet<>();
+    @MapKeyColumn(name = "CHILD_TAX_ID")
+//    @Column MapKeyColumn(name = "CHILD_TAX_ID")
+    private Map<Long, Tax> childTaxes = new HashMap<>();
 
     @ManyToMany(mappedBy = "childTaxes")
     private Set<Tax> parentTaxes = new HashSet<>();
@@ -144,7 +150,7 @@ public class Tax implements Serializable {
         this.denormalizedFormula = denormalizedFormula;
         this.startDate = startDate;
         this.endDate = endDate;
-        this.childTaxes = new HashSet<>(childTaxes);
+        this.childTaxes = childTaxes.stream().collect(Collectors.toMap(tax -> tax.getId(), tax -> tax));
     }
 
     public String getDescription() {
@@ -210,12 +216,12 @@ public class Tax implements Serializable {
         this.startDate = startDate;
     }
 
-    public Set<Tax> getChildTaxes() {
+    public Map<Long, Tax> getChildTaxes() {
         return this.childTaxes;
     }
 
     public void setChildTaxes(Collection<Tax> childTaxes) {
-        this.childTaxes = new HashSet<>(childTaxes);
+        this.childTaxes = childTaxes.stream().collect(Collectors.toMap(tax -> tax.getId(), tax -> tax));;
     }
 
     public Set<Tax> getParentTaxes() {
@@ -239,7 +245,7 @@ public class Tax implements Serializable {
         StringBuilder result = new StringBuilder();
         String mathExpressionToCalculate = denormalizedFormula.replace(DataBaseConstants.TAX_RATE_PLACEHOLDER, rate.toString());
         mathExpressionToCalculate = mathExpressionToCalculate.replace(DataBaseConstants.TAX_RATE_PLACEHOLDER, rate.toString());
-        mathExpressionToCalculate
+        mathExpressionToCalculate = mathExpressionToCalculate.
         return result.toString();
     }
 
