@@ -266,26 +266,28 @@ public class TableTaxTest {
     private JsonObject createJsonObject() throws Exception {
         String schemaName = "TEST";
 
-        Object[] row = new Object[9];
+        Object[] row = new Object[10];
         row[0] = 1L;
         row[1] = "name of a tax";
         row[2] = "desc of a tax";
-        row[3] = new BigDecimal("1.0");
+        row[3] = new BigDecimal("2.0");
         row[4] = "formula";
-        row[5] = SIMPLE_DATE_FORMAT.parse("2001-02-03");
-        row[6] = SIMPLE_DATE_FORMAT.parse("2003-02-02");
-        row[7] = SIMPLE_DATE_TIME_FORMAT.parse("2001-02-03 14:05:06");
-        row[8] = SIMPLE_DATE_TIME_FORMAT.parse("2006-05-04 03:02:01");
+        row[5] = "denormalized formula";
+        row[6] = SIMPLE_DATE_FORMAT.parse("2001-02-03");
+        row[7] = SIMPLE_DATE_FORMAT.parse("2003-02-02");
+        row[8] = SIMPLE_DATE_TIME_FORMAT.parse("2001-02-03 14:05:06");
+        row[9] = SIMPLE_DATE_TIME_FORMAT.parse("2006-05-04 03:02:01");
         JsonObject rowJson = new JsonObject();
         rowJson.addProperty(Table.TAX.ID.toString(), (Long) row[0]);
         rowJson.addProperty(Table.TAX.NAME.toString(), (String) row[1]);
         rowJson.addProperty(Table.TAX.DESCRIPTION.toString(), (String) row[2]);
         rowJson.addProperty(Table.TAX.RATE.toString(), (BigDecimal) row[3]);
         rowJson.addProperty(Table.TAX.FORMULA.toString(), (String) row[4]);
-        rowJson.addProperty(Table.TAX.STARTDATE.toString(), SIMPLE_DATE_FORMAT.format((Date) row[5]));
-        rowJson.addProperty(Table.TAX.ENDDATE.toString(), SIMPLE_DATE_FORMAT.format((Date) row[6]));
-        rowJson.addProperty(Table.TAX.T_CREATEDON.toString(), SIMPLE_DATE_TIME_FORMAT.format((Date) row[7]));
-        rowJson.addProperty(Table.TAX.T_UPDATEDON.toString(), SIMPLE_DATE_TIME_FORMAT.format((Date) row[8]));
+        rowJson.addProperty(Table.TAX.DENORMALIZED_FORMULA.toString(), (String) row[5]);
+        rowJson.addProperty(Table.TAX.STARTDATE.toString(), SIMPLE_DATE_FORMAT.format((Date) row[6]));
+        rowJson.addProperty(Table.TAX.ENDDATE.toString(), SIMPLE_DATE_FORMAT.format((Date) row[7]));
+        rowJson.addProperty(Table.TAX.T_CREATEDON.toString(), SIMPLE_DATE_TIME_FORMAT.format((Date) row[8]));
+        rowJson.addProperty(Table.TAX.T_UPDATEDON.toString(), SIMPLE_DATE_TIME_FORMAT.format((Date) row[9]));
 
         JsonObject tableJson = new JsonObject();
         tableJson.addProperty(Table.Elements.tableName.toString(), schemaName + "." + Table.Names.TAX);
@@ -298,8 +300,9 @@ public class TableTaxTest {
     public void testDeleteToJsonObject() throws Exception{
         JsonObject tableJson = createJsonObject();
         String expectedJsonString = "{\"tableName\":\"TEST.TAX\",\"row\":" +
-                "{\"ID\":1,\"NAME\":\"name of a tax\",\"DESCRIPTION\":\"desc of a tax\",\"RATE\":1," +
-                "\"FORMULA\":\"formula\",\"STARTDATE\":\"2001-02-03\",\"ENDDATE\":\"2003-02-02\"," +
+                "{\"ID\":1,\"NAME\":\"name of a tax\",\"DESCRIPTION\":\"desc of a tax\",\"RATE\":2.0," +
+                "\"FORMULA\":\"formula\",\"DENORMALIZED_FORMULA\":\"denormalized formula\","+
+                "\"STARTDATE\":\"2001-02-03\",\"ENDDATE\":\"2003-02-02\"," +
                 "\"T_CREATEDON\":\"2001-02-03 14:05:06\",\"T_UPDATEDON\":\"2006-05-04 03:02:01\"}}";
 
         LOG.debug("testDeleteToJsonObject.expectedJsonString:" + expectedJsonString);
@@ -329,7 +332,13 @@ public class TableTaxTest {
         assertEquals("desc of a tax", description);
         JsonElement jsonElementRate = rowJsonObject.get(Table.TAX.RATE.toString());
         BigDecimal rate = JsonUtils.getNullableFromJsonElementAsBigDecimal(jsonElementRate);
-        assertEquals(new BigDecimal("1.0"), rate);
+        assertEquals(new BigDecimal("2.0"), rate);
+        JsonElement jsonElementForm = rowJsonObject.get(Table.TAX.FORMULA.toString());
+        String formula = JsonUtils.getNullableFromJsonElementAsString(jsonElementForm);
+        assertEquals("formula", formula);
+        JsonElement jsonElementDenormForm = rowJsonObject.get(Table.TAX.DENORMALIZED_FORMULA.toString());
+        String denormalizedFormula = JsonUtils.getNullableFromJsonElementAsString(jsonElementDenormForm);
+        assertEquals("denormalized formula", denormalizedFormula);
         Date startDate = SIMPLE_DATE_FORMAT.parse(rowJsonObject.get(Table.TAX.STARTDATE.toString()).getAsString());
         assertEquals(SIMPLE_DATE_FORMAT.parse("2001-02-03"), startDate);
         Date endDate = SIMPLE_DATE_FORMAT.parse(rowJsonObject.get(Table.TAX.ENDDATE.toString()).getAsString());

@@ -41,6 +41,8 @@ public class TriggerTax extends AbstractTrigger {
                 (BigDecimal) oldRow[Table.TAX.RATE.getColumnIndex()]);
         rowJson.addProperty(Table.TAX.FORMULA.toString(),
                 (String) oldRow[Table.TAX.FORMULA.getColumnIndex()]);
+        rowJson.addProperty(Table.TAX.DENORMALIZED_FORMULA.toString(),
+                (String) oldRow[Table.TAX.DENORMALIZED_FORMULA.getColumnIndex()]);
         rowJson.addProperty(Table.TAX.STARTDATE.toString(),
                 JsonUtils.getStringOfNullableDate((Date) oldRow[Table.TAX.STARTDATE.getColumnIndex()]));
         rowJson.addProperty(Table.TAX.ENDDATE.toString(),

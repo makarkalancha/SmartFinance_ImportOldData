@@ -247,10 +247,11 @@ public class Table {
         DESCRIPTION(2),
         RATE(3),
         FORMULA(4),
-        STARTDATE(5),
-        ENDDATE(6),
-        T_CREATEDON(7),
-        T_UPDATEDON(8);
+        DENORMALIZED_FORMULA(5),
+        STARTDATE(6),
+        ENDDATE(7),
+        T_CREATEDON(8),
+        T_UPDATEDON(9);
 
         private int columnIndex;
         private TAX(int columnIndex) {
