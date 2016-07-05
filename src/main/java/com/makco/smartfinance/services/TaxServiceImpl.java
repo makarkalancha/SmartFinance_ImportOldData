@@ -43,6 +43,17 @@ public class TaxServiceImpl implements TaxService {
     }
 
     @Override
+    public List<Tax> taxListWithChildren() throws Exception {
+        List<Tax> taxs = new ArrayList<>();
+        try {
+            taxs = taxDAO.taxListWithChildren();
+        } catch (Exception e) {
+            throw e;
+        }
+        return taxs;
+    }
+
+    @Override
     public List<Tax> getTaxByName(String name) throws Exception {
         List<Tax> taxs = new ArrayList<>();
         try {

@@ -33,7 +33,7 @@ public class TaxModel {
             if (!taxes.isEmpty()) {
                 taxes.clear();
             }
-            taxes = FXCollections.observableArrayList(taxService.taxList());
+            taxes = FXCollections.observableArrayList(taxService.taxListWithChildren());
             LOG.debug("taxes.size: " + taxes.size());
         }catch (Exception e){
             throw e;

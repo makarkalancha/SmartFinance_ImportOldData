@@ -9,6 +9,7 @@ import java.util.List;
  */
 public interface TaxDAO {
     List<Tax> taxList() throws Exception;
+    List<Tax> taxListWithChildren() throws Exception;
     Tax getTaxById(Long id) throws Exception;
     List<Tax> getTaxByName(String name) throws Exception;
 

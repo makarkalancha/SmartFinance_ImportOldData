@@ -72,6 +72,37 @@ public class TaxDAOImpl implements TaxDAO {
     }
 
     @Override
+    public List<Tax> taxListWithChildren() throws Exception {
+        Session session = null;
+        List<Tax> list = new ArrayList<>();
+        try {
+            session = HibernateUtil.openSession();
+            session.beginTransaction();
+            ////http://stackoverflow.com/questions/12425835/jpql-manytomany-select
+            list = session.createQuery("SELECT t FROM Tax t left join t.childTaxes ORDER BY t.name").list();
+            //TODO fix it
+//            //https://docs.jboss.org/hibernate/orm/3.3/reference/en/html/queryhql.html
+//            list = session.createQuery("SELECT t FROM Tax t all properties t.childTaxes ORDER BY t.name").list();
+            session.getTransaction().commit();
+        } catch (Exception e) {
+            try {
+                if (session.getTransaction().getStatus() == TransactionStatus.ACTIVE
+                        || session.getTransaction().getStatus() == TransactionStatus.MARKED_ROLLBACK)
+                    session.getTransaction().rollback();
+            } catch (Exception rbEx) {
+                LOG.error("Rollback of transaction failed, trace follows!");
+                LOG.error(rbEx, rbEx);
+            }
+            throw new RuntimeException(e);
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+        return list;
+    }
+
+    @Override
     public List<Tax> getTaxByName(String name) throws Exception {
         Session session = null;
         List<Tax> taxs = new ArrayList<>();
