@@ -84,6 +84,8 @@ public class TaxController /*implements Initializable, ControlledScreen, UndoRed
     @FXML
     private TextArea formulaTA;
     @FXML
+    private TextArea denormformTA;
+    @FXML
     private DatePicker startDP;
     @FXML
     private DatePicker endDP;
@@ -118,8 +120,8 @@ public class TaxController /*implements Initializable, ControlledScreen, UndoRed
                         @Override
                         protected EnumSet<ErrorEnum> call() throws Exception {
                             return taxModel.savePendingTax(
-                                    nameTF.getText(), descTA.getText(), rateTF.getText(), formulaTA.getText(),
-                                    startDP.getValue(), endDP.getValue(), childTaxes);
+                                    nameTF.getText(), descTA.getText(), rateTF.getText(),
+                                    formulaTA.getText(), startDP.getValue(), endDP.getValue(), childTaxes);
                         }
                     };
                 }
@@ -490,6 +492,7 @@ public class TaxController /*implements Initializable, ControlledScreen, UndoRed
                         descTA.getText(),
                         BigDecimalUtils.convertStringToBigDecimal(rateTF.getText(), UserInterfaceConstants.SCALE),
                         formulaTA.getText(),
+                        denormformTA.getText(),
                         startDP.getValue(),
                         endDP.getValue(),
                         childTaxes);

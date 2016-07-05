@@ -45,8 +45,9 @@ public class TaxModel {
     }
 
 
-    public EnumSet<ErrorEnum> savePendingTax(String name, String description, String rateStr, String formula,
-                                             LocalDate startDate, LocalDate endDate, Collection<Tax> childTaxes) throws Exception {
+    public EnumSet<ErrorEnum> savePendingTax(String name, String description, String rateStr, String formula, String denormalizedFormula,
+         LocalDate startDate, LocalDate endDate, Collection<Tax> childTaxes) throws Exception {
+
         EnumSet<ErrorEnum> errors = EnumSet.noneOf(ErrorEnum.class);
         BigDecimal rate = null;
         try {
@@ -61,12 +62,13 @@ public class TaxModel {
                 pendingTax.setDescription(description);
                 pendingTax.setRate(rate);
                 pendingTax.setFormula(formula);
+                pendingTax.setDenormalizedFormula(denormalizedFormula);
                 pendingTax.setStartDate(startDate);
                 pendingTax.setEndDate(endDate);
                 pendingTax.setChildTaxes(childTaxes);
                 tmpTax = pendingTax;
             } else {
-                tmpTax = new Tax(name, description, rate, formula, startDate, endDate, childTaxes);
+                tmpTax = new Tax(name, description, rate, formula, denormalizedFormula, startDate, endDate, childTaxes);
             }
 
             errors = taxService.validate(tmpTax);

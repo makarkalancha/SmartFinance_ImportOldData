@@ -98,6 +98,14 @@ public class Tax implements Serializable {
     )
     private String formula;
 
+    @Column(name = "DENORMALIZED_FORMULA")
+    @Size(
+            min = 0,
+            max = DataBaseConstants.TAX_DENORMALIZED_FORMULA_MAX_LGTH,
+            message = "Denormalized Formula length is " + DataBaseConstants.TAX_DENORMALIZED_FORMULA_MAX_LGTH + " characters."
+    )
+    private String denormalizedFormula;
+
     @Column(name = "STARTDATE")
     private LocalDate startDate;
 
@@ -127,12 +135,13 @@ public class Tax implements Serializable {
 
     }
 
-    public Tax(String name, String description, BigDecimal rate, String formula,
+    public Tax(String name, String description, BigDecimal rate, String formula, String denormalizedFormula,
                LocalDate startDate, LocalDate endDate, Collection<Tax> childTaxes) {
         this.name = name;
         this.description = description;
         this.rate = rate;
         this.formula = formula;
+        this.denormalizedFormula = denormalizedFormula;
         this.startDate = startDate;
         this.endDate = endDate;
         this.childTaxes = new HashSet<>(childTaxes);
@@ -176,6 +185,15 @@ public class Tax implements Serializable {
         this.formula = formula;
     }
 
+
+    public String getDenormalizedFormula() {
+        return denormalizedFormula;
+    }
+
+    public void setDenormalizedFormula(String denormalizedFormula) {
+        this.denormalizedFormula = denormalizedFormula;
+    }
+
     public BigDecimal getRate() {
         return rate;
     }
@@ -210,12 +228,19 @@ public class Tax implements Serializable {
 
     public BigDecimal calculateFormula(BigDecimal bigDecimal){
         BigDecimal result = new BigDecimal("0");
-        String mathExpressionToCalculate = formula.replace(DataBaseConstants.TAX_NUMBER_PLACEHOLDER, bigDecimal.toString());
-        mathExpressionToCalculate = mathExpressionToCalculate.replace(DataBaseConstants.TAX_RATE_PLACEHOLDER, rate.toString());
+        String mathExpressionToCalculate = denormalizedFormula.replace(DataBaseConstants.TAX_NUMBER_PLACEHOLDER, bigDecimal.toString());
         ReversePolishNotation rpn = new ReversePolishNotation(mathExpressionToCalculate, BigDecimalUtils.getDecimalSeparator(),
                 UserInterfaceConstants.SCALE);
         result = rpn.evaluateReversePolishNotation();
         return result;
+    }
+
+    public String denormalizeFormula (){
+        StringBuilder result = new StringBuilder();
+        String mathExpressionToCalculate = denormalizedFormula.replace(DataBaseConstants.TAX_RATE_PLACEHOLDER, rate.toString());
+        mathExpressionToCalculate = mathExpressionToCalculate.replace(DataBaseConstants.TAX_RATE_PLACEHOLDER, rate.toString());
+        mathExpressionToCalculate
+        return result.toString();
     }
 
     @Override
