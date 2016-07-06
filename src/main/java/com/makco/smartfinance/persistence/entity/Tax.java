@@ -133,8 +133,7 @@ public class Tax implements Serializable {
             joinColumns = {@JoinColumn(name="TAX_ID")},
             inverseJoinColumns = {@JoinColumn(name="CHILD_TAX_ID")}
     )
-    @MapKey(name = "id")
-    private Map<Long, Tax> childTaxes = new HashMap<>();
+    private Set<Tax> childTaxes = new HashSet<>();
 
     @ManyToMany(mappedBy = "childTaxes")
     private Set<Tax> parentTaxes = new HashSet<>();
@@ -152,7 +151,9 @@ public class Tax implements Serializable {
         this.denormalizedFormula = denormalizedFormula;
         this.startDate = startDate;
         this.endDate = endDate;
-        this.childTaxes = childTaxes.stream().collect(Collectors.toMap(tax -> tax.getId(), tax -> tax));
+        if(childTaxes != null) {
+            this.childTaxes = new HashSet<>(childTaxes);
+        }
     }
 
     public String getDescription() {
@@ -222,11 +223,11 @@ public class Tax implements Serializable {
     }
 
     public Collection<Tax> getChildTaxes() {
-        return this.childTaxes.values();
+        return new HashSet<>(this.childTaxes);
     }
 
     public void setChildTaxes(Collection<Tax> childTaxes) {
-        this.childTaxes = childTaxes.stream().collect(Collectors.toMap(tax -> tax.getId(), tax -> tax));;
+        this.childTaxes = new HashSet<>(childTaxes);
     }
 
     public Set<Tax> getParentTaxes() {
@@ -242,6 +243,8 @@ public class Tax implements Serializable {
         String mathExpressionToCalculate = getDenormalizedFormula().replace(DataBaseConstants.TAX_NUMBER_PLACEHOLDER, bigDecimal.toString());
         ReversePolishNotation rpn = new ReversePolishNotation(mathExpressionToCalculate, BigDecimalUtils.getDecimalSeparator(),
                 UserInterfaceConstants.SCALE);
+        //TODO validate from formula editor ({NUM}*(1+{TAX1}/100)*(1+9.75/100))
+        //because tax doesn't have children yet
         result = rpn.evaluateReversePolishNotation();
         return result;
     }
@@ -249,11 +252,9 @@ public class Tax implements Serializable {
     public void refreshDenormalizeFormula (){
         String mathExpressionToCalculate = formula.replace(DataBaseConstants.TAX_RATE_PLACEHOLDER, rate.toString());
         mathExpressionToCalculate = mathExpressionToCalculate.replace(DataBaseConstants.TAX_RATE_PLACEHOLDER, rate.toString());
-        for (Map.Entry<Long, Tax> entry : childTaxes.entrySet()) {
-            Long taxId = entry.getKey();
-            Tax tax = entry.getValue();
+        for (Tax tax : childTaxes) {
             mathExpressionToCalculate = mathExpressionToCalculate.replace(
-                    DataBaseConstants.getTaxChildIdPlaceholder(taxId),
+                    DataBaseConstants.getTaxChildIdPlaceholder(tax.getId()),
                     tax.getRate().toString()
             );
         }

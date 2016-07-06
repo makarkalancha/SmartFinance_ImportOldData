@@ -546,6 +546,7 @@ public class TaxController /*implements Initializable, ControlledScreen, UndoRed
             saveBtn.setDisable(false);
             deleteBtn.setDisable(true);
             careTaker.clear();
+            taxModel.setPendingTaxProperty(null);
         } catch (Exception e) {
             startService(onRefreshWorker, null);
             DialogMessages.showExceptionAlert(e);
@@ -593,7 +594,9 @@ public class TaxController /*implements Initializable, ControlledScreen, UndoRed
 
             nameTF.setText(taxModel.getPendingTax().getName());
             descTA.setText(taxModel.getPendingTax().getDescription());
-            rateTF.setText(UserInterfaceConstants.NUMBER_FORMAT.format(taxModel.getPendingTax().getRate().doubleValue()));
+            if(taxModel.getPendingTax().getRate() != null) {
+                rateTF.setText(UserInterfaceConstants.NUMBER_FORMAT.format(taxModel.getPendingTax().getRate().doubleValue()));
+            }
             formulaTA.setText(taxModel.getPendingTax().getFormula());
             denormformTA.setText(taxModel.getPendingTax().getDenormalizedFormula());
             startDP.setValue(taxModel.getPendingTax().getStartDate());
