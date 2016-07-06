@@ -1,6 +1,7 @@
 package com.makco.smartfinance.persistence.entity;
 
 import com.makco.smartfinance.constants.DataBaseConstants;
+import com.makco.smartfinance.persistence.entity.session.Tax_v1;
 import org.junit.Test;
 
 import java.math.BigDecimal;
@@ -37,9 +38,7 @@ public class TaxTest {
 
     @Test
     public void testDenormalize_1() throws Exception {
-        String denormalizedFormulaString = "{NUM}*(1+{TAX1}/100)*(1+{RATE}/100)";
-
-        Tax five = new Tax(
+        Tax_v1 five = new Tax_v1(
                 "TAX5",
                 "tax number 5",
                 new BigDecimal("5"),
@@ -48,35 +47,35 @@ public class TaxTest {
                         .append(DataBaseConstants.TAX_RATE_PLACEHOLDER)
                         .append("/100)")
                         .toString(),
-                "{NUM}*(1+{RATE}/100)",
+                null,
                 null,
                 null,
                 new HashSet<>()
         );
-        five.seti
+        five.setId(5L);
 
-        Set<Tax> taxSet = new HashSet<>();
+        Set<Tax_v1> taxSet = new HashSet<>();
         taxSet.add(five);
-        Tax nine = new Tax(
+        Tax_v1 nine = new Tax_v1(
                 "TAX9",
                 "tax number 9",
                 new BigDecimal("9"),
                 new StringBuilder(DataBaseConstants.TAX_NUMBER_PLACEHOLDER)
                         .append("*(1+")
-                        .append(DataBaseConstants.getTaxChildIdPlaceholder(1))
+                        .append(DataBaseConstants.getTaxChildIdPlaceholder(five.getId()))
                         .append("/100)")
                         .append("*(1+")
                         .append(DataBaseConstants.TAX_RATE_PLACEHOLDER)
                         .append("/100)")
                         .toString(),
-                denormalizedFormulaString,
+                null,
                 null,
                 null,
                 taxSet
         );
-        nine.denormalizeFormula();
+        nine.setId(9L);
         String denormalizedFormula = nine.getDenormalizedFormula();
-        assertEquals("{NUM}*(1+{5}/100)*(1+{9}/100)", denormalizedFormula);
+        assertEquals("{NUM}*(1+5/100)*(1+9/100)", denormalizedFormula);
 
     }
 }

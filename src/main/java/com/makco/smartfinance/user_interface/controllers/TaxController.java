@@ -48,8 +48,10 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.Set;
@@ -121,7 +123,8 @@ public class TaxController /*implements Initializable, ControlledScreen, UndoRed
                         protected EnumSet<ErrorEnum> call() throws Exception {
                             return taxModel.savePendingTax(
                                     nameTF.getText(), descTA.getText(), rateTF.getText(),
-                                    formulaTA.getText(), startDP.getValue(), endDP.getValue(), childTaxes);
+                                    formulaTA.getText(), denormformTA.getText(),
+                                    startDP.getValue(), endDP.getValue(), childTaxes);
                         }
                     };
                 }

@@ -1,4 +1,4 @@
-package com.makco.smartfinance.persistence.entity;
+package com.makco.smartfinance.persistence.entity.session;
 
 import com.google.common.base.Objects;
 import com.makco.smartfinance.constants.DataBaseConstants;
@@ -36,7 +36,6 @@ import java.util.stream.Collectors;
 
 /**
  * Created by mcalancea on 2016-06-08.
- * v1
  */
 
 @Entity
@@ -48,7 +47,7 @@ import java.util.stream.Collectors;
                 columnNames = {"NAME"}
         )
 )
-public class Tax implements Serializable {
+public class Tax_v1 implements Serializable {
     public static final String RATE_PLACEHOLDER = "{rate}";
     public static final String TAX_ID_PATTERN = "{id\\d+}";
 
@@ -134,17 +133,17 @@ public class Tax implements Serializable {
     )
     @MapKeyColumn(name = "CHILD_TAX_ID")
 //    @Column MapKeyColumn(name = "CHILD_TAX_ID")
-    private Map<Long, Tax> childTaxes = new HashMap<>();
+    private Map<Long, Tax_v1> childTaxes = new HashMap<>();
 
     @ManyToMany(mappedBy = "childTaxes")
-    private Set<Tax> parentTaxes = new HashSet<>();
+    private Set<Tax_v1> parentTaxes = new HashSet<>();
 
-    public Tax() {
+    public Tax_v1() {
 
     }
 
-    public Tax(String name, String description, BigDecimal rate, String formula, String denormalizedFormula,
-               LocalDate startDate, LocalDate endDate, Collection<Tax> childTaxes) {
+    public Tax_v1(String name, String description, BigDecimal rate, String formula, String denormalizedFormula,
+               LocalDate startDate, LocalDate endDate, Collection<Tax_v1> childTaxes) {
         this.name = name;
         this.description = description;
         this.rate = rate;
@@ -168,6 +167,10 @@ public class Tax implements Serializable {
     }
 
     //no setId method
+    public void setId(Long id) {
+        //don't set it in real implementation
+        this.id = id;
+    }
 
     public String getName() {
         return name;
@@ -220,19 +223,19 @@ public class Tax implements Serializable {
         this.startDate = startDate;
     }
 
-    public Collection<Tax> getChildTaxes() {
-        return this.childTaxes.values();
+    public Map<Long, Tax_v1> getChildTaxes() {
+        return this.childTaxes;
     }
 
-    public void setChildTaxes(Collection<Tax> childTaxes) {
+    public void setChildTaxes(Collection<Tax_v1> childTaxes) {
         this.childTaxes = childTaxes.stream().collect(Collectors.toMap(tax -> tax.getId(), tax -> tax));;
     }
 
-    public Set<Tax> getParentTaxes() {
+    public Set<Tax_v1> getParentTaxes() {
         return this.parentTaxes;
     }
 
-    public void setParentTaxes(Collection<Tax> parentTaxes) {
+    public void setParentTaxes(Collection<Tax_v1> parentTaxes) {
         this.parentTaxes = new HashSet<>(parentTaxes);
     }
 
@@ -248,9 +251,9 @@ public class Tax implements Serializable {
     public void refreshDenormalizeFormula (){
         String mathExpressionToCalculate = formula.replace(DataBaseConstants.TAX_RATE_PLACEHOLDER, rate.toString());
         mathExpressionToCalculate = mathExpressionToCalculate.replace(DataBaseConstants.TAX_RATE_PLACEHOLDER, rate.toString());
-        for (Map.Entry<Long, Tax> entry : childTaxes.entrySet()) {
+        for (Map.Entry<Long, Tax_v1> entry : childTaxes.entrySet()) {
             Long taxId = entry.getKey();
-            Tax tax = entry.getValue();
+            Tax_v1 tax = entry.getValue();
             mathExpressionToCalculate = mathExpressionToCalculate.replace(
                     DataBaseConstants.getTaxChildIdPlaceholder(taxId),
                     tax.getRate().toString()
@@ -261,8 +264,8 @@ public class Tax implements Serializable {
 
     @Override
     public boolean equals(Object other) {
-        if (other instanceof Tax) {
-            Tax that = (Tax) other;
+        if (other instanceof Tax_v1) {
+            Tax_v1 that = (Tax_v1) other;
             return Objects.equal(getName(), that.getName());
         }
         return false;
