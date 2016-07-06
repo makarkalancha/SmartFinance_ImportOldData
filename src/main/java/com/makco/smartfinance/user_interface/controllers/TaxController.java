@@ -356,8 +356,15 @@ public class TaxController /*implements Initializable, ControlledScreen, UndoRed
                     isNotUndo.setValue(true);
                 }
             });
-            formulaTA.setPrefColumnCount(DataBaseConstants.TAX_FORMULA_MAX_LGTH);
+//            formulaTA.setPrefColumnCount(DataBaseConstants.TAX_FORMULA_MAX_LGTH);
             formulaTA.textProperty().addListener((observable, oldValue, newValue) -> {
+                if (isNotUndo.getValue()) {
+                    saveForm();
+                } else {
+                    isNotUndo.setValue(true);
+                }
+            });
+            denormformTA.textProperty().addListener((observable, oldValue, newValue) -> {
                 if (isNotUndo.getValue()) {
                     saveForm();
                 } else {
@@ -531,6 +538,7 @@ public class TaxController /*implements Initializable, ControlledScreen, UndoRed
             descTA.clear();
             rateTF.clear();
             formulaTA.clear();
+            denormformTA.clear();
             startDP.setValue(null);
             endDP.setValue(null);
 
@@ -587,6 +595,7 @@ public class TaxController /*implements Initializable, ControlledScreen, UndoRed
             descTA.setText(taxModel.getPendingTax().getDescription());
             rateTF.setText(UserInterfaceConstants.NUMBER_FORMAT.format(taxModel.getPendingTax().getRate().doubleValue()));
             formulaTA.setText(taxModel.getPendingTax().getFormula());
+            denormformTA.setText(taxModel.getPendingTax().getDenormalizedFormula());
             startDP.setValue(taxModel.getPendingTax().getStartDate());
             endDP.setValue(taxModel.getPendingTax().getEndDate());
 
@@ -651,8 +660,8 @@ public class TaxController /*implements Initializable, ControlledScreen, UndoRed
     @Override
     public void saveForm() {
         try {
-            careTaker.saveState(new TaxFormState(nameTF.getText(), descTA.getText(), rateTF.getText(), formulaTA.getText(),
-                    startDP.getValue(), endDP.getValue()));
+            careTaker.saveState(new TaxFormState(nameTF.getText(), descTA.getText(), rateTF.getText(),
+                    formulaTA.getText(), denormformTA.getText(), startDP.getValue(), endDP.getValue()));
         } catch (Exception e) {
             DialogMessages.showExceptionAlert(e);
         }
@@ -666,6 +675,7 @@ public class TaxController /*implements Initializable, ControlledScreen, UndoRed
             descTA.setText(formState.getDescTAStr());
             rateTF.setText(formState.getRateTFStr());
             formulaTA.setText(formState.getFormulaTFStr());
+            denormformTA.setText(formState.getDenormFormulaTFStr());
             startDP.setValue(formState.getStartDateDPLocD());
             endDP.setValue(formState.getEndDateDPLocD());
         } catch (Exception e) {
@@ -714,6 +724,12 @@ public class TaxController /*implements Initializable, ControlledScreen, UndoRed
                 contentText.append(") is not saved. ");
             }
 
+            if(!StringUtils.isBlank(denormformTA.getText())) {
+                contentText.append("Denormalized Formula (");
+                contentText.append(denormformTA.getText());
+                contentText.append(") is not saved. ");
+            }
+
             if(!StringUtils.isBlank(startDP.getEditor().getText())) {
                 contentText.append("Start date (");
                 contentText.append(startDP.getValue());
@@ -742,14 +758,16 @@ public class TaxController /*implements Initializable, ControlledScreen, UndoRed
         private final String descTAStr;
         private final String rateTFStr;
         private final String formulaTFStr;
+        private final String denormFormulaTFStr;
         private final LocalDate startDateDPLocD;
         private final LocalDate endDateDPLocD;
 
-        public TaxFormState(String nameTF, String descTA, String rateTF, String formulaTF, LocalDate startDateDP, LocalDate endDateDP){
+        public TaxFormState(String nameTF, String descTA, String rateTF, String formulaTF, String denormFormulaTF, LocalDate startDateDP, LocalDate endDateDP){
             this.nameTFStr = nameTF;
             this.descTAStr = descTA;
             this.rateTFStr = rateTF;
             this.formulaTFStr = formulaTF;
+            this.denormFormulaTFStr = denormFormulaTF;
             this.startDateDPLocD = startDateDP;
             this.endDateDPLocD = endDateDP;
         }
@@ -768,6 +786,10 @@ public class TaxController /*implements Initializable, ControlledScreen, UndoRed
 
         public String getFormulaTFStr() {
             return formulaTFStr;
+        }
+
+        public String getDenormFormulaTFStr() {
+            return denormFormulaTFStr;
         }
 
         public String getRateTFStr() {

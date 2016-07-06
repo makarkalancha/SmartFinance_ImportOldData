@@ -17,6 +17,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.MapKey;
 import javax.persistence.MapKeyColumn;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
@@ -132,8 +133,7 @@ public class Tax implements Serializable {
             joinColumns = {@JoinColumn(name="TAX_ID")},
             inverseJoinColumns = {@JoinColumn(name="CHILD_TAX_ID")}
     )
-    @MapKeyColumn(name = "CHILD_TAX_ID")
-//    @Column MapKeyColumn(name = "CHILD_TAX_ID")
+    @MapKey(name = "id")
     private Map<Long, Tax> childTaxes = new HashMap<>();
 
     @ManyToMany(mappedBy = "childTaxes")
@@ -191,6 +191,7 @@ public class Tax implements Serializable {
 
     public void setFormula(String formula) {
         this.formula = formula;
+        refreshDenormalizeFormula();
     }
 
     public String getDenormalizedFormula() {
@@ -238,7 +239,7 @@ public class Tax implements Serializable {
 
     public BigDecimal calculateFormula(BigDecimal bigDecimal){
         BigDecimal result = new BigDecimal("0");
-        String mathExpressionToCalculate = denormalizedFormula.replace(DataBaseConstants.TAX_NUMBER_PLACEHOLDER, bigDecimal.toString());
+        String mathExpressionToCalculate = getDenormalizedFormula().replace(DataBaseConstants.TAX_NUMBER_PLACEHOLDER, bigDecimal.toString());
         ReversePolishNotation rpn = new ReversePolishNotation(mathExpressionToCalculate, BigDecimalUtils.getDecimalSeparator(),
                 UserInterfaceConstants.SCALE);
         result = rpn.evaluateReversePolishNotation();

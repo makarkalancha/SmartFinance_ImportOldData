@@ -233,7 +233,7 @@ public class ReversePolishNotation {
         if(valueStack.size() == 1){
             resultBigDecimal =  valueStack.pop();
         } else {
-            throw new RuntimeException("value stack contains more elements than 1: " + valueStack);
+            throw new RuntimeException("value stack doesn't contain exactly one: " + valueStack);
         }
 
 //        System.out.println(">>>resultBigDecimal: " + resultBigDecimal);

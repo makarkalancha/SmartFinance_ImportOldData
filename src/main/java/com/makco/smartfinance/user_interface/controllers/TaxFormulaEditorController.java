@@ -204,7 +204,7 @@ public class TaxFormulaEditorController {
             editedFormulaForCalculation = editedFormulaForCalculation.replace(DataBaseConstants.TAX_NUMBER_PLACEHOLDER,
                     numberTF.getText());
 
-            String editedFormula = formula.replace(DataBaseConstants.TAX_RATE_PLACEHOLDER,
+            String editedFormula = editedFormulaForCalculation.replace(DataBaseConstants.TAX_RATE_PLACEHOLDER,
                     BigDecimalUtils.formatDecimalNumber(tax.getRate()));
             editedFormula = editedFormula.replace(DataBaseConstants.TAX_NUMBER_PLACEHOLDER, numberTF.getText());
 
