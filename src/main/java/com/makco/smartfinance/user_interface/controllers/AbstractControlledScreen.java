@@ -63,7 +63,7 @@ public abstract class AbstractControlledScreen implements Initializable, Control
                 //version 2 using setStyle(), only this approach is working in listener (tax formula editor, formulaTA)
                 reg.setStyle("");
             } else if(control instanceof ComboBox){
-                LOG.debug(">>>clearErrorHighlight before control.getStyleClass(): " + control.getStyleClass());
+//                LOG.debug(">>>clearErrorHighlight before control.getStyleClass(): " + control.getStyleClass());
                 TextField reg = ((ComboBox) control).getEditor();
                 //version 1 using getStyleClass().add, that is not working in listener (tax formula editor, formulaTA)
                 reg.getStyleClass().remove(UserInterfaceConstants.INVALID_CONTROL_CSS_CLASS);

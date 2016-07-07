@@ -237,7 +237,7 @@ public class ReversePolishNotation {
         }
 
 //        System.out.println(">>>resultBigDecimal: " + resultBigDecimal);
-        return resultBigDecimal;
+        return resultBigDecimal.setScale(scale, BigDecimal.ROUND_HALF_UP);
     }
 
 }

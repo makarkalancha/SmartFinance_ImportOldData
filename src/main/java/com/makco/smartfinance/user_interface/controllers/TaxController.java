@@ -12,6 +12,7 @@ import com.makco.smartfinance.user_interface.utility_screens.DialogMessages;
 import com.makco.smartfinance.user_interface.utility_screens.forms.ProgressIndicatorForm;
 import com.makco.smartfinance.user_interface.validation.ErrorEnum;
 import com.makco.smartfinance.utils.BigDecimalUtils;
+import com.makco.smartfinance.utils.collection.CollectionUtils;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
@@ -81,6 +82,10 @@ public class TaxController /*implements Initializable, ControlledScreen, UndoRed
     private TextArea descTA;
     @FXML
     private TextField rateTF;
+    private final static String RATE_VALID_CHARS = new StringBuilder()
+            .append("1234567890")
+            .append(BigDecimalUtils.getDecimalSeparator())
+            .toString();
     @FXML
     private Label useDecSepLbl;
     @FXML
@@ -349,7 +354,14 @@ public class TaxController /*implements Initializable, ControlledScreen, UndoRed
                 /**
                  * check if string contains invalid decimal separator
                  */
-//                if(newValue.contains())
+                if (!StringUtils.containsOnly(newValue, RATE_VALID_CHARS)) {
+                    rateTF.getStyleClass().add(UserInterfaceConstants.INVALID_CONTROL_CSS_CLASS);
+                    rateTF.getStyleClass().setAll(CollectionUtils.convertCollectionToObservableSet(rateTF.getStyleClass()));
+                    saveBtn.setDisable(true);
+                } else {
+                    rateTF.getStyleClass().remove(UserInterfaceConstants.INVALID_CONTROL_CSS_CLASS);
+                    saveBtn.setDisable(false);
+                }
                 if (isNotUndo.getValue()) {
                     saveForm();
                 } else {
@@ -495,6 +507,7 @@ public class TaxController /*implements Initializable, ControlledScreen, UndoRed
             if(taxModel.getPendingTax() != null){
                 taxFromControllerForm = taxModel.getPendingTax();
                 taxFromControllerForm.setRate(BigDecimalUtils.convertStringToBigDecimal(rateTF.getText(), UserInterfaceConstants.SCALE));
+                taxFromControllerForm.setChildTaxes(childTaxes);
                 taxes.remove(taxFromControllerForm);
             } else {
                 taxFromControllerForm = new Tax(
@@ -511,21 +524,17 @@ public class TaxController /*implements Initializable, ControlledScreen, UndoRed
             TaxFormulaEditorController taxFormulaEditorController = loader.getController();
             taxFormulaEditorController.setDialogStage(dialogStage, taxFromControllerForm, taxes);
 
-//            taxFormulaEditorController.setTax(taxModel.getPendingTax());
-
             dialogStage.showAndWait();
 
             if (taxFormulaEditorController.isOkClicked()){
                 formulaTA.setText(taxFormulaEditorController.getFormula());
-                denormformTA.setText(taxFormulaEditorController.getFormula());
-                //todo return taxes child list
+                denormformTA.setText(taxFormulaEditorController.getDenormalizedFormula());
                 childTaxes = new HashSet<>(taxFormulaEditorController.getChildTaxes());
             }
 
         }catch (Exception e){
             startService(onRefreshWorker, null);
             DialogMessages.showExceptionAlert(e);
-//            return false;
         }
     }
 

@@ -94,7 +94,6 @@ public class Tax implements Serializable {
     private BigDecimal rate;
 
     /**
-     * todo prefix postfix formula
      * http://interactivepython.org/runestone/static/pythonds/BasicDS/InfixPrefixandPostfixExpressions.html
      */
     @Column(name = "FORMULA")
@@ -243,8 +242,6 @@ public class Tax implements Serializable {
         String mathExpressionToCalculate = getDenormalizedFormula().replace(DataBaseConstants.TAX_NUMBER_PLACEHOLDER, bigDecimal.toString());
         ReversePolishNotation rpn = new ReversePolishNotation(mathExpressionToCalculate, BigDecimalUtils.getDecimalSeparator(),
                 UserInterfaceConstants.SCALE);
-        //TODO validate from formula editor ({NUM}*(1+{TAX1}/100)*(1+9.75/100))
-        //because tax doesn't have children yet
         result = rpn.evaluateReversePolishNotation();
         return result;
     }
@@ -253,9 +250,11 @@ public class Tax implements Serializable {
         String mathExpressionToCalculate = formula.replace(DataBaseConstants.TAX_RATE_PLACEHOLDER, rate.toString());
         mathExpressionToCalculate = mathExpressionToCalculate.replace(DataBaseConstants.TAX_RATE_PLACEHOLDER, rate.toString());
         for (Tax tax : childTaxes) {
+            String placeHolder = DataBaseConstants.getTaxChildIdPlaceholder(tax.getId());
+            String rateVale = tax.getRate().toString();
             mathExpressionToCalculate = mathExpressionToCalculate.replace(
-                    DataBaseConstants.getTaxChildIdPlaceholder(tax.getId()),
-                    tax.getRate().toString()
+                    placeHolder,
+                    rateVale
             );
         }
         this.denormalizedFormula = mathExpressionToCalculate.toString();
@@ -285,7 +284,7 @@ public class Tax implements Serializable {
                 ", formula='" + formula + '\'' +
                 ", startDate=" + startDate +
                 ", endDate=" + endDate +
-                ", childTaxes=" + childTaxes +
+                ", childTaxes.size=" + childTaxes.size() +
                 ", createdOn=" + createdOn +
                 ", updatedOn=" + updatedOn +
                 '}';

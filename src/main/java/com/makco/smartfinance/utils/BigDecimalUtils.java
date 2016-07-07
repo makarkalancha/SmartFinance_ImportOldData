@@ -12,7 +12,9 @@ import java.text.DecimalFormatSymbols;
 public class BigDecimalUtils {
     private static DecimalFormat numberFormat = (DecimalFormat) DecimalFormat.getInstance();
     private static DecimalFormatSymbols decimalFormatSymbols = new DecimalFormatSymbols();
+    private static final char DEFAULT_GROUPING_SEPARATOR = ',';
     private static char groupingSeparator = ',';
+    private static final char DEFAULT_DECIMAL_SEPARATOR = '.';
     private static char decimalSeparator = '.';
 
     /*
@@ -46,18 +48,27 @@ public class BigDecimalUtils {
 
     public static BigDecimal convertStringToBigDecimal(String string, int scale) throws Exception{
         BigDecimal bigDecimal = convertStringToBigDecimal(string);
-        bigDecimal.setScale(scale);
+        bigDecimal.setScale(scale, BigDecimal.ROUND_HALF_UP);
         return bigDecimal;
     }
 
     public static BigDecimal roundBigDecimal(String string, int scale) throws Exception{
-        BigDecimal bigDecimal = new BigDecimal(string);
-        bigDecimal.setScale(scale);
-        return bigDecimal;
+        String newString = string;
+        BigDecimal bigDecimal = new BigDecimal(newString);
+        return bigDecimal.setScale(scale, BigDecimal.ROUND_HALF_UP);
+//        return bigDecimal;
     }
 
     public static String formatDecimalNumber(BigDecimal bigDecimal/*, int scale*/) throws Exception{
         return decimalFormat.format(bigDecimal);
+    }
+
+    public static char getDefaultDecimalSeparator() {
+        return DEFAULT_DECIMAL_SEPARATOR;
+    }
+
+    public static char getDefaultGroupingSeparator() {
+        return DEFAULT_GROUPING_SEPARATOR;
     }
 
     public static char getDecimalSeparator() {

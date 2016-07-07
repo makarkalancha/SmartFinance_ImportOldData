@@ -31,6 +31,7 @@ public class Divide implements Operator{
 
     @Override
     public BigDecimal evaluate(BigDecimal first, BigDecimal second) {
-        return first.divide(second, scale, BigDecimal.ROUND_HALF_UP);
+//        return first.divide(second, scale, BigDecimal.ROUND_HALF_UP);
+        return first.divide(second);
     }
 }

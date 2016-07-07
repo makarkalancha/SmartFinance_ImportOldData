@@ -81,8 +81,7 @@ public class TaxFormulaEditorController {
             you can
             */
 
-            LOG.debug(oldValue + "->" + newValue);
-//            LOG.debug(newValue.matches(FORMULA_PATTERN));
+//            LOG.debug(oldValue + "->" + newValue);
 
             String tmp = newValue.replace(DataBaseConstants.TAX_NUMBER_PLACEHOLDER, "");
             tmp = tmp.replace(DataBaseConstants.TAX_RATE_PLACEHOLDER, "");
@@ -92,19 +91,18 @@ public class TaxFormulaEditorController {
             Region reg = (Region) formulaTA.lookup(".content");
             if (reg != null) {
                 if (StringUtils.containsOnly(tmp, FORMULA_VALID_CHARS)) {
-                    //            if(tmp.length() == 0){
                     validateBtn.setDisable(false);
                     okBtn.setDisable(false);
 
-                    LOG.debug("new is valid->" + newValue);
-                    LOG.debug("new is valid->" + reg.getStyle());
+//                    LOG.debug("new is valid->" + newValue);
+//                    LOG.debug("new is valid->" + reg.getStyle());
 
                     reg.setStyle("");
                 } else {
                     validateBtn.setDisable(true);
                     okBtn.setDisable(true);
 
-                    LOG.debug("new is NOT valid->" + newValue);
+//                    LOG.debug("new is NOT valid->" + newValue);
 
                     reg.setStyle(UserInterfaceConstants.INVALID_CONTROL_BGCOLOR);
 
@@ -138,14 +136,14 @@ public class TaxFormulaEditorController {
 
         taxLV.getSelectionModel().selectedItemProperty().addListener(
                 (observable, oldValue, newValue) -> {
-                    LOG.debug(">>>" + oldValue + ": " + newValue);
+//                    LOG.debug(">>>" + oldValue + ": " + newValue);
                     formulaTA.appendText(
                             DataBaseConstants.getTaxChildIdPlaceholder(newValue.getId())
                     );
                     formulaTA.requestFocus();
 
                     childTaxes.add(newValue);
-                    LOG.debug(">>>childTaxes->" + childTaxes);
+//                    LOG.debug(">>>childTaxes->" + childTaxes);
                 }
         );
     }
@@ -158,13 +156,17 @@ public class TaxFormulaEditorController {
         taxLV.setItems(FXCollections.observableArrayList(taxes));
         childTaxes = new HashSet<>(tax.getChildTaxes());
 
-        LOG.debug(">>>tax.id->" + tax.getId());
-        LOG.debug(">>>taxes->" + taxes);
+//        LOG.debug(">>>tax.id->" + tax.getId());
+//        LOG.debug(">>>taxes->" + taxes);
     }
 
 
     public String getFormula(){
         return formulaTA.getText();
+    }
+
+    public String getDenormalizedFormula(){
+        return tax.getDenormalizedFormula();
     }
 
     public Set<Tax> getChildTaxes(){
@@ -196,17 +198,19 @@ public class TaxFormulaEditorController {
     @FXML
     public void onValidateBtn(ActionEvent event){
         try {
-            String formula = formulaTA.getText();
-            tax.setFormula(formula);
+            tax.setChildTaxes(childTaxes);
+            tax.setFormula(formulaTA.getText());
 
-            String editedFormulaForCalculation = formula.replace(DataBaseConstants.TAX_RATE_PLACEHOLDER,
-                    tax.getRate().toString());
-            editedFormulaForCalculation = editedFormulaForCalculation.replace(DataBaseConstants.TAX_NUMBER_PLACEHOLDER,
+            String editedFormulaForCalculation = tax.getDenormalizedFormula().replace(DataBaseConstants.TAX_NUMBER_PLACEHOLDER,
                     numberTF.getText());
 
-            String editedFormula = editedFormulaForCalculation.replace(DataBaseConstants.TAX_RATE_PLACEHOLDER,
-                    BigDecimalUtils.formatDecimalNumber(tax.getRate()));
-            editedFormula = editedFormula.replace(DataBaseConstants.TAX_NUMBER_PLACEHOLDER, numberTF.getText());
+            String editedFormula = editedFormulaForCalculation;
+            if(BigDecimalUtils.getGroupingSeparator() != BigDecimalUtils.getDefaultGroupingSeparator()) {
+                editedFormula = editedFormulaForCalculation.replace(",", Character.toString(BigDecimalUtils.getGroupingSeparator()));
+            }
+            if(BigDecimalUtils.getDecimalSeparator() != BigDecimalUtils.getDefaultDecimalSeparator()) {
+                editedFormula = editedFormula.replace(".", Character.toString(BigDecimalUtils.getDecimalSeparator()));
+            }
 
             StringBuilder resultSB = new StringBuilder(editedFormula);
             resultSB.append(" = ");
