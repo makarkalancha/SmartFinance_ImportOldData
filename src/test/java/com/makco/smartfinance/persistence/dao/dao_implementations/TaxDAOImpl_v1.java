@@ -78,7 +78,6 @@ public class TaxDAOImpl_v1 {
             session.beginTransaction();
             ////http://stackoverflow.com/questions/12425835/jpql-manytomany-select
             list = session.createQuery("SELECT t FROM Tax t left join fetch t.childTaxes ORDER BY t.name").list();
-            //TODO fix it
 //            //https://docs.jboss.org/hibernate/orm/3.3/reference/en/html/queryhql.html
 //            list = session.createQuery("SELECT t FROM Tax t all properties t.childTaxes ORDER BY t.name").list();
             session.getTransaction().commit();

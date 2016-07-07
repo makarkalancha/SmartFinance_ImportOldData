@@ -351,9 +351,6 @@ public class TaxController /*implements Initializable, ControlledScreen, UndoRed
                 }
             });
             rateTF.textProperty().addListener((observable, oldValue, newValue) -> {
-                /**
-                 * check if string contains invalid decimal separator
-                 */
                 if (!StringUtils.containsOnly(newValue, RATE_VALID_CHARS)) {
                     rateTF.getStyleClass().add(UserInterfaceConstants.INVALID_CONTROL_CSS_CLASS);
                     rateTF.getStyleClass().setAll(CollectionUtils.convertCollectionToObservableSet(rateTF.getStyleClass()));

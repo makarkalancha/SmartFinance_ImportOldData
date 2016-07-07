@@ -75,12 +75,6 @@ public class TaxFormulaEditorController {
         charsLbl.setText(UserInterfaceConstants.TAX_FORMULA_VALID_CHARACTERS);
 
         formulaTA.textProperty().addListener((observable, oldValue, newValue) -> {
-            /*
-            todo enter only allowed characters and block buttons OK and VALIDATE when error
-            color still is needed because you cannot type but paste an invalid formula
-            you can
-            */
-
 //            LOG.debug(oldValue + "->" + newValue);
 
             String tmp = newValue.replace(DataBaseConstants.TAX_NUMBER_PLACEHOLDER, "");
