@@ -211,6 +211,7 @@ public class Tax implements Serializable {
 
     public void setRate(BigDecimal rate) {
         this.rate = rate;
+        refreshDenormalizeFormula();
     }
 
     public LocalDate getStartDate() {
@@ -227,6 +228,7 @@ public class Tax implements Serializable {
 
     public void setChildTaxes(Collection<Tax> childTaxes) {
         this.childTaxes = new HashSet<>(childTaxes);
+        refreshDenormalizeFormula();
     }
 
     public Set<Tax> getParentTaxes() {
