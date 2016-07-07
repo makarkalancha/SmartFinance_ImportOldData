@@ -8,11 +8,8 @@ import java.math.BigDecimal;
  * Created by mcalancea on 23 Jun 2016.
  */
 public class Divide implements Operator{
-    private final int scale;
-
-    public Divide(int scale){
-        this.scale = scale;
-    }
+//    private final int scale = Integer.MAX_VALUE;//smoke test takes tooooo long
+    private final int scale = 10;
 
     @Override
     public String getOperatorSymbol() {
@@ -31,7 +28,7 @@ public class Divide implements Operator{
 
     @Override
     public BigDecimal evaluate(BigDecimal first, BigDecimal second) {
-//        return first.divide(second, scale, BigDecimal.ROUND_HALF_UP);
-        return first.divide(second);
+        //java.lang.ArithmeticException: Non-terminating decimal expansion; no exact representable decimal result.
+        return first.divide(second, scale, BigDecimal.ROUND_HALF_UP);
     }
 }

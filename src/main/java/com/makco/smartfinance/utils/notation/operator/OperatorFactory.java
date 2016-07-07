@@ -14,7 +14,7 @@ public class OperatorFactory {
         } else if(operator.equals("*")){
             return new Multiply();
         } else if(operator.equals("/")){
-            return new Divide(roundScale);
+            return new Divide();
         }
         return null;
     }

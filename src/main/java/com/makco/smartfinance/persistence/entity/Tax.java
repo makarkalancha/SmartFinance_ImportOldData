@@ -20,7 +20,10 @@ import javax.persistence.ManyToMany;
 import javax.persistence.MapKey;
 import javax.persistence.MapKeyColumn;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
@@ -249,9 +252,14 @@ public class Tax implements Serializable {
         return result;
     }
 
-    public BigDecimal calculateFormulaWihNashorn(BigDecimal bigDecimal){
+    @Transient
+    private ScriptEngine scriptEngine = new ScriptEngineManager().getEngineByName("nashorn");
+    public BigDecimal calculateFormulaWihNashorn(BigDecimal bigDecimal) throws Exception{
         BigDecimal result = new BigDecimal("0");
-        //todo implement
+        String mathExpressionToCalculate = getDenormalizedFormula().replace(DataBaseConstants.TAX_NUMBER_PLACEHOLDER, bigDecimal.toString());
+        Object nashornResult = scriptEngine.eval(mathExpressionToCalculate);
+        result = BigDecimalUtils.roundBigDecimal(nashornResult.toString(),
+                UserInterfaceConstants.SCALE);
         return result;
     }
 

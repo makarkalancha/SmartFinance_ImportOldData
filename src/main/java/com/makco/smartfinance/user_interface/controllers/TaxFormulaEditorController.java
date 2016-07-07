@@ -29,6 +29,7 @@ import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by mcalancea on 2016-06-19.
@@ -206,11 +207,30 @@ public class TaxFormulaEditorController {
                 editedFormula = editedFormula.replace(".", Character.toString(BigDecimalUtils.getDecimalSeparator()));
             }
 
-            StringBuilder resultSB = new StringBuilder(editedFormula);
+            BigDecimal number = BigDecimalUtils.convertStringToBigDecimal(numberTF.getText(), UserInterfaceConstants.SCALE);
+            long start1 = System.nanoTime();
+            BigDecimal resultTaxCalculateFormula = tax.calculateFormula(number);
+            long end1 = System.nanoTime();
+
+            long start2 = System.nanoTime();
+            BigDecimal resultTaxCalculateFormulaWihNashorn = tax.calculateFormulaWihNashorn(number);
+            long end2 = System.nanoTime();
+
+
+            StringBuilder resultSB = new StringBuilder();
+            resultSB.append("tax.calculateFormula(number) ");
+            resultSB.append(benchmarkCalcultaion(start1, end1));
+            resultSB.append(":\n");
+            resultSB.append(editedFormula);
             resultSB.append(" = ");
-            BigDecimal resultTaxCalculation = tax.calculateFormula(
-                    BigDecimalUtils.convertStringToBigDecimal(numberTF.getText(), UserInterfaceConstants.SCALE));
-            resultSB.append(BigDecimalUtils.formatDecimalNumber(resultTaxCalculation));
+            resultSB.append(BigDecimalUtils.formatDecimalNumber(resultTaxCalculateFormula));
+
+            resultSB.append("\n\ntax.calculateFormulaWihNashorn(number) ");
+            resultSB.append(benchmarkCalcultaion(start2, end2));
+            resultSB.append(":\n");
+            resultSB.append(editedFormula);
+            resultSB.append(" = ");
+            resultSB.append(BigDecimalUtils.formatDecimalNumber(resultTaxCalculateFormulaWihNashorn));
 
             ScriptEngineManager scriptEngineManager = new ScriptEngineManager();
             ScriptEngine scriptEngine = scriptEngineManager.getEngineByName("nashorn");
@@ -219,12 +239,12 @@ public class TaxFormulaEditorController {
                     UserInterfaceConstants.SCALE);
 
             resultSB.append("\n------------------------------------------\nValidation check:\n");
-            resultSB.append(BigDecimalUtils.formatDecimalNumber(resultTaxCalculation));
+            resultSB.append(BigDecimalUtils.formatDecimalNumber(resultTaxCalculateFormula));
             resultSB.append(" = ");
             resultSB.append(BigDecimalUtils.formatDecimalNumber(nashornResultBD));
 
             Region reg = (Region) validationResultTA.lookup(".content");
-            if(resultTaxCalculation.compareTo(nashornResultBD) == 0){
+            if(resultTaxCalculateFormula.compareTo(nashornResultBD) == 0){
                 okBtn.setDisable(false);
 
                 reg.setStyle("");
@@ -239,5 +259,14 @@ public class TaxFormulaEditorController {
         }catch (Exception e){
             DialogMessages.showExceptionAlert(e);
         }
+    }
+
+    private String benchmarkCalcultaion(long start, long end){
+        long elapsed_string = end - start;
+        long minutes = TimeUnit.NANOSECONDS.toMinutes(elapsed_string);
+        long seconds = TimeUnit.NANOSECONDS.toSeconds(elapsed_string - TimeUnit.MINUTES.toNanos(minutes));
+        long millis = TimeUnit.NANOSECONDS.toMillis(elapsed_string - TimeUnit.MINUTES.toNanos(minutes) - TimeUnit.SECONDS.toNanos(seconds));
+        long nanos = elapsed_string - TimeUnit.MINUTES.toNanos(minutes) - TimeUnit.SECONDS.toNanos(seconds) - TimeUnit.MILLISECONDS.toNanos(millis);
+        return String.format("[mm:ss:millis.nanos]: %s:%s:%s.%s", minutes, seconds, millis, nanos);
     }
 }

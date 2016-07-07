@@ -1,8 +1,11 @@
 package com.makco.smartfinance.utils.notation;
 
+import com.makco.smartfinance.user_interface.constants.UserInterfaceConstants;
 import com.makco.smartfinance.utils.BigDecimalUtils;
 import org.junit.Test;
 
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
 import java.math.BigDecimal;
 import java.util.concurrent.TimeUnit;
 
@@ -458,6 +461,7 @@ public class ReversePolishNotationTest {
         };
 
         double sumDouble = 0d;
+        System.out.println(">>>>double");
         long start_double = System.nanoTime();
         for (int i = 0; i < cycles; i++) {
             double result = doubleArray[i % doubleArray.length];
@@ -493,6 +497,7 @@ public class ReversePolishNotationTest {
         };
 
         BigDecimal sumBigDecimal = new BigDecimal("0");
+        System.out.println(">>>>RPN");
         long start_string = System.nanoTime();
         for (int i = 0; i < cycles; i++) {
             ReversePolishNotation rpn = new ReversePolishNotation(stringArray[i % doubleArray.length],
@@ -514,9 +519,33 @@ public class ReversePolishNotationTest {
         long millis2 = TimeUnit.NANOSECONDS.toMillis(elapsed_string - TimeUnit.MINUTES.toNanos(minutes2) - TimeUnit.SECONDS.toNanos(seconds2));
         long nanos2 = elapsed_string - TimeUnit.MINUTES.toNanos(minutes2) - TimeUnit.SECONDS.toNanos(seconds2) - TimeUnit.MILLISECONDS.toNanos(millis2);
 
+        BigDecimal sumBigDecimalNashorn = new BigDecimal("0");
+        ScriptEngine scriptEngine = new ScriptEngineManager().getEngineByName("nashorn");
+        System.out.println(">>>>Nashorn");
+        long start_stringNashorn = System.nanoTime();
+        for (int i = 0; i < cycles; i++) {
+
+            Object nashornResult = scriptEngine.eval(stringArray[i % doubleArray.length]);
+            BigDecimal result = BigDecimalUtils.roundBigDecimal(nashornResult.toString(), 6);
+
+            sumBigDecimalNashorn = sumBigDecimal.add(result);
+
+            if (i % 10_000 == 0) {
+                System.out.println("j=" + (i % doubleArray.length) + " " + result + " -> i=" + i);
+            }
+
+        }
+        long end_stringNashorn = System.nanoTime();
+        long elapsed_stringNashorn = end_stringNashorn - start_stringNashorn;
+        long minutes2Nashorn = TimeUnit.NANOSECONDS.toMinutes(elapsed_stringNashorn);
+        long seconds2Nashorn = TimeUnit.NANOSECONDS.toSeconds(elapsed_stringNashorn - TimeUnit.MINUTES.toNanos(minutes2Nashorn));
+        long millis2Nashorn = TimeUnit.NANOSECONDS.toMillis(elapsed_stringNashorn - TimeUnit.MINUTES.toNanos(minutes2Nashorn) - TimeUnit.SECONDS.toNanos(seconds2Nashorn));
+        long nanos2Nashorn = elapsed_stringNashorn - TimeUnit.MINUTES.toNanos(minutes2Nashorn) - TimeUnit.SECONDS.toNanos(seconds2Nashorn) - TimeUnit.MILLISECONDS.toNanos(millis2Nashorn);
+
         System.out.println(String.format("double array elapsed [mm:ss:millis.nanos]: %s:%s:%s.%s", minutes1, seconds1, millis1, nanos1));
         System.out.println(String.format("string RPN elapsed [mm:ss:millis.nanos]: %s:%s:%s.%s", minutes2, seconds2, millis2, nanos2));
+        System.out.println(String.format("string Nashorn elapsed [mm:ss:millis.nanos]: %s:%s:%s.%s", minutes2Nashorn, seconds2Nashorn, millis2Nashorn, nanos2Nashorn));
 
-        System.out.println(String.format("doubleSum vs bigDecimalSum: %s ~ %s", sumDouble, sumBigDecimal));
+        System.out.println(String.format("doubleSum vs bigDecimalSum vs sumBigDecimalNashorn: %s ~ %s ~ %s", sumDouble, sumBigDecimal, sumBigDecimalNashorn));
     }
 }
