@@ -249,6 +249,13 @@ public class Tax implements Serializable {
         return result;
     }
 
+    public BigDecimal calculateFormulaWihNashorn(BigDecimal bigDecimal){
+        BigDecimal result = new BigDecimal("0");
+        //todo implement
+        return result;
+    }
+
+
     public void refreshDenormalizeFormula (){
         if(!StringUtils.isBlank(formula)) {
             String mathExpressionToCalculate = formula.replace(DataBaseConstants.TAX_RATE_PLACEHOLDER, rate.toString());
