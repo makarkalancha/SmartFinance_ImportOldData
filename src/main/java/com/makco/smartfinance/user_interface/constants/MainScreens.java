@@ -12,7 +12,8 @@ public enum MainScreens {
     ORGANIZATION("organization.fxml"),
     SCREEN1("scene1.fxml"),
     SCREEN2("scene2.fxml"),
-    TAX("tax.fxml");
+//    TAX("tax.fxml");
+    TAX("tax_v1.fxml");
 
     private String fxmlFilePath;
     private MainScreens(String fxmlFilePath) {

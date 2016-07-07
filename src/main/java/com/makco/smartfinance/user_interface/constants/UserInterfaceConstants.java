@@ -119,6 +119,8 @@ public class UserInterfaceConstants {
     //tax
     public final static String TAX_INACTIVE_DAYS_BGCOLOR = "-fx-background-color: #ffc0cb;";
     public final static String TAX_DECIMAL_SEPARATOR = "(use %c as decimal separator)";
+    public final static String TAX_FORMULA_LBL = "Click \"Formula Editor\" button to compose formula";
+    public final static String TAX_DENORMALIZED_FORMULA_LBL = "Denormalized Fomula will be set after composing main formula";
 
     //tax formula
     public final static String TAX_FORMULA_VALID_CHARACTERS = new StringBuilder()
