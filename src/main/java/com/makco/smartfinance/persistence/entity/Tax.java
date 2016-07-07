@@ -201,9 +201,10 @@ public class Tax implements Serializable {
         return denormalizedFormula;
     }
 
-    public void setDenormalizedFormula(String denormalizedFormula) {
-        this.denormalizedFormula = denormalizedFormula;
-    }
+    //impossible to set DenormalizedFormula as it is set in refreshDenormalizeFormula
+//    public void setDenormalizedFormula(String denormalizedFormula) {
+//        this.denormalizedFormula = denormalizedFormula;
+//    }
 
     public BigDecimal getRate() {
         return rate;
@@ -249,17 +250,19 @@ public class Tax implements Serializable {
     }
 
     public void refreshDenormalizeFormula (){
-        String mathExpressionToCalculate = formula.replace(DataBaseConstants.TAX_RATE_PLACEHOLDER, rate.toString());
-        mathExpressionToCalculate = mathExpressionToCalculate.replace(DataBaseConstants.TAX_RATE_PLACEHOLDER, rate.toString());
-        for (Tax tax : childTaxes) {
-            String placeHolder = DataBaseConstants.getTaxChildIdPlaceholder(tax.getId());
-            String rateVale = tax.getRate().toString();
-            mathExpressionToCalculate = mathExpressionToCalculate.replace(
-                    placeHolder,
-                    rateVale
-            );
+        if(!StringUtils.isBlank(formula)) {
+            String mathExpressionToCalculate = formula.replace(DataBaseConstants.TAX_RATE_PLACEHOLDER, rate.toString());
+            mathExpressionToCalculate = mathExpressionToCalculate.replace(DataBaseConstants.TAX_RATE_PLACEHOLDER, rate.toString());
+            for (Tax tax : childTaxes) {
+                String placeHolder = DataBaseConstants.getTaxChildIdPlaceholder(tax.getId());
+                String rateVale = tax.getRate().toString();
+                mathExpressionToCalculate = mathExpressionToCalculate.replace(
+                        placeHolder,
+                        rateVale
+                );
+            }
+            this.denormalizedFormula = mathExpressionToCalculate.toString();
         }
-        this.denormalizedFormula = mathExpressionToCalculate.toString();
     }
 
     @Override

@@ -83,10 +83,12 @@ public class TaxController_v1 /*implements Initializable, ControlledScreen, Undo
     @FXML
     private Label useDecSepLbl;
     @FXML
-//    private TextArea formulaTA;
+    private Label formulaPromptLbl;
+    @FXML
     private Label formulaLbl;
     @FXML
-//    private TextArea denormformTA;
+    private Label denormformPromptLbl;
+    @FXML
     private Label denormformLbl;
     @FXML
     private DatePicker startDP;
@@ -361,8 +363,7 @@ public class TaxController_v1 /*implements Initializable, ControlledScreen, Undo
                     isNotUndo.setValue(true);
                 }
             });
-//            formulaTA.setPrefColumnCount(DataBaseConstants.TAX_FORMULA_MAX_LGTH);
-            formulaLbl.setText(UserInterfaceConstants.TAX_FORMULA_LBL);
+            formulaPromptLbl.setText(UserInterfaceConstants.TAX_FORMULA_LBL);
             formulaLbl.textProperty().addListener((observable, oldValue, newValue) -> {
                 if (isNotUndo.getValue()) {
                     saveForm();
@@ -370,7 +371,7 @@ public class TaxController_v1 /*implements Initializable, ControlledScreen, Undo
                     isNotUndo.setValue(true);
                 }
             });
-            denormformLbl.setText(UserInterfaceConstants.TAX_DENORMALIZED_FORMULA_LBL);
+            denormformPromptLbl.setText(UserInterfaceConstants.TAX_DENORMALIZED_FORMULA_LBL);
             denormformLbl.textProperty().addListener((observable, oldValue, newValue) -> {
                 if (isNotUndo.getValue()) {
                     saveForm();
@@ -522,8 +523,8 @@ public class TaxController_v1 /*implements Initializable, ControlledScreen, Undo
             dialogStage.showAndWait();
 
             if (taxFormulaEditorController.isOkClicked()){
-                formulaLbl.setText(taxFormulaEditorController.getFormula());
-                denormformLbl.setText(taxFormulaEditorController.getDenormalizedFormula());
+                setFormula(taxFormulaEditorController.getFormula());
+                setDenormalizedFormula(taxFormulaEditorController.getDenormalizedFormula());
                 childTaxes = new HashSet<>(taxFormulaEditorController.getChildTaxes());
             }
 
@@ -543,8 +544,8 @@ public class TaxController_v1 /*implements Initializable, ControlledScreen, Undo
             rateTF.clear();
 //            formulaTA.clear();
 //            denormformTA.clear();
-            formulaLbl.setText(UserInterfaceConstants.TAX_FORMULA_LBL);
-            denormformLbl.setText(UserInterfaceConstants.TAX_DENORMALIZED_FORMULA_LBL);
+            setFormula(null);
+            setDenormalizedFormula(null);
             startDP.setValue(null);
             endDP.setValue(null);
 
@@ -604,17 +605,11 @@ public class TaxController_v1 /*implements Initializable, ControlledScreen, Undo
                 rateTF.setText(UserInterfaceConstants.NUMBER_FORMAT.format(taxModel.getPendingTax().getRate().doubleValue()));
             }
             String formulaToPopulate = taxModel.getPendingTax().getFormula();
-            if (StringUtils.isBlank(formulaToPopulate)) {
-                formulaLbl.setText(UserInterfaceConstants.TAX_FORMULA_LBL);
-            }else {
-                formulaLbl.setText(formulaToPopulate);
-            }
+            setFormula(formulaToPopulate);
+
             String denormFormulaToPopulate = taxModel.getPendingTax().getDenormalizedFormula();
-            if (StringUtils.isBlank(denormFormulaToPopulate)) {
-                denormformLbl.setText(UserInterfaceConstants.TAX_FORMULA_LBL);
-            }else {
-                denormformLbl.setText(formulaToPopulate);
-            }
+            setDenormalizedFormula(denormFormulaToPopulate);
+
             startDP.setValue(taxModel.getPendingTax().getStartDate());
             endDP.setValue(taxModel.getPendingTax().getEndDate());
 
@@ -622,6 +617,26 @@ public class TaxController_v1 /*implements Initializable, ControlledScreen, Undo
         } catch (Exception e) {
             startService(onRefreshWorker, null);
             DialogMessages.showExceptionAlert(e);
+        }
+    }
+
+    private void setFormula(String formula){
+        if (StringUtils.isBlank(formula)) {
+            formulaPromptLbl.setText(UserInterfaceConstants.TAX_FORMULA_LBL);
+            formulaLbl.setText("");
+        }else {
+            formulaPromptLbl.setText("");
+            formulaLbl.setText(formula);
+        }
+    }
+
+    private void setDenormalizedFormula(String denormalizedFormula){
+        if (StringUtils.isBlank(denormalizedFormula)) {
+            denormformPromptLbl.setText(UserInterfaceConstants.TAX_DENORMALIZED_FORMULA_LBL);
+            denormformLbl.setText("");
+        }else {
+            denormformPromptLbl.setText("");
+            denormformLbl.setText(denormalizedFormula);
         }
     }
 
@@ -693,8 +708,8 @@ public class TaxController_v1 /*implements Initializable, ControlledScreen, Undo
             nameTF.setText(formState.getNameTFStr());
             descTA.setText(formState.getDescTAStr());
             rateTF.setText(formState.getRateTFStr());
-            formulaLbl.setText(formState.getFormulaTFStr());
-            denormformLbl.setText(formState.getDenormFormulaTFStr());
+            setFormula(formState.getFormulaTFStr());
+            setDenormalizedFormula(formState.getDenormFormulaTFStr());
             startDP.setValue(formState.getStartDateDPLocD());
             endDP.setValue(formState.getEndDateDPLocD());
         } catch (Exception e) {

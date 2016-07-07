@@ -60,13 +60,17 @@
                   <Label fx:id="useDecSepLbl" />
                </children>
             </HBox>
-            <Label fx:id="formulaLbl" GridPane.rowIndex="3" />
+            <HBox GridPane.rowIndex="3">
+               <children>
+                  <Label fx:id="formulaPromptLbl" GridPane.rowIndex="3" />
+                  <Label fx:id="formulaLbl" />
+               </children>
+            </HBox>
             <Button fx:id="frmEdtBtn" mnemonicParsing="false" onAction="#onFormulaEditorBtn" text="Formula Editor" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
                <HBox.margin>
                   <Insets bottom="15.0" left="5.0" right="5.0" top="15.0" />
                </HBox.margin>
             </Button>
-            <Label fx:id="denormformLbl" GridPane.rowIndex="4" />
             <DatePicker fx:id="startDP" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="200.0" promptText="Start date..." GridPane.columnIndex="0" GridPane.rowIndex="5">
                <tooltip>
                   <Tooltip text="Enter start date" />
@@ -97,6 +101,12 @@
                         <Insets right="5.0" />
                      </HBox.margin>
                   </Button>
+               </children>
+            </HBox>
+            <HBox prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="4">
+               <children>
+                  <Label fx:id="denormformPromptLbl" />
+                  <Label fx:id="denormformLbl" />
                </children>
             </HBox>
          </children>

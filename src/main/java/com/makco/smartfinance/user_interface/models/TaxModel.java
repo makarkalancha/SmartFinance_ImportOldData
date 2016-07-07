@@ -62,7 +62,7 @@ public class TaxModel {
                 pendingTax.setDescription(description);
                 pendingTax.setRate(rate);
                 pendingTax.setFormula(formula);
-                pendingTax.setDenormalizedFormula(denormalizedFormula);
+//                pendingTax.setDenormalizedFormula(denormalizedFormula);
                 pendingTax.setStartDate(startDate);
                 pendingTax.setEndDate(endDate);
                 pendingTax.setChildTaxes(childTaxes);
