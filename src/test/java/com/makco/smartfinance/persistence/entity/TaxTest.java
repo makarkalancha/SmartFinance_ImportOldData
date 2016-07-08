@@ -2,6 +2,7 @@ package com.makco.smartfinance.persistence.entity;
 
 import com.makco.smartfinance.constants.DataBaseConstants;
 import com.makco.smartfinance.persistence.entity.session.Tax_v1;
+import com.makco.smartfinance.utils.BigDecimalCalculation;
 import org.junit.Test;
 
 import java.math.BigDecimal;
@@ -32,7 +33,7 @@ public class TaxTest {
                 new HashSet<>()
         );
         System.out.println(">>>Formula:" + tax.getFormula());
-        BigDecimal result = tax.calculateFormula(new BigDecimal("100"));
+        BigDecimal result = BigDecimalCalculation.calculateFormulaRPN(tax.getDenormalizedFormula(), new BigDecimal("100"));
         assertEquals(new BigDecimal("105.00"), result);
     }
 

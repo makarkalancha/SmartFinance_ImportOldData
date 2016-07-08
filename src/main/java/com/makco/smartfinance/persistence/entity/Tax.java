@@ -243,27 +243,6 @@ public class Tax implements Serializable {
         this.parentTaxes = new HashSet<>(parentTaxes);
     }
 
-    public BigDecimal calculateFormula(BigDecimal bigDecimal){
-        BigDecimal result = new BigDecimal("0");
-        String mathExpressionToCalculate = getDenormalizedFormula().replace(DataBaseConstants.TAX_NUMBER_PLACEHOLDER, bigDecimal.toString());
-        ReversePolishNotation rpn = new ReversePolishNotation(mathExpressionToCalculate, BigDecimalUtils.getDecimalSeparator(),
-                UserInterfaceConstants.SCALE);
-        result = rpn.evaluateReversePolishNotation();
-        return result;
-    }
-
-    @Transient
-    private ScriptEngine scriptEngine = new ScriptEngineManager().getEngineByName("nashorn");
-    public BigDecimal calculateFormulaWihNashorn(BigDecimal bigDecimal) throws Exception{
-        BigDecimal result = new BigDecimal("0");
-        String mathExpressionToCalculate = getDenormalizedFormula().replace(DataBaseConstants.TAX_NUMBER_PLACEHOLDER, bigDecimal.toString());
-        Object nashornResult = scriptEngine.eval(mathExpressionToCalculate);
-        result = BigDecimalUtils.roundBigDecimal(nashornResult.toString(),
-                UserInterfaceConstants.SCALE);
-        return result;
-    }
-
-
     public void refreshDenormalizeFormula (){
         if(!StringUtils.isBlank(formula)) {
             String mathExpressionToCalculate = formula.replace(DataBaseConstants.TAX_RATE_PLACEHOLDER, rate.toString());

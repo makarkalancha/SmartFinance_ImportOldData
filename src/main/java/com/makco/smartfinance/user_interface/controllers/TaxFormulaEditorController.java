@@ -4,6 +4,7 @@ import com.makco.smartfinance.constants.DataBaseConstants;
 import com.makco.smartfinance.persistence.entity.Tax;
 import com.makco.smartfinance.user_interface.constants.UserInterfaceConstants;
 import com.makco.smartfinance.user_interface.utility_screens.DialogMessages;
+import com.makco.smartfinance.utils.BigDecimalCalculation;
 import com.makco.smartfinance.utils.BigDecimalUtils;
 import com.makco.smartfinance.utils.collection.CollectionUtils;
 import javafx.beans.property.SimpleStringProperty;
@@ -209,11 +210,11 @@ public class TaxFormulaEditorController {
 
             BigDecimal number = BigDecimalUtils.convertStringToBigDecimal(numberTF.getText(), UserInterfaceConstants.SCALE);
             long start1 = System.nanoTime();
-            BigDecimal resultTaxCalculateFormula = tax.calculateFormula(number);
+            BigDecimal resultTaxCalculateFormula = BigDecimalCalculation.calculateFormulaRPN(tax.getDenormalizedFormula(), number);
             long end1 = System.nanoTime();
 
             long start2 = System.nanoTime();
-            BigDecimal resultTaxCalculateFormulaWihNashorn = tax.calculateFormulaWihNashorn(number);
+            BigDecimal resultTaxCalculateFormulaWihNashorn = BigDecimalCalculation.calculateFormulaRPN(tax.getDenormalizedFormula(), number);
             long end2 = System.nanoTime();
 
 
