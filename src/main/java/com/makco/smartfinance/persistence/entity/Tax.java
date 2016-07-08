@@ -247,13 +247,20 @@ public class Tax implements Serializable {
         if(!StringUtils.isBlank(formula)) {
             String mathExpressionToCalculate = formula.replace(DataBaseConstants.TAX_RATE_PLACEHOLDER, rate.toString());
             mathExpressionToCalculate = mathExpressionToCalculate.replace(DataBaseConstants.TAX_RATE_PLACEHOLDER, rate.toString());
-            for (Tax tax : childTaxes) {
+            Set<Tax> chidrenToIterate = new HashSet<>(childTaxes);
+            for (Tax tax : chidrenToIterate) {
                 String placeHolder = DataBaseConstants.getTaxChildIdPlaceholder(tax.getId());
-                String rateVale = (tax.getRate() == null) ? "0" : tax.getRate().toString();
-                mathExpressionToCalculate = mathExpressionToCalculate.replace(
-                        placeHolder,
-                        rateVale
-                );
+                if (mathExpressionToCalculate.contains(placeHolder)) {
+                    String rateVale = (tax.getRate() == null) ? "0" : tax.getRate().toString();
+                    mathExpressionToCalculate = mathExpressionToCalculate.replace(
+                            placeHolder,
+                            rateVale
+                    );
+                } else {
+                    //if for some reason tax contains in its children tax that is not in formula - remove it
+                    childTaxes.remove(tax);
+                }
+
             }
             this.denormalizedFormula = mathExpressionToCalculate.toString();
         }
