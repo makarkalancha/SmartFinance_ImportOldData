@@ -2,14 +2,14 @@ package com.makco.smartfinance.persistence.entity;
 
 import com.makco.smartfinance.constants.DataBaseConstants;
 import com.makco.smartfinance.persistence.entity.session.Tax_v1;
-import com.makco.smartfinance.utils.BigDecimalCalculation;
+import com.makco.smartfinance.utils.BigDecimalUtils;
 import org.junit.Test;
 
 import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Created by mcalancea on 29 Jun 2016.
@@ -33,7 +33,7 @@ public class TaxTest {
                 new HashSet<>()
         );
         System.out.println(">>>Formula:" + tax.getFormula());
-        BigDecimal result = BigDecimalCalculation.calculateFormulaRPN(tax.getDenormalizedFormula(), new BigDecimal("100"));
+        BigDecimal result = BigDecimalUtils.calculateFormulaRPN(tax.getDenormalizedFormula(), new BigDecimal("100"));
         assertEquals(new BigDecimal("105.00"), result);
     }
 

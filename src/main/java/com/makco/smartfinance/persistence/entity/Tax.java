@@ -249,7 +249,7 @@ public class Tax implements Serializable {
             mathExpressionToCalculate = mathExpressionToCalculate.replace(DataBaseConstants.TAX_RATE_PLACEHOLDER, rate.toString());
             for (Tax tax : childTaxes) {
                 String placeHolder = DataBaseConstants.getTaxChildIdPlaceholder(tax.getId());
-                String rateVale = tax.getRate().toString();
+                String rateVale = (tax.getRate() == null) ? "0" : tax.getRate().toString();
                 mathExpressionToCalculate = mathExpressionToCalculate.replace(
                         placeHolder,
                         rateVale

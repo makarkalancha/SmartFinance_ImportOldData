@@ -603,6 +603,8 @@ public class TaxController_v1 /*implements Initializable, ControlledScreen, Undo
             descTA.setText(taxModel.getPendingTax().getDescription());
             if(taxModel.getPendingTax().getRate() != null) {
                 rateTF.setText(UserInterfaceConstants.NUMBER_FORMAT.format(taxModel.getPendingTax().getRate().doubleValue()));
+            }else{
+                rateTF.setText("");
             }
             String formulaToPopulate = taxModel.getPendingTax().getFormula();
             setFormula(formulaToPopulate);
