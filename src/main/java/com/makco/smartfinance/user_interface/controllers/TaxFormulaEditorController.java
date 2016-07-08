@@ -197,18 +197,17 @@ public class TaxFormulaEditorController {
             tax.setChildTaxes(childTaxes);
             tax.setFormula(formulaTA.getText());
 
+            BigDecimal number = BigDecimalUtils.convertStringToBigDecimal(numberTF.getText(), UserInterfaceConstants.SCALE);
             String editedFormulaForCalculation = tax.getDenormalizedFormula().replace(DataBaseConstants.TAX_NUMBER_PLACEHOLDER,
-                    numberTF.getText());
-
-            String editedFormula = editedFormulaForCalculation;
+                    number.toString());
+            String editedFormulaForUI = editedFormulaForCalculation;
             if(BigDecimalUtils.getGroupingSeparator() != BigDecimalUtils.getDefaultGroupingSeparator()) {
-                editedFormula = editedFormulaForCalculation.replace(",", Character.toString(BigDecimalUtils.getGroupingSeparator()));
+                editedFormulaForUI = editedFormulaForUI.replace(",", Character.toString(BigDecimalUtils.getGroupingSeparator()));
             }
             if(BigDecimalUtils.getDecimalSeparator() != BigDecimalUtils.getDefaultDecimalSeparator()) {
-                editedFormula = editedFormula.replace(".", Character.toString(BigDecimalUtils.getDecimalSeparator()));
+                editedFormulaForUI = editedFormulaForUI.replace(".", Character.toString(BigDecimalUtils.getDecimalSeparator()));
             }
 
-            BigDecimal number = BigDecimalUtils.convertStringToBigDecimal(numberTF.getText(), UserInterfaceConstants.SCALE);
             long start1 = System.nanoTime();
             BigDecimal resultTaxCalculateFormula = BigDecimalCalculation.calculateFormulaRPN(tax.getDenormalizedFormula(), number);
             long end1 = System.nanoTime();
@@ -217,24 +216,24 @@ public class TaxFormulaEditorController {
             BigDecimal resultTaxCalculateFormulaWihNashorn = BigDecimalCalculation.calculateFormulaRPN(tax.getDenormalizedFormula(), number);
             long end2 = System.nanoTime();
 
-
             StringBuilder resultSB = new StringBuilder();
             resultSB.append("tax.calculateFormula(number) ");
             resultSB.append(benchmarkCalcultaion(start1, end1));
             resultSB.append(":\n");
-            resultSB.append(editedFormula);
+            resultSB.append(editedFormulaForUI);
             resultSB.append(" = ");
             resultSB.append(BigDecimalUtils.formatDecimalNumber(resultTaxCalculateFormula));
 
             resultSB.append("\n\ntax.calculateFormulaWihNashorn(number) ");
             resultSB.append(benchmarkCalcultaion(start2, end2));
             resultSB.append(":\n");
-            resultSB.append(editedFormula);
+            resultSB.append(editedFormulaForUI);
             resultSB.append(" = ");
             resultSB.append(BigDecimalUtils.formatDecimalNumber(resultTaxCalculateFormulaWihNashorn));
 
             ScriptEngineManager scriptEngineManager = new ScriptEngineManager();
             ScriptEngine scriptEngine = scriptEngineManager.getEngineByName("nashorn");
+
             Object nashornResult = scriptEngine.eval(editedFormulaForCalculation);
             BigDecimal nashornResultBD = BigDecimalUtils.roundBigDecimal(nashornResult.toString(),
                     UserInterfaceConstants.SCALE);
