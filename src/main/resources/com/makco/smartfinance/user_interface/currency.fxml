@@ -19,6 +19,9 @@
          <font>
             <Font size="20.0" />
          </font>
+         <VBox.margin>
+            <Insets />
+         </VBox.margin>
       </Label>
       <TableView fx:id="table" editable="true" prefHeight="395.0" prefWidth="580.0">
         <columns>

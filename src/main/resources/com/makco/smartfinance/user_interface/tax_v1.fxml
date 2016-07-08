@@ -1,36 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
-
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 <VBox fx:id="vBox" alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.makco.smartfinance.user_interface.controllers.TaxController_v1">
    <children>
       <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="30.0" prefWidth="441.0" text="Taxes">
          <font>
             <Font size="20.0" />
          </font>
+         <VBox.margin>
+            <Insets />
+         </VBox.margin>
       </Label>
-      <TableView fx:id="table" editable="true" minHeight="-Infinity" minWidth="-Infinity" prefHeight="206.0" prefWidth="580.0">
+      <TableView fx:id="table" editable="true" minHeight="-Infinity" minWidth="-Infinity" prefHeight="202.0" prefWidth="580.0">
         <columns>
         </columns>
+         <VBox.margin>
+            <Insets />
+         </VBox.margin>
       </TableView>
-      <GridPane hgap="5.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="369.0" prefWidth="493.0" vgap="5.0">
+      <GridPane hgap="5.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="344.0" prefWidth="493.0" vgap="5.0">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="415.0" minWidth="10.0" prefWidth="401.0" />
             <ColumnConstraints hgrow="SOMETIMES" maxWidth="255.0" minWidth="10.0" prefWidth="120.0" />
         </columnConstraints>
         <rowConstraints>
-          <RowConstraints minHeight="25.0" prefHeight="35.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="65.0" prefHeight="75.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="25.0" prefHeight="35.0" vgrow="SOMETIMES" />
-         <RowConstraints minHeight="35.0" prefHeight="45.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="35.0" prefHeight="45.0" vgrow="SOMETIMES" />
-         <RowConstraints minHeight="25.0" prefHeight="35.0" vgrow="SOMETIMES" />
-         <RowConstraints minHeight="25.0" prefHeight="35.0" vgrow="SOMETIMES" />
-         <RowConstraints minHeight="25.0" prefHeight="35.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="30.0" minHeight="15.0" prefHeight="15.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="60.0" minHeight="45.0" prefHeight="45.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="30.0" minHeight="15.0" prefHeight="15.0" vgrow="SOMETIMES" />
+         <RowConstraints maxHeight="45.0" minHeight="25.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="45.0" minHeight="25.0" prefHeight="30.0" vgrow="SOMETIMES" />
+         <RowConstraints maxHeight="30.0" minHeight="15.0" prefHeight="15.0" vgrow="SOMETIMES" />
+         <RowConstraints maxHeight="30.0" minHeight="25.0" prefHeight="25.0" vgrow="SOMETIMES" />
+         <RowConstraints maxHeight="30.0" minHeight="25.0" prefHeight="25.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
             <TextField fx:id="nameTF" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="330.0" promptText="Name..." style="-fx-border-color: red;" GridPane.columnIndex="0" GridPane.rowIndex="0">
@@ -46,7 +60,7 @@
                         <Tooltip text="Enter rate in percetage" />
                      </tooltip>
                      <HBox.margin>
-                        <Insets />
+                        <Insets top="1.0" />
                      </HBox.margin>
                      <VBox.margin>
                         <Insets bottom="5.0" left="50.0" right="50.0" top="10.0" />
@@ -54,7 +68,7 @@
                   </TextField>
                   <Label prefHeight="27.0" prefWidth="16.0" text="\%">
                      <HBox.margin>
-                        <Insets left="5.0" />
+                        <Insets left="5.0" top="1.0" />
                      </HBox.margin>
                   </Label>
                   <Label fx:id="useDecSepLbl" />
@@ -63,7 +77,7 @@
             <HBox GridPane.rowIndex="3">
                <children>
                   <Label fx:id="formulaPromptLbl" GridPane.rowIndex="3" />
-                  <Label fx:id="formulaLbl" />
+                  <Label fx:id="formulaLbl" text="aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" wrapText="true" />
                </children>
             </HBox>
             <Button fx:id="frmEdtBtn" mnemonicParsing="false" onAction="#onFormulaEditorBtn" text="Formula Editor" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
@@ -84,7 +98,7 @@
                   <Tooltip text="Enter start date" />
                </tooltip>
             </DatePicker>
-            <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" GridPane.columnIndex="0" GridPane.rowIndex="7">
+            <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="200.0" GridPane.columnIndex="0" GridPane.rowIndex="7">
                <children>
                   <Button fx:id="saveBtn" mnemonicParsing="false" onAction="#onSave" prefWidth="60.0" text="Save">
                      <HBox.margin>
@@ -102,11 +116,14 @@
                      </HBox.margin>
                   </Button>
                </children>
+               <GridPane.margin>
+                  <Insets top="3.0" />
+               </GridPane.margin>
             </HBox>
             <HBox prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="4">
                <children>
                   <Label fx:id="denormformPromptLbl" />
-                  <Label fx:id="denormformLbl" />
+                  <Label fx:id="denormformLbl" text="aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" wrapText="true" />
                </children>
             </HBox>
          </children>

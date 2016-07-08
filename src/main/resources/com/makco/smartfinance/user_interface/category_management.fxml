@@ -27,6 +27,9 @@
          <font>
             <Font size="20.0" />
          </font>
+         <VBox.margin>
+            <Insets top="10.0" />
+         </VBox.margin>
       </Label>
       <TabPane fx:id="tabPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="570.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE">
         <tabs>
