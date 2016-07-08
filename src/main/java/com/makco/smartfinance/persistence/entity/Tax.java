@@ -194,12 +194,12 @@ public class Tax implements Serializable {
 
     public void setFormula(String formula) {
         this.formula = formula;
-        refreshDenormalizeFormula();
+        refreshDenormalizeFormula(true);
     }
 
     public String getDenormalizedFormula() {
         if (!StringUtils.isBlank(formula) && StringUtils.isBlank(denormalizedFormula)) {
-            refreshDenormalizeFormula();
+            refreshDenormalizeFormula(true);
         }
         return denormalizedFormula;
     }
@@ -215,7 +215,7 @@ public class Tax implements Serializable {
 
     public void setRate(BigDecimal rate) {
         this.rate = rate;
-        refreshDenormalizeFormula();
+        refreshDenormalizeFormula(false);
     }
 
     public LocalDate getStartDate() {
@@ -232,7 +232,7 @@ public class Tax implements Serializable {
 
     public void setChildTaxes(Collection<Tax> childTaxes) {
         this.childTaxes = new HashSet<>(childTaxes);
-        refreshDenormalizeFormula();
+        refreshDenormalizeFormula(false);
     }
 
     public Set<Tax> getParentTaxes() {
@@ -243,7 +243,7 @@ public class Tax implements Serializable {
         this.parentTaxes = new HashSet<>(parentTaxes);
     }
 
-    public void refreshDenormalizeFormula (){
+    public void refreshDenormalizeFormula (boolean cleanChildSet){
         if(!StringUtils.isBlank(formula)) {
             String mathExpressionToCalculate = formula.replace(DataBaseConstants.TAX_RATE_PLACEHOLDER, rate.toString());
             mathExpressionToCalculate = mathExpressionToCalculate.replace(DataBaseConstants.TAX_RATE_PLACEHOLDER, rate.toString());
@@ -256,11 +256,10 @@ public class Tax implements Serializable {
                             placeHolder,
                             rateVale
                     );
-                } else {
+                } else if(cleanChildSet){
                     //if for some reason tax contains in its children tax that is not in formula - remove it
                     childTaxes.remove(tax);
                 }
-
             }
             this.denormalizedFormula = mathExpressionToCalculate.toString();
         }

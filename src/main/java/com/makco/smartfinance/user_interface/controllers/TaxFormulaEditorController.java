@@ -88,7 +88,6 @@ public class TaxFormulaEditorController {
             if (reg != null) {
                 if (StringUtils.containsOnly(tmp, FORMULA_VALID_CHARS)) {
                     validateBtn.setDisable(false);
-//                    okBtn.setDisable(false);
 
 //                    LOG.debug("new is valid->" + newValue);
 //                    LOG.debug("new is valid->" + reg.getStyle());
@@ -96,7 +95,6 @@ public class TaxFormulaEditorController {
                     reg.setStyle("");
                 } else {
                     validateBtn.setDisable(true);
-//                    okBtn.setDisable(true);
 
 //                    LOG.debug("new is NOT valid->" + newValue);
 
@@ -197,17 +195,15 @@ public class TaxFormulaEditorController {
 
         childTaxes = new HashSet<>();
         while (matcherFormula.find()) {
-            System.out.println(">>>>matcher.group: " + matcherFormula.group());
             long taxId = DataBaseConstants.getTaxChildId(matcherFormula.group());
-            System.out.println(">>>>taxId: " + taxId);
-            childTaxes.add(
-                    taxes.stream()
-                            .filter(tax -> tax.getId().equals(taxId))
-                            .findFirst()
-                            .get()
-            );
+            Tax tmpTax = taxes.stream()
+                    .filter(tax -> tax.getId().equals(taxId))
+                    .findFirst()
+                    .orElse(null);
+            if(tmpTax != null){
+                childTaxes.add(tmpTax);
+            }
         }
-
     }
 
     @FXML
@@ -237,7 +233,7 @@ public class TaxFormulaEditorController {
             long end1 = System.nanoTime();
 
             long start2 = System.nanoTime();
-            BigDecimal resultTaxCalculateFormulaWihNashorn = BigDecimalUtils.calculateFormulaRPN(tax.getDenormalizedFormula(), number);
+            BigDecimal resultTaxCalculateFormulaWihNashorn = BigDecimalUtils.calculateFormulaNashorn(tax.getDenormalizedFormula(), number);
             long end2 = System.nanoTime();
 
             StringBuilder resultSB = new StringBuilder();

@@ -160,6 +160,7 @@ public class TaxDAOImpl implements TaxDAO {
     public void saveOrUpdateTax(Tax tax) throws Exception {
         Session session = null;
         try {
+//            tax.refreshDenormalizeFormula(true);
             session = HibernateUtil.openSession();
             session.beginTransaction();
             session.saveOrUpdate(tax);
