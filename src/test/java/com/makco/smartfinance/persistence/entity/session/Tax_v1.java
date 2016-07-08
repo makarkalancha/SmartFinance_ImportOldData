@@ -127,9 +127,7 @@ public class Tax_v1 implements Serializable {
             joinColumns = {@JoinColumn(name="TAX_ID")},
             inverseJoinColumns = {@JoinColumn(name="CHILD_TAX_ID")}
     )
-    @MapKeyColumn(name = "CHILD_TAX_ID")
-//    @Column MapKeyColumn(name = "CHILD_TAX_ID")
-    private Map<Long, Tax_v1> childTaxes = new HashMap<>();
+    private Set<Tax_v1> childTaxes = new HashSet<>();
 
     @ManyToMany(mappedBy = "childTaxes")
     private Set<Tax_v1> parentTaxes = new HashSet<>();
@@ -139,7 +137,7 @@ public class Tax_v1 implements Serializable {
     }
 
     public Tax_v1(String name, String description, BigDecimal rate, String formula, String denormalizedFormula,
-               LocalDate startDate, LocalDate endDate, Collection<Tax_v1> childTaxes) {
+                  LocalDate startDate, LocalDate endDate, Collection<Tax_v1> childTaxes) {
         this.name = name;
         this.description = description;
         this.rate = rate;
@@ -147,7 +145,9 @@ public class Tax_v1 implements Serializable {
         this.denormalizedFormula = denormalizedFormula;
         this.startDate = startDate;
         this.endDate = endDate;
-        this.childTaxes = childTaxes.stream().collect(Collectors.toMap(tax -> tax.getId(), tax -> tax));
+        if(childTaxes != null) {
+            this.childTaxes = new HashSet<>(childTaxes);
+        }
     }
 
     public String getDescription() {
@@ -190,6 +190,7 @@ public class Tax_v1 implements Serializable {
 
     public void setFormula(String formula) {
         this.formula = formula;
+        refreshDenormalizeFormula();
     }
 
     public String getDenormalizedFormula() {
@@ -199,9 +200,10 @@ public class Tax_v1 implements Serializable {
         return denormalizedFormula;
     }
 
-    public void setDenormalizedFormula(String denormalizedFormula) {
-        this.denormalizedFormula = denormalizedFormula;
-    }
+    //impossible to set DenormalizedFormula as it is set in refreshDenormalizeFormula
+//    public void setDenormalizedFormula(String denormalizedFormula) {
+//        this.denormalizedFormula = denormalizedFormula;
+//    }
 
     public BigDecimal getRate() {
         return rate;
@@ -209,6 +211,7 @@ public class Tax_v1 implements Serializable {
 
     public void setRate(BigDecimal rate) {
         this.rate = rate;
+        refreshDenormalizeFormula();
     }
 
     public LocalDate getStartDate() {
@@ -219,12 +222,13 @@ public class Tax_v1 implements Serializable {
         this.startDate = startDate;
     }
 
-    public Map<Long, Tax_v1> getChildTaxes() {
-        return this.childTaxes;
+    public Collection<Tax_v1> getChildTaxes() {
+        return new HashSet<>(this.childTaxes);
     }
 
     public void setChildTaxes(Collection<Tax_v1> childTaxes) {
-        this.childTaxes = childTaxes.stream().collect(Collectors.toMap(tax -> tax.getId(), tax -> tax));;
+        this.childTaxes = new HashSet<>(childTaxes);
+        refreshDenormalizeFormula();
     }
 
     public Set<Tax_v1> getParentTaxes() {
@@ -245,17 +249,26 @@ public class Tax_v1 implements Serializable {
     }
 
     public void refreshDenormalizeFormula (){
-        String mathExpressionToCalculate = formula.replace(DataBaseConstants.TAX_RATE_PLACEHOLDER, rate.toString());
-        mathExpressionToCalculate = mathExpressionToCalculate.replace(DataBaseConstants.TAX_RATE_PLACEHOLDER, rate.toString());
-        for (Map.Entry<Long, Tax_v1> entry : childTaxes.entrySet()) {
-            Long taxId = entry.getKey();
-            Tax_v1 tax = entry.getValue();
-            mathExpressionToCalculate = mathExpressionToCalculate.replace(
-                    DataBaseConstants.getTaxChildIdPlaceholder(taxId),
-                    tax.getRate().toString()
-            );
+        if(!StringUtils.isBlank(formula)) {
+            String mathExpressionToCalculate = formula.replace(DataBaseConstants.TAX_RATE_PLACEHOLDER, rate.toString());
+            mathExpressionToCalculate = mathExpressionToCalculate.replace(DataBaseConstants.TAX_RATE_PLACEHOLDER, rate.toString());
+            Set<Tax_v1> chidrenToIterate = new HashSet<>(childTaxes);
+            for (Tax_v1 tax : chidrenToIterate) {
+                String placeHolder = DataBaseConstants.getTaxChildIdPlaceholder(tax.getId());
+                if (mathExpressionToCalculate.contains(placeHolder)) {
+                    String rateVale = (tax.getRate() == null) ? "0" : tax.getRate().toString();
+                    mathExpressionToCalculate = mathExpressionToCalculate.replace(
+                            placeHolder,
+                            rateVale
+                    );
+                } else {
+                    //if for some reason tax contains in its children tax that is not in formula - remove it
+                    childTaxes.remove(tax);
+                }
+
+            }
+            this.denormalizedFormula = mathExpressionToCalculate.toString();
         }
-        this.denormalizedFormula = mathExpressionToCalculate.toString();
     }
 
     @Override
@@ -282,7 +295,7 @@ public class Tax_v1 implements Serializable {
                 ", formula='" + formula + '\'' +
                 ", startDate=" + startDate +
                 ", endDate=" + endDate +
-                ", childTaxes=" + childTaxes +
+                ", childTaxes=" + childTaxes.size() +
                 ", createdOn=" + createdOn +
                 ", updatedOn=" + updatedOn +
                 '}';

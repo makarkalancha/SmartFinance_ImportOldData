@@ -3,6 +3,9 @@ package com.makco.smartfinance.constants;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /**
  * Created by mcalancea on 2016-04-05.
  */
@@ -96,6 +99,15 @@ public class DataBaseConstants {
         placeholder.append(taxId);
         placeholder.append("}");
         return placeholder.toString();
+    }
+    public final static long getTaxChildId(String taxIdPlaceholder) throws Exception {
+        Pattern patternTaxId = Pattern.compile("\\d+");
+        Matcher matcherTaxId = patternTaxId.matcher(taxIdPlaceholder);
+        if (matcherTaxId.find()) {
+            return Long.valueOf(matcherTaxId.group());
+        } else {
+            throw new Exception("Match (with number) is not found in " + taxIdPlaceholder);
+        }
     }
     public final static String TAX_CHILD_ID_PLACEHOLDER_PATTERN = "\\{TAX\\d+\\}";
 

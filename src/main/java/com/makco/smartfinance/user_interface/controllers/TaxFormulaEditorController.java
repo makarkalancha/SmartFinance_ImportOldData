@@ -28,6 +28,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by mcalancea on 2016-06-19.
@@ -71,6 +73,7 @@ public class TaxFormulaEditorController {
 
     @FXML
     private void initialize(){
+        okBtn.setDisable(true);
         charsLbl.setText(UserInterfaceConstants.TAX_FORMULA_VALID_CHARACTERS);
 
         formulaTA.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -85,7 +88,7 @@ public class TaxFormulaEditorController {
             if (reg != null) {
                 if (StringUtils.containsOnly(tmp, FORMULA_VALID_CHARS)) {
                     validateBtn.setDisable(false);
-                    okBtn.setDisable(false);
+//                    okBtn.setDisable(false);
 
 //                    LOG.debug("new is valid->" + newValue);
 //                    LOG.debug("new is valid->" + reg.getStyle());
@@ -93,7 +96,7 @@ public class TaxFormulaEditorController {
                     reg.setStyle("");
                 } else {
                     validateBtn.setDisable(true);
-                    okBtn.setDisable(true);
+//                    okBtn.setDisable(true);
 
 //                    LOG.debug("new is NOT valid->" + newValue);
 
@@ -183,9 +186,28 @@ public class TaxFormulaEditorController {
     }
 
     @FXML
-    public void onRateBtn(ActionEvent event){
+    public void onRateBtn(ActionEvent event) {
         formulaTA.appendText(DataBaseConstants.TAX_RATE_PLACEHOLDER);
         formulaTA.requestFocus();
+    }
+
+    private void fillChildTaxes() throws Exception {
+        Pattern patternFormula = Pattern.compile(DataBaseConstants.TAX_CHILD_ID_PLACEHOLDER_PATTERN);
+        Matcher matcherFormula = patternFormula.matcher(formulaTA.getText());
+
+        childTaxes = new HashSet<>();
+        while (matcherFormula.find()) {
+            System.out.println(">>>>matcher.group: " + matcherFormula.group());
+            long taxId = DataBaseConstants.getTaxChildId(matcherFormula.group());
+            System.out.println(">>>>taxId: " + taxId);
+            childTaxes.add(
+                    taxes.stream()
+                            .filter(tax -> tax.getId().equals(taxId))
+                            .findFirst()
+                            .get()
+            );
+        }
+
     }
 
     @FXML
@@ -195,6 +217,7 @@ public class TaxFormulaEditorController {
             todo denormolize formula: if you type {TAX1} without clicking on listview child list will be empty
             so add it explicitly
               */
+            fillChildTaxes();
             tax.setChildTaxes(childTaxes);
             tax.setFormula(formulaTA.getText());
 

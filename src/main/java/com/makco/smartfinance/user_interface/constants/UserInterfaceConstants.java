@@ -20,10 +20,10 @@ public class UserInterfaceConstants {
 
 
     public static final int SCALE = 2;
+    public static int MAX_FRACTION_DIGITS = 6;
     public static final NumberFormat NUMBER_FORMAT = NumberFormat.getInstance();
-    //todo set constant of 6
     static {
-        NUMBER_FORMAT.setMaximumFractionDigits(6);
+        NUMBER_FORMAT.setMaximumFractionDigits(MAX_FRACTION_DIGITS);
     }
 
     public static final String FXML_PATH = "/com/makco/smartfinance/user_interface/";
