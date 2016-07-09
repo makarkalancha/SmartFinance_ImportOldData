@@ -150,34 +150,30 @@ public class TaxDAOImplTest {
     public void test_42_select_benchMark() throws Exception {
 //        int cycle = 100_000;
         int cycle = 1_000;
-        List<String> stringLogs = new ArrayList<>();
-        for(int i= 0;i<cycle;i++) {
-            long start1 = System.nanoTime();
-            List<Tax> taxList1 = taxDAO.taxListWithChildren(); // throwLazyInitializationException
-            long end1 = System.nanoTime();
-
-            long start2 = System.nanoTime();
-            List<Tax> taxList2 = taxDAO.taxListWithChildrenAndParents_leftJoinFetch(); // cartesian product
-            long end2 = System.nanoTime();
-
-            long start3 = System.nanoTime();
-            List<Tax> taxList3 = taxDAO.taxListWithChildrenAndParents_HibernateInitialize(); // select + 1
-            long end3 = System.nanoTime();
-
-            stringLogs.add(">>>>" + i + "\ttaxListWithChildren (throwLazyInitializationException)\tsize\t" + taxList1.size() + "\ttime\t" + Logs.benchmarkCalcultaion(start1, end1) + "\tnanoTime\t" + (end1 - start1));
-            stringLogs.add(">>>>" + i + "\ttaxListWithChildrenAndParents_leftJoinFetch (cartesian product)\tsize\t" + taxList2.size() + "\ttime\t" + Logs.benchmarkCalcultaion(start2, end2) + "\tnanoTime\t" + (end2 - start2));
-            stringLogs.add(">>>>" + i + "\ttaxListWithChildrenAndParents_HibernateInitialize (select + 1)\tsize\t" + taxList3.size() + "\ttime\t" + Logs.benchmarkCalcultaion(start3, end3) + "\tnanoTime\t" + (end3 - start3));
-
-            Thread.sleep(100);
-        }
-
         //in root project folder
         try(PrintWriter printWriter = new PrintWriter("test_42_select_benchMark.log", "UTF-8");) {
-            for (String log : stringLogs) {
-                printWriter.append(log);
+            for (int i = 0; i < cycle; i++) {
+                long start1 = System.nanoTime();
+                List<Tax> taxList1 = taxDAO.taxListWithChildren(); // throwLazyInitializationException
+                long end1 = System.nanoTime();
+
+                long start2 = System.nanoTime();
+                List<Tax> taxList2 = taxDAO.taxListWithChildrenAndParents_leftJoinFetch(); // cartesian product
+                long end2 = System.nanoTime();
+
+                long start3 = System.nanoTime();
+                List<Tax> taxList3 = taxDAO.taxListWithChildrenAndParents_HibernateInitialize(); // select + 1
+                long end3 = System.nanoTime();
+
+                printWriter.append(">>>>" + i + "\ttaxListWithChildren (throwLazyInitializationException)\tsize\t" + taxList1.size() + "\ttime\t" + Logs.benchmarkCalcultaion(start1, end1) + "\tnanoTime\t" + (end1 - start1));
                 printWriter.append("\r\n");
+                printWriter.append(">>>>" + i + "\ttaxListWithChildrenAndParents_leftJoinFetch (cartesian product)\tsize\t" + taxList2.size() + "\ttime\t" + Logs.benchmarkCalcultaion(start2, end2) + "\tnanoTime\t" + (end2 - start2));
+                printWriter.append("\r\n");
+                printWriter.append(">>>>" + i + "\ttaxListWithChildrenAndParents_HibernateInitialize (select + 1)\tsize\t" + taxList3.size() + "\ttime\t" + Logs.benchmarkCalcultaion(start3, end3) + "\tnanoTime\t" + (end3 - start3));
+                printWriter.append("\r\n");
+
+                Thread.sleep(100);
             }
         }
     }
-
 }
