@@ -1,0 +1,300 @@
+>>>>0	taxListWithChildren (throwLazyInitializationException)	size	66	time	[mm:ss:millis.nanos]: 0:2:885.481594	nanoTime	2885481594
+>>>>0	taxListWithChildrenAndParents_leftJoinFetch (cartesian product)	size	66	time	[mm:ss:millis.nanos]: 0:0:211.242007	nanoTime	211242007
+>>>>0	taxListWithChildrenAndParents_HibernateInitialize (select + 1)	size	50	time	[mm:ss:millis.nanos]: 0:0:345.562121	nanoTime	345562121
+>>>>1	taxListWithChildren (throwLazyInitializationException)	size	66	time	[mm:ss:millis.nanos]: 0:0:113.335352	nanoTime	113335352
+>>>>1	taxListWithChildrenAndParents_leftJoinFetch (cartesian product)	size	66	time	[mm:ss:millis.nanos]: 0:0:172.419053	nanoTime	172419053
+>>>>1	taxListWithChildrenAndParents_HibernateInitialize (select + 1)	size	50	time	[mm:ss:millis.nanos]: 0:0:281.646368	nanoTime	281646368
+>>>>2	taxListWithChildren (throwLazyInitializationException)	size	66	time	[mm:ss:millis.nanos]: 0:0:88.961435	nanoTime	88961435
+>>>>2	taxListWithChildrenAndParents_leftJoinFetch (cartesian product)	size	66	time	[mm:ss:millis.nanos]: 0:0:161.469731	nanoTime	161469731
+>>>>2	taxListWithChildrenAndParents_HibernateInitialize (select + 1)	size	50	time	[mm:ss:millis.nanos]: 0:0:267.656371	nanoTime	267656371
+>>>>3	taxListWithChildren (throwLazyInitializationException)	size	66	time	[mm:ss:millis.nanos]: 0:0:104.24859	nanoTime	104024859
+>>>>3	taxListWithChildrenAndParents_leftJoinFetch (cartesian product)	size	66	time	[mm:ss:millis.nanos]: 0:0:129.196498	nanoTime	129196498
+>>>>3	taxListWithChildrenAndParents_HibernateInitialize (select + 1)	size	50	time	[mm:ss:millis.nanos]: 0:0:269.702925	nanoTime	269702925
+>>>>4	taxListWithChildren (throwLazyInitializationException)	size	66	time	[mm:ss:millis.nanos]: 0:0:99.60320	nanoTime	99060320
+>>>>4	taxListWithChildrenAndParents_leftJoinFetch (cartesian product)	size	66	time	[mm:ss:millis.nanos]: 0:0:132.655627	nanoTime	132655627
+>>>>4	taxListWithChildrenAndParents_HibernateInitialize (select + 1)	size	50	time	[mm:ss:millis.nanos]: 0:0:627.532244	nanoTime	627532244
+>>>>5	taxListWithChildren (throwLazyInitializationException)	size	66	time	[mm:ss:millis.nanos]: 0:0:92.944449	nanoTime	92944449
+>>>>5	taxListWithChildrenAndParents_leftJoinFetch (cartesian product)	size	66	time	[mm:ss:millis.nanos]: 0:0:141.412846	nanoTime	141412846
+>>>>5	taxListWithChildrenAndParents_HibernateInitialize (select + 1)	size	50	time	[mm:ss:millis.nanos]: 0:0:277.291084	nanoTime	277291084
+>>>>6	taxListWithChildren (throwLazyInitializationException)	size	66	time	[mm:ss:millis.nanos]: 0:0:96.92420	nanoTime	96092420
+>>>>6	taxListWithChildrenAndParents_leftJoinFetch (cartesian product)	size	66	time	[mm:ss:millis.nanos]: 0:0:138.385233	nanoTime	138385233
+>>>>6	taxListWithChildrenAndParents_HibernateInitialize (select + 1)	size	50	time	[mm:ss:millis.nanos]: 0:0:250.892539	nanoTime	250892539
+>>>>7	taxListWithChildren (throwLazyInitializationException)	size	66	time	[mm:ss:millis.nanos]: 0:0:99.670508	nanoTime	99670508
+>>>>7	taxListWithChildrenAndParents_leftJoinFetch (cartesian product)	size	66	time	[mm:ss:millis.nanos]: 0:0:133.501399	nanoTime	133501399
+>>>>7	taxListWithChildrenAndParents_HibernateInitialize (select + 1)	size	50	time	[mm:ss:millis.nanos]: 0:0:277.566322	nanoTime	277566322
+>>>>8	taxListWithChildren (throwLazyInitializationException)	size	66	time	[mm:ss:millis.nanos]: 0:0:164.158662	nanoTime	164158662
+>>>>8	taxListWithChildrenAndParents_leftJoinFetch (cartesian product)	size	66	time	[mm:ss:millis.nanos]: 0:0:129.810417	nanoTime	129810417
+>>>>8	taxListWithChildrenAndParents_HibernateInitialize (select + 1)	size	50	time	[mm:ss:millis.nanos]: 0:0:256.613281	nanoTime	256613281
+>>>>9	taxListWithChildren (throwLazyInitializationException)	size	66	time	[mm:ss:millis.nanos]: 0:0:93.556503	nanoTime	93556503
+>>>>9	taxListWithChildrenAndParents_leftJoinFetch (cartesian product)	size	66	time	[mm:ss:millis.nanos]: 0:0:330.168879	nanoTime	330168879
+>>>>9	taxListWithChildrenAndParents_HibernateInitialize (select + 1)	size	50	time	[mm:ss:millis.nanos]: 0:0:265.467999	nanoTime	265467999
+>>>>10	taxListWithChildren (throwLazyInitializationException)	size	66	time	[mm:ss:millis.nanos]: 0:0:89.207283	nanoTime	89207283
+>>>>10	taxListWithChildrenAndParents_leftJoinFetch (cartesian product)	size	66	time	[mm:ss:millis.nanos]: 0:0:122.16063	nanoTime	122016063
+>>>>10	taxListWithChildrenAndParents_HibernateInitialize (select + 1)	size	50	time	[mm:ss:millis.nanos]: 0:0:272.908276	nanoTime	272908276
+>>>>11	taxListWithChildren (throwLazyInitializationException)	size	66	time	[mm:ss:millis.nanos]: 0:0:77.531614	nanoTime	77531614
+>>>>11	taxListWithChildrenAndParents_leftJoinFetch (cartesian product)	size	66	time	[mm:ss:millis.nanos]: 0:0:133.506065	nanoTime	133506065
+>>>>11	taxListWithChildrenAndParents_HibernateInitialize (select + 1)	size	50	time	[mm:ss:millis.nanos]: 0:0:309.46498	nanoTime	309046498
+>>>>12	taxListWithChildren (throwLazyInitializationException)	size	66	time	[mm:ss:millis.nanos]: 0:0:98.29346	nanoTime	98029346
+>>>>12	taxListWithChildrenAndParents_leftJoinFetch (cartesian product)	size	66	time	[mm:ss:millis.nanos]: 0:0:375.621792	nanoTime	375621792
+>>>>12	taxListWithChildrenAndParents_HibernateInitialize (select + 1)	size	50	time	[mm:ss:millis.nanos]: 0:0:316.746618	nanoTime	316746618
+>>>>13	taxListWithChildren (throwLazyInitializationException)	size	66	time	[mm:ss:millis.nanos]: 0:0:91.987183	nanoTime	91987183
+>>>>13	taxListWithChildrenAndParents_leftJoinFetch (cartesian product)	size	66	time	[mm:ss:millis.nanos]: 0:0:143.38613	nanoTime	143038613
+>>>>13	taxListWithChildrenAndParents_HibernateInitialize (select + 1)	size	50	time	[mm:ss:millis.nanos]: 0:0:271.192474	nanoTime	271192474
+>>>>14	taxListWithChildren (throwLazyInitializationException)	size	66	time	[mm:ss:millis.nanos]: 0:0:95.62845	nanoTime	95062845
+>>>>14	taxListWithChildrenAndParents_leftJoinFetch (cartesian product)	size	66	time	[mm:ss:millis.nanos]: 0:0:313.691015	nanoTime	313691015
+>>>>14	taxListWithChildrenAndParents_HibernateInitialize (select + 1)	size	50	time	[mm:ss:millis.nanos]: 0:0:262.104970	nanoTime	262104970
+>>>>15	taxListWithChildren (throwLazyInitializationException)	size	66	time	[mm:ss:millis.nanos]: 0:0:79.133123	nanoTime	79133123
+>>>>15	taxListWithChildrenAndParents_leftJoinFetch (cartesian product)	size	66	time	[mm:ss:millis.nanos]: 0:0:155.773247	nanoTime	155773247
+>>>>15	taxListWithChildrenAndParents_HibernateInitialize (select + 1)	size	50	time	[mm:ss:millis.nanos]: 0:0:234.118445	nanoTime	234118445
+>>>>16	taxListWithChildren (throwLazyInitializationException)	size	66	time	[mm:ss:millis.nanos]: 0:0:74.808628	nanoTime	74808628
+>>>>16	taxListWithChildrenAndParents_leftJoinFetch (cartesian product)	size	66	time	[mm:ss:millis.nanos]: 0:0:113.345615	nanoTime	113345615
+>>>>16	taxListWithChildrenAndParents_HibernateInitialize (select + 1)	size	50	time	[mm:ss:millis.nanos]: 0:0:211.46542	nanoTime	211046542
+>>>>17	taxListWithChildren (throwLazyInitializationException)	size	66	time	[mm:ss:millis.nanos]: 0:0:79.452679	nanoTime	79452679
+>>>>17	taxListWithChildrenAndParents_leftJoinFetch (cartesian product)	size	66	time	[mm:ss:millis.nanos]: 0:0:109.509550	nanoTime	109509550
+>>>>17	taxListWithChildrenAndParents_HibernateInitialize (select + 1)	size	50	time	[mm:ss:millis.nanos]: 0:0:271.123431	nanoTime	271123431
+>>>>18	taxListWithChildren (throwLazyInitializationException)	size	66	time	[mm:ss:millis.nanos]: 0:0:80.357231	nanoTime	80357231
+>>>>18	taxListWithChildrenAndParents_leftJoinFetch (cartesian product)	size	66	time	[mm:ss:millis.nanos]: 0:0:115.112266	nanoTime	115112266
+>>>>18	taxListWithChildrenAndParents_HibernateInitialize (select + 1)	size	50	time	[mm:ss:millis.nanos]: 0:0:242.634013	nanoTime	242634013
+>>>>19	taxListWithChildren (throwLazyInitializationException)	size	66	time	[mm:ss:millis.nanos]: 0:1:14.826439	nanoTime	1014826439
+>>>>19	taxListWithChildrenAndParents_leftJoinFetch (cartesian product)	size	66	time	[mm:ss:millis.nanos]: 0:0:134.780087	nanoTime	134780087
+>>>>19	taxListWithChildrenAndParents_HibernateInitialize (select + 1)	size	50	time	[mm:ss:millis.nanos]: 0:0:274.674462	nanoTime	274674462
+>>>>20	taxListWithChildren (throwLazyInitializationException)	size	66	time	[mm:ss:millis.nanos]: 0:0:96.476820	nanoTime	96476820
+>>>>20	taxListWithChildrenAndParents_leftJoinFetch (cartesian product)	size	66	time	[mm:ss:millis.nanos]: 0:0:134.904178	nanoTime	134904178
+>>>>20	taxListWithChildrenAndParents_HibernateInitialize (select + 1)	size	50	time	[mm:ss:millis.nanos]: 0:0:256.152375	nanoTime	256152375
+>>>>21	taxListWithChildren (throwLazyInitializationException)	size	66	time	[mm:ss:millis.nanos]: 0:0:97.325391	nanoTime	97325391
+>>>>21	taxListWithChildrenAndParents_leftJoinFetch (cartesian product)	size	66	time	[mm:ss:millis.nanos]: 0:0:137.608969	nanoTime	137608969
+>>>>21	taxListWithChildrenAndParents_HibernateInitialize (select + 1)	size	50	time	[mm:ss:millis.nanos]: 0:0:233.640744	nanoTime	233640744
+>>>>22	taxListWithChildren (throwLazyInitializationException)	size	66	time	[mm:ss:millis.nanos]: 0:0:86.887357	nanoTime	86887357
+>>>>22	taxListWithChildrenAndParents_leftJoinFetch (cartesian product)	size	66	time	[mm:ss:millis.nanos]: 0:0:126.421730	nanoTime	126421730
+>>>>22	taxListWithChildrenAndParents_HibernateInitialize (select + 1)	size	50	time	[mm:ss:millis.nanos]: 0:0:263.678022	nanoTime	263678022
+>>>>23	taxListWithChildren (throwLazyInitializationException)	size	66	time	[mm:ss:millis.nanos]: 0:0:99.436790	nanoTime	99436790
+>>>>23	taxListWithChildrenAndParents_leftJoinFetch (cartesian product)	size	66	time	[mm:ss:millis.nanos]: 0:0:135.224666	nanoTime	135224666
+>>>>23	taxListWithChildrenAndParents_HibernateInitialize (select + 1)	size	50	time	[mm:ss:millis.nanos]: 0:0:679.104294	nanoTime	679104294
+>>>>24	taxListWithChildren (throwLazyInitializationException)	size	66	time	[mm:ss:millis.nanos]: 0:0:99.421861	nanoTime	99421861
+>>>>24	taxListWithChildrenAndParents_leftJoinFetch (cartesian product)	size	66	time	[mm:ss:millis.nanos]: 0:0:136.606919	nanoTime	136606919
+>>>>24	taxListWithChildrenAndParents_HibernateInitialize (select + 1)	size	50	time	[mm:ss:millis.nanos]: 0:0:276.16594	nanoTime	276016594
+>>>>25	taxListWithChildren (throwLazyInitializationException)	size	66	time	[mm:ss:millis.nanos]: 0:0:84.886521	nanoTime	84886521
+>>>>25	taxListWithChildrenAndParents_leftJoinFetch (cartesian product)	size	66	time	[mm:ss:millis.nanos]: 0:0:229.957693	nanoTime	229957693
+>>>>25	taxListWithChildrenAndParents_HibernateInitialize (select + 1)	size	50	time	[mm:ss:millis.nanos]: 0:0:305.798229	nanoTime	305798229
+>>>>26	taxListWithChildren (throwLazyInitializationException)	size	66	time	[mm:ss:millis.nanos]: 0:0:85.464519	nanoTime	85464519
+>>>>26	taxListWithChildrenAndParents_leftJoinFetch (cartesian product)	size	66	time	[mm:ss:millis.nanos]: 0:0:134.882252	nanoTime	134882252
+>>>>26	taxListWithChildrenAndParents_HibernateInitialize (select + 1)	size	50	time	[mm:ss:millis.nanos]: 0:0:246.471012	nanoTime	246471012
+>>>>27	taxListWithChildren (throwLazyInitializationException)	size	66	time	[mm:ss:millis.nanos]: 0:0:80.842861	nanoTime	80842861
+>>>>27	taxListWithChildrenAndParents_leftJoinFetch (cartesian product)	size	66	time	[mm:ss:millis.nanos]: 0:0:132.494683	nanoTime	132494683
+>>>>27	taxListWithChildrenAndParents_HibernateInitialize (select + 1)	size	50	time	[mm:ss:millis.nanos]: 0:0:272.565395	nanoTime	272565395
+>>>>28	taxListWithChildren (throwLazyInitializationException)	size	66	time	[mm:ss:millis.nanos]: 0:0:96.656891	nanoTime	96656891
+>>>>28	taxListWithChildrenAndParents_leftJoinFetch (cartesian product)	size	66	time	[mm:ss:millis.nanos]: 0:0:172.104163	nanoTime	172104163
+>>>>28	taxListWithChildrenAndParents_HibernateInitialize (select + 1)	size	50	time	[mm:ss:millis.nanos]: 0:2:142.604297	nanoTime	2142604297
+>>>>29	taxListWithChildren (throwLazyInitializationException)	size	66	time	[mm:ss:millis.nanos]: 0:0:115.222362	nanoTime	115222362
+>>>>29	taxListWithChildrenAndParents_leftJoinFetch (cartesian product)	size	66	time	[mm:ss:millis.nanos]: 0:0:249.288232	nanoTime	249288232
+>>>>29	taxListWithChildrenAndParents_HibernateInitialize (select + 1)	size	50	time	[mm:ss:millis.nanos]: 0:0:279.654861	nanoTime	279654861
+>>>>30	taxListWithChildren (throwLazyInitializationException)	size	66	time	[mm:ss:millis.nanos]: 0:0:86.550074	nanoTime	86550074
+>>>>30	taxListWithChildrenAndParents_leftJoinFetch (cartesian product)	size	66	time	[mm:ss:millis.nanos]: 0:0:137.161126	nanoTime	137161126
+>>>>30	taxListWithChildrenAndParents_HibernateInitialize (select + 1)	size	50	time	[mm:ss:millis.nanos]: 0:0:264.864810	nanoTime	264864810
+>>>>31	taxListWithChildren (throwLazyInitializationException)	size	66	time	[mm:ss:millis.nanos]: 0:0:83.896599	nanoTime	83896599
+>>>>31	taxListWithChildrenAndParents_leftJoinFetch (cartesian product)	size	66	time	[mm:ss:millis.nanos]: 0:0:166.22813	nanoTime	166022813
+>>>>31	taxListWithChildrenAndParents_HibernateInitialize (select + 1)	size	50	time	[mm:ss:millis.nanos]: 0:0:247.933036	nanoTime	247933036
+>>>>32	taxListWithChildren (throwLazyInitializationException)	size	66	time	[mm:ss:millis.nanos]: 0:0:90.498568	nanoTime	90498568
+>>>>32	taxListWithChildrenAndParents_leftJoinFetch (cartesian product)	size	66	time	[mm:ss:millis.nanos]: 0:0:130.412674	nanoTime	130412674
+>>>>32	taxListWithChildrenAndParents_HibernateInitialize (select + 1)	size	50	time	[mm:ss:millis.nanos]: 0:0:235.983062	nanoTime	235983062
+>>>>33	taxListWithChildren (throwLazyInitializationException)	size	66	time	[mm:ss:millis.nanos]: 0:0:82.787718	nanoTime	82787718
+>>>>33	taxListWithChildrenAndParents_leftJoinFetch (cartesian product)	size	66	time	[mm:ss:millis.nanos]: 0:0:110.561983	nanoTime	110561983
+>>>>33	taxListWithChildrenAndParents_HibernateInitialize (select + 1)	size	50	time	[mm:ss:millis.nanos]: 0:0:490.722396	nanoTime	490722396
+>>>>34	taxListWithChildren (throwLazyInitializationException)	size	66	time	[mm:ss:millis.nanos]: 0:0:103.862515	nanoTime	103862515
+>>>>34	taxListWithChildrenAndParents_leftJoinFetch (cartesian product)	size	66	time	[mm:ss:millis.nanos]: 0:0:124.440020	nanoTime	124440020
+>>>>34	taxListWithChildrenAndParents_HibernateInitialize (select + 1)	size	50	time	[mm:ss:millis.nanos]: 0:0:263.618777	nanoTime	263618777
+>>>>35	taxListWithChildren (throwLazyInitializationException)	size	66	time	[mm:ss:millis.nanos]: 0:0:114.755391	nanoTime	114755391
+>>>>35	taxListWithChildrenAndParents_leftJoinFetch (cartesian product)	size	66	time	[mm:ss:millis.nanos]: 0:0:121.853720	nanoTime	121853720
+>>>>35	taxListWithChildrenAndParents_HibernateInitialize (select + 1)	size	50	time	[mm:ss:millis.nanos]: 0:0:258.525949	nanoTime	258525949
+>>>>36	taxListWithChildren (throwLazyInitializationException)	size	66	time	[mm:ss:millis.nanos]: 0:0:86.676964	nanoTime	86676964
+>>>>36	taxListWithChildrenAndParents_leftJoinFetch (cartesian product)	size	66	time	[mm:ss:millis.nanos]: 0:0:130.117844	nanoTime	130117844
+>>>>36	taxListWithChildrenAndParents_HibernateInitialize (select + 1)	size	50	time	[mm:ss:millis.nanos]: 0:0:240.851501	nanoTime	240851501
+>>>>37	taxListWithChildren (throwLazyInitializationException)	size	66	time	[mm:ss:millis.nanos]: 0:0:85.166423	nanoTime	85166423
+>>>>37	taxListWithChildrenAndParents_leftJoinFetch (cartesian product)	size	66	time	[mm:ss:millis.nanos]: 0:0:133.288673	nanoTime	133288673
+>>>>37	taxListWithChildrenAndParents_HibernateInitialize (select + 1)	size	50	time	[mm:ss:millis.nanos]: 0:0:264.752382	nanoTime	264752382
+>>>>38	taxListWithChildren (throwLazyInitializationException)	size	66	time	[mm:ss:millis.nanos]: 0:0:91.910209	nanoTime	91910209
+>>>>38	taxListWithChildrenAndParents_leftJoinFetch (cartesian product)	size	66	time	[mm:ss:millis.nanos]: 0:0:902.284145	nanoTime	902284145
+>>>>38	taxListWithChildrenAndParents_HibernateInitialize (select + 1)	size	50	time	[mm:ss:millis.nanos]: 0:0:277.740328	nanoTime	277740328
+>>>>39	taxListWithChildren (throwLazyInitializationException)	size	66	time	[mm:ss:millis.nanos]: 0:0:89.948092	nanoTime	89948092
+>>>>39	taxListWithChildrenAndParents_leftJoinFetch (cartesian product)	size	66	time	[mm:ss:millis.nanos]: 0:0:126.17738	nanoTime	126017738
+>>>>39	taxListWithChildrenAndParents_HibernateInitialize (select + 1)	size	50	time	[mm:ss:millis.nanos]: 0:0:284.95049	nanoTime	284095049
+>>>>40	taxListWithChildren (throwLazyInitializationException)	size	66	time	[mm:ss:millis.nanos]: 0:0:97.645413	nanoTime	97645413
+>>>>40	taxListWithChildrenAndParents_leftJoinFetch (cartesian product)	size	66	time	[mm:ss:millis.nanos]: 0:0:140.286704	nanoTime	140286704
+>>>>40	taxListWithChildrenAndParents_HibernateInitialize (select + 1)	size	50	time	[mm:ss:millis.nanos]: 0:0:248.980338	nanoTime	248980338
+>>>>41	taxListWithChildren (throwLazyInitializationException)	size	66	time	[mm:ss:millis.nanos]: 0:0:87.546994	nanoTime	87546994
+>>>>41	taxListWithChildrenAndParents_leftJoinFetch (cartesian product)	size	66	time	[mm:ss:millis.nanos]: 0:0:268.496078	nanoTime	268496078
+>>>>41	taxListWithChildrenAndParents_HibernateInitialize (select + 1)	size	50	time	[mm:ss:millis.nanos]: 0:0:261.911371	nanoTime	261911371
+>>>>42	taxListWithChildren (throwLazyInitializationException)	size	66	time	[mm:ss:millis.nanos]: 0:0:91.761861	nanoTime	91761861
+>>>>42	taxListWithChildrenAndParents_leftJoinFetch (cartesian product)	size	66	time	[mm:ss:millis.nanos]: 0:0:137.251160	nanoTime	137251160
+>>>>42	taxListWithChildrenAndParents_HibernateInitialize (select + 1)	size	50	time	[mm:ss:millis.nanos]: 0:0:209.520606	nanoTime	209520606
+>>>>43	taxListWithChildren (throwLazyInitializationException)	size	66	time	[mm:ss:millis.nanos]: 0:0:89.422809	nanoTime	89422809
+>>>>43	taxListWithChildrenAndParents_leftJoinFetch (cartesian product)	size	66	time	[mm:ss:millis.nanos]: 0:0:417.933731	nanoTime	417933731
+>>>>43	taxListWithChildrenAndParents_HibernateInitialize (select + 1)	size	50	time	[mm:ss:millis.nanos]: 0:0:260.947573	nanoTime	260947573
+>>>>44	taxListWithChildren (throwLazyInitializationException)	size	66	time	[mm:ss:millis.nanos]: 0:0:94.150829	nanoTime	94150829
+>>>>44	taxListWithChildrenAndParents_leftJoinFetch (cartesian product)	size	66	time	[mm:ss:millis.nanos]: 0:0:129.954100	nanoTime	129954100
+>>>>44	taxListWithChildrenAndParents_HibernateInitialize (select + 1)	size	50	time	[mm:ss:millis.nanos]: 0:0:256.498988	nanoTime	256498988
+>>>>45	taxListWithChildren (throwLazyInitializationException)	size	66	time	[mm:ss:millis.nanos]: 0:0:91.565929	nanoTime	91565929
+>>>>45	taxListWithChildrenAndParents_leftJoinFetch (cartesian product)	size	66	time	[mm:ss:millis.nanos]: 0:0:131.536949	nanoTime	131536949
+>>>>45	taxListWithChildrenAndParents_HibernateInitialize (select + 1)	size	50	time	[mm:ss:millis.nanos]: 0:0:262.104503	nanoTime	262104503
+>>>>46	taxListWithChildren (throwLazyInitializationException)	size	66	time	[mm:ss:millis.nanos]: 0:0:90.770539	nanoTime	90770539
+>>>>46	taxListWithChildrenAndParents_leftJoinFetch (cartesian product)	size	66	time	[mm:ss:millis.nanos]: 0:0:123.876949	nanoTime	123876949
+>>>>46	taxListWithChildrenAndParents_HibernateInitialize (select + 1)	size	50	time	[mm:ss:millis.nanos]: 0:0:248.586142	nanoTime	248586142
+>>>>47	taxListWithChildren (throwLazyInitializationException)	size	66	time	[mm:ss:millis.nanos]: 0:0:87.804971	nanoTime	87804971
+>>>>47	taxListWithChildrenAndParents_leftJoinFetch (cartesian product)	size	66	time	[mm:ss:millis.nanos]: 0:0:171.212207	nanoTime	171212207
+>>>>47	taxListWithChildrenAndParents_HibernateInitialize (select + 1)	size	50	time	[mm:ss:millis.nanos]: 0:0:254.568126	nanoTime	254568126
+>>>>48	taxListWithChildren (throwLazyInitializationException)	size	66	time	[mm:ss:millis.nanos]: 0:0:514.751099	nanoTime	514751099
+>>>>48	taxListWithChildrenAndParents_leftJoinFetch (cartesian product)	size	66	time	[mm:ss:millis.nanos]: 0:0:151.856477	nanoTime	151856477
+>>>>48	taxListWithChildrenAndParents_HibernateInitialize (select + 1)	size	50	time	[mm:ss:millis.nanos]: 0:0:195.976120	nanoTime	195976120
+>>>>49	taxListWithChildren (throwLazyInitializationException)	size	66	time	[mm:ss:millis.nanos]: 0:0:68.905950	nanoTime	68905950
+>>>>49	taxListWithChildrenAndParents_leftJoinFetch (cartesian product)	size	66	time	[mm:ss:millis.nanos]: 0:0:133.901660	nanoTime	133901660
+>>>>49	taxListWithChildrenAndParents_HibernateInitialize (select + 1)	size	50	time	[mm:ss:millis.nanos]: 0:0:263.785785	nanoTime	263785785
+>>>>50	taxListWithChildren (throwLazyInitializationException)	size	66	time	[mm:ss:millis.nanos]: 0:0:77.721948	nanoTime	77721948
+>>>>50	taxListWithChildrenAndParents_leftJoinFetch (cartesian product)	size	66	time	[mm:ss:millis.nanos]: 0:0:103.463655	nanoTime	103463655
+>>>>50	taxListWithChildrenAndParents_HibernateInitialize (select + 1)	size	50	time	[mm:ss:millis.nanos]: 0:0:202.320579	nanoTime	202320579
+>>>>51	taxListWithChildren (throwLazyInitializationException)	size	66	time	[mm:ss:millis.nanos]: 0:0:69.715801	nanoTime	69715801
+>>>>51	taxListWithChildrenAndParents_leftJoinFetch (cartesian product)	size	66	time	[mm:ss:millis.nanos]: 0:0:402.559149	nanoTime	402559149
+>>>>51	taxListWithChildrenAndParents_HibernateInitialize (select + 1)	size	50	time	[mm:ss:millis.nanos]: 0:0:308.278165	nanoTime	308278165
+>>>>52	taxListWithChildren (throwLazyInitializationException)	size	66	time	[mm:ss:millis.nanos]: 0:0:88.25628	nanoTime	88025628
+>>>>52	taxListWithChildrenAndParents_leftJoinFetch (cartesian product)	size	66	time	[mm:ss:millis.nanos]: 0:0:102.817080	nanoTime	102817080
+>>>>52	taxListWithChildrenAndParents_HibernateInitialize (select + 1)	size	50	time	[mm:ss:millis.nanos]: 0:0:924.330205	nanoTime	924330205
+>>>>53	taxListWithChildren (throwLazyInitializationException)	size	66	time	[mm:ss:millis.nanos]: 0:0:101.172185	nanoTime	101172185
+>>>>53	taxListWithChildrenAndParents_leftJoinFetch (cartesian product)	size	66	time	[mm:ss:millis.nanos]: 0:0:254.26515	nanoTime	254026515
+>>>>53	taxListWithChildrenAndParents_HibernateInitialize (select + 1)	size	50	time	[mm:ss:millis.nanos]: 0:0:243.900573	nanoTime	243900573
+>>>>54	taxListWithChildren (throwLazyInitializationException)	size	66	time	[mm:ss:millis.nanos]: 0:0:76.822061	nanoTime	76822061
+>>>>54	taxListWithChildrenAndParents_leftJoinFetch (cartesian product)	size	66	time	[mm:ss:millis.nanos]: 0:0:117.210	nanoTime	117000210
+>>>>54	taxListWithChildrenAndParents_HibernateInitialize (select + 1)	size	50	time	[mm:ss:millis.nanos]: 0:0:196.816762	nanoTime	196816762
+>>>>55	taxListWithChildren (throwLazyInitializationException)	size	66	time	[mm:ss:millis.nanos]: 0:0:88.891459	nanoTime	88891459
+>>>>55	taxListWithChildrenAndParents_leftJoinFetch (cartesian product)	size	66	time	[mm:ss:millis.nanos]: 0:0:123.855956	nanoTime	123855956
+>>>>55	taxListWithChildrenAndParents_HibernateInitialize (select + 1)	size	50	time	[mm:ss:millis.nanos]: 0:0:254.808843	nanoTime	254808843
+>>>>56	taxListWithChildren (throwLazyInitializationException)	size	66	time	[mm:ss:millis.nanos]: 0:0:110.687940	nanoTime	110687940
+>>>>56	taxListWithChildrenAndParents_leftJoinFetch (cartesian product)	size	66	time	[mm:ss:millis.nanos]: 0:0:120.117857	nanoTime	120117857
+>>>>56	taxListWithChildrenAndParents_HibernateInitialize (select + 1)	size	50	time	[mm:ss:millis.nanos]: 0:0:239.532227	nanoTime	239532227
+>>>>57	taxListWithChildren (throwLazyInitializationException)	size	66	time	[mm:ss:millis.nanos]: 0:0:92.243759	nanoTime	92243759
+>>>>57	taxListWithChildrenAndParents_leftJoinFetch (cartesian product)	size	66	time	[mm:ss:millis.nanos]: 0:0:133.886732	nanoTime	133886732
+>>>>57	taxListWithChildrenAndParents_HibernateInitialize (select + 1)	size	50	time	[mm:ss:millis.nanos]: 0:1:362.81504	nanoTime	1362081504
+>>>>58	taxListWithChildren (throwLazyInitializationException)	size	66	time	[mm:ss:millis.nanos]: 0:0:95.640844	nanoTime	95640844
+>>>>58	taxListWithChildrenAndParents_leftJoinFetch (cartesian product)	size	66	time	[mm:ss:millis.nanos]: 0:0:106.975499	nanoTime	106975499
+>>>>58	taxListWithChildrenAndParents_HibernateInitialize (select + 1)	size	50	time	[mm:ss:millis.nanos]: 0:0:251.613755	nanoTime	251613755
+>>>>59	taxListWithChildren (throwLazyInitializationException)	size	66	time	[mm:ss:millis.nanos]: 0:0:94.941087	nanoTime	94941087
+>>>>59	taxListWithChildrenAndParents_leftJoinFetch (cartesian product)	size	66	time	[mm:ss:millis.nanos]: 0:0:126.693235	nanoTime	126693235
+>>>>59	taxListWithChildrenAndParents_HibernateInitialize (select + 1)	size	50	time	[mm:ss:millis.nanos]: 0:0:244.552746	nanoTime	244552746
+>>>>60	taxListWithChildren (throwLazyInitializationException)	size	66	time	[mm:ss:millis.nanos]: 0:0:92.431761	nanoTime	92431761
+>>>>60	taxListWithChildrenAndParents_leftJoinFetch (cartesian product)	size	66	time	[mm:ss:millis.nanos]: 0:0:111.55079	nanoTime	111055079
+>>>>60	taxListWithChildrenAndParents_HibernateInitialize (select + 1)	size	50	time	[mm:ss:millis.nanos]: 0:0:235.831915	nanoTime	235831915
+>>>>61	taxListWithChildren (throwLazyInitializationException)	size	66	time	[mm:ss:millis.nanos]: 0:0:95.728080	nanoTime	95728080
+>>>>61	taxListWithChildrenAndParents_leftJoinFetch (cartesian product)	size	66	time	[mm:ss:millis.nanos]: 0:0:126.603667	nanoTime	126603667
+>>>>61	taxListWithChildrenAndParents_HibernateInitialize (select + 1)	size	50	time	[mm:ss:millis.nanos]: 0:0:236.259699	nanoTime	236259699
+>>>>62	taxListWithChildren (throwLazyInitializationException)	size	66	time	[mm:ss:millis.nanos]: 0:0:230.860845	nanoTime	230860845
+>>>>62	taxListWithChildrenAndParents_leftJoinFetch (cartesian product)	size	66	time	[mm:ss:millis.nanos]: 0:0:850.443389	nanoTime	850443389
+>>>>62	taxListWithChildrenAndParents_HibernateInitialize (select + 1)	size	50	time	[mm:ss:millis.nanos]: 0:0:491.379234	nanoTime	491379234
+>>>>63	taxListWithChildren (throwLazyInitializationException)	size	66	time	[mm:ss:millis.nanos]: 0:0:87.465356	nanoTime	87465356
+>>>>63	taxListWithChildrenAndParents_leftJoinFetch (cartesian product)	size	66	time	[mm:ss:millis.nanos]: 0:0:133.437954	nanoTime	133437954
+>>>>63	taxListWithChildrenAndParents_HibernateInitialize (select + 1)	size	50	time	[mm:ss:millis.nanos]: 0:0:371.15062	nanoTime	371015062
+>>>>64	taxListWithChildren (throwLazyInitializationException)	size	66	time	[mm:ss:millis.nanos]: 0:0:92.654750	nanoTime	92654750
+>>>>64	taxListWithChildrenAndParents_leftJoinFetch (cartesian product)	size	66	time	[mm:ss:millis.nanos]: 0:0:159.113418	nanoTime	159113418
+>>>>64	taxListWithChildrenAndParents_HibernateInitialize (select + 1)	size	50	time	[mm:ss:millis.nanos]: 0:0:224.167908	nanoTime	224167908
+>>>>65	taxListWithChildren (throwLazyInitializationException)	size	66	time	[mm:ss:millis.nanos]: 0:0:74.371048	nanoTime	74371048
+>>>>65	taxListWithChildrenAndParents_leftJoinFetch (cartesian product)	size	66	time	[mm:ss:millis.nanos]: 0:0:122.661706	nanoTime	122661706
+>>>>65	taxListWithChildrenAndParents_HibernateInitialize (select + 1)	size	50	time	[mm:ss:millis.nanos]: 0:0:243.733565	nanoTime	243733565
+>>>>66	taxListWithChildren (throwLazyInitializationException)	size	66	time	[mm:ss:millis.nanos]: 0:0:93.431480	nanoTime	93431480
+>>>>66	taxListWithChildrenAndParents_leftJoinFetch (cartesian product)	size	66	time	[mm:ss:millis.nanos]: 0:0:125.215350	nanoTime	125215350
+>>>>66	taxListWithChildrenAndParents_HibernateInitialize (select + 1)	size	50	time	[mm:ss:millis.nanos]: 0:0:195.901480	nanoTime	195901480
+>>>>67	taxListWithChildren (throwLazyInitializationException)	size	66	time	[mm:ss:millis.nanos]: 0:0:66.57941	nanoTime	66057941
+>>>>67	taxListWithChildrenAndParents_leftJoinFetch (cartesian product)	size	66	time	[mm:ss:millis.nanos]: 0:0:192.203033	nanoTime	192203033
+>>>>67	taxListWithChildrenAndParents_HibernateInitialize (select + 1)	size	50	time	[mm:ss:millis.nanos]: 0:1:297.955359	nanoTime	1297955359
+>>>>68	taxListWithChildren (throwLazyInitializationException)	size	66	time	[mm:ss:millis.nanos]: 0:0:94.482980	nanoTime	94482980
+>>>>68	taxListWithChildrenAndParents_leftJoinFetch (cartesian product)	size	66	time	[mm:ss:millis.nanos]: 0:0:136.717947	nanoTime	136717947
+>>>>68	taxListWithChildrenAndParents_HibernateInitialize (select + 1)	size	50	time	[mm:ss:millis.nanos]: 0:0:274.227551	nanoTime	274227551
+>>>>69	taxListWithChildren (throwLazyInitializationException)	size	66	time	[mm:ss:millis.nanos]: 0:0:85.244329	nanoTime	85244329
+>>>>69	taxListWithChildrenAndParents_leftJoinFetch (cartesian product)	size	66	time	[mm:ss:millis.nanos]: 0:0:132.281957	nanoTime	132281957
+>>>>69	taxListWithChildrenAndParents_HibernateInitialize (select + 1)	size	50	time	[mm:ss:millis.nanos]: 0:0:262.617192	nanoTime	262617192
+>>>>70	taxListWithChildren (throwLazyInitializationException)	size	66	time	[mm:ss:millis.nanos]: 0:0:91.488489	nanoTime	91488489
+>>>>70	taxListWithChildrenAndParents_leftJoinFetch (cartesian product)	size	66	time	[mm:ss:millis.nanos]: 0:0:130.66061	nanoTime	130066061
+>>>>70	taxListWithChildrenAndParents_HibernateInitialize (select + 1)	size	50	time	[mm:ss:millis.nanos]: 0:0:243.87456	nanoTime	243087456
+>>>>71	taxListWithChildren (throwLazyInitializationException)	size	66	time	[mm:ss:millis.nanos]: 0:0:77.70707	nanoTime	77070707
+>>>>71	taxListWithChildrenAndParents_leftJoinFetch (cartesian product)	size	66	time	[mm:ss:millis.nanos]: 0:0:121.131105	nanoTime	121131105
+>>>>71	taxListWithChildrenAndParents_HibernateInitialize (select + 1)	size	50	time	[mm:ss:millis.nanos]: 0:0:229.944164	nanoTime	229944164
+>>>>72	taxListWithChildren (throwLazyInitializationException)	size	66	time	[mm:ss:millis.nanos]: 0:0:86.999785	nanoTime	86999785
+>>>>72	taxListWithChildrenAndParents_leftJoinFetch (cartesian product)	size	66	time	[mm:ss:millis.nanos]: 0:1:68.2797	nanoTime	1068002797
+>>>>72	taxListWithChildrenAndParents_HibernateInitialize (select + 1)	size	50	time	[mm:ss:millis.nanos]: 0:0:247.910644	nanoTime	247910644
+>>>>73	taxListWithChildren (throwLazyInitializationException)	size	66	time	[mm:ss:millis.nanos]: 0:0:87.246565	nanoTime	87246565
+>>>>73	taxListWithChildrenAndParents_leftJoinFetch (cartesian product)	size	66	time	[mm:ss:millis.nanos]: 0:0:114.437235	nanoTime	114437235
+>>>>73	taxListWithChildrenAndParents_HibernateInitialize (select + 1)	size	50	time	[mm:ss:millis.nanos]: 0:0:232.232368	nanoTime	232232368
+>>>>74	taxListWithChildren (throwLazyInitializationException)	size	66	time	[mm:ss:millis.nanos]: 0:0:79.781564	nanoTime	79781564
+>>>>74	taxListWithChildrenAndParents_leftJoinFetch (cartesian product)	size	66	time	[mm:ss:millis.nanos]: 0:0:127.587525	nanoTime	127587525
+>>>>74	taxListWithChildrenAndParents_HibernateInitialize (select + 1)	size	50	time	[mm:ss:millis.nanos]: 0:0:262.855576	nanoTime	262855576
+>>>>75	taxListWithChildren (throwLazyInitializationException)	size	66	time	[mm:ss:millis.nanos]: 0:0:129.586962	nanoTime	129586962
+>>>>75	taxListWithChildrenAndParents_leftJoinFetch (cartesian product)	size	66	time	[mm:ss:millis.nanos]: 0:0:132.164864	nanoTime	132164864
+>>>>75	taxListWithChildrenAndParents_HibernateInitialize (select + 1)	size	50	time	[mm:ss:millis.nanos]: 0:0:264.99742	nanoTime	264099742
+>>>>76	taxListWithChildren (throwLazyInitializationException)	size	66	time	[mm:ss:millis.nanos]: 0:0:79.344916	nanoTime	79344916
+>>>>76	taxListWithChildrenAndParents_leftJoinFetch (cartesian product)	size	66	time	[mm:ss:millis.nanos]: 0:0:104.9464	nanoTime	104009464
+>>>>76	taxListWithChildrenAndParents_HibernateInitialize (select + 1)	size	50	time	[mm:ss:millis.nanos]: 0:0:191.49369	nanoTime	191049369
+>>>>77	taxListWithChildren (throwLazyInitializationException)	size	66	time	[mm:ss:millis.nanos]: 0:0:70.832613	nanoTime	70832613
+>>>>77	taxListWithChildrenAndParents_leftJoinFetch (cartesian product)	size	66	time	[mm:ss:millis.nanos]: 0:0:802.8114	nanoTime	802008114
+>>>>77	taxListWithChildrenAndParents_HibernateInitialize (select + 1)	size	50	time	[mm:ss:millis.nanos]: 0:0:250.598642	nanoTime	250598642
+>>>>78	taxListWithChildren (throwLazyInitializationException)	size	66	time	[mm:ss:millis.nanos]: 0:0:94.875310	nanoTime	94875310
+>>>>78	taxListWithChildrenAndParents_leftJoinFetch (cartesian product)	size	66	time	[mm:ss:millis.nanos]: 0:0:133.274678	nanoTime	133274678
+>>>>78	taxListWithChildrenAndParents_HibernateInitialize (select + 1)	size	50	time	[mm:ss:millis.nanos]: 0:0:252.112915	nanoTime	252112915
+>>>>79	taxListWithChildren (throwLazyInitializationException)	size	66	time	[mm:ss:millis.nanos]: 0:0:90.631521	nanoTime	90631521
+>>>>79	taxListWithChildrenAndParents_leftJoinFetch (cartesian product)	size	66	time	[mm:ss:millis.nanos]: 0:0:135.179415	nanoTime	135179415
+>>>>79	taxListWithChildrenAndParents_HibernateInitialize (select + 1)	size	50	time	[mm:ss:millis.nanos]: 0:0:337.194434	nanoTime	337194434
+>>>>80	taxListWithChildren (throwLazyInitializationException)	size	66	time	[mm:ss:millis.nanos]: 0:0:181.33055	nanoTime	181033055
+>>>>80	taxListWithChildrenAndParents_leftJoinFetch (cartesian product)	size	66	time	[mm:ss:millis.nanos]: 0:0:113.469705	nanoTime	113469705
+>>>>80	taxListWithChildrenAndParents_HibernateInitialize (select + 1)	size	50	time	[mm:ss:millis.nanos]: 0:0:271.766274	nanoTime	271766274
+>>>>81	taxListWithChildren (throwLazyInitializationException)	size	66	time	[mm:ss:millis.nanos]: 0:0:91.176397	nanoTime	91176397
+>>>>81	taxListWithChildrenAndParents_leftJoinFetch (cartesian product)	size	66	time	[mm:ss:millis.nanos]: 0:0:122.934611	nanoTime	122934611
+>>>>81	taxListWithChildrenAndParents_HibernateInitialize (select + 1)	size	50	time	[mm:ss:millis.nanos]: 0:0:312.832180	nanoTime	312832180
+>>>>82	taxListWithChildren (throwLazyInitializationException)	size	66	time	[mm:ss:millis.nanos]: 0:1:42.701470	nanoTime	1042701470
+>>>>82	taxListWithChildrenAndParents_leftJoinFetch (cartesian product)	size	66	time	[mm:ss:millis.nanos]: 0:0:96.232838	nanoTime	96232838
+>>>>82	taxListWithChildrenAndParents_HibernateInitialize (select + 1)	size	50	time	[mm:ss:millis.nanos]: 0:0:171.398809	nanoTime	171398809
+>>>>83	taxListWithChildren (throwLazyInitializationException)	size	66	time	[mm:ss:millis.nanos]: 0:0:54.729351	nanoTime	54729351
+>>>>83	taxListWithChildrenAndParents_leftJoinFetch (cartesian product)	size	66	time	[mm:ss:millis.nanos]: 0:0:109.882754	nanoTime	109882754
+>>>>83	taxListWithChildrenAndParents_HibernateInitialize (select + 1)	size	50	time	[mm:ss:millis.nanos]: 0:0:232.531397	nanoTime	232531397
+>>>>84	taxListWithChildren (throwLazyInitializationException)	size	66	time	[mm:ss:millis.nanos]: 0:0:69.898204	nanoTime	69898204
+>>>>84	taxListWithChildrenAndParents_leftJoinFetch (cartesian product)	size	66	time	[mm:ss:millis.nanos]: 0:0:83.445489	nanoTime	83445489
+>>>>84	taxListWithChildrenAndParents_HibernateInitialize (select + 1)	size	50	time	[mm:ss:millis.nanos]: 0:0:169.185712	nanoTime	169185712
+>>>>85	taxListWithChildren (throwLazyInitializationException)	size	66	time	[mm:ss:millis.nanos]: 0:0:65.187910	nanoTime	65187910
+>>>>85	taxListWithChildrenAndParents_leftJoinFetch (cartesian product)	size	66	time	[mm:ss:millis.nanos]: 0:0:81.735284	nanoTime	81735284
+>>>>85	taxListWithChildrenAndParents_HibernateInitialize (select + 1)	size	50	time	[mm:ss:millis.nanos]: 0:0:162.862247	nanoTime	162862247
+>>>>86	taxListWithChildren (throwLazyInitializationException)	size	66	time	[mm:ss:millis.nanos]: 0:0:67.979005	nanoTime	67979005
+>>>>86	taxListWithChildrenAndParents_leftJoinFetch (cartesian product)	size	66	time	[mm:ss:millis.nanos]: 0:0:98.764091	nanoTime	98764091
+>>>>86	taxListWithChildrenAndParents_HibernateInitialize (select + 1)	size	50	time	[mm:ss:millis.nanos]: 0:1:639.347398	nanoTime	1639347398
+>>>>87	taxListWithChildren (throwLazyInitializationException)	size	66	time	[mm:ss:millis.nanos]: 0:0:69.822164	nanoTime	69822164
+>>>>87	taxListWithChildrenAndParents_leftJoinFetch (cartesian product)	size	66	time	[mm:ss:millis.nanos]: 0:0:77.157011	nanoTime	77157011
+>>>>87	taxListWithChildrenAndParents_HibernateInitialize (select + 1)	size	50	time	[mm:ss:millis.nanos]: 0:0:188.297459	nanoTime	188297459
+>>>>88	taxListWithChildren (throwLazyInitializationException)	size	66	time	[mm:ss:millis.nanos]: 0:0:63.711424	nanoTime	63711424
+>>>>88	taxListWithChildrenAndParents_leftJoinFetch (cartesian product)	size	66	time	[mm:ss:millis.nanos]: 0:0:126.18204	nanoTime	126018204
+>>>>88	taxListWithChildrenAndParents_HibernateInitialize (select + 1)	size	50	time	[mm:ss:millis.nanos]: 0:0:171.82985	nanoTime	171082985
+>>>>89	taxListWithChildren (throwLazyInitializationException)	size	66	time	[mm:ss:millis.nanos]: 0:0:66.815077	nanoTime	66815077
+>>>>89	taxListWithChildrenAndParents_leftJoinFetch (cartesian product)	size	66	time	[mm:ss:millis.nanos]: 0:0:83.702532	nanoTime	83702532
+>>>>89	taxListWithChildrenAndParents_HibernateInitialize (select + 1)	size	50	time	[mm:ss:millis.nanos]: 0:0:161.724909	nanoTime	161724909
+>>>>90	taxListWithChildren (throwLazyInitializationException)	size	66	time	[mm:ss:millis.nanos]: 0:0:243.292251	nanoTime	243292251
+>>>>90	taxListWithChildrenAndParents_leftJoinFetch (cartesian product)	size	66	time	[mm:ss:millis.nanos]: 0:0:99.694766	nanoTime	99694766
+>>>>90	taxListWithChildrenAndParents_HibernateInitialize (select + 1)	size	50	time	[mm:ss:millis.nanos]: 0:0:166.580286	nanoTime	166580286
+>>>>91	taxListWithChildren (throwLazyInitializationException)	size	66	time	[mm:ss:millis.nanos]: 0:0:66.842601	nanoTime	66842601
+>>>>91	taxListWithChildrenAndParents_leftJoinFetch (cartesian product)	size	66	time	[mm:ss:millis.nanos]: 0:0:94.295446	nanoTime	94295446
+>>>>91	taxListWithChildrenAndParents_HibernateInitialize (select + 1)	size	50	time	[mm:ss:millis.nanos]: 0:1:965.588311	nanoTime	1965588311
+>>>>92	taxListWithChildren (throwLazyInitializationException)	size	66	time	[mm:ss:millis.nanos]: 0:0:93.222486	nanoTime	93222486
+>>>>92	taxListWithChildrenAndParents_leftJoinFetch (cartesian product)	size	66	time	[mm:ss:millis.nanos]: 0:0:222.891552	nanoTime	222891552
+>>>>92	taxListWithChildrenAndParents_HibernateInitialize (select + 1)	size	50	time	[mm:ss:millis.nanos]: 0:0:266.512036	nanoTime	266512036
+>>>>93	taxListWithChildren (throwLazyInitializationException)	size	66	time	[mm:ss:millis.nanos]: 0:0:90.137959	nanoTime	90137959
+>>>>93	taxListWithChildrenAndParents_leftJoinFetch (cartesian product)	size	66	time	[mm:ss:millis.nanos]: 0:0:116.120382	nanoTime	116120382
+>>>>93	taxListWithChildrenAndParents_HibernateInitialize (select + 1)	size	50	time	[mm:ss:millis.nanos]: 0:0:243.112181	nanoTime	243112181
+>>>>94	taxListWithChildren (throwLazyInitializationException)	size	66	time	[mm:ss:millis.nanos]: 0:0:79.882795	nanoTime	79882795
+>>>>94	taxListWithChildrenAndParents_leftJoinFetch (cartesian product)	size	66	time	[mm:ss:millis.nanos]: 0:0:117.745217	nanoTime	117745217
+>>>>94	taxListWithChildrenAndParents_HibernateInitialize (select + 1)	size	50	time	[mm:ss:millis.nanos]: 0:0:222.509485	nanoTime	222509485
+>>>>95	taxListWithChildren (throwLazyInitializationException)	size	66	time	[mm:ss:millis.nanos]: 0:0:81.370477	nanoTime	81370477
+>>>>95	taxListWithChildrenAndParents_leftJoinFetch (cartesian product)	size	66	time	[mm:ss:millis.nanos]: 0:0:267.63910	nanoTime	267063910
+>>>>95	taxListWithChildrenAndParents_HibernateInitialize (select + 1)	size	50	time	[mm:ss:millis.nanos]: 0:0:245.445635	nanoTime	245445635
+>>>>96	taxListWithChildren (throwLazyInitializationException)	size	66	time	[mm:ss:millis.nanos]: 0:0:81.40660	nanoTime	81040660
+>>>>96	taxListWithChildrenAndParents_leftJoinFetch (cartesian product)	size	66	time	[mm:ss:millis.nanos]: 0:0:162.972808	nanoTime	162972808
+>>>>96	taxListWithChildrenAndParents_HibernateInitialize (select + 1)	size	50	time	[mm:ss:millis.nanos]: 0:1:289.173882	nanoTime	1289173882
+>>>>97	taxListWithChildren (throwLazyInitializationException)	size	66	time	[mm:ss:millis.nanos]: 0:0:180.842255	nanoTime	180842255
+>>>>97	taxListWithChildrenAndParents_leftJoinFetch (cartesian product)	size	66	time	[mm:ss:millis.nanos]: 0:0:89.138707	nanoTime	89138707
+>>>>97	taxListWithChildrenAndParents_HibernateInitialize (select + 1)	size	50	time	[mm:ss:millis.nanos]: 0:0:194.964273	nanoTime	194964273
+>>>>98	taxListWithChildren (throwLazyInitializationException)	size	66	time	[mm:ss:millis.nanos]: 0:0:69.145733	nanoTime	69145733
+>>>>98	taxListWithChildrenAndParents_leftJoinFetch (cartesian product)	size	66	time	[mm:ss:millis.nanos]: 0:0:109.310819	nanoTime	109310819
+>>>>98	taxListWithChildrenAndParents_HibernateInitialize (select + 1)	size	50	time	[mm:ss:millis.nanos]: 0:0:230.780606	nanoTime	230780606
+>>>>99	taxListWithChildren (throwLazyInitializationException)	size	66	time	[mm:ss:millis.nanos]: 0:0:70.946906	nanoTime	70946906
+>>>>99	taxListWithChildrenAndParents_leftJoinFetch (cartesian product)	size	66	time	[mm:ss:millis.nanos]: 0:0:104.871564	nanoTime	104871564
+>>>>99	taxListWithChildrenAndParents_HibernateInitialize (select + 1)	size	50	time	[mm:ss:millis.nanos]: 0:0:176.79713	nanoTime	176079713
