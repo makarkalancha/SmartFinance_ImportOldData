@@ -5,6 +5,7 @@ import com.makco.smartfinance.persistence.entity.Currency;
 import com.makco.smartfinance.persistence.entity.DateUnit;
 import com.makco.smartfinance.persistence.entity.FamilyMember;
 import com.makco.smartfinance.persistence.entity.Tax;
+import com.makco.smartfinance.persistence.entity.session.Tax_v1;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
@@ -52,6 +53,7 @@ public class HibernateUtilTest {
         cfg.addAnnotatedClass(DateUnit.class);
         cfg.addAnnotatedClass(FamilyMember.class);
         cfg.addAnnotatedClass(Tax.class);
+        cfg.addAnnotatedClass(Tax_v1.class);
 //        cfg.setProperty("hibernate.connection.driver_class", "org.h2.Driver");
         cfg.setProperty("javax.persistence.jdbc.driver", "org.h2.Driver");
         cfg.setProperty("hibernate.connection.url", DataBaseConstants.URL);

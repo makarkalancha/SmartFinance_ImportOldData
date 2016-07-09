@@ -5,6 +5,7 @@ import com.makco.smartfinance.persistence.entity.Tax;
 import com.makco.smartfinance.user_interface.constants.UserInterfaceConstants;
 import com.makco.smartfinance.user_interface.utility_screens.DialogMessages;
 import com.makco.smartfinance.utils.BigDecimalUtils;
+import com.makco.smartfinance.utils.Logs;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -238,14 +239,14 @@ public class TaxFormulaEditorController {
 
             StringBuilder resultSB = new StringBuilder();
             resultSB.append("tax.calculateFormula(number) ");
-            resultSB.append(benchmarkCalcultaion(start1, end1));
+            resultSB.append(Logs.benchmarkCalcultaion(start1, end1));
             resultSB.append(":\n");
             resultSB.append(editedFormulaForUI);
             resultSB.append(" = ");
             resultSB.append(BigDecimalUtils.formatDecimalNumber(resultTaxCalculateFormula));
 
             resultSB.append("\n\ntax.calculateFormulaWihNashorn(number) ");
-            resultSB.append(benchmarkCalcultaion(start2, end2));
+            resultSB.append(Logs.benchmarkCalcultaion(start2, end2));
             resultSB.append(":\n");
             resultSB.append(editedFormulaForUI);
             resultSB.append(" = ");
@@ -279,14 +280,5 @@ public class TaxFormulaEditorController {
         }catch (Exception e){
             DialogMessages.showExceptionAlert(e);
         }
-    }
-
-    private String benchmarkCalcultaion(long start, long end){
-        long elapsed_string = end - start;
-        long minutes = TimeUnit.NANOSECONDS.toMinutes(elapsed_string);
-        long seconds = TimeUnit.NANOSECONDS.toSeconds(elapsed_string - TimeUnit.MINUTES.toNanos(minutes));
-        long millis = TimeUnit.NANOSECONDS.toMillis(elapsed_string - TimeUnit.MINUTES.toNanos(minutes) - TimeUnit.SECONDS.toNanos(seconds));
-        long nanos = elapsed_string - TimeUnit.MINUTES.toNanos(minutes) - TimeUnit.SECONDS.toNanos(seconds) - TimeUnit.MILLISECONDS.toNanos(millis);
-        return String.format("[mm:ss:millis.nanos]: %s:%s:%s.%s", minutes, seconds, millis, nanos);
     }
 }

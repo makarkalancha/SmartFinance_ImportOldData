@@ -3,6 +3,7 @@ package com.makco.smartfinance.persistence.entity;
 import com.makco.smartfinance.constants.DataBaseConstants;
 import com.makco.smartfinance.persistence.entity.session.Tax_v1;
 import com.makco.smartfinance.utils.BigDecimalUtils;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.math.BigDecimal;
@@ -19,6 +20,101 @@ import static org.junit.Assert.assertEquals;
  * Created by mcalancea on 29 Jun 2016.
  */
 public class TaxTest {
+
+    private Tax_v1 one;
+    private Tax_v1 two;
+    private Tax_v1 five;
+    private Tax_v1 six;
+    private Tax_v1 nine;
+
+    @Before
+    public void setTaxFields() throws Exception{
+        one = new Tax_v1(
+                "TAX1",
+                "tax number 1",
+                new BigDecimal("1"),
+                new StringBuilder(DataBaseConstants.TAX_NUMBER_PLACEHOLDER)
+                        .append("*(1+")
+                        .append(DataBaseConstants.TAX_RATE_PLACEHOLDER)
+                        .append("/100)")
+                        .toString(),
+                null,
+                null,
+                null,
+                new HashSet<>()
+        );
+        one.setId(1L);
+
+        two = new Tax_v1(
+                "TAX2",
+                "tax number 2",
+                new BigDecimal("2"),
+                new StringBuilder(DataBaseConstants.TAX_NUMBER_PLACEHOLDER)
+                        .append("*(1+")
+                        .append(DataBaseConstants.TAX_RATE_PLACEHOLDER)
+                        .append("/100)")
+                        .toString(),
+                null,
+                null,
+                null,
+                new HashSet<>()
+        );
+        two.setId(2L);
+
+        five = new Tax_v1(
+                "TAX5",
+                "tax number 5",
+                new BigDecimal("5"),
+                new StringBuilder(DataBaseConstants.TAX_NUMBER_PLACEHOLDER)
+                        .append("*(1+")
+                        .append(DataBaseConstants.TAX_RATE_PLACEHOLDER)
+                        .append("/100)")
+                        .toString(),
+                null,
+                null,
+                null,
+                new HashSet<>()
+        );
+        five.setId(5L);
+
+        six = new Tax_v1(
+                "TAX6",
+                "tax number 6",
+                new BigDecimal("6"),
+                new StringBuilder(DataBaseConstants.TAX_NUMBER_PLACEHOLDER)
+                        .append("*(1+")
+                        .append(DataBaseConstants.TAX_RATE_PLACEHOLDER)
+                        .append("/100)")
+                        .toString(),
+                null,
+                null,
+                null,
+                new HashSet<>()
+        );
+        six.setId(6L);
+
+        Set<Tax_v1> taxSet = new HashSet<>();
+        taxSet.add(five);
+        taxSet.add(six);
+        nine = new Tax_v1(
+                "TAX9",
+                "tax number 9",
+                new BigDecimal("9"),
+                new StringBuilder(DataBaseConstants.TAX_NUMBER_PLACEHOLDER)
+                        .append("*(1+")
+                        .append(DataBaseConstants.getTaxChildIdPlaceholder(five.getId()))
+                        .append("/100)")
+                        .append("*(1+")
+                        .append(DataBaseConstants.TAX_RATE_PLACEHOLDER)
+                        .append("/100)")
+                        .toString(),
+                null,
+                null,
+                null,
+                taxSet
+        );
+        nine.setId(9L);
+    }
 
     @Test
     public void testCalculateFormula_1() throws Exception {
@@ -43,193 +139,18 @@ public class TaxTest {
 
     @Test
     public void testDenormalize_1() throws Exception {
-        Tax_v1 five = new Tax_v1(
-                "TAX5",
-                "tax number 5",
-                new BigDecimal("5"),
-                new StringBuilder(DataBaseConstants.TAX_NUMBER_PLACEHOLDER)
-                        .append("*(1+")
-                        .append(DataBaseConstants.TAX_RATE_PLACEHOLDER)
-                        .append("/100)")
-                        .toString(),
-                null,
-                null,
-                null,
-                new HashSet<>()
-        );
-        five.setId(5L);
-
-        Set<Tax_v1> taxSet = new HashSet<>();
-        taxSet.add(five);
-        Tax_v1 nine = new Tax_v1(
-                "TAX9",
-                "tax number 9",
-                new BigDecimal("9"),
-                new StringBuilder(DataBaseConstants.TAX_NUMBER_PLACEHOLDER)
-                        .append("*(1+")
-                        .append(DataBaseConstants.getTaxChildIdPlaceholder(five.getId()))
-                        .append("/100)")
-                        .append("*(1+")
-                        .append(DataBaseConstants.TAX_RATE_PLACEHOLDER)
-                        .append("/100)")
-                        .toString(),
-                null,
-                null,
-                null,
-                taxSet
-        );
-        nine.setId(9L);
-        String denormalizedFormula = nine.getDenormalizedFormula();
-        assertEquals("{NUM}*(1+5/100)*(1+9/100)", denormalizedFormula);
+        assertEquals("{NUM}*(1+5/100)*(1+9/100)", nine.getDenormalizedFormula());
+        assertEquals(1, nine.getChildTaxes().size());
     }
 
     @Test
     public void testRefreshFormula() {
-        Tax_v1 five = new Tax_v1(
-                "TAX5",
-                "tax number 5",
-                new BigDecimal("5"),
-                new StringBuilder(DataBaseConstants.TAX_NUMBER_PLACEHOLDER)
-                        .append("*(1+")
-                        .append(DataBaseConstants.TAX_RATE_PLACEHOLDER)
-                        .append("/100)")
-                        .toString(),
-                null,
-                null,
-                null,
-                new HashSet<>()
-        );
-        five.setId(5L);
-
-        Tax_v1 six = new Tax_v1(
-                "TAX6",
-                "tax number 6",
-                new BigDecimal("6"),
-                new StringBuilder(DataBaseConstants.TAX_NUMBER_PLACEHOLDER)
-                        .append("*(1+")
-                        .append(DataBaseConstants.TAX_RATE_PLACEHOLDER)
-                        .append("/100)")
-                        .toString(),
-                null,
-                null,
-                null,
-                new HashSet<>()
-        );
-        six.setId(6L);
-
-        Set<Tax_v1> taxSet = new HashSet<>();
-        taxSet.add(five);
-        taxSet.add(six);
-        Tax_v1 nine = new Tax_v1(
-                "TAX9",
-                "tax number 9",
-                new BigDecimal("9"),
-                new StringBuilder(DataBaseConstants.TAX_NUMBER_PLACEHOLDER)
-                        .append("*(1+")
-                        .append(DataBaseConstants.getTaxChildIdPlaceholder(five.getId()))
-                        .append("/100)")
-                        .append("*(1+")
-                        .append(DataBaseConstants.TAX_RATE_PLACEHOLDER)
-                        .append("/100)")
-                        .toString(),
-                null,
-                null,
-                null,
-                taxSet
-        );
-        nine.setId(9L);
-        String denormalizedFormula = nine.getDenormalizedFormula();
-        assertEquals("{NUM}*(1+5/100)*(1+9/100)", denormalizedFormula);
+        assertEquals("{NUM}*(1+5/100)*(1+9/100)", nine.getDenormalizedFormula());
         assertEquals(1, nine.getChildTaxes().size());
     }
 
     @Test
     public void testFillChildTaxes_1() throws Exception {
-        Tax_v1 one = new Tax_v1(
-                "TAX1",
-                "tax number 1",
-                new BigDecimal("1"),
-                new StringBuilder(DataBaseConstants.TAX_NUMBER_PLACEHOLDER)
-                        .append("*(1+")
-                        .append(DataBaseConstants.TAX_RATE_PLACEHOLDER)
-                        .append("/100)")
-                        .toString(),
-                null,
-                null,
-                null,
-                new HashSet<>()
-        );
-        one.setId(1L);
-
-        Tax_v1 two = new Tax_v1(
-                "TAX2",
-                "tax number 2",
-                new BigDecimal("2"),
-                new StringBuilder(DataBaseConstants.TAX_NUMBER_PLACEHOLDER)
-                        .append("*(1+")
-                        .append(DataBaseConstants.TAX_RATE_PLACEHOLDER)
-                        .append("/100)")
-                        .toString(),
-                null,
-                null,
-                null,
-                new HashSet<>()
-        );
-        two.setId(2L);
-
-        Tax_v1 five = new Tax_v1(
-                "TAX5",
-                "tax number 5",
-                new BigDecimal("5"),
-                new StringBuilder(DataBaseConstants.TAX_NUMBER_PLACEHOLDER)
-                        .append("*(1+")
-                        .append(DataBaseConstants.TAX_RATE_PLACEHOLDER)
-                        .append("/100)")
-                        .toString(),
-                null,
-                null,
-                null,
-                new HashSet<>()
-        );
-        five.setId(5L);
-
-        Tax_v1 six = new Tax_v1(
-                "TAX6",
-                "tax number 6",
-                new BigDecimal("6"),
-                new StringBuilder(DataBaseConstants.TAX_NUMBER_PLACEHOLDER)
-                        .append("*(1+")
-                        .append(DataBaseConstants.TAX_RATE_PLACEHOLDER)
-                        .append("/100)")
-                        .toString(),
-                null,
-                null,
-                null,
-                new HashSet<>()
-        );
-        six.setId(6L);
-
-        Set<Tax_v1> taxSet = new HashSet<>();
-        taxSet.add(five);
-        taxSet.add(six);
-        Tax_v1 nine = new Tax_v1(
-                "TAX9",
-                "tax number 9",
-                new BigDecimal("9"),
-                new StringBuilder(DataBaseConstants.TAX_NUMBER_PLACEHOLDER)
-                        .append("*(1+")
-                        .append(DataBaseConstants.getTaxChildIdPlaceholder(five.getId()))
-                        .append("/100)")
-                        .append("*(1+")
-                        .append(DataBaseConstants.TAX_RATE_PLACEHOLDER)
-                        .append("/100)")
-                        .toString(),
-                null,
-                null,
-                null,
-                taxSet
-        );
-        nine.setId(9L);
         List<Tax_v1> taxList = new ArrayList<Tax_v1>() {{
             add(one);
             add(two);
@@ -273,91 +194,6 @@ public class TaxTest {
     @Test
     //{TAXa} is not a pattern like {TAX\\d+}, so result should contain only 1 record
     public void testFillChildTaxes_2_invalidFormula() throws Exception {
-        Tax_v1 one = new Tax_v1(
-                "TAX1",
-                "tax number 1",
-                new BigDecimal("1"),
-                new StringBuilder(DataBaseConstants.TAX_NUMBER_PLACEHOLDER)
-                        .append("*(1+")
-                        .append(DataBaseConstants.TAX_RATE_PLACEHOLDER)
-                        .append("/100)")
-                        .toString(),
-                null,
-                null,
-                null,
-                new HashSet<>()
-        );
-        one.setId(1L);
-
-        Tax_v1 two = new Tax_v1(
-                "TAX2",
-                "tax number 2",
-                new BigDecimal("2"),
-                new StringBuilder(DataBaseConstants.TAX_NUMBER_PLACEHOLDER)
-                        .append("*(1+")
-                        .append(DataBaseConstants.TAX_RATE_PLACEHOLDER)
-                        .append("/100)")
-                        .toString(),
-                null,
-                null,
-                null,
-                new HashSet<>()
-        );
-        two.setId(2L);
-
-        Tax_v1 five = new Tax_v1(
-                "TAX5",
-                "tax number 5",
-                new BigDecimal("5"),
-                new StringBuilder(DataBaseConstants.TAX_NUMBER_PLACEHOLDER)
-                        .append("*(1+")
-                        .append(DataBaseConstants.TAX_RATE_PLACEHOLDER)
-                        .append("/100)")
-                        .toString(),
-                null,
-                null,
-                null,
-                new HashSet<>()
-        );
-        five.setId(5L);
-
-        Tax_v1 six = new Tax_v1(
-                "TAX6",
-                "tax number 6",
-                new BigDecimal("6"),
-                new StringBuilder(DataBaseConstants.TAX_NUMBER_PLACEHOLDER)
-                        .append("*(1+")
-                        .append(DataBaseConstants.TAX_RATE_PLACEHOLDER)
-                        .append("/100)")
-                        .toString(),
-                null,
-                null,
-                null,
-                new HashSet<>()
-        );
-        six.setId(6L);
-
-        Set<Tax_v1> taxSet = new HashSet<>();
-        taxSet.add(five);
-        taxSet.add(six);
-        Tax_v1 nine = new Tax_v1(
-                "TAX9",
-                "tax number 9",
-                new BigDecimal("9"),
-                new StringBuilder(DataBaseConstants.TAX_NUMBER_PLACEHOLDER)
-                        .append("*(1+")
-                        .append(DataBaseConstants.getTaxChildIdPlaceholder(five.getId()))
-                        .append("/100)")
-                        .append("*(1+")
-                        .append(DataBaseConstants.TAX_RATE_PLACEHOLDER)
-                        .append("/100)")
-                        .toString(),
-                null,
-                null,
-                null,
-                taxSet
-        );
-        nine.setId(9L);
         List<Tax_v1> taxList = new ArrayList<Tax_v1>() {{
             add(one);
             add(two);
@@ -375,91 +211,6 @@ public class TaxTest {
     @Test
     //{TAX100} is not in tax list, so result should contain only 1 record
     public void testFillChildTaxes_3_invalidFormula() throws Exception {
-        Tax_v1 one = new Tax_v1(
-                "TAX1",
-                "tax number 1",
-                new BigDecimal("1"),
-                new StringBuilder(DataBaseConstants.TAX_NUMBER_PLACEHOLDER)
-                        .append("*(1+")
-                        .append(DataBaseConstants.TAX_RATE_PLACEHOLDER)
-                        .append("/100)")
-                        .toString(),
-                null,
-                null,
-                null,
-                new HashSet<>()
-        );
-        one.setId(1L);
-
-        Tax_v1 two = new Tax_v1(
-                "TAX2",
-                "tax number 2",
-                new BigDecimal("2"),
-                new StringBuilder(DataBaseConstants.TAX_NUMBER_PLACEHOLDER)
-                        .append("*(1+")
-                        .append(DataBaseConstants.TAX_RATE_PLACEHOLDER)
-                        .append("/100)")
-                        .toString(),
-                null,
-                null,
-                null,
-                new HashSet<>()
-        );
-        two.setId(2L);
-
-        Tax_v1 five = new Tax_v1(
-                "TAX5",
-                "tax number 5",
-                new BigDecimal("5"),
-                new StringBuilder(DataBaseConstants.TAX_NUMBER_PLACEHOLDER)
-                        .append("*(1+")
-                        .append(DataBaseConstants.TAX_RATE_PLACEHOLDER)
-                        .append("/100)")
-                        .toString(),
-                null,
-                null,
-                null,
-                new HashSet<>()
-        );
-        five.setId(5L);
-
-        Tax_v1 six = new Tax_v1(
-                "TAX6",
-                "tax number 6",
-                new BigDecimal("6"),
-                new StringBuilder(DataBaseConstants.TAX_NUMBER_PLACEHOLDER)
-                        .append("*(1+")
-                        .append(DataBaseConstants.TAX_RATE_PLACEHOLDER)
-                        .append("/100)")
-                        .toString(),
-                null,
-                null,
-                null,
-                new HashSet<>()
-        );
-        six.setId(6L);
-
-        Set<Tax_v1> taxSet = new HashSet<>();
-        taxSet.add(five);
-        taxSet.add(six);
-        Tax_v1 nine = new Tax_v1(
-                "TAX9",
-                "tax number 9",
-                new BigDecimal("9"),
-                new StringBuilder(DataBaseConstants.TAX_NUMBER_PLACEHOLDER)
-                        .append("*(1+")
-                        .append(DataBaseConstants.getTaxChildIdPlaceholder(five.getId()))
-                        .append("/100)")
-                        .append("*(1+")
-                        .append(DataBaseConstants.TAX_RATE_PLACEHOLDER)
-                        .append("/100)")
-                        .toString(),
-                null,
-                null,
-                null,
-                taxSet
-        );
-        nine.setId(9L);
         List<Tax_v1> taxList = new ArrayList<Tax_v1>() {{
             add(one);
             add(two);
