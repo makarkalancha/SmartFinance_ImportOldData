@@ -46,7 +46,7 @@ public class TaxServiceImpl implements TaxService {
     public List<Tax> taxListWithChildren() throws Exception {
         List<Tax> taxs = new ArrayList<>();
         try {
-            taxs = taxDAO.taxListWithChildren();
+            taxs = taxDAO.taxListWithAssociations();
         } catch (Exception e) {
             throw e;
         }

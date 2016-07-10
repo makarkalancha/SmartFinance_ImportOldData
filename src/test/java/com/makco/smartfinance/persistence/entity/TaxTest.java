@@ -23,8 +23,11 @@ public class TaxTest {
 
     private Tax_v1 one;
     private Tax_v1 two;
+    private Tax_v1 three;
+    private Tax_v1 four;
     private Tax_v1 five;
     private Tax_v1 six;
+    private Tax_v1 seven;
     private Tax_v1 nine;
 
     @Before
@@ -61,6 +64,38 @@ public class TaxTest {
         );
         two.setId(2L);
 
+        three = new Tax_v1(
+                "TAX3",
+                "tax number 3",
+                new BigDecimal("3"),
+                new StringBuilder(DataBaseConstants.TAX_NUMBER_PLACEHOLDER)
+                        .append("*(1+")
+                        .append(DataBaseConstants.TAX_RATE_PLACEHOLDER)
+                        .append("/100)")
+                        .toString(),
+                null,
+                null,
+                null,
+                new HashSet<>()
+        );
+        three.setId(3L);
+
+        four = new Tax_v1(
+                "TAX4",
+                "tax number 4",
+                new BigDecimal("4"),
+                new StringBuilder(DataBaseConstants.TAX_NUMBER_PLACEHOLDER)
+                        .append("*(1+")
+                        .append(DataBaseConstants.TAX_RATE_PLACEHOLDER)
+                        .append("/100)")
+                        .toString(),
+                null,
+                null,
+                null,
+                new HashSet<>()
+        );
+        four.setId(4L);
+
         five = new Tax_v1(
                 "TAX5",
                 "tax number 5",
@@ -93,9 +128,37 @@ public class TaxTest {
         );
         six.setId(6L);
 
-        Set<Tax_v1> taxSet = new HashSet<>();
-        taxSet.add(five);
-        taxSet.add(six);
+        Set<Tax_v1> taxSet7 = new HashSet<>();
+        taxSet7.add(five);
+        taxSet7.add(two);
+        seven = new Tax_v1(
+                "TAX7",
+                "tax number 7",
+                new BigDecimal("7"),
+                //num+tax5-rate
+                new StringBuilder(DataBaseConstants.TAX_NUMBER_PLACEHOLDER)
+                        .append("+")
+                        .append(DataBaseConstants.getTaxChildIdPlaceholder(five.getId()))
+                        .append("-")
+                        .append(DataBaseConstants.getTaxChildIdPlaceholder(two.getId()))
+                        .append("/")
+                        .append(DataBaseConstants.TAX_RATE_PLACEHOLDER)
+                        .toString(),
+                null,
+                null,
+                null,
+                taxSet7
+        );
+        seven.setId(7L);
+        five.setParentTaxes(new ArrayList<Tax_v1>(){{
+            addAll(five.getParentTaxes());
+            add(seven);
+
+        }});
+
+        Set<Tax_v1> taxSet9 = new HashSet<>();
+        taxSet9.add(five);
+        taxSet9.add(six);
         nine = new Tax_v1(
                 "TAX9",
                 "tax number 9",
@@ -111,9 +174,37 @@ public class TaxTest {
                 null,
                 null,
                 null,
-                taxSet
+                taxSet9
         );
         nine.setId(9L);
+        five.setParentTaxes(new ArrayList<Tax_v1>(){{
+            addAll(five.getParentTaxes());
+            add(nine);
+
+        }});
+        six.setParentTaxes(new ArrayList<Tax_v1>(){{
+            addAll(nine.getParentTaxes());
+            add(nine);
+        }});
+    }
+    //TaxFormulaEditorController.fillChildTaxes
+    private Set<Tax_v1> fillChildTaxes(String taxFormula, List<Tax_v1> taxList) throws Exception {
+        Set<Tax_v1> childTaxes = new HashSet<>();
+        Pattern patternFormula = Pattern.compile(DataBaseConstants.TAX_CHILD_ID_PLACEHOLDER_PATTERN);
+        Matcher matcherFormula = patternFormula.matcher(taxFormula);
+        while (matcherFormula.find()) {
+            System.out.println(">>>>matcher.group: " + matcherFormula.group());
+            long taxId = DataBaseConstants.getTaxChildId(matcherFormula.group());
+            System.out.println(">>>>taxId: " + taxId);
+            Tax_v1 tax_v1 = taxList.stream()
+                    .filter(tax -> tax.getId().equals(taxId))
+                    .findFirst()
+                    .orElse(null);
+            if(tax_v1 != null){
+                childTaxes.add(tax_v1);
+            }
+        }
+        return childTaxes;
     }
 
     @Test
@@ -202,7 +293,7 @@ public class TaxTest {
         }};
         String taxFormula = "{NUM}*(1+{TAX5}/100)*(1+{TAXa}/100)";
 
-        Set<Tax_v1> childTaxes = fillTaxChild(taxFormula, taxList);
+        Set<Tax_v1> childTaxes = fillChildTaxes(taxFormula, taxList);
 
         assertEquals(1, childTaxes.size());
         assert (childTaxes.contains(five));
@@ -218,28 +309,30 @@ public class TaxTest {
             add(six);//<-in nine
         }};
         String taxFormula = "{NUM}*(1+{TAX5}/100)*(1+{TAX100}/100)";
-        Set<Tax_v1> childTaxes = fillTaxChild(taxFormula, taxList);
+        Set<Tax_v1> childTaxes = fillChildTaxes(taxFormula, taxList);
 
         assertEquals(1, childTaxes.size());
         assert (childTaxes.contains(five));
     }
 
-    private Set<Tax_v1> fillTaxChild(String taxFormula, List<Tax_v1> taxList) throws Exception {
-        Set<Tax_v1> childTaxes = new HashSet<>();
-        Pattern patternFormula = Pattern.compile(DataBaseConstants.TAX_CHILD_ID_PLACEHOLDER_PATTERN);
-        Matcher matcherFormula = patternFormula.matcher(taxFormula);
-        while (matcherFormula.find()) {
-            System.out.println(">>>>matcher.group: " + matcherFormula.group());
-            long taxId = DataBaseConstants.getTaxChildId(matcherFormula.group());
-            System.out.println(">>>>taxId: " + taxId);
-            Tax_v1 tax_v1 = taxList.stream()
-                    .filter(tax -> tax.getId().equals(taxId))
-                    .findFirst()
-                    .orElse(null);
-            if(tax_v1 != null){
-                childTaxes.add(tax_v1);
-            }
-        }
-        return childTaxes;
+    @Test
+    public void test_changeParentRate() throws Exception {
+        /*
+        seven has five, so we change five's rate
+        nine has five and six, so we change five's rate
+         */
+        assertEquals (new BigDecimal("5"), five.getRate());
+        assertEquals ("{NUM}+5-2/7", seven.getDenormalizedFormula());
+        assertEquals ("{NUM}*(1+5/100)*(1+9/100)", nine.getDenormalizedFormula());
+
+        five.setRate(new BigDecimal("55"));
+        assertEquals (new BigDecimal("55"), five.getRate());
+        assertEquals ("{NUM}+55-2/7", seven.getDenormalizedFormula());
+        assertEquals ("{NUM}*(1+55/100)*(1+9/100)", nine.getDenormalizedFormula());
+        String sevenDenormForm2 = seven.getDenormalizedFormula();
+        String nineDenormForm2 = nine.getDenormalizedFormula();
+        System.out.println(">>>1:" + sevenDenormForm2);
+        System.out.println(">>>2:" + nineDenormForm2);
+
     }
 }

@@ -2,10 +2,6 @@ package com.makco.smartfinance.persistence.entity;
 
 import com.google.common.base.Objects;
 import com.makco.smartfinance.constants.DataBaseConstants;
-import com.makco.smartfinance.user_interface.constants.UserInterfaceConstants;
-import com.makco.smartfinance.utils.BigDecimalUtils;
-import com.makco.smartfinance.utils.notation.ReversePolishNotation;
-import com.makco.smartfinance.utils.notation.ReversePolishNotation1;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.persistence.CascadeType;
@@ -17,13 +13,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.MapKey;
-import javax.persistence.MapKeyColumn;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
@@ -32,11 +23,8 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * Created by mcalancea on 2016-06-08.
@@ -199,17 +187,17 @@ public class Tax implements Serializable {
 
     public void setFormula(String formula) {
         this.formula = formula;
-        refreshDenormalizeFormula(true);
+        refreshDenormalizedFormula(true);
     }
 
     public String getDenormalizedFormula() {
         if (!StringUtils.isBlank(formula) && StringUtils.isBlank(denormalizedFormula)) {
-            refreshDenormalizeFormula(true);
+            refreshDenormalizedFormula(true);
         }
         return denormalizedFormula;
     }
 
-    //impossible to set DenormalizedFormula as it is set in refreshDenormalizeFormula
+    //impossible to set DenormalizedFormula as it is set in refreshDenormalizedFormula
 //    public void setDenormalizedFormula(String denormalizedFormula) {
 //        this.denormalizedFormula = denormalizedFormula;
 //    }
@@ -220,7 +208,8 @@ public class Tax implements Serializable {
 
     public void setRate(BigDecimal rate) {
         this.rate = rate;
-        refreshDenormalizeFormula(false);
+        refreshDenormalizedFormula(false);
+        refreshDenormalizedFormulaInParents();
     }
 
     public LocalDate getStartDate() {
@@ -237,7 +226,7 @@ public class Tax implements Serializable {
 
     public void setChildTaxes(Collection<Tax> childTaxes) {
         this.childTaxes = new HashSet<>(childTaxes);
-        refreshDenormalizeFormula(false);
+        refreshDenormalizedFormula(false);
     }
 
     public Set<Tax> getParentTaxes() {
@@ -248,7 +237,7 @@ public class Tax implements Serializable {
         this.parentTaxes = new HashSet<>(parentTaxes);
     }
 
-    public void refreshDenormalizeFormula (boolean cleanChildSet){
+    public void refreshDenormalizedFormula(boolean cleanChildSet){
         if(!StringUtils.isBlank(formula)) {
             String mathExpressionToCalculate = formula.replace(DataBaseConstants.TAX_RATE_PLACEHOLDER, rate.toString());
             mathExpressionToCalculate = mathExpressionToCalculate.replace(DataBaseConstants.TAX_RATE_PLACEHOLDER, rate.toString());
@@ -267,6 +256,12 @@ public class Tax implements Serializable {
                 }
             }
             this.denormalizedFormula = mathExpressionToCalculate.toString();
+        }
+    }
+
+    private void refreshDenormalizedFormulaInParents() {
+        for(Tax parent : parentTaxes){
+            parent.refreshDenormalizedFormula(false);
         }
     }
 

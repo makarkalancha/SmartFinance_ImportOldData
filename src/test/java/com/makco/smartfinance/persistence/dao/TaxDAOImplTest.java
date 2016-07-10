@@ -8,9 +8,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.Test;
 
-import java.io.File;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
@@ -105,7 +103,7 @@ public class TaxDAOImplTest {
         }});
         taxDAO.saveOrUpdateTax(tax);
 
-//        List<Tax> taxList = taxDAO.taxListWithChildren(); // throwLazyInitializationException
+//        List<Tax> taxList = taxDAO.taxListWithAssociations(); // throwLazyInitializationException
 //        List<Tax> taxList = taxDAO.taxListWithChildrenAndParents_leftJoinFetch(); // cartesian product
         List<Tax> taxList = taxDAO.taxListWithChildrenAndParents_HibernateInitialize();
         int taxCount = 0;
@@ -154,7 +152,7 @@ public class TaxDAOImplTest {
         try(PrintWriter printWriter = new PrintWriter("test_42_select_benchMark.log", "UTF-8");) {
             for (int i = 0; i < cycle; i++) {
                 long start1 = System.nanoTime();
-                List<Tax> taxList1 = taxDAO.taxListWithChildren(); // throwLazyInitializationException
+                List<Tax> taxList1 = taxDAO.taxListWithAssociations(); // throwLazyInitializationException
                 long end1 = System.nanoTime();
 
                 long start2 = System.nanoTime();
@@ -165,7 +163,7 @@ public class TaxDAOImplTest {
                 List<Tax> taxList3 = taxDAO.taxListWithChildrenAndParents_HibernateInitialize(); // select + 1
                 long end3 = System.nanoTime();
 
-                printWriter.append(">>>>" + i + "\ttaxListWithChildren (throwLazyInitializationException)\tsize\t" + taxList1.size() + "\ttime\t" + Logs.benchmarkCalcultaion(start1, end1) + "\tnanoTime\t" + (end1 - start1));
+                printWriter.append(">>>>" + i + "\ttaxListWithAssociations (throwLazyInitializationException)\tsize\t" + taxList1.size() + "\ttime\t" + Logs.benchmarkCalcultaion(start1, end1) + "\tnanoTime\t" + (end1 - start1));
                 printWriter.append("\r\n");
                 printWriter.append(">>>>" + i + "\ttaxListWithChildrenAndParents_leftJoinFetch (cartesian product)\tsize\t" + taxList2.size() + "\ttime\t" + Logs.benchmarkCalcultaion(start2, end2) + "\tnanoTime\t" + (end2 - start2));
                 printWriter.append("\r\n");

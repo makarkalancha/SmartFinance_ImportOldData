@@ -5,7 +5,6 @@ import com.makco.smartfinance.constants.DataBaseConstants;
 import com.makco.smartfinance.user_interface.constants.UserInterfaceConstants;
 import com.makco.smartfinance.utils.BigDecimalUtils;
 import com.makco.smartfinance.utils.notation.ReversePolishNotation;
-import com.makco.smartfinance.utils.notation.ReversePolishNotation1;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.persistence.CascadeType;
@@ -17,7 +16,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.MapKeyColumn;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
@@ -28,11 +26,8 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * Created by mcalancea on 2016-06-08.
@@ -190,17 +185,17 @@ public class Tax_v1 implements Serializable {
 
     public void setFormula(String formula) {
         this.formula = formula;
-        refreshDenormalizeFormula();
+        refreshDenormalizedFormula(true);
     }
 
     public String getDenormalizedFormula() {
         if (!StringUtils.isBlank(formula) && StringUtils.isBlank(denormalizedFormula)) {
-            refreshDenormalizeFormula();
+            refreshDenormalizedFormula(true);
         }
         return denormalizedFormula;
     }
 
-    //impossible to set DenormalizedFormula as it is set in refreshDenormalizeFormula
+    //impossible to set DenormalizedFormula as it is set in refreshDenormalizedFormula
 //    public void setDenormalizedFormula(String denormalizedFormula) {
 //        this.denormalizedFormula = denormalizedFormula;
 //    }
@@ -211,7 +206,8 @@ public class Tax_v1 implements Serializable {
 
     public void setRate(BigDecimal rate) {
         this.rate = rate;
-        refreshDenormalizeFormula();
+        refreshDenormalizedFormula(false);
+        refreshDenormalizedFormulaInParents();
     }
 
     public LocalDate getStartDate() {
@@ -228,7 +224,7 @@ public class Tax_v1 implements Serializable {
 
     public void setChildTaxes(Collection<Tax_v1> childTaxes) {
         this.childTaxes = new HashSet<>(childTaxes);
-        refreshDenormalizeFormula();
+        refreshDenormalizedFormula(false);
     }
 
     public Set<Tax_v1> getParentTaxes() {
@@ -239,16 +235,7 @@ public class Tax_v1 implements Serializable {
         this.parentTaxes = new HashSet<>(parentTaxes);
     }
 
-    public BigDecimal calculateFormula(BigDecimal bigDecimal){
-        BigDecimal result = new BigDecimal("0");
-        String mathExpressionToCalculate = denormalizedFormula.replace(DataBaseConstants.TAX_NUMBER_PLACEHOLDER, bigDecimal.toString());
-        ReversePolishNotation rpn = new ReversePolishNotation(mathExpressionToCalculate, BigDecimalUtils.getDecimalSeparator(),
-                UserInterfaceConstants.SCALE);
-        result = rpn.evaluateReversePolishNotation();
-        return result;
-    }
-
-    public void refreshDenormalizeFormula (){
+    public void refreshDenormalizedFormula(boolean cleanChildSet){
         if(!StringUtils.isBlank(formula)) {
             String mathExpressionToCalculate = formula.replace(DataBaseConstants.TAX_RATE_PLACEHOLDER, rate.toString());
             mathExpressionToCalculate = mathExpressionToCalculate.replace(DataBaseConstants.TAX_RATE_PLACEHOLDER, rate.toString());
@@ -261,13 +248,28 @@ public class Tax_v1 implements Serializable {
                             placeHolder,
                             rateVale
                     );
-                } else {
+                } else if(cleanChildSet){
                     //if for some reason tax contains in its children tax that is not in formula - remove it
                     childTaxes.remove(tax);
                 }
-
             }
             this.denormalizedFormula = mathExpressionToCalculate.toString();
+        }
+    }
+
+    private void refreshDenormalizedFormulaInParents() {
+        for(Tax_v1 parent : parentTaxes){
+            parent.refreshDenormalizedFormula(false);
+            /*
+            {NUM}*(1+{TAX5}/100)*(1+{RATE}/100)
+            {NUM}*(1+5/100)*(1+9/100)
+            {NUM}*(1+55/100)*(1+{RATE}/100)
+
+            {NUM}+{TAX5}-{TAX2}/{RATE}
+            {NUM}+5-2/7
+            {NUM}+55-{TAX2}/{RATE}
+             */
+
         }
     }
 

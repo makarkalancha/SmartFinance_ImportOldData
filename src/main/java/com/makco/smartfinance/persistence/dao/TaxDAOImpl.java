@@ -72,16 +72,20 @@ public class TaxDAOImpl implements TaxDAO {
     }
 
     @Override
-    public List<Tax> taxListWithChildren() throws Exception {
+    public List<Tax> taxListWithAssociations() throws Exception {
         Session session = null;
         List<Tax> list = new ArrayList<>();
         try {
             session = HibernateUtil.openSession();
             session.beginTransaction();
             ////http://stackoverflow.com/questions/12425835/jpql-manytomany-select
-            list = session.createQuery("SELECT t FROM Tax t left join fetch t.childTaxes ORDER BY t.name").list();
-//            //https://docs.jboss.org/hibernate/orm/3.3/reference/en/html/queryhql.html
-//            list = session.createQuery("SELECT t FROM Tax t all properties t.childTaxes ORDER BY t.name").list();
+            /*
+            SmartFinance\src\test\java\com\makco\smartfinance\persistence\dao\dao_implementations\TaxDAOImpl_v1.java
+            taxListWithChildrenAndParents_leftJoinFetch
+            see test_42_select_benchMark.ods
+            cartesian product
+             */
+            list = session.createQuery("SELECT t FROM Tax t left join fetch t.childTaxes left join fetch t.parentTaxes ORDER BY t.name").list();
             session.getTransaction().commit();
         } catch (Exception e) {
             try {
@@ -160,7 +164,7 @@ public class TaxDAOImpl implements TaxDAO {
     public void saveOrUpdateTax(Tax tax) throws Exception {
         Session session = null;
         try {
-//            tax.refreshDenormalizeFormula(true);
+//            tax.refreshDenormalizedFormula(true);
             session = HibernateUtil.openSession();
             session.beginTransaction();
             session.saveOrUpdate(tax);

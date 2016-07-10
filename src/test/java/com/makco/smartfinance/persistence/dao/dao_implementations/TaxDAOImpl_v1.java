@@ -77,7 +77,7 @@ public class TaxDAOImpl_v1 implements TaxDAO{
          1_000 times = 0:0:95,216793
      */
 
-    public List<Tax> taxListWithChildren() throws Exception {
+    public List<Tax> taxListWithAssociations() throws Exception {
         Session session = null;
         List<Tax> list = new ArrayList<>();
         try {
