@@ -210,10 +210,6 @@ public class TaxFormulaEditorController {
     @FXML
     public void onValidateBtn(ActionEvent event){
         try {
-            /*
-            todo denormolize formula: if you type {TAX1} without clicking on listview child list will be empty
-            so add it explicitly
-              */
             fillChildTaxes();
             tax.setChildTaxes(childTaxes);
             tax.setFormula(formulaTA.getText());
