@@ -14,12 +14,14 @@ public class Table {
         ACCOUNT_GROUP,
         CATEGORY,
         CATEGORY_GROUP,
-        TAX_CHILD,
         CURRENCY,
         DATEUNIT,
         FAMILY_MEMBER,
+        INVOICE,
+        ITEM,
         ORGANIZATION,
-        TAX;
+        TAX,
+        TAX_CHILD;
     }
 
     public enum _DELETED_ROWS implements IEnumRow {
@@ -286,6 +288,60 @@ public class Table {
 
         @Override
         public TAX_CHILD getColumnNameByIndex(){
+            return this;
+        }
+    };
+
+    public enum INVOICE implements IEnumRow {
+        ID(0),
+        ORGANIZATION_ID(1),
+        COMMENT(2),
+        BALANCE(3),
+        T_CREATEDON(4),
+        T_UPDATEDON(5);
+
+        private int columnIndex;
+        private INVOICE(int columnIndex) {
+            this.columnIndex = columnIndex;
+        }
+
+        @Override
+        public int getColumnIndex(){
+            return this.columnIndex;
+        }
+
+        @Override
+        public INVOICE getColumnNameByIndex(){
+            return this;
+        }
+    };
+
+    public enum ITEM implements IEnumRow {
+        ID(0),
+        INVOICE_ID(1),
+        CATEGORY_ID(2),
+        TAX_ID(3),
+        FAMILY_MEMBER_ID(3),
+        DESCRIPTION1(3),
+        DESCRIPTION2(3),
+        COMMENT(3),
+        GROSS_AMOUNT(3),
+        NET_AMOUNT(3),
+        T_CREATEDON(4),
+        T_UPDATEDON(5);
+
+        private int columnIndex;
+        private ITEM(int columnIndex) {
+            this.columnIndex = columnIndex;
+        }
+
+        @Override
+        public int getColumnIndex(){
+            return this.columnIndex;
+        }
+
+        @Override
+        public ITEM getColumnNameByIndex(){
             return this;
         }
     };
