@@ -321,14 +321,14 @@ public class Table {
         INVOICE_ID(1),
         CATEGORY_ID(2),
         TAX_ID(3),
-        FAMILY_MEMBER_ID(3),
-        DESCRIPTION1(3),
-        DESCRIPTION2(3),
-        COMMENT(3),
-        GROSS_AMOUNT(3),
-        NET_AMOUNT(3),
-        T_CREATEDON(4),
-        T_UPDATEDON(5);
+        FAMILY_MEMBER_ID(4),
+        DESCRIPTION1(5),
+        DESCRIPTION2(6),
+        COMMENT(7),
+        GROSS_AMOUNT(8),
+        NET_AMOUNT(9),
+        T_CREATEDON(10),
+        T_UPDATEDON(11);
 
         private int columnIndex;
         private ITEM(int columnIndex) {

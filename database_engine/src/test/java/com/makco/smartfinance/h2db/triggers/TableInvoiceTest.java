@@ -39,10 +39,9 @@ import static org.junit.Assert.*;
 public class TableInvoiceTest {
     private static final Logger LOG = LogManager.getLogger(TableInvoiceTest.class);
     private static final SimpleDateFormat SIMPLE_DATE_TIME_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-    private static final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
 
-    private static final String ORGANIZATION_NAME_PREFIX = "Organization From Invoice #";
-    private static final String ORGANIZATION_DESC = "Organization DESC";
+    private static final String ORGANIZATION_NAME_PREFIX = "Organization TableInvoiceTest";
+    private static final String ORGANIZATION_DESC = "Organization TableInvoiceTest DESC";
 
     private TableOrganizationTest tableOrganizationTest = new TableOrganizationTest();
 
@@ -117,11 +116,7 @@ public class TableInvoiceTest {
         try (
                 PreparedStatement selectDatesPS = dbConnectionResource.getConnection().prepareStatement(queryDates);
         ){
-            //https://en.wikipedia.org/wiki/Goods_and_services_tax_%28Canada%29
-            Date startDate = Date.from(LocalDate.of(2008, Month.JANUARY, 1).atStartOfDay(ZoneId.systemDefault()).toInstant());
-
-            String organizationName = ORGANIZATION_NAME_PREFIX + "11";
-            long organizationId = tableOrganizationTest.insert(organizationName, ORGANIZATION_DESC);
+            long organizationId = tableOrganizationTest.insert("Organization TableInvoiceTest", "Organization Description From TableInvoiceTest #testInvoice_11_insert");
             long idJustInserted = insert(organizationId, "invoice comment 11", new BigDecimal("5.0"));
             LOG.debug("idJustInserted > 0: idJustInserted=" + idJustInserted);
             assert (idJustInserted > 0);
@@ -240,7 +235,7 @@ public class TableInvoiceTest {
     private JsonObject createJsonObject() throws Exception {
         String schemaName = "TEST";
 
-        Object[] row = new Object[10];
+        Object[] row = new Object[6];
         row[0] = 1L;
         row[1] = 2L;
         row[2] = "invoice comment";
