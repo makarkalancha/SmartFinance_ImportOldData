@@ -12,7 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 /**
- * Created by mcalancea on 2016-04-25.
+ * Created by Makar Kalancha on 2016-04-25.
  * because CategoryDebit is used in CategoryGroupDebit SortedSet<CategoryDebit> and this collection puts only Comparable
  */
 @Entity

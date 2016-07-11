@@ -23,7 +23,7 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 
 /**
- * Created by mcalancea on 2016-03-02.
+ * Created by Makar Kalancha on 2016-03-02.
  */
 //http://blog.schauderhaft.de/2011/03/13/testing-databases-with-junit-and-hibernate-part-1-one-to-rule-them/
 //:database_engine:flywayClean is run after every test class, so DB is clean after testing

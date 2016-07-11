@@ -16,7 +16,7 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 /**
- * Created by mcalancea on 2016-04-22.
+ * Created by Makar Kalancha on 2016-04-22.
  */
 
 @Entity

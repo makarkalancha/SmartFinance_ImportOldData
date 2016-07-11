@@ -33,7 +33,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Created by mcalancea on 2016-06-19.
+ * Created by Makar Kalancha on 2016-06-19.
  */
 public class TaxFormulaEditorController {
     private final static Logger LOG = LogManager.getLogger(TaxFormulaEditorController.class);

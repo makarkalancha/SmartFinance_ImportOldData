@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by mcalancea on 21 Jun 2016.
+ * Created by Makar Kalancha on 21 Jun 2016.
  * version 1
  */
 public class ReversePolishNotation1 {

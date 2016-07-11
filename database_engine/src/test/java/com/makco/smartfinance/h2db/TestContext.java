@@ -8,7 +8,7 @@ import java.io.InputStream;
 import java.util.Properties;
 
 /**
- * Created by mcalancea on 2016-03-10.
+ * Created by Makar Kalancha on 2016-03-10.
  */
 public enum TestContext {
     INSTANCE;

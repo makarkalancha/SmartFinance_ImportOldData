@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 import static org.junit.Assert.assertEquals;
 
 /**
- * Created by mcalancea on 2016-06-09.
+ * Created by Makar Kalancha on 2016-06-09.
  */
 public class BigDecimalUtilsTest {
 

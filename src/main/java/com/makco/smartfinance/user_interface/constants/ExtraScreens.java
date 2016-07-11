@@ -1,7 +1,7 @@
 package com.makco.smartfinance.user_interface.constants;
 
 /**
- * Created by mcalancea on 20 Jun 2016.
+ * Created by Makar Kalancha on 20 Jun 2016.
  */
 public enum ExtraScreens {
     TAX_FORMULA_EDITOR("tax_formula_editor.fxml");

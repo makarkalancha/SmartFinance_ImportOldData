@@ -8,7 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.EnumSet;
 
 /**
- * Created by mcalancea on 2016-06-06.
+ * Created by Makar Kalancha on 2016-06-06.
  */
 public class AccGr_EmptyAccountGroupType implements Rule<AccountGroup> {
 

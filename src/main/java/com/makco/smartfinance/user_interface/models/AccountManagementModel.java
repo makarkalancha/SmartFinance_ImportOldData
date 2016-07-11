@@ -28,7 +28,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * Created by mcalancea on 2016-06-06.
+ * Created by Makar Kalancha on 2016-06-06.
  */
 public class AccountManagementModel {
     private final static Logger LOG = LogManager.getLogger(AccountManagementModel.class);

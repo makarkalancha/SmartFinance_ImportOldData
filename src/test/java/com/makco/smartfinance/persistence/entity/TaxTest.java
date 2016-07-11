@@ -17,7 +17,7 @@ import java.util.regex.Pattern;
 import static org.junit.Assert.assertEquals;
 
 /**
- * Created by mcalancea on 29 Jun 2016.
+ * Created by Makar Kalancha on 29 Jun 2016.
  */
 public class TaxTest {
 

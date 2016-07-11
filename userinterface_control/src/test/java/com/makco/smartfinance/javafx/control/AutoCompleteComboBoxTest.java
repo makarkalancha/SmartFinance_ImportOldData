@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
 import static org.junit.Assert.assertArrayEquals;
 
 /**
- * Created by mcalancea on 2016-05-16.
+ * Created by Makar Kalancha on 2016-05-16.
  */
 public class AutoCompleteComboBoxTest {
     List<String> initialList = new ArrayList<>();

@@ -5,7 +5,7 @@ import com.makco.smartfinance.persistence.entity.DateUnit;
 import java.util.List;
 
 /**
- * Created by mcalancea on 2016-04-21.
+ * Created by Makar Kalancha on 2016-04-21.
  */
 public interface DateUnitService {
     List<DateUnit> dateUnitList() throws Exception;

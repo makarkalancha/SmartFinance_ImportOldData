@@ -1,7 +1,7 @@
 package com.makco.smartfinance.constants;
 
 /**
- * Created by mcalancea on 2016-05-27.
+ * Created by Makar Kalancha on 2016-05-27.
  */
 public class TableNameTest {
 

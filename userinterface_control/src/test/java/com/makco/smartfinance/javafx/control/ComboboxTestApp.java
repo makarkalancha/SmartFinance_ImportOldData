@@ -27,7 +27,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Created by mcalancea on 2016-05-18.
+ * Created by Makar Kalancha on 2016-05-18.
  */
 public class ComboboxTestApp extends Application{
 

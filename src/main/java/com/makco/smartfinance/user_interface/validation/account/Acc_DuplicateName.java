@@ -10,7 +10,7 @@ import java.util.EnumSet;
 import java.util.List;
 
 /**
- * Created by mcalancea on 2016-06-06.
+ * Created by Makar Kalancha on 2016-06-06.
  */
 public class Acc_DuplicateName implements Rule<Account> {
     private AccountService accountService = new AccountServiceImpl();

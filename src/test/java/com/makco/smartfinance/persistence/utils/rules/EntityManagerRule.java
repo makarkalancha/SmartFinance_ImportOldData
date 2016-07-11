@@ -11,7 +11,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 
 /**
- * Created by mcalancea on 2016-04-28.
+ * Created by Makar Kalancha on 2016-04-28.
  */
 public class EntityManagerRule implements MethodRule{
     private final static Logger LOG = LogManager.getLogger(EntityManagerRule.class);

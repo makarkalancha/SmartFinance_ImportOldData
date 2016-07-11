@@ -7,7 +7,7 @@ import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 
 /**
- * Created by mcalancea on 2016-04-25.
+ * Created by Makar Kalancha on 2016-04-25.
  */
 @Entity
 //@DiscriminatorValue("D")

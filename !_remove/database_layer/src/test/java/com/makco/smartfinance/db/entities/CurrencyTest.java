@@ -16,7 +16,7 @@ import java.util.Random;
 import static org.junit.Assert.assertEquals;
 
 /**
- * Created by mcalancea on 2016-03-28.
+ * Created by Makar Kalancha on 2016-03-28.
  */
 public class CurrencyTest {
     private final static Logger LOG = LogManager.getLogger(CurrencyTest.class);

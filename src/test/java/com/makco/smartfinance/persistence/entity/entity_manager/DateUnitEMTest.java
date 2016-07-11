@@ -21,7 +21,7 @@ import java.util.Date;
 import static org.junit.Assert.assertEquals;
 
 /**
- * Created by mcalancea on 2016-03-28.
+ * Created by Makar Kalancha on 2016-03-28.
  */
 public class DateUnitEMTest {
     private final static Logger LOG = LogManager.getLogger(DateUnitEMTest.class);

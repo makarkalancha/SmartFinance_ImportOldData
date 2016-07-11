@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by mcalancea on 2016-05-02.
+ * Created by Makar Kalancha on 2016-05-02.
  */
 public class CategoryGroupDAOImplForTest {
     private final static Logger LOG = LogManager.getLogger(CategoryGroupDAOImplForTest.class);

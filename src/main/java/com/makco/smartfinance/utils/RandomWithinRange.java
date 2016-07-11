@@ -3,7 +3,7 @@ package com.makco.smartfinance.utils;
 import java.util.Random;
 
 /**
- * Created by mcalancea on 2016-04-28.
+ * Created by Makar Kalancha on 2016-04-28.
  */
 public final class RandomWithinRange {
     private final Random random;

@@ -13,7 +13,7 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 /**
- * Created by mcalancea on 2016-04-25.
+ * Created by Makar Kalancha on 2016-04-25.
  */
 @Entity
 @DiscriminatorValue(DataBaseConstants.CATEGORY_GROUP_TYPE.Values.DEBIT)

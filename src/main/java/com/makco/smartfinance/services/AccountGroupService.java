@@ -7,7 +7,7 @@ import java.util.EnumSet;
 import java.util.List;
 
 /**
- * Created by mcalancea on 2016-06-06.
+ * Created by Makar Kalancha on 2016-06-06.
  */
 public interface AccountGroupService {
     AccountGroup getAccountGroupById(Long id, boolean initializeCategories) throws Exception;

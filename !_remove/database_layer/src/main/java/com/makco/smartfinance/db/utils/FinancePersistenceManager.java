@@ -6,7 +6,7 @@ import javax.persistence.Persistence;
 import javax.persistence.PersistenceUnit;
 
 /**
- * Created by mcalancea on 2016-03-02.
+ * Created by Makar Kalancha on 2016-03-02.
  */
 public enum FinancePersistenceManager {
     INSTANCE;

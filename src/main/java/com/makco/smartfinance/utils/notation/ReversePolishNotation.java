@@ -13,7 +13,7 @@ import java.util.EnumSet;
 import java.util.List;
 
 /**
- * Created by mcalancea on 29 Jun 2016.
+ * Created by Makar Kalancha on 29 Jun 2016.
  * originated from version4
  */
 public class ReversePolishNotation {

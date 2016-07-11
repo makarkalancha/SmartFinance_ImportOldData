@@ -6,7 +6,7 @@ import com.makco.smartfinance.persistence.entity.Category;
 import com.makco.smartfinance.user_interface.constants.UserInterfaceConstants;
 
 /**
- * Created by mcalancea on 2016-06-03.
+ * Created by Makar Kalancha on 2016-06-03.
  */
 public class CategoryManagementDecoratorCategory implements CategoryManagementDecorator {
     private Long id;

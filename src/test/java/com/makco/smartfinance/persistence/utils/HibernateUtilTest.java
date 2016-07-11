@@ -16,7 +16,7 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
 
 /**
- * Created by mcalancea on 2016-04-21.
+ * Created by Makar Kalancha on 2016-04-21.
  */
 //http://www.devx.com/Java/Article/48193/0/page/2
 public class HibernateUtilTest {

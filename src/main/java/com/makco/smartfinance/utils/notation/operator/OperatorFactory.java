@@ -3,7 +3,7 @@ package com.makco.smartfinance.utils.notation.operator;
 import com.makco.smartfinance.utils.notation.Operator;
 
 /**
- * Created by mcalancea on 23 Jun 2016.
+ * Created by Makar Kalancha on 23 Jun 2016.
  */
 public class OperatorFactory {
     public static Operator buildOperator(String operator, int roundScale){

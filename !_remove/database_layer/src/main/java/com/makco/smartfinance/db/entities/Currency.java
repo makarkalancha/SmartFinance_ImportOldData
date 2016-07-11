@@ -15,7 +15,7 @@ import java.time.ZoneId;
 import java.util.Calendar;
 
 /**
- * Created by mcalancea on 2016-03-01.
+ * Created by Makar Kalancha on 2016-03-01.
  */
 
 @Entity

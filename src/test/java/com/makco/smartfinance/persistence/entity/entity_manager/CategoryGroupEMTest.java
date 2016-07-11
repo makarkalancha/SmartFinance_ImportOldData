@@ -23,7 +23,7 @@ import javax.persistence.RollbackException;
 import static org.junit.Assert.assertEquals;
 
 /**
- * Created by mcalancea on 2016-04-25.
+ * Created by Makar Kalancha on 2016-04-25.
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class CategoryGroupEMTest {

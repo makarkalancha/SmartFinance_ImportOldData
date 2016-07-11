@@ -5,7 +5,7 @@ import com.makco.smartfinance.persistence.entity.Organization;
 import java.util.List;
 
 /**
- * Created by mcalancea on 2016-04-22.
+ * Created by Makar Kalancha on 2016-04-22.
  */
 public interface OrganizationDAO {
     List<Organization> organizationList() throws Exception;

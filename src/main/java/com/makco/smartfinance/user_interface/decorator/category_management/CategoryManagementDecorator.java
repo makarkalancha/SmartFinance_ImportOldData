@@ -3,7 +3,7 @@ package com.makco.smartfinance.user_interface.decorator.category_management;
 import com.makco.smartfinance.persistence.entity.Category;
 
 /**
- * Created by mcalancea on 2016-06-03.
+ * Created by Makar Kalancha on 2016-06-03.
  */
 public interface CategoryManagementDecorator {
     Long getId();

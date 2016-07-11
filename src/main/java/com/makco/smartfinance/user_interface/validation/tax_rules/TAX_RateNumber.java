@@ -7,7 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.EnumSet;
 
 /**
- * Created by mcalancea on 2016-04-22.
+ * Created by Makar Kalancha on 2016-04-22.
  */
 public class TAX_RateNumber implements Rule<String> {
 

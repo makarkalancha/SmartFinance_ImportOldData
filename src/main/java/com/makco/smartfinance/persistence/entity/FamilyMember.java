@@ -16,7 +16,7 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 /**
- * Created by mcalancea on 2016-03-01.
+ * Created by Makar Kalancha on 2016-03-01.
  */
 
 //http://howtodoinjava.com/jpa/jpa-native-delete-sql-query-example/

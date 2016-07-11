@@ -8,7 +8,7 @@ import java.time.ZoneId;
 import java.util.Date;
 
 /**
- * Created by mcalancea on 2016-06-09.
+ * Created by Makar Kalancha on 2016-06-09.
  */
 public class DateUtils {
     public static Date convertLocalDateToUtilDate(LocalDate localDate) throws Exception {

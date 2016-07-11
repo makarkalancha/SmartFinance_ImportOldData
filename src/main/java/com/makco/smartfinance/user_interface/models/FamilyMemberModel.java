@@ -13,7 +13,7 @@ import java.util.EnumSet;
 import java.util.List;
 
 /**
- * Created by mcalancea on 2016-04-05.
+ * Created by Makar Kalancha on 2016-04-05.
  */
 public class FamilyMemberModel {
     private final static Logger LOG = LogManager.getLogger(FamilyMemberModel.class);

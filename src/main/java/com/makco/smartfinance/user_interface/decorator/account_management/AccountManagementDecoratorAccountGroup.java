@@ -6,7 +6,7 @@ import com.makco.smartfinance.persistence.entity.Account;
 import com.makco.smartfinance.persistence.entity.AccountGroup;
 
 /**
- * Created by mcalancea on 2016-06-03.
+ * Created by Makar Kalancha on 2016-06-03.
  */
 public class AccountManagementDecoratorAccountGroup implements AccountManagementDecorator {
     private String name;

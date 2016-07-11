@@ -6,7 +6,7 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 /**
- * Created by mcalancea on 2016-04-19.
+ * Created by Makar Kalancha on 2016-04-19.
  */
 //http://www.thoughts-on-java.org/jpa-21-how-to-implement-type-converter/
 //http://www.thoughts-on-java.org/persist-localdate-localdatetime-jpa/

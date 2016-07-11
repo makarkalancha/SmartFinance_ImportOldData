@@ -16,7 +16,7 @@ import java.util.Random;
 import static org.junit.Assert.assertEquals;
 
 /**
- * Created by mcalancea on 2016-03-02.
+ * Created by Makar Kalancha on 2016-03-02.
  */
 public class FamilyMemberTest {
     private final static Logger LOG = LogManager.getLogger(FamilyMemberTest.class);

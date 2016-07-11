@@ -9,7 +9,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 /**
- * Created by mcalancea on 2016-03-10.
+ * Created by Makar Kalancha on 2016-03-10.
  */
 public class DBConnectionResource extends ExternalResource {
     private final static Logger LOG = LogManager.getLogger(DBConnectionResource.class);

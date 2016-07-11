@@ -5,7 +5,7 @@ import com.makco.smartfinance.persistence.entity.Tax;
 import java.util.List;
 
 /**
- * Created by mcalancea on 2016-06-08.
+ * Created by Makar Kalancha on 2016-06-08.
  */
 public interface TaxDAO {
     List<Tax> taxList() throws Exception;

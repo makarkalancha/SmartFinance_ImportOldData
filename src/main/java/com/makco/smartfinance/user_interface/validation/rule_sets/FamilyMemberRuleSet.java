@@ -14,7 +14,7 @@ import java.util.EnumSet;
 import java.util.List;
 
 /**
- * Created by mcalancea on 2016-04-08.
+ * Created by Makar Kalancha on 2016-04-08.
  */
 public class FamilyMemberRuleSet implements RuleSet<FamilyMember>{
 

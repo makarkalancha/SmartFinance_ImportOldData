@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
 /**
- * Created by mcalancea on 2016-04-19.
+ * Created by Makar Kalancha on 2016-04-19.
  */
 @Entity
 @Table(name="DATEUNIT")

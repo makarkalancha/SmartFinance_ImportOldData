@@ -8,7 +8,7 @@ import com.makco.smartfinance.user_interface.validation.Rule;
 import java.util.EnumSet;
 
 /**
- * Created by mcalancea on 2016-04-22.
+ * Created by Makar Kalancha on 2016-04-22.
  */
 public class ORG_NameLength implements Rule<Organization> {
 

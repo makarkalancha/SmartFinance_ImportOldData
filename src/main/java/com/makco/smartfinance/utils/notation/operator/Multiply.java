@@ -5,7 +5,7 @@ import com.makco.smartfinance.utils.notation.Operator;
 import java.math.BigDecimal;
 
 /**
- * Created by mcalancea on 23 Jun 2016.
+ * Created by Makar Kalancha on 23 Jun 2016.
  */
 public class Multiply implements Operator {
     @Override

@@ -13,7 +13,7 @@ import java.sql.Statement;
 import java.util.Date;
 
 /**
- * Created by mcalancea on 2016-02-16.
+ * Created by Makar Kalancha on 2016-02-16.
  */
 public class TestDateUnitFunctions {
     private static final Logger LOG = LogManager.getLogger(TestDateUnitFunctions.class);

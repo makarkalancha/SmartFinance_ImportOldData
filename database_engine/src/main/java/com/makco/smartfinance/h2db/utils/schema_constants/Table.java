@@ -1,7 +1,7 @@
 package com.makco.smartfinance.h2db.utils.schema_constants;
 
 /**
- * Created by mcalancea on 2016-03-24.
+ * Created by Makar Kalancha on 2016-03-24.
  */
 public class Table {
     public enum Elements{

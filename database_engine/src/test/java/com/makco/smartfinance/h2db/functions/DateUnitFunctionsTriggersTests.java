@@ -24,7 +24,7 @@ import java.util.Random;
 import static org.junit.Assert.assertEquals;
 
 /**
- * Created by mcalancea on 2016-02-26.
+ * Created by Makar Kalancha on 2016-02-26.
  */
 public class DateUnitFunctionsTriggersTests {
     private static final Logger LOG = LogManager.getLogger(DateUnitFunctionsTriggersTests.class);

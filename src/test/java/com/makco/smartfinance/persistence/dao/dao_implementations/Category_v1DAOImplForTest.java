@@ -12,7 +12,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Created by mcalancea on 2016-05-02.
+ * Created by Makar Kalancha on 2016-05-02.
  */
 public class Category_v1DAOImplForTest {
     private final static Logger LOG = LogManager.getLogger(Category_v1DAOImplForTest.class);

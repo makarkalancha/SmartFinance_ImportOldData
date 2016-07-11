@@ -1,7 +1,7 @@
 package com.makco.smartfinance.persistence.entity;
 
 /**
- * Created by mcalancea on 2016-06-02.
+ * Created by Makar Kalancha on 2016-06-02.
  */
 public class CategoryFactory {
 

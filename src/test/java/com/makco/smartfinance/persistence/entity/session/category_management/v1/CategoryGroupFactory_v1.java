@@ -3,7 +3,7 @@ package com.makco.smartfinance.persistence.entity.session.category_management.v1
 import com.makco.smartfinance.constants.DataBaseConstants;
 
 /**
- * Created by mcalancea on 2016-05-25.
+ * Created by Makar Kalancha on 2016-05-25.
  */
 public class CategoryGroupFactory_v1 {
 

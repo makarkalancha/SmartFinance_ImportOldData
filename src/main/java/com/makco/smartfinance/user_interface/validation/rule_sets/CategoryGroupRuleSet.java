@@ -15,7 +15,7 @@ import java.util.EnumSet;
 import java.util.List;
 
 /**
- * Created by mcalancea on 2016-05-14.
+ * Created by Makar Kalancha on 2016-05-14.
  */
 public class CategoryGroupRuleSet implements RuleSet<CategoryGroup>{
 

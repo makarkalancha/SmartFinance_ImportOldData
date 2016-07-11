@@ -16,7 +16,7 @@ import java.util.Collection;
 import java.util.EnumSet;
 
 /**
- * Created by mcalancea on 2016-04-05.
+ * Created by Makar Kalancha on 2016-04-05.
  */
 public class TaxModel {
     private final static Logger LOG = LogManager.getLogger(TaxModel.class);

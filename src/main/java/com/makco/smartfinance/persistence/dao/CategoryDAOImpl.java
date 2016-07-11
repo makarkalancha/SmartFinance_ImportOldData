@@ -12,7 +12,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Created by mcalancea on 2016-05-20.
+ * Created by Makar Kalancha on 2016-05-20.
  */
 public class CategoryDAOImpl implements CategoryDAO {
     private final static Logger LOG = LogManager.getLogger(CategoryDAOImpl.class);

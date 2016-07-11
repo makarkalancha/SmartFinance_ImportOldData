@@ -21,7 +21,7 @@ import javax.validation.constraints.Size;
 import java.sql.Timestamp;
 
 /**
- * Created by mcalancea on 2016-04-25.
+ * Created by Makar Kalancha on 2016-04-25.
  */
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)

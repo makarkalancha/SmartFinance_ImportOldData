@@ -12,7 +12,7 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 
 /**
- * Created by mcalancea on 2016-06-09.
+ * Created by Makar Kalancha on 2016-06-09.
  */
 public class BigDecimalUtils {
     private static DecimalFormat numberFormat = (DecimalFormat) DecimalFormat.getInstance();

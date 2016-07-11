@@ -11,7 +11,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 /**
- * Created by mcalancea on 2016-04-01.
+ * Created by Makar Kalancha on 2016-04-01.
  */
 public class Screen1Controller implements Initializable, ControlledScreen {
     private ScreensController screensController;

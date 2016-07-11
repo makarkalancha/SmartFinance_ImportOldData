@@ -17,7 +17,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 /**
- * Created by mcalancea on 2016-03-08.
+ * Created by Makar Kalancha on 2016-03-08.
  */
 public class H2DbUtilsTest {
     private static final Logger LOG = LogManager.getLogger(H2DbUtilsTest.class);

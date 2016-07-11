@@ -5,7 +5,7 @@ import com.makco.smartfinance.persistence.entity.AccountGroup;
 import java.util.List;
 
 /**
- * Created by mcalancea on 2016-05-12.
+ * Created by Makar Kalancha on 2016-05-12.
  */
 public interface AccountGroupDAO {
     AccountGroup getAccountGroupById(Long id, boolean initializeCategories) throws Exception;

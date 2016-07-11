@@ -5,7 +5,7 @@ import com.makco.smartfinance.persistence.entity.Category;
 import java.util.List;
 
 /**
- * Created by mcalancea on 2016-05-12.
+ * Created by Makar Kalancha on 2016-05-12.
  */
 public interface CategoryDAO {
     Category getCategoryById(Long id) throws Exception;

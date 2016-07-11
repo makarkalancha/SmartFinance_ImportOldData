@@ -8,7 +8,7 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 /**
- * Created by mcalancea on 2016-05-25.
+ * Created by Makar Kalancha on 2016-05-25.
  */
 public class UserInterfaceConstantsTest {
 

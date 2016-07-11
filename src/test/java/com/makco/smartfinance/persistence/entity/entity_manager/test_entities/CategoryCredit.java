@@ -12,7 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 /**
- * Created by mcalancea on 2016-04-29.
+ * Created by Makar Kalancha on 2016-04-29.
  */
 @Entity
 @DiscriminatorValue(DataBaseConstants.CATEGORY_GROUP_TYPE.Values.CREDIT)

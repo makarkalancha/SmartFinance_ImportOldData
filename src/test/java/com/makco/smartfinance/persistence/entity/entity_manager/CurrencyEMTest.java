@@ -22,7 +22,7 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 
 /**
- * Created by mcalancea on 2016-03-28.
+ * Created by Makar Kalancha on 2016-03-28.
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class CurrencyEMTest {

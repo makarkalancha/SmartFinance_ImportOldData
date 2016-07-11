@@ -12,7 +12,7 @@ import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.Statement;
 
 /**
- * Created by mcalancea on 2016-04-29.
+ * Created by Makar Kalancha on 2016-04-29.
  */
 //http://blog.schauderhaft.de/2011/03/13/testing-databases-with-junit-and-hibernate-part-1-one-to-rule-them/
 public class SessionRule implements MethodRule {

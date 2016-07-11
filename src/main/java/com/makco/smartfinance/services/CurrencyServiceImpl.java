@@ -14,7 +14,7 @@ import java.util.EnumSet;
 import java.util.List;
 
 /**
- * Created by mcalancea on 2016-04-12.
+ * Created by Makar Kalancha on 2016-04-12.
  */
 public class CurrencyServiceImpl implements CurrencyService {
     private final static Logger LOG = LogManager.getLogger(CurrencyServiceImpl.class);
