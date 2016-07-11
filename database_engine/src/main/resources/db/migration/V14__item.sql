@@ -22,19 +22,19 @@ CREATE TRIGGER T_ITEM_INS
 BEFORE INSERT
 ON ITEM
 FOR EACH ROW
-CALL "com.makco.smartfinance.h2db.triggers.TriggerInvoice";
+CALL "com.makco.smartfinance.h2db.triggers.TriggerItem";
 
 CREATE TRIGGER T_ITEM_UPD
 BEFORE UPDATE
 ON ITEM
 FOR EACH ROW
-CALL "com.makco.smartfinance.h2db.triggers.TriggerInvoice";
+CALL "com.makco.smartfinance.h2db.triggers.TriggerItem";
 
 CREATE TRIGGER T_ITEM_DEL
 BEFORE DELETE
 ON ITEM
 FOR EACH ROW
-CALL "com.makco.smartfinance.h2db.triggers.TriggerInvoice";
+CALL "com.makco.smartfinance.h2db.triggers.TriggerItem";
 
 GRANT SELECT, INSERT, UPDATE, DELETE ON
 ITEM
