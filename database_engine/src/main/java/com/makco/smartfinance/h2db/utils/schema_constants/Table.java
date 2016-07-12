@@ -326,8 +326,8 @@ public class Table {
         DESCRIPTION1(5),
         DESCRIPTION2(6),
         COMMENT(7),
-        GROSS_AMOUNT(8),
-        NET_AMOUNT(9),
+        SUB_TOTAL(8),
+        TOTAL(9),
         T_CREATEDON(10),
         T_UPDATEDON(11);
 

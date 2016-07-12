@@ -46,10 +46,10 @@ public class TriggerItem extends AbstractTrigger {
                 (String) oldRow[Table.ITEM.DESCRIPTION2.getColumnIndex()]);
         rowJson.addProperty(Table.ITEM.COMMENT.toString(), (String) oldRow[Table.ITEM.COMMENT.getColumnIndex()]);
 
-        rowJson.addProperty(Table.ITEM.GROSS_AMOUNT.toString(),
-                (BigDecimal) oldRow[Table.ITEM.GROSS_AMOUNT.getColumnIndex()]);
-        rowJson.addProperty(Table.ITEM.NET_AMOUNT.toString(),
-                (BigDecimal) oldRow[Table.ITEM.NET_AMOUNT.getColumnIndex()]);
+        rowJson.addProperty(Table.ITEM.SUB_TOTAL.toString(),
+                (BigDecimal) oldRow[Table.ITEM.SUB_TOTAL.getColumnIndex()]);
+        rowJson.addProperty(Table.ITEM.TOTAL.toString(),
+                (BigDecimal) oldRow[Table.ITEM.TOTAL.getColumnIndex()]);
 
         rowJson.addProperty(Table.ITEM.T_CREATEDON.toString(), JsonUtils.getSimpleDateTimeFormat()
                 .format((Date) oldRow[Table.ITEM.T_CREATEDON.getColumnIndex()]));

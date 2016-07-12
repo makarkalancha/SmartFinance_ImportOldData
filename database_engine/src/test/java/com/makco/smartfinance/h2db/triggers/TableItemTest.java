@@ -95,7 +95,7 @@ public class TableItemTest {
         String queryInsert = "INSERT INTO " + Table.Names.ITEM +
                 " (" + Table.ITEM.INVOICE_ID + ", " + Table.ITEM.CATEGORY_ID + ", " + Table.ITEM.TAX_ID + ", " +
                 Table.ITEM.FAMILY_MEMBER_ID + ", " + Table.ITEM.DESCRIPTION1 + ", " + Table.ITEM.DESCRIPTION2 + ", " +
-                Table.ITEM.COMMENT + ", " + Table.ITEM.GROSS_AMOUNT + ", " + Table.ITEM.NET_AMOUNT + ") " +
+                Table.ITEM.COMMENT + ", " + Table.ITEM.SUB_TOTAL + ", " + Table.ITEM.TOTAL + ") " +
                 "VALUES(" + invoiceId + ", " + categoryId + ", " + taxId + ", " +
                 familyMemberId + ", '" + description1 + "', '" + description2 + "', '" + comment + "', " +
                 grossAmount + ", " + netAmount + ")";
@@ -285,8 +285,8 @@ public class TableItemTest {
         rowJson.addProperty(Table.ITEM.DESCRIPTION1.toString(), (String) row[5]);
         rowJson.addProperty(Table.ITEM.DESCRIPTION2.toString(), (String) row[6]);
         rowJson.addProperty(Table.ITEM.COMMENT.toString(), (String) row[7]);
-        rowJson.addProperty(Table.ITEM.GROSS_AMOUNT.toString(), (BigDecimal) row[8]);
-        rowJson.addProperty(Table.ITEM.NET_AMOUNT.toString(), (BigDecimal) row[9]);
+        rowJson.addProperty(Table.ITEM.SUB_TOTAL.toString(), (BigDecimal) row[8]);
+        rowJson.addProperty(Table.ITEM.TOTAL.toString(), (BigDecimal) row[9]);
         rowJson.addProperty(Table.ITEM.T_CREATEDON.toString(), SIMPLE_DATE_TIME_FORMAT.format((Date) row[10]));
         rowJson.addProperty(Table.ITEM.T_UPDATEDON.toString(), SIMPLE_DATE_TIME_FORMAT.format((Date) row[11]));
 
@@ -303,7 +303,7 @@ public class TableItemTest {
         String expectedJsonString = "{\"tableName\":\"TEST.ITEM\",\"row\":" +
                 "{\"ID\":1,\"INVOICE_ID\":2,\"CATEGORY_ID\":3,\"TAX_ID\":4," +
                 "\"FAMILY_MEMBER_ID\":5,\"DESCRIPTION1\":\"desc1\",\"DESCRIPTION2\":\"desc2\"," +
-                "\"COMMENT\":\"comm\",\"GROSS_AMOUNT\":2.0,\"NET_AMOUNT\":4.0," +
+                "\"COMMENT\":\"comm\",\"SUB_TOTAL\":2.0,\"TOTAL\":4.0," +
                 "\"T_CREATEDON\":\"2001-02-03 14:05:06\",\"T_UPDATEDON\":\"2006-05-04 03:02:01\"}}";
 
         LOG.debug("testDeleteToJsonObject.expectedJsonString:" + expectedJsonString);
@@ -345,12 +345,13 @@ public class TableItemTest {
         String comment = JsonUtils.getNullableFromJsonElementAsString(jsonElementComm);
         assertEquals("comm", comment);
 
-        JsonElement jsonElementGrAmt = rowJsonObject.get(Table.ITEM.GROSS_AMOUNT.toString());
+        JsonElement jsonElementGrAmt = rowJsonObject.get(Table.ITEM.SUB_TOTAL.toString());
         BigDecimal grAmt = JsonUtils.getNullableFromJsonElementAsBigDecimal(jsonElementGrAmt);
         assertEquals(new BigDecimal("2.0"), grAmt);
-        JsonElement jsonElementNtAmt = rowJsonObject.get(Table.ITEM.NET_AMOUNT.toString());
+        JsonElement jsonElementNtAmt = rowJsonObject.get(Table.ITEM.TOTAL.toString());
         BigDecimal ntAmt = JsonUtils.getNullableFromJsonElementAsBigDecimal(jsonElementNtAmt);
         assertEquals(new BigDecimal("4.0"), ntAmt);
+
         Date createdOn = SIMPLE_DATE_TIME_FORMAT.parse(rowJsonObject.get(Table.ITEM.T_CREATEDON.toString()).getAsString());
         assertEquals(SIMPLE_DATE_TIME_FORMAT.parse("2001-02-03 14:05:06"), createdOn);
         Date updatedOn = SIMPLE_DATE_TIME_FORMAT.parse(rowJsonObject.get(Table.ITEM.T_UPDATEDON.toString()).getAsString());
