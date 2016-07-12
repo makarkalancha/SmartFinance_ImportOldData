@@ -21,7 +21,8 @@ public class Table {
         ITEM,
         ORGANIZATION,
         TAX,
-        TAX_CHILD;
+        TAX_CHILD,
+        TRANSACTION;
     }
 
     public enum _DELETED_ROWS implements IEnumRow {
@@ -348,5 +349,34 @@ public class Table {
             return this;
         }
     };
+
+    public enum TRANSACTION implements IEnumRow {
+        ID(0),
+        ACCOUNT_ID(1),
+        ACCOUNT_GROUP_TYPE(2),
+        INVOICE_ID(3),
+        DATEUNIT_UNITDAY(4),
+        COMMENT(5),
+        DEBIT_AMOUNT(6),
+        CREDIT_AMOUNT(7),
+        T_CREATEDON(8),
+        T_UPDATEDON(9);
+
+        private int columnIndex;
+        private TRANSACTION(int columnIndex) {
+            this.columnIndex = columnIndex;
+        }
+
+        @Override
+        public int getColumnIndex(){
+            return this.columnIndex;
+        }
+
+        @Override
+        public TRANSACTION getColumnNameByIndex(){
+            return this;
+        }
+    };
+
 
 }
