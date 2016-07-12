@@ -39,7 +39,8 @@ public class TableAccountTest {
     private static final String accountGroupType = "C";
     private static Long accountGroupIdMain;
     private static Long accountGroupIdAnother;
-    
+
+    private static TableAccountGroupTest tableAccountGroupTest = new TableAccountGroupTest();
 
     @ClassRule
     public static DBConnectionResource dbConnectionResource = new DBConnectionResource();
@@ -51,8 +52,8 @@ public class TableAccountTest {
         LOG.debug(mess1);
         //        H2DbUtils.setSchema(dbConnectionResource.getConnection(), "TEST");
         H2DbUtilsTest.emptyTable(dbConnectionResource.getConnection(), Table.Names.ACCOUNT);
-        accountGroupIdMain = insertAccountGroup(accountGroupType, "Main", "main category group");
-        accountGroupIdAnother = insertAccountGroup(accountGroupType, "Another", "another category group");
+        accountGroupIdMain = tableAccountGroupTest.insert(accountGroupType, "Main", "main category group");
+        accountGroupIdAnother = tableAccountGroupTest.insert(accountGroupType, "Another", "another category group");
     }
 
     @AfterClass
@@ -77,30 +78,7 @@ public class TableAccountTest {
         LOG.debug(mess1);
     }
 
-    public static Long insertAccountGroup(String type, String name, String desc) throws Exception {
-        LOG.debug("insert");
-        String queryInsert = "INSERT INTO " + Table.Names.ACCOUNT_GROUP +
-                " (" + Table.ACCOUNT_GROUP.TYPE + ", " + Table.ACCOUNT_GROUP.NAME + ", " + Table.ACCOUNT_GROUP.DESCRIPTION + ") " +
-                "VALUES('" + type + "','" + name + "','" + desc + "')";
-        LOG.debug(queryInsert);
-        ResultSet rs = null;
-        Long result = -1L;
-        try (
-                PreparedStatement insertPS = dbConnectionResource.getConnection().prepareStatement(queryInsert, Statement.RETURN_GENERATED_KEYS);
-        ){
-            insertPS.executeUpdate();
-            rs = insertPS.getGeneratedKeys();
-            rs.next();
-            result = rs.getLong(1);
-            return result;
-        } finally {
-            if(rs != null){
-                rs.close();
-            }
-        }
-    }
-    
-    public Long insertAccount(Long accountGroupId, String type, String name, String desc) throws Exception {
+    public Long insert(Long accountGroupId, String type, String name, String desc) throws Exception {
         LOG.debug("insert");
         String queryInsert = "INSERT INTO " + Table.Names.ACCOUNT +
                 " (" + Table.ACCOUNT.ACCOUNT_GROUP_ID + ", " + Table.ACCOUNT.ACCOUNT_GROUP_TYPE + 
@@ -137,7 +115,7 @@ public class TableAccountTest {
         try (
                 PreparedStatement selectDatesPS = dbConnectionResource.getConnection().prepareStatement(queryDates);
         ){
-            long idJustInserted = insertAccount(accountGroupIdMain, accountGroupType, "CG:Main->cat1", "category 1");
+            long idJustInserted = insert(accountGroupIdMain, accountGroupType, "CG:Main->cat1", "category 1");
             LOG.debug("idJustInserted > 0: idJustInserted=" + idJustInserted);
             assert (idJustInserted > 0);
             selectDatesPS.setLong(1, idJustInserted);
@@ -175,7 +153,7 @@ public class TableAccountTest {
         try (
                 PreparedStatement selectDatesPS = dbConnectionResource.getConnection().prepareStatement(queryDates);
         ){
-            long idJustInserted = insertAccount(accountGroupIdAnother, accountGroupType, "CG:Main->cat1", "category 1");
+            long idJustInserted = insert(accountGroupIdAnother, accountGroupType, "CG:Main->cat1", "category 1");
             LOG.debug("idJustInserted > 0: idJustInserted=" + idJustInserted);
             assert (idJustInserted > 0);
             selectDatesPS.setLong(1, idJustInserted);
@@ -207,7 +185,7 @@ public class TableAccountTest {
         try (
                 PreparedStatement selectDatesPS = dbConnectionResource.getConnection().prepareStatement(queryDates);
         ){
-            long idJustInserted = insertAccount(accountGroupIdMain, "D", "CG:Main->cat4", "category 4");
+            long idJustInserted = insert(accountGroupIdMain, "D", "CG:Main->cat4", "category 4");
             LOG.debug("idJustInserted > 0: idJustInserted=" + idJustInserted);
             assert (idJustInserted > 0);
             selectDatesPS.setLong(1, idJustInserted);
@@ -284,7 +262,7 @@ public class TableAccountTest {
         LOG.debug("testAccount_22_updateDuplicate");
         ResultSet rs = null;
         try {
-            long idJustInserted = insertAccount(accountGroupIdMain, accountGroupType, "CG:Main->cat2", "category 2");
+            long idJustInserted = insert(accountGroupIdMain, accountGroupType, "CG:Main->cat2", "category 2");
             //"cat1_v1" duplicate update, 1st update in method  testAccount_21_update
             update(idJustInserted, "cat1_v1");
         } finally {
@@ -297,7 +275,7 @@ public class TableAccountTest {
         LOG.debug("testAccount_23_update_sameName_AnotherCG");
         ResultSet rs = null;
         try {
-            long idJustInserted = insertAccount(accountGroupIdAnother, accountGroupType, "CG:Another->cat3", "category 3");
+            long idJustInserted = insert(accountGroupIdAnother, accountGroupType, "CG:Another->cat3", "category 3");
             //"cat1_v1" duplicate update, 1st update in method  testAccount_21_update
             update(idJustInserted, "cat1_v1");
         } finally {
