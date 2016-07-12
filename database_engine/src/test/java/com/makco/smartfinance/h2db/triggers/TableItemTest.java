@@ -132,7 +132,7 @@ public class TableItemTest {
                 PreparedStatement selectDatesPS = dbConnectionResource.getConnection().prepareStatement(queryDates);
         ){
             long organizationId = tableOrganizationTest.insert("Organization TableItemTest", "Organization Description From TableItemTest #testItem_11_insert");
-            long invoiceId = tableInvoiceTest.insert(organizationId, "invoice comment", new BigDecimal("3"));
+            long invoiceId = tableInvoiceTest.insert(organizationId, "invoice comment", new BigDecimal("3"), new BigDecimal("4"));
 
             long categoryGroupId = tableCategoryGroupTest.insert("D", "debit category group", "debit category group desc");
             long categoryId = tableCategoryTest.insertCategory(categoryGroupId, "D", "debit category", "debit category desc");

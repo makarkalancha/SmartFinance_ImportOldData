@@ -80,11 +80,11 @@ public class TableInvoiceTest {
         LOG.debug(mess1);
     }
 
-    public Long insert(Long organizationId, String comment, BigDecimal balance) throws Exception {
+    public Long insert(Long organizationId, String comment, BigDecimal subTotal, BigDecimal total) throws Exception {
         LOG.debug("insert");
         String queryInsert = "INSERT INTO " + Table.Names.INVOICE +
-                " (" + Table.INVOICE.ORGANIZATION_ID + ", " + Table.INVOICE.COMMENT + ", " + Table.INVOICE.BALANCE + ") " +
-                "VALUES(" + organizationId + ",'" + comment + "'," + balance + ")";
+                " (" + Table.INVOICE.ORGANIZATION_ID + ", " + Table.INVOICE.COMMENT + ", " + Table.INVOICE.SUB_TOTAL + ", " + Table.INVOICE.TOTAL + ") " +
+                "VALUES(" + organizationId + ",'" + comment + "'," + subTotal + "," + total + ")";
         LOG.debug(queryInsert);
         ResultSet rs = null;
         Long result = -1L;
@@ -117,7 +117,7 @@ public class TableInvoiceTest {
                 PreparedStatement selectDatesPS = dbConnectionResource.getConnection().prepareStatement(queryDates);
         ){
             long organizationId = tableOrganizationTest.insert("Organization TableInvoiceTest", "Organization Description From TableInvoiceTest #testInvoice_11_insert");
-            long idJustInserted = insert(organizationId, "invoice comment 11", new BigDecimal("5.0"));
+            long idJustInserted = insert(organizationId, "invoice comment 11", new BigDecimal("5.0"), new BigDecimal("6.0"));
             LOG.debug("idJustInserted > 0: idJustInserted=" + idJustInserted);
             assert (idJustInserted > 0);
             selectDatesPS.setLong(1, idJustInserted);
@@ -235,20 +235,22 @@ public class TableInvoiceTest {
     private JsonObject createJsonObject() throws Exception {
         String schemaName = "TEST";
 
-        Object[] row = new Object[6];
+        Object[] row = new Object[7];
         row[0] = 1L;
         row[1] = 2L;
         row[2] = "invoice comment";
         row[3] = new BigDecimal("2.0");
-        row[4] = SIMPLE_DATE_TIME_FORMAT.parse("2001-02-03 14:05:06");
-        row[5] = SIMPLE_DATE_TIME_FORMAT.parse("2006-05-04 03:02:01");
+        row[4] = new BigDecimal("5.0");
+        row[5] = SIMPLE_DATE_TIME_FORMAT.parse("2001-02-03 14:05:06");
+        row[6] = SIMPLE_DATE_TIME_FORMAT.parse("2006-05-04 03:02:01");
         JsonObject rowJson = new JsonObject();
         rowJson.addProperty(Table.INVOICE.ID.toString(), (Long) row[0]);
         rowJson.addProperty(Table.INVOICE.ORGANIZATION_ID.toString(), (Long) row[1]);
         rowJson.addProperty(Table.INVOICE.COMMENT.toString(), (String) row[2]);
-        rowJson.addProperty(Table.INVOICE.BALANCE.toString(), (BigDecimal) row[3]);
-        rowJson.addProperty(Table.INVOICE.T_CREATEDON.toString(), SIMPLE_DATE_TIME_FORMAT.format((Date) row[4]));
-        rowJson.addProperty(Table.INVOICE.T_UPDATEDON.toString(), SIMPLE_DATE_TIME_FORMAT.format((Date) row[5]));
+        rowJson.addProperty(Table.INVOICE.SUB_TOTAL.toString(), (BigDecimal) row[3]);
+        rowJson.addProperty(Table.INVOICE.TOTAL.toString(), (BigDecimal) row[4]);
+        rowJson.addProperty(Table.INVOICE.T_CREATEDON.toString(), SIMPLE_DATE_TIME_FORMAT.format((Date) row[5]));
+        rowJson.addProperty(Table.INVOICE.T_UPDATEDON.toString(), SIMPLE_DATE_TIME_FORMAT.format((Date) row[6]));
 
         JsonObject tableJson = new JsonObject();
         tableJson.addProperty(Table.Elements.tableName.toString(), schemaName + "." + Table.Names.INVOICE);
@@ -261,7 +263,8 @@ public class TableInvoiceTest {
     public void testDeleteToJsonObject() throws Exception{
         JsonObject tableJson = createJsonObject();
         String expectedJsonString = "{\"tableName\":\"TEST.INVOICE\",\"row\":" +
-                "{\"ID\":1,\"ORGANIZATION_ID\":2,\"COMMENT\":\"invoice comment\",\"BALANCE\":2.0," +
+                "{\"ID\":1,\"ORGANIZATION_ID\":2,\"COMMENT\":\"invoice comment\","+
+                "\"SUB_TOTAL\":2.0,\"TOTAL\":5.0," +
                 "\"T_CREATEDON\":\"2001-02-03 14:05:06\",\"T_UPDATEDON\":\"2006-05-04 03:02:01\"}}";
 
         LOG.debug("testDeleteToJsonObject.expectedJsonString:" + expectedJsonString);
@@ -289,9 +292,14 @@ public class TableInvoiceTest {
         JsonElement jsonElementDesc = rowJsonObject.get(Table.INVOICE.COMMENT.toString());
         String description = JsonUtils.getNullableFromJsonElementAsString(jsonElementDesc);
         assertEquals("invoice comment", description);
-        JsonElement jsonElementRate = rowJsonObject.get(Table.INVOICE.BALANCE.toString());
-        BigDecimal rate = JsonUtils.getNullableFromJsonElementAsBigDecimal(jsonElementRate);
-        assertEquals(new BigDecimal("2.0"), rate);
+
+        JsonElement jsonElementSubTotal = rowJsonObject.get(Table.INVOICE.SUB_TOTAL.toString());
+        BigDecimal subTotal = JsonUtils.getNullableFromJsonElementAsBigDecimal(jsonElementSubTotal);
+        assertEquals(new BigDecimal("2.0"), subTotal);
+        JsonElement jsonElementTotal = rowJsonObject.get(Table.INVOICE.TOTAL.toString());
+        BigDecimal total = JsonUtils.getNullableFromJsonElementAsBigDecimal(jsonElementTotal);
+        assertEquals(new BigDecimal("5.0"), total);
+
         Date createdOn = SIMPLE_DATE_TIME_FORMAT.parse(rowJsonObject.get(Table.INVOICE.T_CREATEDON.toString()).getAsString());
         assertEquals(SIMPLE_DATE_TIME_FORMAT.parse("2001-02-03 14:05:06"), createdOn);
         Date updatedOn = SIMPLE_DATE_TIME_FORMAT.parse(rowJsonObject.get(Table.INVOICE.T_UPDATEDON.toString()).getAsString());

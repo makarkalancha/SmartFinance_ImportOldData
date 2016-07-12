@@ -296,9 +296,10 @@ public class Table {
         ID(0),
         ORGANIZATION_ID(1),
         COMMENT(2),
-        BALANCE(3),
-        T_CREATEDON(4),
-        T_UPDATEDON(5);
+        SUB_TOTAL(3),
+        TOTAL(4),
+        T_CREATEDON(5),
+        T_UPDATEDON(6);
 
         private int columnIndex;
         private INVOICE(int columnIndex) {

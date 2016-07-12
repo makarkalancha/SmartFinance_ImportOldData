@@ -37,8 +37,10 @@ public class TriggerInvoice extends AbstractTrigger {
         rowJson.addProperty(Table.INVOICE.ORGANIZATION_ID.toString(), (Long) oldRow[Table.INVOICE.ORGANIZATION_ID.getColumnIndex()]);
         rowJson.addProperty(Table.INVOICE.COMMENT.toString(),
                 (String) oldRow[Table.INVOICE.COMMENT.getColumnIndex()]);
-        rowJson.addProperty(Table.INVOICE.BALANCE.toString(),
-                (BigDecimal) oldRow[Table.INVOICE.BALANCE.getColumnIndex()]);
+        rowJson.addProperty(Table.INVOICE.SUB_TOTAL.toString(),
+                (BigDecimal) oldRow[Table.INVOICE.SUB_TOTAL.getColumnIndex()]);
+        rowJson.addProperty(Table.INVOICE.TOTAL.toString(),
+                (BigDecimal) oldRow[Table.INVOICE.TOTAL.getColumnIndex()]);
         rowJson.addProperty(Table.INVOICE.T_CREATEDON.toString(), JsonUtils.getSimpleDateTimeFormat()
                 .format((Date) oldRow[Table.INVOICE.T_CREATEDON.getColumnIndex()]));
         rowJson.addProperty(Table.INVOICE.T_UPDATEDON.toString(), JsonUtils.getSimpleDateTimeFormat()
