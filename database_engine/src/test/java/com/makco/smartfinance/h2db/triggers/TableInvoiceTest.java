@@ -10,7 +10,6 @@ import com.makco.smartfinance.h2db.utils.JsonUtils;
 import com.makco.smartfinance.h2db.utils.schema_constants.Table;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.h2.jdbc.JdbcSQLException;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -29,9 +28,8 @@ import java.time.LocalDate;
 import java.time.Month;
 import java.time.ZoneId;
 import java.util.Date;
-import java.util.Random;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Created by Makar Kalancha on 11 Jul 2016.
@@ -40,9 +38,6 @@ import static org.junit.Assert.*;
 public class TableInvoiceTest {
     private static final Logger LOG = LogManager.getLogger(TableInvoiceTest.class);
     private static final SimpleDateFormat SIMPLE_DATE_TIME_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
-    private static final String ORGANIZATION_NAME_PREFIX = "Organization TableInvoiceTest";
-    private static final String ORGANIZATION_DESC = "Organization TableInvoiceTest DESC";
 
     private TableOrganizationTest tableOrganizationTest = new TableOrganizationTest();
 

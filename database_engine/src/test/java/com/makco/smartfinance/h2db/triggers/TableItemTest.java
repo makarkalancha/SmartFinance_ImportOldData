@@ -20,7 +20,6 @@ import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
 import java.math.BigDecimal;
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -30,7 +29,7 @@ import java.time.Month;
 import java.time.ZoneId;
 import java.util.Date;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Created by Makar Kalancha on 11 Jul 2016.
@@ -39,9 +38,6 @@ import static org.junit.Assert.*;
 public class TableItemTest {
     private static final Logger LOG = LogManager.getLogger(TableItemTest.class);
     private static final SimpleDateFormat SIMPLE_DATE_TIME_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
-    private static final String ORGANIZATION_NAME_PREFIX = "Organization From TableItemTest #";
-    private static final String ORGANIZATION_DESC = "Organization DESC";
 
     private TableOrganizationTest tableOrganizationTest = new TableOrganizationTest();
     private TableInvoiceTest tableInvoiceTest = new TableInvoiceTest();
