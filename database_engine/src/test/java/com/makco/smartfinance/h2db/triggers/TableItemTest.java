@@ -4,6 +4,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.makco.smartfinance.h2db.DBConnectionResource;
+import com.makco.smartfinance.h2db.functions.TestDateUnitFunctions;
 import com.makco.smartfinance.h2db.utils.H2DbUtilsTest;
 import com.makco.smartfinance.h2db.utils.JsonUtils;
 import com.makco.smartfinance.h2db.utils.schema_constants.Table;
@@ -19,6 +20,7 @@ import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
 import java.math.BigDecimal;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -89,15 +91,18 @@ public class TableItemTest {
     }
 
     public Long insert(Long invoiceId, Long categoryId, Long taxId,
-                       Long familyMemberId, String description1, String description2,
+                       Long familyMemberId, Long dateunitUnitday,
+                       String description1, String description2,
                        String comment, BigDecimal grossAmount, BigDecimal netAmount) throws Exception {
         LOG.debug("insert");
         String queryInsert = "INSERT INTO " + Table.Names.ITEM +
                 " (" + Table.ITEM.INVOICE_ID + ", " + Table.ITEM.CATEGORY_ID + ", " + Table.ITEM.TAX_ID + ", " +
-                Table.ITEM.FAMILY_MEMBER_ID + ", " + Table.ITEM.DESCRIPTION1 + ", " + Table.ITEM.DESCRIPTION2 + ", " +
+                Table.ITEM.FAMILY_MEMBER_ID + ", " + Table.ITEM.DATEUNIT_UNITDAY + "," +
+                Table.ITEM.DESCRIPTION1 + ", " + Table.ITEM.DESCRIPTION2 + ", " +
                 Table.ITEM.COMMENT + ", " + Table.ITEM.SUB_TOTAL + ", " + Table.ITEM.TOTAL + ") " +
                 "VALUES(" + invoiceId + ", " + categoryId + ", " + taxId + ", " +
-                familyMemberId + ", '" + description1 + "', '" + description2 + "', '" + comment + "', " +
+                familyMemberId + ", " + dateunitUnitday + ", '" +
+                description1 + "', '" + description2 + "', '" + comment + "', " +
                 grossAmount + ", " + netAmount + ")";
 
         LOG.debug(queryInsert);
@@ -131,8 +136,11 @@ public class TableItemTest {
         try (
                 PreparedStatement selectDatesPS = dbConnectionResource.getConnection().prepareStatement(queryDates);
         ){
+            long dateunitUnitday = TestDateUnitFunctions.insertSelectDate(dbConnectionResource.getConnection(),
+                    Date.from(LocalDate.of(2016, Month.FEBRUARY, 29).atStartOfDay(ZoneId.systemDefault()).toInstant()));
+
             long organizationId = tableOrganizationTest.insert("Organization TableItemTest", "Organization Description From TableItemTest #testItem_11_insert");
-            long invoiceId = tableInvoiceTest.insert(organizationId, "invoice comment", new BigDecimal("3"), new BigDecimal("4"));
+            long invoiceId = tableInvoiceTest.insert(organizationId, dateunitUnitday, "invoice comment", new BigDecimal("3"), new BigDecimal("4"));
 
             long categoryGroupId = tableCategoryGroupTest.insert("D", "debit category group", "debit category group desc");
             long categoryId = tableCategoryTest.insertCategory(categoryGroupId, "D", "debit category", "debit category desc");
@@ -143,7 +151,8 @@ public class TableItemTest {
 
             long familyMemberId = tableFamilyMemberTest.insert("family member #1", "family member desc");
 
-            long idJustInserted = insert(invoiceId, categoryId, taxId, familyMemberId,
+            long idJustInserted = insert(
+                    invoiceId, categoryId, taxId, familyMemberId, dateunitUnitday,
                     "product desc1", "product desc2", "comment",
                     new BigDecimal("5.0"), new BigDecimal("15.0"));
             LOG.debug("idJustInserted > 0: idJustInserted=" + idJustInserted);

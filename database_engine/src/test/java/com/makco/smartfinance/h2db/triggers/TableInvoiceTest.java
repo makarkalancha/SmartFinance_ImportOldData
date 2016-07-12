@@ -4,6 +4,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.makco.smartfinance.h2db.DBConnectionResource;
+import com.makco.smartfinance.h2db.functions.TestDateUnitFunctions;
 import com.makco.smartfinance.h2db.utils.H2DbUtilsTest;
 import com.makco.smartfinance.h2db.utils.JsonUtils;
 import com.makco.smartfinance.h2db.utils.schema_constants.Table;
@@ -80,24 +81,27 @@ public class TableInvoiceTest {
         LOG.debug(mess1);
     }
 
-    public Long insert(Long organizationId, String comment, BigDecimal subTotal, BigDecimal total) throws Exception {
+    public Long insert(Long organizationId, Long dateunitUnitday, String comment, BigDecimal subTotal, BigDecimal total)
+            throws Exception {
         LOG.debug("insert");
         String queryInsert = "INSERT INTO " + Table.Names.INVOICE +
-                " (" + Table.INVOICE.ORGANIZATION_ID + ", " + Table.INVOICE.COMMENT + ", " + Table.INVOICE.SUB_TOTAL + ", " + Table.INVOICE.TOTAL + ") " +
-                "VALUES(" + organizationId + ",'" + comment + "'," + subTotal + "," + total + ")";
+                " (" + Table.INVOICE.ORGANIZATION_ID + ", " + Table.INVOICE.DATEUNIT_UNITDAY + ", " +
+                Table.INVOICE.COMMENT + ", " + Table.INVOICE.SUB_TOTAL + ", " + Table.INVOICE.TOTAL + ") " +
+                "VALUES(" + organizationId + "," + dateunitUnitday + ",'" + comment + "'," + subTotal + "," +
+                total + ")";
         LOG.debug(queryInsert);
         ResultSet rs = null;
         Long result = -1L;
         try (
                 PreparedStatement insertPS = dbConnectionResource.getConnection().prepareStatement(queryInsert, Statement.RETURN_GENERATED_KEYS);
-        ){
+        ) {
             insertPS.executeUpdate();
             rs = insertPS.getGeneratedKeys();
             rs.next();
             result = rs.getLong(1);
             return result;
         } finally {
-            if(rs != null){
+            if (rs != null) {
                 rs.close();
             }
         }
@@ -116,8 +120,11 @@ public class TableInvoiceTest {
         try (
                 PreparedStatement selectDatesPS = dbConnectionResource.getConnection().prepareStatement(queryDates);
         ){
+            long dateunitUnitday = TestDateUnitFunctions.insertSelectDate(dbConnectionResource.getConnection(),
+                    Date.from(LocalDate.of(2016, Month.MARCH, 1).atStartOfDay(ZoneId.systemDefault()).toInstant()));
+
             long organizationId = tableOrganizationTest.insert("Organization TableInvoiceTest", "Organization Description From TableInvoiceTest #testInvoice_11_insert");
-            long idJustInserted = insert(organizationId, "invoice comment 11", new BigDecimal("5.0"), new BigDecimal("6.0"));
+            long idJustInserted = insert(organizationId, dateunitUnitday, "invoice comment 11", new BigDecimal("5.0"), new BigDecimal("6.0"));
             LOG.debug("idJustInserted > 0: idJustInserted=" + idJustInserted);
             assert (idJustInserted > 0);
             selectDatesPS.setLong(1, idJustInserted);

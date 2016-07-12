@@ -295,11 +295,12 @@ public class Table {
     public enum INVOICE implements IEnumRow {
         ID(0),
         ORGANIZATION_ID(1),
-        COMMENT(2),
-        SUB_TOTAL(3),
-        TOTAL(4),
-        T_CREATEDON(5),
-        T_UPDATEDON(6);
+        DATEUNIT_UNITDAY(2),
+        COMMENT(3),
+        SUB_TOTAL(4),
+        TOTAL(5),
+        T_CREATEDON(6),
+        T_UPDATEDON(7);
 
         private int columnIndex;
         private INVOICE(int columnIndex) {
@@ -323,13 +324,14 @@ public class Table {
         CATEGORY_ID(2),
         TAX_ID(3),
         FAMILY_MEMBER_ID(4),
-        DESCRIPTION1(5),
-        DESCRIPTION2(6),
-        COMMENT(7),
-        SUB_TOTAL(8),
-        TOTAL(9),
-        T_CREATEDON(10),
-        T_UPDATEDON(11);
+        DATEUNIT_UNITDAY(5),
+        DESCRIPTION1(6),
+        DESCRIPTION2(7),
+        COMMENT(8),
+        SUB_TOTAL(9),
+        TOTAL(10),
+        T_CREATEDON(11),
+        T_UPDATEDON(12);
 
         private int columnIndex;
         private ITEM(int columnIndex) {
