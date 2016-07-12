@@ -139,7 +139,7 @@ public class TableItemTest {
             long invoiceId = tableInvoiceTest.insert(organizationId, dateunitUnitday, "invoice comment", new BigDecimal("3"), new BigDecimal("4"));
 
             long categoryGroupId = tableCategoryGroupTest.insert("D", "debit category group", "debit category group desc");
-            long categoryId = tableCategoryTest.insertCategory(categoryGroupId, "D", "debit category", "debit category desc");
+            long categoryId = tableCategoryTest.insert(categoryGroupId, "D", "debit category", "debit category desc");
 
             Date startDate = Date.from(LocalDate.of(2008, Month.JANUARY, 1).atStartOfDay(ZoneId.systemDefault()).toInstant());
             Date endDate = Date.from(LocalDate.of(2010, Month.JANUARY, 1).atStartOfDay(ZoneId.systemDefault()).toInstant());
