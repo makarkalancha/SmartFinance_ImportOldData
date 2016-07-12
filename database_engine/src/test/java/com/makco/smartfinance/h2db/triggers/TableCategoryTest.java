@@ -39,7 +39,8 @@ public class TableCategoryTest {
     private static final String categoryGroupType = "C";
     private static Long categoryGroupIdMain;
     private static Long categoryGroupIdAnother;
-    
+
+    private static TableCategoryGroupTest tableCategoryGroupTest = new TableCategoryGroupTest();
 
     @ClassRule
     public static DBConnectionResource dbConnectionResource = new DBConnectionResource();
@@ -51,8 +52,8 @@ public class TableCategoryTest {
         LOG.debug(mess1);
         //        H2DbUtils.setSchema(dbConnectionResource.getConnection(), "TEST");
         H2DbUtilsTest.emptyTable(dbConnectionResource.getConnection(), Table.Names.CATEGORY);
-        categoryGroupIdMain = insertCategoryGroup(categoryGroupType, "Main", "main category group");
-        categoryGroupIdAnother = insertCategoryGroup(categoryGroupType, "Another", "another category group");
+        categoryGroupIdMain = tableCategoryGroupTest.insert(categoryGroupType, "Main", "main category group");
+        categoryGroupIdAnother = tableCategoryGroupTest.insert(categoryGroupType, "Another", "another category group");
     }
 
     @AfterClass
@@ -77,30 +78,7 @@ public class TableCategoryTest {
         LOG.debug(mess1);
     }
 
-    public static Long insertCategoryGroup(String type, String name, String desc) throws Exception {
-        LOG.debug("insert");
-        String queryInsert = "INSERT INTO " + Table.Names.CATEGORY_GROUP +
-                " (" + Table.CATEGORY_GROUP.TYPE + ", " + Table.CATEGORY_GROUP.NAME + ", " + Table.CATEGORY_GROUP.DESCRIPTION + ") " +
-                "VALUES('" + type + "','" + name + "','" + desc + "')";
-        LOG.debug(queryInsert);
-        ResultSet rs = null;
-        Long result = -1L;
-        try (
-                PreparedStatement insertPS = dbConnectionResource.getConnection().prepareStatement(queryInsert, Statement.RETURN_GENERATED_KEYS);
-        ){
-            insertPS.executeUpdate();
-            rs = insertPS.getGeneratedKeys();
-            rs.next();
-            result = rs.getLong(1);
-            return result;
-        } finally {
-            if(rs != null){
-                rs.close();
-            }
-        }
-    }
-    
-    public Long insertCategory(Long categoryGroupId, String type, String name, String desc) throws Exception {
+    public Long insert(Long categoryGroupId, String type, String name, String desc) throws Exception {
         LOG.debug("insert");
         String queryInsert = "INSERT INTO " + Table.Names.CATEGORY +
                 " (" + Table.CATEGORY.CATEGORY_GROUP_ID + ", " + Table.CATEGORY.CATEGORY_GROUP_TYPE + 
@@ -137,7 +115,7 @@ public class TableCategoryTest {
         try (
                 PreparedStatement selectDatesPS = dbConnectionResource.getConnection().prepareStatement(queryDates);
         ){
-            long idJustInserted = insertCategory(categoryGroupIdMain, categoryGroupType, "CG:Main->cat1", "category 1");
+            long idJustInserted = insert(categoryGroupIdMain, categoryGroupType, "CG:Main->cat1", "category 1");
             LOG.debug("idJustInserted > 0: idJustInserted=" + idJustInserted);
             assert (idJustInserted > 0);
             selectDatesPS.setLong(1, idJustInserted);
@@ -175,7 +153,7 @@ public class TableCategoryTest {
         try (
                 PreparedStatement selectDatesPS = dbConnectionResource.getConnection().prepareStatement(queryDates);
         ){
-            long idJustInserted = insertCategory(categoryGroupIdAnother, categoryGroupType, "CG:Main->cat1", "category 1");
+            long idJustInserted = insert(categoryGroupIdAnother, categoryGroupType, "CG:Main->cat1", "category 1");
             LOG.debug("idJustInserted > 0: idJustInserted=" + idJustInserted);
             assert (idJustInserted > 0);
             selectDatesPS.setLong(1, idJustInserted);
@@ -207,7 +185,7 @@ public class TableCategoryTest {
         try (
                 PreparedStatement selectDatesPS = dbConnectionResource.getConnection().prepareStatement(queryDates);
         ){
-            long idJustInserted = insertCategory(categoryGroupIdMain, "D", "CG:Main->cat4", "category 4");
+            long idJustInserted = insert(categoryGroupIdMain, "D", "CG:Main->cat4", "category 4");
             LOG.debug("idJustInserted > 0: idJustInserted=" + idJustInserted);
             assert (idJustInserted > 0);
             selectDatesPS.setLong(1, idJustInserted);
@@ -284,7 +262,7 @@ public class TableCategoryTest {
         LOG.debug("testCategory_22_updateDuplicate");
         ResultSet rs = null;
         try {
-            long idJustInserted = insertCategory(categoryGroupIdMain, categoryGroupType, "CG:Main->cat2", "category 2");
+            long idJustInserted = insert(categoryGroupIdMain, categoryGroupType, "CG:Main->cat2", "category 2");
             //"cat1_v1" duplicate update, 1st update in method  testCategory_21_update
             update(idJustInserted, "cat1_v1");
         } finally {
@@ -297,7 +275,7 @@ public class TableCategoryTest {
         LOG.debug("testCategory_23_update_sameName_AnotherCG");
         ResultSet rs = null;
         try {
-            long idJustInserted = insertCategory(categoryGroupIdAnother, categoryGroupType, "CG:Another->cat3", "category 3");
+            long idJustInserted = insert(categoryGroupIdAnother, categoryGroupType, "CG:Another->cat3", "category 3");
             //"cat1_v1" duplicate update, 1st update in method  testCategory_21_update
             update(idJustInserted, "cat1_v1");
         } finally {
