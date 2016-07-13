@@ -10,7 +10,10 @@ import org.hibernate.Session;
 import org.hibernate.resource.transaction.spi.TransactionStatus;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by Makar Kalancha on 06 Jul 2016.
@@ -45,31 +48,61 @@ public class TaxDAOImpl_v1 implements TaxDAO{
         return tax;
     }
 
-        public List<Tax> taxList() throws Exception {
-            Session session = null;
-            List<Tax> list = new ArrayList<>();
-            try {
-                session = HibernateUtilTest.openSession();
-                session.beginTransaction();
-                list = session.createQuery("SELECT t FROM Tax t ORDER BY t.name").list();
-                session.getTransaction().commit();
-            } catch (Exception e) {
-                try {
-                    if (session.getTransaction().getStatus() == TransactionStatus.ACTIVE
-                            || session.getTransaction().getStatus() == TransactionStatus.MARKED_ROLLBACK)
-                        session.getTransaction().rollback();
-                } catch (Exception rbEx) {
-                    LOG.error("Rollback of transaction failed, trace follows!");
-                    LOG.error(rbEx, rbEx);
-                }
-                throw new RuntimeException(e);
-            } finally {
-                if (session != null) {
-                    session.close();
-                }
+    public Tax getTaxByIdWithParentsChildren(Long id) throws Exception {
+        Session session = null;
+        Tax tax = null;
+        try {
+            session = HibernateUtilTest.openSession();
+            session.beginTransaction();
+            tax = session.get(Tax.class, id);
+            if(tax != null) {
+                Hibernate.initialize(tax.getParentTaxes());
+                Hibernate.initialize(tax.getChildTaxes());
             }
-            return list;
+            session.getTransaction().commit();
+        } catch (Exception e) {
+            try {
+                if (session.getTransaction().getStatus() == TransactionStatus.ACTIVE
+                        || session.getTransaction().getStatus() == TransactionStatus.MARKED_ROLLBACK)
+                    session.getTransaction().rollback();
+            } catch (Exception rbEx) {
+                LOG.error("Rollback of transaction failed, trace follows!");
+                LOG.error(rbEx, rbEx);
+            }
+            throw new RuntimeException(e);
+        } finally {
+            if (session != null) {
+                session.close();
+            }
         }
+        return tax;
+    }
+
+    public List<Tax> taxList() throws Exception {
+        Session session = null;
+        List<Tax> list = new ArrayList<>();
+        try {
+            session = HibernateUtilTest.openSession();
+            session.beginTransaction();
+            list = session.createQuery("SELECT t FROM Tax t ORDER BY t.name").list();
+            session.getTransaction().commit();
+        } catch (Exception e) {
+            try {
+                if (session.getTransaction().getStatus() == TransactionStatus.ACTIVE
+                        || session.getTransaction().getStatus() == TransactionStatus.MARKED_ROLLBACK)
+                    session.getTransaction().rollback();
+            } catch (Exception rbEx) {
+                LOG.error("Rollback of transaction failed, trace follows!");
+                LOG.error(rbEx, rbEx);
+            }
+            throw new RuntimeException(e);
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+        return list;
+    }
 
     /*
     see test_42_select_benchMark.ods
@@ -166,6 +199,10 @@ ORDER BY tax0_.NAME
 //            //https://docs.jboss.org/hibernate/orm/3.3/reference/en/html/queryhql.html
 //            list = session.createQuery("SELECT t FROM Tax t all properties t.childTaxes ORDER BY t.name").list();
             session.getTransaction().commit();
+
+            //clean cartesian product: LinkedHashSet to save the order
+            Set<Tax> set = new LinkedHashSet<>(list);
+            list = new ArrayList<>(set);
         } catch (Exception e) {
             try {
                 if (session.getTransaction().getStatus() == TransactionStatus.ACTIVE
@@ -311,7 +348,39 @@ WHERE parenttaxe0_.CHILD_TAX_ID=?
         try {
             session = HibernateUtilTest.openSession();
             session.beginTransaction();
-            Tax tax = session.load(Tax.class, id);
+
+            /**
+             * session.load()
+             * - It will always return a “proxy” (Hibernate term) without hitting the database.
+             * In Hibernate, proxy is an object with the given identifier value, its properties are not initialized yet,
+             * it just look like a temporary fake object.
+             * - If no row found , it will throws an ObjectNotFoundException.
+
+             */
+//            CategoryGroup CategoryGroup = (CategoryGroup) session.load(CategoryGroup.class, id);
+            /**
+             * session.get()
+             * - It always hit the database and return the real object, an object that represent the database row,
+             * not proxy.
+             * - If no row found , it return null.
+
+             */
+            Tax tax = session.get(Tax.class, id);
+            tax.setChildTaxes(new HashSet<>());
+            tax.setParentTaxes(new HashSet<>());
+            saveOrUpdateTax(tax);
+
+            /*
+            Referential integrity constraint violation: "CONSTRAINT_DBB3: TEST.TAX_CHILD FOREIGN KEY(CHILD_TAX_ID) REFERENCES TEST.TAX(ID) (560)"
+            @ManyToMany(mappedBy = "childTaxes", cascade = CascadeType.ALL)
+            so:
+            @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+            @JoinTable(name = "TAX_CHILD",
+                joinColumns = {@JoinColumn(name = "CHILD_TAX_ID", referencedColumnName = "ID")},
+                inverseJoinColumns = {@JoinColumn(name = "TAX_ID", referencedColumnName = "ID")}
+            )
+            private Set<Tax> parentTaxes = new HashSet<>();
+             */
             session.delete(tax);
             session.getTransaction().commit();
         } catch (Exception e) {

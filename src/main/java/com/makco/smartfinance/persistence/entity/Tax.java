@@ -128,7 +128,12 @@ public class Tax implements Serializable {
     )
     private Set<Tax> childTaxes = new HashSet<>();
 
-    @ManyToMany(mappedBy = "childTaxes", cascade = CascadeType.ALL)
+//    @ManyToMany(mappedBy = "childTaxes", cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinTable(name = "TAX_CHILD",
+            joinColumns = {@JoinColumn(name = "CHILD_TAX_ID", referencedColumnName = "ID")},
+            inverseJoinColumns = {@JoinColumn(name = "TAX_ID", referencedColumnName = "ID")}
+    )
     private Set<Tax> parentTaxes = new HashSet<>();
 
     public Tax() {

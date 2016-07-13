@@ -8,7 +8,10 @@ import org.hibernate.Session;
 import org.hibernate.resource.transaction.spi.TransactionStatus;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by Makar Kalancha on 2016-06-05.
@@ -87,6 +90,10 @@ public class TaxDAOImpl implements TaxDAO {
              */
             list = session.createQuery("SELECT t FROM Tax t left join fetch t.childTaxes left join fetch t.parentTaxes ORDER BY t.name").list();
             session.getTransaction().commit();
+
+            //clean cartesian product: LinkedHashSet to save the order
+            Set<Tax> set = new LinkedHashSet<>(list);
+            list = new ArrayList<>(set);
         } catch (Exception e) {
             try {
                 if (session.getTransaction().getStatus() == TransactionStatus.ACTIVE
@@ -136,11 +143,20 @@ public class TaxDAOImpl implements TaxDAO {
 
     @Override
     public void removeTax(Long id) throws Exception {
+        /*
+        see details in
+        SmartFinance\src\test\java\com\makco\smartfinance\persistence\dao\dao_implementations\TaxDAOImpl_v1.java
+         */
         Session session = null;
         try{
             session = HibernateUtil.openSession();
             session.beginTransaction();
-            Tax tax = session.load(Tax.class, id);
+
+            Tax tax = session.get(Tax.class, id);
+            tax.setChildTaxes(new HashSet<>());
+            tax.setParentTaxes(new HashSet<>());
+            saveOrUpdateTax(tax);
+
             session.delete(tax);
             session.getTransaction().commit();
         } catch (Exception e) {

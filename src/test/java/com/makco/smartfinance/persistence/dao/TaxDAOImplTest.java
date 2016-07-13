@@ -6,17 +6,21 @@ import com.makco.smartfinance.utils.Logs;
 import com.makco.smartfinance.utils.RandomWithinRange;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.junit.runners.MethodSorters;
 
 import java.io.PrintWriter;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static org.junit.Assert.*;
 
 /**
  * Created by Makar Kalancha on 06 Jul 2016.
  */
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TaxDAOImplTest {
 
     private static final Logger LOG = LogManager.getLogger(TaxDAOImplTest.class);
@@ -79,7 +83,88 @@ public class TaxDAOImplTest {
 
         assert (taxChild1.getId() != null);
         assert (taxChild2.getId() != null);
+    }
 
+    @Test
+    public void test_31_remove_ChildOfTax() throws Exception{
+        int randomInt = randomWithinRange.getRandom();
+        String nameChild1 = new StringBuilder(taxName).append("Child").append(randomInt).toString();
+        String descChild1 = new StringBuilder(taxDesc).append("Child").append(randomInt).toString();;
+        Tax taxChild1 = new Tax(nameChild1, descChild1, null, null, null, null, null, null);
+
+        randomInt = randomWithinRange.getRandom();
+        String nameChild2 = new StringBuilder(taxName).append("Child").append(randomInt).toString();
+        String descChild2 = new StringBuilder(taxDesc).append("Child").append(randomInt).toString();;
+        Tax taxChild2 = new Tax(nameChild2, descChild2, null, null, null, null, null, null);
+
+        randomInt = randomWithinRange.getRandom();
+        String name = taxName + randomInt;
+        String desc = taxDesc + randomInt;
+        Tax tax = new Tax(name, desc, null, null, null, null, null, new HashSet<Tax>(){{
+            add(taxChild1);
+            add(taxChild2);
+        }});
+        taxDAO.saveOrUpdateTax(tax);
+
+        Set<Tax> allTaxesBefore = new HashSet<>(taxDAO.taxList());
+        long parentTaxId = tax.getId();
+        long childTaxId1 = taxChild1.getId();
+        long childTaxId2 = taxChild2.getId();
+        System.out.println(">>>>parentTaxId:" + parentTaxId);
+        System.out.println(">>>>childTaxId1:" + childTaxId1);
+        System.out.println(">>>>childTaxId2:" + childTaxId2);
+        taxDAO.removeTax(childTaxId1);
+        Set<Tax> allTaxesAfter = new HashSet<>(taxDAO.taxList());
+
+        assertEquals (1, allTaxesBefore.size() - allTaxesAfter.size());
+        Tax retrievedTax = taxDAO.getTaxByIdWithParentsChildren(parentTaxId);
+        assert (retrievedTax != null);
+        assertEquals (1, retrievedTax.getChildTaxes().size());
+        Tax retrievedChildTax1 = taxDAO.getTaxById(childTaxId1);
+        assert (retrievedChildTax1 == null);
+        Tax retrievedChildTax2 = taxDAO.getTaxById(childTaxId2);
+        assert (retrievedChildTax2 != null);
+    }
+
+
+    @Test
+    public void test_32_remove_ParentOfTax() throws Exception{
+        int randomInt = randomWithinRange.getRandom();
+        String nameChild1 = new StringBuilder(taxName).append("Child").append(randomInt).toString();
+        String descChild1 = new StringBuilder(taxDesc).append("Child").append(randomInt).toString();;
+        Tax taxChild1 = new Tax(nameChild1, descChild1, null, null, null, null, null, null);
+
+        randomInt = randomWithinRange.getRandom();
+        String nameChild2 = new StringBuilder(taxName).append("Child").append(randomInt).toString();
+        String descChild2 = new StringBuilder(taxDesc).append("Child").append(randomInt).toString();;
+        Tax taxChild2 = new Tax(nameChild2, descChild2, null, null, null, null, null, null);
+
+        randomInt = randomWithinRange.getRandom();
+        String name = taxName + randomInt;
+        String desc = taxDesc + randomInt;
+        Tax tax = new Tax(name, desc, null, null, null, null, null, new HashSet<Tax>(){{
+            add(taxChild1);
+            add(taxChild2);
+        }});
+        taxDAO.saveOrUpdateTax(tax);
+
+        Set<Tax> allTaxesBefore = new HashSet<>(taxDAO.taxList());
+        long parentTaxId = tax.getId();
+        long childTaxId1 = taxChild1.getId();
+        long childTaxId2 = taxChild2.getId();
+        System.out.println(">>>>parentTaxId:" + parentTaxId);
+        System.out.println(">>>>childTaxId1:" + childTaxId1);
+        System.out.println(">>>>childTaxId2:" + childTaxId2);
+        taxDAO.removeTax(parentTaxId);
+        Set<Tax> allTaxesAfter = new HashSet<>(taxDAO.taxList());
+
+        assertEquals (1, allTaxesBefore.size() - allTaxesAfter.size());
+        Tax retrievedTax = taxDAO.getTaxByIdWithParentsChildren(parentTaxId);
+        assert (retrievedTax == null);
+        Tax retrievedChildTax1 = taxDAO.getTaxById(childTaxId1);
+        assert (retrievedChildTax1 != null);
+        Tax retrievedChildTax2 = taxDAO.getTaxById(childTaxId2);
+        assert (retrievedChildTax2 != null);
     }
 
     @Test
@@ -144,9 +229,8 @@ public class TaxDAOImplTest {
         }
     }
 
-    @Test
+//    @Test
     public void test_42_select_benchMark() throws Exception {
-//        int cycle = 100_000;
         int cycle = 1_000;
         //in root project folder
         try(PrintWriter printWriter = new PrintWriter("test_42_select_benchMark.log", "UTF-8");) {
