@@ -148,7 +148,7 @@ public class AccountGroupDAOImpl implements AccountGroupDAO{
             session = HibernateUtil.openSession();
             session.beginTransaction();
             accountGroup = (AccountGroup) session.get(AccountGroup.class, id);
-            if(initializeCategories){
+            if(initializeCategories && accountGroup != null){
                 Hibernate.initialize(accountGroup.getAccounts());
             }
             session.getTransaction().commit();

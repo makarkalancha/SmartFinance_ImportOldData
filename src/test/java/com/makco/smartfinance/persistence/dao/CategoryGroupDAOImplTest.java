@@ -530,7 +530,7 @@ public class CategoryGroupDAOImplTest {
     }
 
     @Test
-    public void test_42_seleteCategoryGroupById() throws Exception {
+    public void test_42_1_seleteCategoryGroupById_withChildren() throws Exception {
         int randomInt = randomWithinRange.getRandom();
         int categoriesQty = 3;
         CategoryGroup categoryGroupCredit = new CategoryGroupCredit("cr catGr to sel " + randomInt,
@@ -558,6 +558,28 @@ public class CategoryGroupDAOImplTest {
 
         LOG.debug(">>>categoryGroupList: " + categoryGroupById.getCategories());
         assertEquals(true, categoryGroupById.getCategories().size() > 0);
+    }
+
+    @Test
+    public void test_42_2_seleteCategoryGroupById_withoutChildren() throws Exception {
+        int randomInt = randomWithinRange.getRandom();
+        int categoriesQty = 3;
+        CategoryGroup categoryGroupCredit = new CategoryGroupCredit("cr catGr to sel " + randomInt,
+                "credit category group to select " + randomInt);
+        LOG.debug(">>>category group id: " + categoryGroupCredit);
+        categoryGroupDAOImplForTest.saveOrUpdateCategoryGroup(categoryGroupCredit);
+
+        long categoryGroupId = categoryGroupCredit.getId();
+        LOG.debug(">>>category group id: " + categoryGroupId);
+
+        CategoryGroup categoryGroupById = categoryGroupDAOImplForTest.getCategoryGroupById(categoryGroupId, true);
+
+        LOG.debug(">>>category group select by id: " + categoryGroupById);
+
+        assertEquals(true, categoryGroupId == categoryGroupById.getId());
+
+        LOG.debug(">>>categoryGroupList: " + categoryGroupById.getCategories());
+        assertEquals(true, categoryGroupById.getCategories().size() == 0);
     }
 
     @Test

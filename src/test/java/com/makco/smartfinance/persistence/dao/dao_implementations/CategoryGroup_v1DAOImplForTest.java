@@ -94,18 +94,18 @@ public class CategoryGroup_v1DAOImplForTest {
 
     public CategoryGroup_v1 getCategoryGroup_v1ById(Long id, boolean initializeCategories) throws Exception {
         Session session = null;
-        CategoryGroup_v1 CategoryGroup_v1 = null;
+        CategoryGroup_v1 categoryGroup_v1 = null;
         try{
             session = TestPersistenceSession.openSession();
             session.beginTransaction();
-            CategoryGroup_v1 = (CategoryGroup_v1) session.get(CategoryGroup_v1.class, id);
+            categoryGroup_v1 = (CategoryGroup_v1) session.get(CategoryGroup_v1.class, id);
             if(initializeCategories){
                 //wrongClassException check entity classes in session, again eager might interfere
                 //http://stackoverflow.com/questions/4334197/discriminator-wrongclassexception-jpa-with-hibernate-backend
                 //http://anshuiitk.blogspot.ca/2011/04/hibernate-wrongclassexception.html
                 //http://stackoverflow.com/questions/12199874/about-the-use-of-forcediscriminator-discriminatoroptionsforce-true
                 //http://stackoverflow.com/questions/19928568/hibernate-best-practice-to-pull-all-lazy-collections
-                Hibernate.initialize(CategoryGroup_v1.getCategories());
+                Hibernate.initialize(categoryGroup_v1.getCategories());
             }
             session.getTransaction().commit();
         } catch (Exception e) {
@@ -123,7 +123,7 @@ public class CategoryGroup_v1DAOImplForTest {
                 session.close();
             }
         }
-        return CategoryGroup_v1;
+        return categoryGroup_v1;
     }
 
     //NOT USED
@@ -139,13 +139,13 @@ public class CategoryGroup_v1DAOImplForTest {
                     .list();
             //byName return list as it might be debit or credit and return categories
             if(initializeCategories){
-                for(CategoryGroup_v1 CategoryGroup_v1 : list) {
+                for(CategoryGroup_v1 categoryGroup_v1 : list) {
                     //wrongClassException check entity classes in session, again eager might interfere
                     //http://stackoverflow.com/questions/4334197/discriminator-wrongclassexception-jpa-with-hibernate-backend
                     //http://anshuiitk.blogspot.ca/2011/04/hibernate-wrongclassexception.html
                     //http://stackoverflow.com/questions/12199874/about-the-use-of-forcediscriminator-discriminatoroptionsforce-true
                     //http://stackoverflow.com/questions/19928568/hibernate-best-practice-to-pull-all-lazy-collections
-                    Hibernate.initialize(CategoryGroup_v1.getCategories());
+                    Hibernate.initialize(categoryGroup_v1.getCategories());
                 }
             }
             session.getTransaction().commit();
@@ -198,11 +198,11 @@ public class CategoryGroup_v1DAOImplForTest {
     //NOT USED
     public CategoryGroup_v1 getCategoryGroup_v1ByNameAndType(String categoryGroup_v1Name, DataBaseConstants.CATEGORY_GROUP_TYPE type, boolean initializeCategories) throws Exception {
         Session session = null;
-        CategoryGroup_v1 CategoryGroup_v1 = null;
+        CategoryGroup_v1 categoryGroup_v1 = null;
         try{
             session = TestPersistenceSession.openSession();
             session.beginTransaction();
-            CategoryGroup_v1 = (CategoryGroup_v1) session
+            categoryGroup_v1 = (CategoryGroup_v1) session
                     .createQuery("SELECT cg FROM CategoryGroup_v1 cg where cg.name = :categoryGroup_v1Name and cg.class = :type")
                     .setString("categoryGroup_v1Name", categoryGroup_v1Name)
                     .setString("type", type.getDiscriminator())
@@ -213,7 +213,7 @@ public class CategoryGroup_v1DAOImplForTest {
                 //http://anshuiitk.blogspot.ca/2011/04/hibernate-wrongclassexception.html
                 //http://stackoverflow.com/questions/12199874/about-the-use-of-forcediscriminator-discriminatoroptionsforce-true
                 //http://stackoverflow.com/questions/19928568/hibernate-best-practice-to-pull-all-lazy-collections
-                Hibernate.initialize(CategoryGroup_v1.getCategories());
+                Hibernate.initialize(categoryGroup_v1.getCategories());
             }
             session.getTransaction().commit();
         } catch (Exception e) {
@@ -231,7 +231,7 @@ public class CategoryGroup_v1DAOImplForTest {
                 session.close();
             }
         }
-        return CategoryGroup_v1;
+        return categoryGroup_v1;
     }
 
     public void removeCategoryGroup_v1(Long id) throws Exception {
@@ -287,13 +287,13 @@ public class CategoryGroup_v1DAOImplForTest {
                     .setParameter("type", type.newInstance().getCategoryGroupType())
                     .list();
             if(initializeCategories){
-                for(CategoryGroup_v1 CategoryGroup_v1 : list) {
+                for(CategoryGroup_v1 categoryGroup_v1 : list) {
                     //wrongClassException check entity classes in session, again eager might interfere
                     //http://stackoverflow.com/questions/4334197/discriminator-wrongclassexception-jpa-with-hibernate-backend
                     //http://anshuiitk.blogspot.ca/2011/04/hibernate-wrongclassexception.html
                     //http://stackoverflow.com/questions/12199874/about-the-use-of-forcediscriminator-discriminatoroptionsforce-true
                     //http://stackoverflow.com/questions/19928568/hibernate-best-practice-to-pull-all-lazy-collections
-                    Hibernate.initialize(CategoryGroup_v1.getCategories());
+                    Hibernate.initialize(categoryGroup_v1.getCategories());
                 }
             }
             Collections.sort(list, (CategoryGroup_v1 cg1,  CategoryGroup_v1 cg2) -> cg1.getName().toLowerCase().compareTo(cg2.getName().toLowerCase()));
@@ -395,13 +395,13 @@ public class CategoryGroup_v1DAOImplForTest {
             //p.333 12.2.6 Dynamic eager fetching -> see categoryGroup_v1ListWithLeftJoinFetch
             list = session.createQuery("SELECT cg FROM CategoryGroup_v1 cg").list();
             if(initializeCategories){
-                for(CategoryGroup_v1 CategoryGroup_v1 : list) {
+                for(CategoryGroup_v1 categoryGroup_v1 : list) {
                     //wrongClassException check entity classes in session, again eager might interfere
                     //http://stackoverflow.com/questions/4334197/discriminator-wrongclassexception-jpa-with-hibernate-backend
                     //http://anshuiitk.blogspot.ca/2011/04/hibernate-wrongclassexception.html
                     //http://stackoverflow.com/questions/12199874/about-the-use-of-forcediscriminator-discriminatoroptionsforce-true
                     //http://stackoverflow.com/questions/19928568/hibernate-best-practice-to-pull-all-lazy-collections
-                    Hibernate.initialize(CategoryGroup_v1.getCategories());
+                    Hibernate.initialize(categoryGroup_v1.getCategories());
                 }
             }
             Collections.sort(list, (CategoryGroup_v1 cg1,  CategoryGroup_v1 cg2) -> cg1.getName().toLowerCase().compareTo(cg2.getName().toLowerCase()));
@@ -466,13 +466,13 @@ public class CategoryGroup_v1DAOImplForTest {
             session.beginTransaction();
             list = session.createQuery("SELECT cg FROM CategoryGroupCredit_v1 cg").list();
             if(initializeCategories){
-                for(CategoryGroup_v1 CategoryGroup_v1 : list) {
+                for(CategoryGroup_v1 categoryGroup_v1 : list) {
                     //wrongClassException check entity classes in session, again eager might interfere
                     //http://stackoverflow.com/questions/4334197/discriminator-wrongclassexception-jpa-with-hibernate-backend
                     //http://anshuiitk.blogspot.ca/2011/04/hibernate-wrongclassexception.html
                     //http://stackoverflow.com/questions/12199874/about-the-use-of-forcediscriminator-discriminatoroptionsforce-true
                     //http://stackoverflow.com/questions/19928568/hibernate-best-practice-to-pull-all-lazy-collections
-                    Hibernate.initialize(CategoryGroup_v1.getCategories());
+                    Hibernate.initialize(categoryGroup_v1.getCategories());
                 }
             }
             Collections.sort(list, (CategoryGroup_v1 cg1,  CategoryGroup_v1 cg2) -> cg1.getName().toLowerCase().compareTo(cg2.getName().toLowerCase()));
@@ -505,13 +505,13 @@ public class CategoryGroup_v1DAOImplForTest {
             session.beginTransaction();
             list = session.createQuery("SELECT cg FROM CategoryGroupDebit_v1 cg ORDER BY cg.name").list();
             if(initializeCategories){
-                for(CategoryGroup_v1 CategoryGroup_v1 : list) {
+                for(CategoryGroup_v1 categoryGroup_v1 : list) {
                     //wrongClassException check entity classes in session, again eager might interfere
                     //http://stackoverflow.com/questions/4334197/discriminator-wrongclassexception-jpa-with-hibernate-backend
                     //http://anshuiitk.blogspot.ca/2011/04/hibernate-wrongclassexception.html
                     //http://stackoverflow.com/questions/12199874/about-the-use-of-forcediscriminator-discriminatoroptionsforce-true
                     //http://stackoverflow.com/questions/19928568/hibernate-best-practice-to-pull-all-lazy-collections
-                    Hibernate.initialize(CategoryGroup_v1.getCategories());
+                    Hibernate.initialize(categoryGroup_v1.getCategories());
                 }
             }
 //            Collections.sort(list, (CategoryGroup_v1 cg1,  CategoryGroup_v1 cg2) -> cg1.getName().toLowerCase().compareTo(cg2.getName().toLowerCase()));

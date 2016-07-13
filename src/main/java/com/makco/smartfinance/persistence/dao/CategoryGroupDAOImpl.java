@@ -148,7 +148,7 @@ public class CategoryGroupDAOImpl implements CategoryGroupDAO{
             session = HibernateUtil.openSession();
             session.beginTransaction();
             categoryGroup = (CategoryGroup) session.get(CategoryGroup.class, id);
-            if(initializeCategories){
+            if(initializeCategories && categoryGroup != null){
                 //wrongClassException check entity classes in session, again eager might interfere
                 //http://stackoverflow.com/questions/4334197/discriminator-wrongclassexception-jpa-with-hibernate-backend
                 //http://anshuiitk.blogspot.ca/2011/04/hibernate-wrongclassexception.html
