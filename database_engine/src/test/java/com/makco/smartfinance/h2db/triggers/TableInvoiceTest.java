@@ -102,6 +102,31 @@ public class TableInvoiceTest {
         }
     }
 
+    public Long insert(Long organizationId, Long dateunitUnitday, String comment)
+            throws Exception {
+        LOG.debug("insert");
+        String queryInsert = "INSERT INTO " + Table.Names.INVOICE +
+                " (" + Table.INVOICE.ORGANIZATION_ID + ", " + Table.INVOICE.DATEUNIT_UNITDAY + ", " +
+                Table.INVOICE.COMMENT + ") " +
+                "VALUES(" + organizationId + "," + dateunitUnitday + ",'" + comment + "')";
+        LOG.debug(queryInsert);
+        ResultSet rs = null;
+        Long result = -1L;
+        try (
+                PreparedStatement insertPS = dbConnectionResource.getConnection().prepareStatement(queryInsert, Statement.RETURN_GENERATED_KEYS);
+        ) {
+            insertPS.executeUpdate();
+            rs = insertPS.getGeneratedKeys();
+            rs.next();
+            result = rs.getLong(1);
+            return result;
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+        }
+    }
+
     @Test
     public void testInvoice_11_insert() throws Exception {
         LOG.debug("testInvoice_11_insert");

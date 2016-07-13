@@ -59,6 +59,7 @@ public class TableItemTest {
         H2DbUtilsTest.emptyTable(dbConnectionResource.getConnection(), Table.Names.INVOICE);
         H2DbUtilsTest.emptyTable(dbConnectionResource.getConnection(), Table.Names.ORGANIZATION);
         H2DbUtilsTest.emptyTable(dbConnectionResource.getConnection(), Table.Names.FAMILY_MEMBER);
+        H2DbUtilsTest.emptyTable(dbConnectionResource.getConnection(), Table.Names.TAX_CHILD);
         H2DbUtilsTest.emptyTable(dbConnectionResource.getConnection(), Table.Names.TAX);
         H2DbUtilsTest.emptyTable(dbConnectionResource.getConnection(), Table.Names.CATEGORY);
         H2DbUtilsTest.emptyTable(dbConnectionResource.getConnection(), Table.Names.CATEGORY_GROUP);
@@ -127,25 +128,32 @@ public class TableItemTest {
                 " AND " + Table.ITEM.T_CREATEDON + " IS NOT NULL" +
                 " AND " + Table.ITEM.T_UPDATEDON + " IS NOT NULL" +
                 " AND " + Table.ITEM.T_CREATEDON + " = " + Table.ITEM.T_UPDATEDON;
+
+        String queryInvoice = "SELECT " + Table.INVOICE.ID + " FROM " + Table.Names.INVOICE +
+                " WHERE " + Table.INVOICE.ID + " = ?" +
+                " AND " + Table.INVOICE.SUB_TOTAL + "  = (SELECT SUM(" + Table.ITEM.SUB_TOTAL + ") FROM " + Table.Names.ITEM + " WHERE " + Table.ITEM.INVOICE_ID + " = ? )" +
+                " AND " + Table.INVOICE.TOTAL + "  = (SELECT SUM(" + Table.ITEM.TOTAL + ") FROM " + Table.Names.ITEM + " WHERE " + Table.ITEM.INVOICE_ID + " = ? )";
+
         LOG.debug(queryDates);
         ResultSet rs = null;
         try (
                 PreparedStatement selectDatesPS = dbConnectionResource.getConnection().prepareStatement(queryDates);
+                PreparedStatement selectInvoicePS = dbConnectionResource.getConnection().prepareStatement(queryInvoice);
         ){
             long dateunitUnitday = TestDateUnitFunctions.insertSelectDate(dbConnectionResource.getConnection(),
                     Date.from(LocalDate.of(2016, Month.FEBRUARY, 29).atStartOfDay(ZoneId.systemDefault()).toInstant()));
 
-            long organizationId = tableOrganizationTest.insert("Organization TableItemTest", "Organization Description From TableItemTest #testItem_11_insert");
-            long invoiceId = tableInvoiceTest.insert(organizationId, dateunitUnitday, "invoice comment", new BigDecimal("3"), new BigDecimal("4"));
+            long organizationId = tableOrganizationTest.insert("testItem_11_insert", "Organization Description From TableItemTest #testItem_11_insert");
+            long invoiceId = tableInvoiceTest.insert(organizationId, dateunitUnitday, "invoice comment");
 
-            long categoryGroupId = tableCategoryGroupTest.insert("D", "debit category group", "debit category group desc");
+            long categoryGroupId = tableCategoryGroupTest.insert("D", "debit category group11", "debit category group desc");
             long categoryId = tableCategoryTest.insert(categoryGroupId, "D", "debit category", "debit category desc");
 
             Date startDate = Date.from(LocalDate.of(2008, Month.JANUARY, 1).atStartOfDay(ZoneId.systemDefault()).toInstant());
             Date endDate = Date.from(LocalDate.of(2010, Month.JANUARY, 1).atStartOfDay(ZoneId.systemDefault()).toInstant());
-            long taxId = tableTaxTest.insert("tax name", "tax desc", new BigDecimal("10"), "1+2", startDate, endDate);
+            long taxId = tableTaxTest.insert("tax name11", "tax desc", new BigDecimal("10"), "1+2", startDate, endDate);
 
-            long familyMemberId = tableFamilyMemberTest.insert("family member #1", "family member desc");
+            long familyMemberId = tableFamilyMemberTest.insert("family member #11", "family member desc");
 
             long idJustInserted = insert(
                     invoiceId, categoryId, taxId, familyMemberId, dateunitUnitday,
@@ -163,6 +171,20 @@ public class TableItemTest {
                     "; idWithDates=" + idWithDates);
             assert (idWithDates > 0);
             assert (idJustInserted == idWithDates);
+
+            selectInvoicePS.setLong(1, invoiceId);
+            selectInvoicePS.setLong(2, invoiceId);
+            selectInvoicePS.setLong(3, invoiceId);
+            rs = selectInvoicePS.executeQuery();
+            rs.next();
+            long idOfInvoice = rs.getLong(1);
+            LOG.debug("idOfInvoice > 0: idOfInvoice=" + idOfInvoice);
+            LOG.debug("idJustInserted == idOfInvoice: " + (invoiceId == idOfInvoice) +
+                    "; invoiceId=" + invoiceId +
+                    "; idOfInvoice=" + idOfInvoice);
+            assert (idOfInvoice > 0);
+            assert (invoiceId == idOfInvoice);
+
         } finally {
             if (rs != null) rs.close();
         }
@@ -189,11 +211,16 @@ public class TableItemTest {
     public void testItem_21_update() throws Exception {
         LOG.debug("testItem_21_update");
         String querySelect = "SELECT MAX(" + Table.ITEM.ID + ") FROM " + Table.Names.ITEM;
-        String queryDates = "SELECT " + Table.ITEM.ID + " FROM " + Table.Names.ITEM +
+        String queryDates = "SELECT " + Table.ITEM.ID + ", " + Table.ITEM.INVOICE_ID + " FROM " + Table.Names.ITEM +
                 " WHERE " + Table.ITEM.ID + " = ?" +
                 " AND " + Table.ITEM.T_CREATEDON + " IS NOT NULL" +
                 " AND " + Table.ITEM.T_UPDATEDON + " IS NOT NULL" +
                 " AND " + Table.ITEM.T_CREATEDON + " != " + Table.ITEM.T_UPDATEDON;
+        String queryInvoice = "SELECT " + Table.INVOICE.ID + " FROM " + Table.Names.INVOICE +
+                " WHERE " + Table.INVOICE.ID + " = ?" +
+                " AND " + Table.INVOICE.SUB_TOTAL + "  = (SELECT SUM(" + Table.ITEM.SUB_TOTAL + ") FROM " + Table.Names.ITEM + " WHERE " + Table.ITEM.INVOICE_ID + " = ? )" +
+                " AND " + Table.INVOICE.TOTAL + "  = (SELECT SUM(" + Table.ITEM.TOTAL + ") FROM " + Table.Names.ITEM + " WHERE " + Table.ITEM.INVOICE_ID + " = ? )";
+
         LOG.debug(querySelect);
         LOG.debug(queryDates);
         ResultSet rs = null;
@@ -201,6 +228,7 @@ public class TableItemTest {
         try (
                 PreparedStatement selectPS = dbConnectionResource.getConnection().prepareStatement(querySelect);
                 PreparedStatement selectDatesPS = dbConnectionResource.getConnection().prepareStatement(queryDates);
+                PreparedStatement selectInvoicePS = dbConnectionResource.getConnection().prepareStatement(queryInvoice);
         ){
             rs = selectPS.executeQuery();
             rs.next();
@@ -212,8 +240,22 @@ public class TableItemTest {
             rs = selectDatesPS.executeQuery();
             rs.next();
             long idWithDates = rs.getLong(1);
+            long invoiceId = rs.getLong(2);
             assert (idWithDates > 0);
             assert (idMax == idWithDates);
+
+            selectInvoicePS.setLong(1, invoiceId);
+            selectInvoicePS.setLong(2, invoiceId);
+            selectInvoicePS.setLong(3, invoiceId);
+            rs = selectInvoicePS.executeQuery();
+            rs.next();
+            long idOfInvoice = rs.getLong(1);
+            LOG.debug("idOfInvoice > 0: idOfInvoice=" + idOfInvoice);
+            LOG.debug("idJustInserted == idOfInvoice: " + (invoiceId == idOfInvoice) +
+                    "; invoiceId=" + invoiceId +
+                    "; idOfInvoice=" + idOfInvoice);
+            assert (idOfInvoice > 0);
+            assert (invoiceId == idOfInvoice);
         } finally {
             if (rs != null) rs.close();
         }
@@ -260,6 +302,104 @@ public class TableItemTest {
 
             long idFromDeletedRows = rowJsonObject.get(Table.ITEM.ID.toString()).getAsLong();
             assertEquals(true, idMin == idFromDeletedRows);
+        } finally {
+            if (rs != null) rs.close();
+        }
+    }
+
+    @Test
+    public void testItem_32_delete() throws Exception {
+        LOG.debug("testItem_31_delete");
+        String queryInvoice = "SELECT " + Table.INVOICE.ID + "," + Table.INVOICE.SUB_TOTAL + "," + Table.INVOICE.TOTAL + " FROM " + Table.Names.INVOICE +
+                " WHERE " + Table.INVOICE.ID + " = ?" +
+                " AND " + Table.INVOICE.SUB_TOTAL + "  = (SELECT SUM(" + Table.ITEM.SUB_TOTAL + ") FROM " + Table.Names.ITEM + " WHERE " + Table.ITEM.INVOICE_ID + " = ? )" +
+                " AND " + Table.INVOICE.TOTAL + "  = (SELECT SUM(" + Table.ITEM.TOTAL + ") FROM " + Table.Names.ITEM + " WHERE " + Table.ITEM.INVOICE_ID + " = ? )";
+        String queryDelete = "DELETE FROM " + Table.Names.ITEM + " WHERE " +
+                Table.ITEM.ID + " = ?";
+        String querySelectDeletedRow = "SELECT JSON_ROW FROM _DELETED_ROWS WHERE ID = (SELECT MAX(ID) FROM _DELETED_ROWS WHERE SCHEMA_NAME = 'TEST' AND TABLE_NAME = '" + Table.Names.ITEM + "')";
+
+        LOG.debug(queryDelete);
+        LOG.debug(querySelectDeletedRow);
+        ResultSet rs = null;
+        try (
+                PreparedStatement selectInvoicePS = dbConnectionResource.getConnection().prepareStatement(queryInvoice);
+                PreparedStatement deletePS = dbConnectionResource.getConnection().prepareStatement(queryDelete);
+                PreparedStatement selectDeletedRowsPS = dbConnectionResource.getConnection().prepareStatement(querySelectDeletedRow);
+        ){
+            long dateunitUnitday = TestDateUnitFunctions.insertSelectDate(dbConnectionResource.getConnection(),
+                    Date.from(LocalDate.of(2016, Month.FEBRUARY, 29).atStartOfDay(ZoneId.systemDefault()).toInstant()));
+
+            long organizationId = tableOrganizationTest.insert("testItem_32_delete", "Organization Description From TableItemTest #testItem_11_insert");
+            long invoiceId = tableInvoiceTest.insert(organizationId, dateunitUnitday, "invoice comment");
+
+            long categoryGroupId = tableCategoryGroupTest.insert("D", "debit category group32", "debit category group desc");
+            long categoryId = tableCategoryTest.insert(categoryGroupId, "D", "debit category", "debit category desc");
+
+            Date startDate = Date.from(LocalDate.of(2008, Month.JANUARY, 1).atStartOfDay(ZoneId.systemDefault()).toInstant());
+            Date endDate = Date.from(LocalDate.of(2010, Month.JANUARY, 1).atStartOfDay(ZoneId.systemDefault()).toInstant());
+            long taxId = tableTaxTest.insert("tax name32", "tax desc", new BigDecimal("10"), "1+2", startDate, endDate);
+
+            long familyMemberId = tableFamilyMemberTest.insert("family member #32", "family member desc");
+
+            long idJustInserted1 = insert(
+                    invoiceId, categoryId, taxId, familyMemberId, dateunitUnitday,
+                    "product1 desc1", "product1 desc2", "comment",
+                    new BigDecimal("5.0"), new BigDecimal("15.0"));
+            insert(
+                    invoiceId, categoryId, taxId, familyMemberId, dateunitUnitday,
+                    "product2 desc1", "product2 desc2", "comment",
+                    new BigDecimal("10.0"), new BigDecimal("30.0"));
+
+            selectInvoicePS.setLong(1, invoiceId);
+            selectInvoicePS.setLong(2, invoiceId);
+            selectInvoicePS.setLong(3, invoiceId);
+            rs = selectInvoicePS.executeQuery();
+            rs.next();
+            long invoiceIdBefore = rs.getLong(1);
+            BigDecimal subtotalBefore = rs.getBigDecimal(2);
+            BigDecimal totalBefore = rs.getBigDecimal(3);
+            LOG.debug("before delete: invoiceIdBefore > 0: invoiceIdBefore=" + invoiceIdBefore);
+            LOG.debug("before delete: idJustInserted == invoiceIdBefore: " + (invoiceId == invoiceIdBefore) +
+                    "; invoiceId=" + invoiceId +
+                    "; invoiceIdBefore=" + invoiceIdBefore);
+            assert (invoiceIdBefore > 0);
+            assert (invoiceId == invoiceIdBefore);
+            LOG.debug("before delete: subtotalBefore=" + subtotalBefore);
+            LOG.debug("before delete: totalBefore=" + totalBefore);
+            assert(new BigDecimal("15").compareTo(subtotalBefore) == 0);
+            assert(new BigDecimal("45").compareTo(totalBefore) == 0);
+
+            deletePS.setLong(1, idJustInserted1);
+            deletePS.executeUpdate();
+
+            rs = selectDeletedRowsPS.executeQuery();
+            rs.next();
+            String jsonRow = rs.getString(1);
+            JsonParser jsonParser = new JsonParser();
+            JsonObject jsonObject = jsonParser.parse(jsonRow).getAsJsonObject();
+            JsonObject rowJsonObject = jsonObject.get(Table.Elements.row.toString()).getAsJsonObject();
+
+            long idFromDeletedRows = rowJsonObject.get(Table.ITEM.ID.toString()).getAsLong();
+            assertEquals(true, idJustInserted1 == idFromDeletedRows);
+
+            selectInvoicePS.setLong(1, invoiceId);
+            selectInvoicePS.setLong(2, invoiceId);
+            selectInvoicePS.setLong(3, invoiceId);
+            rs = selectInvoicePS.executeQuery();
+            rs.next();
+            long invoiceIdAfter = rs.getLong(1);
+            BigDecimal subtotalAfter = rs.getBigDecimal(2);
+            BigDecimal totalAfter = rs.getBigDecimal(3);
+            LOG.debug("after delete: invoiceIdAfter > 0: invoiceIdAfter=" + invoiceIdAfter);
+            LOG.debug("after delete: idJustInserted == invoiceIdAfter: " + (invoiceId == invoiceIdAfter) +
+                    "; invoiceId=" + invoiceId +
+                    "; invoiceIdAfter=" + invoiceIdAfter);
+            assert (invoiceIdAfter > 0);
+            assert (invoiceId == invoiceIdAfter);
+            LOG.debug("after delete: subtotalBefore=" + subtotalAfter);
+            LOG.debug("after delete: totalBefore=" + totalAfter);
+            assert(new BigDecimal("10").compareTo(subtotalAfter) == 0);
+            assert(new BigDecimal("30").compareTo(totalAfter) == 0);
         } finally {
             if (rs != null) rs.close();
         }

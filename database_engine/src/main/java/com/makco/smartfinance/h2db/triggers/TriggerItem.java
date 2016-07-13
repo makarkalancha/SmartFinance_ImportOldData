@@ -5,6 +5,7 @@ import com.makco.smartfinance.h2db.utils.schema_constants.Table;
 
 import java.math.BigDecimal;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.Date;
@@ -15,6 +16,22 @@ import java.util.Date;
  * Time: 11:33
  */
 public class TriggerItem extends AbstractTrigger {
+    private static final String UPDATE_INVOICE = new StringBuilder()
+            .append("UPDATE ")
+            .append(Table.Names.INVOICE)
+            .append(" SET ")
+            .append(Table.INVOICE.SUB_TOTAL)
+            .append(" = ")
+            .append(Table.INVOICE.SUB_TOTAL)
+            .append("+ ?, ")
+            .append(Table.INVOICE.TOTAL)
+            .append(" = ")
+            .append(Table.INVOICE.TOTAL)
+            .append("+ ? where ")
+            .append(Table.INVOICE.ID)
+            .append(" = ?")
+            .toString();
+
     @Override
     protected String logTriggerName() {
         return Table.Names.ITEM.toString();
@@ -24,11 +41,46 @@ public class TriggerItem extends AbstractTrigger {
     protected void insert(Connection connection, Object[] oldRow, Object[] newRow) throws SQLException {
         newRow[Table.ITEM.T_CREATEDON.getColumnIndex()] = Timestamp.valueOf(now);
         newRow[Table.ITEM.T_UPDATEDON.getColumnIndex()] = Timestamp.valueOf(now);
+
+        PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_INVOICE);
+        preparedStatement.setBigDecimal(1, (BigDecimal) newRow[Table.ITEM.SUB_TOTAL.getColumnIndex()]);
+        preparedStatement.setBigDecimal(2, (BigDecimal) newRow[Table.ITEM.TOTAL.getColumnIndex()]);
+        preparedStatement.setLong(3, (Long) newRow[Table.ITEM.INVOICE_ID.getColumnIndex()]);
+        preparedStatement.execute();
     }
 
     @Override
     protected void update(Connection connection, Object[] oldRow, Object[] newRow) throws SQLException {
         newRow[Table.ITEM.T_UPDATEDON.getColumnIndex()] = Timestamp.valueOf(now);
+
+        BigDecimal diffSubtotal = (BigDecimal) newRow[Table.ITEM.SUB_TOTAL.getColumnIndex()];
+        diffSubtotal = diffSubtotal.subtract((BigDecimal) oldRow[Table.ITEM.SUB_TOTAL.getColumnIndex()]);
+
+        BigDecimal diffTotal = (BigDecimal) newRow[Table.ITEM.TOTAL.getColumnIndex()];
+        diffTotal = diffTotal.subtract((BigDecimal) oldRow[Table.ITEM.TOTAL.getColumnIndex()]);
+
+
+        PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_INVOICE);
+        preparedStatement.setBigDecimal(1, diffSubtotal);
+        preparedStatement.setBigDecimal(2, diffTotal);
+        preparedStatement.setLong(3, (Long) newRow[Table.ITEM.INVOICE_ID.getColumnIndex()]);
+        preparedStatement.execute();
+    }
+
+    @Override
+    protected void delete(Connection connection, Object[] oldRow, Object[] newRow) throws SQLException {
+        super.delete(connection, oldRow, newRow);
+
+        BigDecimal diffSubtotal = ((BigDecimal) oldRow[Table.ITEM.SUB_TOTAL.getColumnIndex()]).negate();
+
+        BigDecimal diffTotal = ((BigDecimal) oldRow[Table.ITEM.TOTAL.getColumnIndex()]).negate();
+
+
+        PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_INVOICE);
+        preparedStatement.setBigDecimal(1, diffSubtotal);
+        preparedStatement.setBigDecimal(2, diffTotal);
+        preparedStatement.setLong(3, (Long) oldRow[Table.ITEM.INVOICE_ID.getColumnIndex()]);
+        preparedStatement.execute();
     }
 
     @Override
