@@ -3,11 +3,14 @@ package com.makco.smartfinance.persistence.entity;
 import com.google.common.base.Objects;
 import com.makco.smartfinance.constants.DataBaseConstants;
 import org.apache.commons.lang3.StringUtils;
+import org.hibernate.action.internal.OrphanRemovalAction;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.ConstraintMode;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -120,17 +123,12 @@ public class Tax implements Serializable {
     //http://viralpatel.net/blogs/hibernate-self-join-annotation-mapping-many-to-many-example/
     @ManyToMany(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
     @JoinTable(name = "TAX_CHILD",
-            joinColumns = {@JoinColumn(name="TAX_ID", referencedColumnName = "ID")},
-            inverseJoinColumns = {@JoinColumn(name="CHILD_TAX_ID", referencedColumnName = "ID")}
+            joinColumns = {@JoinColumn(name = "TAX_ID", referencedColumnName = "ID")},
+            inverseJoinColumns = {@JoinColumn(name = "CHILD_TAX_ID", referencedColumnName = "ID")}
     )
     private Set<Tax> childTaxes = new HashSet<>();
 
     @ManyToMany(mappedBy = "childTaxes", cascade = CascadeType.ALL)
-//    @ManyToMany(cascade = CascadeType.ALL)
-//    @JoinTable(name = "TAX_CHILD",
-//            joinColumns = {@JoinColumn(name="CHILD_TAX_ID", referencedColumnName = "id")},
-//            inverseJoinColumns = {@JoinColumn(name="TAX_ID", referencedColumnName = "id")}
-//    )
     private Set<Tax> parentTaxes = new HashSet<>();
 
     public Tax() {
