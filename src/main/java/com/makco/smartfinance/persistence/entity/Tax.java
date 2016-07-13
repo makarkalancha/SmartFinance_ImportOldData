@@ -44,10 +44,6 @@ import java.util.Set;
         )
 )
 public class Tax implements Serializable {
-    public static final String RATE_PLACEHOLDER = "{rate}";
-    public static final String TAX_ID_PATTERN = "{id\\d+}";
-
-
     @Id
     @org.hibernate.annotations.GenericGenerator(
             name = "TAX_SEQUENCE_GENERATOR",
