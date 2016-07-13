@@ -207,9 +207,6 @@ public class TaxFormulaEditorController {
         }
     }
 
-    /*
-    todo check result on this site http://helpsme.com/tools/free-gst-hst-pst-sales-tax-calculator-canada
-     */
     @FXML
     public void onValidateBtn(ActionEvent event){
         try {

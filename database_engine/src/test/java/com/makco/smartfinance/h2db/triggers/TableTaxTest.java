@@ -122,7 +122,11 @@ public class TableTaxTest {
         try (
                 PreparedStatement selectDatesPS = dbConnectionResource.getConnection().prepareStatement(queryDates);
         ){
-            //todo https://en.wikipedia.org/wiki/Goods_and_services_tax_%28Canada%29
+            /*
+            todo sites for taxes to check
+            https://en.wikipedia.org/wiki/Goods_and_services_tax_%28Canada%29
+            http://helpsme.com/tools/free-gst-hst-pst-sales-tax-calculator-canada
+             */
             Date startDate = Date.from(LocalDate.of(2008, Month.JANUARY, 1).atStartOfDay(ZoneId.systemDefault()).toInstant());
             long idJustInserted = insert("GST (2008)", "the goods and services tax", new BigDecimal("5.0"), "{num} * tax / 100", startDate, null);
             LOG.debug("idJustInserted > 0: idJustInserted=" + idJustInserted);
