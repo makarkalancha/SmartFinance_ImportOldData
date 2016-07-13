@@ -207,6 +207,25 @@ public class TableItemTest {
         }
     }
 
+    public void updateSubtotalAndTotal(Long id, BigDecimal subtotal, BigDecimal total) throws Exception {
+        LOG.debug("update");
+        String queryUpdate = "UPDATE " + Table.Names.ITEM + " SET " + Table.ITEM.SUB_TOTAL + " = ? , " +
+                Table.ITEM.TOTAL + " = ? " +
+                " WHERE " + Table.ITEM.ID + " = ?";
+        LOG.debug(queryUpdate);
+        ResultSet rs = null;
+        try (
+                PreparedStatement updatePS = dbConnectionResource.getConnection().prepareStatement(queryUpdate);
+        ){
+            updatePS.setBigDecimal(1, subtotal);
+            updatePS.setBigDecimal(2, total);
+            updatePS.setLong(3, id);
+            updatePS.executeUpdate();
+        } finally {
+            if (rs != null) rs.close();
+        }
+    }
+
     @Test
     public void testItem_21_update() throws Exception {
         LOG.debug("testItem_21_update");
@@ -256,6 +275,89 @@ public class TableItemTest {
                     "; idOfInvoice=" + idOfInvoice);
             assert (idOfInvoice > 0);
             assert (invoiceId == idOfInvoice);
+        } finally {
+            if (rs != null) rs.close();
+        }
+    }
+
+    @Test
+    public void testItem_22_update() throws Exception {
+        LOG.debug("testItem_22_update");
+        String queryInvoice = "SELECT " + Table.INVOICE.ID + "," + Table.INVOICE.SUB_TOTAL + "," + Table.INVOICE.TOTAL + " FROM " + Table.Names.INVOICE +
+                " WHERE " + Table.INVOICE.ID + " = ?" +
+                " AND " + Table.INVOICE.SUB_TOTAL + "  = (SELECT SUM(" + Table.ITEM.SUB_TOTAL + ") FROM " + Table.Names.ITEM + " WHERE " + Table.ITEM.INVOICE_ID + " = ? )" +
+                " AND " + Table.INVOICE.TOTAL + "  = (SELECT SUM(" + Table.ITEM.TOTAL + ") FROM " + Table.Names.ITEM + " WHERE " + Table.ITEM.INVOICE_ID + " = ? )";
+
+        LOG.debug(queryInvoice);
+        ResultSet rs = null;
+        try (
+                PreparedStatement selectInvoicePS = dbConnectionResource.getConnection().prepareStatement(queryInvoice);
+        ){
+            long dateunitUnitday = TestDateUnitFunctions.insertSelectDate(dbConnectionResource.getConnection(),
+                    Date.from(LocalDate.of(2016, Month.FEBRUARY, 29).atStartOfDay(ZoneId.systemDefault()).toInstant()));
+
+            long organizationId = tableOrganizationTest.insert("testItem_22_update", "Organization Description From TableItemTest #testItem_11_insert");
+            long invoiceId = tableInvoiceTest.insert(organizationId, dateunitUnitday, "invoice comment");
+
+            long categoryGroupId = tableCategoryGroupTest.insert("D", "debit category group22", "debit category group desc");
+            long categoryId = tableCategoryTest.insert(categoryGroupId, "D", "debit category", "debit category desc");
+
+            Date startDate = Date.from(LocalDate.of(2008, Month.JANUARY, 1).atStartOfDay(ZoneId.systemDefault()).toInstant());
+            Date endDate = Date.from(LocalDate.of(2010, Month.JANUARY, 1).atStartOfDay(ZoneId.systemDefault()).toInstant());
+            long taxId = tableTaxTest.insert("tax name22", "tax desc", new BigDecimal("10"), "1+2", startDate, endDate);
+
+            long familyMemberId = tableFamilyMemberTest.insert("family member #22", "family member desc");
+
+            long idJustInserted1 = insert(
+                    invoiceId, categoryId, taxId, familyMemberId, dateunitUnitday,
+                    "product1 desc1", "product1 desc2", "comment",
+                    new BigDecimal("5.0"), new BigDecimal("15.0"));
+            insert(
+                    invoiceId, categoryId, taxId, familyMemberId, dateunitUnitday,
+                    "product2 desc1", "product2 desc2", "comment",
+                    new BigDecimal("10.0"), new BigDecimal("30.0"));
+
+            //check sum after insert
+            selectInvoicePS.setLong(1, invoiceId);
+            selectInvoicePS.setLong(2, invoiceId);
+            selectInvoicePS.setLong(3, invoiceId);
+            rs = selectInvoicePS.executeQuery();
+            rs.next();
+            long invoiceIdBefore = rs.getLong(1);
+            BigDecimal subtotalBefore = rs.getBigDecimal(2);
+            BigDecimal totalBefore = rs.getBigDecimal(3);
+            LOG.debug("before delete: invoiceIdBefore=" + invoiceIdBefore);
+            LOG.debug("before delete: invoiceId == invoiceIdBefore: " + (invoiceId == invoiceIdBefore) +
+                    "; invoiceId=" + invoiceId +
+                    "; invoiceIdBefore=" + invoiceIdBefore);
+            assert (invoiceIdBefore > 0);
+            assert (invoiceId == invoiceIdBefore);
+            LOG.debug("before delete: subtotalBefore=" + subtotalBefore);
+            LOG.debug("before delete: totalBefore=" + totalBefore);
+            assert(new BigDecimal("15").compareTo(subtotalBefore) == 0);
+            assert(new BigDecimal("45").compareTo(totalBefore) == 0);
+
+            //check sum after update
+            updateSubtotalAndTotal(idJustInserted1, new BigDecimal("100"), new BigDecimal("233"));
+
+            selectInvoicePS.setLong(1, invoiceId);
+            selectInvoicePS.setLong(2, invoiceId);
+            selectInvoicePS.setLong(3, invoiceId);
+            rs = selectInvoicePS.executeQuery();
+            rs.next();
+            long invoiceIdAfter = rs.getLong(1);
+            BigDecimal subtotalAfter = rs.getBigDecimal(2);
+            BigDecimal totalAfter = rs.getBigDecimal(3);
+            LOG.debug("before delete: invoiceIdAfter=" + invoiceIdAfter);
+            LOG.debug("before delete: invoiceId == invoiceIdAfter: " + (invoiceId == invoiceIdAfter) +
+                    "; invoiceId=" + invoiceId +
+                    "; invoiceIdAfter=" + invoiceIdAfter);
+            assert (invoiceIdAfter > 0);
+            assert (invoiceId == invoiceIdAfter);
+            LOG.debug("before delete: subtotalAfter=" + subtotalAfter);
+            LOG.debug("before delete: totalAfter=" + totalAfter);
+            assert(new BigDecimal("110").compareTo(subtotalAfter) == 0);
+            assert(new BigDecimal("263").compareTo(totalAfter) == 0);
         } finally {
             if (rs != null) rs.close();
         }
