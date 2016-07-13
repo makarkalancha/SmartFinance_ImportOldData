@@ -3,10 +3,13 @@ package com.makco.smartfinance.persistence.entity;
 import com.google.common.base.Objects;
 import com.makco.smartfinance.constants.DataBaseConstants;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
@@ -14,6 +17,10 @@ import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.LinkedHashSet;
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 /**
  * Created by Makar Kalancha on 2016-04-22.
@@ -73,6 +80,11 @@ public class Organization implements Serializable {
     @org.hibernate.annotations.UpdateTimestamp
     @Column(name = "T_UPDATEDON", insertable = false, updatable = false)
     private Timestamp updatedOn;
+
+    @OneToMany(mappedBy = "organization", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @javax.persistence.OrderBy("DATEUNIT_UNITDAY")
+//    private SortedSet<AccountDebit> accounts = new TreeSet<>();
+    private Set<Invoice> invoices = new LinkedHashSet<>();
 
     public Organization() {
 
