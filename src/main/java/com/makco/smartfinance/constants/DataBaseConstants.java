@@ -111,4 +111,11 @@ public class DataBaseConstants {
     }
     public final static String TAX_CHILD_ID_PLACEHOLDER_PATTERN = "\\{TAX\\d+\\}";
 
+    //invoice
+    public final static int INVOICE_COMMENT_MAX_LGTH = 512;
+
+    //item
+    public final static int ITEM_DESCRIPTION1_MAX_LGTH = 512;
+    public final static int ITEM_DESCRIPTION2_MAX_LGTH = 512;
+    public final static int ITEM_COMMENT_MAX_LGTH = 512;
 }

@@ -1,5 +1,7 @@
 package com.makco.smartfinance.persistence.entity;
 
+import com.makco.smartfinance.constants.DataBaseConstants;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,15 +13,18 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+import javax.validation.constraints.Size;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 /**
  * Created by Makar Kalancha on 2016-07-13
  */
 @Entity
 @Table(name = "INVOICE")
-public class Invoice {
+public class Invoice implements Serializable {
     @Id
     @org.hibernate.annotations.GenericGenerator(
             name = "INVOICE_SEQUENCE_GENERATOR",
@@ -48,6 +53,11 @@ public class Invoice {
     private DateUnit dateUnit;
 
     @Column(name = "COMMENT")
+    @Size(
+            min = 0,
+            max = DataBaseConstants.INVOICE_COMMENT_MAX_LGTH,
+            message = "Comment length is " + DataBaseConstants.INVOICE_COMMENT_MAX_LGTH + " characters."
+    )
     private String comment;
 
     @Column(name = "SUB_TOTAL")
@@ -68,7 +78,53 @@ public class Invoice {
 
     }
 
-    public Invoice(Organization organization, DateUnit dateUnit){
+    public Invoice(Organization organization, DateUnit dateUnit, String comment){
+        this.organization = organization;
+        this.dateUnit = dateUnit;
+        this.comment = comment;
+    }
 
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
+    public DateUnit getDateUnit() {
+        return dateUnit;
+    }
+
+    public void setDateUnit(DateUnit dateUnit) {
+        this.dateUnit = dateUnit;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public Organization getOrganization() {
+        return organization;
+    }
+
+    public void setOrganization(Organization organization) {
+        this.organization = organization;
+    }
+
+    public BigDecimal getSubTotal() {
+        return subTotal;
+    }
+
+    public BigDecimal getTotal() {
+        return total;
+    }
+
+    public LocalDateTime getCreatedOn() {
+        return createdOn.toLocalDateTime();
+    }
+
+    public LocalDateTime getUpdatedOn() {
+        return updatedOn.toLocalDateTime();
     }
 }
