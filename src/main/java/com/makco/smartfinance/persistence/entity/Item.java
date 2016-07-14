@@ -14,6 +14,7 @@ import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 /**
  * Created by Makar Kalancha on 2016-07-14.
@@ -102,17 +103,106 @@ public class Item implements Serializable {
 
     }
 
-    public Item(Invoice invoice, Category category, Tax tax, FamilyMember familyMember, DateUnit dateUnit,
+    public Item(Invoice invoice, Category category, Tax tax, FamilyMember familyMember,
                 String description1, String description2, String comment, BigDecimal subTotal, BigDecimal total){
         this.invoice = invoice;
         this.category = category;
         this.tax = tax;
         this.familyMember = familyMember;
-        this.dateUnit = dateUnit;
         this.description1 = description1;
         this.description2 = description2;
         this.comment = comment;
         this.subTotal = subTotal;
         this.total = total;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
+    public DateUnit getDateUnit() {
+        return dateUnit;
+    }
+
+    //set date unit in invoice/item triggers
+
+    public String getDescription1() {
+        return description1;
+    }
+
+    public void setDescription1(String description1) {
+        this.description1 = description1;
+    }
+
+    public String getDescription2() {
+        return description2;
+    }
+
+    public void setDescription2(String description2) {
+        this.description2 = description2;
+    }
+
+    public FamilyMember getFamilyMember() {
+        return familyMember;
+    }
+
+    public void setFamilyMember(FamilyMember familyMember) {
+        this.familyMember = familyMember;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public Invoice getInvoice() {
+        return invoice;
+    }
+
+    public void setInvoice(Invoice invoice) {
+        this.invoice = invoice;
+    }
+
+    public BigDecimal getSubTotal() {
+        return subTotal;
+    }
+
+    public void setSubTotal(BigDecimal subTotal) {
+        this.subTotal = subTotal;
+    }
+
+    public Tax getTax() {
+        return tax;
+    }
+
+    public void setTax(Tax tax) {
+        this.tax = tax;
+    }
+
+    public BigDecimal getTotal() {
+        return total;
+    }
+
+    public void setTotal(BigDecimal total) {
+        this.total = total;
+    }
+
+    public LocalDateTime getCreatedOn() {
+        return createdOn.toLocalDateTime();
+    }
+
+    public LocalDateTime getUpdatedOn() {
+        return updatedOn.toLocalDateTime();
     }
 }

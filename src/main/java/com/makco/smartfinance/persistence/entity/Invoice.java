@@ -116,9 +116,13 @@ public class Invoice implements Serializable {
         return subTotal;
     }
 
+    //set subtotal in item trigger
+
     public BigDecimal getTotal() {
         return total;
     }
+
+    //set total in item trigger
 
     public LocalDateTime getCreatedOn() {
         return createdOn.toLocalDateTime();
