@@ -6,6 +6,7 @@ import com.makco.smartfinance.h2db.utils.schema_constants.Table;
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.Date;
@@ -31,6 +32,15 @@ public class TriggerItem extends AbstractTrigger {
             .append(Table.INVOICE.ID)
             .append(" = ?")
             .toString();
+    private static final String INVOICE_DATEUNIT = new StringBuilder()
+            .append("SELECT ")
+            .append(Table.INVOICE.DATEUNIT_UNITDAY)
+            .append(" FROM ")
+            .append(Table.Names.INVOICE)
+            .append(" WHERE ")
+            .append(Table.INVOICE.ID)
+            .append(" = ?")
+            .toString();
 
     @Override
     protected String logTriggerName() {
@@ -39,14 +49,28 @@ public class TriggerItem extends AbstractTrigger {
 
     @Override
     protected void insert(Connection connection, Object[] oldRow, Object[] newRow) throws SQLException {
-        newRow[Table.ITEM.T_CREATEDON.getColumnIndex()] = Timestamp.valueOf(now);
-        newRow[Table.ITEM.T_UPDATEDON.getColumnIndex()] = Timestamp.valueOf(now);
+        ResultSet rs = null;
+        try(
+            PreparedStatement updateInvoice = connection.prepareStatement(UPDATE_INVOICE);
+            PreparedStatement invoiceDate = connection.prepareStatement(INVOICE_DATEUNIT);
+        ) {
+            invoiceDate.setLong(1, (Long) newRow[Table.ITEM.INVOICE_ID.getColumnIndex()]);
+            rs = invoiceDate.executeQuery();
+            rs.next();
+            newRow[Table.ITEM.DATEUNIT_UNITDAY.getColumnIndex()] = rs.getLong(1);;
 
-        PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_INVOICE);
-        preparedStatement.setBigDecimal(1, (BigDecimal) newRow[Table.ITEM.SUB_TOTAL.getColumnIndex()]);
-        preparedStatement.setBigDecimal(2, (BigDecimal) newRow[Table.ITEM.TOTAL.getColumnIndex()]);
-        preparedStatement.setLong(3, (Long) newRow[Table.ITEM.INVOICE_ID.getColumnIndex()]);
-        preparedStatement.execute();
+            newRow[Table.ITEM.T_CREATEDON.getColumnIndex()] = Timestamp.valueOf(now);
+            newRow[Table.ITEM.T_UPDATEDON.getColumnIndex()] = Timestamp.valueOf(now);
+
+            updateInvoice.setBigDecimal(1, (BigDecimal) newRow[Table.ITEM.SUB_TOTAL.getColumnIndex()]);
+            updateInvoice.setBigDecimal(2, (BigDecimal) newRow[Table.ITEM.TOTAL.getColumnIndex()]);
+            updateInvoice.setLong(3, (Long) newRow[Table.ITEM.INVOICE_ID.getColumnIndex()]);
+            updateInvoice.execute();
+        }finally {
+            if(rs != null){
+                rs.close();
+            }
+        }
     }
 
     @Override
@@ -60,11 +84,15 @@ public class TriggerItem extends AbstractTrigger {
         diffTotal = diffTotal.subtract((BigDecimal) oldRow[Table.ITEM.TOTAL.getColumnIndex()]);
 
 
-        PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_INVOICE);
-        preparedStatement.setBigDecimal(1, diffSubtotal);
-        preparedStatement.setBigDecimal(2, diffTotal);
-        preparedStatement.setLong(3, (Long) newRow[Table.ITEM.INVOICE_ID.getColumnIndex()]);
-        preparedStatement.execute();
+        try (
+            PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_INVOICE);
+        ) {
+            preparedStatement.setBigDecimal(1, diffSubtotal);
+            preparedStatement.setBigDecimal(2, diffTotal);
+            preparedStatement.setLong(3, (Long) newRow[Table.ITEM.INVOICE_ID.getColumnIndex()]);
+            preparedStatement.execute();
+        }
+
     }
 
     @Override
@@ -75,12 +103,14 @@ public class TriggerItem extends AbstractTrigger {
 
         BigDecimal diffTotal = ((BigDecimal) oldRow[Table.ITEM.TOTAL.getColumnIndex()]).negate();
 
-
-        PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_INVOICE);
-        preparedStatement.setBigDecimal(1, diffSubtotal);
-        preparedStatement.setBigDecimal(2, diffTotal);
-        preparedStatement.setLong(3, (Long) oldRow[Table.ITEM.INVOICE_ID.getColumnIndex()]);
-        preparedStatement.execute();
+        try (
+                PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_INVOICE);
+        ) {
+            preparedStatement.setBigDecimal(1, diffSubtotal);
+            preparedStatement.setBigDecimal(2, diffTotal);
+            preparedStatement.setLong(3, (Long) oldRow[Table.ITEM.INVOICE_ID.getColumnIndex()]);
+            preparedStatement.execute();
+        }
     }
 
     @Override

@@ -5,6 +5,8 @@ import com.makco.smartfinance.h2db.utils.schema_constants.Table;
 
 import java.math.BigDecimal;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.Date;
@@ -15,6 +17,17 @@ import java.util.Date;
  * Time: 11:33
  */
 public class TriggerInvoice extends AbstractTrigger {
+    private static final String UPDATE_ITEM_DATEUNIT = new StringBuilder()
+            .append("UPDATE ")
+            .append(Table.Names.ITEM)
+            .append(" SET ")
+            .append(Table.ITEM.DATEUNIT_UNITDAY)
+            .append(" = ? ")
+            .append(" WHERE ")
+            .append(Table.ITEM.INVOICE_ID)
+            .append(" = ? ")
+            .toString();
+
     @Override
     protected String logTriggerName() {
         return Table.Names.INVOICE.toString();
@@ -29,6 +42,18 @@ public class TriggerInvoice extends AbstractTrigger {
     @Override
     protected void update(Connection connection, Object[] oldRow, Object[] newRow) throws SQLException {
         newRow[Table.INVOICE.T_UPDATEDON.getColumnIndex()] = Timestamp.valueOf(now);
+
+        if (!((Long) oldRow[Table.INVOICE.DATEUNIT_UNITDAY.getColumnIndex()]).equals(
+                (Long) newRow[Table.INVOICE.DATEUNIT_UNITDAY.getColumnIndex()])) {
+            try (
+                    PreparedStatement updateItemDate = connection.prepareStatement(UPDATE_ITEM_DATEUNIT);
+            ) {
+
+                updateItemDate.setLong(1, (Long) newRow[Table.INVOICE.DATEUNIT_UNITDAY.getColumnIndex()]);
+                updateItemDate.setLong(2, (Long) newRow[Table.INVOICE.ID.getColumnIndex()]);
+                updateItemDate.execute();
+            }
+        }
     }
 
     @Override

@@ -63,4 +63,12 @@ public class Invoice {
     @org.hibernate.annotations.UpdateTimestamp
     @Column(name = "T_UPDATEDON", insertable = false, updatable = false)
     private Timestamp updatedOn;
+
+    public Invoice(){
+
+    }
+
+    public Invoice(Organization organization, DateUnit dateUnit){
+
+    }
 }

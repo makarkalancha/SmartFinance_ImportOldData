@@ -50,6 +50,7 @@ public class TableInvoiceTest {
         System.out.println(mess1);
         LOG.debug(mess1);
         //        H2DbUtils.setSchema(dbConnectionResource.getConnection(), "TEST");
+        H2DbUtilsTest.emptyTable(dbConnectionResource.getConnection(), Table.Names.ITEM);
         H2DbUtilsTest.emptyTable(dbConnectionResource.getConnection(), Table.Names.INVOICE);
         H2DbUtilsTest.emptyTable(dbConnectionResource.getConnection(), Table.Names.ORGANIZATION);
     }
@@ -172,6 +173,23 @@ public class TableInvoiceTest {
                 PreparedStatement updatePS = dbConnectionResource.getConnection().prepareStatement(queryUpdate);
         ){
             updatePS.setString(1, comment);
+            updatePS.setLong(2, id);
+            updatePS.executeUpdate();
+        } finally {
+            if (rs != null) rs.close();
+        }
+    }
+
+    public void updateDate(Long id, Long dateunit) throws Exception {
+        LOG.debug("update");
+        String queryUpdate = "UPDATE " + Table.Names.INVOICE + " SET " + Table.INVOICE.DATEUNIT_UNITDAY + " = ? " +
+                " WHERE " + Table.INVOICE.ID + " = ?";
+        LOG.debug(queryUpdate);
+        ResultSet rs = null;
+        try (
+                PreparedStatement updatePS = dbConnectionResource.getConnection().prepareStatement(queryUpdate);
+        ){
+            updatePS.setLong(1, dateunit);
             updatePS.setLong(2, id);
             updatePS.executeUpdate();
         } finally {

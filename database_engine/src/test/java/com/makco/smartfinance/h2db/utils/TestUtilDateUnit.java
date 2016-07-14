@@ -9,7 +9,7 @@ import java.time.temporal.ChronoUnit;
  * Created by Makar Kalancha on 2016-02-26.
  */
 public class TestUtilDateUnit {
-    private final static LocalDate EPOCH = LocalDate.ofEpochDay(0);
+    public final static LocalDate EPOCH = LocalDate.ofEpochDay(0);
     private final java.util.Date date;
     private final LocalDate localDate;
 
