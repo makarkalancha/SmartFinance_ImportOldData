@@ -1,5 +1,6 @@
 package com.makco.smartfinance.persistence.entity;
 
+import com.google.common.base.Objects;
 import com.makco.smartfinance.constants.DataBaseConstants;
 
 import javax.persistence.CascadeType;
@@ -134,5 +135,58 @@ public class Invoice implements Serializable {
 
     public LocalDateTime getUpdatedOn() {
         return updatedOn.toLocalDateTime();
+    }
+
+    @Override
+    public String toString() {
+        return "Invoice{" +
+                "id=" + id +
+                ", organization=" + organization +
+                ", dateUnit=" + dateUnit +
+                ", comment='" + comment + '\'' +
+                ", subTotal=" + subTotal +
+                ", total=" + total +
+                ", createdOn=" + createdOn +
+                ", updatedOn=" + updatedOn +
+                ", items.size=" + items.size() +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        //todo invoice table get invoice number
+//        if (other instanceof Item) {
+//            Item that = (Item) other;
+//            return Objects.equal(
+//                    && Objects.equal(getInvoice(), that.getInvoice())
+//                    && Objects.equal(getCategory(), that.getCategory())
+//                    && Objects.equal(getTax(), that.getTax())
+//                    && Objects.equal(getFamilyMember(), that.getFamilyMember())
+//                    && Objects.equal(getDateUnit(), that.getDateUnit())
+//                    && Objects.equal(getDescription1(), that.getDescription1())
+//                    && Objects.equal(getDescription2(), that.getDescription2())
+//                    && Objects.equal(getComment(), that.getComment())
+//                    && Objects.equal(getSubTotal(), that.getSubTotal())
+//                    && Objects.equal(getTotal(), that.getTotal());
+//        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        //todo invoice table get invoice number
+        return Objects.hashCode(
+//                getId(),
+//                getInvoice(),
+//                getCategory(),
+//                getTax(),
+//                getFamilyMember(),
+//                getDateUnit(),
+//                getDescription1(),
+//                getDescription2(),
+//                getComment(),
+//                getSubTotal(),
+                getTotal()
+        );
     }
 }
