@@ -11,6 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -21,7 +23,13 @@ import java.time.LocalDateTime;
  * Created by Makar Kalancha on 2016-07-14.
  */
 @Entity
-@Table(name = "ITEM")
+@Table(name = "ITEM",
+        uniqueConstraints =
+        @UniqueConstraint(
+                name = "IDX_UNQ_TM_NVCDRDRNMBR",
+                columnNames = {"INVOICE_ID", "ORDER_NUMBER"}
+        )
+)
 public class Item implements Serializable {
     @Id
     @org.hibernate.annotations.GenericGenerator(
@@ -41,6 +49,10 @@ public class Item implements Serializable {
     @GeneratedValue(generator = "ITEM_SEQUENCE_GENERATOR")
     @Column(name = "ID")
     private Long id;
+
+    @Column(name = "ORDER_NUMBER")
+    @NotNull
+    private Integer orderNumber;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "INVOICE_ID", referencedColumnName = "ID", nullable = false)
@@ -100,12 +112,13 @@ public class Item implements Serializable {
     @Column(name = "T_UPDATEDON", insertable = false, updatable = false)
     private Timestamp updatedOn;
 
-    public Item(){
+    public Item() {
 
     }
 
-    public Item(Invoice invoice, Category category, Tax tax, FamilyMember familyMember,
-                String description1, String description2, String comment, BigDecimal subTotal, BigDecimal total){
+    public Item(Integer orderNumber, Invoice invoice, Category category, Tax tax, FamilyMember familyMember,
+                String description1, String description2, String comment, BigDecimal subTotal, BigDecimal total) {
+        this.orderNumber = orderNumber;
         this.invoice = invoice;
         this.category = category;
         this.tax = tax;
@@ -207,27 +220,19 @@ public class Item implements Serializable {
         return updatedOn.toLocalDateTime();
     }
 
-//    @Override
-//    public String toString() {
-//        return "Tax{" +
-//                "id=" + id +
-//                ", name='" + name + '\'' +
-//                ", description='" + description + '\'' +
-//                ", rate=" + rate +
-//                ", formula='" + formula + '\'' +
-//                ", startDate=" + startDate +
-//                ", endDate=" + endDate +
-//                ", childTaxes.size=" + childTaxes.size() +
-//                ", createdOn=" + createdOn +
-//                ", updatedOn=" + updatedOn +
-//                '}';
-//    }
+    public Integer getOrderNumber() {
+        return orderNumber;
+    }
 
+    public void setOrderNumber(Integer orderNumber) {
+        this.orderNumber = orderNumber;
+    }
 
     @Override
     public String toString() {
         return "Item{" +
                 "id=" + id +
+                ", orderNumber=" + orderNumber +
                 ", invoice=" + invoice +
                 ", category=" + category +
                 ", tax=" + tax +
@@ -245,39 +250,19 @@ public class Item implements Serializable {
 
     @Override
     public boolean equals(Object other) {
-        //todo item table get order number
-//        if (other instanceof Item) {
-//            Item that = (Item) other;
-//            return Objects.equal(
-//                    && Objects.equal(getInvoice(), that.getInvoice())
-//                    && Objects.equal(getCategory(), that.getCategory())
-//                    && Objects.equal(getTax(), that.getTax())
-//                    && Objects.equal(getFamilyMember(), that.getFamilyMember())
-//                    && Objects.equal(getDateUnit(), that.getDateUnit())
-//                    && Objects.equal(getDescription1(), that.getDescription1())
-//                    && Objects.equal(getDescription2(), that.getDescription2())
-//                    && Objects.equal(getComment(), that.getComment())
-//                    && Objects.equal(getSubTotal(), that.getSubTotal())
-//                    && Objects.equal(getTotal(), that.getTotal());
-//        }
+        if (other instanceof Item) {
+            Item that = (Item) other;
+            return Objects.equal(getOrderNumber(), that.getOrderNumber())
+                    && Objects.equal(getInvoice(), that.getInvoice());
+        }
         return false;
     }
 
     @Override
     public int hashCode() {
-        //todo item table get order number
         return Objects.hashCode(
-//                getId(),
-//                getInvoice(),
-//                getCategory(),
-//                getTax(),
-//                getFamilyMember(),
-//                getDateUnit(),
-//                getDescription1(),
-//                getDescription2(),
-//                getComment(),
-//                getSubTotal(),
-                getTotal()
+                getOrderNumber(),
+                getInvoice()
         );
     }
 }
