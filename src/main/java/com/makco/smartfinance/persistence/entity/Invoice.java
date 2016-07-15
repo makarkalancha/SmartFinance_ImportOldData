@@ -100,7 +100,8 @@ public class Invoice implements Serializable {
 
     }
 
-    public Invoice(Organization organization, DateUnit dateUnit, String comment){
+    public Invoice(String invoiceNumber, Organization organization, DateUnit dateUnit, String comment){
+        this.invoiceNumber = invoiceNumber;
         this.organization = organization;
         this.dateUnit = dateUnit;
         this.comment = comment;
