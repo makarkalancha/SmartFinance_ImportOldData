@@ -115,6 +115,7 @@ public class DataBaseConstants {
 
     //invoice
     public final static int INVOICE_COMMENT_MAX_LGTH = 512;
+    public final static int INVOICE_NUMBER_MAX_LGTH = 14;
     public static final DateTimeFormatter INVOICE_NUMBER_FORMAT = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
     public static String generateInvoiceNumber(){
         return LocalDateTime.now().format(INVOICE_NUMBER_FORMAT);

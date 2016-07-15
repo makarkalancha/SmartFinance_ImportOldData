@@ -13,6 +13,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -25,7 +27,13 @@ import java.util.List;
  * Created by Makar Kalancha on 2016-07-13
  */
 @Entity
-@Table(name = "INVOICE")
+@Table(name = "INVOICE",
+        uniqueConstraints =
+        @UniqueConstraint(
+                name="IDX_UNQ_NVC_NVCNMBR",
+                columnNames = {"INVOICE_NUMBER"}
+        )
+)
 public class Invoice implements Serializable {
     @Id
     @org.hibernate.annotations.GenericGenerator(
@@ -45,6 +53,15 @@ public class Invoice implements Serializable {
     @GeneratedValue(generator = "INVOICE_SEQUENCE_GENERATOR")
     @Column(name = "ID")
     private Long id;
+
+    @Column(name = "INVOICE_NUMBER")
+    @NotNull
+    @Size(
+            min = 0,
+            max = DataBaseConstants.INVOICE_NUMBER_MAX_LGTH,
+            message = "Invoice Number length is " + DataBaseConstants.INVOICE_NUMBER_MAX_LGTH + " characters."
+    )
+    private String invoiceNumber;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "ORGANIZATION_ID", referencedColumnName = "ID", nullable = false)
@@ -117,6 +134,14 @@ public class Invoice implements Serializable {
         this.organization = organization;
     }
 
+    public String getInvoiceNumber() {
+        return invoiceNumber;
+    }
+
+    public void setInvoiceNumber(String invoiceNumber) {
+        this.invoiceNumber = invoiceNumber;
+    }
+
     public BigDecimal getSubTotal() {
         return subTotal;
     }
@@ -141,6 +166,7 @@ public class Invoice implements Serializable {
     public String toString() {
         return "Invoice{" +
                 "id=" + id +
+                ", invoiceNumber=" + invoiceNumber +
                 ", organization=" + organization +
                 ", dateUnit=" + dateUnit +
                 ", comment='" + comment + '\'' +
@@ -154,39 +180,15 @@ public class Invoice implements Serializable {
 
     @Override
     public boolean equals(Object other) {
-        //todo invoice table get invoice number
-//        if (other instanceof Item) {
-//            Item that = (Item) other;
-//            return Objects.equal(
-//                    && Objects.equal(getInvoice(), that.getInvoice())
-//                    && Objects.equal(getCategory(), that.getCategory())
-//                    && Objects.equal(getTax(), that.getTax())
-//                    && Objects.equal(getFamilyMember(), that.getFamilyMember())
-//                    && Objects.equal(getDateUnit(), that.getDateUnit())
-//                    && Objects.equal(getDescription1(), that.getDescription1())
-//                    && Objects.equal(getDescription2(), that.getDescription2())
-//                    && Objects.equal(getComment(), that.getComment())
-//                    && Objects.equal(getSubTotal(), that.getSubTotal())
-//                    && Objects.equal(getTotal(), that.getTotal());
-//        }
+        if (other instanceof Invoice) {
+            Invoice that = (Invoice) other;
+            return Objects.equal(getInvoiceNumber(), that.getInvoiceNumber());
+        }
         return false;
     }
 
     @Override
     public int hashCode() {
-        //todo invoice table get invoice number
-        return Objects.hashCode(
-//                getId(),
-//                getInvoice(),
-//                getCategory(),
-//                getTax(),
-//                getFamilyMember(),
-//                getDateUnit(),
-//                getDescription1(),
-//                getDescription2(),
-//                getComment(),
-//                getSubTotal(),
-                getTotal()
-        );
+        return Objects.hashCode(getInvoiceNumber());
     }
 }
