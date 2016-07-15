@@ -153,7 +153,7 @@ public class TableInvoiceTest {
                     Date.from(LocalDate.of(2016, Month.MARCH, 1).atStartOfDay(ZoneId.systemDefault()).toInstant()));
 
             long organizationId = tableOrganizationTest.insert("Organization TableInvoiceTest", "Organization Description From TableInvoiceTest #testInvoice_11_insert");
-            long idJustInserted = insert(generateInvoiceNumber(), organizationId, dateunitUnitday, "invoice comment 11", new BigDecimal("5.0"), new BigDecimal("6.0"));
+            long idJustInserted = insert("11_insert", organizationId, dateunitUnitday, "invoice comment 11", new BigDecimal("5.0"), new BigDecimal("6.0"));
             LOG.debug("idJustInserted > 0: idJustInserted=" + idJustInserted);
             assert (idJustInserted > 0);
             selectDatesPS.setLong(1, idJustInserted);
@@ -179,7 +179,7 @@ public class TableInvoiceTest {
                 Date.from(LocalDate.of(2016, Month.MARCH, 1).atStartOfDay(ZoneId.systemDefault()).toInstant()));
 
         long organizationId = tableOrganizationTest.insert("Organization TableInvoiceTest", "Organization Description From TableInvoiceTest #testInvoice_11_insert");
-        String invoiceNumber = generateInvoiceNumber();
+        String invoiceNumber = "Invoice_12_insert";
         long idJustInserted1 = insert(invoiceNumber, organizationId, dateunitUnitday, "invoice comment 11", new BigDecimal("5.0"), new BigDecimal("6.0"));
         long idJustInserted2 = insert(invoiceNumber, organizationId, dateunitUnitday, "invoice comment 12", new BigDecimal("5.0"), new BigDecimal("6.0"));
     }
@@ -275,7 +275,7 @@ public class TableInvoiceTest {
                 Date.from(LocalDate.of(2016, Month.MARCH, 1).atStartOfDay(ZoneId.systemDefault()).toInstant()));
 
         long organizationId = tableOrganizationTest.insert("Organization TableInvoiceTest", "Organization Description From TableInvoiceTest #testInvoice_11_insert");
-        String invoiceNumber1 = generateInvoiceNumber();
+        String invoiceNumber1 = "22_update";
         String invoiceNumber2 = invoiceNumber1.substring(0, invoiceNumber1.length() - 2) + "aa";
         LOG.debug(String.format(">>>>invoiceNumber1=%s; invoiceNumber2=%s", invoiceNumber1, invoiceNumber2));
         assert (!invoiceNumber1.equals(invoiceNumber2));
