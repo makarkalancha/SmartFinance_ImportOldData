@@ -116,6 +116,7 @@ public class TriggerItem extends AbstractTrigger {
     @Override
     protected void prepareJsonForDeletion(Object[] oldRow) {
         rowJson.addProperty(Table.ITEM.ID.toString(), (Long) oldRow[Table.ITEM.ID.getColumnIndex()]);
+        rowJson.addProperty(Table.ITEM.ORDER_NUMBER.toString(), (Integer) oldRow[Table.ITEM.ORDER_NUMBER.getColumnIndex()]);
         rowJson.addProperty(Table.ITEM.INVOICE_ID.toString(), (Long) oldRow[Table.ITEM.INVOICE_ID.getColumnIndex()]);
         rowJson.addProperty(Table.ITEM.CATEGORY_ID.toString(), (Long) oldRow[Table.ITEM.CATEGORY_ID.getColumnIndex()]);
         rowJson.addProperty(Table.ITEM.TAX_ID.toString(), (Long) oldRow[Table.ITEM.TAX_ID.getColumnIndex()]);

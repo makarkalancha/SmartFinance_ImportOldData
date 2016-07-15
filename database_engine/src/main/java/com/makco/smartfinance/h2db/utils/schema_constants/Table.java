@@ -322,18 +322,19 @@ public class Table {
 
     public enum ITEM implements IEnumRow {
         ID(0),
-        INVOICE_ID(1),
-        CATEGORY_ID(2),
-        TAX_ID(3),
-        FAMILY_MEMBER_ID(4),
-        DATEUNIT_UNITDAY(5),
-        DESCRIPTION1(6),
-        DESCRIPTION2(7),
-        COMMENT(8),
-        SUB_TOTAL(9),
-        TOTAL(10),
-        T_CREATEDON(11),
-        T_UPDATEDON(12);
+        ORDER_NUMBER(1),
+        INVOICE_ID(2),
+        CATEGORY_ID(3),
+        TAX_ID(4),
+        FAMILY_MEMBER_ID(5),
+        DATEUNIT_UNITDAY(6),
+        DESCRIPTION1(7),
+        DESCRIPTION2(8),
+        COMMENT(9),
+        SUB_TOTAL(10),
+        TOTAL(11),
+        T_CREATEDON(12),
+        T_UPDATEDON(13);
 
         private int columnIndex;
         private ITEM(int columnIndex) {
