@@ -3,6 +3,8 @@ package com.makco.smartfinance.constants;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -113,6 +115,10 @@ public class DataBaseConstants {
 
     //invoice
     public final static int INVOICE_COMMENT_MAX_LGTH = 512;
+    public static final DateTimeFormatter INVOICE_NUMBER_FORMAT = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+    public static String generateInvoiceNumber(){
+        return LocalDateTime.now().format(INVOICE_NUMBER_FORMAT);
+    }
 
     //item
     public final static int ITEM_DESCRIPTION1_MAX_LGTH = 512;
