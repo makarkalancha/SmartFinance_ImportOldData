@@ -389,6 +389,11 @@ public class TableInvoiceTest {
 
         long id = rowJsonObject.get(Table.INVOICE.ID.toString()).getAsLong();
         assertEquals(1L, id);
+
+        JsonElement jsonElementInvoiceNumber = rowJsonObject.get(Table.INVOICE.INVOICE_NUMBER.toString());
+        String invoiceNumber= JsonUtils.getNullableFromJsonElementAsString(jsonElementInvoiceNumber);
+        assertEquals("20160715114901", invoiceNumber);
+
         long organizationId = rowJsonObject.get(Table.INVOICE.ORGANIZATION_ID.toString()).getAsLong();
         assertEquals(2L, organizationId);
         JsonElement jsonElementDesc = rowJsonObject.get(Table.INVOICE.COMMENT.toString());
