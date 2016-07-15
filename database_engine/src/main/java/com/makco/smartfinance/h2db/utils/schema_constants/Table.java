@@ -354,15 +354,16 @@ public class Table {
 
     public enum TRANSACTION implements IEnumRow {
         ID(0),
-        ACCOUNT_ID(1),
-        ACCOUNT_GROUP_TYPE(2),
-        INVOICE_ID(3),
-        DATEUNIT_UNITDAY(4),
-        COMMENT(5),
-        DEBIT_AMOUNT(6),
-        CREDIT_AMOUNT(7),
-        T_CREATEDON(8),
-        T_UPDATEDON(9);
+        TRANSACTION_NUMBER(1),
+        ACCOUNT_ID(2),
+        ACCOUNT_GROUP_TYPE(3),
+        INVOICE_ID(4),
+        DATEUNIT_UNITDAY(5),
+        COMMENT(6),
+        DEBIT_AMOUNT(7),
+        CREDIT_AMOUNT(8),
+        T_CREATEDON(9),
+        T_UPDATEDON(10);
 
         private int columnIndex;
         private TRANSACTION(int columnIndex) {

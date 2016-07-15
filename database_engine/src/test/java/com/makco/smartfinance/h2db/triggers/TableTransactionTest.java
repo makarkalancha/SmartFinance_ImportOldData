@@ -10,6 +10,7 @@ import com.makco.smartfinance.h2db.utils.JsonUtils;
 import com.makco.smartfinance.h2db.utils.schema_constants.Table;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.h2.jdbc.JdbcSQLException;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -54,6 +55,8 @@ public class TableTransactionTest {
         LOG.debug(mess1);
         //        H2DbUtils.setSchema(dbConnectionResource.getConnection(), "TEST");
         H2DbUtilsTest.emptyTable(dbConnectionResource.getConnection(), Table.Names.TRANSACTION);
+        H2DbUtilsTest.emptyTable(dbConnectionResource.getConnection(), Table.Names.ACCOUNT);
+        H2DbUtilsTest.emptyTable(dbConnectionResource.getConnection(), Table.Names.ACCOUNT_GROUP);
         H2DbUtilsTest.emptyTable(dbConnectionResource.getConnection(), Table.Names.INVOICE);
         H2DbUtilsTest.emptyTable(dbConnectionResource.getConnection(), Table.Names.ORGANIZATION);
     }
@@ -80,16 +83,16 @@ public class TableTransactionTest {
         LOG.debug(mess1);
     }
 
-    public Long insert(Long accountId, String accountGroupType, Long invoiceId, Long dateunitUnitday, String comment,
-                       BigDecimal subTotal, BigDecimal total) throws Exception {
+    public Long insert(String transactionNumber, Long accountId, String accountGroupType, Long invoiceId,
+                       Long dateunitUnitday, String comment, BigDecimal subTotal, BigDecimal total) throws Exception {
         LOG.debug("insert");
         String queryInsert = "INSERT INTO " + Table.Names.TRANSACTION +
-                " (" + Table.TRANSACTION.ACCOUNT_ID + ", " + Table.TRANSACTION.ACCOUNT_GROUP_TYPE + ", " +
-                Table.TRANSACTION.INVOICE_ID + ", " + Table.TRANSACTION.DATEUNIT_UNITDAY + ", " +
-                Table.TRANSACTION.COMMENT + ", " + Table.TRANSACTION.DEBIT_AMOUNT + ", " +
-                Table.TRANSACTION.CREDIT_AMOUNT + ") " +
-                "VALUES(" + accountId + ", '" + accountGroupType + "', " + invoiceId + ", " + dateunitUnitday + ", '" +
-                comment + "', " + subTotal + ", " + total + ")";
+                " (" + Table.TRANSACTION.TRANSACTION_NUMBER + ", " + Table.TRANSACTION.ACCOUNT_ID + ", " +
+                Table.TRANSACTION.ACCOUNT_GROUP_TYPE + ", " + Table.TRANSACTION.INVOICE_ID + ", " +
+                Table.TRANSACTION.DATEUNIT_UNITDAY + ", " + Table.TRANSACTION.COMMENT + ", " +
+                Table.TRANSACTION.DEBIT_AMOUNT + ", " + Table.TRANSACTION.CREDIT_AMOUNT + ") " +
+                "VALUES('" + transactionNumber + "'," + accountId + ", '" + accountGroupType + "', " + invoiceId + ", " +
+                dateunitUnitday + ", '" + comment + "', " + subTotal + ", " + total + ")";
 
         LOG.debug(queryInsert);
         ResultSet rs = null;
@@ -133,11 +136,11 @@ public class TableTransactionTest {
 
             long organizationId = tableOrganizationTest.insert("TableTransactionTest",
                     "Organization Description From TableTransactionTest #testItem_11_insert");
-            long invoiceId = tableInvoiceTest.insert(tableInvoiceTest.generateInvoiceNumber(), organizationId,
+            long invoiceId = tableInvoiceTest.insert("11_insert", organizationId,
                     dateunitUnitday, "invoice comment TableTransactionTest #testItem_11_insert", new BigDecimal("3"),
                     new BigDecimal("4"));
 
-            long idJustInserted = insert(accountId, accountGroupType, invoiceId, dateunitUnitday,
+            long idJustInserted = insert("11_insert", accountId, accountGroupType, invoiceId, dateunitUnitday,
                     "transaction TableTransactionTest #testItem_11_insert comment 11", new BigDecimal("5.0"),
                     new BigDecimal("6.0"));
             LOG.debug("idJustInserted > 0: idJustInserted=" + idJustInserted);
@@ -157,7 +160,35 @@ public class TableTransactionTest {
         }
     }
 
-    public void update(Long id, String comment) throws Exception {
+    @Test(expected=JdbcSQLException.class)
+    //org.h2.jdbc.JdbcSQLException: Unique index or primary key violation: "IDX_UNQ_TRNSCTN_TRNSCTNNMBR ON TEST.TRANSACTION(TRANSACTION_NUMBER) VALUES ('12_insert', 3)"; SQL statement:
+    public void testTransaction_12_insert_duplicate() throws Exception {
+        LOG.debug("testTransaction_11_insert");
+        long dateunitUnitday = TestDateUnitFunctions.insertSelectDate(dbConnectionResource.getConnection(),
+                Date.from(LocalDate.of(2016, Month.MARCH, 1).atStartOfDay(ZoneId.systemDefault()).toInstant()));
+
+        String accountGroupType = "C";
+        long accountGroupId = tableAccountGroupTest.insert(accountGroupType, "account group name12",
+                "account group description from  TableTransactionTest #testTransaction_11_insert");
+        long accountId = tableAccountTest.insert(accountGroupId, accountGroupType, "account name12",
+                "account description from  TableTransactionTest #testTransaction_11_insert");
+
+        long organizationId = tableOrganizationTest.insert("TableTransactionTest12",
+                "Organization Description From TableTransactionTest #testItem_11_insert");
+        long invoiceId = tableInvoiceTest.insert("12_insert", organizationId,
+                dateunitUnitday, "invoice comment TableTransactionTest #testItem_11_insert", new BigDecimal("3"),
+                new BigDecimal("4"));
+
+        insert("12_insert", accountId, accountGroupType, invoiceId, dateunitUnitday,
+                "transaction TableTransactionTest #testItem_11_insert comment 11", new BigDecimal("5.0"),
+                new BigDecimal("6.0"));
+
+        insert("12_insert", accountId, accountGroupType, invoiceId, dateunitUnitday,
+                "transaction TableTransactionTest #testItem_11_insert comment 11", new BigDecimal("5.0"),
+                new BigDecimal("6.0"));
+    }
+
+    public void updateComment(Long id, String comment) throws Exception {
         LOG.debug("update");
         String queryUpdate = "UPDATE " + Table.Names.TRANSACTION + " SET " + Table.TRANSACTION.COMMENT + " = ? " +
                 " WHERE " + Table.TRANSACTION.ID + " = ?";
@@ -167,6 +198,23 @@ public class TableTransactionTest {
                 PreparedStatement updatePS = dbConnectionResource.getConnection().prepareStatement(queryUpdate);
         ){
             updatePS.setString(1, comment);
+            updatePS.setLong(2, id);
+            updatePS.executeUpdate();
+        } finally {
+            if (rs != null) rs.close();
+        }
+    }
+
+    public void updateTransactionNumber(Long id, String transactionNumber) throws Exception {
+        LOG.debug("update");
+        String queryUpdate = "UPDATE " + Table.Names.TRANSACTION + " SET " + Table.TRANSACTION.TRANSACTION_NUMBER + " = ? " +
+                " WHERE " + Table.TRANSACTION.ID + " = ?";
+        LOG.debug(queryUpdate);
+        ResultSet rs = null;
+        try (
+                PreparedStatement updatePS = dbConnectionResource.getConnection().prepareStatement(queryUpdate);
+        ){
+            updatePS.setString(1, transactionNumber);
             updatePS.setLong(2, id);
             updatePS.executeUpdate();
         } finally {
@@ -195,7 +243,7 @@ public class TableTransactionTest {
             rs.next();
             idMax = rs.getLong(1);
 
-            update(idMax, "_new comment");
+            updateComment(idMax, "_new comment");
 
             selectDatesPS.setLong(1, idMax);
             rs = selectDatesPS.executeQuery();
@@ -206,6 +254,38 @@ public class TableTransactionTest {
         } finally {
             if (rs != null) rs.close();
         }
+    }
+
+    @Test(expected=JdbcSQLException.class)
+    //org.h2.jdbc.JdbcSQLException: Unique index or primary key violation: "IDX_UNQ_TRNSCTN_TRNSCTNNMBR ON TEST.TRANSACTION(TRANSACTION_NUMBER) VALUES ('22_update-2', 6)"; SQL statement:
+    public void testTransaction_22_update_duplicate() throws Exception {
+        LOG.debug("testTransaction_22_update_duplicate");
+        long dateunitUnitday = TestDateUnitFunctions.insertSelectDate(dbConnectionResource.getConnection(),
+                Date.from(LocalDate.of(2016, Month.MARCH, 1).atStartOfDay(ZoneId.systemDefault()).toInstant()));
+
+        String accountGroupType = "C";
+        long accountGroupId = tableAccountGroupTest.insert(accountGroupType, "account group name22",
+                "account group description from  TableTransactionTest #testTransaction_11_insert");
+        long accountId = tableAccountTest.insert(accountGroupId, accountGroupType, "account name22",
+                "account description from  TableTransactionTest #testTransaction_11_insert");
+
+        long organizationId = tableOrganizationTest.insert("TableTransactionTest22",
+                "Organization Description From TableTransactionTest #testItem_11_insert");
+        long invoiceId = tableInvoiceTest.insert("22_update", organizationId,
+                dateunitUnitday, "invoice comment TableTransactionTest #testItem_11_insert", new BigDecimal("3"),
+                new BigDecimal("4"));
+
+        String transactionNumber1 = "22_update-1";
+        String transactionNumber2 = "22_update-2";
+        long idJustInserted = insert(transactionNumber1, accountId, accountGroupType, invoiceId, dateunitUnitday,
+                "transaction TableTransactionTest #testItem_11_insert comment 11", new BigDecimal("5.0"),
+                new BigDecimal("6.0"));
+        insert(transactionNumber2, accountId, accountGroupType, invoiceId, dateunitUnitday,
+                "transaction TableTransactionTest #testItem_11_insert comment 11", new BigDecimal("5.0"),
+                new BigDecimal("6.0"));
+
+        updateTransactionNumber(idJustInserted, transactionNumber2);
+
     }
 
     @Test
