@@ -335,22 +335,24 @@ public class TableInvoiceTest {
     private JsonObject createJsonObject() throws Exception {
         String schemaName = "TEST";
 
-        Object[] row = new Object[7];
+        Object[] row = new Object[8];
         row[0] = 1L;
-        row[1] = 2L;
-        row[2] = "invoice comment";
-        row[3] = new BigDecimal("2.0");
-        row[4] = new BigDecimal("5.0");
-        row[5] = SIMPLE_DATE_TIME_FORMAT.parse("2001-02-03 14:05:06");
-        row[6] = SIMPLE_DATE_TIME_FORMAT.parse("2006-05-04 03:02:01");
+        row[1] = "20160715114901";
+        row[2] = 2L;
+        row[3] = "invoice comment";
+        row[4] = new BigDecimal("2.0");
+        row[5] = new BigDecimal("5.0");
+        row[6] = SIMPLE_DATE_TIME_FORMAT.parse("2001-02-03 14:05:06");
+        row[7] = SIMPLE_DATE_TIME_FORMAT.parse("2006-05-04 03:02:01");
         JsonObject rowJson = new JsonObject();
         rowJson.addProperty(Table.INVOICE.ID.toString(), (Long) row[0]);
-        rowJson.addProperty(Table.INVOICE.ORGANIZATION_ID.toString(), (Long) row[1]);
-        rowJson.addProperty(Table.INVOICE.COMMENT.toString(), (String) row[2]);
-        rowJson.addProperty(Table.INVOICE.SUB_TOTAL.toString(), (BigDecimal) row[3]);
-        rowJson.addProperty(Table.INVOICE.TOTAL.toString(), (BigDecimal) row[4]);
-        rowJson.addProperty(Table.INVOICE.T_CREATEDON.toString(), SIMPLE_DATE_TIME_FORMAT.format((Date) row[5]));
-        rowJson.addProperty(Table.INVOICE.T_UPDATEDON.toString(), SIMPLE_DATE_TIME_FORMAT.format((Date) row[6]));
+        rowJson.addProperty(Table.INVOICE.INVOICE_NUMBER.toString(), (String) row[1]);
+        rowJson.addProperty(Table.INVOICE.ORGANIZATION_ID.toString(), (Long) row[2]);
+        rowJson.addProperty(Table.INVOICE.COMMENT.toString(), (String) row[3]);
+        rowJson.addProperty(Table.INVOICE.SUB_TOTAL.toString(), (BigDecimal) row[4]);
+        rowJson.addProperty(Table.INVOICE.TOTAL.toString(), (BigDecimal) row[5]);
+        rowJson.addProperty(Table.INVOICE.T_CREATEDON.toString(), SIMPLE_DATE_TIME_FORMAT.format((Date) row[6]));
+        rowJson.addProperty(Table.INVOICE.T_UPDATEDON.toString(), SIMPLE_DATE_TIME_FORMAT.format((Date) row[7]));
 
         JsonObject tableJson = new JsonObject();
         tableJson.addProperty(Table.Elements.tableName.toString(), schemaName + "." + Table.Names.INVOICE);
@@ -363,7 +365,7 @@ public class TableInvoiceTest {
     public void testDeleteToJsonObject() throws Exception{
         JsonObject tableJson = createJsonObject();
         String expectedJsonString = "{\"tableName\":\"TEST.INVOICE\",\"row\":" +
-                "{\"ID\":1,\"ORGANIZATION_ID\":2,\"COMMENT\":\"invoice comment\","+
+                "{\"ID\":1,\"INVOICE_NUMBER\":\"20160715114901\",\"ORGANIZATION_ID\":2,\"COMMENT\":\"invoice comment\","+
                 "\"SUB_TOTAL\":2.0,\"TOTAL\":5.0," +
                 "\"T_CREATEDON\":\"2001-02-03 14:05:06\",\"T_UPDATEDON\":\"2006-05-04 03:02:01\"}}";
 
