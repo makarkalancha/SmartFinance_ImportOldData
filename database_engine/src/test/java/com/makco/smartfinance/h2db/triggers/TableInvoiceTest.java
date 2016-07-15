@@ -41,7 +41,6 @@ import static org.junit.Assert.assertEquals;
 public class TableInvoiceTest {
     private static final Logger LOG = LogManager.getLogger(TableInvoiceTest.class);
     private static final SimpleDateFormat SIMPLE_DATE_TIME_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-    public static final DateTimeFormatter INVOICE_NUMBER_FORMAT = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
 
     private TableOrganizationTest tableOrganizationTest = new TableOrganizationTest();
 
@@ -130,10 +129,6 @@ public class TableInvoiceTest {
                 rs.close();
             }
         }
-    }
-
-    public String generateInvoiceNumber(){
-        return LocalDateTime.now().format(INVOICE_NUMBER_FORMAT);
     }
 
     @Test
