@@ -147,7 +147,8 @@ public class TableItemTest {
                     Date.from(LocalDate.of(2016, Month.FEBRUARY, 29).atStartOfDay(ZoneId.systemDefault()).toInstant()));
 
             long organizationId = tableOrganizationTest.insert("testItem_11_insert", "Organization Description From TableItemTest #testItem_11_insert");
-            long invoiceId = tableInvoiceTest.insert(organizationId, dateunitUnitday, "invoice comment");
+            long invoiceId = tableInvoiceTest.insert(tableInvoiceTest.generateInvoiceNumber(), organizationId,
+                    dateunitUnitday, "invoice comment");
 
             long categoryGroupId = tableCategoryGroupTest.insert("D", "debit category group11", "debit category group desc");
             long categoryId = tableCategoryTest.insert(categoryGroupId, "D", "debit category", "debit category desc");
@@ -306,7 +307,8 @@ public class TableItemTest {
                     Date.from(LocalDate.of(2016, Month.FEBRUARY, 29).atStartOfDay(ZoneId.systemDefault()).toInstant()));
 
             long organizationId = tableOrganizationTest.insert("testItem_22_update", "Organization Description From TableItemTest #testItem_11_insert");
-            long invoiceId = tableInvoiceTest.insert(organizationId, dateunitUnitday, "invoice comment");
+            long invoiceId = tableInvoiceTest.insert(tableInvoiceTest.generateInvoiceNumber(), organizationId,
+                    dateunitUnitday, "invoice comment");
 
             long categoryGroupId = tableCategoryGroupTest.insert("D", "debit category group22", "debit category group desc");
             long categoryId = tableCategoryTest.insert(categoryGroupId, "D", "debit category", "debit category desc");
@@ -401,8 +403,10 @@ public class TableItemTest {
             long dateunitUnitday = TestDateUnitFunctions.insertSelectDate(dbConnectionResource.getConnection(),
                     Date.from(LocalDate.of(2016, Month.FEBRUARY, 29).atStartOfDay(ZoneId.systemDefault()).toInstant()));
 
-            long organizationId = tableOrganizationTest.insert("testItem_11_insert", "Organization Description From TableItemTest #testItem_11_insert");
-            long invoiceId = tableInvoiceTest.insert(organizationId, dateunitUnitday, "invoice comment");
+            long organizationId = tableOrganizationTest.insert("testItem_11_insert",
+                    "Organization Description From TableItemTest #testItem_11_insert");
+            long invoiceId = tableInvoiceTest.insert(tableInvoiceTest.generateInvoiceNumber(), organizationId,
+                    dateunitUnitday, "invoice comment");
 
             long categoryGroupId = tableCategoryGroupTest.insert("D", "debit category group11", "debit category group desc");
             long categoryId = tableCategoryTest.insert(categoryGroupId, "D", "debit category", "debit category desc");
@@ -532,7 +536,8 @@ public class TableItemTest {
                     Date.from(LocalDate.of(2016, Month.FEBRUARY, 29).atStartOfDay(ZoneId.systemDefault()).toInstant()));
 
             long organizationId = tableOrganizationTest.insert("testItem_32_delete", "Organization Description From TableItemTest #testItem_11_insert");
-            long invoiceId = tableInvoiceTest.insert(organizationId, dateunitUnitday, "invoice comment");
+            long invoiceId = tableInvoiceTest.insert(tableInvoiceTest.generateInvoiceNumber(), organizationId,
+                    dateunitUnitday, "invoice comment");
 
             long categoryGroupId = tableCategoryGroupTest.insert("D", "debit category group32", "debit category group desc");
             long categoryId = tableCategoryTest.insert(categoryGroupId, "D", "debit category", "debit category desc");

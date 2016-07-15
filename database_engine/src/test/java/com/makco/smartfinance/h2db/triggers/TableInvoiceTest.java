@@ -10,6 +10,7 @@ import com.makco.smartfinance.h2db.utils.JsonUtils;
 import com.makco.smartfinance.h2db.utils.schema_constants.Table;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.h2.jdbc.JdbcSQLException;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -25,8 +26,10 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 import static org.junit.Assert.assertEquals;
@@ -38,6 +41,7 @@ import static org.junit.Assert.assertEquals;
 public class TableInvoiceTest {
     private static final Logger LOG = LogManager.getLogger(TableInvoiceTest.class);
     private static final SimpleDateFormat SIMPLE_DATE_TIME_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    public static final DateTimeFormatter INVOICE_NUMBER_FORMAT = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
 
     private TableOrganizationTest tableOrganizationTest = new TableOrganizationTest();
 
@@ -77,13 +81,13 @@ public class TableInvoiceTest {
         LOG.debug(mess1);
     }
 
-    public Long insert(Long organizationId, Long dateunitUnitday, String comment, BigDecimal subTotal, BigDecimal total)
+    public Long insert(String invoiceNumber, Long organizationId, Long dateunitUnitday, String comment, BigDecimal subTotal, BigDecimal total)
             throws Exception {
         LOG.debug("insert");
         String queryInsert = "INSERT INTO " + Table.Names.INVOICE +
-                " (" + Table.INVOICE.ORGANIZATION_ID + ", " + Table.INVOICE.DATEUNIT_UNITDAY + ", " +
+                " (" + Table.INVOICE.INVOICE_NUMBER + ", " + Table.INVOICE.ORGANIZATION_ID + ", " + Table.INVOICE.DATEUNIT_UNITDAY + ", " +
                 Table.INVOICE.COMMENT + ", " + Table.INVOICE.SUB_TOTAL + ", " + Table.INVOICE.TOTAL + ") " +
-                "VALUES(" + organizationId + "," + dateunitUnitday + ",'" + comment + "'," + subTotal + "," +
+                "VALUES('" + invoiceNumber + "'," + organizationId + "," + dateunitUnitday + ",'" + comment + "'," + subTotal + "," +
                 total + ")";
         LOG.debug(queryInsert);
         ResultSet rs = null;
@@ -103,13 +107,13 @@ public class TableInvoiceTest {
         }
     }
 
-    public Long insert(Long organizationId, Long dateunitUnitday, String comment)
+    public Long insert(String invoiceNumber, Long organizationId, Long dateunitUnitday, String comment)
             throws Exception {
         LOG.debug("insert");
         String queryInsert = "INSERT INTO " + Table.Names.INVOICE +
-                " (" + Table.INVOICE.ORGANIZATION_ID + ", " + Table.INVOICE.DATEUNIT_UNITDAY + ", " +
-                Table.INVOICE.COMMENT + ") " +
-                "VALUES(" + organizationId + "," + dateunitUnitday + ",'" + comment + "')";
+                " (" + Table.INVOICE.INVOICE_NUMBER + ", " + Table.INVOICE.ORGANIZATION_ID + ", " +
+                Table.INVOICE.DATEUNIT_UNITDAY + ", " + Table.INVOICE.COMMENT + ") " +
+                "VALUES('" + invoiceNumber + "'," + organizationId + "," + dateunitUnitday + ",'" + comment + "')";
         LOG.debug(queryInsert);
         ResultSet rs = null;
         Long result = -1L;
@@ -126,6 +130,10 @@ public class TableInvoiceTest {
                 rs.close();
             }
         }
+    }
+
+    public String generateInvoiceNumber(){
+        return LocalDateTime.now().format(INVOICE_NUMBER_FORMAT);
     }
 
     @Test
@@ -145,7 +153,7 @@ public class TableInvoiceTest {
                     Date.from(LocalDate.of(2016, Month.MARCH, 1).atStartOfDay(ZoneId.systemDefault()).toInstant()));
 
             long organizationId = tableOrganizationTest.insert("Organization TableInvoiceTest", "Organization Description From TableInvoiceTest #testInvoice_11_insert");
-            long idJustInserted = insert(organizationId, dateunitUnitday, "invoice comment 11", new BigDecimal("5.0"), new BigDecimal("6.0"));
+            long idJustInserted = insert(generateInvoiceNumber(), organizationId, dateunitUnitday, "invoice comment 11", new BigDecimal("5.0"), new BigDecimal("6.0"));
             LOG.debug("idJustInserted > 0: idJustInserted=" + idJustInserted);
             assert (idJustInserted > 0);
             selectDatesPS.setLong(1, idJustInserted);
@@ -163,8 +171,20 @@ public class TableInvoiceTest {
         }
     }
 
-    public void update(Long id, String comment) throws Exception {
-        LOG.debug("update");
+    @Test(expected=JdbcSQLException.class)
+    //org.h2.jdbc.JdbcSQLException: Unique index or primary key violation: "IDX_UNQ_NVC_NVCNMBR ON TEST.INVOICE(INVOICE_NUMBER) VALUES ('20160715112027', 4)"; SQL statement:
+    public void testInvoice_12_insert_duplicate() throws Exception {
+        LOG.debug("testInvoice_12_insert_duplicate");
+        long dateunitUnitday = TestDateUnitFunctions.insertSelectDate(dbConnectionResource.getConnection(),
+                Date.from(LocalDate.of(2016, Month.MARCH, 1).atStartOfDay(ZoneId.systemDefault()).toInstant()));
+
+        long organizationId = tableOrganizationTest.insert("Organization TableInvoiceTest", "Organization Description From TableInvoiceTest #testInvoice_11_insert");
+        String invoiceNumber = generateInvoiceNumber();
+        long idJustInserted1 = insert(invoiceNumber, organizationId, dateunitUnitday, "invoice comment 11", new BigDecimal("5.0"), new BigDecimal("6.0"));
+        long idJustInserted2 = insert(invoiceNumber, organizationId, dateunitUnitday, "invoice comment 12", new BigDecimal("5.0"), new BigDecimal("6.0"));
+    }
+
+    public void updateComment(Long id, String comment) throws Exception {
         String queryUpdate = "UPDATE " + Table.Names.INVOICE + " SET " + Table.INVOICE.COMMENT + " = ? " +
                 " WHERE " + Table.INVOICE.ID + " = ?";
         LOG.debug(queryUpdate);
@@ -180,8 +200,23 @@ public class TableInvoiceTest {
         }
     }
 
+    public void updateInvoiceNumber(Long id, String invoiceNumber) throws Exception {
+        String queryUpdate = "UPDATE " + Table.Names.INVOICE + " SET " + Table.INVOICE.INVOICE_NUMBER + " = ? " +
+                " WHERE " + Table.INVOICE.ID + " = ?";
+        LOG.debug(queryUpdate);
+        ResultSet rs = null;
+        try (
+                PreparedStatement updatePS = dbConnectionResource.getConnection().prepareStatement(queryUpdate);
+        ){
+            updatePS.setString(1, invoiceNumber);
+            updatePS.setLong(2, id);
+            updatePS.executeUpdate();
+        } finally {
+            if (rs != null) rs.close();
+        }
+    }
+
     public void updateDate(Long id, Long dateunit) throws Exception {
-        LOG.debug("update");
         String queryUpdate = "UPDATE " + Table.Names.INVOICE + " SET " + Table.INVOICE.DATEUNIT_UNITDAY + " = ? " +
                 " WHERE " + Table.INVOICE.ID + " = ?";
         LOG.debug(queryUpdate);
@@ -218,7 +253,7 @@ public class TableInvoiceTest {
             rs.next();
             idMax = rs.getLong(1);
 
-            update(idMax, "_new comment");
+            updateComment(idMax, "_new comment");
 
             selectDatesPS.setLong(1, idMax);
             rs = selectDatesPS.executeQuery();
@@ -229,6 +264,26 @@ public class TableInvoiceTest {
         } finally {
             if (rs != null) rs.close();
         }
+    }
+
+    @Test(expected=JdbcSQLException.class)
+    //org.h2.jdbc.JdbcSQLException: Unique index or primary key violation: "IDX_UNQ_NVC_NVCNMBR ON TEST.INVOICE(INVOICE_NUMBER) VALUES ('201607151144aa', 12)"; SQL statement:
+    public void testInvoice_22_update_duplicate() throws Exception {
+        LOG.debug("testInvoice_22_update_duplicate");
+
+        long dateunitUnitday = TestDateUnitFunctions.insertSelectDate(dbConnectionResource.getConnection(),
+                Date.from(LocalDate.of(2016, Month.MARCH, 1).atStartOfDay(ZoneId.systemDefault()).toInstant()));
+
+        long organizationId = tableOrganizationTest.insert("Organization TableInvoiceTest", "Organization Description From TableInvoiceTest #testInvoice_11_insert");
+        String invoiceNumber1 = generateInvoiceNumber();
+        String invoiceNumber2 = invoiceNumber1.substring(0, invoiceNumber1.length() - 2) + "aa";
+        LOG.debug(String.format(">>>>invoiceNumber1=%s; invoiceNumber2=%s", invoiceNumber1, invoiceNumber2));
+        assert (!invoiceNumber1.equals(invoiceNumber2));
+        long idJustInserted1 = insert(invoiceNumber1, organizationId, dateunitUnitday, "invoice comment 11", new BigDecimal("5.0"), new BigDecimal("6.0"));
+        long idJustInserted2 = insert(invoiceNumber2, organizationId, dateunitUnitday, "invoice comment 11", new BigDecimal("5.0"), new BigDecimal("6.0"));
+
+        updateInvoiceNumber(idJustInserted1, invoiceNumber2);
+
     }
 
     @Test

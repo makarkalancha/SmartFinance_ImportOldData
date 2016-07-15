@@ -133,8 +133,9 @@ public class TableTransactionTest {
 
             long organizationId = tableOrganizationTest.insert("TableTransactionTest",
                     "Organization Description From TableTransactionTest #testItem_11_insert");
-            long invoiceId = tableInvoiceTest.insert(organizationId, dateunitUnitday,
-                    "invoice comment TableTransactionTest #testItem_11_insert", new BigDecimal("3"), new BigDecimal("4"));
+            long invoiceId = tableInvoiceTest.insert(tableInvoiceTest.generateInvoiceNumber(), organizationId,
+                    dateunitUnitday, "invoice comment TableTransactionTest #testItem_11_insert", new BigDecimal("3"),
+                    new BigDecimal("4"));
 
             long idJustInserted = insert(accountId, accountGroupType, invoiceId, dateunitUnitday,
                     "transaction TableTransactionTest #testItem_11_insert comment 11", new BigDecimal("5.0"),

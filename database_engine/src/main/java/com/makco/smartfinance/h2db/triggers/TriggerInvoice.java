@@ -59,6 +59,7 @@ public class TriggerInvoice extends AbstractTrigger {
     @Override
     protected void prepareJsonForDeletion(Object[] oldRow) {
         rowJson.addProperty(Table.INVOICE.ID.toString(), (Long) oldRow[Table.INVOICE.ID.getColumnIndex()]);
+        rowJson.addProperty(Table.INVOICE.INVOICE_NUMBER.toString(), (String) oldRow[Table.INVOICE.INVOICE_NUMBER.getColumnIndex()]);
         rowJson.addProperty(Table.INVOICE.ORGANIZATION_ID.toString(), (Long) oldRow[Table.INVOICE.ORGANIZATION_ID.getColumnIndex()]);
         rowJson.addProperty(Table.INVOICE.COMMENT.toString(),
                 (String) oldRow[Table.INVOICE.COMMENT.getColumnIndex()]);

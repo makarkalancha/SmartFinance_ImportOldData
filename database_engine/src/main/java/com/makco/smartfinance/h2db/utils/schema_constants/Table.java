@@ -295,13 +295,14 @@ public class Table {
 
     public enum INVOICE implements IEnumRow {
         ID(0),
-        ORGANIZATION_ID(1),
-        DATEUNIT_UNITDAY(2),
-        COMMENT(3),
-        SUB_TOTAL(4),
-        TOTAL(5),
-        T_CREATEDON(6),
-        T_UPDATEDON(7);
+        INVOICE_NUMBER(1),
+        ORGANIZATION_ID(2),
+        DATEUNIT_UNITDAY(3),
+        COMMENT(4),
+        SUB_TOTAL(5),
+        TOTAL(6),
+        T_CREATEDON(7),
+        T_UPDATEDON(8);
 
         private int columnIndex;
         private INVOICE(int columnIndex) {
