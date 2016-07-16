@@ -246,7 +246,7 @@ public class TableCurrencyTest {
     private JsonObject createJsonObject() throws Exception {
         String schemaName = "TEST";
 
-        Object[] row = new Object[6];
+        Object[] row = new Object[Table.CURRENCY.values().length];
         row[0] = 1L;
         row[1] = "CAD";
         row[2] = "CAD name";

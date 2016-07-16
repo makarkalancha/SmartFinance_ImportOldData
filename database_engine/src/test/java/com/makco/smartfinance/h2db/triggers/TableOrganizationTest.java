@@ -245,7 +245,7 @@ public class TableOrganizationTest {
     private JsonObject createJsonObject() throws Exception {
         String schemaName = "TEST";
 
-        Object[] row = new Object[5];
+        Object[] row = new Object[Table.ORGANIZATION.values().length];
         row[0] = 1L;
         row[1] = "Fred";
         row[2] = null;

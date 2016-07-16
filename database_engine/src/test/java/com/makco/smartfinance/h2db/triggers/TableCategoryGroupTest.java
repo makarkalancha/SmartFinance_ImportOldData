@@ -379,7 +379,7 @@ public class TableCategoryGroupTest {
     private JsonObject createJsonObject() throws Exception {
         String schemaName = "TEST";
 
-        Object[] row = new Object[6];
+        Object[] row = new Object[Table.CATEGORY_GROUP.values().length];
         row[0] = 1L;
         row[1] = "C";
         row[2] = "health";

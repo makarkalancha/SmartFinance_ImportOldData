@@ -270,7 +270,7 @@ public class TableTaxTest {
     private JsonObject createJsonObject() throws Exception {
         String schemaName = "TEST";
 
-        Object[] row = new Object[10];
+        Object[] row = new Object[Table.TAX.values().length];
         row[0] = 1L;
         row[1] = "name of a tax";
         row[2] = "desc of a tax";

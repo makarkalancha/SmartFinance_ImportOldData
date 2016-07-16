@@ -330,7 +330,7 @@ public class TableInvoiceTest {
     private JsonObject createJsonObject() throws Exception {
         String schemaName = "TEST";
 
-        Object[] row = new Object[8];
+        Object[] row = new Object[Table.INVOICE.values().length];
         row[0] = 1L;
         row[1] = "20160715114901";
         row[2] = 2L;

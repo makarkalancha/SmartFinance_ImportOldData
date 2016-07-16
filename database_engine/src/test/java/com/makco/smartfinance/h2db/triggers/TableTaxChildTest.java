@@ -197,7 +197,7 @@ public class TableTaxChildTest {
     private JsonObject createJsonObject() throws Exception {
         String schemaName = "TEST";
 
-        Object[] row = new Object[3];
+        Object[] row = new Object[Table.TAX_CHILD.values().length];
         row[0] = 1L;
         row[1] = 2L;
         row[2] = SIMPLE_DATE_TIME_FORMAT.parse("2001-02-03 14:05:06");
