@@ -50,7 +50,7 @@ public class Item implements Serializable {
     @Column(name = "ID")
     private Long id;
 
-    @Column(name = "ORDER_NUMBER")
+    @Column(name = "ORDER_NUMBER", unique = true)
     @NotNull
     private Integer orderNumber;
 

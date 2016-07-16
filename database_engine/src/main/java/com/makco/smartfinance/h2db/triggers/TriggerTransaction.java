@@ -36,7 +36,6 @@ public class TriggerTransaction extends AbstractTrigger {
         rowJson.addProperty(Table.TRANSACTION.ID.toString(), (Long) oldRow[Table.TRANSACTION.ID.getColumnIndex()]);
         rowJson.addProperty(Table.TRANSACTION.TRANSACTION_NUMBER.toString(), (String) oldRow[Table.TRANSACTION.TRANSACTION_NUMBER.getColumnIndex()]);
         rowJson.addProperty(Table.TRANSACTION.ACCOUNT_ID.toString(), (Long) oldRow[Table.TRANSACTION.ACCOUNT_ID.getColumnIndex()]);
-        rowJson.addProperty(Table.TRANSACTION.ACCOUNT_GROUP_TYPE.toString(), (String) oldRow[Table.TRANSACTION.ACCOUNT_GROUP_TYPE.getColumnIndex()]);
         rowJson.addProperty(Table.TRANSACTION.INVOICE_ID.toString(), (Long) oldRow[Table.TRANSACTION.INVOICE_ID.getColumnIndex()]);
         rowJson.addProperty(Table.TRANSACTION.DATEUNIT_UNITDAY.toString(), (Long) oldRow[Table.TRANSACTION.DATEUNIT_UNITDAY.getColumnIndex()]);
         rowJson.addProperty(Table.TRANSACTION.COMMENT.toString(), (String) oldRow[Table.TRANSACTION.COMMENT.getColumnIndex()]);

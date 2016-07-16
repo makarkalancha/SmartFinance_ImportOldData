@@ -54,7 +54,7 @@ public class Invoice implements Serializable {
     @Column(name = "ID")
     private Long id;
 
-    @Column(name = "INVOICE_NUMBER")
+    @Column(name = "INVOICE_NUMBER", unique = true)
     @NotNull
     @Size(
             min = 0,

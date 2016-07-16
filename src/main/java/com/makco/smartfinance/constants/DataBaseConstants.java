@@ -125,4 +125,8 @@ public class DataBaseConstants {
     public final static int ITEM_DESCRIPTION1_MAX_LGTH = 512;
     public final static int ITEM_DESCRIPTION2_MAX_LGTH = 512;
     public final static int ITEM_COMMENT_MAX_LGTH = 512;
+
+    //transaction
+    public final static int TRANSACTION_NUMBER_MAX_LGTH = 14;
+    public final static int TRANSACTION_COMMENT_MAX_LGTH = 512;
 }

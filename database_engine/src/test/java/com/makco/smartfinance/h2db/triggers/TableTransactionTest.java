@@ -83,15 +83,15 @@ public class TableTransactionTest {
         LOG.debug(mess1);
     }
 
-    public Long insert(String transactionNumber, Long accountId, String accountGroupType, Long invoiceId,
+    public Long insert(String transactionNumber, Long accountId, Long invoiceId,
                        Long dateunitUnitday, String comment, BigDecimal subTotal, BigDecimal total) throws Exception {
         LOG.debug("insert");
         String queryInsert = "INSERT INTO " + Table.Names.TRANSACTION +
                 " (" + Table.TRANSACTION.TRANSACTION_NUMBER + ", " + Table.TRANSACTION.ACCOUNT_ID + ", " +
-                Table.TRANSACTION.ACCOUNT_GROUP_TYPE + ", " + Table.TRANSACTION.INVOICE_ID + ", " +
-                Table.TRANSACTION.DATEUNIT_UNITDAY + ", " + Table.TRANSACTION.COMMENT + ", " +
-                Table.TRANSACTION.DEBIT_AMOUNT + ", " + Table.TRANSACTION.CREDIT_AMOUNT + ") " +
-                "VALUES('" + transactionNumber + "'," + accountId + ", '" + accountGroupType + "', " + invoiceId + ", " +
+                Table.TRANSACTION.INVOICE_ID + ", " + Table.TRANSACTION.DATEUNIT_UNITDAY + ", " +
+                Table.TRANSACTION.COMMENT + ", " + Table.TRANSACTION.DEBIT_AMOUNT + ", " +
+                Table.TRANSACTION.CREDIT_AMOUNT + ") " +
+                "VALUES('" + transactionNumber + "'," + accountId + ", " + invoiceId + ", " +
                 dateunitUnitday + ", '" + comment + "', " + subTotal + ", " + total + ")";
 
         LOG.debug(queryInsert);
@@ -140,7 +140,7 @@ public class TableTransactionTest {
                     dateunitUnitday, "invoice comment TableTransactionTest #testItem_11_insert", new BigDecimal("3"),
                     new BigDecimal("4"));
 
-            long idJustInserted = insert("11_insert", accountId, accountGroupType, invoiceId, dateunitUnitday,
+            long idJustInserted = insert("11_insert", accountId, invoiceId, dateunitUnitday,
                     "transaction TableTransactionTest #testItem_11_insert comment 11", new BigDecimal("5.0"),
                     new BigDecimal("6.0"));
             LOG.debug("idJustInserted > 0: idJustInserted=" + idJustInserted);
@@ -179,11 +179,11 @@ public class TableTransactionTest {
                 dateunitUnitday, "invoice comment TableTransactionTest #testItem_11_insert", new BigDecimal("3"),
                 new BigDecimal("4"));
 
-        insert("12_insert", accountId, accountGroupType, invoiceId, dateunitUnitday,
+        insert("12_insert", accountId, invoiceId, dateunitUnitday,
                 "transaction TableTransactionTest #testItem_11_insert comment 11", new BigDecimal("5.0"),
                 new BigDecimal("6.0"));
 
-        insert("12_insert", accountId, accountGroupType, invoiceId, dateunitUnitday,
+        insert("12_insert", accountId, invoiceId, dateunitUnitday,
                 "transaction TableTransactionTest #testItem_11_insert comment 11", new BigDecimal("5.0"),
                 new BigDecimal("6.0"));
     }
@@ -277,10 +277,10 @@ public class TableTransactionTest {
 
         String transactionNumber1 = "22_update-1";
         String transactionNumber2 = "22_update-2";
-        long idJustInserted = insert(transactionNumber1, accountId, accountGroupType, invoiceId, dateunitUnitday,
+        long idJustInserted = insert(transactionNumber1, accountId, invoiceId, dateunitUnitday,
                 "transaction TableTransactionTest #testItem_11_insert comment 11", new BigDecimal("5.0"),
                 new BigDecimal("6.0"));
-        insert(transactionNumber2, accountId, accountGroupType, invoiceId, dateunitUnitday,
+        insert(transactionNumber2, accountId, invoiceId, dateunitUnitday,
                 "transaction TableTransactionTest #testItem_11_insert comment 11", new BigDecimal("5.0"),
                 new BigDecimal("6.0"));
 
@@ -337,10 +337,10 @@ public class TableTransactionTest {
     private JsonObject createJsonObject() throws Exception {
         String schemaName = "TEST";
 
-        Object[] row = new Object[10];
+        Object[] row = new Object[Table.TRANSACTION.values().length];
         row[0] = 1L;
-        row[1] = 2L;
-        row[2] = "D";
+        row[1] = "trans number";
+        row[2] = 2L;
         row[3] = 3L;
         row[4] = 4L;
         row[5] = "invoice comment";
@@ -350,8 +350,8 @@ public class TableTransactionTest {
         row[9] = SIMPLE_DATE_TIME_FORMAT.parse("2006-05-04 03:02:01");
         JsonObject rowJson = new JsonObject();
         rowJson.addProperty(Table.TRANSACTION.ID.toString(), (Long) row[0]);
-        rowJson.addProperty(Table.TRANSACTION.ACCOUNT_ID.toString(), (Long) row[1]);
-        rowJson.addProperty(Table.TRANSACTION.ACCOUNT_GROUP_TYPE.toString(), (String) row[2]);
+        rowJson.addProperty(Table.TRANSACTION.TRANSACTION_NUMBER.toString(), (String) row[1]);
+        rowJson.addProperty(Table.TRANSACTION.ACCOUNT_ID.toString(), (Long) row[2]);
         rowJson.addProperty(Table.TRANSACTION.INVOICE_ID.toString(), (Long) row[3]);
         rowJson.addProperty(Table.TRANSACTION.DATEUNIT_UNITDAY.toString(), (Long) row[4]);
         rowJson.addProperty(Table.TRANSACTION.COMMENT.toString(), (String) row[5]);
@@ -371,7 +371,7 @@ public class TableTransactionTest {
     public void testDeleteToJsonObject() throws Exception{
         JsonObject tableJson = createJsonObject();
         String expectedJsonString = "{\"tableName\":\"TEST.TRANSACTION\",\"row\":" +
-                "{\"ID\":1,\"ACCOUNT_ID\":2,\"ACCOUNT_GROUP_TYPE\":\"D\","+
+                "{\"ID\":1,\"TRANSACTION_NUMBER\":\"trans number\",\"ACCOUNT_ID\":2,"+
                 "\"INVOICE_ID\":3,\"DATEUNIT_UNITDAY\":4,"+
                 "\"COMMENT\":\"invoice comment\","+
                 "\"DEBIT_AMOUNT\":2.0,\"CREDIT_AMOUNT\":5.0," +
@@ -397,11 +397,11 @@ public class TableTransactionTest {
 
         long id = rowJsonObject.get(Table.TRANSACTION.ID.toString()).getAsLong();
         assertEquals(1L, id);
+        JsonElement jsonElementAccGr = rowJsonObject.get(Table.TRANSACTION.TRANSACTION_NUMBER.toString());
+        String accountGroup = JsonUtils.getNullableFromJsonElementAsString(jsonElementAccGr);
+        assertEquals("trans number", accountGroup);
         long accountId = rowJsonObject.get(Table.TRANSACTION.ACCOUNT_ID.toString()).getAsLong();
         assertEquals(2L, accountId);
-        JsonElement jsonElementAccGr = rowJsonObject.get(Table.TRANSACTION.ACCOUNT_GROUP_TYPE.toString());
-        String accountGroup = JsonUtils.getNullableFromJsonElementAsString(jsonElementAccGr);
-        assertEquals("D", accountGroup);
         long invoiceId = rowJsonObject.get(Table.TRANSACTION.INVOICE_ID.toString()).getAsLong();
         assertEquals(3L, invoiceId);
         long dateunitUnitday = rowJsonObject.get(Table.TRANSACTION.DATEUNIT_UNITDAY.toString()).getAsLong();
