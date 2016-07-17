@@ -61,8 +61,9 @@ public class Transaction implements Serializable {
     @JoinColumn(name = "ACCOUNT_ID", referencedColumnName = "ID", nullable = false)
     private Account account;
 
-//    ACCOUNT_GROUP_TYPE VARCHAR(1) NOT NULL,--discriminator: CREDIT/DEBIT account group
-//    INVOICE_ID BIGINT,
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "INVOICE_ID", referencedColumnName = "ID", nullable = false)
+    private Invoice invoice;
 //    DATEUNIT_UNITDAY BIGINT,
 //    COMMENT VARCHAR(512) NOT NULL,
 //    DEBIT_AMOUNT DECIMAL(10,4) DEFAULT 0,
