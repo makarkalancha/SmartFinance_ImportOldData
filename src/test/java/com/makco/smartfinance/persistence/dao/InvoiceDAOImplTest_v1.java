@@ -12,7 +12,6 @@ import com.makco.smartfinance.persistence.entity.CategoryGroup;
 import com.makco.smartfinance.persistence.entity.CategoryGroupCredit;
 import com.makco.smartfinance.persistence.entity.DateUnit;
 import com.makco.smartfinance.persistence.entity.FamilyMember;
-import com.makco.smartfinance.persistence.entity.Organization;
 import com.makco.smartfinance.persistence.entity.Tax;
 import com.makco.smartfinance.persistence.entity.session.invoice_management.v1.Invoice_v1;
 import com.makco.smartfinance.persistence.entity.session.invoice_management.v1.Item_v1;
@@ -35,9 +34,9 @@ import static org.junit.Assert.assertEquals;
  * Date: 17/07/2016
  * Time: 21:35
  */
-public class InvoiceDAOImplTest {
+public class InvoiceDAOImplTest_v1 {
 
-    private static final Logger LOG = LogManager.getLogger(InvoiceDAOImplTest.class);
+    private static final Logger LOG = LogManager.getLogger(InvoiceDAOImplTest_v1.class);
 
     private static int MIN = 1;
     private static int MAX = 1_000_000;
@@ -113,6 +112,18 @@ public class InvoiceDAOImplTest {
         assertEquals(0, new BigDecimal("12").compareTo(invoice1.getTotal()));
         assert(invoice1.getCreatedOn() != null);
         assert(invoice1.getUpdatedOn() != null);
+
+//        for(Item_v1 item_v1 : invoice1.getItems()){
+//            LOG.debug(">>>item_v1: " + item_v1);
+//            assert(item_v1.getId() != null);
+//            assert(item_v1.getCategory() != null);
+//            assert(item_v1.getTax() != null);
+//            assert(item_v1.getFamilyMember() != null);
+//            assert(item_v1.getDateUnit() != null);
+//            assert(item_v1.getCreatedOn() != null);
+//            assert(item_v1.getUpdatedOn() != null);
+//        }
+
     }
 
 

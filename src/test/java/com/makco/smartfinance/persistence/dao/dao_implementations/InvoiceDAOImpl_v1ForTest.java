@@ -1,6 +1,7 @@
 package com.makco.smartfinance.persistence.dao.dao_implementations;
 
 import com.makco.smartfinance.persistence.entity.session.invoice_management.v1.Invoice_v1;
+import com.makco.smartfinance.persistence.entity.session.invoice_management.v1.Item_v1;
 import com.makco.smartfinance.persistence.utils.TestPersistenceSession;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -54,6 +55,10 @@ public class InvoiceDAOImpl_v1ForTest {
             invoice = session.get(Invoice_v1.class, id);
             if(invoice != null) {
                 Hibernate.initialize(invoice.getItems());
+                for(Item_v1 item_v1 : invoice.getItems()){
+                    Hibernate.initialize(item_v1.getTax());
+                    Hibernate.initialize(item_v1.getFamilyMember());
+                }
             }
             session.getTransaction().commit();
         } catch (Exception e) {

@@ -20,7 +20,6 @@ import com.makco.smartfinance.persistence.entity.Invoice;
 import com.makco.smartfinance.persistence.entity.Item;
 import com.makco.smartfinance.persistence.entity.Organization;
 import com.makco.smartfinance.persistence.entity.Tax;
-import com.makco.smartfinance.persistence.entity.Transaction;
 import com.makco.smartfinance.persistence.entity.entity_manager.test_entities.EagerCategoryDebit;
 import com.makco.smartfinance.persistence.entity.entity_manager.test_entities.EagerCategoryGroupDebit;
 import com.makco.smartfinance.persistence.entity.session.Tax_v1;

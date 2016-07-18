@@ -85,6 +85,7 @@ public class Invoice_v1 implements Serializable {
     )
     private String comment;
 
+    //todo investigate
     @org.hibernate.annotations.Generated(
             GenerationTime.ALWAYS
     )
@@ -92,6 +93,7 @@ public class Invoice_v1 implements Serializable {
 //    @Column(name = "SUB_TOTAL")
     private BigDecimal subTotal;
 
+    //todo investigate
     @org.hibernate.annotations.Generated(
             GenerationTime.ALWAYS
     )
