@@ -1,7 +1,10 @@
-package com.makco.smartfinance.persistence.entity;
+package com.makco.smartfinance.persistence.entity.session.invoice_management.v1;
 
 import com.google.common.base.Objects;
 import com.makco.smartfinance.constants.DataBaseConstants;
+import com.makco.smartfinance.persistence.entity.DateUnit;
+import com.makco.smartfinance.persistence.entity.Item;
+import com.makco.smartfinance.persistence.entity.Organization;
 import org.hibernate.annotations.GenerationTime;
 
 import javax.persistence.CascadeType;
@@ -23,11 +26,11 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
 
 /**
- * Created by Makar Kalancha on 2016-07-13
+ * Created by Makar Kalancha on 2016-07-18
+ * v1
  */
 @Entity
 @Table(name = "INVOICE",
@@ -37,7 +40,7 @@ import java.util.List;
                 columnNames = {"INVOICE_NUMBER"}
         )
 )
-public class Invoice implements Serializable {
+public class Invoice_v1 implements Serializable {
     @Id
     @org.hibernate.annotations.GenericGenerator(
             name = "INVOICE_SEQUENCE_GENERATOR",
@@ -68,7 +71,7 @@ public class Invoice implements Serializable {
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "ORGANIZATION_ID", referencedColumnName = "ID", nullable = false)
-    private Organization organization;
+    private Organization_v1 organization;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "DATEUNIT_UNITDAY", referencedColumnName = "UNITDAY", nullable = false)
@@ -106,13 +109,13 @@ public class Invoice implements Serializable {
 
     @OneToMany(mappedBy = "invoice", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 //    @JoinColumn(name = "DATEUNIT_UNITDAY", referencedColumnName = "UNITDAY", nullable = false)
-    private List<Item> items = new ArrayList<>();
+    private List<Item_v1> items = new ArrayList<>();
 
-    public Invoice(){
+    public Invoice_v1(){
 
     }
 
-    public Invoice(String invoiceNumber, Organization organization, DateUnit dateUnit, String comment) {
+    public Invoice_v1(String invoiceNumber, Organization_v1 organization, DateUnit dateUnit, String comment) {
         this.invoiceNumber = invoiceNumber;
         this.organization = organization;
         this.dateUnit = dateUnit;
@@ -139,11 +142,11 @@ public class Invoice implements Serializable {
         return id;
     }
 
-    public Organization getOrganization() {
+    public Organization_v1 getOrganization() {
         return organization;
     }
 
-    public void setOrganization(Organization organization) {
+    public void setOrganization(Organization_v1 organization) {
         this.organization = organization;
     }
 
@@ -167,11 +170,11 @@ public class Invoice implements Serializable {
 
     //set total in item trigger
 
-    public Collection<Item> getItems() {
+    public Collection<Item_v1> getItems() {
         return new ArrayList<>(this.items);
     }
 
-    public void setItems(Collection<Item> items) {
+    public void setItems(Collection<Item_v1> items) {
         this.items = new ArrayList<>(items);
     }
 
@@ -201,8 +204,8 @@ public class Invoice implements Serializable {
 
     @Override
     public boolean equals(Object other) {
-        if (other instanceof Invoice) {
-            Invoice that = (Invoice) other;
+        if (other instanceof Invoice_v1) {
+            Invoice_v1 that = (Invoice_v1) other;
             return Objects.equal(getInvoiceNumber(), that.getInvoiceNumber());
         }
         return false;

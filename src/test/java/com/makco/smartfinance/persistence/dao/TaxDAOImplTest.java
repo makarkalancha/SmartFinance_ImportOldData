@@ -1,6 +1,6 @@
 package com.makco.smartfinance.persistence.dao;
 
-import com.makco.smartfinance.persistence.dao.dao_implementations.TaxDAOImpl_v1;
+import com.makco.smartfinance.persistence.dao.dao_implementations.TaxDAOImpl_v1ForTest;
 import com.makco.smartfinance.persistence.entity.Tax;
 import com.makco.smartfinance.utils.Logs;
 import com.makco.smartfinance.utils.RandomWithinRange;
@@ -31,7 +31,7 @@ public class TaxDAOImplTest {
     private static int MAX = 1_000_000;
     private static RandomWithinRange randomWithinRange = new RandomWithinRange(MIN, MAX);
 
-    private TaxDAOImpl_v1 taxDAO = new TaxDAOImpl_v1();
+    private TaxDAOImpl_v1ForTest taxDAO = new TaxDAOImpl_v1ForTest();
 
     @Test
     public void test_11_saveOrUpdateTax() throws Exception {

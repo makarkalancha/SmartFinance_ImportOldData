@@ -1,9 +1,9 @@
-package com.makco.smartfinance.persistence.entity;
+package com.makco.smartfinance.persistence.entity.session.invoice_management.v1;
 
 import com.google.common.base.Objects;
 import com.makco.smartfinance.constants.DataBaseConstants;
+import com.makco.smartfinance.persistence.entity.Invoice;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -19,11 +19,14 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.LinkedHashSet;
 import java.util.Set;
-import java.util.SortedSet;
-import java.util.TreeSet;
 
 /**
- * Created by Makar Kalancha on 2016-04-22.
+ * Created by Makar Kalancha on 2016-07-18.
+ * v1
+ * like com.makco.smartfinance.persistence.entity.Organization but with
+ * private Set<Invoice_v1> invoices = new LinkedHashSet<>();
+ * and not
+ * private Set<Invoice> invoices = new LinkedHashSet<>();
  */
 
 @Entity
@@ -35,7 +38,7 @@ import java.util.TreeSet;
                 columnNames = {"NAME"}
         )
 )
-public class Organization implements Serializable {
+public class Organization_v1 implements Serializable {
 
     @Id
     @org.hibernate.annotations.GenericGenerator(
@@ -83,13 +86,13 @@ public class Organization implements Serializable {
 
     @OneToMany(mappedBy = "organization", fetch = FetchType.LAZY)
     @javax.persistence.OrderBy("DATEUNIT_UNITDAY")
-    private Set<Invoice> invoices = new LinkedHashSet<>();
+    private Set<Invoice_v1> invoices = new LinkedHashSet<>();
 
-    public Organization() {
+    public Organization_v1() {
 
     }
 
-    public Organization(String name, String description) {
+    public Organization_v1(String name, String description) {
         this.name = name;
         this.description = description;
     }
@@ -118,8 +121,8 @@ public class Organization implements Serializable {
 
     @Override
     public boolean equals(Object other) {
-        if (other instanceof Organization) {
-            Organization that = (Organization) other;
+        if (other instanceof Organization_v1) {
+            Organization_v1 that = (Organization_v1) other;
             return Objects.equal(getName(), that.getName());
         }
         return false;

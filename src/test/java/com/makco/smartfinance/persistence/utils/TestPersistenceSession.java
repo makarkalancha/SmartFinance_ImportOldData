@@ -36,6 +36,10 @@ import com.makco.smartfinance.persistence.entity.session.category_management.v2.
 import com.makco.smartfinance.persistence.entity.session.category_management.v2.CategoryGroupDebit_v2;
 import com.makco.smartfinance.persistence.entity.session.category_management.v2.CategoryGroup_v2;
 import com.makco.smartfinance.persistence.entity.session.category_management.v2.Category_v2;
+import com.makco.smartfinance.persistence.entity.session.invoice_management.v1.Invoice_v1;
+import com.makco.smartfinance.persistence.entity.session.invoice_management.v1.Item_v1;
+import com.makco.smartfinance.persistence.entity.session.invoice_management.v1.Organization_v1;
+import com.makco.smartfinance.persistence.entity.session.invoice_management.v1.Transaction_v1;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
@@ -116,11 +120,14 @@ public class TestPersistenceSession {
         cfg.addAnnotatedClass(DateUnit.class);
         cfg.addAnnotatedClass(FamilyMember.class);
         cfg.addAnnotatedClass(Invoice.class);
+        cfg.addAnnotatedClass(Invoice_v1.class);
         cfg.addAnnotatedClass(Item.class);
+        cfg.addAnnotatedClass(Item_v1.class);
         cfg.addAnnotatedClass(Organization.class);
+        cfg.addAnnotatedClass(Organization_v1.class);
         cfg.addAnnotatedClass(Tax.class);
         cfg.addAnnotatedClass(Tax_v1.class);
-        cfg.addAnnotatedClass(Transaction.class);
+        cfg.addAnnotatedClass(Transaction_v1.class);
 //        cfg.setProperty("hibernate.connection.driver_class", "org.h2.Driver");
         cfg.setProperty("javax.persistence.jdbc.driver", "org.h2.Driver");
         cfg.setProperty("hibernate.connection.url", DataBaseConstants.URL);

@@ -1,7 +1,12 @@
-package com.makco.smartfinance.persistence.entity;
+package com.makco.smartfinance.persistence.entity.session.invoice_management.v1;
 
 import com.google.common.base.Objects;
 import com.makco.smartfinance.constants.DataBaseConstants;
+import com.makco.smartfinance.persistence.entity.Category;
+import com.makco.smartfinance.persistence.entity.DateUnit;
+import com.makco.smartfinance.persistence.entity.FamilyMember;
+import com.makco.smartfinance.persistence.entity.Invoice;
+import com.makco.smartfinance.persistence.entity.Tax;
 import com.makco.smartfinance.utils.BigDecimalUtils;
 
 import javax.persistence.CascadeType;
@@ -22,7 +27,8 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 /**
- * Created by Makar Kalancha on 2016-07-14.
+ * Created by Makar Kalancha on 2016-07-18.
+ * v1
  */
 @Entity
 @Table(name = "ITEM",
@@ -32,7 +38,7 @@ import java.time.LocalDateTime;
                 columnNames = {"INVOICE_ID", "ORDER_NUMBER"}
         )
 )
-public class Item implements Serializable {
+public class Item_v1 implements Serializable {
     @Id
     @org.hibernate.annotations.GenericGenerator(
             name = "ITEM_SEQUENCE_GENERATOR",
@@ -58,7 +64,7 @@ public class Item implements Serializable {
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "INVOICE_ID", referencedColumnName = "ID", nullable = false)
-    private Invoice invoice;
+    private Invoice_v1 invoice;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "CATEGORY_ID", referencedColumnName = "ID", nullable = false)
@@ -114,12 +120,12 @@ public class Item implements Serializable {
     @Column(name = "T_UPDATEDON", insertable = false, updatable = false)
     private Timestamp updatedOn;
 
-    public Item() {
+    public Item_v1() {
 
     }
 
-    public Item(Integer orderNumber, Invoice invoice, Category category, Tax tax, FamilyMember familyMember,
-                DateUnit dateUnit, String description1, String description2, String comment, BigDecimal subTotal)
+    public Item_v1(Integer orderNumber, Invoice_v1 invoice, Category category, Tax tax, FamilyMember familyMember,
+                   DateUnit dateUnit, String description1, String description2, String comment, BigDecimal subTotal)
             throws Exception{
         this.orderNumber = orderNumber;
         this.invoice = invoice;
@@ -184,11 +190,11 @@ public class Item implements Serializable {
         return id;
     }
 
-    public Invoice getInvoice() {
+    public Invoice_v1 getInvoice() {
         return invoice;
     }
 
-    public void setInvoice(Invoice invoice) {
+    public void setInvoice(Invoice_v1 invoice) {
         this.invoice = invoice;
     }
 
@@ -255,8 +261,8 @@ public class Item implements Serializable {
 
     @Override
     public boolean equals(Object other) {
-        if (other instanceof Item) {
-            Item that = (Item) other;
+        if (other instanceof Item_v1) {
+            Item_v1 that = (Item_v1) other;
             return Objects.equal(getOrderNumber(), that.getOrderNumber())
                     && Objects.equal(getInvoice(), that.getInvoice());
         }

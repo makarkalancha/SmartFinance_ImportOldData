@@ -3,7 +3,6 @@ package com.makco.smartfinance.persistence.dao.dao_implementations;
 import com.makco.smartfinance.persistence.dao.TaxDAO;
 import com.makco.smartfinance.persistence.entity.Tax;
 import com.makco.smartfinance.persistence.utils.TestPersistenceSession;
-import com.makco.smartfinance.persistence.utils.TestPersistenceSession;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Hibernate;
@@ -19,9 +18,9 @@ import java.util.Set;
 /**
  * Created by Makar Kalancha on 06 Jul 2016.
  */
-public class TaxDAOImpl_v1 implements TaxDAO{
+public class TaxDAOImpl_v1ForTest implements TaxDAO{
     //http://programmers.stackexchange.com/questions/220909/service-layer-vs-dao-why-both
-    private final static Logger LOG = LogManager.getLogger(TaxDAOImpl_v1.class);
+    private final static Logger LOG = LogManager.getLogger(TaxDAOImpl_v1ForTest.class);
 
     public Tax getTaxById(Long id) throws Exception {
         Session session = null;
