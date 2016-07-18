@@ -21,6 +21,10 @@ import java.util.Map;
 
 /**
  * Created by Makar Kalancha on 2016-05-02.
+ *
+ * CategoryGroup_v1DAOImplForTest and CategoryGroupDAOImplForTest are the same,
+ * only CategoryGroup_v1DAOImplForTest is using entities with "_v1" from test and
+ * CategoryGroupDAOImplForTest real from prod
  */
 public class CategoryGroupDAOImplForTest {
     private final static Logger LOG = LogManager.getLogger(CategoryGroupDAOImplForTest.class);
