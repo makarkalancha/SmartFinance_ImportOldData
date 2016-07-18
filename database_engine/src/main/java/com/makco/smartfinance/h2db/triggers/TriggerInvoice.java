@@ -19,6 +19,8 @@ import java.util.Date;
 public class TriggerInvoice extends AbstractTrigger {
     private static final String UPDATE_ITEM_DATEUNIT = new StringBuilder()
             .append("UPDATE ")
+            .append(SCHEMA_NAME_PLACEHOLDER)
+            .append(".")
             .append(Table.Names.ITEM)
             .append(" SET ")
             .append(Table.ITEM.DATEUNIT_UNITDAY)
@@ -45,8 +47,9 @@ public class TriggerInvoice extends AbstractTrigger {
 
         if (!((Long) oldRow[Table.INVOICE.DATEUNIT_UNITDAY.getColumnIndex()]).equals(
                 (Long) newRow[Table.INVOICE.DATEUNIT_UNITDAY.getColumnIndex()])) {
+            String query = UPDATE_ITEM_DATEUNIT.replace(SCHEMA_NAME_PLACEHOLDER, schemaName);
             try (
-                    PreparedStatement updateItemDate = connection.prepareStatement(UPDATE_ITEM_DATEUNIT);
+                    PreparedStatement updateItemDate = connection.prepareStatement(query);
             ) {
 
                 updateItemDate.setLong(1, (Long) newRow[Table.INVOICE.DATEUNIT_UNITDAY.getColumnIndex()]);

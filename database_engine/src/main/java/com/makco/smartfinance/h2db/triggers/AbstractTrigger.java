@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 public abstract class AbstractTrigger implements Trigger {
 
     private static final Logger LOG = LogManager.getLogger(AbstractTrigger.class);
-    private static final String SCHEMA_NAME_PLACEHOLDER = "{{schemaName}}";
+    protected static final String SCHEMA_NAME_PLACEHOLDER = "{{schemaName}}";
 
     private StringBuilder schemaNameAndTable = new StringBuilder();
     private final StringBuilder queryStrB = new StringBuilder();
@@ -37,12 +37,12 @@ public abstract class AbstractTrigger implements Trigger {
         queryStrB.append(") VALUES(?,?,?)");
     }
 
-//    protected java.util.Date now;
-    protected LocalDateTime now;
     private int type;
-    private String schemaName;
     private String tableName;
+    //    protected java.util.Date now;
+    protected LocalDateTime now;
     protected JsonObject rowJson = new JsonObject();
+    protected String schemaName;
 
     private final JsonObject tableJson = new JsonObject();
 

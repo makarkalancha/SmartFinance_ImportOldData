@@ -19,16 +19,18 @@ import java.util.Date;
 public class TriggerItem extends AbstractTrigger {
     private static final String UPDATE_INVOICE = new StringBuilder()
             .append("UPDATE ")
+            .append(SCHEMA_NAME_PLACEHOLDER)
+            .append(".")
             .append(Table.Names.INVOICE)
             .append(" SET ")
             .append(Table.INVOICE.SUB_TOTAL)
             .append(" = ")
             .append(Table.INVOICE.SUB_TOTAL)
-            .append("+ ?, ")
+            .append(" + ?, ")
             .append(Table.INVOICE.TOTAL)
             .append(" = ")
             .append(Table.INVOICE.TOTAL)
-            .append("+ ? where ")
+            .append(" + ? where ")
             .append(Table.INVOICE.ID)
             .append(" = ?")
             .toString();
@@ -36,6 +38,8 @@ public class TriggerItem extends AbstractTrigger {
             .append("SELECT ")
             .append(Table.INVOICE.DATEUNIT_UNITDAY)
             .append(" FROM ")
+            .append(SCHEMA_NAME_PLACEHOLDER)
+            .append(".")
             .append(Table.Names.INVOICE)
             .append(" WHERE ")
             .append(Table.INVOICE.ID)
@@ -49,10 +53,12 @@ public class TriggerItem extends AbstractTrigger {
 
     @Override
     protected void insert(Connection connection, Object[] oldRow, Object[] newRow) throws SQLException {
+        String updateInvoiceQ = UPDATE_INVOICE.replace(SCHEMA_NAME_PLACEHOLDER, schemaName);
+        String invoiceDateunitQ = INVOICE_DATEUNIT.replace(SCHEMA_NAME_PLACEHOLDER, schemaName);
         ResultSet rs = null;
         try(
-            PreparedStatement updateInvoice = connection.prepareStatement(UPDATE_INVOICE);
-            PreparedStatement invoiceDate = connection.prepareStatement(INVOICE_DATEUNIT);
+            PreparedStatement updateInvoice = connection.prepareStatement(updateInvoiceQ);
+            PreparedStatement invoiceDate = connection.prepareStatement(invoiceDateunitQ);
         ) {
             invoiceDate.setLong(1, (Long) newRow[Table.ITEM.INVOICE_ID.getColumnIndex()]);
             rs = invoiceDate.executeQuery();
@@ -83,9 +89,9 @@ public class TriggerItem extends AbstractTrigger {
         BigDecimal diffTotal = (BigDecimal) newRow[Table.ITEM.TOTAL.getColumnIndex()];
         diffTotal = diffTotal.subtract((BigDecimal) oldRow[Table.ITEM.TOTAL.getColumnIndex()]);
 
-
+        String updateInvoiceQ = UPDATE_INVOICE.replace(SCHEMA_NAME_PLACEHOLDER, schemaName);
         try (
-            PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_INVOICE);
+            PreparedStatement preparedStatement = connection.prepareStatement(updateInvoiceQ);
         ) {
             preparedStatement.setBigDecimal(1, diffSubtotal);
             preparedStatement.setBigDecimal(2, diffTotal);
@@ -103,8 +109,9 @@ public class TriggerItem extends AbstractTrigger {
 
         BigDecimal diffTotal = ((BigDecimal) oldRow[Table.ITEM.TOTAL.getColumnIndex()]).negate();
 
+        String updateInvoiceQ = UPDATE_INVOICE.replace(SCHEMA_NAME_PLACEHOLDER, schemaName);
         try (
-                PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_INVOICE);
+                PreparedStatement preparedStatement = connection.prepareStatement(updateInvoiceQ);
         ) {
             preparedStatement.setBigDecimal(1, diffSubtotal);
             preparedStatement.setBigDecimal(2, diffTotal);
