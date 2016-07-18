@@ -26,7 +26,7 @@ public class CategoryGroupDAOImplForTest {
     private final static Logger LOG = LogManager.getLogger(CategoryGroupDAOImplForTest.class);
 
     /**
-     * check file saveOrUpdateCategoryGroup.log: find "statement [prep" 6 hits,
+     * check file CategoryGroupSaveOrUpdate.log: find "statement [prep" 6 hits,
      * and 2 (! vs 3 in merge) statements registered, released and closed:
      * 1) update TEST.CATEGORY_GROUP set DESCRIPTION=?, NAME=? where ID=? {1: 'CategoryGroupDebit_description', 2: '_changed67092_changed_v511301', 3: 9}]
      * 2) update TEST.CATEGORY set DESCRIPTION=?, NAME=?, CATEGORY_GROUP_ID=? where ID=? {1: 'debit category #1 ''description''', 2: 'nged_461186_changed_167092', 3: 9, 4: 7}]
@@ -59,7 +59,7 @@ public class CategoryGroupDAOImplForTest {
     }
 
     /**
-     * check file saveOrUpdateWithMergeCategoryGroup.log: find "statement [prep" 10 hits,
+     * check file CategoryGroupSaveOrUpdateWithMerge.log: find "statement [prep" 10 hits,
      * and 3 (! vs 2 in saveOrUpdate) statements registered, released and closed:
      * 1) select categorygr0_.ID as ID2_1_1_, categorygr0_.T_CREATEDON as T_CREATE3_1_1_, categorygr0_.DESCRIPTION as DESCRIPT4_1_1_, categorygr0_.NAME as NAME5_1_1_, categorygr0_.T_UPDATEDON as T_UPDATE6_1_1_, categories1_.CATEGORY_GROUP_ID as CATEGORY7_0_3_, categories1_.ID as ID2_0_3_, categories1_.ID as ID2_0_0_, categories1_.T_CREATEDON as T_CREATE3_0_0_, categories1_.DESCRIPTION as DESCRIPT4_0_0_, categories1_.NAME as NAME5_0_0_, categories1_.T_UPDATEDON as T_UPDATE6_0_0_, categories1_.CATEGORY_GROUP_ID as CATEGORY7_0_0_ from TEST.CATEGORY_GROUP categorygr0_ left outer join TEST.CATEGORY categories1_ on categorygr0_.ID=categories1_.CATEGORY_GROUP_ID and categories1_.CATEGORY_GROUP_TYPE='D' where categorygr0_.ID=? and categorygr0_.TYPE='D' order by categories1_.NAME {1: 9}]
      * 2) update TEST.CATEGORY set DESCRIPTION=?, NAME=?, CATEGORY_GROUP_ID=? where ID=? {1: 'debit category #2 ''description''', 2: 'nged_511301_changed_417087', 3: 9, 4: 8}]

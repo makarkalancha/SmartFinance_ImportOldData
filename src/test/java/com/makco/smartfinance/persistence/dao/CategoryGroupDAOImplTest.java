@@ -585,7 +585,7 @@ public class CategoryGroupDAOImplTest {
     @Test
     /**
      * 1+n select issue
-     * see selectAll_cGWithCats_.log
+     * see CategoryGroupSelectAll_cGWithCats_.log
      */
     public void test_44_1_seleteAllCategoryGroupsWithCategories() throws Exception {
         int randomInt = randomWithinRange.getRandom();
@@ -896,7 +896,7 @@ public class CategoryGroupDAOImplTest {
     @Test
     /**
      * 1 query
-     * see selectAll_cGWithCats_nativeQuery.log
+     * see CategoryGroupSelectAll_cGWithCats_nativeQuery.log
      */
     public void test_44_3_1_seleteAllCategoryGroupsWithCategories_withNativeQuery() throws Exception {
         int randomInt = randomWithinRange.getRandom();

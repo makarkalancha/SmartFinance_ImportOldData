@@ -8,7 +8,7 @@ import org.junit.Test;
  * Time: 21:40
  */
 public class FamilyMemberDAOImplTest {
-    // see: saveOrUpdateWithMergeCategoryGroup.log
+    // see: CategoryGroupSaveOrUpdateWithMerge.log
     // hibernate persistence book p281
     // session.saveOrUpdate no, better use detach-merge approach
     // compare if this approach uses less queries
