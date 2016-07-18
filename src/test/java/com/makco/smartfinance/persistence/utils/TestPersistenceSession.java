@@ -1,6 +1,12 @@
 package com.makco.smartfinance.persistence.utils;
 
 import com.makco.smartfinance.constants.DataBaseConstants;
+import com.makco.smartfinance.persistence.entity.Account;
+import com.makco.smartfinance.persistence.entity.AccountCredit;
+import com.makco.smartfinance.persistence.entity.AccountDebit;
+import com.makco.smartfinance.persistence.entity.AccountGroup;
+import com.makco.smartfinance.persistence.entity.AccountGroupCredit;
+import com.makco.smartfinance.persistence.entity.AccountGroupDebit;
 import com.makco.smartfinance.persistence.entity.Category;
 import com.makco.smartfinance.persistence.entity.CategoryCredit;
 import com.makco.smartfinance.persistence.entity.CategoryDebit;
@@ -10,8 +16,11 @@ import com.makco.smartfinance.persistence.entity.CategoryGroupDebit;
 import com.makco.smartfinance.persistence.entity.Currency;
 import com.makco.smartfinance.persistence.entity.DateUnit;
 import com.makco.smartfinance.persistence.entity.FamilyMember;
+import com.makco.smartfinance.persistence.entity.Invoice;
+import com.makco.smartfinance.persistence.entity.Item;
 import com.makco.smartfinance.persistence.entity.Organization;
 import com.makco.smartfinance.persistence.entity.Tax;
+import com.makco.smartfinance.persistence.entity.Transaction;
 import com.makco.smartfinance.persistence.entity.entity_manager.test_entities.EagerCategoryDebit;
 import com.makco.smartfinance.persistence.entity.entity_manager.test_entities.EagerCategoryGroupDebit;
 import com.makco.smartfinance.persistence.entity.session.Tax_v1;
@@ -75,6 +84,13 @@ public class TestPersistenceSession {
     private static Configuration getConfiguration() {
         Configuration cfg = new Configuration();
 
+        cfg.addAnnotatedClass(Account.class);
+        cfg.addAnnotatedClass(AccountCredit.class);
+        cfg.addAnnotatedClass(AccountDebit.class);
+        cfg.addAnnotatedClass(AccountGroup.class);
+        cfg.addAnnotatedClass(AccountGroupCredit.class);
+        cfg.addAnnotatedClass(AccountGroupDebit.class);
+
         cfg.addAnnotatedClass(Category.class);
         cfg.addAnnotatedClass(CategoryCredit.class);
         cfg.addAnnotatedClass(CategoryDebit.class);
@@ -99,9 +115,12 @@ public class TestPersistenceSession {
         cfg.addAnnotatedClass(Currency.class);
         cfg.addAnnotatedClass(DateUnit.class);
         cfg.addAnnotatedClass(FamilyMember.class);
+        cfg.addAnnotatedClass(Invoice.class);
+        cfg.addAnnotatedClass(Item.class);
         cfg.addAnnotatedClass(Organization.class);
         cfg.addAnnotatedClass(Tax.class);
         cfg.addAnnotatedClass(Tax_v1.class);
+        cfg.addAnnotatedClass(Transaction.class);
 //        cfg.setProperty("hibernate.connection.driver_class", "org.h2.Driver");
         cfg.setProperty("javax.persistence.jdbc.driver", "org.h2.Driver");
         cfg.setProperty("hibernate.connection.url", DataBaseConstants.URL);

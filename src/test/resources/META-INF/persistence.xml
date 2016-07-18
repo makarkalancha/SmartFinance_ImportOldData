@@ -8,6 +8,12 @@
         >
     <persistence-unit name="test" transaction-type="RESOURCE_LOCAL">
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+        <class>com.makco.smartfinance.persistence.entity.Account</class>
+        <class>com.makco.smartfinance.persistence.entity.AccountCredit</class>
+        <class>com.makco.smartfinance.persistence.entity.AccountDebit</class>
+        <class>com.makco.smartfinance.persistence.entity.AccountGroup</class>
+        <class>com.makco.smartfinance.persistence.entity.AccountGroupCredit</class>
+        <class>com.makco.smartfinance.persistence.entity.AccountGroupDebit</class>
         <class>com.makco.smartfinance.persistence.entity.session.category_management.v1.Category_v1</class>
         <class>com.makco.smartfinance.persistence.entity.entity_manager.test_entities.CategoryCredit</class>
         <class>com.makco.smartfinance.persistence.entity.entity_manager.test_entities.CategoryDebit</class>
@@ -20,6 +26,9 @@
         <class>com.makco.smartfinance.persistence.entity.DateUnit</class>
         <class>com.makco.smartfinance.persistence.entity.FamilyMember</class>
         <class>com.makco.smartfinance.persistence.entity.Organization</class>
+        <class>com.makco.smartfinance.persistence.entity.Invoice</class>
+        <class>com.makco.smartfinance.persistence.entity.Item</class>
+        <class>com.makco.smartfinance.persistence.entity.Tax</class>
         <properties>
             <!--http://stackoverflow.com/questions/5225700/can-i-have-h2-autocreate-a-schema-in-an-in-memory-database-->
             <!--http://www.h2database.com/html/grammar.html#set_schema-->

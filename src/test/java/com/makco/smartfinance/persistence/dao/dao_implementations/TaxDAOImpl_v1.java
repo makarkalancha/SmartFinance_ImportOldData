@@ -2,7 +2,8 @@ package com.makco.smartfinance.persistence.dao.dao_implementations;
 
 import com.makco.smartfinance.persistence.dao.TaxDAO;
 import com.makco.smartfinance.persistence.entity.Tax;
-import com.makco.smartfinance.persistence.utils.HibernateUtilTest;
+import com.makco.smartfinance.persistence.utils.TestPersistenceSession;
+import com.makco.smartfinance.persistence.utils.TestPersistenceSession;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Hibernate;
@@ -26,7 +27,7 @@ public class TaxDAOImpl_v1 implements TaxDAO{
         Session session = null;
         Tax tax = null;
         try {
-            session = HibernateUtilTest.openSession();
+            session = TestPersistenceSession.openSession();
             session.beginTransaction();
             tax = session.get(Tax.class, id);
             session.getTransaction().commit();
@@ -52,7 +53,7 @@ public class TaxDAOImpl_v1 implements TaxDAO{
         Session session = null;
         Tax tax = null;
         try {
-            session = HibernateUtilTest.openSession();
+            session = TestPersistenceSession.openSession();
             session.beginTransaction();
             tax = session.get(Tax.class, id);
             if(tax != null) {
@@ -82,7 +83,7 @@ public class TaxDAOImpl_v1 implements TaxDAO{
         Session session = null;
         List<Tax> list = new ArrayList<>();
         try {
-            session = HibernateUtilTest.openSession();
+            session = TestPersistenceSession.openSession();
             session.beginTransaction();
             list = session.createQuery("SELECT t FROM Tax t ORDER BY t.name").list();
             session.getTransaction().commit();
@@ -114,7 +115,7 @@ public class TaxDAOImpl_v1 implements TaxDAO{
         Session session = null;
         List<Tax> list = new ArrayList<>();
         try {
-            session = HibernateUtilTest.openSession();
+            session = TestPersistenceSession.openSession();
             session.beginTransaction();
             ////http://stackoverflow.com/questions/12425835/jpql-manytomany-select
             list = session.createQuery("SELECT t FROM Tax t left join fetch t.childTaxes ORDER BY t.name").list();
@@ -192,7 +193,7 @@ ORDER BY tax0_.NAME
         Session session = null;
         List<Tax> list = new ArrayList<>();
         try {
-            session = HibernateUtilTest.openSession();
+            session = TestPersistenceSession.openSession();
             session.beginTransaction();
             ////http://stackoverflow.com/questions/12425835/jpql-manytomany-select
             list = session.createQuery("SELECT t FROM Tax t left join fetch t.childTaxes left join fetch t.parentTaxes ORDER BY t.name").list();
@@ -286,7 +287,7 @@ WHERE parenttaxe0_.CHILD_TAX_ID=?
         Session session = null;
         List<Tax> list = new ArrayList<>();
         try {
-            session = HibernateUtilTest.openSession();
+            session = TestPersistenceSession.openSession();
             session.beginTransaction();
             ////http://stackoverflow.com/questions/12425835/jpql-manytomany-select
             list = session.createQuery("SELECT t FROM Tax t ORDER BY t.name").list();
@@ -319,7 +320,7 @@ WHERE parenttaxe0_.CHILD_TAX_ID=?
         Session session = null;
         List<Tax> taxs = new ArrayList<>();
         try {
-            session = HibernateUtilTest.openSession();
+            session = TestPersistenceSession.openSession();
             session.beginTransaction();
             taxs = session.createQuery("SELECT t FROM Tax t WHERE name = :name ORDER BY t.name")
                     .setString("name", name)
@@ -346,7 +347,7 @@ WHERE parenttaxe0_.CHILD_TAX_ID=?
     public void removeTax(Long id) throws Exception {
         Session session = null;
         try {
-            session = HibernateUtilTest.openSession();
+            session = TestPersistenceSession.openSession();
             session.beginTransaction();
 
             /**
@@ -404,7 +405,7 @@ WHERE parenttaxe0_.CHILD_TAX_ID=?
 
         Session session = null;
         try {
-            session = HibernateUtilTest.openSession();
+            session = TestPersistenceSession.openSession();
             session.beginTransaction();
             session.saveOrUpdate(tax);
             session.getTransaction().commit();
