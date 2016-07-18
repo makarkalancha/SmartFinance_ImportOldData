@@ -1,3 +1,4 @@
+--todo start/end date as dateunit???
 --http://www.revenuquebec.ca/en/entreprises/taxes/tpstvhtvq/default.aspx
 --http://www.revenuquebec.ca/en/entreprises/taxes/tpstvhtvq/reglesdebase/default.aspx
 CREATE SEQUENCE IF NOT EXISTS SEQ_TAX;
@@ -10,8 +11,12 @@ FORMULA VARCHAR(512),
 DENORMALIZED_FORMULA VARCHAR(512),
 STARTDATE DATE,
 ENDDATE DATE,
+--STARTDATE BIGINT,
+--ENDDATE BIGINT,
 T_CREATEDON TIMESTAMP,
 T_UPDATEDON TIMESTAMP
+--,FOREIGN KEY (STARTDATE) REFERENCES DATEUNIT(UNITDAY),
+--FOREIGN KEY (ENDDATE) REFERENCES DATEUNIT(UNITDAY)
 );
 CREATE UNIQUE INDEX IF NOT EXISTS IDX_UNQ_TX_NM ON TAX(NAME);--because we order by code
 
