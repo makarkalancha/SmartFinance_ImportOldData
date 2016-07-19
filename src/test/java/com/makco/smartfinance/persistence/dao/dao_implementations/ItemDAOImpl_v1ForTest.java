@@ -71,8 +71,6 @@ public class ItemDAOImpl_v1ForTest {
              */
             Item_v1 item_v1 = session.load(Item_v1.class, id);
 
-            //todo don't delete other associations
-
             /*
             Referential integrity constraint violation: "CONSTRAINT_DBB3: TEST.TAX_CHILD FOREIGN KEY(CHILD_TAX_ID) REFERENCES TEST.TAX(ID) (560)"
             @ManyToMany(mappedBy = "childTaxes", cascade = CascadeType.ALL)

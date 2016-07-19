@@ -1,11 +1,10 @@
 package com.makco.smartfinance.persistence.dao.dao_implementations;
 
-import com.makco.smartfinance.persistence.entity.session.invoice_management.v1.Invoice_v1;
-import com.makco.smartfinance.persistence.entity.session.invoice_management.v1.Item_v1;
+
+import com.makco.smartfinance.persistence.entity.session.invoice_management.v1.Organization_v1;
 import com.makco.smartfinance.persistence.utils.TestPersistenceSession;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.resource.transaction.spi.TransactionStatus;
 
@@ -13,20 +12,45 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * User: Makar Kalancha
- * Date: 17/07/2016
- * Time: 21:39
+ * Created by mcalancea on 19 Jul 2016.
  */
-public class InvoiceDAOImpl_v1ForTest {
-    private final static Logger LOG = LogManager.getLogger(InvoiceDAOImpl_v1ForTest.class);
+public class OrganizationDAOImpl_v1ForTest {
 
-    public Invoice_v1 getInvoiceById(Long id) throws Exception {
+    private final static Logger LOG = LogManager.getLogger(OrganizationDAOImpl_v1ForTest.class);
+
+    public Organization_v1 getOrganizationById(Long id) throws Exception {
         Session session = null;
-        Invoice_v1 invoice = null;
+        Organization_v1 organization = null;
+        try{
+            session = TestPersistenceSession.openSession();
+            session.beginTransaction();
+            organization = session.get(Organization_v1.class, id);
+            session.getTransaction().commit();
+        } catch (Exception e) {
+            try {
+                if (session.getTransaction().getStatus() == TransactionStatus.ACTIVE
+                        || session.getTransaction().getStatus() == TransactionStatus.MARKED_ROLLBACK)
+                    session.getTransaction().rollback();
+            } catch (Exception rbEx) {
+                LOG.error("Rollback of transaction failed, trace follows!");
+                LOG.error(rbEx, rbEx);
+            }
+            throw new RuntimeException(e);
+        } finally {
+            if(session != null){
+                session.close();
+            }
+        }
+        return organization;
+    }
+
+    public List<Organization_v1> organizationList() throws Exception {
+        Session session = null;
+        List<Organization_v1> list = new ArrayList<>();
         try {
             session = TestPersistenceSession.openSession();
             session.beginTransaction();
-            invoice = session.get(Invoice_v1.class, id);
+            list = session.createQuery("SELECT o FROM Organization_v1 o ORDER BY o.name").list();
             session.getTransaction().commit();
         } catch (Exception e) {
             try {
@@ -43,50 +67,17 @@ public class InvoiceDAOImpl_v1ForTest {
                 session.close();
             }
         }
-        return invoice;
+        return list;
     }
 
-    public Invoice_v1 getInvoiceByIdWithItems(Long id) throws Exception {
+    public List<Organization_v1> getOrganizationByName(String name) throws Exception {
         Session session = null;
-        Invoice_v1 invoice = null;
+        List<Organization_v1> organizations = new ArrayList<>();
         try {
             session = TestPersistenceSession.openSession();
             session.beginTransaction();
-            invoice = session.get(Invoice_v1.class, id);
-            if(invoice != null) {
-                Hibernate.initialize(invoice.getItems());
-                for(Item_v1 item_v1 : invoice.getItems()){
-                    Hibernate.initialize(item_v1.getTax());
-                    Hibernate.initialize(item_v1.getFamilyMember());
-                }
-            }
-            session.getTransaction().commit();
-        } catch (Exception e) {
-            try {
-                if (session.getTransaction().getStatus() == TransactionStatus.ACTIVE
-                        || session.getTransaction().getStatus() == TransactionStatus.MARKED_ROLLBACK)
-                    session.getTransaction().rollback();
-            } catch (Exception rbEx) {
-                LOG.error("Rollback of transaction failed, trace follows!");
-                LOG.error(rbEx, rbEx);
-            }
-            throw new RuntimeException(e);
-        } finally {
-            if (session != null) {
-                session.close();
-            }
-        }
-        return invoice;
-    }
-
-    public List<Invoice_v1> getInvoiceByNumber(String invoiceNumber) throws Exception {
-        Session session = null;
-        List<Invoice_v1> invoices = new ArrayList<>();
-        try {
-            session = TestPersistenceSession.openSession();
-            session.beginTransaction();
-            invoices = session.createQuery("SELECT i FROM Invoice_v1 i WHERE invoiceNumber = :invoiceNumber ORDER BY i.invoiceNumber")
-                    .setString("invoiceNumber", invoiceNumber)
+            organizations = session.createQuery("SELECT o FROM Organization_v1 o WHERE name = :name ORDER BY o.name")
+                    .setString("name", name)
                     .list();
             session.getTransaction().commit();
         } catch (Exception e) {
@@ -100,53 +91,20 @@ public class InvoiceDAOImpl_v1ForTest {
             }
             throw new RuntimeException(e);
         } finally {
-            if (session != null) {
+            if(session != null){
                 session.close();
             }
         }
-        return invoices;
+        return organizations;
     }
 
-    public void removeInvoice(Long id) throws Exception {
+    public void removeOrganization(Long id) throws Exception {
         Session session = null;
-        try {
+        try{
             session = TestPersistenceSession.openSession();
             session.beginTransaction();
-
-            /**
-             * session.load()
-             * - It will always return a “proxy” (Hibernate term) without hitting the database.
-             * In Hibernate, proxy is an object with the given identifier value, its properties are not initialized yet,
-             * it just look like a temporary fake object.
-             * - If no row found , it will throws an ObjectNotFoundException.
-
-             */
-//            CategoryGroup CategoryGroup = (CategoryGroup) session.load(CategoryGroup.class, id);
-            /**
-             * session.get()
-             * - It always hit the database and return the real object, an object that represent the database row,
-             * not proxy.
-             * - If no row found , it return null.
-
-             */
-            Invoice_v1 invoice = session.get(Invoice_v1.class, id);
-            invoice.setOrganization(null);
-            saveOrUpdateInvoice(invoice);
-            //todo organization don't delete
-            //todo items DO delete
-
-            /*
-            Referential integrity constraint violation: "CONSTRAINT_DBB3: TEST.TAX_CHILD FOREIGN KEY(CHILD_TAX_ID) REFERENCES TEST.TAX(ID) (560)"
-            @ManyToMany(mappedBy = "childTaxes", cascade = CascadeType.ALL)
-            so:
-            @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-            @JoinTable(name = "TAX_CHILD",
-                joinColumns = {@JoinColumn(name = "CHILD_TAX_ID", referencedColumnName = "ID")},
-                inverseJoinColumns = {@JoinColumn(name = "TAX_ID", referencedColumnName = "ID")}
-            )
-            private Set<Tax> parentTaxes = new HashSet<>();
-             */
-            session.delete(invoice);
+            Organization_v1 organization = session.load(Organization_v1.class, id);
+            session.delete(organization);
             session.getTransaction().commit();
         } catch (Exception e) {
             try {
@@ -159,19 +117,18 @@ public class InvoiceDAOImpl_v1ForTest {
             }
             throw new RuntimeException(e);
         } finally {
-            if (session != null) {
+            if(session != null){
                 session.close();
             }
         }
     }
 
-    public void saveOrUpdateInvoice(Invoice_v1 invoice) throws Exception {
-
+    public void saveOrUpdateOrganization(Organization_v1 organization) throws Exception {
         Session session = null;
         try {
             session = TestPersistenceSession.openSession();
             session.beginTransaction();
-            session.saveOrUpdate(invoice);
+            session.saveOrUpdate(organization);
             session.getTransaction().commit();
         } catch (Exception e) {
             try {
@@ -184,9 +141,10 @@ public class InvoiceDAOImpl_v1ForTest {
             }
             throw new RuntimeException(e);
         } finally {
-            if (session != null) {
+            if(session != null){
                 session.close();
             }
         }
     }
 }
+
