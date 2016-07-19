@@ -5,6 +5,7 @@ import com.makco.smartfinance.persistence.dao.dao_implementations.CategoryGroupD
 import com.makco.smartfinance.persistence.dao.dao_implementations.DateUnitDAOImplForTest;
 import com.makco.smartfinance.persistence.dao.dao_implementations.FamilyMemberDAOImpl_v1ForTest;
 import com.makco.smartfinance.persistence.dao.dao_implementations.InvoiceDAOImpl_v1ForTest;
+import com.makco.smartfinance.persistence.dao.dao_implementations.ItemDAOImpl_v1ForTest;
 import com.makco.smartfinance.persistence.dao.dao_implementations.TaxDAOImpl_v1ForTest;
 import com.makco.smartfinance.persistence.entity.Category;
 import com.makco.smartfinance.persistence.entity.CategoryCredit;
@@ -26,6 +27,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
@@ -42,6 +44,7 @@ public class ItemDAOImplTest_v1 {
     private static int MAX = 1_000_000;
     private static RandomWithinRange randomWithinRange = new RandomWithinRange(MIN, MAX);
 
+    private ItemDAOImpl_v1ForTest itemDAOImpl_v1ForTest = new ItemDAOImpl_v1ForTest();
     private InvoiceDAOImpl_v1ForTest invoiceDAOImpl_v1ForTest = new InvoiceDAOImpl_v1ForTest();
     private CategoryGroupDAOImplForTest categoryGroupDAOImplForTest = new CategoryGroupDAOImplForTest();
     private CategoryDAOImplForTest categoryDAOImplForTest = new CategoryDAOImplForTest();
@@ -56,7 +59,7 @@ public class ItemDAOImplTest_v1 {
     }
 
     @Test
-    public void test_11_saveOrUpdateInvoice() throws Exception {
+    public void test_11_saveOrUpdateItems() throws Exception {
         int randomInt = randomWithinRange.getRandom();
 
         DateUnit dateUnit = new DateUnit(LocalDate.now());
@@ -87,14 +90,15 @@ public class ItemDAOImplTest_v1 {
         Item_v1 item3 = new Item_v1(3, invoice, category1, tax1, familyMember, dateUnit, "desc13", "desc23", "comment", new BigDecimal("3"));
         Item_v1 item4 = new Item_v1(4, invoice, category1, tax2, familyMember, dateUnit, "desc14", "desc24", "comment", new BigDecimal("4"));
 
-        invoice.setItems(new ArrayList<Item_v1>(){{
-            add(item1);
-            add(item2);
-            add(item3);
-            add(item4);
-        }});
+        List<Item_v1> itemsToSave = new ArrayList<>();
+        itemsToSave.add(item1);
+        itemsToSave.add(item2);
+        itemsToSave.add(item3);
+        itemsToSave.add(item4);
 
-        invoiceDAOImpl_v1ForTest.saveOrUpdateInvoice(invoice);
+        invoice.setItems(itemsToSave);
+
+        itemDAOImpl_v1ForTest.saveOrUpdateMultipleItem(itemsToSave);
 
         LOG.debug(">>>invoice: " + invoice);
         assert(invoice.getId() != null);

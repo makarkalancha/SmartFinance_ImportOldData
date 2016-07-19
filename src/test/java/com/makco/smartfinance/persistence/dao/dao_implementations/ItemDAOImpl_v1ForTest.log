@@ -1,0 +1,15 @@
+------------------------------------------------
+ItemDAO:
+batch saving is working if "cascade = CascadeType.ALL" is only in Item_v1
+if it's in both Invoice_v1 and Item_v1 than saving is as follows:
+1) item0 is saved (invoice id is null)
+2) invoice is saved
+3) item1 is saved (invoice id is NOT null)
+4) item2 is saved
+5) item3 is saved
+6) invoice triggers saving of item1 (that was saved) that's why
+unique index (invoice id and order number) is broken
+
+if "cascade = CascadeType.ALL" is in both Invoice_v1 and Item_v1 than
+it is enough to save item0 and invoice with other items will be saved:
+//            session.save(item_v1_list.get(0));

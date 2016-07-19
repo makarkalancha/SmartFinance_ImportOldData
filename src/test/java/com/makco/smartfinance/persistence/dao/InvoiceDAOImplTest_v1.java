@@ -104,7 +104,8 @@ public class InvoiceDAOImplTest_v1 {
         assert(invoice.getCreatedOn() != null);
         assert(invoice.getUpdatedOn() != null);
 
-        Invoice_v1 invoice1 = invoiceDAOImpl_v1ForTest.getInvoiceByIdWithItems(invoice.getId());
+//        Invoice_v1 invoice1 = invoiceDAOImpl_v1ForTest.getInvoiceByIdWithItems(invoice.getId());
+        Invoice_v1 invoice1 = invoice;
         LOG.debug(">>>invoice1: " + invoice1);
         assert(invoice1.getId() != null);
         assertEquals(4, invoice1.getItems().size());
@@ -113,16 +114,16 @@ public class InvoiceDAOImplTest_v1 {
         assert(invoice1.getCreatedOn() != null);
         assert(invoice1.getUpdatedOn() != null);
 
-//        for(Item_v1 item_v1 : invoice1.getItems()){
-//            LOG.debug(">>>item_v1: " + item_v1);
-//            assert(item_v1.getId() != null);
-//            assert(item_v1.getCategory() != null);
-//            assert(item_v1.getTax() != null);
-//            assert(item_v1.getFamilyMember() != null);
-//            assert(item_v1.getDateUnit() != null);
-//            assert(item_v1.getCreatedOn() != null);
-//            assert(item_v1.getUpdatedOn() != null);
-//        }
+        for(Item_v1 item_v1 : invoice1.getItems()){
+            LOG.debug(">>>item_v1: " + item_v1);
+            assert(item_v1.getId() != null);
+            assert(item_v1.getCategory() != null);
+            assert(item_v1.getTax() != null);
+            assert(item_v1.getFamilyMember() != null);
+            assert(item_v1.getDateUnit() != null);
+            assert(item_v1.getCreatedOn() != null);
+            assert(item_v1.getUpdatedOn() != null);
+        }
 
     }
 

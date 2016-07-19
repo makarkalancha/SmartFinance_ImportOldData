@@ -3,14 +3,11 @@ package com.makco.smartfinance.persistence.entity;
 import com.google.common.base.Objects;
 import com.makco.smartfinance.constants.DataBaseConstants;
 import org.apache.commons.lang3.StringUtils;
-import org.hibernate.action.internal.OrphanRemovalAction;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.ConstraintMode;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -288,7 +285,6 @@ public class Tax implements Serializable {
                 ", formula='" + formula + '\'' +
                 ", startDate=" + startDate +
                 ", endDate=" + endDate +
-                ", childTaxes.size=" + childTaxes.size() +
                 ", createdOn=" + createdOn +
                 ", updatedOn=" + updatedOn +
                 '}';

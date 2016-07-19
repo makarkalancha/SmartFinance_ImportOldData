@@ -62,7 +62,7 @@ public class Item_v1 implements Serializable {
     @NotNull
     private Integer orderNumber;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER/*, cascade = CascadeType.ALL*/)
     @JoinColumn(name = "INVOICE_ID", referencedColumnName = "ID", nullable = false)
     private Invoice_v1 invoice;
 

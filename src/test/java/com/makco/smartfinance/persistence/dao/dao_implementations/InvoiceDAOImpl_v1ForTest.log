@@ -1,0 +1,36 @@
+InvoiceDAO:
+1) cascade only in invoice, invoice.totals columns are generated:
+error:
+item.tax.child lazy loading in tax.toString
+
+2) cascade only in item, invoice.totals columns are generated:
+assert error:
+assertEquals(4, invoice1.getItems().size());
+Expected :4
+Actual   :0
+
+3) cascade in invoice and in item, invoice.totals columns are generated:
+error:
+item.tax.child lazy loading in tax.toString
+
+4) invoice.totals columns are NOT generated:
+--if invoice has cascade
+assert error:
+assertEquals(0, new BigDecimal("10").compareTo(invoice1.getSubTotal()));
+java.lang.NullPointerException
+
+--if only item has cascade
+assert error:
+assertEquals(4, invoice1.getItems().size());
+Expected :4
+Actual   :0
+
+---(1) and (3) pass if LOG.debug(">>>item_v1: " + item_v1); is commented
+
+5) change rows:
+from:	Invoice_v1 invoice1 = invoiceDAOImpl_v1ForTest.getInvoiceByIdWithItems(invoice.getId());
+to:		Invoice_v1 invoice1 = invoice;
+assertEquals(0, new BigDecimal("10").compareTo(invoice1.getSubTotal()));
+java.lang.AssertionError: 
+Expected :0
+Actual   :1
