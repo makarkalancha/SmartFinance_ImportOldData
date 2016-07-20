@@ -2,6 +2,8 @@ package com.makco.smartfinance.h2db.triggers;
 
 import com.makco.smartfinance.h2db.utils.JsonUtils;
 import com.makco.smartfinance.h2db.utils.schema_constants.Table;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.math.BigDecimal;
 import java.sql.Connection;
@@ -17,6 +19,7 @@ import java.util.Date;
  * Time: 11:33
  */
 public class TriggerItem extends AbstractTrigger {
+    private static final Logger LOG = LogManager.getLogger(TriggerItem.class);
     private static final String UPDATE_INVOICE = new StringBuilder()
             .append("UPDATE ")
             .append(SCHEMA_NAME_PLACEHOLDER)
@@ -72,6 +75,9 @@ public class TriggerItem extends AbstractTrigger {
             updateInvoice.setBigDecimal(2, (BigDecimal) newRow[Table.ITEM.TOTAL.getColumnIndex()]);
             updateInvoice.setLong(3, (Long) newRow[Table.ITEM.INVOICE_ID.getColumnIndex()]);
             updateInvoice.execute();
+            LOG.debug(String.format(">>>>TriggerItem->insert: subtotal=%s, total=%s",
+                    newRow[Table.ITEM.SUB_TOTAL.getColumnIndex()],
+                    newRow[Table.ITEM.TOTAL.getColumnIndex()]));
         }finally {
             if(rs != null){
                 rs.close();
@@ -97,6 +103,8 @@ public class TriggerItem extends AbstractTrigger {
             preparedStatement.setBigDecimal(2, diffTotal);
             preparedStatement.setLong(3, (Long) newRow[Table.ITEM.INVOICE_ID.getColumnIndex()]);
             preparedStatement.execute();
+
+            LOG.debug(String.format(">>>>TriggerItem->update: subtotal=%s, total=%s", diffSubtotal, diffTotal));
         }
 
     }
@@ -117,6 +125,7 @@ public class TriggerItem extends AbstractTrigger {
             preparedStatement.setBigDecimal(2, diffTotal);
             preparedStatement.setLong(3, (Long) oldRow[Table.ITEM.INVOICE_ID.getColumnIndex()]);
             preparedStatement.execute();
+            LOG.debug(String.format(">>>>TriggerItem->delete: subtotal=%s, total=%s", diffSubtotal, diffTotal));
         }
     }
 

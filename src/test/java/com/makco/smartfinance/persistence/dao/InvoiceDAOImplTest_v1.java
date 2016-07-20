@@ -106,8 +106,9 @@ public class InvoiceDAOImplTest_v1 {
         assert(invoice.getCreatedOn() != null);
         assert(invoice.getUpdatedOn() != null);
 
-        Invoice_v1 invoice1 = invoiceDAOImpl_v1ForTest.getInvoiceByIdWithItems(invoice.getId());
-//        Invoice_v1 invoice1 = invoice;
+        Invoice_v1 invoice1 = invoiceDAOImpl_v1ForTest.getInvoiceByIdWithItems(invoice.getId()); //pass
+//        Invoice_v1 invoice1 = invoice; //fail
+//        Invoice_v1 invoice1 = invoiceDAOImpl_v1ForTest.refresh(invoice);//fail
         LOG.debug(">>>invoice1: " + invoice1);
         assert(invoice1.getId() != null);
         assertEquals(4, invoice1.getItems().size());

@@ -2,6 +2,8 @@ package com.makco.smartfinance.h2db.triggers;
 
 import com.makco.smartfinance.h2db.utils.JsonUtils;
 import com.makco.smartfinance.h2db.utils.schema_constants.Table;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.math.BigDecimal;
 import java.sql.Connection;
@@ -17,6 +19,7 @@ import java.util.Date;
  * Time: 11:33
  */
 public class TriggerInvoice extends AbstractTrigger {
+    private static final Logger LOG = LogManager.getLogger(TriggerInvoice.class);
     private static final String UPDATE_ITEM_DATEUNIT = new StringBuilder()
             .append("UPDATE ")
             .append(SCHEMA_NAME_PLACEHOLDER)
@@ -57,6 +60,9 @@ public class TriggerInvoice extends AbstractTrigger {
                 updateItemDate.execute();
             }
         }
+        LOG.debug(String.format(">>>>TriggerInvoice->update: subtotal=%s, total=%s",
+                newRow[Table.INVOICE.SUB_TOTAL.getColumnIndex()],
+                newRow[Table.INVOICE.TOTAL.getColumnIndex()]));
     }
 
     @Override

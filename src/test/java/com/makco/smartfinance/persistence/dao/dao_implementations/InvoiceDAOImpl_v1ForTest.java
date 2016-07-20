@@ -79,6 +79,31 @@ public class InvoiceDAOImpl_v1ForTest {
         return invoice;
     }
 
+    public Invoice_v1 refresh(Invoice_v1 invoice_v1) throws Exception {
+        Session session = null;
+        try {
+            session = TestPersistenceSession.openSession();
+            session.beginTransaction();
+            session.refresh(invoice_v1);
+            session.getTransaction().commit();
+        } catch (Exception e) {
+            try {
+                if (session.getTransaction().getStatus() == TransactionStatus.ACTIVE
+                        || session.getTransaction().getStatus() == TransactionStatus.MARKED_ROLLBACK)
+                    session.getTransaction().rollback();
+            } catch (Exception rbEx) {
+                LOG.error("Rollback of transaction failed, trace follows!");
+                LOG.error(rbEx, rbEx);
+            }
+            throw new RuntimeException(e);
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+        return invoice_v1;
+    }
+
     public List<Invoice_v1> getInvoiceByNumber(String invoiceNumber) throws Exception {
         Session session = null;
         List<Invoice_v1> invoices = new ArrayList<>();
@@ -131,6 +156,8 @@ public class InvoiceDAOImpl_v1ForTest {
              */
             Invoice_v1 invoice = session.get(Invoice_v1.class, id);
             invoice.setOrganization(null);
+//            session.saveOrUpdate(invoice);
+            ////Illegal attempt to associate a collection with two open sessions
             saveOrUpdateInvoice(invoice);
             //todo organization don't delete
             //todo items DO delete
