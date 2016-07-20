@@ -86,6 +86,7 @@ public class Invoice_v1 implements Serializable {
     private String comment;
 
     //todo investigate
+    //one extra select query to fetch subtotal and total
     @org.hibernate.annotations.Generated(
             GenerationTime.ALWAYS
     )
@@ -94,6 +95,7 @@ public class Invoice_v1 implements Serializable {
     private BigDecimal subTotal;
 
 //    //todo investigate
+    //one extra select query to fetch subtotal and total
     @org.hibernate.annotations.Generated(
             GenerationTime.ALWAYS
     )
