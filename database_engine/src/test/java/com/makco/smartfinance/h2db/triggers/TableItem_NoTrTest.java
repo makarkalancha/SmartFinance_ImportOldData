@@ -30,7 +30,6 @@ import java.time.LocalDate;
 import java.time.Month;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalUnit;
 import java.util.Date;
 
 import static org.junit.Assert.assertEquals;
@@ -39,12 +38,12 @@ import static org.junit.Assert.assertEquals;
  * Created by Makar Kalancha on 11 Jul 2016.
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class TableItemTest {
-    private static final Logger LOG = LogManager.getLogger(TableItemTest.class);
+public class TableItem_NoTrTest {
+    private static final Logger LOG = LogManager.getLogger(TableItem_NoTrTest.class);
     private static final SimpleDateFormat SIMPLE_DATE_TIME_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     private TableOrganizationTest tableOrganizationTest = new TableOrganizationTest();
-    private TableInvoiceTest tableInvoiceTest = new TableInvoiceTest();
+    private TableInvoice_NoTrTest tableInvoiceTest = new TableInvoice_NoTrTest();
     private TableCategoryGroupTest tableCategoryGroupTest = new TableCategoryGroupTest();
     private TableCategoryTest tableCategoryTest = new TableCategoryTest();
     private TableTaxTest tableTaxTest = new TableTaxTest();
@@ -98,7 +97,7 @@ public class TableItemTest {
                        String description1, String description2,
                        String comment, BigDecimal grossAmount, BigDecimal netAmount) throws Exception {
         LOG.debug("insert");
-        String queryInsert = "INSERT INTO " + Table.Names.ITEM +
+        String queryInsert = "INSERT INTO " + Table.Names.ITEM_notr +
                 " (" + Table.ITEM.ORDER_NUMBER + ", " + Table.ITEM.INVOICE_ID + ", " + Table.ITEM.CATEGORY_ID + ", " +
                 Table.ITEM.TAX_ID + ", " + Table.ITEM.FAMILY_MEMBER_ID + ", " + Table.ITEM.DESCRIPTION1 + ", " +
                 Table.ITEM.DESCRIPTION2 + ", " + Table.ITEM.COMMENT + ", " + Table.ITEM.SUB_TOTAL + ", " +
@@ -129,16 +128,16 @@ public class TableItemTest {
     @Test
     public void testItem_11_insert() throws Exception {
         LOG.debug("testItem_11_insert");
-        String queryItemDates = "SELECT " + Table.ITEM.ID + ", " + Table.ITEM.DATEUNIT_UNITDAY + " FROM " + Table.Names.ITEM +
+        String queryItemDates = "SELECT " + Table.ITEM.ID + ", " + Table.ITEM.DATEUNIT_UNITDAY + " FROM " + Table.Names.ITEM_notr +
                 " WHERE " + Table.ITEM.ID + " = ?" +
                 " AND " + Table.ITEM.T_CREATEDON + " IS NOT NULL" +
                 " AND " + Table.ITEM.T_UPDATEDON + " IS NOT NULL" +
                 " AND " + Table.ITEM.T_CREATEDON + " = " + Table.ITEM.T_UPDATEDON;
 
-        String queryInvoice = "SELECT " + Table.INVOICE.ID + ", " + Table.INVOICE.DATEUNIT_UNITDAY + " FROM " + Table.Names.INVOICE +
+        String queryInvoice = "SELECT " + Table.INVOICE.ID + ", " + Table.INVOICE.DATEUNIT_UNITDAY + " FROM " + Table.Names.INVOICE_notr +
                 " WHERE " + Table.INVOICE.ID + " = ?" +
-                " AND " + Table.INVOICE.SUB_TOTAL + "  = (SELECT SUM(" + Table.ITEM.SUB_TOTAL + ") FROM " + Table.Names.ITEM + " WHERE " + Table.ITEM.INVOICE_ID + " = ? )" +
-                " AND " + Table.INVOICE.TOTAL + "  = (SELECT SUM(" + Table.ITEM.TOTAL + ") FROM " + Table.Names.ITEM + " WHERE " + Table.ITEM.INVOICE_ID + " = ? )";
+                " AND " + Table.INVOICE.SUB_TOTAL + "  = (SELECT SUM(" + Table.ITEM.SUB_TOTAL + ") FROM " + Table.Names.ITEM_notr + " WHERE " + Table.ITEM.INVOICE_ID + " = ? )" +
+                " AND " + Table.INVOICE.TOTAL + "  = (SELECT SUM(" + Table.ITEM.TOTAL + ") FROM " + Table.Names.ITEM_notr + " WHERE " + Table.ITEM.INVOICE_ID + " = ? )";
 
         LOG.debug(queryItemDates);
         ResultSet rs = null;
@@ -180,23 +179,14 @@ public class TableItemTest {
             assert (idWithDates > 0);
             assert (idJustInserted == idWithDates);
             LOG.debug(String.format("dateunit: invoice (to be inserted)=%s; item=%s", dateunitUnitday, dateUnitItemWithDates));
-            assert (dateunitUnitday == dateUnitItemWithDates);
+            assert (dateunitUnitday != dateUnitItemWithDates);
 
             selectInvoicePS.setLong(1, invoiceId);
             selectInvoicePS.setLong(2, invoiceId);
             selectInvoicePS.setLong(3, invoiceId);
             rs = selectInvoicePS.executeQuery();
-            rs.next();
-            long idOfInvoice = rs.getLong(1);
-            long dateunitOfInvoice = rs.getLong(2);
-            LOG.debug("idOfInvoice > 0: idOfInvoice=" + idOfInvoice);
-            LOG.debug("idJustInserted == idOfInvoice: " + (invoiceId == idOfInvoice) +
-                    "; invoiceId=" + invoiceId +
-                    "; idOfInvoice=" + idOfInvoice);
-            assert (idOfInvoice > 0);
-            assert (invoiceId == idOfInvoice);
-            LOG.debug(String.format("dateunit: invoice (from select query)=%s; item=%s", dateunitOfInvoice, dateUnitItemWithDates));
-            assert (dateunitOfInvoice == dateUnitItemWithDates);
+            boolean dataIsAvail= rs.next();
+            assert (!dataIsAvail);
 
         } finally {
             if (rs != null) rs.close();
@@ -236,7 +226,7 @@ public class TableItemTest {
 
     public void updateComment(Long id, String comment) throws Exception {
         LOG.debug("update");
-        String queryUpdate = "UPDATE " + Table.Names.ITEM + " SET " + Table.ITEM.COMMENT + " = ? " +
+        String queryUpdate = "UPDATE " + Table.Names.ITEM_notr + " SET " + Table.ITEM.COMMENT + " = ? " +
                 " WHERE " + Table.ITEM.ID + " = ?";
         LOG.debug(queryUpdate);
         ResultSet rs = null;
@@ -253,7 +243,7 @@ public class TableItemTest {
 
     public void updateOrderNumbert(Long id, Integer orderNumber) throws Exception {
         LOG.debug("update");
-        String queryUpdate = "UPDATE " + Table.Names.ITEM + " SET " + Table.ITEM.ORDER_NUMBER + " = ? " +
+        String queryUpdate = "UPDATE " + Table.Names.ITEM_notr + " SET " + Table.ITEM.ORDER_NUMBER + " = ? " +
                 " WHERE " + Table.ITEM.ID + " = ?";
         LOG.debug(queryUpdate);
         ResultSet rs = null;
@@ -270,7 +260,7 @@ public class TableItemTest {
 
     public void updateSubtotalAndTotal(Long id, BigDecimal subtotal, BigDecimal total) throws Exception {
         LOG.debug("update");
-        String queryUpdate = "UPDATE " + Table.Names.ITEM + " SET " + Table.ITEM.SUB_TOTAL + " = ? , " +
+        String queryUpdate = "UPDATE " + Table.Names.ITEM_notr + " SET " + Table.ITEM.SUB_TOTAL + " = ? , " +
                 Table.ITEM.TOTAL + " = ? " +
                 " WHERE " + Table.ITEM.ID + " = ?";
         LOG.debug(queryUpdate);
@@ -290,16 +280,16 @@ public class TableItemTest {
     @Test
     public void testItem_21_update_check_T_UPDATEDON() throws Exception {
         LOG.debug("testItem_21_update");
-        String querySelect = "SELECT MAX(" + Table.ITEM.ID + ") FROM " + Table.Names.ITEM;
-        String queryDates = "SELECT " + Table.ITEM.ID + ", " + Table.ITEM.INVOICE_ID + " FROM " + Table.Names.ITEM +
+        String querySelect = "SELECT MAX(" + Table.ITEM.ID + ") FROM " + Table.Names.ITEM_notr;
+        String queryDates = "SELECT " + Table.ITEM.ID + ", " + Table.ITEM.INVOICE_ID + " FROM " + Table.Names.ITEM_notr +
                 " WHERE " + Table.ITEM.ID + " = ?" +
                 " AND " + Table.ITEM.T_CREATEDON + " IS NOT NULL" +
                 " AND " + Table.ITEM.T_UPDATEDON + " IS NOT NULL" +
                 " AND " + Table.ITEM.T_CREATEDON + " != " + Table.ITEM.T_UPDATEDON;
-        String queryInvoice = "SELECT " + Table.INVOICE.ID + " FROM " + Table.Names.INVOICE +
+        String queryInvoice = "SELECT " + Table.INVOICE.ID + " FROM " + Table.Names.INVOICE_notr +
                 " WHERE " + Table.INVOICE.ID + " = ?" +
-                " AND " + Table.INVOICE.SUB_TOTAL + "  = (SELECT SUM(" + Table.ITEM.SUB_TOTAL + ") FROM " + Table.Names.ITEM + " WHERE " + Table.ITEM.INVOICE_ID + " = ? )" +
-                " AND " + Table.INVOICE.TOTAL + "  = (SELECT SUM(" + Table.ITEM.TOTAL + ") FROM " + Table.Names.ITEM + " WHERE " + Table.ITEM.INVOICE_ID + " = ? )";
+                " AND " + Table.INVOICE.SUB_TOTAL + "  = (SELECT SUM(" + Table.ITEM.SUB_TOTAL + ") FROM " + Table.Names.ITEM_notr + " WHERE " + Table.ITEM.INVOICE_ID + " = ? )" +
+                " AND " + Table.INVOICE.TOTAL + "  = (SELECT SUM(" + Table.ITEM.TOTAL + ") FROM " + Table.Names.ITEM_notr + " WHERE " + Table.ITEM.INVOICE_ID + " = ? )";
 
         LOG.debug(querySelect);
         LOG.debug(queryDates);
@@ -328,14 +318,8 @@ public class TableItemTest {
             selectInvoicePS.setLong(2, invoiceId);
             selectInvoicePS.setLong(3, invoiceId);
             rs = selectInvoicePS.executeQuery();
-            rs.next();
-            long idOfInvoice = rs.getLong(1);
-            LOG.debug("idOfInvoice > 0: idOfInvoice=" + idOfInvoice);
-            LOG.debug("idJustInserted == idOfInvoice: " + (invoiceId == idOfInvoice) +
-                    "; invoiceId=" + invoiceId +
-                    "; idOfInvoice=" + idOfInvoice);
-            assert (idOfInvoice > 0);
-            assert (invoiceId == idOfInvoice);
+            boolean dataIsAvail = rs.next();
+            assert (!dataIsAvail);
         } finally {
             if (rs != null) rs.close();
         }
@@ -344,10 +328,10 @@ public class TableItemTest {
     @Test
     public void testItem_22_update_check_invoiceSubtotalTotal() throws Exception {
         LOG.debug("testItem_22_update");
-        String queryInvoice = "SELECT " + Table.INVOICE.ID + "," + Table.INVOICE.SUB_TOTAL + "," + Table.INVOICE.TOTAL + " FROM " + Table.Names.INVOICE +
+        String queryInvoice = "SELECT " + Table.INVOICE.ID + "," + Table.INVOICE.SUB_TOTAL + "," + Table.INVOICE.TOTAL + " FROM " + Table.Names.INVOICE_notr +
                 " WHERE " + Table.INVOICE.ID + " = ?" +
-                " AND " + Table.INVOICE.SUB_TOTAL + "  = (SELECT SUM(" + Table.ITEM.SUB_TOTAL + ") FROM " + Table.Names.ITEM + " WHERE " + Table.ITEM.INVOICE_ID + " = ? )" +
-                " AND " + Table.INVOICE.TOTAL + "  = (SELECT SUM(" + Table.ITEM.TOTAL + ") FROM " + Table.Names.ITEM + " WHERE " + Table.ITEM.INVOICE_ID + " = ? )";
+                " AND " + Table.INVOICE.SUB_TOTAL + "  = (SELECT SUM(" + Table.ITEM.SUB_TOTAL + ") FROM " + Table.Names.ITEM_notr + " WHERE " + Table.ITEM.INVOICE_ID + " = ? )" +
+                " AND " + Table.INVOICE.TOTAL + "  = (SELECT SUM(" + Table.ITEM.TOTAL + ") FROM " + Table.Names.ITEM_notr + " WHERE " + Table.ITEM.INVOICE_ID + " = ? )";
 
         LOG.debug(queryInvoice);
         ResultSet rs = null;
@@ -384,42 +368,8 @@ public class TableItemTest {
             selectInvoicePS.setLong(2, invoiceId);
             selectInvoicePS.setLong(3, invoiceId);
             rs = selectInvoicePS.executeQuery();
-            rs.next();
-            long invoiceIdBefore = rs.getLong(1);
-            BigDecimal subtotalBefore = rs.getBigDecimal(2);
-            BigDecimal totalBefore = rs.getBigDecimal(3);
-            LOG.debug("before delete: invoiceIdBefore=" + invoiceIdBefore);
-            LOG.debug("before delete: invoiceId == invoiceIdBefore: " + (invoiceId == invoiceIdBefore) +
-                    "; invoiceId=" + invoiceId +
-                    "; invoiceIdBefore=" + invoiceIdBefore);
-            assert (invoiceIdBefore > 0);
-            assert (invoiceId == invoiceIdBefore);
-            LOG.debug("before delete: subtotalBefore=" + subtotalBefore);
-            LOG.debug("before delete: totalBefore=" + totalBefore);
-            assert(new BigDecimal("15").compareTo(subtotalBefore) == 0);
-            assert(new BigDecimal("45").compareTo(totalBefore) == 0);
-
-            //check sum after update
-            updateSubtotalAndTotal(idJustInserted1, new BigDecimal("100"), new BigDecimal("233"));
-
-            selectInvoicePS.setLong(1, invoiceId);
-            selectInvoicePS.setLong(2, invoiceId);
-            selectInvoicePS.setLong(3, invoiceId);
-            rs = selectInvoicePS.executeQuery();
-            rs.next();
-            long invoiceIdAfter = rs.getLong(1);
-            BigDecimal subtotalAfter = rs.getBigDecimal(2);
-            BigDecimal totalAfter = rs.getBigDecimal(3);
-            LOG.debug("before delete: invoiceIdAfter=" + invoiceIdAfter);
-            LOG.debug("before delete: invoiceId == invoiceIdAfter: " + (invoiceId == invoiceIdAfter) +
-                    "; invoiceId=" + invoiceId +
-                    "; invoiceIdAfter=" + invoiceIdAfter);
-            assert (invoiceIdAfter > 0);
-            assert (invoiceId == invoiceIdAfter);
-            LOG.debug("before delete: subtotalAfter=" + subtotalAfter);
-            LOG.debug("before delete: totalAfter=" + totalAfter);
-            assert(new BigDecimal("110").compareTo(subtotalAfter) == 0);
-            assert(new BigDecimal("263").compareTo(totalAfter) == 0);
+            boolean dataIsAvail = rs.next();
+            assert (!dataIsAvail);
         } finally {
             if (rs != null) rs.close();
         }
@@ -429,13 +379,13 @@ public class TableItemTest {
     public void testItem_23_update_check_invoiceUpdateDate() throws Exception {
         //checks TriggerInvoice.update
         LOG.debug("testItem_23_update");
-        String queryDates = "SELECT " + Table.INVOICE.ID + " FROM " + Table.Names.INVOICE +
+        String queryDates = "SELECT " + Table.INVOICE.ID + " FROM " + Table.Names.INVOICE_notr +
                 " WHERE " + Table.INVOICE.ID + " = ?" +
                 " AND " + Table.INVOICE.T_CREATEDON + " IS NOT NULL" +
                 " AND " + Table.INVOICE.T_UPDATEDON + " IS NOT NULL" +
                 " AND " + Table.INVOICE.T_CREATEDON + " != " + Table.INVOICE.T_UPDATEDON;
         String items = "SELECT " + Table.ITEM.ID + ", " + Table.ITEM.DATEUNIT_UNITDAY +
-                " FROM " + Table.Names.ITEM +
+                " FROM " + Table.Names.ITEM_notr +
                 " WHERE " + Table.ITEM.INVOICE_ID + " = ?";
         LOG.debug(queryDates);
         ResultSet rs = null;
@@ -480,7 +430,7 @@ public class TableItemTest {
                 long itemId = rs.getLong(1);
                 long itemDate = rs.getLong(2);
                 LOG.debug(String.format(">>>>before item: id=%s, date=%s; invoice.date=%s", itemId, itemDate, dateunitUnitday));
-                assert (dateunitUnitday == itemDate);
+                assert (dateunitUnitday != itemDate);
             }
 
             long newDateunitInvoiceWithIdMax = dateunitUnitday + 10;
@@ -502,7 +452,7 @@ public class TableItemTest {
                 long itemId = rs.getLong(1);
                 long itemDate = rs.getLong(2);
                 LOG.debug(String.format(">>>>after item: id=%s, date=%s; invoice.date=%s", itemId, itemDate, newDateunitInvoiceWithIdMax));
-                assert (newDateunitInvoiceWithIdMax == itemDate);
+                assert (newDateunitInvoiceWithIdMax != itemDate);
             }
 
         } finally {
@@ -548,10 +498,10 @@ public class TableItemTest {
     @Test
     public void testItem_31_delete() throws Exception {
         LOG.debug("testItem_31_delete");
-        String querySelect = "SELECT MIN(" + Table.ITEM.ID + ") FROM " + Table.Names.ITEM;
-        String queryDelete = "DELETE FROM " + Table.Names.ITEM + " WHERE " +
+        String querySelect = "SELECT MIN(" + Table.ITEM.ID + ") FROM " + Table.Names.ITEM_notr;
+        String queryDelete = "DELETE FROM " + Table.Names.ITEM_notr + " WHERE " +
                 Table.ITEM.ID + " = ?";
-        String querySelectDeletedRow = "SELECT JSON_ROW FROM _DELETED_ROWS WHERE ID = (SELECT MAX(ID) FROM _DELETED_ROWS WHERE SCHEMA_NAME = 'TEST' AND TABLE_NAME = '" + Table.Names.ITEM + "')";
+        String querySelectDeletedRow = "SELECT JSON_ROW FROM _DELETED_ROWS WHERE ID = (SELECT MAX(ID) FROM _DELETED_ROWS WHERE SCHEMA_NAME = 'TEST' AND TABLE_NAME = '" + Table.Names.ITEM_notr + "')";
 
         LOG.debug(querySelect);
         LOG.debug(queryDelete);
@@ -594,13 +544,13 @@ public class TableItemTest {
     @Test
     public void testItem_32_delete() throws Exception {
         LOG.debug("testItem_31_delete");
-        String queryInvoice = "SELECT " + Table.INVOICE.ID + "," + Table.INVOICE.SUB_TOTAL + "," + Table.INVOICE.TOTAL + " FROM " + Table.Names.INVOICE +
+        String queryInvoice = "SELECT " + Table.INVOICE.ID + "," + Table.INVOICE.SUB_TOTAL + "," + Table.INVOICE.TOTAL + " FROM " + Table.Names.INVOICE_notr +
                 " WHERE " + Table.INVOICE.ID + " = ?" +
-                " AND " + Table.INVOICE.SUB_TOTAL + "  = (SELECT SUM(" + Table.ITEM.SUB_TOTAL + ") FROM " + Table.Names.ITEM + " WHERE " + Table.ITEM.INVOICE_ID + " = ? )" +
-                " AND " + Table.INVOICE.TOTAL + "  = (SELECT SUM(" + Table.ITEM.TOTAL + ") FROM " + Table.Names.ITEM + " WHERE " + Table.ITEM.INVOICE_ID + " = ? )";
-        String queryDelete = "DELETE FROM " + Table.Names.ITEM + " WHERE " +
+                " AND " + Table.INVOICE.SUB_TOTAL + "  = (SELECT SUM(" + Table.ITEM.SUB_TOTAL + ") FROM " + Table.Names.ITEM_notr + " WHERE " + Table.ITEM.INVOICE_ID + " = ? )" +
+                " AND " + Table.INVOICE.TOTAL + "  = (SELECT SUM(" + Table.ITEM.TOTAL + ") FROM " + Table.Names.ITEM_notr + " WHERE " + Table.ITEM.INVOICE_ID + " = ? )";
+        String queryDelete = "DELETE FROM " + Table.Names.ITEM_notr + " WHERE " +
                 Table.ITEM.ID + " = ?";
-        String querySelectDeletedRow = "SELECT JSON_ROW FROM _DELETED_ROWS WHERE ID = (SELECT MAX(ID) FROM _DELETED_ROWS WHERE SCHEMA_NAME = 'TEST' AND TABLE_NAME = '" + Table.Names.ITEM + "')";
+        String querySelectDeletedRow = "SELECT JSON_ROW FROM _DELETED_ROWS WHERE ID = (SELECT MAX(ID) FROM _DELETED_ROWS WHERE SCHEMA_NAME = 'TEST' AND TABLE_NAME = '" + Table.Names.ITEM_notr + "')";
 
         LOG.debug(queryDelete);
         LOG.debug(querySelectDeletedRow);
@@ -723,7 +673,7 @@ public class TableItemTest {
         rowJson.addProperty(Table.ITEM.T_UPDATEDON.toString(), SIMPLE_DATE_TIME_FORMAT.format((Date) row[12]));
 
         JsonObject tableJson = new JsonObject();
-        tableJson.addProperty(Table.Elements.tableName.toString(), schemaName + "." + Table.Names.ITEM);
+        tableJson.addProperty(Table.Elements.tableName.toString(), schemaName + "." + Table.Names.ITEM_notr);
         tableJson.add(Table.Elements.row.toString(), rowJson);
 
         return tableJson;

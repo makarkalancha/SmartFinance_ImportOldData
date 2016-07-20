@@ -18,11 +18,14 @@ public class Table {
         DATEUNIT,
         FAMILY_MEMBER,
         INVOICE,
+        INVOICE_notr,
         ITEM,
+        ITEM_notr,
         ORGANIZATION,
         TAX,
         TAX_CHILD,
-        TRANSACTION;
+        TRANSACTION,
+        TRANSACTION_notr;
     }
 
     public enum _DELETED_ROWS implements IEnumRow {
@@ -379,6 +382,8 @@ public class Table {
             return this;
         }
     };
+
+
 
 
 }
