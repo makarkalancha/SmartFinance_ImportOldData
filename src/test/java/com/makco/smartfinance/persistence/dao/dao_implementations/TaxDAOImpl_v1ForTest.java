@@ -368,7 +368,9 @@ WHERE parenttaxe0_.CHILD_TAX_ID=?
             Tax tax = session.get(Tax.class, id);
             tax.setChildTaxes(new HashSet<>());
             tax.setParentTaxes(new HashSet<>());
-            saveOrUpdateTax(tax);
+//            //no error like: Illegal attempt to associate a collection with two open sessions
+//            saveOrUpdateTax(tax);
+            session.saveOrUpdate(tax);
 
             /*
             Referential integrity constraint violation: "CONSTRAINT_DBB3: TEST.TAX_CHILD FOREIGN KEY(CHILD_TAX_ID) REFERENCES TEST.TAX(ID) (560)"

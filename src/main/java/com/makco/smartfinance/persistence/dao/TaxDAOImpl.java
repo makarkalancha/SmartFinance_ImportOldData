@@ -155,7 +155,7 @@ public class TaxDAOImpl implements TaxDAO {
             Tax tax = session.get(Tax.class, id);
             tax.setChildTaxes(new HashSet<>());
             tax.setParentTaxes(new HashSet<>());
-            saveOrUpdateTax(tax);
+            session.saveOrUpdate(tax);
 
             session.delete(tax);
             session.getTransaction().commit();
