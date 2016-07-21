@@ -69,6 +69,8 @@ public class Invoice_v1 implements Serializable {
     )
     private String invoiceNumber;
 
+    //todo rethink if organization cascade all is needed
+    //todo invoice-items cascade all at invoice, not item is necessary, but other entities not
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "ORGANIZATION_ID", referencedColumnName = "ID", nullable = false)
     private Organization_v1 organization;
