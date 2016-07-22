@@ -94,7 +94,7 @@ public class Invoice_v1 implements Serializable {
     )
     @Column(name = "SUB_TOTAL", insertable = false, updatable = false)
 //    @Column(name = "SUB_TOTAL")
-    private BigDecimal subTotal;
+    private BigDecimal subTotal = new BigDecimal("0");
 
 //    //todo investigate
     //one extra select query to fetch subtotal and total
@@ -103,7 +103,7 @@ public class Invoice_v1 implements Serializable {
     )
     @Column(name = "TOTAL", insertable = false, updatable = false)
 //    @Column(name = "TOTAL")
-    private BigDecimal total;
+    private BigDecimal total = new BigDecimal("0");
 
     @org.hibernate.annotations.CreationTimestamp
     @Column(name = "T_CREATEDON", insertable = false, updatable = false)

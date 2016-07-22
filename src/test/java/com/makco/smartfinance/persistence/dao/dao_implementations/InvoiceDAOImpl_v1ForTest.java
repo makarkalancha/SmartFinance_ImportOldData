@@ -156,11 +156,9 @@ public class InvoiceDAOImpl_v1ForTest {
              */
             Invoice_v1 invoice = session.get(Invoice_v1.class, id);
             invoice.setOrganization(null);
-//            session.saveOrUpdate(invoice);
-            ////Illegal attempt to associate a collection with two open sessions
-            saveOrUpdateInvoice(invoice);
-            //todo organization don't delete
-            //todo items DO delete
+            session.saveOrUpdate(invoice);
+//            ////Illegal attempt to associate a collection with two open sessions
+//            saveOrUpdateInvoice(invoice);
 
             /*
             Referential integrity constraint violation: "CONSTRAINT_DBB3: TEST.TAX_CHILD FOREIGN KEY(CHILD_TAX_ID) REFERENCES TEST.TAX(ID) (560)"

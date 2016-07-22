@@ -5,6 +5,7 @@ import com.makco.smartfinance.persistence.dao.dao_implementations.CategoryGroupD
 import com.makco.smartfinance.persistence.dao.dao_implementations.DateUnitDAOImplForTest;
 import com.makco.smartfinance.persistence.dao.dao_implementations.FamilyMemberDAOImpl_v1ForTest;
 import com.makco.smartfinance.persistence.dao.dao_implementations.InvoiceDAOImpl_v1ForTest;
+import com.makco.smartfinance.persistence.dao.dao_implementations.ItemDAOImpl_v1ForTest;
 import com.makco.smartfinance.persistence.dao.dao_implementations.OrganizationDAOImpl_v1ForTest;
 import com.makco.smartfinance.persistence.dao.dao_implementations.TaxDAOImpl_v1ForTest;
 import com.makco.smartfinance.persistence.entity.Category;
@@ -45,6 +46,7 @@ public class InvoiceDAOImplTest_v1 {
 
     private InvoiceDAOImpl_v1ForTest invoiceDAOImpl_v1ForTest = new InvoiceDAOImpl_v1ForTest();
     private OrganizationDAOImpl_v1ForTest organizationDAOImpl_v1ForTest = new OrganizationDAOImpl_v1ForTest();
+    private ItemDAOImpl_v1ForTest itemDAOImpl_v1ForTest = new ItemDAOImpl_v1ForTest();
     private CategoryGroupDAOImplForTest categoryGroupDAOImplForTest = new CategoryGroupDAOImplForTest();
     private CategoryDAOImplForTest categoryDAOImplForTest = new CategoryDAOImplForTest();
     private TaxDAOImpl_v1ForTest taxDAO = new TaxDAOImpl_v1ForTest();
@@ -180,6 +182,10 @@ public class InvoiceDAOImplTest_v1 {
 
         long invoiceId = invoice.getId();
         long organizationId = invoice.getOrganization().getId();
+        long itemId1 = item1.getId();
+        long itemId2 = item2.getId();
+        long itemId3 = item3.getId();
+        long itemId4 = item4.getId();
 
         Invoice_v1 invoice1 = invoiceDAOImpl_v1ForTest.getInvoiceByIdWithItems(invoiceId);
 
@@ -187,12 +193,25 @@ public class InvoiceDAOImplTest_v1 {
         //todo fails here
         invoiceDAOImpl_v1ForTest.removeInvoice(invoiceId);
 
-        Invoice_v1 invoice2 = invoiceDAOImpl_v1ForTest.getInvoiceByIdWithItems(invoiceId);
-        Organization_v1 organization_v1 = organizationDAOImpl_v1ForTest.getOrganizationById(organizationId);
-        LOG.debug(">>>invoice2: " + invoice2);
-        assert(invoice2 == null);
-        LOG.debug(">>>organization_v1: " + organization_v1);
-        assert(organization_v1 != null);
+        Invoice_v1 invoice_v1_2 = invoiceDAOImpl_v1ForTest.getInvoiceByIdWithItems(invoiceId);
+        Organization_v1 organization_v1_2 = organizationDAOImpl_v1ForTest.getOrganizationById(organizationId);
+        Item_v1 item_v1_2_1= itemDAOImpl_v1ForTest.getItemById(itemId1);
+        Item_v1 item_v1_2_2= itemDAOImpl_v1ForTest.getItemById(itemId2);
+        Item_v1 item_v1_2_3= itemDAOImpl_v1ForTest.getItemById(itemId3);
+        Item_v1 item_v1_2_4= itemDAOImpl_v1ForTest.getItemById(itemId4);
+        LOG.debug(">>>invoice_2: " + invoice_v1_2);
+        assert(invoice_v1_2 == null);
+        LOG.debug(">>>organization_v1: " + organization_v1_2);
+        assert(organization_v1_2 != null);
+        LOG.debug(">>>item_v1_2_1: " + item_v1_2_1);
+        assert(item_v1_2_1 == null);
+        LOG.debug(">>>item_v1_2_2: " + item_v1_2_2);
+        assert(item_v1_2_2 == null);
+        LOG.debug(">>>item_v1_2_3: " + item_v1_2_3);
+        assert(item_v1_2_3 == null);
+        LOG.debug(">>>item_v1_2_4: " + item_v1_2_4);
+        assert(item_v1_2_4 == null);
+
     }
 
 

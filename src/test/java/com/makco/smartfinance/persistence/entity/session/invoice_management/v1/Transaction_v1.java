@@ -85,10 +85,10 @@ public class Transaction_v1 implements Serializable {
     private String comment;
 
     @Column(name = "DEBIT_AMOUNT")
-    private BigDecimal debitAmount;
+    private BigDecimal debitAmount = new BigDecimal("0");
 
     @Column(name = "CREDIT_AMOUNT")
-    private BigDecimal creditAmount;
+    private BigDecimal creditAmount = new BigDecimal("0");
 
     @org.hibernate.annotations.CreationTimestamp
     @Column(name = "T_CREATEDON", insertable = false, updatable = false)
