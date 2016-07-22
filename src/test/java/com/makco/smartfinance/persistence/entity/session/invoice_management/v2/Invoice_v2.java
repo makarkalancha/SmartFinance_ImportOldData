@@ -86,10 +86,10 @@ public class Invoice_v2 implements Serializable {
     private String comment;
 
     @Column(name = "SUB_TOTAL")
-    private BigDecimal subTotal;
+    private BigDecimal subTotal = new BigDecimal("0");
 
     @Column(name = "TOTAL")
-    private BigDecimal total;
+    private BigDecimal total = new BigDecimal("0");
 
     @org.hibernate.annotations.CreationTimestamp
     @Column(name = "T_CREATEDON", insertable = false, updatable = false)
@@ -168,6 +168,26 @@ public class Invoice_v2 implements Serializable {
 
     public void setItems(Collection<Item_v2> items) {
         this.items = new ArrayList<>(items);
+        sumSubtotal();
+        sumTotal();
+    }
+
+    private void sumSubtotal() {
+        this.subTotal = items.stream()
+                .map(Item_v2::getSubTotal)
+                .reduce(
+                        new BigDecimal("0"),
+                        (a, b) -> a.add(b)
+                );
+    }
+
+    private void sumTotal() {
+        this.total = items.stream()
+                .map(Item_v2::getTotal)
+                .reduce(
+                        new BigDecimal("0"),
+                        (a, b) -> a.add(b)
+                );
     }
 
     public LocalDateTime getCreatedOn() {

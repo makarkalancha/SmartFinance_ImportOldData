@@ -39,6 +39,9 @@ import com.makco.smartfinance.persistence.entity.session.invoice_management.v1.I
 import com.makco.smartfinance.persistence.entity.session.invoice_management.v1.Item_v1;
 import com.makco.smartfinance.persistence.entity.session.invoice_management.v1.Organization_v1;
 import com.makco.smartfinance.persistence.entity.session.invoice_management.v1.Transaction_v1;
+import com.makco.smartfinance.persistence.entity.session.invoice_management.v2.Invoice_v2;
+import com.makco.smartfinance.persistence.entity.session.invoice_management.v2.Item_v2;
+import com.makco.smartfinance.persistence.entity.session.invoice_management.v2.Organization_v2;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
@@ -118,12 +121,19 @@ public class TestPersistenceSession {
         cfg.addAnnotatedClass(Currency.class);
         cfg.addAnnotatedClass(DateUnit.class);
         cfg.addAnnotatedClass(FamilyMember.class);
+
         cfg.addAnnotatedClass(Invoice.class);
         cfg.addAnnotatedClass(Invoice_v1.class);
+        cfg.addAnnotatedClass(Invoice_v2.class);
+
         cfg.addAnnotatedClass(Item.class);
         cfg.addAnnotatedClass(Item_v1.class);
+        cfg.addAnnotatedClass(Item_v2.class);
+
         cfg.addAnnotatedClass(Organization.class);
         cfg.addAnnotatedClass(Organization_v1.class);
+        cfg.addAnnotatedClass(Organization_v2.class);
+
         cfg.addAnnotatedClass(Tax.class);
         cfg.addAnnotatedClass(Tax_v1.class);
         cfg.addAnnotatedClass(Transaction_v1.class);
