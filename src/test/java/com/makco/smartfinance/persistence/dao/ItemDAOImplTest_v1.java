@@ -62,7 +62,7 @@ public class ItemDAOImplTest_v1 {
     }
 
     @Test
-    public void test_11_saveOrUpdateItems() throws Exception {
+    public void test_11_saveItems() throws Exception {
         int randomInt = randomWithinRange.getRandom();
 
         DateUnit dateUnit = new DateUnit(LocalDate.now());

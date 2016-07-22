@@ -34,7 +34,7 @@ public class TaxDAOImplTest {
     private TaxDAOImpl_v1ForTest taxDAO = new TaxDAOImpl_v1ForTest();
 
     @Test
-    public void test_11_saveOrUpdateTax() throws Exception {
+    public void test_11_saveTax() throws Exception {
         int randomInt = randomWithinRange.getRandom();
         String name = taxName + randomInt;
         String desc = taxDesc + randomInt;
@@ -50,7 +50,7 @@ public class TaxDAOImplTest {
     }
 
     @Test
-    public void test_12_saveOrUpdateTax_withChildParent() throws Exception {
+    public void test_12_saveTax_withChildParent() throws Exception {
         int randomInt = randomWithinRange.getRandom();
         String nameChild1 = new StringBuilder(taxName).append("Child").append(randomInt).toString();
         String descChild1 = new StringBuilder(taxDesc).append("Child").append(randomInt).toString();;

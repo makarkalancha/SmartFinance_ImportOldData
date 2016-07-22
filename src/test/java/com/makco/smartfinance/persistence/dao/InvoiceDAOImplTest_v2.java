@@ -63,7 +63,7 @@ public class InvoiceDAOImplTest_v2 {
     }
 
     @Test
-    public void test_11_saveOrUpdateInvoice() throws Exception {
+    public void test_11_saveInvoice() throws Exception {
         int randomInt = randomWithinRange.getRandom();
 
         DateUnit dateUnit = new DateUnit(LocalDate.now());
