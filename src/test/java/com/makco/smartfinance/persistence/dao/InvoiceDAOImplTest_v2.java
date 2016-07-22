@@ -21,7 +21,9 @@ import com.makco.smartfinance.persistence.entity.session.invoice_management.v2.O
 import com.makco.smartfinance.utils.RandomWithinRange;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.junit.runners.MethodSorters;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -36,6 +38,7 @@ import static org.junit.Assert.assertEquals;
  * Date: 17/07/2016
  * Time: 21:35
  */
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class InvoiceDAOImplTest_v2 {
 
     private static final Logger LOG = LogManager.getLogger(InvoiceDAOImplTest_v2.class);
