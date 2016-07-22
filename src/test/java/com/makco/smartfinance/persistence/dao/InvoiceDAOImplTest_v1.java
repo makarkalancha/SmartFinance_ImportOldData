@@ -30,6 +30,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
@@ -66,8 +67,15 @@ public class InvoiceDAOImplTest_v1 {
     public void test_11_saveInvoice() throws Exception {
         int randomInt = randomWithinRange.getRandom();
 
+        //todo Caused by: org.hibernate.QueryException: could not resolve property: unitDate of: com.makco.smartfinance.persistence.entity.DateUnit
+
+        List<DateUnit> dates = dateUnitDAO.dateUnitList();
         DateUnit dateUnit = new DateUnit(LocalDate.now());
-        dateUnitDAO.addDateUnit(dateUnit);
+        if(dates.isEmpty()) {
+            dateUnitDAO.addDateUnit(dateUnit);
+        } else {
+            dateUnit = dates.get(0);
+        }
 
         String organizationName = "OrgName" + randomInt;
         Organization_v1 organization = new Organization_v1(organizationName, "org desc " + randomInt);
@@ -102,17 +110,30 @@ public class InvoiceDAOImplTest_v1 {
         }});
 
         invoiceDAOImpl_v1ForTest.saveOrUpdateInvoice(invoice);
+        /*
+        with two saveOrUpdateInvoice or just one number of queries is same:
+        prep138: insert into TEST.DATEUNIT
+        prep141: insert into TEST.CATEGORY_GROUP
+        prep144: insert into TEST.CATEGORY
+        prep147: insert into TEST.TAX
+        prep150: insert into TEST.TAX
+        prep153: insert into TEST.FAMILY_MEMBER
+        prep162: insert into TEST.ORGANIZATION
+        prep164: insert into TEST.INVOICE
+        prep167: insert into TEST.ITEM
+         */
+//        invoiceDAOImpl_v1ForTest.saveOrUpdateInvoice(invoice);
 
         LOG.debug(">>>invoice: " + invoice);
         assert(invoice.getId() != null);
         assertEquals(4, invoice.getItems().size());
-//        assertEquals(new BigDecimal("10"), invoice.getSubTotal());
-//        assertEquals(new BigDecimal("12"), invoice.getTotal());
+//        assertEquals(0, new BigDecimal("10").compareTo(invoice.getSubTotal()));//(!!!!) fail, but if you do another saveOrUpdateInvoice right after first one this line will be valid
+//        assertEquals(0, new BigDecimal("12").compareTo(invoice.getTotal()));//(!!!!) fail, but if you do another saveOrUpdateInvoice right after first one this line will be valid
         assert(invoice.getCreatedOn() != null);
         assert(invoice.getUpdatedOn() != null);
 
         Invoice_v1 invoice1 = invoiceDAOImpl_v1ForTest.getInvoiceByIdWithItems(invoice.getId()); //pass
-//        Invoice_v1 invoice1 = invoice; //fail
+//        Invoice_v1 invoice1 = invoice; //(!!!!) fail, but if you do another saveOrUpdateInvoice right after first one this line will be valid
 //        Invoice_v1 invoice1 = invoiceDAOImpl_v1ForTest.refresh(invoice);//fail
         LOG.debug(">>>invoice1: " + invoice1);
         assert(invoice1.getId() != null);
@@ -122,20 +143,23 @@ public class InvoiceDAOImplTest_v1 {
         assert(invoice1.getCreatedOn() != null);
         assert(invoice1.getUpdatedOn() != null);
 
-        for(Item_v1 item_v1 : invoice1.getItems()){
+        List<Item_v1> items = new ArrayList<>(invoice1.getItems());
+        for (int i = 0; i < items.size(); i++) {
+            Item_v1 item_v1 = items.get(i);
             LOG.debug(">>>item_v1: " + item_v1);
-            assert(item_v1.getId() != null);
-            assert(item_v1.getCategory() != null);
-            assert(item_v1.getTax() != null);
-            assert(item_v1.getFamilyMember() != null);
-            assert(item_v1.getDateUnit() != null);
-            assert(item_v1.getCreatedOn() != null);
-            assert(item_v1.getUpdatedOn() != null);
+            assert (item_v1.getId() != null);
+            assertEquals((int)(i + 1), (int) item_v1.getOrderNumber());
+            assert (item_v1.getCategory() != null);
+            assert (item_v1.getTax() != null);
+            assert (item_v1.getFamilyMember() != null);
+            assert (item_v1.getDateUnit() != null);
+            assert (item_v1.getCreatedOn() != null);
+            assert (item_v1.getUpdatedOn() != null);
         }
     }
 
     @Test
-    public void test_21_saveOrUpdateInvoice() throws Exception {
+    public void test_21_updateInvoice_addingItem() throws Exception {
         int randomInt = randomWithinRange.getRandom();
 
         DateUnit dateUnit = new DateUnit(LocalDate.now());
@@ -174,35 +198,56 @@ public class InvoiceDAOImplTest_v1 {
         }});
 
         invoiceDAOImpl_v1ForTest.saveOrUpdateInvoice(invoice);
+        invoiceDAOImpl_v1ForTest.saveOrUpdateInvoice(invoice);
 
         LOG.debug(">>>invoice: " + invoice);
         assert(invoice.getId() != null);
         assertEquals(4, invoice.getItems().size());
-//        assertEquals(new BigDecimal("10"), invoice.getSubTotal());
-//        assertEquals(new BigDecimal("12"), invoice.getTotal());
+        assertEquals(0, new BigDecimal("10").compareTo(invoice.getSubTotal()));
+        assertEquals(0, new BigDecimal("12").compareTo(invoice.getTotal()));
         assert(invoice.getCreatedOn() != null);
         assert(invoice.getUpdatedOn() != null);
 
-        Invoice_v1 invoice1 = invoiceDAOImpl_v1ForTest.getInvoiceByIdWithItems(invoice.getId()); //pass
-//        Invoice_v1 invoice1 = invoice; //fail
+        //UPDATING
+        Item_v1 item5 = new Item_v1(invoice.getNextItemOrderNumber(), invoice, category1, tax1, familyMember, dateUnit, "desc14", "desc24", "comment", new BigDecimal("5"));
+        invoice.setItems(new ArrayList<Item_v1>(){{
+            addAll(invoice.getItems());
+            add(item5);
+        }});
+        invoiceDAOImpl_v1ForTest.saveOrUpdateInvoice(invoice);
+
+
+        LOG.debug(">>>invoice: " + invoice);
+        assert(invoice.getId() != null);
+        assertEquals(5, invoice.getItems().size());
+        assertEquals(0, new BigDecimal("15").compareTo(invoice.getSubTotal()));
+        assertEquals(0, new BigDecimal("18").compareTo(invoice.getTotal()));
+        assert(invoice.getCreatedOn() != null);
+        assert(invoice.getUpdatedOn() != null);
+
+//        Invoice_v1 invoice1 = invoiceDAOImpl_v1ForTest.getInvoiceByIdWithItems(invoice.getId()); //pass
+        Invoice_v1 invoice1 = invoice; //fail
 //        Invoice_v1 invoice1 = invoiceDAOImpl_v1ForTest.refresh(invoice);//fail
         LOG.debug(">>>invoice1: " + invoice1);
         assert(invoice1.getId() != null);
-        assertEquals(4, invoice1.getItems().size());
-        assertEquals(0, new BigDecimal("10").compareTo(invoice1.getSubTotal()));
-        assertEquals(0, new BigDecimal("12").compareTo(invoice1.getTotal()));
+        assertEquals(5, invoice1.getItems().size());
+        assertEquals(0, new BigDecimal("15").compareTo(invoice1.getSubTotal()));
+        assertEquals(0, new BigDecimal("18").compareTo(invoice1.getTotal()));
         assert(invoice1.getCreatedOn() != null);
         assert(invoice1.getUpdatedOn() != null);
 
-        for(Item_v1 item_v1 : invoice1.getItems()){
+        List<Item_v1> items = new ArrayList<>(invoice1.getItems());
+        for (int i = 0; i < items.size(); i++) {
+            Item_v1 item_v1 = items.get(i);
             LOG.debug(">>>item_v1: " + item_v1);
-            assert(item_v1.getId() != null);
-            assert(item_v1.getCategory() != null);
-            assert(item_v1.getTax() != null);
-            assert(item_v1.getFamilyMember() != null);
-            assert(item_v1.getDateUnit() != null);
-            assert(item_v1.getCreatedOn() != null);
-            assert(item_v1.getUpdatedOn() != null);
+            assert (item_v1.getId() != null);
+            assertEquals((int)(i + 1), (int) item_v1.getOrderNumber());
+            assert (item_v1.getCategory() != null);
+            assert (item_v1.getTax() != null);
+            assert (item_v1.getFamilyMember() != null);
+            assert (item_v1.getDateUnit() != null);
+            assert (item_v1.getCreatedOn() != null);
+            assert (item_v1.getUpdatedOn() != null);
         }
     }
 

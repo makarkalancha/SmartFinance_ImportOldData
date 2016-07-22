@@ -184,6 +184,18 @@ public class Invoice_v1 implements Serializable {
         this.items = new ArrayList<>(items);
     }
 
+    private int getLastItemOrderNumber() {
+        int lastItemOrderNumber = 0;
+        if(items.size()>0) {
+            lastItemOrderNumber = items.get(items.size() - 1).getOrderNumber();
+        }
+        return lastItemOrderNumber;
+    }
+
+    public int getNextItemOrderNumber() {
+        return getLastItemOrderNumber() + 1;
+    }
+
     public LocalDateTime getCreatedOn() {
         return createdOn.toLocalDateTime();
     }
