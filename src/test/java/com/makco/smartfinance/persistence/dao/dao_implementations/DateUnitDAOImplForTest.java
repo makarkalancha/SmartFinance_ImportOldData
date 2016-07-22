@@ -71,7 +71,7 @@ public class DateUnitDAOImplForTest implements DateUnitDAO {
         try{
             session = TestPersistenceSession.openSession();
             session.beginTransaction();
-            list = session.createQuery("SELECT du FROM DateUnit du ORDER BY du.unitDate").list();
+            list = session.createQuery("SELECT du FROM DateUnit du ORDER BY du.unitDay").list();
             session.getTransaction().commit();
         } catch (Exception e) {
             session.getTransaction().rollback();
