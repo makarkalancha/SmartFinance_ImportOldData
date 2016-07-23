@@ -16,6 +16,7 @@ import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Collection;
 
 /**
@@ -109,11 +110,17 @@ public abstract class CategoryGroup <T extends Category>{
 
     public abstract DataBaseConstants.CATEGORY_GROUP_TYPE getCategoryGroupType();
 
-    public Timestamp getCreatedOn() {
-        return createdOn;
+    public LocalDateTime getCreatedOn() {
+        if(createdOn == null){
+            return null;
+        }
+        return createdOn.toLocalDateTime();
     }
 
-    public Timestamp getUpdatedOn() {
-        return updatedOn;
+    public LocalDateTime getUpdatedOn() {
+        if(updatedOn == null){
+            return null;
+        }
+        return updatedOn.toLocalDateTime();
     }
 }

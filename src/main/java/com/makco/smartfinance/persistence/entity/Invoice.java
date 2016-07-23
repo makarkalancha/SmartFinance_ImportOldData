@@ -176,10 +176,16 @@ public class Invoice implements Serializable {
     }
 
     public LocalDateTime getCreatedOn() {
+        if(createdOn == null){
+            return null;
+        }
         return createdOn.toLocalDateTime();
     }
 
     public LocalDateTime getUpdatedOn() {
+        if(updatedOn == null){
+            return null;
+        }
         return updatedOn.toLocalDateTime();
     }
 

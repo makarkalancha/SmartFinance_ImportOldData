@@ -19,6 +19,7 @@ import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -135,12 +136,18 @@ public abstract class CategoryGroup_v2/*<T extends Category_v2>*/{
         this.categories = new TreeSet<>(categories);
     }
 
-    public Timestamp getCreatedOn() {
-        return createdOn;
+    public LocalDateTime getCreatedOn() {
+        if(createdOn == null){
+            return null;
+        }
+        return createdOn.toLocalDateTime();
     }
 
-    public Timestamp getUpdatedOn() {
-        return updatedOn;
+    public LocalDateTime getUpdatedOn() {
+        if(updatedOn == null){
+            return null;
+        }
+        return updatedOn.toLocalDateTime();
     }
 
     public abstract String toStringFull();

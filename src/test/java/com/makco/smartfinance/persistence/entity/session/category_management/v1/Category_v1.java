@@ -16,6 +16,7 @@ import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 /**
  * Created by Makar Kalancha on 2016-04-25.
@@ -107,11 +108,17 @@ public abstract class Category_v1 {
 
     public abstract String getCategoryGroupType();
 
-    public Timestamp getCreatedOn() {
-        return createdOn;
+    public LocalDateTime getCreatedOn() {
+        if(createdOn == null){
+            return null;
+        }
+        return createdOn.toLocalDateTime();
     }
 
-    public Timestamp getUpdatedOn() {
-        return updatedOn;
+    public LocalDateTime getUpdatedOn() {
+        if(updatedOn == null){
+            return null;
+        }
+        return updatedOn.toLocalDateTime();
     }
 }
