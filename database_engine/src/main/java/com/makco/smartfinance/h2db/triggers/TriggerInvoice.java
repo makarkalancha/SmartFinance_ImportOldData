@@ -42,6 +42,14 @@ public class TriggerInvoice extends AbstractTrigger {
     protected void insert(Connection connection, Object[] oldRow, Object[] newRow) throws SQLException {
         newRow[Table.INVOICE.T_CREATEDON.getColumnIndex()] = Timestamp.valueOf(now);
         newRow[Table.INVOICE.T_UPDATEDON.getColumnIndex()] = Timestamp.valueOf(now);
+
+//        LOG.debug(String.format(">>>>TriggerInvoice->insert: dateunit=%s, subtotal=%s, total=%s",
+//                newRow[Table.INVOICE.DATEUNIT_UNITDAY.getColumnIndex()],
+//                newRow[Table.INVOICE.SUB_TOTAL.getColumnIndex()],
+//                newRow[Table.INVOICE.TOTAL.getColumnIndex()]));
+//        LOG.debug(String.format(">>>>TriggerInvoice->update: create=%s, update=%s",
+//                newRow[Table.INVOICE.T_CREATEDON.getColumnIndex()],
+//                newRow[Table.INVOICE.T_UPDATEDON.getColumnIndex()]));
     }
 
     @Override
@@ -60,9 +68,13 @@ public class TriggerInvoice extends AbstractTrigger {
                 updateItemDate.execute();
             }
         }
-        LOG.debug(String.format(">>>>TriggerInvoice->update: subtotal=%s, total=%s",
-                newRow[Table.INVOICE.SUB_TOTAL.getColumnIndex()],
-                newRow[Table.INVOICE.TOTAL.getColumnIndex()]));
+//        LOG.debug(String.format(">>>>TriggerInvoice->update: dateunit=%s, subtotal=%s, total=%s",
+//                newRow[Table.INVOICE.DATEUNIT_UNITDAY.getColumnIndex()],
+//                newRow[Table.INVOICE.SUB_TOTAL.getColumnIndex()],
+//                newRow[Table.INVOICE.TOTAL.getColumnIndex()]));
+//        LOG.debug(String.format(">>>>TriggerInvoice->update: create=%s, update=%s",
+//                newRow[Table.INVOICE.T_CREATEDON.getColumnIndex()],
+//                newRow[Table.INVOICE.T_UPDATEDON.getColumnIndex()]));
     }
 
     @Override

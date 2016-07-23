@@ -215,4 +215,19 @@ public class InvoiceDAOImplTest_v2 {
 
 
     //todo tests
+    public void test_Invoice_v2_benchmark() throws Exception{
+        /*
+        comment any logs in triggers and daos
+        dates: amount = from 2011-01-01 to today randomly choose
+        family member: 3 random
+        category: 10 random
+        tax: 3 random
+
+        count time for creation of:
+        organization
+        invoice
+        item
+        create around 20_000 invoices with organizations
+         */
+    }
 }

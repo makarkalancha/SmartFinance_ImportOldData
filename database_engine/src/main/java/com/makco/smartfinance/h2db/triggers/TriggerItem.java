@@ -75,9 +75,10 @@ public class TriggerItem extends AbstractTrigger {
             updateInvoice.setBigDecimal(2, (BigDecimal) newRow[Table.ITEM.TOTAL.getColumnIndex()]);
             updateInvoice.setLong(3, (Long) newRow[Table.ITEM.INVOICE_ID.getColumnIndex()]);
             updateInvoice.execute();
-            LOG.debug(String.format(">>>>TriggerItem->insert: subtotal=%s, total=%s",
-                    newRow[Table.ITEM.SUB_TOTAL.getColumnIndex()],
-                    newRow[Table.ITEM.TOTAL.getColumnIndex()]));
+//            LOG.debug(String.format(">>>>TriggerItem->insert: dateunit=%s, subtotal=%s, total=%s",
+//                    newRow[Table.ITEM.DATEUNIT_UNITDAY.getColumnIndex()],
+//                    newRow[Table.ITEM.SUB_TOTAL.getColumnIndex()],
+//                    newRow[Table.ITEM.TOTAL.getColumnIndex()]));
         }finally {
             if(rs != null){
                 rs.close();
@@ -104,7 +105,10 @@ public class TriggerItem extends AbstractTrigger {
             preparedStatement.setLong(3, (Long) newRow[Table.ITEM.INVOICE_ID.getColumnIndex()]);
             preparedStatement.execute();
 
-            LOG.debug(String.format(">>>>TriggerItem->update: subtotal=%s, total=%s", diffSubtotal, diffTotal));
+//            LOG.debug(String.format(">>>>TriggerItem->update: dateunit=%s, subtotal=%s, total=%s",
+//                    newRow[Table.ITEM.DATEUNIT_UNITDAY.getColumnIndex()],
+//                    diffSubtotal,
+//                    diffTotal));
         }
 
     }
@@ -125,7 +129,10 @@ public class TriggerItem extends AbstractTrigger {
             preparedStatement.setBigDecimal(2, diffTotal);
             preparedStatement.setLong(3, (Long) oldRow[Table.ITEM.INVOICE_ID.getColumnIndex()]);
             preparedStatement.execute();
-            LOG.debug(String.format(">>>>TriggerItem->delete: subtotal=%s, total=%s", diffSubtotal, diffTotal));
+//            LOG.debug(String.format(">>>>TriggerItem->delete: dateunit=%s, subtotal=%s, total=%s",
+//                    newRow[Table.ITEM.DATEUNIT_UNITDAY.getColumnIndex()],
+//                    diffSubtotal,
+//                    diffTotal));
         }
     }
 

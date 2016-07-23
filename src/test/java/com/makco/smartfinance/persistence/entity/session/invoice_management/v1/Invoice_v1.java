@@ -89,20 +89,18 @@ public class Invoice_v1 implements Serializable {
 
     //todo investigate
     //one extra select query to fetch subtotal and total
-    @org.hibernate.annotations.Generated(
-            GenerationTime.ALWAYS
-    )
+//    @org.hibernate.annotations.Generated(
+//            GenerationTime.ALWAYS
+//    )
     @Column(name = "SUB_TOTAL", insertable = false, updatable = false)
-//    @Column(name = "SUB_TOTAL")
     private BigDecimal subTotal = new BigDecimal("0");
 
 //    //todo investigate
     //one extra select query to fetch subtotal and total
-    @org.hibernate.annotations.Generated(
-            GenerationTime.ALWAYS
-    )
+//    @org.hibernate.annotations.Generated(
+//            GenerationTime.ALWAYS
+//    )
     @Column(name = "TOTAL", insertable = false, updatable = false)
-//    @Column(name = "TOTAL")
     private BigDecimal total = new BigDecimal("0");
 
     @org.hibernate.annotations.CreationTimestamp
