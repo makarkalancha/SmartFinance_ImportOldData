@@ -1,5 +1,7 @@
 package com.makco.smartfinance.persistence.dao;
 
+import com.google.common.collect.Lists;
+import com.makco.smartfinance.constants.DataBaseConstants;
 import com.makco.smartfinance.persistence.dao.dao_implementations.CategoryDAOImplForTest;
 import com.makco.smartfinance.persistence.dao.dao_implementations.CategoryGroupDAOImplForTest;
 import com.makco.smartfinance.persistence.dao.dao_implementations.DateUnitDAOImplForTest;
@@ -15,9 +17,14 @@ import com.makco.smartfinance.persistence.entity.CategoryGroupCredit;
 import com.makco.smartfinance.persistence.entity.DateUnit;
 import com.makco.smartfinance.persistence.entity.FamilyMember;
 import com.makco.smartfinance.persistence.entity.Tax;
+import com.makco.smartfinance.persistence.entity.session.invoice_management.v1.Invoice_v1;
+import com.makco.smartfinance.persistence.entity.session.invoice_management.v1.Item_v1;
+import com.makco.smartfinance.persistence.entity.session.invoice_management.v1.Organization_v1;
 import com.makco.smartfinance.persistence.entity.session.invoice_management.v2.Invoice_v2;
 import com.makco.smartfinance.persistence.entity.session.invoice_management.v2.Item_v2;
 import com.makco.smartfinance.persistence.entity.session.invoice_management.v2.Organization_v2;
+import com.makco.smartfinance.persistence.utils.DateUnitUtil;
+import com.makco.smartfinance.utils.Logs;
 import com.makco.smartfinance.utils.RandomWithinRange;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -25,11 +32,17 @@ import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
+import java.io.PrintWriter;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Month;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
 
@@ -214,7 +227,7 @@ public class InvoiceDAOImplTest_v2 {
     }
 
 
-    //todo tests
+    @Test
     public void test_Invoice_v2_benchmark() throws Exception{
         /*
         comment any logs in triggers and daos
@@ -229,5 +242,146 @@ public class InvoiceDAOImplTest_v2 {
         item
         create around 20_000 invoices with organizations
          */
+
+        int random = randomWithinRange.getRandom();
+        Long startProcessing;
+        Long endProcessing;
+        String testName = "benchmark invoice_v2 ";
+
+        /////////////////////DATES
+        LocalDate Jan_01_2011 = LocalDate.of(2011, Month.JANUARY, 1);
+        LocalDate now = LocalDate.now();
+
+        List<DateUnit> dateUnitList_2011ToNow = DateUnitUtil.getListOfDateUnitEntities(Jan_01_2011, now);
+
+        Set<DateUnit> dateUnitList_toCreate_Set = new HashSet<>(dateUnitList_2011ToNow);
+        Set<DateUnit> dateUnitList_DB_Set = new HashSet<>(dateUnitDAO.dateUnitList());
+        dateUnitList_toCreate_Set.removeAll(dateUnitList_DB_Set);
+        List<DateUnit> dateUnitList_toCreate_List = new ArrayList<>(dateUnitList_toCreate_Set);
+
+        for(List<DateUnit> batch : Lists.partition(dateUnitList_toCreate_List, DataBaseConstants.BATCH_SIZE)) {
+            dateUnitDAO.addDateUnitList(batch);
+        }
+
+        RandomWithinRange dateRandom = new RandomWithinRange(0, dateUnitList_2011ToNow.size() - 1);
+        /////////////////////Family
+        FamilyMember familyMember1 = new FamilyMember("FM-1-" + random, testName + "family member1 desc");
+        familyMemberDAO.saveOrUpdateFamilyMember(familyMember1);
+
+        FamilyMember familyMember2 = new FamilyMember("FM-2-" + random, testName + "family member2 desc");
+        familyMemberDAO.saveOrUpdateFamilyMember(familyMember2);
+
+        FamilyMember familyMember3 = new FamilyMember("FM-3-" + random, testName + "family member3 desc");
+        familyMemberDAO.saveOrUpdateFamilyMember(familyMember3);
+
+        List<FamilyMember> familyMemberList = new ArrayList<>();
+        familyMemberList.add(familyMember1);
+        familyMemberList.add(familyMember2);
+        familyMemberList.add(familyMember3);
+        RandomWithinRange familyRandom = new RandomWithinRange(0, familyMemberList.size() - 1);
+        /////////////////////Category
+        CategoryGroup categoryGroup1 = new CategoryGroupCredit("CG cr1-" + random, testName + "category group credit 1");
+        Category category11 = new CategoryCredit(categoryGroup1, "C cr1-1-" + random, testName + "category credit 1-1");
+        Category category12 = new CategoryCredit(categoryGroup1, "C cr1-2-" + random, testName + "category credit 1-2");
+        Category category13 = new CategoryCredit(categoryGroup1, "C cr1-3-" + random, testName + "category credit 1-3");
+
+        CategoryGroup categoryGroup2 = new CategoryGroupCredit("CG cr2-" + random, testName + "category group credit 2");
+        Category category21 = new CategoryCredit(categoryGroup1, "C cr2-1-" + random, testName + "category credit 2-1");
+        Category category22 = new CategoryCredit(categoryGroup1, "C cr2-2-" + random, testName + "category credit 2-2");
+        Category category23 = new CategoryCredit(categoryGroup1, "C cr2-3-" + random, testName + "category credit 2-3");
+
+        CategoryGroup categoryGroup3 = new CategoryGroupCredit("CG cr3-" + random, testName + "category group credit 3");
+        Category category31 = new CategoryCredit(categoryGroup1, "C cr3-1-" + random, testName + "category credit 3-1");
+        Category category32 = new CategoryCredit(categoryGroup1, "C cr3-2-" + random, testName + "category credit 3-2");
+        Category category33 = new CategoryCredit(categoryGroup1, "C cr3-3-" + random, testName + "category credit 3-3");
+        Category category34 = new CategoryCredit(categoryGroup1, "C cr3-4-" + random, testName + "category credit 3-4");
+
+        categoryGroupDAOImplForTest.saveOrUpdateCategoryGroup(categoryGroup1);
+        categoryGroupDAOImplForTest.saveOrUpdateCategoryGroup(categoryGroup2);
+        categoryGroupDAOImplForTest.saveOrUpdateCategoryGroup(categoryGroup3);
+        categoryDAOImplForTest.saveOrUpdateCategory(category11);
+        categoryDAOImplForTest.saveOrUpdateCategory(category12);
+        categoryDAOImplForTest.saveOrUpdateCategory(category13);
+        categoryDAOImplForTest.saveOrUpdateCategory(category21);
+        categoryDAOImplForTest.saveOrUpdateCategory(category22);
+        categoryDAOImplForTest.saveOrUpdateCategory(category23);
+        categoryDAOImplForTest.saveOrUpdateCategory(category31);
+        categoryDAOImplForTest.saveOrUpdateCategory(category32);
+        categoryDAOImplForTest.saveOrUpdateCategory(category33);
+        categoryDAOImplForTest.saveOrUpdateCategory(category34);
+
+        List<Category> categoryList = new ArrayList<>();
+        categoryList.add(category11);
+        categoryList.add(category12);
+        categoryList.add(category13);
+        categoryList.add(category21);
+        categoryList.add(category22);
+        categoryList.add(category23);
+        categoryList.add(category31);
+        categoryList.add(category32);
+        categoryList.add(category33);
+        categoryList.add(category34);
+        RandomWithinRange categoryRandom = new RandomWithinRange(0, categoryList.size() - 1);
+        /////////////////////Tax
+        Tax tax1 = new Tax("TX-1-" + random, testName + "tax1 desc", new BigDecimal("1"), "{NUM}+{RATE}", "{NUM}+1", null, null, null);
+        Tax tax2 = new Tax("TX-2-" + random, testName + "tax2 desc", new BigDecimal("2"), "{NUM}+{RATE}*2", "{NUM}+2*2", null, null, null);
+        Tax tax3 = new Tax("TX-3-" + random, " tax3 desc", new BigDecimal("3"), "{NUM}*{RATE}", "{NUM}*3", null, null, null);
+        taxDAO.saveOrUpdateTax(tax1);
+        taxDAO.saveOrUpdateTax(tax2);
+        taxDAO.saveOrUpdateTax(tax3);
+
+        List<Tax> taxList = new ArrayList<>();
+        taxList.add(tax1);
+        taxList.add(tax2);
+        taxList.add(tax3);
+        RandomWithinRange taxRandom = new RandomWithinRange(0, taxList.size() - 1);
+        /////////////////////ITEM
+        int itemAmount = 5;
+        /////////////////////BENCHMARK
+        int recordsAmount = 20_000;
+//        int recordsAmount = 1000;
+        try(PrintWriter printWriter = new PrintWriter("test_Invoice_v2_benchmark.log", "UTF-8");) {
+            for (int i = 0; i < recordsAmount; i++) {
+                startProcessing = System.nanoTime();
+
+                String organizationName = random + "-" + i;
+                Organization_v2 organization = new Organization_v2(organizationName, "org desc " + organizationName);
+
+                String invoiceNumber = random + "-" + i;
+                DateUnit dateUnit = dateUnitList_2011ToNow.get(dateRandom.getRandom());
+                Invoice_v2 invoice = new Invoice_v2(
+                        invoiceNumber,
+                        organization,
+                        dateUnit,
+                        "comment " + invoiceNumber);
+                List<Item_v2> items = new ArrayList<>();
+                for (int j = 0; j < itemAmount; j++) {
+                    Item_v2 item = new Item_v2(
+                            (j + 1),
+                            invoice,
+                            categoryList.get(categoryRandom.getRandom()),
+                            taxList.get(taxRandom.getRandom()),
+                            familyMemberList.get(familyRandom.getRandom()),
+                            dateUnit,
+                            "desc11",
+                            "desc21",
+                            "comment",
+                            new BigDecimal(Integer.toString(j)));
+                    items.add(item);
+                }
+
+                invoice.setItems(items);
+
+                invoiceDAOImpl_v2ForTest.saveOrUpdateInvoice(invoice);
+                endProcessing = System.nanoTime();
+
+                printWriter.append(">>>>invoice_v2" + i + "\ttime\t" + Logs.benchmarkCalcultaion(startProcessing, endProcessing) + "\tnanoTime\t" + (endProcessing - startProcessing));
+                printWriter.append("\r\n");
+
+                if (i % 10 == 0) {
+                    Thread.sleep(100);
+                }
+            }
+        }
     }
 }

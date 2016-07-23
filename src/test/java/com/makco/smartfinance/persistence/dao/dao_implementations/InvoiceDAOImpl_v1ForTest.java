@@ -51,16 +51,16 @@ public class InvoiceDAOImpl_v1ForTest {
         Session session = null;
         Invoice_v1 invoice = null;
         try {
-            if(invoice != null) {
-                LOG.debug(String.format(">>>>InvoiceDAOImpl_v1ForTest->getInvoiceByIdWithItems->before transaction: dateunit=%s, subtotal=%s, total=%s",
-                        invoice.getSubTotal(),
-                        invoice.getTotal()));
-                LOG.debug(String.format(">>>>InvoiceDAOImpl_v1ForTest->getInvoiceByIdWithItems->before transaction: create=%s, update=%s",
-                        invoice.getCreatedOn(),
-                        invoice.getUpdatedOn()));
-            } else{
-                LOG.debug(">>>>InvoiceDAOImpl_v1ForTest->getInvoiceByIdWithItems->before transaction: invoice == null");
-            }
+//            if(invoice != null) {
+//                LOG.debug(String.format(">>>>InvoiceDAOImpl_v1ForTest->getInvoiceByIdWithItems->before transaction: dateunit=%s, subtotal=%s, total=%s",
+//                        invoice.getSubTotal(),
+//                        invoice.getTotal()));
+//                LOG.debug(String.format(">>>>InvoiceDAOImpl_v1ForTest->getInvoiceByIdWithItems->before transaction: create=%s, update=%s",
+//                        invoice.getCreatedOn(),
+//                        invoice.getUpdatedOn()));
+//            } else{
+//                LOG.debug(">>>>InvoiceDAOImpl_v1ForTest->getInvoiceByIdWithItems->before transaction: invoice == null");
+//            }
 
             session = TestPersistenceSession.openSession();
             session.beginTransaction();
@@ -74,17 +74,17 @@ public class InvoiceDAOImpl_v1ForTest {
             }
             session.getTransaction().commit();
 
-            if(invoice != null) {
-                LOG.debug(String.format(">>>>InvoiceDAOImpl_v1ForTest->getInvoiceByIdWithItems->after commit: dateunit=%s, subtotal=%s, total=%s",
-                        invoice.getDateUnit(),
-                        invoice.getSubTotal(),
-                        invoice.getTotal()));
-                LOG.debug(String.format(">>>>InvoiceDAOImpl_v1ForTest->getInvoiceByIdWithItems->after commit: create=%s, update=%s",
-                        invoice.getCreatedOn(),
-                        invoice.getUpdatedOn()));
-            } else{
-                LOG.debug(">>>>InvoiceDAOImpl_v1ForTest->getInvoiceByIdWithItems->before transaction: invoice == null");
-            }
+//            if(invoice != null) {
+//                LOG.debug(String.format(">>>>InvoiceDAOImpl_v1ForTest->getInvoiceByIdWithItems->after commit: dateunit=%s, subtotal=%s, total=%s",
+//                        invoice.getDateUnit(),
+//                        invoice.getSubTotal(),
+//                        invoice.getTotal()));
+//                LOG.debug(String.format(">>>>InvoiceDAOImpl_v1ForTest->getInvoiceByIdWithItems->after commit: create=%s, update=%s",
+//                        invoice.getCreatedOn(),
+//                        invoice.getUpdatedOn()));
+//            } else{
+//                LOG.debug(">>>>InvoiceDAOImpl_v1ForTest->getInvoiceByIdWithItems->before transaction: invoice == null");
+//            }
         } catch (Exception e) {
             try {
                 if (session.getTransaction().getStatus() == TransactionStatus.ACTIVE
@@ -100,17 +100,17 @@ public class InvoiceDAOImpl_v1ForTest {
                 session.close();
             }
 
-            if(invoice != null) {
-                LOG.debug(String.format(">>>>InvoiceDAOImpl_v1ForTest->getInvoiceByIdWithItems->after close: dateunit=%s, subtotal=%s, total=%s",
-                        invoice.getDateUnit(),
-                        invoice.getSubTotal(),
-                        invoice.getTotal()));
-                LOG.debug(String.format(">>>>InvoiceDAOImpl_v1ForTest->getInvoiceByIdWithItems->after close: create=%s, update=%s",
-                        invoice.getCreatedOn(),
-                        invoice.getUpdatedOn()));
-            } else{
-                LOG.debug(">>>>InvoiceDAOImpl_v1ForTest->getInvoiceByIdWithItems->before transaction: invoice == null");
-            }
+//            if(invoice != null) {
+//                LOG.debug(String.format(">>>>InvoiceDAOImpl_v1ForTest->getInvoiceByIdWithItems->after close: dateunit=%s, subtotal=%s, total=%s",
+//                        invoice.getDateUnit(),
+//                        invoice.getSubTotal(),
+//                        invoice.getTotal()));
+//                LOG.debug(String.format(">>>>InvoiceDAOImpl_v1ForTest->getInvoiceByIdWithItems->after close: create=%s, update=%s",
+//                        invoice.getCreatedOn(),
+//                        invoice.getUpdatedOn()));
+//            } else{
+//                LOG.debug(">>>>InvoiceDAOImpl_v1ForTest->getInvoiceByIdWithItems->before transaction: invoice == null");
+//            }
         }
         return invoice;
     }
@@ -280,25 +280,25 @@ public class InvoiceDAOImpl_v1ForTest {
 
         Session session = null;
         try {
-            LOG.debug(String.format(">>>>InvoiceDAOImpl_v1ForTest->saveOrUpdateInvoice->before transaction: dateunit=%s, subtotal=%s, total=%s",
-                    invoice.getDateUnit(),
-                    invoice.getSubTotal(),
-                    invoice.getTotal()));
-            LOG.debug(String.format(">>>>InvoiceDAOImpl_v1ForTest->saveOrUpdateInvoice->before transaction: create=%s, update=%s",
-                    invoice.getCreatedOn(),
-                    invoice.getUpdatedOn()));
+//            LOG.debug(String.format(">>>>InvoiceDAOImpl_v1ForTest->saveOrUpdateInvoice->before transaction: dateunit=%s, subtotal=%s, total=%s",
+//                    invoice.getDateUnit(),
+//                    invoice.getSubTotal(),
+//                    invoice.getTotal()));
+//            LOG.debug(String.format(">>>>InvoiceDAOImpl_v1ForTest->saveOrUpdateInvoice->before transaction: create=%s, update=%s",
+//                    invoice.getCreatedOn(),
+//                    invoice.getUpdatedOn()));
             session = TestPersistenceSession.openSession();
             session.beginTransaction();
             session.saveOrUpdate(invoice);
 
             session.getTransaction().commit();
-            LOG.debug(String.format(">>>>InvoiceDAOImpl_v1ForTest->saveOrUpdateInvoice->after commit: dateunit=%s, subtotal=%s, total=%s",
-                    invoice.getDateUnit(),
-                    invoice.getSubTotal(),
-                    invoice.getTotal()));
-            LOG.debug(String.format(">>>>InvoiceDAOImpl_v1ForTest->saveOrUpdateInvoice->after commit: create=%s, update=%s",
-                    invoice.getCreatedOn(),
-                    invoice.getUpdatedOn()));
+//            LOG.debug(String.format(">>>>InvoiceDAOImpl_v1ForTest->saveOrUpdateInvoice->after commit: dateunit=%s, subtotal=%s, total=%s",
+//                    invoice.getDateUnit(),
+//                    invoice.getSubTotal(),
+//                    invoice.getTotal()));
+//            LOG.debug(String.format(">>>>InvoiceDAOImpl_v1ForTest->saveOrUpdateInvoice->after commit: create=%s, update=%s",
+//                    invoice.getCreatedOn(),
+//                    invoice.getUpdatedOn()));
         } catch (Exception e) {
             try {
                 if (session.getTransaction().getStatus() == TransactionStatus.ACTIVE
@@ -313,13 +313,13 @@ public class InvoiceDAOImpl_v1ForTest {
             if (session != null) {
                 session.close();
             }
-            LOG.debug(String.format(">>>>InvoiceDAOImpl_v1ForTest->saveOrUpdateInvoice->after close: dateunit=%s, subtotal=%s, total=%s",
-                    invoice.getDateUnit(),
-                    invoice.getSubTotal(),
-                    invoice.getTotal()));
-            LOG.debug(String.format(">>>>InvoiceDAOImpl_v1ForTest->saveOrUpdateInvoice->after close: create=%s, update=%s",
-                    invoice.getCreatedOn(),
-                    invoice.getUpdatedOn()));
+//            LOG.debug(String.format(">>>>InvoiceDAOImpl_v1ForTest->saveOrUpdateInvoice->after close: dateunit=%s, subtotal=%s, total=%s",
+//                    invoice.getDateUnit(),
+//                    invoice.getSubTotal(),
+//                    invoice.getTotal()));
+//            LOG.debug(String.format(">>>>InvoiceDAOImpl_v1ForTest->saveOrUpdateInvoice->after close: create=%s, update=%s",
+//                    invoice.getCreatedOn(),
+//                    invoice.getUpdatedOn()));
         }
     }
 }
