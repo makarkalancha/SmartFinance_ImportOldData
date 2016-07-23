@@ -104,6 +104,56 @@ public class InvoiceDAOImpl_v1ForTest {
         return invoice_v1;
     }
 
+    public Invoice_v1 merge(Invoice_v1 invoice_v1) throws Exception {
+        Session session = null;
+        try {
+            session = TestPersistenceSession.openSession();
+            session.beginTransaction();
+            session.merge(invoice_v1);
+            session.getTransaction().commit();
+        } catch (Exception e) {
+            try {
+                if (session.getTransaction().getStatus() == TransactionStatus.ACTIVE
+                        || session.getTransaction().getStatus() == TransactionStatus.MARKED_ROLLBACK)
+                    session.getTransaction().rollback();
+            } catch (Exception rbEx) {
+                LOG.error("Rollback of transaction failed, trace follows!");
+                LOG.error(rbEx, rbEx);
+            }
+            throw new RuntimeException(e);
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+        return invoice_v1;
+    }
+
+    public Invoice_v1 update(Invoice_v1 invoice_v1) throws Exception {
+        Session session = null;
+        try {
+            session = TestPersistenceSession.openSession();
+            session.beginTransaction();
+            session.update(invoice_v1);
+            session.getTransaction().commit();
+        } catch (Exception e) {
+            try {
+                if (session.getTransaction().getStatus() == TransactionStatus.ACTIVE
+                        || session.getTransaction().getStatus() == TransactionStatus.MARKED_ROLLBACK)
+                    session.getTransaction().rollback();
+            } catch (Exception rbEx) {
+                LOG.error("Rollback of transaction failed, trace follows!");
+                LOG.error(rbEx, rbEx);
+            }
+            throw new RuntimeException(e);
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+        return invoice_v1;
+    }
+
     public List<Invoice_v1> getInvoiceByNumber(String invoiceNumber) throws Exception {
         Session session = null;
         List<Invoice_v1> invoices = new ArrayList<>();
@@ -197,6 +247,7 @@ public class InvoiceDAOImpl_v1ForTest {
             session = TestPersistenceSession.openSession();
             session.beginTransaction();
             session.saveOrUpdate(invoice);
+
             session.getTransaction().commit();
         } catch (Exception e) {
             try {

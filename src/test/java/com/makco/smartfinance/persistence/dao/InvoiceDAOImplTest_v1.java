@@ -121,14 +121,21 @@ public class InvoiceDAOImplTest_v1 {
         prep162: insert into TEST.ORGANIZATION
         prep164: insert into TEST.INVOICE
         prep167: insert into TEST.ITEM
+
+        saveOrUpdateInvoice-> didn't help
+            session.flush();
+            session.clear();
          */
-//        invoiceDAOImpl_v1ForTest.saveOrUpdateInvoice(invoice);
+//        invoiceDAOImpl_v1ForTest.saveOrUpdateInvoice(invoice); //works
+//        invoiceDAOImpl_v1ForTest.update(invoice); //works
+//        invoiceDAOImpl_v1ForTest.merge(invoice); //doesn't work
+//        invoiceDAOImpl_v1ForTest.refresh(invoice); //doesn't work
 
         LOG.debug(">>>invoice: " + invoice);
         assert(invoice.getId() != null);
         assertEquals(4, invoice.getItems().size());
-//        assertEquals(0, new BigDecimal("10").compareTo(invoice.getSubTotal()));//(!!!!) fail, but if you do another saveOrUpdateInvoice right after first one this line will be valid
-//        assertEquals(0, new BigDecimal("12").compareTo(invoice.getTotal()));//(!!!!) fail, but if you do another saveOrUpdateInvoice right after first one this line will be valid
+        assertEquals(0, new BigDecimal("10").compareTo(invoice.getSubTotal()));//(!!!!) fail, but if you do another saveOrUpdateInvoice right after first one this line will be valid
+        assertEquals(0, new BigDecimal("12").compareTo(invoice.getTotal()));//(!!!!) fail, but if you do another saveOrUpdateInvoice right after first one this line will be valid
         assert(invoice.getCreatedOn() != null);
         assert(invoice.getUpdatedOn() != null);
 
