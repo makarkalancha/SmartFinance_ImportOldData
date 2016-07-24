@@ -1,3 +1,4 @@
+--SmartFinance\database_engine\src\main\resources\db\migration\V16__invoice_notr.sql
 CREATE SEQUENCE IF NOT EXISTS SEQ_INVOICE_NOTR;
 CREATE TABLE INVOICE_NOTR(
 ID BIGINT DEFAULT SEQ_INVOICE_NOTR.NEXTVAL PRIMARY KEY,

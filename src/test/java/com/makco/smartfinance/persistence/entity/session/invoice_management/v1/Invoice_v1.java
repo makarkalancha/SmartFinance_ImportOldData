@@ -31,6 +31,16 @@ import java.util.List;
 /**
  * Created by Makar Kalancha on 2016-07-18
  * v1
+ * \SmartFinance\src\test\java\com\makco\smartfinance\persistence\entity\session\invoice_management\Invoice_v1_vs_Invoice_v2_benchmark.ods
+ * trigger version faster than non-trigger
+ *
+ * 20_000 x 5 times -> total time:
+ * trigger->        26min 01sec 174millis 329466nano
+ * non-trigger->    29min 36sec 90millis 327361nano
+ *
+ * 20_000 x 5 times -> average time:
+ * trigger->        15millis 611743nano
+ * non-trigger->    17millis 760903nano
  */
 @Entity
 @Table(name = "INVOICE",
@@ -92,7 +102,7 @@ public class Invoice_v1 implements Serializable {
 
     /*
     investigate
-    D:\SRC\smartFinance_workspace\SmartFinance\src\test\java\com\makco\smartfinance\persistence\entity\session\invoice_management\v1\Invoice_v1_query.ods
+    \SmartFinance\src\test\java\com\makco\smartfinance\persistence\entity\session\invoice_management\v1\Invoice_v1_query.ods
      */
     //one extra select query to fetch subtotal and total
 //    @org.hibernate.annotations.Generated(
@@ -103,7 +113,7 @@ public class Invoice_v1 implements Serializable {
 
     /*
     investigate
-    D:\SRC\smartFinance_workspace\SmartFinance\src\test\java\com\makco\smartfinance\persistence\entity\session\invoice_management\v1\Invoice_v1_query.ods
+    \SmartFinance\src\test\java\com\makco\smartfinance\persistence\entity\session\invoice_management\v1\Invoice_v1_query.ods
     */
     //one extra select query to fetch subtotal and total
 //    @org.hibernate.annotations.Generated(

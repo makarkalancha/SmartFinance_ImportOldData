@@ -3,12 +3,13 @@ git_config_original_bitbucket.txt
 git_config_original_github.txt
 ============================================================================================================================================
 INVOICE:
-Invoice_v1_vs_Invoice_v2_benchmark.ods
 test_Invoice_v1_benchmark.log
 test_Invoice_v2_benchmark.log
--D:\SRC\smartFinance_workspace\SmartFinance\src\test\java\com\makco\smartfinance\persistence\dao\dao_implementations\
+-\SmartFinance\src\test\java\com\makco\smartfinance\persistence\dao\dao_implementations\
 --InvoiceDAOImpl_v1ForTest.log
--D:\SRC\smartFinance_workspace\SmartFinance\src\test\java\com\makco\smartfinance\persistence\entity\session\invoice_management\v1\
+-\SmartFinance\src\test\java\com\makco\smartfinance\persistence\entity\session\invoice_management
+--Invoice_v1_vs_Invoice_v2_benchmark.ods
+-\SmartFinance\src\test\java\com\makco\smartfinance\persistence\entity\session\invoice_management\v1\
 --Invoice_v1_query.ods
 --Invoice_v1_Subtotal_Total_GenerationTime.ALWAYS.log
 --Invoice_v1_Subtotal_Total_NO_GenerationTime.ALWAYS.log
@@ -19,7 +20,7 @@ test_Invoice_v2_benchmark.log
 --Invoice_v1_withoutGetById.log
 ============================================================================================================================================
 ITEM:
--D:\SRC\smartFinance_workspace\SmartFinance\src\test\java\com\makco\smartfinance\persistence\dao\dao_implementations\
+-\SmartFinance\src\test\java\com\makco\smartfinance\persistence\dao\dao_implementations\
 --ItemDAOImpl_v1ForTest.log
 ============================================================================================================================================
 TAX:
@@ -27,7 +28,7 @@ Tax_test_42_select_benchMark.log
 test_Tax_42_select_benchMark.ods
 ============================================================================================================================================
 CATEGORY MANAGEMENT:
--D:\SRC\smartFinance_workspace\SmartFinance\src\test\java\com\makco\smartfinance\persistence\dao\dao_implementations\
+-\SmartFinance\src\test\java\com\makco\smartfinance\persistence\dao\dao_implementations\
 --CategoryGroupList_hibernateInitialize.log
 --CategoryGroupSaveOrUpdate.log
 --CategoryGroupSaveOrUpdateWithMerge.log
@@ -37,8 +38,8 @@ CATEGORY MANAGEMENT:
 --CategoryGroupSelectCGDebitHibernateInitialize_byName.log
 --CategoryGroupSelectCGDebitHibernateInitialize_credit_byType.log
 --CategoryGroupSelectCGDebitLeftJoinFetch.log
--D:\SRC\smartFinance_workspace\SmartFinance\src\test\java\com\makco\smartfinance\persistence\entity\session\category_management\v1
+-\SmartFinance\src\test\java\com\makco\smartfinance\persistence\entity\session\category_management\v1
 --v1_read.me
--D:\SRC\smartFinance_workspace\SmartFinance\src\test\java\com\makco\smartfinance\persistence\entity\session\category_management\v2
+-\SmartFinance\src\test\java\com\makco\smartfinance\persistence\entity\session\category_management\v2
 --v2_read.me
 --

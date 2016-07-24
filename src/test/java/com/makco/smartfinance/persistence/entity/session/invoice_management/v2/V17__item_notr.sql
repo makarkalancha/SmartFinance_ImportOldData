@@ -1,3 +1,4 @@
+--\SmartFinance\database_engine\src\main\resources\db\migration\V17__item_notr.sql
 CREATE SEQUENCE IF NOT EXISTS SEQ_ITEM_NOTR;
 CREATE TABLE ITEM_NOTR(
 ID BIGINT DEFAULT SEQ_ITEM_NOTR.NEXTVAL PRIMARY KEY,
