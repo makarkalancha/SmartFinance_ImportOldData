@@ -110,7 +110,7 @@ public class CategoryGroupDAOImplForTest {
                 //http://stackoverflow.com/questions/12199874/about-the-use-of-forcediscriminator-discriminatoroptionsforce-true
                 //http://stackoverflow.com/questions/19928568/hibernate-best-practice-to-pull-all-lazy-collections
 
-                //todo change to JPQL
+                ////JPQL doesn't work because of inheritance
                 Hibernate.initialize(categoryGroup.getCategories());
             }
             session.getTransaction().commit();
@@ -152,7 +152,7 @@ public class CategoryGroupDAOImplForTest {
                     //http://stackoverflow.com/questions/12199874/about-the-use-of-forcediscriminator-discriminatoroptionsforce-true
                     //http://stackoverflow.com/questions/19928568/hibernate-best-practice-to-pull-all-lazy-collections
 
-                    //todo change to JPQL
+                    ////JPQL doesn't work because of inheritance
                     Hibernate.initialize(categoryGroup.getCategories());
                 }
             }
@@ -222,7 +222,7 @@ public class CategoryGroupDAOImplForTest {
                 //http://stackoverflow.com/questions/12199874/about-the-use-of-forcediscriminator-discriminatoroptionsforce-true
                 //http://stackoverflow.com/questions/19928568/hibernate-best-practice-to-pull-all-lazy-collections
 
-                //todo change to JPQL
+                ////JPQL doesn't work because of inheritance
                 Hibernate.initialize(categoryGroup.getCategories());
             }
             session.getTransaction().commit();
@@ -304,7 +304,7 @@ public class CategoryGroupDAOImplForTest {
                     //http://stackoverflow.com/questions/12199874/about-the-use-of-forcediscriminator-discriminatoroptionsforce-true
                     //http://stackoverflow.com/questions/19928568/hibernate-best-practice-to-pull-all-lazy-collections
 
-                    //todo change to JPQL
+                    ////JPQL doesn't work because of inheritance
                     Hibernate.initialize(categoryGroup.getCategories());
                 }
             }
@@ -412,7 +412,7 @@ public class CategoryGroupDAOImplForTest {
                     //http://stackoverflow.com/questions/12199874/about-the-use-of-forcediscriminator-discriminatoroptionsforce-true
                     //http://stackoverflow.com/questions/19928568/hibernate-best-practice-to-pull-all-lazy-collections
 
-                    //todo change to JPQL
+                    ////JPQL doesn't work because of inheritance
                     Hibernate.initialize(categoryGroup.getCategories());
                 }
             }
@@ -485,7 +485,7 @@ public class CategoryGroupDAOImplForTest {
                     //http://stackoverflow.com/questions/12199874/about-the-use-of-forcediscriminator-discriminatoroptionsforce-true
                     //http://stackoverflow.com/questions/19928568/hibernate-best-practice-to-pull-all-lazy-collections
 
-                    //todo change to JPQL
+                    ////JPQL doesn't work because of inheritance
                     Hibernate.initialize(categoryGroup.getCategories());
                 }
             }
@@ -526,7 +526,7 @@ public class CategoryGroupDAOImplForTest {
                     //http://stackoverflow.com/questions/12199874/about-the-use-of-forcediscriminator-discriminatoroptionsforce-true
                     //http://stackoverflow.com/questions/19928568/hibernate-best-practice-to-pull-all-lazy-collections
 
-                    //todo change to JPQL
+                    ////JPQL doesn't work because of inheritance
                     Hibernate.initialize(categoryGroup.getCategories());
                 }
             }

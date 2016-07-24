@@ -203,7 +203,6 @@ public class InvoiceDAOImplTest_v2 {
         long itemId3 = item3.getId();
         long itemId4 = item4.getId();
 
-        //todo fails here
         invoiceDAOImpl_v2ForTest.removeInvoice(invoiceId);
 
         Invoice_v2 invoice_v2_2 = invoiceDAOImpl_v2ForTest.getInvoiceByIdWithItems(invoiceId);

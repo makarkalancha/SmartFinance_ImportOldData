@@ -149,7 +149,7 @@ public class AccountGroupDAOImpl implements AccountGroupDAO{
             session.beginTransaction();
             accountGroup = (AccountGroup) session.get(AccountGroup.class, id);
             if(initializeCategories && accountGroup != null){
-                //todo change to JPQL
+                ////JPQL doesn't work because of inheritance
                 Hibernate.initialize(accountGroup.getAccounts());
             }
             session.getTransaction().commit();

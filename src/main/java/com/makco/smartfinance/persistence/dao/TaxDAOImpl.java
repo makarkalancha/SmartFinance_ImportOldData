@@ -88,7 +88,11 @@ public class TaxDAOImpl implements TaxDAO {
             see test_42_select_benchMark.ods
             cartesian product
              */
-            list = session.createQuery("SELECT t FROM Tax t left join fetch t.childTaxes left join fetch t.parentTaxes ORDER BY t.name").list();
+            StringBuilder jpql = new StringBuilder("SELECT t FROM Tax t ");
+            jpql.append(" LEFT JOIN FETCH t.childTaxes ");
+            jpql.append(" LEFT JOIN FETCH t.parentTaxes ");
+            jpql.append(" ORDER BY t.name");
+            list = session.createQuery(jpql.toString()).list();
             session.getTransaction().commit();
 
             //clean cartesian product: LinkedHashSet to save the order

@@ -75,8 +75,6 @@ public class InvoiceDAOImplTest_v1 {
     public void test_11_saveInvoice() throws Exception {
         int randomInt = randomWithinRange.getRandom();
 
-        //todo Caused by: org.hibernate.QueryException: could not resolve property: unitDate of: com.makco.smartfinance.persistence.entity.DateUnit
-
         List<DateUnit> dates = dateUnitDAO.dateUnitList();
         DateUnit dateUnit = new DateUnit(LocalDate.now());
         if(dates.isEmpty()) {
@@ -226,13 +224,13 @@ public class InvoiceDAOImplTest_v1 {
         LOG.debug(">>>invoice: " + invoice);
         assert(invoice.getId() != null);
         assertEquals(5, invoice.getItems().size());
-        assertEquals(0, new BigDecimal("15").compareTo(invoice.getSubTotal()));
-        assertEquals(0, new BigDecimal("18").compareTo(invoice.getTotal()));
+//        assertEquals(0, new BigDecimal("15").compareTo(invoice.getSubTotal()));
+//        assertEquals(0, new BigDecimal("18").compareTo(invoice.getTotal()));
         assert(invoice.getCreatedOn() != null);
         assert(invoice.getUpdatedOn() != null);
 
-//        Invoice_v1 invoice1 = invoiceDAOImpl_v1ForTest.getInvoiceByIdWithItems(invoice.getId()); //pass
-        Invoice_v1 invoice1 = invoice; //fail
+        Invoice_v1 invoice1 = invoiceDAOImpl_v1ForTest.getInvoiceByIdWithItems(invoice.getId()); //pass
+//        Invoice_v1 invoice1 = invoice; //fail
 //        Invoice_v1 invoice1 = invoiceDAOImpl_v1ForTest.refresh(invoice);//fail
         LOG.debug(">>>invoice1: " + invoice1);
         assert(invoice1.getId() != null);
@@ -258,7 +256,6 @@ public class InvoiceDAOImplTest_v1 {
     }
 
     @Test
-    //todo
     public void test_22_updateInvoice_removingItem() throws Exception {
         int randomInt = randomWithinRange.getRandom();
 
@@ -310,14 +307,14 @@ public class InvoiceDAOImplTest_v1 {
 //        assert(invoice.getCreatedOn() != null);
 //        assert(invoice.getUpdatedOn() != null);
 
-//        Invoice_v1 invoice1 = invoiceDAOImpl_v1ForTest.getInvoiceByIdWithItems(invoice.getId()); //pass
-        Invoice_v1 invoice1 = invoice; //fail
+        Invoice_v1 invoice1 = invoiceDAOImpl_v1ForTest.getInvoiceByIdWithItems(invoice.getId()); //pass
+//        Invoice_v1 invoice1 = invoice; //fail
 //        Invoice_v1 invoice1 = invoiceDAOImpl_v1ForTest.refresh(invoice);//fail
         LOG.debug(">>>invoice1: " + invoice1);
         assert(invoice1.getId() != null);
-        assertEquals(5, invoice1.getItems().size());
-        assertEquals(0, new BigDecimal("15").compareTo(invoice1.getSubTotal()));
-        assertEquals(0, new BigDecimal("18").compareTo(invoice1.getTotal()));
+        assertEquals(3, invoice1.getItems().size());
+        assertEquals(0, new BigDecimal("9").compareTo(invoice1.getSubTotal()));
+        assertEquals(0, new BigDecimal("10").compareTo(invoice1.getTotal()));
         assert(invoice1.getCreatedOn() != null);
         assert(invoice1.getUpdatedOn() != null);
 
@@ -326,7 +323,7 @@ public class InvoiceDAOImplTest_v1 {
             Item_v1 item_v1 = items.get(i);
             LOG.debug(">>>item_v1: " + item_v1);
             assert (item_v1.getId() != null);
-            assertEquals((int)(i + 1), (int) item_v1.getOrderNumber());
+            assertEquals((int)(i + 2), (int) item_v1.getOrderNumber());
             assert (item_v1.getCategory() != null);
             assert (item_v1.getTax() != null);
             assert (item_v1.getFamilyMember() != null);
@@ -392,7 +389,6 @@ public class InvoiceDAOImplTest_v1 {
         long itemId3 = item3.getId();
         long itemId4 = item4.getId();
 
-        //todo fails here
         invoiceDAOImpl_v1ForTest.removeInvoice(invoiceId);
 
         Invoice_v1 invoice_v1_2 = invoiceDAOImpl_v1ForTest.getInvoiceByIdWithItems(invoiceId);
@@ -415,7 +411,6 @@ public class InvoiceDAOImplTest_v1 {
         assert(item_v1_2_4 == null);
 
     }
-
 
 //    @Test
     public void test_Invoice_v1_benchmark() throws Exception{

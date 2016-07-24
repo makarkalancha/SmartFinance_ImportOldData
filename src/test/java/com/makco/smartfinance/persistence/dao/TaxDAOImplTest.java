@@ -126,7 +126,6 @@ public class TaxDAOImplTest {
         assert (retrievedChildTax2 != null);
     }
 
-
     @Test
     public void test_32_remove_ParentOfTax() throws Exception{
         int randomInt = randomWithinRange.getRandom();

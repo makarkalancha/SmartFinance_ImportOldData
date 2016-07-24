@@ -54,12 +54,20 @@ public class TaxDAOImpl_v1ForTest implements TaxDAO{
         try {
             session = TestPersistenceSession.openSession();
             session.beginTransaction();
-            tax = session.get(Tax.class, id);
-            if(tax != null) {
-                //todo change to JPQL
-                Hibernate.initialize(tax.getParentTaxes());
-                Hibernate.initialize(tax.getChildTaxes());
-            }
+//            tax = session.get(Tax.class, id);
+//            if(tax != null) {
+//                Hibernate.initialize(tax.getParentTaxes());
+//                Hibernate.initialize(tax.getChildTaxes());
+//            }
+            //JPQL
+            StringBuilder jpql = new StringBuilder("select t from Tax t ");
+            jpql.append(" left join fetch t.childTaxes ");
+            jpql.append(" left join fetch t.parentTaxes ");
+            jpql.append(" where t.id = :taxId");
+            tax = (Tax) session.createQuery(jpql.toString())
+                    .setParameter("taxId",id)
+                    .uniqueResult();
+
             session.getTransaction().commit();
         } catch (Exception e) {
             try {
@@ -292,7 +300,6 @@ WHERE parenttaxe0_.CHILD_TAX_ID=?
             ////http://stackoverflow.com/questions/12425835/jpql-manytomany-select
             list = session.createQuery("SELECT t FROM Tax t ORDER BY t.name").list();
             for(Tax tax : list) {
-                //todo change to JPQL
                 Hibernate.initialize(tax.getChildTaxes());
                 Hibernate.initialize(tax.getParentTaxes());
             }
