@@ -56,6 +56,7 @@ public class TaxDAOImpl_v1ForTest implements TaxDAO{
             session.beginTransaction();
             tax = session.get(Tax.class, id);
             if(tax != null) {
+                //todo change to JPQL
                 Hibernate.initialize(tax.getParentTaxes());
                 Hibernate.initialize(tax.getChildTaxes());
             }
@@ -291,6 +292,7 @@ WHERE parenttaxe0_.CHILD_TAX_ID=?
             ////http://stackoverflow.com/questions/12425835/jpql-manytomany-select
             list = session.createQuery("SELECT t FROM Tax t ORDER BY t.name").list();
             for(Tax tax : list) {
+                //todo change to JPQL
                 Hibernate.initialize(tax.getChildTaxes());
                 Hibernate.initialize(tax.getParentTaxes());
             }

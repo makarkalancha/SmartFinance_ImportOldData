@@ -101,6 +101,7 @@ public class ItemDAOImplTest_v1 {
 
         invoice.setItems(itemsToSave);
 
+//todo exception
         itemDAOImpl_v1ForTest.saveOrUpdateMultipleItem(itemsToSave);
 
         LOG.debug(">>>invoice: " + invoice);

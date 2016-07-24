@@ -109,6 +109,8 @@ public class CategoryGroup_v1DAOImplForTest {
                 //http://anshuiitk.blogspot.ca/2011/04/hibernate-wrongclassexception.html
                 //http://stackoverflow.com/questions/12199874/about-the-use-of-forcediscriminator-discriminatoroptionsforce-true
                 //http://stackoverflow.com/questions/19928568/hibernate-best-practice-to-pull-all-lazy-collections
+
+                //todo change to JPQL
                 Hibernate.initialize(categoryGroup_v1.getCategories());
             }
             session.getTransaction().commit();
@@ -149,6 +151,8 @@ public class CategoryGroup_v1DAOImplForTest {
                     //http://anshuiitk.blogspot.ca/2011/04/hibernate-wrongclassexception.html
                     //http://stackoverflow.com/questions/12199874/about-the-use-of-forcediscriminator-discriminatoroptionsforce-true
                     //http://stackoverflow.com/questions/19928568/hibernate-best-practice-to-pull-all-lazy-collections
+
+                    //todo change to JPQL
                     Hibernate.initialize(categoryGroup_v1.getCategories());
                 }
             }
@@ -217,6 +221,8 @@ public class CategoryGroup_v1DAOImplForTest {
                 //http://anshuiitk.blogspot.ca/2011/04/hibernate-wrongclassexception.html
                 //http://stackoverflow.com/questions/12199874/about-the-use-of-forcediscriminator-discriminatoroptionsforce-true
                 //http://stackoverflow.com/questions/19928568/hibernate-best-practice-to-pull-all-lazy-collections
+
+                //todo change to JPQL
                 Hibernate.initialize(categoryGroup_v1.getCategories());
             }
             session.getTransaction().commit();
@@ -297,6 +303,8 @@ public class CategoryGroup_v1DAOImplForTest {
                     //http://anshuiitk.blogspot.ca/2011/04/hibernate-wrongclassexception.html
                     //http://stackoverflow.com/questions/12199874/about-the-use-of-forcediscriminator-discriminatoroptionsforce-true
                     //http://stackoverflow.com/questions/19928568/hibernate-best-practice-to-pull-all-lazy-collections
+
+                    //todo change to JPQL
                     Hibernate.initialize(categoryGroup_v1.getCategories());
                 }
             }
@@ -405,6 +413,8 @@ public class CategoryGroup_v1DAOImplForTest {
                     //http://anshuiitk.blogspot.ca/2011/04/hibernate-wrongclassexception.html
                     //http://stackoverflow.com/questions/12199874/about-the-use-of-forcediscriminator-discriminatoroptionsforce-true
                     //http://stackoverflow.com/questions/19928568/hibernate-best-practice-to-pull-all-lazy-collections
+
+                    //todo change to JPQL
                     Hibernate.initialize(categoryGroup_v1.getCategories());
                 }
             }
@@ -476,6 +486,8 @@ public class CategoryGroup_v1DAOImplForTest {
                     //http://anshuiitk.blogspot.ca/2011/04/hibernate-wrongclassexception.html
                     //http://stackoverflow.com/questions/12199874/about-the-use-of-forcediscriminator-discriminatoroptionsforce-true
                     //http://stackoverflow.com/questions/19928568/hibernate-best-practice-to-pull-all-lazy-collections
+
+                    //todo change to JPQL
                     Hibernate.initialize(categoryGroup_v1.getCategories());
                 }
             }
@@ -515,6 +527,8 @@ public class CategoryGroup_v1DAOImplForTest {
                     //http://anshuiitk.blogspot.ca/2011/04/hibernate-wrongclassexception.html
                     //http://stackoverflow.com/questions/12199874/about-the-use-of-forcediscriminator-discriminatoroptionsforce-true
                     //http://stackoverflow.com/questions/19928568/hibernate-best-practice-to-pull-all-lazy-collections
+
+                    //todo change to JPQL
                     Hibernate.initialize(categoryGroup_v1.getCategories());
                 }
             }
