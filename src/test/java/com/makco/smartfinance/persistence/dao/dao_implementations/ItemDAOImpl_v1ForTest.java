@@ -126,6 +126,9 @@ public class ItemDAOImpl_v1ForTest {
         }
     }
 
+    /*
+    items cannot be saved without invoice first to be saved
+     */
     public void saveOrUpdateMultipleItem(List<Item_v1> item_v1_list) throws Exception {
 
         Session session = null;
