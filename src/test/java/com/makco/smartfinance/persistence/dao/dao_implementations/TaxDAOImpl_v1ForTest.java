@@ -317,11 +317,11 @@ WHERE parenttaxe0_.CHILD_TAX_ID=?
 
     public List<Tax> getTaxByName(String name) throws Exception {
         Session session = null;
-        List<Tax> taxs = new ArrayList<>();
+        List<Tax> taxes = new ArrayList<>();
         try {
             session = TestPersistenceSession.openSession();
             session.beginTransaction();
-            taxs = session.createQuery("SELECT t FROM Tax t WHERE name = :name ORDER BY t.name")
+            taxes = session.createQuery("SELECT t FROM Tax t WHERE name = :name ORDER BY t.name")
                     .setString("name", name)
                     .list();
             session.getTransaction().commit();
@@ -340,7 +340,7 @@ WHERE parenttaxe0_.CHILD_TAX_ID=?
                 session.close();
             }
         }
-        return taxs;
+        return taxes;
     }
 
     public void removeTax(Long id) throws Exception {

@@ -33,35 +33,35 @@ public class TaxServiceImpl implements TaxService {
 
     @Override
     public List<Tax> taxList() throws Exception {
-        List<Tax> taxs = new ArrayList<>();
+        List<Tax> taxes = new ArrayList<>();
         try {
-            taxs = taxDAO.taxList();
+            taxes = taxDAO.taxList();
         } catch (Exception e) {
             throw e;
         }
-        return taxs;
+        return taxes;
     }
 
     @Override
     public List<Tax> taxListWithChildren() throws Exception {
-        List<Tax> taxs = new ArrayList<>();
+        List<Tax> taxes = new ArrayList<>();
         try {
-            taxs = taxDAO.taxListWithAssociations();
+            taxes = taxDAO.taxListWithAssociations();
         } catch (Exception e) {
             throw e;
         }
-        return taxs;
+        return taxes;
     }
 
     @Override
     public List<Tax> getTaxByName(String name) throws Exception {
-        List<Tax> taxs = new ArrayList<>();
+        List<Tax> taxes = new ArrayList<>();
         try {
-            taxs = taxDAO.getTaxByName(name);
+            taxes = taxDAO.getTaxByName(name);
         } catch (Exception e) {
             throw e;
         }
-        return taxs;
+        return taxes;
     }
 
     @Override

@@ -115,11 +115,11 @@ public class TaxDAOImpl implements TaxDAO {
     @Override
     public List<Tax> getTaxByName(String name) throws Exception {
         Session session = null;
-        List<Tax> taxs = new ArrayList<>();
+        List<Tax> taxes = new ArrayList<>();
         try {
             session = HibernateUtil.openSession();
             session.beginTransaction();
-            taxs = session.createQuery("SELECT t FROM Tax t WHERE name = :name ORDER BY t.name")
+            taxes = session.createQuery("SELECT t FROM Tax t WHERE name = :name ORDER BY t.name")
                     .setString("name", name)
                     .list();
             session.getTransaction().commit();
@@ -138,7 +138,7 @@ public class TaxDAOImpl implements TaxDAO {
                 session.close();
             }
         }
-        return taxs;
+        return taxes;
     }
 
     @Override
