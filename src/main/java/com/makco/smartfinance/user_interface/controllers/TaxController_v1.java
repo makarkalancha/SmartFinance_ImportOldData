@@ -243,9 +243,9 @@ public class TaxController_v1 /*implements Initializable, ControlledScreen, Undo
                 populateTable();
 
                 /**
-                 * todo remove it after testing
+                 * for testing you can trigger button press
+                 * frmEdtBtn.fire();
                  */
-//                frmEdtBtn.fire();
             });
             ((Service<Void>) onRefreshWorker).setOnFailed(event -> {
                 LOG.debug("onRefreshWorker->setOnFailed");
