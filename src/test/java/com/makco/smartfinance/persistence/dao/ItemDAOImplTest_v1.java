@@ -179,7 +179,4 @@ public class ItemDAOImplTest_v1 {
             assert(item_v1.getUpdatedOn() != null);
         }
     }
-
-
-    //todo tests
 }

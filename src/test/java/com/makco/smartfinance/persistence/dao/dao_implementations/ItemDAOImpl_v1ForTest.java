@@ -127,7 +127,10 @@ public class ItemDAOImpl_v1ForTest {
     }
 
     /*
-    items cannot be saved without invoice first to be saved
+    -items cannot be saved without invoice first to be saved
+    -saveUpdate Item from InvoiceDAO
+    -select Items with Invoice from InvoiceDAO
+    -remove Item from ItemDAO
      */
     public void saveOrUpdateMultipleItem(List<Item_v1> item_v1_list) throws Exception {
 
@@ -135,7 +138,6 @@ public class ItemDAOImpl_v1ForTest {
         try {
             session = TestPersistenceSession.openSession();
             session.beginTransaction();
-
 
             /*
             batch saving is working if "cascade = CascadeType.ALL" is only in Item_v1
@@ -152,7 +154,7 @@ public class ItemDAOImpl_v1ForTest {
             it is enough to save item0 and invoice with other items will be saved:
 //            session.save(item_v1_list.get(0));
              */
-            //todo exception in (ItemDAOImplTest_v1.java:104)
+            //exception in (ItemDAOImplTest_v1.java:104)
             for (int i = 0; i < item_v1_list.size(); i++) {
                 LOG.debug(String.format(">>>>item_v1_list.get(%s): %s", i, item_v1_list.get(i).toString()));
                 session.save(item_v1_list.get(i));

@@ -63,7 +63,14 @@ public class Item_v1 implements Serializable {
     @NotNull
     private Integer orderNumber;
 
-    @ManyToOne(fetch = FetchType.EAGER/*, cascade = CascadeType.ALL*/)
+    /*
+    item cascade:
+    -if invoice is deleted -> items are deleted also from DB
+    -if item is deleted -> invoice remains in DB
+    with recalculated subtotal / total from trigger
+     */
+    //@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "INVOICE_ID", referencedColumnName = "ID", nullable = false)
     private Invoice_v1 invoice;
 
