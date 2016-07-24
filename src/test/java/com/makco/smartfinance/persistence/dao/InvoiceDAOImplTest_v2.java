@@ -375,10 +375,10 @@ public class InvoiceDAOImplTest_v2 {
                 invoiceDAOImpl_v2ForTest.saveOrUpdateInvoice(invoice);
                 endProcessing = System.nanoTime();
 
-                printWriter.append(">>>>invoice_v2" + i + "\ttime\t" + Logs.benchmarkCalcultaion(startProcessing, endProcessing) + "\tnanoTime\t" + (endProcessing - startProcessing));
+                printWriter.append(">>>>invoice_v2-" + i + "\ttime\t" + Logs.benchmarkCalcultaion(startProcessing, endProcessing) + "\tnanoTime\t" + (endProcessing - startProcessing));
                 printWriter.append("\r\n");
 
-                if (i % 10 == 0) {
+                if (i % 100 == 0) {
                     Thread.sleep(100);
                 }
             }
