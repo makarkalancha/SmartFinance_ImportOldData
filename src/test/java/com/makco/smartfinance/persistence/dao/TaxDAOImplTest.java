@@ -232,7 +232,7 @@ public class TaxDAOImplTest {
     public void test_42_select_benchMark() throws Exception {
         int cycle = 1_000;
         //in root project folder
-        try(PrintWriter printWriter = new PrintWriter("test_42_select_benchMark.log", "UTF-8");) {
+        try(PrintWriter printWriter = new PrintWriter("Tax_test_42_select_benchMark.log", "UTF-8");) {
             for (int i = 0; i < cycle; i++) {
                 long start1 = System.nanoTime();
                 List<Tax> taxList1 = taxDAO.taxListWithAssociations(); // throwLazyInitializationException

@@ -85,7 +85,7 @@ public class TaxDAOImpl implements TaxDAO {
             /*
             SmartFinance\src\test\java\com\makco\smartfinance\persistence\dao\dao_implementations\TaxDAOImpl_v1.java
             taxListWithChildrenAndParents_leftJoinFetch
-            see test_42_select_benchMark.ods
+            see test_Tax_42_select_benchMark.ods
             cartesian product
              */
             StringBuilder jpql = new StringBuilder("SELECT t FROM Tax t ");

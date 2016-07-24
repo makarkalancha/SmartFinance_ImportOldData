@@ -69,8 +69,11 @@ public class Invoice_v1 implements Serializable {
     )
     private String invoiceNumber;
 
-    //todo rethink if organization cascade all is needed
-    //todo invoice-items cascade all at invoice, not item is necessary, but other entities not
+    /*
+    organization cascade:
+    -if invoice is deleted -> organization remains in DB
+    -if organization is deleted -> exception is thrown
+     */
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "ORGANIZATION_ID", referencedColumnName = "ID", nullable = false)
     private Organization_v1 organization;
@@ -87,7 +90,10 @@ public class Invoice_v1 implements Serializable {
     )
     private String comment;
 
-    //todo investigate
+    /*
+    investigate
+    D:\SRC\smartFinance_workspace\SmartFinance\src\test\java\com\makco\smartfinance\persistence\entity\session\invoice_management\v1\Invoice_v1_query.ods
+     */
     //one extra select query to fetch subtotal and total
 //    @org.hibernate.annotations.Generated(
 //            GenerationTime.ALWAYS
@@ -95,7 +101,10 @@ public class Invoice_v1 implements Serializable {
     @Column(name = "SUB_TOTAL", insertable = false, updatable = false)
     private BigDecimal subTotal = new BigDecimal("0");
 
-//    //todo investigate
+    /*
+    investigate
+    D:\SRC\smartFinance_workspace\SmartFinance\src\test\java\com\makco\smartfinance\persistence\entity\session\invoice_management\v1\Invoice_v1_query.ods
+    */
     //one extra select query to fetch subtotal and total
 //    @org.hibernate.annotations.Generated(
 //            GenerationTime.ALWAYS
@@ -111,6 +120,12 @@ public class Invoice_v1 implements Serializable {
     @Column(name = "T_UPDATEDON", insertable = false, updatable = false)
     private Timestamp updatedOn;
 
+    /*
+    item cascade:
+    -if invoice is deleted -> items are deleted also from DB
+    -if item is deleted -> invoice remains in DB
+    with recalculated subtotal / total from trigger
+     */
     @OneToMany(mappedBy = "invoice", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 //    @JoinColumn(name = "DATEUNIT_UNITDAY", referencedColumnName = "UNITDAY", nullable = false)
     private List<Item_v1> items = new ArrayList<>();

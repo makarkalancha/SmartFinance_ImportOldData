@@ -114,7 +114,7 @@ public class TaxDAOImpl_v1ForTest implements TaxDAO{
     }
 
     /*
-    see test_42_select_benchMark.ods
+    see test_Tax_42_select_benchMark.ods
          100 times = 0:0:144,169106
          1_000 times = 0:0:95,216793
      */
@@ -151,7 +151,7 @@ public class TaxDAOImpl_v1ForTest implements TaxDAO{
     /*
     cartesian product: 2 left join
     fastest
-    see test_42_select_benchMark.ods
+    see test_Tax_42_select_benchMark.ods
     100 times = 0:0:178,10545
     1_000 times = 0:0:104,793171
 
@@ -232,7 +232,7 @@ ORDER BY tax0_.NAME
 
     /*
     select + 1
-    see test_42_select_benchMark.ods
+    see test_Tax_42_select_benchMark.ods
     100 times = 0:0:350,873650
     1_000 times = 0:0:277,691992
 
