@@ -64,14 +64,17 @@ public class InvoiceDAOImpl_v1ForTest {
 
             session = TestPersistenceSession.openSession();
             session.beginTransaction();
-            invoice = session.get(Invoice_v1.class, id);
-            if(invoice != null) {
-                Hibernate.initialize(invoice.getItems());
-                for(Item_v1 item_v1 : invoice.getItems()){
-                    Hibernate.initialize(item_v1.getTax());
-                    Hibernate.initialize(item_v1.getFamilyMember());
-                }
-            }
+//            invoice = session.get(Invoice_v1.class, id);
+//            if(invoice != null) {
+//                Hibernate.initialize(invoice.getItems());
+//                for(Item_v1 item_v1 : invoice.getItems()){
+//                    Hibernate.initialize(item_v1.getTax());
+//                    Hibernate.initialize(item_v1.getFamilyMember());
+//                }
+//            }
+            invoice = (Invoice_v1) session.createQuery("select i from Invoice_v1 i left join fetch i.items where i.id = :invoiceId")
+                    .setParameter("invoiceId", id)
+                    .uniqueResult();
             session.getTransaction().commit();
 
 //            if(invoice != null) {

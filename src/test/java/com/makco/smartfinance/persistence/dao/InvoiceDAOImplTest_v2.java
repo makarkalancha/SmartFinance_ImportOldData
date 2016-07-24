@@ -227,7 +227,7 @@ public class InvoiceDAOImplTest_v2 {
     }
 
 
-    @Test
+//    @Test
     public void test_Invoice_v2_benchmark() throws Exception{
         /*
         comment any logs in triggers and daos
