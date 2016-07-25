@@ -497,6 +497,7 @@ public class InvoiceDAOImplTest_v1 {
         int recordsAmount = 20_000;
 //        int recordsAmount = 1_000;
 
+
         int random = randomWithinRange.getRandom();
         Long startProcessing;
         Long endProcessing;
