@@ -495,7 +495,7 @@ public class InvoiceDAOImplTest_v1 {
         create around 20_000 invoices with organizations
          */
         int recordsAmount = 20_000;
-//        int recordsAmount = 100;
+//        int recordsAmount = 1_000;
 
         int random = randomWithinRange.getRandom();
         Long startProcessing;
