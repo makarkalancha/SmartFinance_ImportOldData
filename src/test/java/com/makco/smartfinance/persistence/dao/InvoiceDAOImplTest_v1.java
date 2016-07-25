@@ -416,8 +416,8 @@ public class InvoiceDAOImplTest_v1 {
     }
 
     @Test(expected = RuntimeException.class)
-//    org.hibernate.exception.ConstraintViolationException
     /*
+    org.hibernate.exception.ConstraintViolationException
     Caused by: org.h2.jdbc.JdbcBatchUpdateException: Referential integrity constraint violation: "CONSTRAINT_9FA: TEST.INVOICE FOREIGN KEY(ORGANIZATION_ID) REFERENCES TEST.ORGANIZATION(ID) (1)"; SQL statement:
     delete from TEST.ORGANIZATION where ID=? [23503-191]
      */
