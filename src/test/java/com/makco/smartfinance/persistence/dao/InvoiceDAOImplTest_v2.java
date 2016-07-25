@@ -241,6 +241,8 @@ public class InvoiceDAOImplTest_v2 {
         item
         create around 20_000 invoices with organizations
          */
+        int recordsAmount = 20_000;
+//        int recordsAmount = 1000;
 
         int random = randomWithinRange.getRandom();
         Long startProcessing;
@@ -337,8 +339,6 @@ public class InvoiceDAOImplTest_v2 {
         /////////////////////ITEM
         int itemAmount = 5;
         /////////////////////BENCHMARK
-        int recordsAmount = 20_000;
-//        int recordsAmount = 1000;
         try(PrintWriter printWriter = new PrintWriter("test_Invoice_v2_benchmark.log", "UTF-8");) {
             for (int i = 0; i < recordsAmount; i++) {
                 startProcessing = System.nanoTime();
