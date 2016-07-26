@@ -9,6 +9,6 @@ import org.junit.runners.MethodSorters;
  * Time: 22:23
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class TransactionDAOImplTest {
+public class TransactionDAOImplTest_v1 {
     //TODO p386 and section 20.1 cursor and batch processing: list too large
 }

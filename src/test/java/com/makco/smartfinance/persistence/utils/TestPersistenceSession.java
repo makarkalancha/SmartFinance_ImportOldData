@@ -124,19 +124,20 @@ public class TestPersistenceSession {
 
         cfg.addAnnotatedClass(Invoice.class);
         cfg.addAnnotatedClass(Invoice_v1.class);
-//        cfg.addAnnotatedClass(Invoice_v2.class);
+        cfg.addAnnotatedClass(Invoice_v2.class);
 
         cfg.addAnnotatedClass(Item.class);
         cfg.addAnnotatedClass(Item_v1.class);
-//        cfg.addAnnotatedClass(Item_v2.class);
+        cfg.addAnnotatedClass(Item_v2.class);
 
         cfg.addAnnotatedClass(Organization.class);
         cfg.addAnnotatedClass(Organization_v1.class);
-//        cfg.addAnnotatedClass(Organization_v2.class);
+        cfg.addAnnotatedClass(Organization_v2.class);
 
         cfg.addAnnotatedClass(Tax.class);
         cfg.addAnnotatedClass(Tax_v1.class);
         cfg.addAnnotatedClass(Transaction_v1.class);
+
 //        cfg.setProperty("hibernate.connection.driver_class", "org.h2.Driver");
         cfg.setProperty("javax.persistence.jdbc.driver", "org.h2.Driver");
         cfg.setProperty("hibernate.connection.url", DataBaseConstants.URL);
