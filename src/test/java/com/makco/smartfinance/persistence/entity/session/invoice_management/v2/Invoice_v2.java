@@ -46,7 +46,7 @@ import java.util.List;
 @Table(name = "INVOICE_NOTR",
         uniqueConstraints =
         @UniqueConstraint(
-                name="IDX_UNQ_NVC_NVCNMBR1",
+                name="IDX_UNQ_NVC_NVCNMBR2",
                 columnNames = {"INVOICE_NUMBER"}
         )
 )

@@ -31,7 +31,7 @@ import java.time.LocalDateTime;
         name = "TRANSACTION_NOTR",
         uniqueConstraints =
         @UniqueConstraint(
-                name = "IDX_UNQ_TRNSCTN_TRNSCTNNMBR1",
+                name = "IDX_UNQ_TRNSCTN_TRNSCTNNMBR2",
                 columnNames = {"TRANSACTION_NUMBER"}
         )
 )

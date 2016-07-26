@@ -33,7 +33,7 @@ import java.time.LocalDateTime;
 @Table(name = "ITEM_NOTR",
         uniqueConstraints =
         @UniqueConstraint(
-                name = "IDX_UNQ_TM_NVCDRDRNMBR1",
+                name = "IDX_UNQ_TM_NVCDRDRNMBR2",
                 columnNames = {"INVOICE_ID", "ORDER_NUMBER"}
         )
 )
