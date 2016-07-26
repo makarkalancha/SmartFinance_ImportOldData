@@ -112,7 +112,7 @@ public class ItemDAOImpl_v3ForTest {
         try {
             session = TestPersistenceSession.openSession();
             session.beginTransaction();
-            //todo check if totals in invoicev3 are updated
+            //check if totals in invoicev3 are updated
 
             Invoice_v3 invoice_v3 = item_v3.getInvoice();
             List<Item_v3> items = new ArrayList<>(invoice_v3.getItems());

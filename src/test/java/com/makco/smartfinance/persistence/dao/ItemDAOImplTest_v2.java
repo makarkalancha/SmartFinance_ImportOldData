@@ -208,7 +208,4 @@ public class ItemDAOImplTest_v2 {
             assert(item_v2.getUpdatedOn() != null);
         }
     }
-
-
-    //todo tests
 }
