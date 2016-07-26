@@ -1,11 +1,9 @@
 package com.makco.smartfinance.persistence.dao.dao_implementations;
 
 import com.makco.smartfinance.persistence.entity.session.invoice_management.v2.Invoice_v2;
-import com.makco.smartfinance.persistence.entity.session.invoice_management.v2.Item_v2;
 import com.makco.smartfinance.persistence.utils.TestPersistenceSession;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.resource.transaction.spi.TransactionStatus;
 

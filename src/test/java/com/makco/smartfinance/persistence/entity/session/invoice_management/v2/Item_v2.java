@@ -6,7 +6,6 @@ import com.makco.smartfinance.persistence.entity.Category;
 import com.makco.smartfinance.persistence.entity.DateUnit;
 import com.makco.smartfinance.persistence.entity.FamilyMember;
 import com.makco.smartfinance.persistence.entity.Tax;
-import com.makco.smartfinance.persistence.entity.session.invoice_management.v2.Invoice_v2;
 import com.makco.smartfinance.utils.BigDecimalUtils;
 
 import javax.persistence.Column;

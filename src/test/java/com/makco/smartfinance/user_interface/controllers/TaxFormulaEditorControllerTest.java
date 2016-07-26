@@ -1,15 +1,12 @@
 package com.makco.smartfinance.user_interface.controllers;
 
-import com.makco.smartfinance.constants.DataBaseConstants;
-import com.makco.smartfinance.persistence.utils.TestPersistenceManager;
-import jdk.nashorn.api.scripting.NashornScriptEngine;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
  * User: Makar Kalancha

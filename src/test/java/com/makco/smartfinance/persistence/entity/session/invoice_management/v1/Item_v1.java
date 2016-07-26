@@ -5,12 +5,9 @@ import com.makco.smartfinance.constants.DataBaseConstants;
 import com.makco.smartfinance.persistence.entity.Category;
 import com.makco.smartfinance.persistence.entity.DateUnit;
 import com.makco.smartfinance.persistence.entity.FamilyMember;
-import com.makco.smartfinance.persistence.entity.Invoice;
 import com.makco.smartfinance.persistence.entity.Tax;
 import com.makco.smartfinance.utils.BigDecimalUtils;
-import org.hibernate.annotations.GenerationTime;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;

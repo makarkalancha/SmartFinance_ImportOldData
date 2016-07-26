@@ -1,6 +1,5 @@
 package com.makco.smartfinance.utils.notation;
 
-import com.makco.smartfinance.user_interface.constants.UserInterfaceConstants;
 import com.makco.smartfinance.utils.BigDecimalUtils;
 import org.junit.Test;
 
@@ -9,7 +8,7 @@ import javax.script.ScriptEngineManager;
 import java.math.BigDecimal;
 import java.util.concurrent.TimeUnit;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
  * User: Makar Kalancha

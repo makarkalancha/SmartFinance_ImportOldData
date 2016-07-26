@@ -2,9 +2,6 @@ package com.makco.smartfinance.persistence.entity.session;
 
 import com.google.common.base.Objects;
 import com.makco.smartfinance.constants.DataBaseConstants;
-import com.makco.smartfinance.user_interface.constants.UserInterfaceConstants;
-import com.makco.smartfinance.utils.BigDecimalUtils;
-import com.makco.smartfinance.utils.notation.ReversePolishNotation;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.persistence.CascadeType;

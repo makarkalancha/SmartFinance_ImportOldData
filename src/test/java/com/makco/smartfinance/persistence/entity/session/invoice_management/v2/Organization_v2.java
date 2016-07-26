@@ -2,7 +2,6 @@ package com.makco.smartfinance.persistence.entity.session.invoice_management.v2;
 
 import com.google.common.base.Objects;
 import com.makco.smartfinance.constants.DataBaseConstants;
-import com.makco.smartfinance.persistence.entity.session.invoice_management.v2.Invoice_v2;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

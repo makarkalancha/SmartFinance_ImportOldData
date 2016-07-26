@@ -3,9 +3,6 @@ package com.makco.smartfinance.persistence.entity.session.invoice_management.v1;
 import com.google.common.base.Objects;
 import com.makco.smartfinance.constants.DataBaseConstants;
 import com.makco.smartfinance.persistence.entity.DateUnit;
-import com.makco.smartfinance.persistence.entity.Item;
-import com.makco.smartfinance.persistence.entity.Organization;
-import org.hibernate.annotations.GenerationTime;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;

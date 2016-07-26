@@ -5,7 +5,6 @@ import com.makco.smartfinance.persistence.dao.dao_implementations.CategoryGroupD
 import com.makco.smartfinance.persistence.dao.dao_implementations.DateUnitDAOImplForTest;
 import com.makco.smartfinance.persistence.dao.dao_implementations.FamilyMemberDAOImpl_v1ForTest;
 import com.makco.smartfinance.persistence.dao.dao_implementations.InvoiceDAOImpl_v1ForTest;
-import com.makco.smartfinance.persistence.dao.dao_implementations.ItemDAOImpl_v1ForTest;
 import com.makco.smartfinance.persistence.dao.dao_implementations.OrganizationDAOImpl_v1ForTest;
 import com.makco.smartfinance.persistence.dao.dao_implementations.TaxDAOImpl_v1ForTest;
 import com.makco.smartfinance.persistence.entity.Category;
