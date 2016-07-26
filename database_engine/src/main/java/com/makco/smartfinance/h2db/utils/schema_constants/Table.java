@@ -18,14 +18,17 @@ public class Table {
         DATEUNIT,
         FAMILY_MEMBER,
         INVOICE,
-        INVOICE_notr,
+        INVOICE_NOTR,
+        INVOICE_V3,
         ITEM,
-        ITEM_notr,
+        ITEM_NOTR,
+        ITEM_V3,
         ORGANIZATION,
         TAX,
         TAX_CHILD,
         TRANSACTION,
-        TRANSACTION_notr;
+        TRANSACTION_NOTR,
+        TRANSACTION_V3;
     }
 
     public enum _DELETED_ROWS implements IEnumRow {
@@ -383,7 +386,35 @@ public class Table {
         }
     };
 
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    public enum INVOICE_V3 implements IEnumRow {
+        ID(0),
+        INVOICE_NUMBER(1),
+        ORGANIZATION_ID(2),
+        DATEUNIT_UNITDAY(3),
+        COMMENT(4),
+        DEBIT_TOTAL(5),
+        CREDIT_TOTAL(6),
+        T_CREATEDON(7),
+        T_UPDATEDON(8);
+
+        private int columnIndex;
+        private INVOICE_V3(int columnIndex) {
+            this.columnIndex = columnIndex;
+        }
+
+        @Override
+        public int getColumnIndex(){
+            return this.columnIndex;
+        }
+
+        @Override
+        public INVOICE_V3 getColumnNameByIndex(){
+            return this;
+        }
+    };
 
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 }

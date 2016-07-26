@@ -30,7 +30,6 @@ import java.time.LocalDate;
 import java.time.Month;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalUnit;
 import java.util.Date;
 
 import static org.junit.Assert.assertEquals;
@@ -59,9 +58,9 @@ public class TableItemTest {
         System.out.println(mess1);
         LOG.debug(mess1);
         //        H2DbUtils.setSchema(dbConnectionResource.getConnection(), "TEST");
-        H2DbUtilsTest.emptyTable(dbConnectionResource.getConnection(), Table.Names.ITEM_notr);
+        H2DbUtilsTest.emptyTable(dbConnectionResource.getConnection(), Table.Names.ITEM_NOTR);
         H2DbUtilsTest.emptyTable(dbConnectionResource.getConnection(), Table.Names.ITEM);
-        H2DbUtilsTest.emptyTable(dbConnectionResource.getConnection(), Table.Names.INVOICE_notr);
+        H2DbUtilsTest.emptyTable(dbConnectionResource.getConnection(), Table.Names.INVOICE_NOTR);
         H2DbUtilsTest.emptyTable(dbConnectionResource.getConnection(), Table.Names.INVOICE);
         H2DbUtilsTest.emptyTable(dbConnectionResource.getConnection(), Table.Names.ORGANIZATION);
         H2DbUtilsTest.emptyTable(dbConnectionResource.getConnection(), Table.Names.FAMILY_MEMBER);
@@ -592,8 +591,8 @@ public class TableItemTest {
     }
 
     @Test
-    public void testItem_32_delete() throws Exception {
-        LOG.debug("testItem_31_delete");
+    public void testItem_32_delete_checkInvoiceSum() throws Exception {
+        LOG.debug("testItem_32_delete");
         String queryInvoice = "SELECT " + Table.INVOICE.ID + "," + Table.INVOICE.SUB_TOTAL + "," + Table.INVOICE.TOTAL + " FROM " + Table.Names.INVOICE +
                 " WHERE " + Table.INVOICE.ID + " = ?" +
                 " AND " + Table.INVOICE.SUB_TOTAL + "  = (SELECT SUM(" + Table.ITEM.SUB_TOTAL + ") FROM " + Table.Names.ITEM + " WHERE " + Table.ITEM.INVOICE_ID + " = ? )" +

@@ -38,12 +38,12 @@ import static org.junit.Assert.assertEquals;
  * Created by Makar Kalancha on 11 Jul 2016.
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class TableItem_NoTrTest {
-    private static final Logger LOG = LogManager.getLogger(TableItem_NoTrTest.class);
+public class TableItem_V3Test {
+    private static final Logger LOG = LogManager.getLogger(TableItem_V3Test.class);
     private static final SimpleDateFormat SIMPLE_DATE_TIME_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     private TableOrganizationTest tableOrganizationTest = new TableOrganizationTest();
-    private TableInvoice_NoTrTest tableInvoiceTest = new TableInvoice_NoTrTest();
+    private TableInvoice_V3Test tableInvoiceTest = new TableInvoice_V3Test();
     private TableCategoryGroupTest tableCategoryGroupTest = new TableCategoryGroupTest();
     private TableCategoryTest tableCategoryTest = new TableCategoryTest();
     private TableTaxTest tableTaxTest = new TableTaxTest();
@@ -61,9 +61,11 @@ public class TableItem_NoTrTest {
         H2DbUtilsTest.emptyTable(dbConnectionResource.getConnection(), Table.Names.ITEM_V3);
         H2DbUtilsTest.emptyTable(dbConnectionResource.getConnection(), Table.Names.ITEM_NOTR);
         H2DbUtilsTest.emptyTable(dbConnectionResource.getConnection(), Table.Names.ITEM);
+
         H2DbUtilsTest.emptyTable(dbConnectionResource.getConnection(), Table.Names.INVOICE_V3);
-        H2DbUtilsTest.emptyTable(dbConnectionResource.getConnection(), Table.Names.INVOICE_NOTR);
+        H2DbUtilsTest.emptyTable(dbConnectionResource.getConnection(), Table.Names.INVOICE_V3);
         H2DbUtilsTest.emptyTable(dbConnectionResource.getConnection(), Table.Names.INVOICE);
+
         H2DbUtilsTest.emptyTable(dbConnectionResource.getConnection(), Table.Names.ORGANIZATION);
         H2DbUtilsTest.emptyTable(dbConnectionResource.getConnection(), Table.Names.FAMILY_MEMBER);
         H2DbUtilsTest.emptyTable(dbConnectionResource.getConnection(), Table.Names.TAX_CHILD);
@@ -99,7 +101,7 @@ public class TableItem_NoTrTest {
                        String description1, String description2,
                        String comment, BigDecimal grossAmount, BigDecimal netAmount) throws Exception {
         LOG.debug("insert");
-        String queryInsert = "INSERT INTO " + Table.Names.ITEM_NOTR +
+        String queryInsert = "INSERT INTO " + Table.Names.ITEM_V3 +
                 " (" + Table.ITEM.ORDER_NUMBER + ", " + Table.ITEM.INVOICE_ID + ", " + Table.ITEM.CATEGORY_ID + ", " +
                 Table.ITEM.TAX_ID + ", " + Table.ITEM.FAMILY_MEMBER_ID + ", " + Table.ITEM.DESCRIPTION1 + ", " +
                 Table.ITEM.DESCRIPTION2 + ", " + Table.ITEM.COMMENT + ", " + Table.ITEM.SUB_TOTAL + ", " +
@@ -130,16 +132,16 @@ public class TableItem_NoTrTest {
     @Test
     public void testItem_11_insert() throws Exception {
         LOG.debug("testItem_11_insert");
-        String queryItemDates = "SELECT " + Table.ITEM.ID + ", " + Table.ITEM.DATEUNIT_UNITDAY + " FROM " + Table.Names.ITEM_NOTR +
+        String queryItemDates = "SELECT " + Table.ITEM.ID + ", " + Table.ITEM.DATEUNIT_UNITDAY + " FROM " + Table.Names.ITEM_V3 +
                 " WHERE " + Table.ITEM.ID + " = ?" +
                 " AND " + Table.ITEM.T_CREATEDON + " IS NOT NULL" +
                 " AND " + Table.ITEM.T_UPDATEDON + " IS NOT NULL" +
                 " AND " + Table.ITEM.T_CREATEDON + " = " + Table.ITEM.T_UPDATEDON;
 
-        String queryInvoice = "SELECT " + Table.INVOICE.ID + ", " + Table.INVOICE.DATEUNIT_UNITDAY + " FROM " + Table.Names.INVOICE_NOTR +
-                " WHERE " + Table.INVOICE.ID + " = ?" +
-                " AND " + Table.INVOICE.SUB_TOTAL + "  = (SELECT SUM(" + Table.ITEM.SUB_TOTAL + ") FROM " + Table.Names.ITEM_NOTR + " WHERE " + Table.ITEM.INVOICE_ID + " = ? )" +
-                " AND " + Table.INVOICE.TOTAL + "  = (SELECT SUM(" + Table.ITEM.TOTAL + ") FROM " + Table.Names.ITEM_NOTR + " WHERE " + Table.ITEM.INVOICE_ID + " = ? )";
+        String queryInvoice = "SELECT " + Table.INVOICE_V3.ID + ", " + Table.INVOICE_V3.DATEUNIT_UNITDAY + " FROM " + Table.Names.INVOICE_V3 +
+                " WHERE " + Table.INVOICE_V3.ID + " = ?" +
+                " AND " + Table.INVOICE_V3.DEBIT_TOTAL + "  = (SELECT SUM(" + Table.ITEM.SUB_TOTAL + ") FROM " + Table.Names.ITEM_V3 + " WHERE " + Table.ITEM.INVOICE_ID + " = ? )" +
+                " AND " + Table.INVOICE_V3.CREDIT_TOTAL + "  = (SELECT SUM(" + Table.ITEM.TOTAL + ") FROM " + Table.Names.ITEM_V3 + " WHERE " + Table.ITEM.INVOICE_ID + " = ? )";
 
         LOG.debug(queryItemDates);
         ResultSet rs = null;
@@ -228,7 +230,7 @@ public class TableItem_NoTrTest {
 
     public void updateComment(Long id, String comment) throws Exception {
         LOG.debug("update");
-        String queryUpdate = "UPDATE " + Table.Names.ITEM_NOTR + " SET " + Table.ITEM.COMMENT + " = ? " +
+        String queryUpdate = "UPDATE " + Table.Names.ITEM_V3 + " SET " + Table.ITEM.COMMENT + " = ? " +
                 " WHERE " + Table.ITEM.ID + " = ?";
         LOG.debug(queryUpdate);
         ResultSet rs = null;
@@ -245,7 +247,7 @@ public class TableItem_NoTrTest {
 
     public void updateOrderNumbert(Long id, Integer orderNumber) throws Exception {
         LOG.debug("update");
-        String queryUpdate = "UPDATE " + Table.Names.ITEM_NOTR + " SET " + Table.ITEM.ORDER_NUMBER + " = ? " +
+        String queryUpdate = "UPDATE " + Table.Names.ITEM_V3 + " SET " + Table.ITEM.ORDER_NUMBER + " = ? " +
                 " WHERE " + Table.ITEM.ID + " = ?";
         LOG.debug(queryUpdate);
         ResultSet rs = null;
@@ -262,7 +264,7 @@ public class TableItem_NoTrTest {
 
     public void updateSubtotalAndTotal(Long id, BigDecimal subtotal, BigDecimal total) throws Exception {
         LOG.debug("update");
-        String queryUpdate = "UPDATE " + Table.Names.ITEM_NOTR + " SET " + Table.ITEM.SUB_TOTAL + " = ? , " +
+        String queryUpdate = "UPDATE " + Table.Names.ITEM_V3 + " SET " + Table.ITEM.SUB_TOTAL + " = ? , " +
                 Table.ITEM.TOTAL + " = ? " +
                 " WHERE " + Table.ITEM.ID + " = ?";
         LOG.debug(queryUpdate);
@@ -282,16 +284,16 @@ public class TableItem_NoTrTest {
     @Test
     public void testItem_21_update_check_T_UPDATEDON() throws Exception {
         LOG.debug("testItem_21_update");
-        String querySelect = "SELECT MAX(" + Table.ITEM.ID + ") FROM " + Table.Names.ITEM_NOTR;
-        String queryDates = "SELECT " + Table.ITEM.ID + ", " + Table.ITEM.INVOICE_ID + " FROM " + Table.Names.ITEM_NOTR +
+        String querySelect = "SELECT MAX(" + Table.ITEM.ID + ") FROM " + Table.Names.ITEM_V3;
+        String queryDates = "SELECT " + Table.ITEM.ID + ", " + Table.ITEM.INVOICE_ID + " FROM " + Table.Names.ITEM_V3 +
                 " WHERE " + Table.ITEM.ID + " = ?" +
                 " AND " + Table.ITEM.T_CREATEDON + " IS NOT NULL" +
                 " AND " + Table.ITEM.T_UPDATEDON + " IS NOT NULL" +
                 " AND " + Table.ITEM.T_CREATEDON + " != " + Table.ITEM.T_UPDATEDON;
-        String queryInvoice = "SELECT " + Table.INVOICE.ID + " FROM " + Table.Names.INVOICE_NOTR +
-                " WHERE " + Table.INVOICE.ID + " = ?" +
-                " AND " + Table.INVOICE.SUB_TOTAL + "  = (SELECT SUM(" + Table.ITEM.SUB_TOTAL + ") FROM " + Table.Names.ITEM_NOTR + " WHERE " + Table.ITEM.INVOICE_ID + " = ? )" +
-                " AND " + Table.INVOICE.TOTAL + "  = (SELECT SUM(" + Table.ITEM.TOTAL + ") FROM " + Table.Names.ITEM_NOTR + " WHERE " + Table.ITEM.INVOICE_ID + " = ? )";
+        String queryInvoice = "SELECT " + Table.INVOICE_V3.ID + " FROM " + Table.Names.INVOICE_V3 +
+                " WHERE " + Table.INVOICE_V3.ID + " = ?" +
+                " AND " + Table.INVOICE_V3.DEBIT_TOTAL + "  = (SELECT SUM(" + Table.ITEM.SUB_TOTAL + ") FROM " + Table.Names.ITEM_V3 + " WHERE " + Table.ITEM.INVOICE_ID + " = ? )" +
+                " AND " + Table.INVOICE_V3.CREDIT_TOTAL + "  = (SELECT SUM(" + Table.ITEM.TOTAL + ") FROM " + Table.Names.ITEM_V3 + " WHERE " + Table.ITEM.INVOICE_ID + " = ? )";
 
         LOG.debug(querySelect);
         LOG.debug(queryDates);
@@ -330,10 +332,10 @@ public class TableItem_NoTrTest {
     @Test
     public void testItem_22_update_check_invoiceSubtotalTotal() throws Exception {
         LOG.debug("testItem_22_update");
-        String queryInvoice = "SELECT " + Table.INVOICE.ID + "," + Table.INVOICE.SUB_TOTAL + "," + Table.INVOICE.TOTAL + " FROM " + Table.Names.INVOICE_NOTR +
-                " WHERE " + Table.INVOICE.ID + " = ?" +
-                " AND " + Table.INVOICE.SUB_TOTAL + "  = (SELECT SUM(" + Table.ITEM.SUB_TOTAL + ") FROM " + Table.Names.ITEM_NOTR + " WHERE " + Table.ITEM.INVOICE_ID + " = ? )" +
-                " AND " + Table.INVOICE.TOTAL + "  = (SELECT SUM(" + Table.ITEM.TOTAL + ") FROM " + Table.Names.ITEM_NOTR + " WHERE " + Table.ITEM.INVOICE_ID + " = ? )";
+        String queryInvoice = "SELECT " + Table.INVOICE_V3.ID + "," + Table.INVOICE_V3.DEBIT_TOTAL + "," + Table.INVOICE_V3.CREDIT_TOTAL + " FROM " + Table.Names.INVOICE_V3 +
+                " WHERE " + Table.INVOICE_V3.ID + " = ?" +
+                " AND " + Table.INVOICE_V3.DEBIT_TOTAL + "  = (SELECT SUM(" + Table.ITEM.SUB_TOTAL + ") FROM " + Table.Names.ITEM_V3 + " WHERE " + Table.ITEM.INVOICE_ID + " = ? )" +
+                " AND " + Table.INVOICE_V3.CREDIT_TOTAL + "  = (SELECT SUM(" + Table.ITEM.TOTAL + ") FROM " + Table.Names.ITEM_V3 + " WHERE " + Table.ITEM.INVOICE_ID + " = ? )";
 
         LOG.debug(queryInvoice);
         ResultSet rs = null;
@@ -381,13 +383,13 @@ public class TableItem_NoTrTest {
     public void testItem_23_update_check_invoiceUpdateDate() throws Exception {
         //checks TriggerInvoice.update
         LOG.debug("testItem_23_update");
-        String queryDates = "SELECT " + Table.INVOICE.ID + " FROM " + Table.Names.INVOICE_NOTR +
-                " WHERE " + Table.INVOICE.ID + " = ?" +
-                " AND " + Table.INVOICE.T_CREATEDON + " IS NOT NULL" +
-                " AND " + Table.INVOICE.T_UPDATEDON + " IS NOT NULL" +
-                " AND " + Table.INVOICE.T_CREATEDON + " != " + Table.INVOICE.T_UPDATEDON;
+        String queryDates = "SELECT " + Table.INVOICE_V3.ID + " FROM " + Table.Names.INVOICE_V3 +
+                " WHERE " + Table.INVOICE_V3.ID + " = ?" +
+                " AND " + Table.INVOICE_V3.T_CREATEDON + " IS NOT NULL" +
+                " AND " + Table.INVOICE_V3.T_UPDATEDON + " IS NOT NULL" +
+                " AND " + Table.INVOICE_V3.T_CREATEDON + " != " + Table.INVOICE_V3.T_UPDATEDON;
         String items = "SELECT " + Table.ITEM.ID + ", " + Table.ITEM.DATEUNIT_UNITDAY +
-                " FROM " + Table.Names.ITEM_NOTR +
+                " FROM " + Table.Names.ITEM_V3 +
                 " WHERE " + Table.ITEM.INVOICE_ID + " = ?";
         LOG.debug(queryDates);
         ResultSet rs = null;
@@ -500,10 +502,10 @@ public class TableItem_NoTrTest {
     @Test
     public void testItem_31_delete() throws Exception {
         LOG.debug("testItem_31_delete");
-        String querySelect = "SELECT MIN(" + Table.ITEM.ID + ") FROM " + Table.Names.ITEM_NOTR;
-        String queryDelete = "DELETE FROM " + Table.Names.ITEM_NOTR + " WHERE " +
+        String querySelect = "SELECT MIN(" + Table.ITEM.ID + ") FROM " + Table.Names.ITEM_V3;
+        String queryDelete = "DELETE FROM " + Table.Names.ITEM_V3 + " WHERE " +
                 Table.ITEM.ID + " = ?";
-        String querySelectDeletedRow = "SELECT JSON_ROW FROM _DELETED_ROWS WHERE ID = (SELECT MAX(ID) FROM _DELETED_ROWS WHERE SCHEMA_NAME = 'TEST' AND TABLE_NAME = '" + Table.Names.ITEM_NOTR + "')";
+        String querySelectDeletedRow = "SELECT JSON_ROW FROM _DELETED_ROWS WHERE ID = (SELECT MAX(ID) FROM _DELETED_ROWS WHERE SCHEMA_NAME = 'TEST' AND TABLE_NAME = '" + Table.Names.ITEM_V3 + "')";
 
         LOG.debug(querySelect);
         LOG.debug(queryDelete);
@@ -543,6 +545,7 @@ public class TableItem_NoTrTest {
         }
     }
 
+
     private JsonObject createJsonObject() throws Exception {
         String schemaName = "TEST";
 
@@ -576,7 +579,7 @@ public class TableItem_NoTrTest {
         rowJson.addProperty(Table.ITEM.T_UPDATEDON.toString(), SIMPLE_DATE_TIME_FORMAT.format((Date) row[12]));
 
         JsonObject tableJson = new JsonObject();
-        tableJson.addProperty(Table.Elements.tableName.toString(), schemaName + "." + Table.Names.ITEM_NOTR);
+        tableJson.addProperty(Table.Elements.tableName.toString(), schemaName + "." + Table.Names.ITEM_V3);
         tableJson.add(Table.Elements.row.toString(), rowJson);
 
         return tableJson;
@@ -603,7 +606,7 @@ public class TableItem_NoTrTest {
         JsonObject jsonObject = jsonParser.parse(tableJsonString).getAsJsonObject();
 
         String schemaTableName = jsonObject.get(Table.Elements.tableName.toString()).getAsString();
-        assertEquals("TEST.ITEM_NOTR", schemaTableName);
+        assertEquals("TEST.ITEM", schemaTableName);
 
         JsonObject rowJsonObject = jsonObject.get(Table.Elements.row.toString()).getAsJsonObject();
 
