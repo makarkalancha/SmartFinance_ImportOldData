@@ -36,14 +36,14 @@ import static org.junit.Assert.assertEquals;
  * Created by Makar Kalancha on 12 Jul 2016.
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class TableTransaction_NoTrTest {
-    private static final Logger LOG = LogManager.getLogger(TableTransaction_NoTrTest.class);
+public class TriggerTransaction_V3 {
+    private static final Logger LOG = LogManager.getLogger(TriggerTransaction_V3.class);
     private static final SimpleDateFormat SIMPLE_DATE_TIME_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-    private TableAccountGroupTest tableAccountGroupTest = new TableAccountGroupTest();
-    private TableAccountTest tableAccountTest= new TableAccountTest();
-    private TableOrganizationTest tableOrganizationTest = new TableOrganizationTest();
-    private TableInvoice_NoTrTest tableInvoiceTest = new TableInvoice_NoTrTest();
+    private TriggerAccountGroupTest triggerAccountGroupTest = new TriggerAccountGroupTest();
+    private TriggerAccountTest triggerAccountTest = new TriggerAccountTest();
+    private TriggerOrganizationTest triggerOrganizationTest = new TriggerOrganizationTest();
+    private TriggerInvoice_V3Test tableInvoiceTest = new TriggerInvoice_V3Test();
 
     @ClassRule
     public static DBConnectionResource dbConnectionResource = new DBConnectionResource();
@@ -55,14 +55,16 @@ public class TableTransaction_NoTrTest {
         LOG.debug(mess1);
         //        H2DbUtils.setSchema(dbConnectionResource.getConnection(), "TEST");
         H2DbUtilsTest.emptyTable(dbConnectionResource.getConnection(), Table.Names.TRANSACTION);
+        H2DbUtilsTest.emptyTable(dbConnectionResource.getConnection(), Table.Names.TRANSACTION_NOTR);
+        H2DbUtilsTest.emptyTable(dbConnectionResource.getConnection(), Table.Names.TRANSACTION_V3);
         H2DbUtilsTest.emptyTable(dbConnectionResource.getConnection(), Table.Names.ACCOUNT);
         H2DbUtilsTest.emptyTable(dbConnectionResource.getConnection(), Table.Names.ACCOUNT_GROUP);
+        H2DbUtilsTest.emptyTable(dbConnectionResource.getConnection(), Table.Names.INVOICE);
+        H2DbUtilsTest.emptyTable(dbConnectionResource.getConnection(), Table.Names.INVOICE_V3);
+        H2DbUtilsTest.emptyTable(dbConnectionResource.getConnection(), Table.Names.INVOICE_NOTR);
+        H2DbUtilsTest.emptyTable(dbConnectionResource.getConnection(), Table.Names.ITEM);
         H2DbUtilsTest.emptyTable(dbConnectionResource.getConnection(), Table.Names.ITEM_NOTR);
         H2DbUtilsTest.emptyTable(dbConnectionResource.getConnection(), Table.Names.ITEM_V3);
-        H2DbUtilsTest.emptyTable(dbConnectionResource.getConnection(), Table.Names.ITEM);
-        H2DbUtilsTest.emptyTable(dbConnectionResource.getConnection(), Table.Names.INVOICE_NOTR);
-        H2DbUtilsTest.emptyTable(dbConnectionResource.getConnection(), Table.Names.INVOICE_V3);
-        H2DbUtilsTest.emptyTable(dbConnectionResource.getConnection(), Table.Names.INVOICE);
         H2DbUtilsTest.emptyTable(dbConnectionResource.getConnection(), Table.Names.ORGANIZATION);
     }
 
@@ -91,7 +93,7 @@ public class TableTransaction_NoTrTest {
     public Long insert(String transactionNumber, Long accountId, Long invoiceId,
                        Long dateunitUnitday, String comment, BigDecimal subTotal, BigDecimal total) throws Exception {
         LOG.debug("insert");
-        String queryInsert = "INSERT INTO " + Table.Names.TRANSACTION_NOTR +
+        String queryInsert = "INSERT INTO " + Table.Names.TRANSACTION_V3 +
                 " (" + Table.TRANSACTION.TRANSACTION_NUMBER + ", " + Table.TRANSACTION.ACCOUNT_ID + ", " +
                 Table.TRANSACTION.INVOICE_ID + ", " + Table.TRANSACTION.DATEUNIT_UNITDAY + ", " +
                 Table.TRANSACTION.COMMENT + ", " + Table.TRANSACTION.DEBIT_AMOUNT + ", " +
@@ -120,7 +122,7 @@ public class TableTransaction_NoTrTest {
     @Test
     public void testTransaction_11_insert() throws Exception {
         LOG.debug("testTransaction_11_insert");
-        String queryDates = "SELECT " + Table.TRANSACTION.ID + " FROM " + Table.Names.TRANSACTION_NOTR +
+        String queryDates = "SELECT " + Table.TRANSACTION.ID + " FROM " + Table.Names.TRANSACTION_V3 +
                 " WHERE " + Table.TRANSACTION.ID + " = ?" +
                 " AND " + Table.TRANSACTION.T_CREATEDON + " IS NOT NULL" +
                 " AND " + Table.TRANSACTION.T_UPDATEDON + " IS NOT NULL" +
@@ -134,12 +136,12 @@ public class TableTransaction_NoTrTest {
                     Date.from(LocalDate.of(2016, Month.MARCH, 1).atStartOfDay(ZoneId.systemDefault()).toInstant()));
 
             String accountGroupType = "C";
-            long accountGroupId = tableAccountGroupTest.insert(accountGroupType, "account group name",
+            long accountGroupId = triggerAccountGroupTest.insert(accountGroupType, "account group name",
                     "account group description from  TableTransactionTest #testTransaction_11_insert");
-            long accountId = tableAccountTest.insert(accountGroupId, accountGroupType, "account name",
+            long accountId = triggerAccountTest.insert(accountGroupId, accountGroupType, "account name",
                     "account description from  TableTransactionTest #testTransaction_11_insert");
 
-            long organizationId = tableOrganizationTest.insert("TableTransactionTest",
+            long organizationId = triggerOrganizationTest.insert("TableTransactionTest",
                     "Organization Description From TableTransactionTest #testItem_11_insert");
             long invoiceId = tableInvoiceTest.insert("11_insert", organizationId,
                     dateunitUnitday, "invoice comment TableTransactionTest #testItem_11_insert", new BigDecimal("3"),
@@ -173,12 +175,12 @@ public class TableTransaction_NoTrTest {
                 Date.from(LocalDate.of(2016, Month.MARCH, 1).atStartOfDay(ZoneId.systemDefault()).toInstant()));
 
         String accountGroupType = "C";
-        long accountGroupId = tableAccountGroupTest.insert(accountGroupType, "account group name12",
+        long accountGroupId = triggerAccountGroupTest.insert(accountGroupType, "account group name12",
                 "account group description from  TableTransactionTest #testTransaction_11_insert");
-        long accountId = tableAccountTest.insert(accountGroupId, accountGroupType, "account name12",
+        long accountId = triggerAccountTest.insert(accountGroupId, accountGroupType, "account name12",
                 "account description from  TableTransactionTest #testTransaction_11_insert");
 
-        long organizationId = tableOrganizationTest.insert("TableTransactionTest12",
+        long organizationId = triggerOrganizationTest.insert("TableTransactionTest12",
                 "Organization Description From TableTransactionTest #testItem_11_insert");
         long invoiceId = tableInvoiceTest.insert("12_insert", organizationId,
                 dateunitUnitday, "invoice comment TableTransactionTest #testItem_11_insert", new BigDecimal("3"),
@@ -195,7 +197,7 @@ public class TableTransaction_NoTrTest {
 
     public void updateComment(Long id, String comment) throws Exception {
         LOG.debug("update");
-        String queryUpdate = "UPDATE " + Table.Names.TRANSACTION_NOTR + " SET " + Table.TRANSACTION.COMMENT + " = ? " +
+        String queryUpdate = "UPDATE " + Table.Names.TRANSACTION_V3 + " SET " + Table.TRANSACTION.COMMENT + " = ? " +
                 " WHERE " + Table.TRANSACTION.ID + " = ?";
         LOG.debug(queryUpdate);
         ResultSet rs = null;
@@ -212,7 +214,7 @@ public class TableTransaction_NoTrTest {
 
     public void updateTransactionNumber(Long id, String transactionNumber) throws Exception {
         LOG.debug("update");
-        String queryUpdate = "UPDATE " + Table.Names.TRANSACTION_NOTR + " SET " + Table.TRANSACTION.TRANSACTION_NUMBER + " = ? " +
+        String queryUpdate = "UPDATE " + Table.Names.TRANSACTION_V3 + " SET " + Table.TRANSACTION.TRANSACTION_NUMBER + " = ? " +
                 " WHERE " + Table.TRANSACTION.ID + " = ?";
         LOG.debug(queryUpdate);
         ResultSet rs = null;
@@ -230,8 +232,8 @@ public class TableTransaction_NoTrTest {
     @Test
     public void testTransaction_21_update() throws Exception {
         LOG.debug("testTransaction_21_update");
-        String querySelect = "SELECT MAX(" + Table.TRANSACTION.ID + ") FROM " + Table.Names.TRANSACTION_NOTR;
-        String queryDates = "SELECT " + Table.TRANSACTION.ID + " FROM " + Table.Names.TRANSACTION_NOTR +
+        String querySelect = "SELECT MAX(" + Table.TRANSACTION.ID + ") FROM " + Table.Names.TRANSACTION_V3;
+        String queryDates = "SELECT " + Table.TRANSACTION.ID + " FROM " + Table.Names.TRANSACTION_V3 +
                 " WHERE " + Table.TRANSACTION.ID + " = ?" +
                 " AND " + Table.TRANSACTION.T_CREATEDON + " IS NOT NULL" +
                 " AND " + Table.TRANSACTION.T_UPDATEDON + " IS NOT NULL" +
@@ -269,12 +271,12 @@ public class TableTransaction_NoTrTest {
                 Date.from(LocalDate.of(2016, Month.MARCH, 1).atStartOfDay(ZoneId.systemDefault()).toInstant()));
 
         String accountGroupType = "C";
-        long accountGroupId = tableAccountGroupTest.insert(accountGroupType, "account group name22",
+        long accountGroupId = triggerAccountGroupTest.insert(accountGroupType, "account group name22",
                 "account group description from  TableTransactionTest #testTransaction_11_insert");
-        long accountId = tableAccountTest.insert(accountGroupId, accountGroupType, "account name22",
+        long accountId = triggerAccountTest.insert(accountGroupId, accountGroupType, "account name22",
                 "account description from  TableTransactionTest #testTransaction_11_insert");
 
-        long organizationId = tableOrganizationTest.insert("TableTransactionTest22",
+        long organizationId = triggerOrganizationTest.insert("TableTransactionTest22",
                 "Organization Description From TableTransactionTest #testItem_11_insert");
         long invoiceId = tableInvoiceTest.insert("22_update", organizationId,
                 dateunitUnitday, "invoice comment TableTransactionTest #testItem_11_insert", new BigDecimal("3"),
@@ -296,10 +298,10 @@ public class TableTransaction_NoTrTest {
     @Test
     public void testTransaction_31_delete() throws Exception {
         LOG.debug("testTransaction_31_delete");
-        String querySelect = "SELECT MIN(" + Table.TRANSACTION.ID + ") FROM " + Table.Names.TRANSACTION_NOTR;
-        String queryDelete = "DELETE FROM " + Table.Names.TRANSACTION_NOTR + " WHERE " +
+        String querySelect = "SELECT MIN(" + Table.TRANSACTION.ID + ") FROM " + Table.Names.TRANSACTION_V3;
+        String queryDelete = "DELETE FROM " + Table.Names.TRANSACTION_V3 + " WHERE " +
                 Table.TRANSACTION.ID + " = ?";
-        String querySelectDeletedRow = "SELECT JSON_ROW FROM _DELETED_ROWS WHERE ID = (SELECT MAX(ID) FROM _DELETED_ROWS WHERE SCHEMA_NAME = 'TEST' AND TABLE_NAME = '" + Table.Names.TRANSACTION_NOTR + "')";
+        String querySelectDeletedRow = "SELECT JSON_ROW FROM _DELETED_ROWS WHERE ID = (SELECT MAX(ID) FROM _DELETED_ROWS WHERE SCHEMA_NAME = 'TEST' AND TABLE_NAME = '" + Table.Names.TRANSACTION_V3 + "')";
 
         LOG.debug(querySelect);
         LOG.debug(queryDelete);
@@ -366,7 +368,7 @@ public class TableTransaction_NoTrTest {
         rowJson.addProperty(Table.TRANSACTION.T_UPDATEDON.toString(), SIMPLE_DATE_TIME_FORMAT.format((Date) row[9]));
 
         JsonObject tableJson = new JsonObject();
-        tableJson.addProperty(Table.Elements.tableName.toString(), schemaName + "." + Table.Names.TRANSACTION_NOTR);
+        tableJson.addProperty(Table.Elements.tableName.toString(), schemaName + "." + Table.Names.TRANSACTION_V3);
         tableJson.add(Table.Elements.row.toString(), rowJson);
 
         return tableJson;

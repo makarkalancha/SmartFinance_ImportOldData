@@ -33,8 +33,8 @@ import static org.junit.Assert.assertEquals;
  * Time: 00:54
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class TableCategoryGroupTest {
-    private static final Logger LOG = LogManager.getLogger(TableCategoryGroupTest.class);
+public class TriggerCategoryGroupTest {
+    private static final Logger LOG = LogManager.getLogger(TriggerCategoryGroupTest.class);
     private static final SimpleDateFormat sdfJson = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     @ClassRule

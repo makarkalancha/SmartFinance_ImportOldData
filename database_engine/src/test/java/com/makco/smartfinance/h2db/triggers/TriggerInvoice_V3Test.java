@@ -26,10 +26,8 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 import static org.junit.Assert.assertEquals;
@@ -38,11 +36,11 @@ import static org.junit.Assert.assertEquals;
  * Created by Makar Kalancha on 11 Jul 2016.
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class TableInvoiceTest {
-    private static final Logger LOG = LogManager.getLogger(TableInvoiceTest.class);
+public class TriggerInvoice_V3Test {
+    private static final Logger LOG = LogManager.getLogger(TriggerInvoice_V3Test.class);
     private static final SimpleDateFormat SIMPLE_DATE_TIME_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-    private TableOrganizationTest tableOrganizationTest = new TableOrganizationTest();
+    private TriggerOrganizationTest triggerOrganizationTest = new TriggerOrganizationTest();
 
     @ClassRule
     public static DBConnectionResource dbConnectionResource = new DBConnectionResource();
@@ -60,9 +58,6 @@ public class TableInvoiceTest {
         H2DbUtilsTest.emptyTable(dbConnectionResource.getConnection(), Table.Names.INVOICE_NOTR);
         H2DbUtilsTest.emptyTable(dbConnectionResource.getConnection(), Table.Names.INVOICE);
         H2DbUtilsTest.emptyTable(dbConnectionResource.getConnection(), Table.Names.ORGANIZATION);
-        H2DbUtilsTest.emptyTable(dbConnectionResource.getConnection(), Table.Names.TRANSACTION_V3);
-        H2DbUtilsTest.emptyTable(dbConnectionResource.getConnection(), Table.Names.TRANSACTION_NOTR);
-        H2DbUtilsTest.emptyTable(dbConnectionResource.getConnection(), Table.Names.TRANSACTION);
     }
 
     @AfterClass
@@ -90,9 +85,9 @@ public class TableInvoiceTest {
     public Long insert(String invoiceNumber, Long organizationId, Long dateunitUnitday, String comment, BigDecimal subTotal, BigDecimal total)
             throws Exception {
         LOG.debug("insert");
-        String queryInsert = "INSERT INTO " + Table.Names.INVOICE +
-                " (" + Table.INVOICE.INVOICE_NUMBER + ", " + Table.INVOICE.ORGANIZATION_ID + ", " + Table.INVOICE.DATEUNIT_UNITDAY + ", " +
-                Table.INVOICE.COMMENT + ", " + Table.INVOICE.SUB_TOTAL + ", " + Table.INVOICE.TOTAL + ") " +
+        String queryInsert = "INSERT INTO " + Table.Names.INVOICE_V3 +
+                " (" + Table.INVOICE_V3.INVOICE_NUMBER + ", " + Table.INVOICE_V3.ORGANIZATION_ID + ", " + Table.INVOICE_V3.DATEUNIT_UNITDAY + ", " +
+                Table.INVOICE_V3.COMMENT + ", " + Table.INVOICE_V3.DEBIT_TOTAL + ", " + Table.INVOICE_V3.CREDIT_TOTAL + ") " +
                 "VALUES('" + invoiceNumber + "'," + organizationId + "," + dateunitUnitday + ",'" + comment + "'," + subTotal + "," +
                 total + ")";
         LOG.debug(queryInsert);
@@ -116,9 +111,9 @@ public class TableInvoiceTest {
     public Long insert(String invoiceNumber, Long organizationId, Long dateunitUnitday, String comment)
             throws Exception {
         LOG.debug("insert");
-        String queryInsert = "INSERT INTO " + Table.Names.INVOICE +
-                " (" + Table.INVOICE.INVOICE_NUMBER + ", " + Table.INVOICE.ORGANIZATION_ID + ", " +
-                Table.INVOICE.DATEUNIT_UNITDAY + ", " + Table.INVOICE.COMMENT + ") " +
+        String queryInsert = "INSERT INTO " + Table.Names.INVOICE_V3 +
+                " (" + Table.INVOICE_V3.INVOICE_NUMBER + ", " + Table.INVOICE_V3.ORGANIZATION_ID + ", " +
+                Table.INVOICE_V3.DATEUNIT_UNITDAY + ", " + Table.INVOICE_V3.COMMENT + ") " +
                 "VALUES('" + invoiceNumber + "'," + organizationId + "," + dateunitUnitday + ",'" + comment + "')";
         LOG.debug(queryInsert);
         ResultSet rs = null;
@@ -141,11 +136,11 @@ public class TableInvoiceTest {
     @Test
     public void testInvoice_11_insert() throws Exception {
         LOG.debug("testInvoice_11_insert");
-        String queryDates = "SELECT " + Table.INVOICE.ID + " FROM " + Table.Names.INVOICE +
-                " WHERE " + Table.INVOICE.ID + " = ?" +
-                " AND " + Table.INVOICE.T_CREATEDON + " IS NOT NULL" +
-                " AND " + Table.INVOICE.T_UPDATEDON + " IS NOT NULL" +
-                " AND " + Table.INVOICE.T_CREATEDON + " = " + Table.INVOICE.T_UPDATEDON;
+        String queryDates = "SELECT " + Table.INVOICE_V3.ID + " FROM " + Table.Names.INVOICE_V3 +
+                " WHERE " + Table.INVOICE_V3.ID + " = ?" +
+                " AND " + Table.INVOICE_V3.T_CREATEDON + " IS NOT NULL" +
+                " AND " + Table.INVOICE_V3.T_UPDATEDON + " IS NOT NULL" +
+                " AND " + Table.INVOICE_V3.T_CREATEDON + " = " + Table.INVOICE_V3.T_UPDATEDON;
         LOG.debug(queryDates);
         ResultSet rs = null;
         try (
@@ -154,7 +149,7 @@ public class TableInvoiceTest {
             long dateunitUnitday = TestDateUnitFunctions.insertSelectDate(dbConnectionResource.getConnection(),
                     Date.from(LocalDate.of(2016, Month.MARCH, 1).atStartOfDay(ZoneId.systemDefault()).toInstant()));
 
-            long organizationId = tableOrganizationTest.insert("Organization TableInvoiceTest", "Organization Description From TableInvoiceTest #testInvoice_11_insert");
+            long organizationId = triggerOrganizationTest.insert("Organization TableInvoiceTest", "Organization Description From TableInvoiceTest #testInvoice_11_insert");
             long idJustInserted = insert("11_insert", organizationId, dateunitUnitday, "invoice comment 11", new BigDecimal("5.0"), new BigDecimal("6.0"));
             LOG.debug("idJustInserted > 0: idJustInserted=" + idJustInserted);
             assert (idJustInserted > 0);
@@ -180,15 +175,15 @@ public class TableInvoiceTest {
         long dateunitUnitday = TestDateUnitFunctions.insertSelectDate(dbConnectionResource.getConnection(),
                 Date.from(LocalDate.of(2016, Month.MARCH, 1).atStartOfDay(ZoneId.systemDefault()).toInstant()));
 
-        long organizationId = tableOrganizationTest.insert("Organization TableInvoiceTest", "Organization Description From TableInvoiceTest #testInvoice_11_insert");
+        long organizationId = triggerOrganizationTest.insert("Organization TableInvoiceTest", "Organization Description From TableInvoiceTest #testInvoice_11_insert");
         String invoiceNumber = "Invoice_12_insert";
         long idJustInserted1 = insert(invoiceNumber, organizationId, dateunitUnitday, "invoice comment 11", new BigDecimal("5.0"), new BigDecimal("6.0"));
         long idJustInserted2 = insert(invoiceNumber, organizationId, dateunitUnitday, "invoice comment 12", new BigDecimal("5.0"), new BigDecimal("6.0"));
     }
 
     public void updateComment(Long id, String comment) throws Exception {
-        String queryUpdate = "UPDATE " + Table.Names.INVOICE + " SET " + Table.INVOICE.COMMENT + " = ? " +
-                " WHERE " + Table.INVOICE.ID + " = ?";
+        String queryUpdate = "UPDATE " + Table.Names.INVOICE_V3 + " SET " + Table.INVOICE_V3.COMMENT + " = ? " +
+                " WHERE " + Table.INVOICE_V3.ID + " = ?";
         LOG.debug(queryUpdate);
         ResultSet rs = null;
         try (
@@ -203,8 +198,8 @@ public class TableInvoiceTest {
     }
 
     public void updateInvoiceNumber(Long id, String invoiceNumber) throws Exception {
-        String queryUpdate = "UPDATE " + Table.Names.INVOICE + " SET " + Table.INVOICE.INVOICE_NUMBER + " = ? " +
-                " WHERE " + Table.INVOICE.ID + " = ?";
+        String queryUpdate = "UPDATE " + Table.Names.INVOICE_V3 + " SET " + Table.INVOICE_V3.INVOICE_NUMBER + " = ? " +
+                " WHERE " + Table.INVOICE_V3.ID + " = ?";
         LOG.debug(queryUpdate);
         ResultSet rs = null;
         try (
@@ -219,8 +214,8 @@ public class TableInvoiceTest {
     }
 
     public void updateDate(Long id, Long dateunit) throws Exception {
-        String queryUpdate = "UPDATE " + Table.Names.INVOICE + " SET " + Table.INVOICE.DATEUNIT_UNITDAY + " = ? " +
-                " WHERE " + Table.INVOICE.ID + " = ?";
+        String queryUpdate = "UPDATE " + Table.Names.INVOICE_V3 + " SET " + Table.INVOICE_V3.DATEUNIT_UNITDAY + " = ? " +
+                " WHERE " + Table.INVOICE_V3.ID + " = ?";
         LOG.debug(queryUpdate);
         ResultSet rs = null;
         try (
@@ -237,12 +232,12 @@ public class TableInvoiceTest {
     @Test
     public void testInvoice_21_update() throws Exception {
         LOG.debug("testInvoice_21_update");
-        String querySelect = "SELECT MAX(" + Table.INVOICE.ID + ") FROM " + Table.Names.INVOICE;
-        String queryDates = "SELECT " + Table.INVOICE.ID + " FROM " + Table.Names.INVOICE +
-                " WHERE " + Table.INVOICE.ID + " = ?" +
-                " AND " + Table.INVOICE.T_CREATEDON + " IS NOT NULL" +
-                " AND " + Table.INVOICE.T_UPDATEDON + " IS NOT NULL" +
-                " AND " + Table.INVOICE.T_CREATEDON + " != " + Table.INVOICE.T_UPDATEDON;
+        String querySelect = "SELECT MAX(" + Table.INVOICE_V3.ID + ") FROM " + Table.Names.INVOICE_V3;
+        String queryDates = "SELECT " + Table.INVOICE_V3.ID + " FROM " + Table.Names.INVOICE_V3 +
+                " WHERE " + Table.INVOICE_V3.ID + " = ?" +
+                " AND " + Table.INVOICE_V3.T_CREATEDON + " IS NOT NULL" +
+                " AND " + Table.INVOICE_V3.T_UPDATEDON + " IS NOT NULL" +
+                " AND " + Table.INVOICE_V3.T_CREATEDON + " != " + Table.INVOICE_V3.T_UPDATEDON;
         LOG.debug(querySelect);
         LOG.debug(queryDates);
         ResultSet rs = null;
@@ -276,7 +271,7 @@ public class TableInvoiceTest {
         long dateunitUnitday = TestDateUnitFunctions.insertSelectDate(dbConnectionResource.getConnection(),
                 Date.from(LocalDate.of(2016, Month.MARCH, 1).atStartOfDay(ZoneId.systemDefault()).toInstant()));
 
-        long organizationId = tableOrganizationTest.insert("Organization TableInvoiceTest", "Organization Description From TableInvoiceTest #testInvoice_11_insert");
+        long organizationId = triggerOrganizationTest.insert("Organization TableInvoiceTest", "Organization Description From TableInvoiceTest #testInvoice_11_insert");
         String invoiceNumber1 = "22_update";
         String invoiceNumber2 = invoiceNumber1.substring(0, invoiceNumber1.length() - 2) + "aa";
         LOG.debug(String.format(">>>>invoiceNumber1=%s; invoiceNumber2=%s", invoiceNumber1, invoiceNumber2));
@@ -291,10 +286,10 @@ public class TableInvoiceTest {
     @Test
     public void testInvoice_31_delete() throws Exception {
         LOG.debug("testInvoice_31_delete");
-        String querySelect = "SELECT MIN(" + Table.INVOICE.ID + ") FROM " + Table.Names.INVOICE;
-        String queryDelete = "DELETE FROM " + Table.Names.INVOICE + " WHERE " +
-                Table.INVOICE.ID + " = ?";
-        String querySelectDeletedRow = "SELECT JSON_ROW FROM _DELETED_ROWS WHERE ID = (SELECT MAX(ID) FROM _DELETED_ROWS WHERE SCHEMA_NAME = 'TEST' AND TABLE_NAME = '" + Table.Names.INVOICE + "')";
+        String querySelect = "SELECT MIN(" + Table.INVOICE_V3.ID + ") FROM " + Table.Names.INVOICE_V3;
+        String queryDelete = "DELETE FROM " + Table.Names.INVOICE_V3 + " WHERE " +
+                Table.INVOICE_V3.ID + " = ?";
+        String querySelectDeletedRow = "SELECT JSON_ROW FROM _DELETED_ROWS WHERE ID = (SELECT MAX(ID) FROM _DELETED_ROWS WHERE SCHEMA_NAME = 'TEST' AND TABLE_NAME = '" + Table.Names.INVOICE_V3 + "')";
 
         LOG.debug(querySelect);
         LOG.debug(queryDelete);
@@ -327,7 +322,7 @@ public class TableInvoiceTest {
             JsonObject jsonObject = jsonParser.parse(jsonRow).getAsJsonObject();
             JsonObject rowJsonObject = jsonObject.get(Table.Elements.row.toString()).getAsJsonObject();
 
-            long idFromDeletedRows = rowJsonObject.get(Table.INVOICE.ID.toString()).getAsLong();
+            long idFromDeletedRows = rowJsonObject.get(Table.INVOICE_V3.ID.toString()).getAsLong();
             assertEquals(true, idMin == idFromDeletedRows);
         } finally {
             if (rs != null) rs.close();
@@ -337,7 +332,7 @@ public class TableInvoiceTest {
     private JsonObject createJsonObject() throws Exception {
         String schemaName = "TEST";
 
-        Object[] row = new Object[Table.INVOICE.values().length];
+        Object[] row = new Object[Table.INVOICE_V3.values().length];
         row[0] = 1L;
         row[1] = "20160715114901";
         row[2] = 2L;
@@ -347,17 +342,17 @@ public class TableInvoiceTest {
         row[6] = SIMPLE_DATE_TIME_FORMAT.parse("2001-02-03 14:05:06");
         row[7] = SIMPLE_DATE_TIME_FORMAT.parse("2006-05-04 03:02:01");
         JsonObject rowJson = new JsonObject();
-        rowJson.addProperty(Table.INVOICE.ID.toString(), (Long) row[0]);
-        rowJson.addProperty(Table.INVOICE.INVOICE_NUMBER.toString(), (String) row[1]);
-        rowJson.addProperty(Table.INVOICE.ORGANIZATION_ID.toString(), (Long) row[2]);
-        rowJson.addProperty(Table.INVOICE.COMMENT.toString(), (String) row[3]);
-        rowJson.addProperty(Table.INVOICE.SUB_TOTAL.toString(), (BigDecimal) row[4]);
-        rowJson.addProperty(Table.INVOICE.TOTAL.toString(), (BigDecimal) row[5]);
-        rowJson.addProperty(Table.INVOICE.T_CREATEDON.toString(), SIMPLE_DATE_TIME_FORMAT.format((Date) row[6]));
-        rowJson.addProperty(Table.INVOICE.T_UPDATEDON.toString(), SIMPLE_DATE_TIME_FORMAT.format((Date) row[7]));
+        rowJson.addProperty(Table.INVOICE_V3.ID.toString(), (Long) row[0]);
+        rowJson.addProperty(Table.INVOICE_V3.INVOICE_NUMBER.toString(), (String) row[1]);
+        rowJson.addProperty(Table.INVOICE_V3.ORGANIZATION_ID.toString(), (Long) row[2]);
+        rowJson.addProperty(Table.INVOICE_V3.COMMENT.toString(), (String) row[3]);
+        rowJson.addProperty(Table.INVOICE_V3.DEBIT_TOTAL.toString(), (BigDecimal) row[4]);
+        rowJson.addProperty(Table.INVOICE_V3.CREDIT_TOTAL.toString(), (BigDecimal) row[5]);
+        rowJson.addProperty(Table.INVOICE_V3.T_CREATEDON.toString(), SIMPLE_DATE_TIME_FORMAT.format((Date) row[6]));
+        rowJson.addProperty(Table.INVOICE_V3.T_UPDATEDON.toString(), SIMPLE_DATE_TIME_FORMAT.format((Date) row[7]));
 
         JsonObject tableJson = new JsonObject();
-        tableJson.addProperty(Table.Elements.tableName.toString(), schemaName + "." + Table.Names.INVOICE);
+        tableJson.addProperty(Table.Elements.tableName.toString(), schemaName + "." + Table.Names.INVOICE_V3);
         tableJson.add(Table.Elements.row.toString(), rowJson);
 
         return tableJson;
@@ -366,9 +361,9 @@ public class TableInvoiceTest {
     @Test
     public void testDeleteToJsonObject() throws Exception{
         JsonObject tableJson = createJsonObject();
-        String expectedJsonString = "{\"tableName\":\"TEST.INVOICE\",\"row\":" +
+        String expectedJsonString = "{\"tableName\":\"TEST.INVOICE_V3\",\"row\":" +
                 "{\"ID\":1,\"INVOICE_NUMBER\":\"20160715114901\",\"ORGANIZATION_ID\":2,\"COMMENT\":\"invoice comment\","+
-                "\"SUB_TOTAL\":2.0,\"TOTAL\":5.0," +
+                "\"DEBIT_TOTAL\":2.0,\"CREDIT_TOTAL\":5.0," +
                 "\"T_CREATEDON\":\"2001-02-03 14:05:06\",\"T_UPDATEDON\":\"2006-05-04 03:02:01\"}}";
 
         LOG.debug("testDeleteToJsonObject.expectedJsonString:" + expectedJsonString);
@@ -383,35 +378,35 @@ public class TableInvoiceTest {
         JsonObject jsonObject = jsonParser.parse(tableJsonString).getAsJsonObject();
 
         String schemaTableName = jsonObject.get(Table.Elements.tableName.toString()).getAsString();
-        assertEquals("TEST.INVOICE", schemaTableName);
+        assertEquals("TEST.INVOICE_V3", schemaTableName);
 
         JsonObject rowJsonObject = jsonObject.get(Table.Elements.row.toString()).getAsJsonObject();
 
         LOG.debug("testDeleteReadJsonObject.rowJsonObject:" + rowJsonObject.toString());
 
-        long id = rowJsonObject.get(Table.INVOICE.ID.toString()).getAsLong();
+        long id = rowJsonObject.get(Table.INVOICE_V3.ID.toString()).getAsLong();
         assertEquals(1L, id);
 
-        JsonElement jsonElementInvoiceNumber = rowJsonObject.get(Table.INVOICE.INVOICE_NUMBER.toString());
+        JsonElement jsonElementInvoiceNumber = rowJsonObject.get(Table.INVOICE_V3.INVOICE_NUMBER.toString());
         String invoiceNumber= JsonUtils.getNullableFromJsonElementAsString(jsonElementInvoiceNumber);
         assertEquals("20160715114901", invoiceNumber);
 
-        long organizationId = rowJsonObject.get(Table.INVOICE.ORGANIZATION_ID.toString()).getAsLong();
+        long organizationId = rowJsonObject.get(Table.INVOICE_V3.ORGANIZATION_ID.toString()).getAsLong();
         assertEquals(2L, organizationId);
-        JsonElement jsonElementDesc = rowJsonObject.get(Table.INVOICE.COMMENT.toString());
+        JsonElement jsonElementDesc = rowJsonObject.get(Table.INVOICE_V3.COMMENT.toString());
         String description = JsonUtils.getNullableFromJsonElementAsString(jsonElementDesc);
         assertEquals("invoice comment", description);
 
-        JsonElement jsonElementSubTotal = rowJsonObject.get(Table.INVOICE.SUB_TOTAL.toString());
+        JsonElement jsonElementSubTotal = rowJsonObject.get(Table.INVOICE_V3.DEBIT_TOTAL.toString());
         BigDecimal subTotal = JsonUtils.getNullableFromJsonElementAsBigDecimal(jsonElementSubTotal);
         assertEquals(new BigDecimal("2.0"), subTotal);
-        JsonElement jsonElementTotal = rowJsonObject.get(Table.INVOICE.TOTAL.toString());
+        JsonElement jsonElementTotal = rowJsonObject.get(Table.INVOICE_V3.CREDIT_TOTAL.toString());
         BigDecimal total = JsonUtils.getNullableFromJsonElementAsBigDecimal(jsonElementTotal);
         assertEquals(new BigDecimal("5.0"), total);
 
-        Date createdOn = SIMPLE_DATE_TIME_FORMAT.parse(rowJsonObject.get(Table.INVOICE.T_CREATEDON.toString()).getAsString());
+        Date createdOn = SIMPLE_DATE_TIME_FORMAT.parse(rowJsonObject.get(Table.INVOICE_V3.T_CREATEDON.toString()).getAsString());
         assertEquals(SIMPLE_DATE_TIME_FORMAT.parse("2001-02-03 14:05:06"), createdOn);
-        Date updatedOn = SIMPLE_DATE_TIME_FORMAT.parse(rowJsonObject.get(Table.INVOICE.T_UPDATEDON.toString()).getAsString());
+        Date updatedOn = SIMPLE_DATE_TIME_FORMAT.parse(rowJsonObject.get(Table.INVOICE_V3.T_UPDATEDON.toString()).getAsString());
         assertEquals(SIMPLE_DATE_TIME_FORMAT.parse("2006-05-04 03:02:01"), updatedOn);
     }
 }

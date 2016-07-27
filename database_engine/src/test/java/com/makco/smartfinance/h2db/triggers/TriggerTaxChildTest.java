@@ -34,8 +34,8 @@ import static org.junit.Assert.assertEquals;
  * Time: 00:54
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class TableTaxChildTest {
-    private static final Logger LOG = LogManager.getLogger(TableTaxChildTest.class);
+public class TriggerTaxChildTest {
+    private static final Logger LOG = LogManager.getLogger(TriggerTaxChildTest.class);
     private static final SimpleDateFormat SIMPLE_DATE_TIME_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     private static final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -101,9 +101,9 @@ public class TableTaxChildTest {
         ){
             //https://en.wikipedia.org/wiki/Goods_and_services_tax_%28Canada%29
             Date startDate = Date.from(LocalDate.of(2008, Month.JANUARY, 1).atStartOfDay(ZoneId.systemDefault()).toInstant());
-            TableTaxTest tableTaxTest = new TableTaxTest();
-            long idTax1 = tableTaxTest.insert("GST1 (2008)", "#1 the goods and services tax", new BigDecimal("5.0"), "{num} * tax / 100", startDate, null);
-            long idTax2 = tableTaxTest.insert("GST2 (2008)", "#2 the goods and services tax", new BigDecimal("7.0"), "{num} * tax / 100", startDate, null);
+            TriggerTaxTest triggerTaxTest = new TriggerTaxTest();
+            long idTax1 = triggerTaxTest.insert("GST1 (2008)", "#1 the goods and services tax", new BigDecimal("5.0"), "{num} * tax / 100", startDate, null);
+            long idTax2 = triggerTaxTest.insert("GST2 (2008)", "#2 the goods and services tax", new BigDecimal("7.0"), "{num} * tax / 100", startDate, null);
 
             insert(idTax1, idTax2);
 //            LOG.debug("idJustInserted > 0: idJustInserted=" + idJustInserted);
@@ -137,9 +137,9 @@ public class TableTaxChildTest {
         ){
             //https://en.wikipedia.org/wiki/Goods_and_services_tax_%28Canada%29
             Date startDate = Date.from(LocalDate.of(2008, Month.JANUARY, 1).atStartOfDay(ZoneId.systemDefault()).toInstant());
-            TableTaxTest tableTaxTest = new TableTaxTest();
-            long idTax1 = tableTaxTest.insert("GST3 (2008)", "#3 the goods and services tax", new BigDecimal("5.0"), "{num} * tax / 100", startDate, null);
-            long idTax2 = tableTaxTest.insert("GST4 (2008)", "#4 the goods and services tax", new BigDecimal("7.0"), "{num} * tax / 100", startDate, null);
+            TriggerTaxTest triggerTaxTest = new TriggerTaxTest();
+            long idTax1 = triggerTaxTest.insert("GST3 (2008)", "#3 the goods and services tax", new BigDecimal("5.0"), "{num} * tax / 100", startDate, null);
+            long idTax2 = triggerTaxTest.insert("GST4 (2008)", "#4 the goods and services tax", new BigDecimal("7.0"), "{num} * tax / 100", startDate, null);
 
             insert(idTax1, idTax2);
             insert(idTax1, idTax2);

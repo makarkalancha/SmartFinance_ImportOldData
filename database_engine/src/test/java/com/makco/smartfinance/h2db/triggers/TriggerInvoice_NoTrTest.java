@@ -36,11 +36,11 @@ import static org.junit.Assert.assertEquals;
  * Created by Makar Kalancha on 11 Jul 2016.
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class TableInvoice_NoTrTest {
-    private static final Logger LOG = LogManager.getLogger(TableInvoice_NoTrTest.class);
+public class TriggerInvoice_NoTrTest {
+    private static final Logger LOG = LogManager.getLogger(TriggerInvoice_NoTrTest.class);
     private static final SimpleDateFormat SIMPLE_DATE_TIME_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-    private TableOrganizationTest tableOrganizationTest = new TableOrganizationTest();
+    private TriggerOrganizationTest triggerOrganizationTest = new TriggerOrganizationTest();
 
     @ClassRule
     public static DBConnectionResource dbConnectionResource = new DBConnectionResource();
@@ -152,7 +152,7 @@ public class TableInvoice_NoTrTest {
             long dateunitUnitday = TestDateUnitFunctions.insertSelectDate(dbConnectionResource.getConnection(),
                     Date.from(LocalDate.of(2016, Month.MARCH, 1).atStartOfDay(ZoneId.systemDefault()).toInstant()));
 
-            long organizationId = tableOrganizationTest.insert("Organization TableInvoiceTest", "Organization Description From TableInvoiceTest #testInvoice_11_insert");
+            long organizationId = triggerOrganizationTest.insert("Organization TableInvoiceTest", "Organization Description From TableInvoiceTest #testInvoice_11_insert");
             long idJustInserted = insert("11_insert", organizationId, dateunitUnitday, "invoice comment 11", new BigDecimal("5.0"), new BigDecimal("6.0"));
             LOG.debug("idJustInserted > 0: idJustInserted=" + idJustInserted);
             assert (idJustInserted > 0);
@@ -178,7 +178,7 @@ public class TableInvoice_NoTrTest {
         long dateunitUnitday = TestDateUnitFunctions.insertSelectDate(dbConnectionResource.getConnection(),
                 Date.from(LocalDate.of(2016, Month.MARCH, 1).atStartOfDay(ZoneId.systemDefault()).toInstant()));
 
-        long organizationId = tableOrganizationTest.insert("Organization TableInvoiceTest", "Organization Description From TableInvoiceTest #testInvoice_11_insert");
+        long organizationId = triggerOrganizationTest.insert("Organization TableInvoiceTest", "Organization Description From TableInvoiceTest #testInvoice_11_insert");
         String invoiceNumber = "Invoice_12_insert";
         long idJustInserted1 = insert(invoiceNumber, organizationId, dateunitUnitday, "invoice comment 11", new BigDecimal("5.0"), new BigDecimal("6.0"));
         long idJustInserted2 = insert(invoiceNumber, organizationId, dateunitUnitday, "invoice comment 12", new BigDecimal("5.0"), new BigDecimal("6.0"));
@@ -274,7 +274,7 @@ public class TableInvoice_NoTrTest {
         long dateunitUnitday = TestDateUnitFunctions.insertSelectDate(dbConnectionResource.getConnection(),
                 Date.from(LocalDate.of(2016, Month.MARCH, 1).atStartOfDay(ZoneId.systemDefault()).toInstant()));
 
-        long organizationId = tableOrganizationTest.insert("Organization TableInvoiceTest", "Organization Description From TableInvoiceTest #testInvoice_11_insert");
+        long organizationId = triggerOrganizationTest.insert("Organization TableInvoiceTest", "Organization Description From TableInvoiceTest #testInvoice_11_insert");
         String invoiceNumber1 = "22_update";
         String invoiceNumber2 = invoiceNumber1.substring(0, invoiceNumber1.length() - 2) + "aa";
         LOG.debug(String.format(">>>>invoiceNumber1=%s; invoiceNumber2=%s", invoiceNumber1, invoiceNumber2));

@@ -29,14 +29,12 @@ import static org.junit.Assert.assertEquals;
 
 /**
  * User: Makar Kalancha
- * Date: 25/03/2016
- * Time: 12:05
+ * Date: 24/04/2016
+ * Time: 00:54
  */
-
-//https://github.com/junit-team/junit4/blob/master/doc/ReleaseNotes4.11.md#test-execution-order
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class TableFamilyMemberTest {
-    private static final Logger LOG = LogManager.getLogger(TableFamilyMemberTest.class);
+public class TriggerCurrencyTest {
+    private static final Logger LOG = LogManager.getLogger(TriggerCurrencyTest.class);
     private static final SimpleDateFormat sdfJson = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     @ClassRule
@@ -44,40 +42,40 @@ public class TableFamilyMemberTest {
 
     @BeforeClass
     public static void setUpClass() throws Exception {
-        String mess1 = "TriggerFamilyMemberTest: Test->BeforeClass";
+        String mess1 = "TriggerCurrencyTest: Test->BeforeClass";
         System.out.println(mess1);
         LOG.debug(mess1);
         //        H2DbUtils.setSchema(dbConnectionResource.getConnection(), "TEST");
-        H2DbUtilsTest.emptyTable(dbConnectionResource.getConnection(), Table.Names.FAMILY_MEMBER);
+        H2DbUtilsTest.emptyTable(dbConnectionResource.getConnection(), Table.Names.CURRENCY);
     }
 
     @AfterClass
     public static void tearDownClass() throws Exception {
         //first remove schema test
-        String mess1 = "TriggerFamilyMemberTest: Test->AfterClass";
+        String mess1 = "TriggerCurrencyTest: Test->AfterClass";
         System.out.println(mess1);
         LOG.debug(mess1);
     }
 
     @Before
     public void setUp() throws Exception {
-        String mess1 = "TriggerFamilyMemberTest: Test->Before";
+        String mess1 = "TriggerCurrencyTest: Test->Before";
         System.out.println(mess1);
         LOG.debug(mess1);
     }
 
     @After
     public void tearDown() throws Exception {
-        String mess1 = "TriggerFamilyMemberTest: Test->After";
+        String mess1 = "TriggerCurrencyTest: Test->After";
         System.out.println(mess1);
         LOG.debug(mess1);
     }
 
-    public Long insert(String name, String desc) throws Exception {
+    public Long insert(String code, String name, String desc) throws Exception {
         LOG.debug("insert");
-        String queryInsert = "INSERT INTO " + Table.Names.FAMILY_MEMBER +
-                " (" + Table.FAMILY_MEMBER.NAME + ", " + Table.FAMILY_MEMBER.DESCRIPTION + ") " +
-                "VALUES('" + name + "','" + desc + "')";
+        String queryInsert = "INSERT INTO " + Table.Names.CURRENCY +
+                " (" + Table.CURRENCY.CODE + ", " + Table.CURRENCY.NAME + ", " + Table.CURRENCY.DESCRIPTION + ") " +
+                "VALUES('" + code + "','" + name + "','" + desc + "')";
         LOG.debug(queryInsert);
         ResultSet rs = null;
         Long result = -1L;
@@ -96,21 +94,20 @@ public class TableFamilyMemberTest {
         }
     }
 
-    //    @Test: junit doesn't support order in test (http://stackoverflow.com/questions/3693626/how-to-run-test-methods-in-specific-order-in-junit4)
     @Test
-    public void testFamilyMember_11_insert() throws Exception {
-        LOG.debug("testFamilyMember_11_insert");
-        String queryDates = "SELECT " + Table.FAMILY_MEMBER.ID + " FROM " + Table.Names.FAMILY_MEMBER +
-                " WHERE " + Table.FAMILY_MEMBER.ID + " = ?" +
-                " AND " + Table.FAMILY_MEMBER.T_CREATEDON + " IS NOT NULL" +
-                " AND " + Table.FAMILY_MEMBER.T_UPDATEDON + " IS NOT NULL" +
-                " AND " + Table.FAMILY_MEMBER.T_CREATEDON + " = " + Table.FAMILY_MEMBER.T_UPDATEDON;
+    public void testCurrency_11_insert() throws Exception {
+        LOG.debug("testCurrency_11_insert");
+        String queryDates = "SELECT " + Table.CURRENCY.ID + " FROM " + Table.Names.CURRENCY +
+                " WHERE " + Table.CURRENCY.ID + " = ?" +
+                " AND " + Table.CURRENCY.T_CREATEDON + " IS NOT NULL" +
+                " AND " + Table.CURRENCY.T_UPDATEDON + " IS NOT NULL" +
+                " AND " + Table.CURRENCY.T_CREATEDON + " = " + Table.CURRENCY.T_UPDATEDON;
         LOG.debug(queryDates);
         ResultSet rs = null;
         try (
-            PreparedStatement selectDatesPS = dbConnectionResource.getConnection().prepareStatement(queryDates);
+                PreparedStatement selectDatesPS = dbConnectionResource.getConnection().prepareStatement(queryDates);
         ){
-            long idJustInserted = insert("the Flintstones", "family");
+            long idJustInserted = insert("CAD","cad name","cad desc");
             LOG.debug("idJustInserted > 0: idJustInserted=" + idJustInserted);
             assert (idJustInserted > 0);
             selectDatesPS.setLong(1, idJustInserted);
@@ -129,22 +126,22 @@ public class TableFamilyMemberTest {
     }
 
     @Test(expected=JdbcSQLException.class)
-    public void testFamilyMember_12_insertDuplicate() throws Exception {
-        LOG.debug("testFamilyMember_12_insertDuplicate");
-        //Unique index or primary key violation: "IDX_UNQ_FMLMMBR_NM ON TEST.FAMILY_MEMBER(NAME) VALUES ('the Flintstones', 9)"
-        testFamilyMember_11_insert();
+    public void testCurrency_12_insertDuplicate() throws Exception {
+        LOG.debug("testCurrency_12_insertDuplicate");
+        //Unique index or primary key violation: "IDX_UNQ_CRRNC_CD ON TEST.CURRENCY(CODE) VALUES ('CAD', 7)"
+        testCurrency_11_insert();
     }
 
-    public void update(Long id, String name) throws Exception {
+    public void update(Long id, String code) throws Exception {
         LOG.debug("update");
-        String queryUpdate = "UPDATE " + Table.Names.FAMILY_MEMBER + " SET " + Table.FAMILY_MEMBER.NAME + " = ? " +
-                " WHERE " + Table.FAMILY_MEMBER.ID + " = ?";
+        String queryUpdate = "UPDATE " + Table.Names.CURRENCY + " SET " + Table.CURRENCY.CODE + " = ? " +
+                " WHERE " + Table.CURRENCY.ID + " = ?";
         LOG.debug(queryUpdate);
         ResultSet rs = null;
         try (
                 PreparedStatement updatePS = dbConnectionResource.getConnection().prepareStatement(queryUpdate);
         ){
-            updatePS.setString(1, name);
+            updatePS.setString(1, code);
             updatePS.setLong(2, id);
             updatePS.executeUpdate();
         } finally {
@@ -153,14 +150,14 @@ public class TableFamilyMemberTest {
     }
 
     @Test
-    public void testFamilyMember_21_update() throws Exception {
-        LOG.debug("testFamilyMember_21_update");
-        String querySelect = "SELECT MAX(" + Table.FAMILY_MEMBER.ID + ") FROM " + Table.Names.FAMILY_MEMBER;
-        String queryDates = "SELECT " + Table.FAMILY_MEMBER.ID + " FROM " + Table.Names.FAMILY_MEMBER +
-                " WHERE " + Table.FAMILY_MEMBER.ID + " = ?" +
-                " AND " + Table.FAMILY_MEMBER.T_CREATEDON + " IS NOT NULL" +
-                " AND " + Table.FAMILY_MEMBER.T_UPDATEDON + " IS NOT NULL" +
-                " AND " + Table.FAMILY_MEMBER.T_CREATEDON + " != " + Table.FAMILY_MEMBER.T_UPDATEDON;
+    public void testCurrency_21_update() throws Exception {
+        LOG.debug("testCurrency_21_update");
+        String querySelect = "SELECT MAX(" + Table.CURRENCY.ID + ") FROM " + Table.Names.CURRENCY;
+        String queryDates = "SELECT " + Table.CURRENCY.ID + " FROM " + Table.Names.CURRENCY +
+                " WHERE " + Table.CURRENCY.ID + " = ?" +
+                " AND " + Table.CURRENCY.T_CREATEDON + " IS NOT NULL" +
+                " AND " + Table.CURRENCY.T_UPDATEDON + " IS NOT NULL" +
+                " AND " + Table.CURRENCY.T_CREATEDON + " != " + Table.CURRENCY.T_UPDATEDON;
         LOG.debug(querySelect);
         LOG.debug(queryDates);
         ResultSet rs = null;
@@ -173,7 +170,7 @@ public class TableFamilyMemberTest {
             rs.next();
             idMax = rs.getLong(1);
 
-            update(idMax, "Barney");
+            update(idMax, "USD");
 
             selectDatesPS.setLong(1, idMax);
             rs = selectDatesPS.executeQuery();
@@ -186,27 +183,27 @@ public class TableFamilyMemberTest {
         }
     }
 
-    //Unique index or primary key violation: "IDX_UNQ_FMLMMBR_NM ON TEST.FAMILY_MEMBER(NAME)
     @Test(expected=JdbcSQLException.class)
-    public void testFamilyMember_22_updateDuplicate() throws Exception {
-        LOG.debug("testFamilyMember_22_updateDuplicate");
+    public void testCurrency_22_updateDuplicate() throws Exception {
+        LOG.debug("testCurrency_22_updateDuplicate");
         ResultSet rs = null;
         try {
-            long idJustInserted = insert("Wilma", "Fred''s wife");
-            //"Barney" duplicate update, 1st update in method  testFamilyMember_21_update
-            update(idJustInserted, "Barney");
+            long idJustInserted = insert("EUR", "euro", "Europa''s currency");
+            //"USD" duplicate update, 1st update in method  testCurrency_21_update
+            //Unique index or primary key violation: "IDX_UNQ_CRRNC_CD ON TEST.CURRENCY(CODE) VALUES ('USD', 7)"
+            update(idJustInserted, "USD");
         } finally {
             if (rs != null) rs.close();
         }
     }
 
     @Test
-    public void testFamilyMember_31_delete() throws Exception {
-        LOG.debug("testFamilyMember_31_delete");
-        String querySelect = "SELECT MIN(" + Table.FAMILY_MEMBER.ID + ") FROM " + Table.Names.FAMILY_MEMBER;
-        String queryDelete = "DELETE FROM " + Table.Names.FAMILY_MEMBER + " WHERE " +
-                Table.FAMILY_MEMBER.ID + " = ?";
-        String querySelectDeletedRow = "SELECT JSON_ROW FROM _DELETED_ROWS WHERE ID = (SELECT MAX(ID) FROM _DELETED_ROWS WHERE SCHEMA_NAME = 'TEST' AND TABLE_NAME = '" + Table.Names.FAMILY_MEMBER + "')";
+    public void testCurrency_31_delete() throws Exception {
+        LOG.debug("testCurrency_31_delete");
+        String querySelect = "SELECT MIN(" + Table.CURRENCY.ID + ") FROM " + Table.Names.CURRENCY;
+        String queryDelete = "DELETE FROM " + Table.Names.CURRENCY + " WHERE " +
+                Table.CURRENCY.ID + " = ?";
+        String querySelectDeletedRow = "SELECT JSON_ROW FROM _DELETED_ROWS WHERE ID = (SELECT MAX(ID) FROM _DELETED_ROWS WHERE SCHEMA_NAME = 'TEST' AND TABLE_NAME = '" + Table.Names.CURRENCY + "')";
 
         LOG.debug(querySelect);
         LOG.debug(queryDelete);
@@ -239,7 +236,7 @@ public class TableFamilyMemberTest {
             JsonObject jsonObject = jsonParser.parse(jsonRow).getAsJsonObject();
             JsonObject rowJsonObject = jsonObject.get(Table.Elements.row.toString()).getAsJsonObject();
 
-            long idFromDeletedRows = rowJsonObject.get(Table.FAMILY_MEMBER.ID.toString()).getAsLong();
+            long idFromDeletedRows = rowJsonObject.get(Table.CURRENCY.ID.toString()).getAsLong();
             assertEquals(true, idMin == idFromDeletedRows);
         } finally {
             if (rs != null) rs.close();
@@ -249,21 +246,23 @@ public class TableFamilyMemberTest {
     private JsonObject createJsonObject() throws Exception {
         String schemaName = "TEST";
 
-        Object[] row = new Object[Table.FAMILY_MEMBER.values().length];
+        Object[] row = new Object[Table.CURRENCY.values().length];
         row[0] = 1L;
-        row[1] = "Fred";
-        row[2] = null;
-        row[3] = sdfJson.parse("2001-02-03 14:05:06");
-        row[4] = sdfJson.parse("2006-05-04 03:02:01");
+        row[1] = "CAD";
+        row[2] = "CAD name";
+        row[3] = "CAD desc";
+        row[4] = sdfJson.parse("2001-02-03 14:05:06");
+        row[5] = sdfJson.parse("2006-05-04 03:02:01");
         JsonObject rowJson = new JsonObject();
-        rowJson.addProperty(Table.FAMILY_MEMBER.ID.toString(), (Long) row[0]);
-        rowJson.addProperty(Table.FAMILY_MEMBER.NAME.toString(), (String) row[1]);
-        rowJson.addProperty(Table.FAMILY_MEMBER.DESCRIPTION.toString(), (String) row[2]);
-        rowJson.addProperty(Table.FAMILY_MEMBER.T_CREATEDON.toString(), sdfJson.format((Date) row[3]));
-        rowJson.addProperty(Table.FAMILY_MEMBER.T_UPDATEDON.toString(), sdfJson.format((Date) row[4]));
+        rowJson.addProperty(Table.CURRENCY.ID.toString(), (Long) row[0]);
+        rowJson.addProperty(Table.CURRENCY.CODE.toString(), (String) row[1]);
+        rowJson.addProperty(Table.CURRENCY.NAME.toString(), (String) row[2]);
+        rowJson.addProperty(Table.CURRENCY.DESCRIPTION.toString(), (String) row[3]);
+        rowJson.addProperty(Table.CURRENCY.T_CREATEDON.toString(), sdfJson.format((Date) row[4]));
+        rowJson.addProperty(Table.CURRENCY.T_UPDATEDON.toString(), sdfJson.format((Date) row[5]));
 
         JsonObject tableJson = new JsonObject();
-        tableJson.addProperty(Table.Elements.tableName.toString(), schemaName + "." + Table.Names.FAMILY_MEMBER);
+        tableJson.addProperty(Table.Elements.tableName.toString(), schemaName + "." + Table.Names.CURRENCY);
         tableJson.add(Table.Elements.row.toString(), rowJson);
 
         return tableJson;
@@ -272,7 +271,7 @@ public class TableFamilyMemberTest {
     @Test
     public void testDeleteToJsonObject() throws Exception{
         JsonObject tableJson = createJsonObject();
-        String expectedJsonString = "{\"tableName\":\"TEST.FAMILY_MEMBER\",\"row\":{\"ID\":1,\"NAME\":\"Fred\",\"DESCRIPTION\":null,\"T_CREATEDON\":\"2001-02-03 14:05:06\",\"T_UPDATEDON\":\"2006-05-04 03:02:01\"}}";
+        String expectedJsonString = "{\"tableName\":\"TEST.CURRENCY\",\"row\":{\"ID\":1,\"CODE\":\"CAD\",\"NAME\":\"CAD name\",\"DESCRIPTION\":\"CAD desc\",\"T_CREATEDON\":\"2001-02-03 14:05:06\",\"T_UPDATEDON\":\"2006-05-04 03:02:01\"}}";
 
         LOG.debug("testDeleteToJsonObject.expectedJsonString:" + expectedJsonString);
         LOG.debug("testDeleteToJsonObject.actualJsonString:" + tableJson.toString());
@@ -286,22 +285,25 @@ public class TableFamilyMemberTest {
         JsonObject jsonObject = jsonParser.parse(tableJsonString).getAsJsonObject();
 
         String schemaTableName = jsonObject.get(Table.Elements.tableName.toString()).getAsString();
-        assertEquals("TEST.FAMILY_MEMBER", schemaTableName);
+        assertEquals("TEST.CURRENCY", schemaTableName);
 
         JsonObject rowJsonObject = jsonObject.get(Table.Elements.row.toString()).getAsJsonObject();
 
         LOG.debug("testDeleteReadJsonObject.rowJsonObject:" + rowJsonObject.toString());
 
-        long id = rowJsonObject.get(Table.FAMILY_MEMBER.ID.toString()).getAsLong();
+        long id = rowJsonObject.get(Table.CURRENCY.ID.toString()).getAsLong();
         assertEquals(1L, id);
-        String name = rowJsonObject.get(Table.FAMILY_MEMBER.NAME.toString()).getAsString();
-        assertEquals("Fred", name);
-        JsonElement jsonElement = rowJsonObject.get(Table.FAMILY_MEMBER.DESCRIPTION.toString());
-        String description = JsonUtils.getNullableFromJsonElementAsString(jsonElement);
-        assertEquals(null, description);
-        Date createdOn = sdfJson.parse(rowJsonObject.get(Table.FAMILY_MEMBER.T_CREATEDON.toString()).getAsString());
+        String code = rowJsonObject.get(Table.CURRENCY.CODE.toString()).getAsString();
+        assertEquals("CAD", code);
+        JsonElement jsonElementName = rowJsonObject.get(Table.CURRENCY.NAME.toString());
+        String name = JsonUtils.getNullableFromJsonElementAsString(jsonElementName);
+        assertEquals("CAD name", name);
+        JsonElement jsonElementDesc = rowJsonObject.get(Table.CURRENCY.DESCRIPTION.toString());
+        String description = JsonUtils.getNullableFromJsonElementAsString(jsonElementDesc);
+        assertEquals("CAD desc", description);
+        Date createdOn = sdfJson.parse(rowJsonObject.get(Table.CURRENCY.T_CREATEDON.toString()).getAsString());
         assertEquals(sdfJson.parse("2001-02-03 14:05:06"), createdOn);
-        Date updatedOn = sdfJson.parse(rowJsonObject.get(Table.FAMILY_MEMBER.T_UPDATEDON.toString()).getAsString());
+        Date updatedOn = sdfJson.parse(rowJsonObject.get(Table.CURRENCY.T_UPDATEDON.toString()).getAsString());
         assertEquals(sdfJson.parse("2006-05-04 03:02:01"), updatedOn);
     }
 }

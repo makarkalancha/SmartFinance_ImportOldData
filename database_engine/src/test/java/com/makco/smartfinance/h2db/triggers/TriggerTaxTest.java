@@ -37,8 +37,8 @@ import static org.junit.Assert.assertEquals;
  * Time: 00:54
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class TableTaxTest {
-    private static final Logger LOG = LogManager.getLogger(TableTaxTest.class);
+public class TriggerTaxTest {
+    private static final Logger LOG = LogManager.getLogger(TriggerTaxTest.class);
     private static final SimpleDateFormat SIMPLE_DATE_TIME_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     private static final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
 

@@ -36,14 +36,14 @@ import static org.junit.Assert.assertEquals;
  * Created by Makar Kalancha on 12 Jul 2016.
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class TableTransactionTest {
-    private static final Logger LOG = LogManager.getLogger(TableTransactionTest.class);
+public class TriggerTransactionTest {
+    private static final Logger LOG = LogManager.getLogger(TriggerTransactionTest.class);
     private static final SimpleDateFormat SIMPLE_DATE_TIME_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-    private TableAccountGroupTest tableAccountGroupTest = new TableAccountGroupTest();
-    private TableAccountTest tableAccountTest= new TableAccountTest();
-    private TableOrganizationTest tableOrganizationTest = new TableOrganizationTest();
-    private TableInvoiceTest tableInvoiceTest = new TableInvoiceTest();
+    private TriggerAccountGroupTest triggerAccountGroupTest = new TriggerAccountGroupTest();
+    private TriggerAccountTest triggerAccountTest = new TriggerAccountTest();
+    private TriggerOrganizationTest triggerOrganizationTest = new TriggerOrganizationTest();
+    private TriggerInvoiceTest triggerInvoiceTest = new TriggerInvoiceTest();
 
     @ClassRule
     public static DBConnectionResource dbConnectionResource = new DBConnectionResource();
@@ -134,14 +134,14 @@ public class TableTransactionTest {
                     Date.from(LocalDate.of(2016, Month.MARCH, 1).atStartOfDay(ZoneId.systemDefault()).toInstant()));
 
             String accountGroupType = "C";
-            long accountGroupId = tableAccountGroupTest.insert(accountGroupType, "account group name",
+            long accountGroupId = triggerAccountGroupTest.insert(accountGroupType, "account group name",
                     "account group description from  TableTransactionTest #testTransaction_11_insert");
-            long accountId = tableAccountTest.insert(accountGroupId, accountGroupType, "account name",
+            long accountId = triggerAccountTest.insert(accountGroupId, accountGroupType, "account name",
                     "account description from  TableTransactionTest #testTransaction_11_insert");
 
-            long organizationId = tableOrganizationTest.insert("TableTransactionTest",
+            long organizationId = triggerOrganizationTest.insert("TableTransactionTest",
                     "Organization Description From TableTransactionTest #testItem_11_insert");
-            long invoiceId = tableInvoiceTest.insert("11_insert", organizationId,
+            long invoiceId = triggerInvoiceTest.insert("11_insert", organizationId,
                     dateunitUnitday, "invoice comment TableTransactionTest #testItem_11_insert", new BigDecimal("3"),
                     new BigDecimal("4"));
 
@@ -173,14 +173,14 @@ public class TableTransactionTest {
                 Date.from(LocalDate.of(2016, Month.MARCH, 1).atStartOfDay(ZoneId.systemDefault()).toInstant()));
 
         String accountGroupType = "C";
-        long accountGroupId = tableAccountGroupTest.insert(accountGroupType, "account group name12",
+        long accountGroupId = triggerAccountGroupTest.insert(accountGroupType, "account group name12",
                 "account group description from  TableTransactionTest #testTransaction_11_insert");
-        long accountId = tableAccountTest.insert(accountGroupId, accountGroupType, "account name12",
+        long accountId = triggerAccountTest.insert(accountGroupId, accountGroupType, "account name12",
                 "account description from  TableTransactionTest #testTransaction_11_insert");
 
-        long organizationId = tableOrganizationTest.insert("TableTransactionTest12",
+        long organizationId = triggerOrganizationTest.insert("TableTransactionTest12",
                 "Organization Description From TableTransactionTest #testItem_11_insert");
-        long invoiceId = tableInvoiceTest.insert("12_insert", organizationId,
+        long invoiceId = triggerInvoiceTest.insert("12_insert", organizationId,
                 dateunitUnitday, "invoice comment TableTransactionTest #testItem_11_insert", new BigDecimal("3"),
                 new BigDecimal("4"));
 
@@ -269,14 +269,14 @@ public class TableTransactionTest {
                 Date.from(LocalDate.of(2016, Month.MARCH, 1).atStartOfDay(ZoneId.systemDefault()).toInstant()));
 
         String accountGroupType = "C";
-        long accountGroupId = tableAccountGroupTest.insert(accountGroupType, "account group name22",
+        long accountGroupId = triggerAccountGroupTest.insert(accountGroupType, "account group name22",
                 "account group description from  TableTransactionTest #testTransaction_11_insert");
-        long accountId = tableAccountTest.insert(accountGroupId, accountGroupType, "account name22",
+        long accountId = triggerAccountTest.insert(accountGroupId, accountGroupType, "account name22",
                 "account description from  TableTransactionTest #testTransaction_11_insert");
 
-        long organizationId = tableOrganizationTest.insert("TableTransactionTest22",
+        long organizationId = triggerOrganizationTest.insert("TableTransactionTest22",
                 "Organization Description From TableTransactionTest #testItem_11_insert");
-        long invoiceId = tableInvoiceTest.insert("22_update", organizationId,
+        long invoiceId = triggerInvoiceTest.insert("22_update", organizationId,
                 dateunitUnitday, "invoice comment TableTransactionTest #testItem_11_insert", new BigDecimal("3"),
                 new BigDecimal("4"));
 
