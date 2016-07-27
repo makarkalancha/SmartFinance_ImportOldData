@@ -96,10 +96,10 @@ public class ItemDAOImplTest_v3 {
         FamilyMember familyMember = new FamilyMember("FM " + randomInt, "family member desc");
         familyMemberDAO.saveOrUpdateFamilyMember(familyMember);
 
-        Item_v3 item1 = new Item_v3(1, invoice, category1, tax1, familyMember, dateUnit, "desc11", "desc21", "comment", new BigDecimal("1"));
-        Item_v3 item2 = new Item_v3(2, invoice, category1, tax2, familyMember, dateUnit, "desc12", "desc22", "comment", new BigDecimal("2"));
-        Item_v3 item3 = new Item_v3(3, invoice, category1, tax1, familyMember, dateUnit, "desc13", "desc23", "comment", new BigDecimal("3"));
-        Item_v3 item4 = new Item_v3(4, invoice, category1, tax2, familyMember, dateUnit, "desc14", "desc24", "comment", new BigDecimal("4"));
+        Item_v3 item1 = new Item_v3(1, invoice, category1, tax1, familyMember, "desc11", "desc21", "comment", new BigDecimal("1"));
+        Item_v3 item2 = new Item_v3(2, invoice, category1, tax2, familyMember, "desc12", "desc22", "comment", new BigDecimal("2"));
+        Item_v3 item3 = new Item_v3(3, invoice, category1, tax1, familyMember, "desc13", "desc23", "comment", new BigDecimal("3"));
+        Item_v3 item4 = new Item_v3(4, invoice, category1, tax2, familyMember, "desc14", "desc24", "comment", new BigDecimal("4"));
 
         List<Item_v3> itemsToSave = new ArrayList<>();
         itemsToSave.add(item1);
@@ -146,10 +146,10 @@ public class ItemDAOImplTest_v3 {
         FamilyMember familyMember = new FamilyMember("FM " + randomInt, "family member desc");
         familyMemberDAO.saveOrUpdateFamilyMember(familyMember);
 
-        Item_v3 item1 = new Item_v3(1, invoice, category1, tax1, familyMember, dateUnit, "desc11", "desc21", "comment", new BigDecimal("1"));
-        Item_v3 item2 = new Item_v3(2, invoice, category1, tax2, familyMember, dateUnit, "desc12", "desc22", "comment", new BigDecimal("2"));
-        Item_v3 item3 = new Item_v3(3, invoice, category2, tax1, familyMember, dateUnit, "desc13", "desc23", "comment", new BigDecimal("3"));
-        Item_v3 item4 = new Item_v3(4, invoice, category2, tax2, familyMember, dateUnit, "desc14", "desc24", "comment", new BigDecimal("4"));
+        Item_v3 item1 = new Item_v3(1, invoice, category1, tax1, familyMember, "desc11", "desc21", "comment", new BigDecimal("1"));
+        Item_v3 item2 = new Item_v3(2, invoice, category1, tax2, familyMember, "desc12", "desc22", "comment", new BigDecimal("2"));
+        Item_v3 item3 = new Item_v3(3, invoice, category2, tax1, familyMember, "desc13", "desc23", "comment", new BigDecimal("3"));
+        Item_v3 item4 = new Item_v3(4, invoice, category2, tax2, familyMember, "desc14", "desc24", "comment", new BigDecimal("4"));
 
         invoice.setItems(new ArrayList<Item_v3>(){{
             add(item1);
@@ -221,10 +221,10 @@ public class ItemDAOImplTest_v3 {
         FamilyMember familyMember = new FamilyMember("FM " + randomInt, "family member desc");
         familyMemberDAO.saveOrUpdateFamilyMember(familyMember);
 
-        Item_v3 item1 = new Item_v3(1, invoice, category1, tax1, familyMember, dateUnit, "desc11", "desc21", "comment", new BigDecimal("1"));
-        Item_v3 item2 = new Item_v3(2, invoice, category1, tax2, familyMember, dateUnit, "desc12", "desc22", "comment", new BigDecimal("2"));
-        Item_v3 item3 = new Item_v3(3, invoice, category2, tax1, familyMember, dateUnit, "desc13", "desc23", "comment", new BigDecimal("3"));
-        Item_v3 item4 = new Item_v3(4, invoice, category2, tax2, familyMember, dateUnit, "desc14", "desc24", "comment", new BigDecimal("4"));
+        Item_v3 item1 = new Item_v3(1, invoice, category1, tax1, familyMember, "desc11", "desc21", "comment", new BigDecimal("1"));
+        Item_v3 item2 = new Item_v3(2, invoice, category1, tax2, familyMember, "desc12", "desc22", "comment", new BigDecimal("2"));
+        Item_v3 item3 = new Item_v3(3, invoice, category2, tax1, familyMember, "desc13", "desc23", "comment", new BigDecimal("3"));
+        Item_v3 item4 = new Item_v3(4, invoice, category2, tax2, familyMember, "desc14", "desc24", "comment", new BigDecimal("4"));
 
         invoice.setItems(new ArrayList<Item_v3>(){{
             add(item1);
@@ -264,7 +264,7 @@ public class ItemDAOImplTest_v3 {
             assert(item_v3.getCategory() != null);
             assert(item_v3.getTax() != null);
             assert(item_v3.getFamilyMember() != null);
-            assert(item_v3.getDateUnit() != null);
+            assert(item_v3.getDateUnit() != null && item_v3.getDateUnit() == invoice1.getDateUnit());
             assert(item_v3.getCreatedOn() != null);
             assert(item_v3.getUpdatedOn() != null);
         }

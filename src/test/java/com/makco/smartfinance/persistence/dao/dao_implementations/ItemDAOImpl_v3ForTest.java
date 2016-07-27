@@ -144,8 +144,6 @@ public class ItemDAOImpl_v3ForTest {
         try {
             session = TestPersistenceSession.openSession();
             session.beginTransaction();
-            //todo check if totals in invoicev3 are updated
-
             /*
             batch saving is working if "cascade = CascadeType.ALL" is only in Item_v3
             if it's in both Invoice_v3 and Item_v3 than saving is as follows:
@@ -163,7 +161,18 @@ public class ItemDAOImpl_v3ForTest {
              */
             for (int i = 0; i < item_v3_list.size(); i++) {
                 LOG.debug(String.format(">>>>item_v3_list.get(%s): %s", i, item_v3_list.get(i).toString()));
-                session.save(item_v3_list.get(i));
+
+//                session.save(item_v3_list.get(i));
+                //todo try to group item list in map (key invoice id) and do batch save
+                Item_v3 item_v3 = item_v3_list.get(i);
+                Invoice_v3 invoice_v3 = item_v3.getInvoice();
+                List<Item_v3> items = new ArrayList<>(invoice_v3.getItems());
+                invoice_v3.setItems(items);
+
+//            session.saveOrUpdate(item_v3);//@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+                session.saveOrUpdate(invoice_v3);//Item_v3->@ManyToOne(fetch = FetchType.EAGER)
+                session.getTransaction().commit();
+
                 if(i % DataBaseConstants.BATCH_SIZE == 0){
                     LOG.debug(String.format(">>>>i %% DataBaseConstants.BATCH_SIZE: %s %% %s = %s",
                             i,

@@ -123,7 +123,7 @@ public class Item_v3 implements Serializable {
     private FamilyMember familyMember;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "DATEUNIT_UNITDAY", referencedColumnName = "UNITDAY", nullable = false)
+    @JoinColumn(name = "DATEUNIT_UNITDAY", referencedColumnName = "UNITDAY", nullable = false, insertable = false, updatable = false)
     private DateUnit dateUnit;
 
     @Column(name = "DESCRIPTION1")
@@ -169,14 +169,13 @@ public class Item_v3 implements Serializable {
     }
 
     public Item_v3(Integer orderNumber, Invoice_v3 invoice, Category category, Tax tax, FamilyMember familyMember,
-                   DateUnit dateUnit, String description1, String description2, String comment, BigDecimal subTotal)
+                   String description1, String description2, String comment, BigDecimal subTotal)
             throws Exception{
         this.orderNumber = orderNumber;
         this.invoice = invoice;
         this.category = category;
         this.tax = tax;
         this.familyMember = familyMember;
-        this.dateUnit = dateUnit;
         this.description1 = description1;
         this.description2 = description2;
         this.comment = comment;
