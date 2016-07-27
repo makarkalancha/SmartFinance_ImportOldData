@@ -36,14 +36,14 @@ import static org.junit.Assert.assertEquals;
  * Created by Makar Kalancha on 12 Jul 2016.
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class TriggerTransaction_NoTrTest {
-    private static final Logger LOG = LogManager.getLogger(TriggerTransaction_NoTrTest.class);
+public class TriggerTransactionNoTrTest {
+    private static final Logger LOG = LogManager.getLogger(TriggerTransactionNoTrTest.class);
     private static final SimpleDateFormat SIMPLE_DATE_TIME_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     private TriggerAccountGroupTest triggerAccountGroupTest = new TriggerAccountGroupTest();
     private TriggerAccountTest triggerAccountTest = new TriggerAccountTest();
     private TriggerOrganizationTest triggerOrganizationTest = new TriggerOrganizationTest();
-    private TriggerInvoice_NoTrTest tableInvoiceTest = new TriggerInvoice_NoTrTest();
+    private TriggerInvoiceNoTrTest triggerInvoiceTest = new TriggerInvoiceNoTrTest();
 
     @ClassRule
     public static DBConnectionResource dbConnectionResource = new DBConnectionResource();
@@ -141,7 +141,7 @@ public class TriggerTransaction_NoTrTest {
 
             long organizationId = triggerOrganizationTest.insert("TableTransactionTest",
                     "Organization Description From TableTransactionTest #testItem_11_insert");
-            long invoiceId = tableInvoiceTest.insert("11_insert", organizationId,
+            long invoiceId = triggerInvoiceTest.insert("11_insert", organizationId,
                     dateunitUnitday, "invoice comment TableTransactionTest #testItem_11_insert", new BigDecimal("3"),
                     new BigDecimal("4"));
 
@@ -180,7 +180,7 @@ public class TriggerTransaction_NoTrTest {
 
         long organizationId = triggerOrganizationTest.insert("TableTransactionTest12",
                 "Organization Description From TableTransactionTest #testItem_11_insert");
-        long invoiceId = tableInvoiceTest.insert("12_insert", organizationId,
+        long invoiceId = triggerInvoiceTest.insert("12_insert", organizationId,
                 dateunitUnitday, "invoice comment TableTransactionTest #testItem_11_insert", new BigDecimal("3"),
                 new BigDecimal("4"));
 
@@ -276,7 +276,7 @@ public class TriggerTransaction_NoTrTest {
 
         long organizationId = triggerOrganizationTest.insert("TableTransactionTest22",
                 "Organization Description From TableTransactionTest #testItem_11_insert");
-        long invoiceId = tableInvoiceTest.insert("22_update", organizationId,
+        long invoiceId = triggerInvoiceTest.insert("22_update", organizationId,
                 dateunitUnitday, "invoice comment TableTransactionTest #testItem_11_insert", new BigDecimal("3"),
                 new BigDecimal("4"));
 

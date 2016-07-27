@@ -36,14 +36,14 @@ import static org.junit.Assert.assertEquals;
  * Created by Makar Kalancha on 12 Jul 2016.
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class TriggerTransaction_V3 {
-    private static final Logger LOG = LogManager.getLogger(TriggerTransaction_V3.class);
+public class TriggerTransactionV3Test {
+    private static final Logger LOG = LogManager.getLogger(TriggerTransactionV3Test.class);
     private static final SimpleDateFormat SIMPLE_DATE_TIME_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     private TriggerAccountGroupTest triggerAccountGroupTest = new TriggerAccountGroupTest();
     private TriggerAccountTest triggerAccountTest = new TriggerAccountTest();
     private TriggerOrganizationTest triggerOrganizationTest = new TriggerOrganizationTest();
-    private TriggerInvoice_V3Test tableInvoiceTest = new TriggerInvoice_V3Test();
+    private TriggerInvoiceV3Test triggerInvoiceTest = new TriggerInvoiceV3Test();
 
     @ClassRule
     public static DBConnectionResource dbConnectionResource = new DBConnectionResource();
@@ -143,7 +143,7 @@ public class TriggerTransaction_V3 {
 
             long organizationId = triggerOrganizationTest.insert("TableTransactionTest",
                     "Organization Description From TableTransactionTest #testItem_11_insert");
-            long invoiceId = tableInvoiceTest.insert("11_insert", organizationId,
+            long invoiceId = triggerInvoiceTest.insert("11_insert", organizationId,
                     dateunitUnitday, "invoice comment TableTransactionTest #testItem_11_insert", new BigDecimal("3"),
                     new BigDecimal("4"));
 
@@ -182,7 +182,7 @@ public class TriggerTransaction_V3 {
 
         long organizationId = triggerOrganizationTest.insert("TableTransactionTest12",
                 "Organization Description From TableTransactionTest #testItem_11_insert");
-        long invoiceId = tableInvoiceTest.insert("12_insert", organizationId,
+        long invoiceId = triggerInvoiceTest.insert("12_insert", organizationId,
                 dateunitUnitday, "invoice comment TableTransactionTest #testItem_11_insert", new BigDecimal("3"),
                 new BigDecimal("4"));
 
@@ -278,7 +278,7 @@ public class TriggerTransaction_V3 {
 
         long organizationId = triggerOrganizationTest.insert("TableTransactionTest22",
                 "Organization Description From TableTransactionTest #testItem_11_insert");
-        long invoiceId = tableInvoiceTest.insert("22_update", organizationId,
+        long invoiceId = triggerInvoiceTest.insert("22_update", organizationId,
                 dateunitUnitday, "invoice comment TableTransactionTest #testItem_11_insert", new BigDecimal("3"),
                 new BigDecimal("4"));
 
@@ -377,7 +377,7 @@ public class TriggerTransaction_V3 {
     @Test
     public void testDeleteToJsonObject() throws Exception{
         JsonObject tableJson = createJsonObject();
-        String expectedJsonString = "{\"tableName\":\"TEST.TRANSACTION\",\"row\":" +
+        String expectedJsonString = "{\"tableName\":\"TEST.TRANSACTION_V3\",\"row\":" +
                 "{\"ID\":1,\"TRANSACTION_NUMBER\":\"trans number\",\"ACCOUNT_ID\":2,"+
                 "\"INVOICE_ID\":3,\"DATEUNIT_UNITDAY\":4,"+
                 "\"COMMENT\":\"invoice comment\","+
@@ -396,7 +396,7 @@ public class TriggerTransaction_V3 {
         JsonObject jsonObject = jsonParser.parse(tableJsonString).getAsJsonObject();
 
         String schemaTableName = jsonObject.get(Table.Elements.tableName.toString()).getAsString();
-        assertEquals("TEST.TRANSACTION", schemaTableName);
+        assertEquals("TEST.TRANSACTION_V3", schemaTableName);
 
         JsonObject rowJsonObject = jsonObject.get(Table.Elements.row.toString()).getAsJsonObject();
 

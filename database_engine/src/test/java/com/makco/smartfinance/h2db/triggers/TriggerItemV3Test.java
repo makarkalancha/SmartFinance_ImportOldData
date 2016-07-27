@@ -38,12 +38,12 @@ import static org.junit.Assert.assertEquals;
  * Created by Makar Kalancha on 11 Jul 2016.
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class TriggerItem_V3Test {
-    private static final Logger LOG = LogManager.getLogger(TriggerItem_V3Test.class);
+public class TriggerItemV3Test {
+    private static final Logger LOG = LogManager.getLogger(TriggerItemV3Test.class);
     private static final SimpleDateFormat SIMPLE_DATE_TIME_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     private TriggerOrganizationTest triggerOrganizationTest = new TriggerOrganizationTest();
-    private TriggerInvoice_V3Test tableInvoiceTest = new TriggerInvoice_V3Test();
+    private TriggerInvoiceV3Test triggerInvoiceTest = new TriggerInvoiceV3Test();
     private TriggerCategoryGroupTest triggerCategoryGroupTest = new TriggerCategoryGroupTest();
     private TriggerCategoryTest triggerCategoryTest = new TriggerCategoryTest();
     private TriggerTaxTest triggerTaxTest = new TriggerTaxTest();
@@ -153,7 +153,7 @@ public class TriggerItem_V3Test {
                     Date.from(LocalDate.of(2016, Month.FEBRUARY, 29).atStartOfDay(ZoneId.systemDefault()).toInstant()));
 
             long organizationId = triggerOrganizationTest.insert("testItem_11_insert", "Organization Description From TableItemTest #testItem_11_insert");
-            long invoiceId = tableInvoiceTest.insert("Item_11_insert", organizationId,
+            long invoiceId = triggerInvoiceTest.insert("Item_11_insert", organizationId,
                     dateunitUnitday, "invoice comment");
 
             long categoryGroupId = triggerCategoryGroupTest.insert("D", "debit category group11", "debit category group desc");
@@ -183,7 +183,7 @@ public class TriggerItem_V3Test {
             assert (idWithDates > 0);
             assert (idJustInserted == idWithDates);
             LOG.debug(String.format("dateunit: invoice (to be inserted)=%s; item=%s", dateunitUnitday, dateUnitItemWithDates));
-            assert (dateunitUnitday != dateUnitItemWithDates);
+            assert (dateunitUnitday == dateUnitItemWithDates);
 
             selectInvoicePS.setLong(1, invoiceId);
             selectInvoicePS.setLong(2, invoiceId);
@@ -206,7 +206,7 @@ public class TriggerItem_V3Test {
                 Date.from(LocalDate.of(2016, Month.FEBRUARY, 29).atStartOfDay(ZoneId.systemDefault()).toInstant()));
 
         long organizationId = triggerOrganizationTest.insert("testItem_12_insert", "Organization Description From TableItemTest #testItem_11_insert");
-        long invoiceId = tableInvoiceTest.insert("Item_12_insert", organizationId,
+        long invoiceId = triggerInvoiceTest.insert("Item_12_insert", organizationId,
                 dateunitUnitday, "invoice comment");
 
         long categoryGroupId = triggerCategoryGroupTest.insert("D", "debit category group12", "debit category group desc");
@@ -346,7 +346,7 @@ public class TriggerItem_V3Test {
                     Date.from(LocalDate.of(2016, Month.FEBRUARY, 29).atStartOfDay(ZoneId.systemDefault()).toInstant()));
 
             long organizationId = triggerOrganizationTest.insert("testItem_22_update", "Organization Description From TableItemTest #testItem_11_insert");
-            long invoiceId = tableInvoiceTest.insert("Item_22_update", organizationId,
+            long invoiceId = triggerInvoiceTest.insert("Item_22_update", organizationId,
                     dateunitUnitday, "invoice comment");
 
             long categoryGroupId = triggerCategoryGroupTest.insert("D", "debit category group22", "debit category group desc");
@@ -402,7 +402,7 @@ public class TriggerItem_V3Test {
 
             long organizationId = triggerOrganizationTest.insert("testItem_23_update",
                     "Organization Description From TableItemTest #testItem_11_insert");
-            long invoiceId = tableInvoiceTest.insert("Item_23_update", organizationId,
+            long invoiceId = triggerInvoiceTest.insert("Item_23_update", organizationId,
                     dateunitUnitday, "invoice comment");
 
             long categoryGroupId = triggerCategoryGroupTest.insert("D", "debit category group23", "debit category group desc");
@@ -434,14 +434,14 @@ public class TriggerItem_V3Test {
                 long itemId = rs.getLong(1);
                 long itemDate = rs.getLong(2);
                 LOG.debug(String.format(">>>>before item: id=%s, date=%s; invoice.date=%s", itemId, itemDate, dateunitUnitday));
-                assert (dateunitUnitday != itemDate);
+                assert (dateunitUnitday == itemDate);
             }
 
             long newDateunitInvoiceWithIdMax = dateunitUnitday + 10;
             LocalDate newLocalDate = TestUtilDateUnit.EPOCH.plus(newDateunitInvoiceWithIdMax, ChronoUnit.DAYS);
             TestDateUnitFunctions.insertSelectDate(dbConnectionResource.getConnection(),
                     Date.from(newLocalDate.atStartOfDay(ZoneId.systemDefault()).toInstant()));
-            tableInvoiceTest.updateDate(invoiceId, newDateunitInvoiceWithIdMax);
+            triggerInvoiceTest.updateDate(invoiceId, newDateunitInvoiceWithIdMax);
 
             selectDatesPS.setLong(1, invoiceId);
             rs = selectDatesPS.executeQuery();
@@ -456,7 +456,7 @@ public class TriggerItem_V3Test {
                 long itemId = rs.getLong(1);
                 long itemDate = rs.getLong(2);
                 LOG.debug(String.format(">>>>after item: id=%s, date=%s; invoice.date=%s", itemId, itemDate, newDateunitInvoiceWithIdMax));
-                assert (newDateunitInvoiceWithIdMax != itemDate);
+                assert (newDateunitInvoiceWithIdMax == itemDate);
             }
 
         } finally {
@@ -472,7 +472,7 @@ public class TriggerItem_V3Test {
 
         long organizationId = triggerOrganizationTest.insert("testItem_24_update",
                 "Organization Description From TableItemTest #testItem_24_update");
-        long invoiceId = tableInvoiceTest.insert("Item_24_update", organizationId,
+        long invoiceId = triggerInvoiceTest.insert("Item_24_update", organizationId,
                 dateunitUnitday, "invoice comment");
 
         long categoryGroupId = triggerCategoryGroupTest.insert("D", "debit category group24", "debit category group desc");
@@ -588,7 +588,7 @@ public class TriggerItem_V3Test {
     @Test
     public void testDeleteToJsonObject() throws Exception{
         JsonObject tableJson = createJsonObject();
-        String expectedJsonString = "{\"tableName\":\"TEST.ITEM\",\"row\":" +
+        String expectedJsonString = "{\"tableName\":\"TEST.ITEM_V3\",\"row\":" +
                 "{\"ID\":1,\"ORDER_NUMBER\":2,\"INVOICE_ID\":3,\"CATEGORY_ID\":4,\"TAX_ID\":5," +
                 "\"FAMILY_MEMBER_ID\":6,\"DESCRIPTION1\":\"desc1\",\"DESCRIPTION2\":\"desc2\"," +
                 "\"COMMENT\":\"comm\",\"SUB_TOTAL\":2.0,\"TOTAL\":4.0," +
@@ -606,7 +606,7 @@ public class TriggerItem_V3Test {
         JsonObject jsonObject = jsonParser.parse(tableJsonString).getAsJsonObject();
 
         String schemaTableName = jsonObject.get(Table.Elements.tableName.toString()).getAsString();
-        assertEquals("TEST.ITEM", schemaTableName);
+        assertEquals("TEST.ITEM_V3", schemaTableName);
 
         JsonObject rowJsonObject = jsonObject.get(Table.Elements.row.toString()).getAsJsonObject();
 

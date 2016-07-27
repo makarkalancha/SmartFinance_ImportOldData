@@ -20,7 +20,7 @@ public class TriggerInvoiceV3 extends AbstractTrigger {
             .append("UPDATE ")
             .append(SCHEMA_NAME_PLACEHOLDER)
             .append(".")
-            .append(Table.Names.ITEM)
+            .append(Table.Names.ITEM_V3)
             .append(" SET ")
             .append(Table.ITEM.DATEUNIT_UNITDAY)
             .append(" = ? ")

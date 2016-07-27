@@ -38,12 +38,12 @@ import static org.junit.Assert.assertEquals;
  * Created by Makar Kalancha on 11 Jul 2016.
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class TriggerItem_NoTrTest {
-    private static final Logger LOG = LogManager.getLogger(TriggerItem_NoTrTest.class);
+public class TriggerItemNoTrTest {
+    private static final Logger LOG = LogManager.getLogger(TriggerItemNoTrTest.class);
     private static final SimpleDateFormat SIMPLE_DATE_TIME_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     private TriggerOrganizationTest triggerOrganizationTest = new TriggerOrganizationTest();
-    private TriggerInvoice_NoTrTest tableInvoiceTest = new TriggerInvoice_NoTrTest();
+    private TriggerInvoiceNoTrTest triggerInvoiceTest = new TriggerInvoiceNoTrTest();
     private TriggerCategoryGroupTest triggerCategoryGroupTest = new TriggerCategoryGroupTest();
     private TriggerCategoryTest triggerCategoryTest = new TriggerCategoryTest();
     private TriggerTaxTest triggerTaxTest = new TriggerTaxTest();
@@ -151,7 +151,7 @@ public class TriggerItem_NoTrTest {
                     Date.from(LocalDate.of(2016, Month.FEBRUARY, 29).atStartOfDay(ZoneId.systemDefault()).toInstant()));
 
             long organizationId = triggerOrganizationTest.insert("testItem_11_insert", "Organization Description From TableItemTest #testItem_11_insert");
-            long invoiceId = tableInvoiceTest.insert("Item_11_insert", organizationId,
+            long invoiceId = triggerInvoiceTest.insert("Item_11_insert", organizationId,
                     dateunitUnitday, "invoice comment");
 
             long categoryGroupId = triggerCategoryGroupTest.insert("D", "debit category group11", "debit category group desc");
@@ -204,7 +204,7 @@ public class TriggerItem_NoTrTest {
                 Date.from(LocalDate.of(2016, Month.FEBRUARY, 29).atStartOfDay(ZoneId.systemDefault()).toInstant()));
 
         long organizationId = triggerOrganizationTest.insert("testItem_12_insert", "Organization Description From TableItemTest #testItem_11_insert");
-        long invoiceId = tableInvoiceTest.insert("Item_12_insert", organizationId,
+        long invoiceId = triggerInvoiceTest.insert("Item_12_insert", organizationId,
                 dateunitUnitday, "invoice comment");
 
         long categoryGroupId = triggerCategoryGroupTest.insert("D", "debit category group12", "debit category group desc");
@@ -344,7 +344,7 @@ public class TriggerItem_NoTrTest {
                     Date.from(LocalDate.of(2016, Month.FEBRUARY, 29).atStartOfDay(ZoneId.systemDefault()).toInstant()));
 
             long organizationId = triggerOrganizationTest.insert("testItem_22_update", "Organization Description From TableItemTest #testItem_11_insert");
-            long invoiceId = tableInvoiceTest.insert("Item_22_update", organizationId,
+            long invoiceId = triggerInvoiceTest.insert("Item_22_update", organizationId,
                     dateunitUnitday, "invoice comment");
 
             long categoryGroupId = triggerCategoryGroupTest.insert("D", "debit category group22", "debit category group desc");
@@ -400,7 +400,7 @@ public class TriggerItem_NoTrTest {
 
             long organizationId = triggerOrganizationTest.insert("testItem_23_update",
                     "Organization Description From TableItemTest #testItem_11_insert");
-            long invoiceId = tableInvoiceTest.insert("Item_23_update", organizationId,
+            long invoiceId = triggerInvoiceTest.insert("Item_23_update", organizationId,
                     dateunitUnitday, "invoice comment");
 
             long categoryGroupId = triggerCategoryGroupTest.insert("D", "debit category group23", "debit category group desc");
@@ -439,7 +439,7 @@ public class TriggerItem_NoTrTest {
             LocalDate newLocalDate = TestUtilDateUnit.EPOCH.plus(newDateunitInvoiceWithIdMax, ChronoUnit.DAYS);
             TestDateUnitFunctions.insertSelectDate(dbConnectionResource.getConnection(),
                     Date.from(newLocalDate.atStartOfDay(ZoneId.systemDefault()).toInstant()));
-            tableInvoiceTest.updateDate(invoiceId, newDateunitInvoiceWithIdMax);
+            triggerInvoiceTest.updateDate(invoiceId, newDateunitInvoiceWithIdMax);
 
             selectDatesPS.setLong(1, invoiceId);
             rs = selectDatesPS.executeQuery();
@@ -470,7 +470,7 @@ public class TriggerItem_NoTrTest {
 
         long organizationId = triggerOrganizationTest.insert("testItem_24_update",
                 "Organization Description From TableItemTest #testItem_24_update");
-        long invoiceId = tableInvoiceTest.insert("Item_24_update", organizationId,
+        long invoiceId = triggerInvoiceTest.insert("Item_24_update", organizationId,
                 dateunitUnitday, "invoice comment");
 
         long categoryGroupId = triggerCategoryGroupTest.insert("D", "debit category group24", "debit category group desc");

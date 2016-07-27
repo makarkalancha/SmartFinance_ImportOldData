@@ -24,7 +24,7 @@ public class TriggerItemV3 extends AbstractTrigger {
             .append(" FROM ")
             .append(SCHEMA_NAME_PLACEHOLDER)
             .append(".")
-            .append(Table.Names.INVOICE)
+            .append(Table.Names.INVOICE_V3)
             .append(" WHERE ")
             .append(Table.INVOICE.ID)
             .append(" = ?")
@@ -37,8 +37,28 @@ public class TriggerItemV3 extends AbstractTrigger {
 
     @Override
     protected void insert(Connection connection, Object[] oldRow, Object[] newRow) throws SQLException {
-        newRow[Table.ITEM.T_CREATEDON.getColumnIndex()] = Timestamp.valueOf(now);
-        newRow[Table.ITEM.T_UPDATEDON.getColumnIndex()] = Timestamp.valueOf(now);
+        String invoiceDateunitQ = INVOICE_DATEUNIT.replace(SCHEMA_NAME_PLACEHOLDER, schemaName);
+        ResultSet rs = null;
+        try(
+                PreparedStatement invoiceDate = connection.prepareStatement(invoiceDateunitQ);
+        ) {
+            invoiceDate.setLong(1, (Long) newRow[Table.ITEM.INVOICE_ID.getColumnIndex()]);
+            rs = invoiceDate.executeQuery();
+            rs.next();
+            newRow[Table.ITEM.DATEUNIT_UNITDAY.getColumnIndex()] = rs.getLong(1);;
+
+            newRow[Table.ITEM.T_CREATEDON.getColumnIndex()] = Timestamp.valueOf(now);
+            newRow[Table.ITEM.T_UPDATEDON.getColumnIndex()] = Timestamp.valueOf(now);
+
+//            LOG.debug(String.format(">>>>TriggerItem->insert: dateunit=%s, subtotal=%s, total=%s",
+//                    newRow[Table.ITEM.DATEUNIT_UNITDAY.getColumnIndex()],
+//                    newRow[Table.ITEM.SUB_TOTAL.getColumnIndex()],
+//                    newRow[Table.ITEM.TOTAL.getColumnIndex()]));
+        }finally {
+            if(rs != null){
+                rs.close();
+            }
+        }
     }
 
     @Override
