@@ -55,7 +55,7 @@ public class CategoryGroupDAOImplTest {
 
         LOG.debug("categoryGroup: " + categoryGroup);
         assertEquals(true, categoryGroup.getId() != null);
-        assertEquals(DataBaseConstants.CATEGORY_GROUP_TYPE.DEBIT.getDiscriminator(), categoryGroup.getCategoryGroupType());
+        assertEquals(DataBaseConstants.CATEGORY_GROUP_TYPE.DEBIT, categoryGroup.getCategoryGroupType());
         assertEquals(name, categoryGroup.getName());
         assertEquals(categoryGroupDesc, categoryGroup.getDescription());
         assertEquals(true, categoryGroup.getCreatedOn() != null);

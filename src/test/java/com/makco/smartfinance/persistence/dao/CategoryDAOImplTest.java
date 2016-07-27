@@ -60,7 +60,7 @@ public class CategoryDAOImplTest {
         CategoryGroup_v1 categoryGroupInserted = category.getCategoryGroup();
         LOG.debug("categoryGroup: " + categoryGroupInserted);
         assertEquals(true, categoryGroupInserted.getId() != null);
-        assertEquals(DataBaseConstants.CATEGORY_GROUP_TYPE.DEBIT.getDiscriminator(), categoryGroupInserted.getCategoryGroupType());
+        assertEquals(DataBaseConstants.CATEGORY_GROUP_TYPE.DEBIT, categoryGroupInserted.getCategoryGroupType());
         assertEquals(name, categoryGroupInserted.getName());
         assertEquals(categoryGroupDesc, categoryGroupInserted.getDescription());
         assertEquals(true, categoryGroupInserted.getCreatedOn() != null);
