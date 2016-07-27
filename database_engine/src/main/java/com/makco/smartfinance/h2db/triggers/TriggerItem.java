@@ -66,7 +66,7 @@ public class TriggerItem extends AbstractTrigger {
             invoiceDate.setLong(1, (Long) newRow[Table.ITEM.INVOICE_ID.getColumnIndex()]);
             rs = invoiceDate.executeQuery();
             rs.next();
-            newRow[Table.ITEM.DATEUNIT_UNITDAY.getColumnIndex()] = rs.getLong(1);;
+            newRow[Table.ITEM.DATEUNIT_UNITDAY.getColumnIndex()] = rs.getLong(1);
 
             newRow[Table.ITEM.T_CREATEDON.getColumnIndex()] = Timestamp.valueOf(now);
             newRow[Table.ITEM.T_UPDATEDON.getColumnIndex()] = Timestamp.valueOf(now);

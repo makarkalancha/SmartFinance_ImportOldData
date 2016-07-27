@@ -22,15 +22,14 @@ import com.makco.smartfinance.persistence.entity.session.invoice_management.v3.O
 import com.makco.smartfinance.utils.RandomWithinRange;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.junit.FixMethodOrder;
 import org.junit.Test;
-import org.junit.runners.MethodSorters;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -96,10 +95,10 @@ public class ItemDAOImplTest_v3 {
         FamilyMember familyMember = new FamilyMember("FM " + randomInt, "family member desc");
         familyMemberDAO.saveOrUpdateFamilyMember(familyMember);
 
-        Item_v3 item1 = new Item_v3(1, invoice, category1, tax1, familyMember, "desc11", "desc21", "comment", new BigDecimal("1"));
-        Item_v3 item2 = new Item_v3(2, invoice, category1, tax2, familyMember, "desc12", "desc22", "comment", new BigDecimal("2"));
-        Item_v3 item3 = new Item_v3(3, invoice, category1, tax1, familyMember, "desc13", "desc23", "comment", new BigDecimal("3"));
-        Item_v3 item4 = new Item_v3(4, invoice, category1, tax2, familyMember, "desc14", "desc24", "comment", new BigDecimal("4"));
+        Item_v3 item1 = new Item_v3(invoice, category1, tax1, familyMember, "desc11", "desc21", "comment", new BigDecimal("1"));
+        Item_v3 item2 = new Item_v3(invoice, category1, tax2, familyMember, "desc12", "desc22", "comment", new BigDecimal("2"));
+        Item_v3 item3 = new Item_v3(invoice, category1, tax1, familyMember, "desc13", "desc23", "comment", new BigDecimal("3"));
+        Item_v3 item4 = new Item_v3(invoice, category1, tax2, familyMember, "desc14", "desc24", "comment", new BigDecimal("4"));
 
         List<Item_v3> itemsToSave = new ArrayList<>();
         itemsToSave.add(item1);
@@ -109,10 +108,65 @@ public class ItemDAOImplTest_v3 {
 
         invoice.setItems(itemsToSave);
 
-        itemDAOImpl_v3ForTest.saveOrUpdateMultipleItem(itemsToSave);
+        itemDAOImpl_v3ForTest.saveOrUpdateMultipleItems(itemsToSave);
     }
 
     //todo save multiple items for different invoices
+    @Test
+    public void test_12_saveItems_Multiple() throws Exception {
+        int randomInt = randomWithinRange.getRandom();
+
+        DateUnit dateUnit = new DateUnit(LocalDate.now());
+        dateUnitDAO.addDateUnit(dateUnit);
+
+        String organizationName = "OrgName" + randomInt;
+        Organization_v3 organization = new Organization_v3(organizationName, "org desc " + randomInt);
+
+        Invoice_v3 invoice1 = new Invoice_v3(generateInvoiceNumber(randomWithinRange.getRandom()), organization, dateUnit, "comment " + randomInt);
+        Invoice_v3 invoice2 = new Invoice_v3(generateInvoiceNumber(randomWithinRange.getRandom()), organization, dateUnit, "comment " + randomInt);
+        Invoice_v3 invoice3 = new Invoice_v3(generateInvoiceNumber(randomWithinRange.getRandom()), organization, dateUnit, "comment " + randomInt);
+
+        CategoryGroup categoryGroup1 = new CategoryGroupCredit("CG credit" + randomInt, "desc");
+        Category category1 = new CategoryCredit(categoryGroup1, "C credit" + randomInt, "desc");
+
+        CategoryGroup categoryGroup2 = new CategoryGroupDebit("CG debit" + randomInt, "desc");
+        Category category2 = new CategoryDebit(categoryGroup2, "C debit" + randomInt, "desc");
+
+        categoryGroupDAOImplForTest.saveOrUpdateCategoryGroup(categoryGroup1);
+        categoryDAOImplForTest.saveOrUpdateCategory(category1);
+
+        Tax tax1 = new Tax("tax1 " + randomInt, "tax1 desc", new BigDecimal("1"), "{NUM}+{RATE}", "{NUM}+1", null, null, null);
+        Tax tax2 = new Tax("tax2 " + randomInt, "tax2 desc", new BigDecimal("1"), "{NUM}*{RATE}", "{NUM}*1", null, null, null);
+        taxDAO.saveOrUpdateTax(tax1);
+        taxDAO.saveOrUpdateTax(tax2);
+
+        FamilyMember familyMember = new FamilyMember("FM " + randomInt, "family member desc");
+        familyMemberDAO.saveOrUpdateFamilyMember(familyMember);
+
+        Item_v3 item1 = new Item_v3(invoice1, category1, tax1, familyMember, "desc11", "desc21", "comment", new BigDecimal("1"));
+        Item_v3 item2 = new Item_v3(invoice2, category2, tax2, familyMember, "desc12", "desc22", "comment", new BigDecimal("2"));
+        Item_v3 item3 = new Item_v3(invoice3, category1, tax1, familyMember, "desc13", "desc23", "comment", new BigDecimal("3"));
+        Item_v3 item4 = new Item_v3(invoice1, category2, tax2, familyMember, "desc14", "desc24", "comment", new BigDecimal("4"));
+
+        List<Item_v3> itemsToSave = new ArrayList<>();
+        itemsToSave.add(item1);
+        itemsToSave.add(item2);
+        itemsToSave.add(item3);
+        itemsToSave.add(item4);
+
+//        invoice.setItems(itemsToSave);
+
+        invoiceDAOImpl_v3ForTest.saveOrUpdateMultipleInvoices(Arrays.asList(invoice1,invoice2,invoice3));
+
+        itemDAOImpl_v3ForTest.saveOrUpdateMultipleItems(itemsToSave);
+
+        Long invoice1Id = invoice1.getId();
+        Long invoice2Id = invoice2.getId();
+        Long invoice3Id = invoice3.getId();
+
+
+    }
+
 
     @Test
     public void test_31_removeItem_FromInvoice_DebitCreditCategories() throws Exception {
@@ -146,10 +200,10 @@ public class ItemDAOImplTest_v3 {
         FamilyMember familyMember = new FamilyMember("FM " + randomInt, "family member desc");
         familyMemberDAO.saveOrUpdateFamilyMember(familyMember);
 
-        Item_v3 item1 = new Item_v3(1, invoice, category1, tax1, familyMember, "desc11", "desc21", "comment", new BigDecimal("1"));
-        Item_v3 item2 = new Item_v3(2, invoice, category1, tax2, familyMember, "desc12", "desc22", "comment", new BigDecimal("2"));
-        Item_v3 item3 = new Item_v3(3, invoice, category2, tax1, familyMember, "desc13", "desc23", "comment", new BigDecimal("3"));
-        Item_v3 item4 = new Item_v3(4, invoice, category2, tax2, familyMember, "desc14", "desc24", "comment", new BigDecimal("4"));
+        Item_v3 item1 = new Item_v3(invoice, category1, tax1, familyMember, "desc11", "desc21", "comment", new BigDecimal("1"));
+        Item_v3 item2 = new Item_v3(invoice, category1, tax2, familyMember, "desc12", "desc22", "comment", new BigDecimal("2"));
+        Item_v3 item3 = new Item_v3(invoice, category2, tax1, familyMember, "desc13", "desc23", "comment", new BigDecimal("3"));
+        Item_v3 item4 = new Item_v3(invoice, category2, tax2, familyMember, "desc14", "desc24", "comment", new BigDecimal("4"));
 
         invoice.setItems(new ArrayList<Item_v3>(){{
             add(item1);
@@ -221,10 +275,10 @@ public class ItemDAOImplTest_v3 {
         FamilyMember familyMember = new FamilyMember("FM " + randomInt, "family member desc");
         familyMemberDAO.saveOrUpdateFamilyMember(familyMember);
 
-        Item_v3 item1 = new Item_v3(1, invoice, category1, tax1, familyMember, "desc11", "desc21", "comment", new BigDecimal("1"));
-        Item_v3 item2 = new Item_v3(2, invoice, category1, tax2, familyMember, "desc12", "desc22", "comment", new BigDecimal("2"));
-        Item_v3 item3 = new Item_v3(3, invoice, category2, tax1, familyMember, "desc13", "desc23", "comment", new BigDecimal("3"));
-        Item_v3 item4 = new Item_v3(4, invoice, category2, tax2, familyMember, "desc14", "desc24", "comment", new BigDecimal("4"));
+        Item_v3 item1 = new Item_v3(invoice, category1, tax1, familyMember, "desc11", "desc21", "comment", new BigDecimal("1"));
+        Item_v3 item2 = new Item_v3(invoice, category1, tax2, familyMember, "desc12", "desc22", "comment", new BigDecimal("2"));
+        Item_v3 item3 = new Item_v3(invoice, category2, tax1, familyMember, "desc13", "desc23", "comment", new BigDecimal("3"));
+        Item_v3 item4 = new Item_v3(invoice, category2, tax2, familyMember, "desc14", "desc24", "comment", new BigDecimal("4"));
 
         invoice.setItems(new ArrayList<Item_v3>(){{
             add(item1);

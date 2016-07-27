@@ -168,10 +168,9 @@ public class Item_v3 implements Serializable {
 
     }
 
-    public Item_v3(Integer orderNumber, Invoice_v3 invoice, Category category, Tax tax, FamilyMember familyMember,
+    public Item_v3(Invoice_v3 invoice, Category category, Tax tax, FamilyMember familyMember,
                    String description1, String description2, String comment, BigDecimal subTotal)
             throws Exception{
-        this.orderNumber = orderNumber;
         this.invoice = invoice;
         this.category = category;
         this.tax = tax;
@@ -284,9 +283,10 @@ public class Item_v3 implements Serializable {
         return orderNumber;
     }
 
-    public void setOrderNumber(Integer orderNumber) {
-        this.orderNumber = orderNumber;
-    }
+    //Item trigger
+//    public void setOrderNumber(Integer orderNumber) {
+//        this.orderNumber = orderNumber;
+//    }
 
     @Override
     public String toString() {

@@ -1,6 +1,10 @@
 package com.makco.smartfinance.persistence.dao.dao_implementations;
 
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
+import com.google.common.collect.Multimaps;
 import com.makco.smartfinance.constants.DataBaseConstants;
+import com.makco.smartfinance.persistence.entity.Invoice;
 import com.makco.smartfinance.persistence.entity.session.invoice_management.v3.Invoice_v3;
 import com.makco.smartfinance.persistence.entity.session.invoice_management.v3.Item_v3;
 import com.makco.smartfinance.persistence.utils.TestPersistenceSession;
@@ -10,7 +14,11 @@ import org.hibernate.Session;
 import org.hibernate.resource.transaction.spi.TransactionStatus;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * User: Makar Kalancha
@@ -138,7 +146,7 @@ public class ItemDAOImpl_v3ForTest {
         }
     }
 
-    public void saveOrUpdateMultipleItem(List<Item_v3> item_v3_list) throws Exception {
+    public void saveOrUpdateMultipleItems(List<Item_v3> item_v3_list) throws Exception {
 
         Session session = null;
         try {
@@ -159,19 +167,30 @@ public class ItemDAOImpl_v3ForTest {
             it is enough to save item0 and invoice with other items will be saved:
 //            session.save(item_v3_list.get(0));
              */
-            for (int i = 0; i < item_v3_list.size(); i++) {
+
+            //guava tutotial https://github.com/google/guava/wiki/NewCollectionTypesExplained
+//            Multimap<Long, Item_v3> invoiceIdToItemV3 = Multimaps.index(item_v3_list, (Item_v3 item) -> item.getInvoice().getId());
+            Multimap<Invoice_v3, Item_v3> invoiceIdToItemV3 = Multimaps.index(item_v3_list, Item_v3::getInvoice);
+
+
+//            Map<Long, Item_v3> invoiceIdToItemV3 = item_v3_list.stream()
+//                    .collect(multicollCollectors.toMap(Item_v3::getInvoice));
+//            for (int i = 0; i < item_v3_list.size(); i++) {
+            int i = 0;
+            for (Invoice_v3 invoiceV3 : invoiceIdToItemV3.keys()) {
+                Set<Item_v3> itemV3s = new HashSet<>(invoiceIdToItemV3.get(invoiceV3));
                 LOG.debug(String.format(">>>>item_v3_list.get(%s): %s", i, item_v3_list.get(i).toString()));
 
-//                session.save(item_v3_list.get(i));
-                //todo try to group item list in map (key invoice id) and do batch save
-                Item_v3 item_v3 = item_v3_list.get(i);
-                Invoice_v3 invoice_v3 = item_v3.getInvoice();
-                List<Item_v3> items = new ArrayList<>(invoice_v3.getItems());
-                invoice_v3.setItems(items);
+////                session.save(item_v3_list.get(i));
+//                //todo try to group item list in map (key invoice id) and do batch save
+//                Item_v3 item_v3 = item_v3_list.get(i);
+//                Invoice_v3 invoice_v3 = item_v3.getInvoice();
+//                List<Item_v3> items = new ArrayList<>(invoice_v3.getItems());
+//                invoice_v3.setItems(items);
+                invoiceV3.setItems(itemV3s);
 
 //            session.saveOrUpdate(item_v3);//@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-                session.saveOrUpdate(invoice_v3);//Item_v3->@ManyToOne(fetch = FetchType.EAGER)
-                session.getTransaction().commit();
+                session.saveOrUpdate(invoiceV3);//Item_v3->@ManyToOne(fetch = FetchType.EAGER)
 
                 if(i % DataBaseConstants.BATCH_SIZE == 0){
                     LOG.debug(String.format(">>>>i %% DataBaseConstants.BATCH_SIZE: %s %% %s = %s",
@@ -182,6 +201,7 @@ public class ItemDAOImpl_v3ForTest {
                     session.clear();
                     Thread.sleep(50);
                 }
+                i++;
             }
 
             session.getTransaction().commit();

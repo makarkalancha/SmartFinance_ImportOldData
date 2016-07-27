@@ -1,5 +1,6 @@
 package com.makco.smartfinance.persistence.dao.dao_implementations;
 
+import com.makco.smartfinance.constants.DataBaseConstants;
 import com.makco.smartfinance.persistence.entity.session.invoice_management.v3.Invoice_v3;
 import com.makco.smartfinance.persistence.utils.TestPersistenceSession;
 import org.apache.logging.log4j.LogManager;
@@ -318,6 +319,69 @@ public class InvoiceDAOImpl_v3ForTest {
 //                    invoice.getSubTotal(),
 //                    invoice.getTotal()));
 //            LOG.debug(String.format(">>>>InvoiceDAOImpl_v3ForTest->saveOrUpdateInvoice->after close: create=%s, update=%s",
+//                    invoice.getCreatedOn(),
+//                    invoice.getUpdatedOn()));
+        }
+    }
+
+    public void saveOrUpdateMultipleInvoices(List<Invoice_v3> invoiceList) throws Exception {
+
+        Session session = null;
+        try {
+//            LOG.debug(String.format(">>>>InvoiceDAOImpl_v3ForTest->saveOrUpdateMultipleInvoices->before transaction: dateunit=%s, subtotal=%s, total=%s",
+//                    invoice.getDateUnit(),
+//                    invoice.getSubTotal(),
+//                    invoice.getTotal()));
+//            LOG.debug(String.format(">>>>InvoiceDAOImpl_v3ForTest->saveOrUpdateMultipleInvoices->before transaction: create=%s, update=%s",
+//                    invoice.getCreatedOn(),
+//                    invoice.getUpdatedOn()));
+            session = TestPersistenceSession.openSession();
+            session.beginTransaction();
+
+            for (int i = 0; i < invoiceList.size(); i++) {
+                Invoice_v3 invoiceV3 = invoiceList.get(i);
+                LOG.debug(String.format(">>>>saveOrUpdateMultipleInvoices->(invoiceList.get(%s)): %s", i, invoiceV3.toString()));
+
+                session.saveOrUpdate(invoiceV3);
+
+                if(i % DataBaseConstants.BATCH_SIZE == 0){
+                    LOG.debug(String.format(">>>>saveOrUpdateMultipleInvoices->(i %% DataBaseConstants.BATCH_SIZE): %s %% %s = %s",
+                            i,
+                            DataBaseConstants.BATCH_SIZE,
+                            (i % DataBaseConstants.BATCH_SIZE)));
+                    session.flush();
+                    session.clear();
+                    Thread.sleep(50);
+                }
+            }
+
+            session.getTransaction().commit();
+//            LOG.debug(String.format(">>>>InvoiceDAOImpl_v3ForTest->saveOrUpdateMultipleInvoices->after commit: dateunit=%s, subtotal=%s, total=%s",
+//                    invoice.getDateUnit(),
+//                    invoice.getSubTotal(),
+//                    invoice.getTotal()));
+//            LOG.debug(String.format(">>>>InvoiceDAOImpl_v3ForTest->saveOrUpdateMultipleInvoices->after commit: create=%s, update=%s",
+//                    invoice.getCreatedOn(),
+//                    invoice.getUpdatedOn()));
+        } catch (Exception e) {
+            try {
+                if (session.getTransaction().getStatus() == TransactionStatus.ACTIVE
+                        || session.getTransaction().getStatus() == TransactionStatus.MARKED_ROLLBACK)
+                    session.getTransaction().rollback();
+            } catch (Exception rbEx) {
+                LOG.error("Rollback of transaction failed, trace follows!");
+                LOG.error(rbEx, rbEx);
+            }
+            throw new RuntimeException(e);
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+//            LOG.debug(String.format(">>>>InvoiceDAOImpl_v3ForTest->saveOrUpdateMultipleInvoices->after close: dateunit=%s, subtotal=%s, total=%s",
+//                    invoice.getDateUnit(),
+//                    invoice.getSubTotal(),
+//                    invoice.getTotal()));
+//            LOG.debug(String.format(">>>>InvoiceDAOImpl_v3ForTest->saveOrUpdateMultipleInvoices->after close: create=%s, update=%s",
 //                    invoice.getCreatedOn(),
 //                    invoice.getUpdatedOn()));
         }

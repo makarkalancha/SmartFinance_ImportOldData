@@ -2,7 +2,10 @@ package com.makco.smartfinance.persistence.entity.session.invoice_management.v3;
 
 import com.google.common.base.Objects;
 import com.makco.smartfinance.constants.DataBaseConstants;
+import com.makco.smartfinance.persistence.entity.Category;
 import com.makco.smartfinance.persistence.entity.DateUnit;
+import com.makco.smartfinance.persistence.entity.FamilyMember;
+import com.makco.smartfinance.persistence.entity.Tax;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -188,6 +191,12 @@ public class Invoice_v3 implements Serializable {
         this.items = new ArrayList<>(items);
         sumDebitTotal();
         sumCreditTotal();
+    }
+
+    public void addItem(Category category, Tax tax, FamilyMember familyMember,
+                        String description1, String description2, String comment, BigDecimal subTotal){
+
+
     }
 
     private void sumDebitTotal() {
