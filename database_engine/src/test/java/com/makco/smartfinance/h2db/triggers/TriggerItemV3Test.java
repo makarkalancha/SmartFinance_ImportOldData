@@ -658,6 +658,10 @@ public class TriggerItemV3Test {
 
 
     @Test
+    /*
+    if there is count instead of max in triggerItemV3
+    Unique index or primary key violation: "IDX_UNQ_TM_NVCDRDRNMBR3 ON TEST.ITEM_V3(INVOICE_ID, ORDER_NUMBER) VALUES (3, 3, 11)"; SQL statement:
+     */
     public void testItem_51_insertDelete_checkOrderNumber() throws Exception {
         LOG.debug("testItem_31_delete");
         String querySelect = "SELECT " + Table.ITEM.ORDER_NUMBER + " FROM " + Table.Names.ITEM_V3 +
@@ -702,36 +706,39 @@ public class TriggerItemV3Test {
                     new BigDecimal("5.0"), new BigDecimal("15.0"));
 
             LOG.debug("itemdId1 > 0: itemdId1=" + itemdId1);
-            LOG.debug("itemdId2 > 0: itemdId2=" + itemdId2);
             assert (itemdId1 > 0);
+            LOG.debug("itemdId2 > 0: itemdId2=" + itemdId2);
             assert (itemdId2 > 0);
 
             selectPS.setLong(1,itemdId1);
             rs = selectPS.executeQuery();
             rs.next();
             int item1Order = rs.getInt(1);
-            assertEquals (1 ,item1Order);
+            LOG.debug("item1Order=" + item1Order);
+            assertEquals(1, item1Order);
 
             selectPS.setLong(1,itemdId2);
             rs = selectPS.executeQuery();
             rs.next();
             int item2Order = rs.getInt(1);
-            assertEquals (2 ,item2Order);
+            LOG.debug("item2Order=" + item2Order);
+            assertEquals(2, item2Order);
 
-            deletePS.setLong(1, itemdId2);
+            deletePS.setLong(1, itemdId1);
             deletePS.executeUpdate();
 
-            long itemdId3 = insert(
+            long itemdId3_new = insert(
                     invoiceId, categoryId, taxId, familyMemberId,
                     "product desc1", "product desc2", "comment",
                     new BigDecimal("5.0"), new BigDecimal("15.0"));
-            LOG.debug("itemdId3 > 0: itemdId3=" + itemdId3);
-            assert (itemdId3 > 0);
-            selectPS.setLong(1,itemdId3);
+            LOG.debug("itemdId3_new > 0: itemdId3_new=" + itemdId3_new);
+            assert (itemdId3_new > 0);
+            selectPS.setLong(1, itemdId3_new);
             rs = selectPS.executeQuery();
             rs.next();
-            int item3Order = rs.getInt(1);
-            assertEquals (3 ,item3Order);
+            int item3Order_new = rs.getInt(1);
+            LOG.debug("item3Order_new=" + item3Order_new);
+            assertEquals(3, item3Order_new);
             //todo fix it should throw exception if count instread of max
         } finally {
             if (rs != null) rs.close();

@@ -31,10 +31,9 @@ public class TriggerItemV3 extends AbstractTrigger {
             .toString();
 
     private static final String ITEM_COUNT_BY_INVOICE_ID = new StringBuilder()
-//            .append("SELECT MAX(")
-//            .append(Table.ITEM.ORDER_NUMBER)
-//            .append(") FROM ")
-            .append("SELECT count(*) from ")
+            .append("SELECT MAX(")
+            .append(Table.ITEM.ORDER_NUMBER)
+            .append(") FROM ")
             .append(SCHEMA_NAME_PLACEHOLDER)
             .append(".")
             .append(Table.Names.ITEM_V3)
