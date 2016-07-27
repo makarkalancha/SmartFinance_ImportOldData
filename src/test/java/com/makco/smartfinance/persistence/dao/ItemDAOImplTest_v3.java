@@ -62,8 +62,9 @@ public class ItemDAOImplTest_v3 {
         return LocalDateTime.now().format(INVOICE_NUMBER_FORMAT) + randomInt;
     }
 
-    @Test(expected = RuntimeException.class)
+
     /*
+    @Test(expected = RuntimeException.class)
     ---items cannot be saved without invoice first to be saved:
     Caused by: org.hibernate.TransientPropertyValueException: Not-null property references a transient value - transient
     instance must be saved before current operation : com.makco.smartfinance.persistence.entity.session.invoice_management.v1.Item_v1.invoice
@@ -134,6 +135,9 @@ public class ItemDAOImplTest_v3 {
 
         categoryGroupDAOImplForTest.saveOrUpdateCategoryGroup(categoryGroup1);
         categoryDAOImplForTest.saveOrUpdateCategory(category1);
+
+        categoryGroupDAOImplForTest.saveOrUpdateCategoryGroup(categoryGroup2);
+        categoryDAOImplForTest.saveOrUpdateCategory(category2);
 
         Tax tax1 = new Tax("tax1 " + randomInt, "tax1 desc", new BigDecimal("1"), "{NUM}+{RATE}", "{NUM}+1", null, null, null);
         Tax tax2 = new Tax("tax2 " + randomInt, "tax2 desc", new BigDecimal("1"), "{NUM}*{RATE}", "{NUM}*1", null, null, null);
