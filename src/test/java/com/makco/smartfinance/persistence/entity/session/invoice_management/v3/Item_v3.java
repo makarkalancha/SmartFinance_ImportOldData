@@ -57,7 +57,8 @@ public class Item_v3 implements Serializable {
     @Column(name = "ID")
     private Long id;
 
-    @Column(name = "ORDER_NUMBER", unique = true)
+    //generated in TriggerItemV3
+    @Column(name = "ORDER_NUMBER", unique = true, nullable = false, insertable = false, updatable = false)
     @NotNull
     private Integer orderNumber;
 
