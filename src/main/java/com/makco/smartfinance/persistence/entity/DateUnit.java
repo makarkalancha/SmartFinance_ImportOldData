@@ -58,7 +58,7 @@ public class DateUnit {
     }
 
     public DateUnit(LocalDate localDate) {
-        this.unitDay = ChronoUnit.DAYS.between(EPOCH, localDate);;
+        this.unitDay = ChronoUnit.DAYS.between(EPOCH, localDate);
         this.unitDayOfMonth = localDate.getDayOfMonth();
         this.unitDayOfYear = localDate.getDayOfYear();
         this.unitMonth = ChronoUnit.MONTHS.between(EPOCH, localDate);

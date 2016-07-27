@@ -52,7 +52,7 @@ public class Main extends Application{
         LOG = LogManager.getLogger(Main.class);
     }
 
-    private static final Worker<Void> quitWorker = new QuitWorker();;
+    private static final Worker<Void> quitWorker = new QuitWorker();
 
     private Stage primaryStage;
     private Worker<Void> preStartWorker;

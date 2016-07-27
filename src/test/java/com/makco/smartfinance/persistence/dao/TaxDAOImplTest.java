@@ -54,12 +54,12 @@ public class TaxDAOImplTest {
     public void test_12_saveTax_withChildParent() throws Exception {
         int randomInt = randomWithinRange.getRandom();
         String nameChild1 = new StringBuilder(taxName).append("Child").append(randomInt).toString();
-        String descChild1 = new StringBuilder(taxDesc).append("Child").append(randomInt).toString();;
+        String descChild1 = new StringBuilder(taxDesc).append("Child").append(randomInt).toString();
         Tax taxChild1 = new Tax(nameChild1, descChild1, null, null, null, null, null, null);
 
         randomInt = randomWithinRange.getRandom();
         String nameChild2 = new StringBuilder(taxName).append("Child").append(randomInt).toString();
-        String descChild2 = new StringBuilder(taxDesc).append("Child").append(randomInt).toString();;
+        String descChild2 = new StringBuilder(taxDesc).append("Child").append(randomInt).toString();
         Tax taxChild2 = new Tax(nameChild2, descChild2, null, null, null, null, null, null);
 
         randomInt = randomWithinRange.getRandom();
@@ -90,12 +90,12 @@ public class TaxDAOImplTest {
     public void test_31_remove_ChildOfTax() throws Exception{
         int randomInt = randomWithinRange.getRandom();
         String nameChild1 = new StringBuilder(taxName).append("Child").append(randomInt).toString();
-        String descChild1 = new StringBuilder(taxDesc).append("Child").append(randomInt).toString();;
+        String descChild1 = new StringBuilder(taxDesc).append("Child").append(randomInt).toString();
         Tax taxChild1 = new Tax(nameChild1, descChild1, null, null, null, null, null, null);
 
         randomInt = randomWithinRange.getRandom();
         String nameChild2 = new StringBuilder(taxName).append("Child").append(randomInt).toString();
-        String descChild2 = new StringBuilder(taxDesc).append("Child").append(randomInt).toString();;
+        String descChild2 = new StringBuilder(taxDesc).append("Child").append(randomInt).toString();
         Tax taxChild2 = new Tax(nameChild2, descChild2, null, null, null, null, null, null);
 
         randomInt = randomWithinRange.getRandom();
@@ -131,12 +131,12 @@ public class TaxDAOImplTest {
     public void test_32_remove_ParentOfTax() throws Exception{
         int randomInt = randomWithinRange.getRandom();
         String nameChild1 = new StringBuilder(taxName).append("Child").append(randomInt).toString();
-        String descChild1 = new StringBuilder(taxDesc).append("Child").append(randomInt).toString();;
+        String descChild1 = new StringBuilder(taxDesc).append("Child").append(randomInt).toString();
         Tax taxChild1 = new Tax(nameChild1, descChild1, null, null, null, null, null, null);
 
         randomInt = randomWithinRange.getRandom();
         String nameChild2 = new StringBuilder(taxName).append("Child").append(randomInt).toString();
-        String descChild2 = new StringBuilder(taxDesc).append("Child").append(randomInt).toString();;
+        String descChild2 = new StringBuilder(taxDesc).append("Child").append(randomInt).toString();
         Tax taxChild2 = new Tax(nameChild2, descChild2, null, null, null, null, null, null);
 
         randomInt = randomWithinRange.getRandom();
@@ -171,12 +171,12 @@ public class TaxDAOImplTest {
     public void test_41_select_withChildParent() throws Exception {
         int randomInt = randomWithinRange.getRandom();
         String nameChild1 = new StringBuilder(taxName).append("Child").append(randomInt).toString();
-        String descChild1 = new StringBuilder(taxDesc).append("Child").append(randomInt).toString();;
+        String descChild1 = new StringBuilder(taxDesc).append("Child").append(randomInt).toString();
         Tax taxChild1 = new Tax(nameChild1, descChild1, null, null, null, null, null, null);
 
         randomInt = randomWithinRange.getRandom();
         String nameChild2 = new StringBuilder(taxName).append("Child").append(randomInt).toString();
-        String descChild2 = new StringBuilder(taxDesc).append("Child").append(randomInt).toString();;
+        String descChild2 = new StringBuilder(taxDesc).append("Child").append(randomInt).toString();
         Tax taxChild2 = new Tax(nameChild2, descChild2, null, null, null, null, null, null);
 
         randomInt = randomWithinRange.getRandom();
