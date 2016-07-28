@@ -45,6 +45,34 @@ public class TransactionDAOImpl_v3ForTest {
         return transaction;
     }
 
+    public Transaction_v3 getTransactionByIdWithInvoiceItems(Long id) throws Exception {
+        Session session = null;
+        Transaction_v3 transaction = null;
+        try{
+            session = TestPersistenceSession.openSession();
+            session.beginTransaction();
+            transaction = (Transaction_v3) session.createQuery("select t, i, it from Transaction_v3 t left join fetch t.invoice i left join fetch i.items it where t.id = :transactionId")
+                    .setParameter("transactionId", id)
+                    .uniqueResult();
+            session.getTransaction().commit();
+        } catch (Exception e) {
+            try {
+                if (session.getTransaction().getStatus() == TransactionStatus.ACTIVE
+                        || session.getTransaction().getStatus() == TransactionStatus.MARKED_ROLLBACK)
+                    session.getTransaction().rollback();
+            } catch (Exception rbEx) {
+                LOG.error("Rollback of transaction failed, trace follows!");
+                LOG.error(rbEx, rbEx);
+            }
+            throw new RuntimeException(e);
+        } finally {
+            if(session != null){
+                session.close();
+            }
+        }
+        return transaction;
+    }
+
     public List<Transaction_v3> transactionList() throws Exception {
         Session session = null;
         List<Transaction_v3> list = new ArrayList<>();

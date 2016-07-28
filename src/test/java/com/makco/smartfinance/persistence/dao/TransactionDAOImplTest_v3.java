@@ -10,6 +10,11 @@ import com.makco.smartfinance.persistence.dao.dao_implementations.InvoiceDAOImpl
 import com.makco.smartfinance.persistence.dao.dao_implementations.ItemDAOImpl_v3ForTest;
 import com.makco.smartfinance.persistence.dao.dao_implementations.OrganizationDAOImpl_v3ForTest;
 import com.makco.smartfinance.persistence.dao.dao_implementations.TaxDAOImpl_v1ForTest;
+import com.makco.smartfinance.persistence.dao.dao_implementations.TransactionDAOImpl_v3ForTest;
+import com.makco.smartfinance.persistence.entity.Account;
+import com.makco.smartfinance.persistence.entity.AccountCredit;
+import com.makco.smartfinance.persistence.entity.AccountGroup;
+import com.makco.smartfinance.persistence.entity.AccountGroupCredit;
 import com.makco.smartfinance.persistence.entity.Category;
 import com.makco.smartfinance.persistence.entity.CategoryCredit;
 import com.makco.smartfinance.persistence.entity.CategoryDebit;
@@ -22,6 +27,7 @@ import com.makco.smartfinance.persistence.entity.Tax;
 import com.makco.smartfinance.persistence.entity.session.invoice_management.v3.Invoice_v3;
 import com.makco.smartfinance.persistence.entity.session.invoice_management.v3.Item_v3;
 import com.makco.smartfinance.persistence.entity.session.invoice_management.v3.Organization_v3;
+import com.makco.smartfinance.persistence.entity.session.invoice_management.v3.Transaction_v3;
 import com.makco.smartfinance.utils.RandomWithinRange;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -31,6 +37,8 @@ import org.junit.runners.MethodSorters;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import static org.junit.Assert.assertEquals;
@@ -48,6 +56,8 @@ public class TransactionDAOImplTest_v3 {
     private static int MAX = 1_000_000;
     private static RandomWithinRange randomWithinRange = new RandomWithinRange(MIN, MAX);
 
+    private TransactionDAOImpl_v3ForTest transactionDAOImpl_v3ForTest = new TransactionDAOImpl_v3ForTest();
+
     private InvoiceDAOImpl_v3ForTest invoiceDAOImpl_v3ForTest = new InvoiceDAOImpl_v3ForTest();
     private InvoiceDAOImplTest_v3 invoiceDAOImplTest_v3 = new InvoiceDAOImplTest_v3();
 
@@ -61,7 +71,9 @@ public class TransactionDAOImplTest_v3 {
     private DateUnitDAO dateUnitDAO = new DateUnitDAOImplForTest();
     private FamilyMemberDAOImpl_v1ForTest familyMemberDAO = new FamilyMemberDAOImpl_v1ForTest();
 
-    private void generateInvoiceDebitCredit(int randomInt) throws Exception{
+    public static final DateTimeFormatter TRANSACTION_NUMBER_FORMAT = DateTimeFormatter.ofPattern("yyyyMMdd");
+
+    private Invoice_v3 generateInvoiceDebitCredit(int randomInt, int multiplicator) throws Exception{
         DateUnit dateUnit = new DateUnit(LocalDate.now());
         dateUnitDAO.addDateUnit(dateUnit);
 
@@ -90,10 +102,12 @@ public class TransactionDAOImplTest_v3 {
         FamilyMember familyMember = new FamilyMember("FM " + randomInt, "family member desc");
         familyMemberDAO.saveOrUpdateFamilyMember(familyMember);
 
-        Item_v3 item1 = new Item_v3(1, invoice, category1, tax1, familyMember, "desc11", "desc21", "comment", new BigDecimal("1"));
-        Item_v3 item2 = new Item_v3(2, invoice, category1, tax2, familyMember, "desc12", "desc22", "comment", new BigDecimal("2"));
-        Item_v3 item3 = new Item_v3(3, invoice, category2, tax1, familyMember, "desc13", "desc23", "comment", new BigDecimal("3"));
-        Item_v3 item4 = new Item_v3(4, invoice, category2, tax2, familyMember, "desc14", "desc24", "comment", new BigDecimal("4"));
+        BigDecimal multiplicatorBD = new BigDecimal(Integer.toString(multiplicator));
+
+        Item_v3 item1 = new Item_v3(1, invoice, category1, tax1, familyMember, "desc11", "desc21", "comment", new BigDecimal("1").multiply(multiplicatorBD));
+        Item_v3 item2 = new Item_v3(2, invoice, category1, tax2, familyMember, "desc12", "desc22", "comment", new BigDecimal("2").multiply(multiplicatorBD));
+        Item_v3 item3 = new Item_v3(3, invoice, category2, tax1, familyMember, "desc13", "desc23", "comment", new BigDecimal("3").multiply(multiplicatorBD));
+        Item_v3 item4 = new Item_v3(4, invoice, category2, tax2, familyMember, "desc14", "desc24", "comment", new BigDecimal("4").multiply(multiplicatorBD));
 
         invoice.setItems(new ArrayList<Item_v3>(){{
             add(item1);
@@ -101,8 +115,11 @@ public class TransactionDAOImplTest_v3 {
             add(item3);
             add(item4);
         }});
+        return invoice;
+    }
 
-        invoiceDAOImpl_v3ForTest.saveOrUpdateInvoice(invoice);
+    public String generateTransactionNumber(int randomInt){
+        return LocalDateTime.now().format(TRANSACTION_NUMBER_FORMAT) + randomInt;
     }
 
     //TODO p386 and section 20.1 cursor and batch processing: list too large
@@ -110,39 +127,37 @@ public class TransactionDAOImplTest_v3 {
     public void test_11_saveTransaction_onlyCreditCategories_byCreditAccount() throws Exception {
         int randomInt = randomWithinRange.getRandom();
 
+        Invoice_v3 invoiceV3_1 = generateInvoiceDebitCredit(randomInt, 1);
+        invoiceDAOImpl_v3ForTest.saveOrUpdateInvoice(invoiceV3_1);
 
+        AccountGroup accountGroup1 = new AccountGroupCredit("AG credit" + randomInt, "desc");
+        Account account1 = new AccountCredit(accountGroup1, "A credit" + randomInt, "desc");
 
+        accountGroupDAOImpl_v1ForTest.saveOrUpdateAccountGroup(accountGroup1);
+        accountDAOImpl_v1ForTest.saveOrUpdateAccount(account1);
 
+        Transaction_v3 transactionV3 = new Transaction_v3(
+                generateTransactionNumber(randomInt),
+                account1,
+                invoiceV3_1,
+                invoiceV3_1.getDateUnit(),
+                "comment" + randomInt,
+                new BigDecimal("0"),
+                invoiceV3_1.getCreditTotal().subtract(invoiceV3_1.getDebitTotal())
+        );
+        transactionDAOImpl_v3ForTest.saveOrUpdateTransaction(transactionV3);
+        assert(transactionV3.getId() != null);
+        Long transactionId = transactionV3.getId();
 
+        Transaction_v3 transactionV3FromDB1 = transactionDAOImpl_v3ForTest.getTransactionById(transactionId);
+        LOG.debug(">>>transactionV3FromDB1 (invoice with lazy items): " + transactionV3FromDB1);
+        assert(transactionV3FromDB1.getCreatedOn() != null);
+        assert(transactionV3FromDB1.getUpdatedOn() != null);
 
-        LOG.debug(">>>invoice: " + invoice);
-        assert(invoice.getId() != null);
-        assertEquals(4, invoice.getItems().size());
-//        assertEquals(new BigDecimal("10"), invoice.getSubTotal());
-//        assertEquals(new BigDecimal("12"), invoice.getTotal());
-        assert(invoice.getCreatedOn() != null);
-        assert(invoice.getUpdatedOn() != null);
+        Transaction_v3 transactionV3FromDB2 = transactionDAOImpl_v3ForTest.getTransactionByIdWithInvoiceItems(transactionId);
+        LOG.debug(">>>transactionV3FromDB2 (invoice with left join fetch items): " + transactionV3FromDB2);
+        assert(transactionV3FromDB2.getCreatedOn() != null);
+        assert(transactionV3FromDB2.getUpdatedOn() != null);
 
-        Invoice_v3 invoice1 = invoiceDAOImpl_v3ForTest.getInvoiceByIdWithItems(invoice.getId()); //pass
-//        Invoice_v3 invoice1 = invoice; //fail
-//        Invoice_v3 invoice1 = invoiceDAOImpl_v3ForTest.refresh(invoice);//fail
-        LOG.debug(">>>invoice1: " + invoice1);
-        assert(invoice1.getId() != null);
-        assertEquals(4, invoice1.getItems().size());
-        assertEquals(0, new BigDecimal("0").compareTo(invoice1.getDebitTotal()));
-        assertEquals(0, new BigDecimal("12").compareTo(invoice1.getCreditTotal()));
-        assert(invoice1.getCreatedOn() != null);
-        assert(invoice1.getUpdatedOn() != null);
-
-        for(Item_v3 item_v3 : invoice1.getItems()){
-            LOG.debug(">>>item_v3: " + item_v3);
-            assert(item_v3.getId() != null);
-            assert(item_v3.getCategory() != null);
-            assert(item_v3.getTax() != null);
-            assert(item_v3.getFamilyMember() != null);
-            assert(item_v3.getDateUnit() != null);
-            assert(item_v3.getCreatedOn() != null);
-            assert(item_v3.getUpdatedOn() != null);
-        }
     }
 }

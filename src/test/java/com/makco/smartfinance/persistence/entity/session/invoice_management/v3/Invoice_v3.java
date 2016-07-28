@@ -259,6 +259,20 @@ public class Invoice_v3 implements Serializable {
                 ", creditTotal=" + creditTotal +
                 ", createdOn=" + createdOn +
                 ", updatedOn=" + updatedOn +
+                '}';
+    }
+
+    public String toStringEager() {
+        return "Invoice{" +
+                "id=" + id +
+                ", invoiceNumber=" + invoiceNumber +
+                ", organization=" + organization +
+                ", dateUnit=" + dateUnit +
+                ", comment='" + comment + '\'' +
+                ", debitTotal=" + debitTotal +
+                ", creditTotal=" + creditTotal +
+                ", createdOn=" + createdOn +
+                ", updatedOn=" + updatedOn +
                 ", items.size=" + items.size() +
                 '}';
     }
