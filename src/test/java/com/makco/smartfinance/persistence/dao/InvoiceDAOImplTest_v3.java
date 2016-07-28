@@ -22,17 +22,12 @@ import com.makco.smartfinance.persistence.entity.Tax;
 import com.makco.smartfinance.persistence.entity.session.invoice_management.v3.Invoice_v3;
 import com.makco.smartfinance.persistence.entity.session.invoice_management.v3.Item_v3;
 import com.makco.smartfinance.persistence.entity.session.invoice_management.v3.Organization_v3;
-import com.makco.smartfinance.persistence.entity.session.invoice_management.v3.Invoice_v3;
-import com.makco.smartfinance.persistence.entity.session.invoice_management.v3.Item_v3;
-import com.makco.smartfinance.persistence.entity.session.invoice_management.v3.Organization_v3;
 import com.makco.smartfinance.persistence.utils.DateUnitUtil;
 import com.makco.smartfinance.utils.Logs;
 import com.makco.smartfinance.utils.RandomWithinRange;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.junit.FixMethodOrder;
 import org.junit.Test;
-import org.junit.runners.MethodSorters;
 
 import java.io.PrintWriter;
 import java.math.BigDecimal;
@@ -767,5 +762,51 @@ public class InvoiceDAOImplTest_v3 {
             assert (item_v3.getCreatedOn() != null);
             assert (item_v3.getUpdatedOn() != null);
         }
+    }
+
+    @Test
+    public void test_41_selectAllinvoices() throws Exception{
+        int randomInt = randomWithinRange.getRandom();
+
+        DateUnit dateUnit = new DateUnit(LocalDate.now());
+        dateUnitDAO.addDateUnit(dateUnit);
+
+        String organizationName = "OrgName" + randomInt;
+        Organization_v3 organization = new Organization_v3(organizationName, "org desc " + randomInt);
+
+        String invoiceNumber = generateInvoiceNumber(randomInt);
+        Invoice_v3 invoice = new Invoice_v3(invoiceNumber, organization, dateUnit, "comment " + randomInt);
+
+        CategoryGroup categoryGroup1 = new CategoryGroupCredit("CG credit" + randomInt, "desc");
+        Category category1 = new CategoryCredit(categoryGroup1, "C credit" + randomInt, "desc");
+
+        categoryGroupDAOImplForTest.saveOrUpdateCategoryGroup(categoryGroup1);
+        categoryDAOImplForTest.saveOrUpdateCategory(category1);
+
+        Tax tax1 = new Tax("tax1 " + randomInt, "tax1 desc", new BigDecimal("1"), "{NUM}+{RATE}", "{NUM}+1", null, null, null);
+        Tax tax2 = new Tax("tax2 " + randomInt, "tax2 desc", new BigDecimal("1"), "{NUM}*{RATE}", "{NUM}*1", null, null, null);
+        taxDAO.saveOrUpdateTax(tax1);
+        taxDAO.saveOrUpdateTax(tax2);
+
+        FamilyMember familyMember = new FamilyMember("FM " + randomInt, "family member desc");
+        familyMemberDAO.saveOrUpdateFamilyMember(familyMember);
+
+        Item_v3 item1 = new Item_v3(1, invoice, category1, tax1, familyMember, "desc11", "desc21", "comment", new BigDecimal("1"));
+        Item_v3 item2 = new Item_v3(2, invoice, category1, tax2, familyMember, "desc12", "desc22", "comment", new BigDecimal("2"));
+        Item_v3 item3 = new Item_v3(3, invoice, category1, tax1, familyMember, "desc13", "desc23", "comment", new BigDecimal("3"));
+        Item_v3 item4 = new Item_v3(4, invoice, category1, tax2, familyMember, "desc14", "desc24", "comment", new BigDecimal("4"));
+
+        invoice.setItems(new ArrayList<Item_v3>(){{
+            add(item1);
+            add(item2);
+            add(item3);
+            add(item4);
+        }});
+
+        invoiceDAOImpl_v3ForTest.saveOrUpdateInvoice(invoice);
+
+        List<Invoice_v3> invoices = invoiceDAOImpl_v3ForTest.invoiceList();
+        LOG.debug(">>>invoices.size(): " + invoices.size());
+        assert (invoices.contains(invoice));
     }
 }

@@ -8,7 +8,6 @@ import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.resource.transaction.spi.TransactionStatus;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -386,5 +385,40 @@ public class InvoiceDAOImpl_v3ForTest {
 //                    invoice.getCreatedOn(),
 //                    invoice.getUpdatedOn()));
         }
+    }
+
+    public List<Invoice_v3> invoiceList() throws Exception {
+        Session session = null;
+        List<Invoice_v3> list = new ArrayList<>();
+        try{
+            session = TestPersistenceSession.openSession();
+            session.beginTransaction();
+            list = session.createQuery("SELECT i FROM Invoice_v3 i ORDER BY i.invoiceNumber").list();
+            session.getTransaction().commit();
+
+//        List<FamilyMember> list = new ArrayList<>();
+//        EntityManager em = FinancePersistenceManager.INSTANCE.getEntityManager();
+//        em.getTransaction().begin();
+//        list = em.createQuery("FROM FamilyMember AS f ORDER BY f.name").getResultList();
+//        em.getTransaction().commit();
+//        em.close();
+//        return list;
+        } catch (Exception e) {
+            //hibernate persistence p.257
+            try {
+                if (session.getTransaction().getStatus() == TransactionStatus.ACTIVE
+                        || session.getTransaction().getStatus() == TransactionStatus.MARKED_ROLLBACK)
+                    session.getTransaction().rollback();
+            } catch (Exception rbEx) {
+                LOG.error("Rollback of transaction failed, trace follows!");
+                LOG.error(rbEx, rbEx);
+            }
+            throw new RuntimeException(e);
+        } finally {
+            if(session != null){
+                session.close();
+            }
+        }
+        return list;
     }
 }
