@@ -96,10 +96,10 @@ public class ItemDAOImplTest_v3 {
         FamilyMember familyMember = new FamilyMember("FM " + randomInt, "family member desc");
         familyMemberDAO.saveOrUpdateFamilyMember(familyMember);
 
-        Item_v3 item1 = new Item_v3(invoice, category1, tax1, familyMember, "desc11", "desc21", "comment", new BigDecimal("1"));
-        Item_v3 item2 = new Item_v3(invoice, category1, tax2, familyMember, "desc12", "desc22", "comment", new BigDecimal("2"));
-        Item_v3 item3 = new Item_v3(invoice, category1, tax1, familyMember, "desc13", "desc23", "comment", new BigDecimal("3"));
-        Item_v3 item4 = new Item_v3(invoice, category1, tax2, familyMember, "desc14", "desc24", "comment", new BigDecimal("4"));
+        Item_v3 item1 = new Item_v3(1, invoice, category1, tax1, familyMember, "desc11", "desc21", "comment", new BigDecimal("1"));
+        Item_v3 item2 = new Item_v3(2, invoice, category1, tax2, familyMember, "desc12", "desc22", "comment", new BigDecimal("2"));
+        Item_v3 item3 = new Item_v3(3, invoice, category1, tax1, familyMember, "desc13", "desc23", "comment", new BigDecimal("3"));
+        Item_v3 item4 = new Item_v3(4, invoice, category1, tax2, familyMember, "desc14", "desc24", "comment", new BigDecimal("4"));
 
         List<Item_v3> itemsToSave = new ArrayList<>();
         itemsToSave.add(item1);
@@ -112,7 +112,6 @@ public class ItemDAOImplTest_v3 {
         itemDAOImpl_v3ForTest.saveOrUpdateMultipleItems(itemsToSave);
     }
 
-    //todo save multiple items for different invoices
     @Test
     public void test_12_saveItems_Multiple() throws Exception {
         int randomInt = randomWithinRange.getRandom();
@@ -147,10 +146,10 @@ public class ItemDAOImplTest_v3 {
         FamilyMember familyMember = new FamilyMember("FM " + randomInt, "family member desc");
         familyMemberDAO.saveOrUpdateFamilyMember(familyMember);
 
-        Item_v3 item1 = new Item_v3(invoice1, category1, tax1, familyMember, "desc11", "desc21", "comment", new BigDecimal("1"));
-        Item_v3 item2 = new Item_v3(invoice2, category2, tax2, familyMember, "desc12", "desc22", "comment", new BigDecimal("2"));
-        Item_v3 item3 = new Item_v3(invoice3, category1, tax1, familyMember, "desc13", "desc23", "comment", new BigDecimal("3"));
-        Item_v3 item4 = new Item_v3(invoice1, category2, tax2, familyMember, "desc14", "desc24", "comment", new BigDecimal("4"));
+        Item_v3 item1 = new Item_v3(1, invoice1, category1, tax1, familyMember, "desc11", "desc21", "comment", new BigDecimal("1"));
+        Item_v3 item2 = new Item_v3(2, invoice2, category2, tax2, familyMember, "desc12", "desc22", "comment", new BigDecimal("2"));
+        Item_v3 item3 = new Item_v3(3, invoice3, category1, tax1, familyMember, "desc13", "desc23", "comment", new BigDecimal("3"));
+        Item_v3 item4 = new Item_v3(4, invoice1, category2, tax2, familyMember, "desc14", "desc24", "comment", new BigDecimal("4"));
 
         List<Item_v3> itemsToSave = new ArrayList<>();
         itemsToSave.add(item1);
@@ -158,7 +157,6 @@ public class ItemDAOImplTest_v3 {
         itemsToSave.add(item3);
         itemsToSave.add(item4);
 
-//        invoice.setItems(itemsToSave);
 
         invoiceDAOImpl_v3ForTest.saveOrUpdateMultipleInvoices(Arrays.asList(invoice1,invoice2,invoice3));
 
@@ -167,8 +165,13 @@ public class ItemDAOImplTest_v3 {
         Long invoice1Id = invoice1.getId();
         Long invoice2Id = invoice2.getId();
         Long invoice3Id = invoice3.getId();
+        Invoice_v3 invoiceV3FromDB1 = invoiceDAOImpl_v3ForTest.getInvoiceByIdWithItems(invoice1Id);
+        Invoice_v3 invoiceV3FromDB2 = invoiceDAOImpl_v3ForTest.getInvoiceByIdWithItems(invoice2Id);
+        Invoice_v3 invoiceV3FromDB3 = invoiceDAOImpl_v3ForTest.getInvoiceByIdWithItems(invoice3Id);
 
-
+        assertEquals(2, invoiceV3FromDB1.getItems().size());
+        assertEquals(1, invoiceV3FromDB2.getItems().size());
+        assertEquals(1, invoiceV3FromDB3.getItems().size());
     }
 
 
@@ -204,10 +207,10 @@ public class ItemDAOImplTest_v3 {
         FamilyMember familyMember = new FamilyMember("FM " + randomInt, "family member desc");
         familyMemberDAO.saveOrUpdateFamilyMember(familyMember);
 
-        Item_v3 item1 = new Item_v3(invoice, category1, tax1, familyMember, "desc11", "desc21", "comment", new BigDecimal("1"));
-        Item_v3 item2 = new Item_v3(invoice, category1, tax2, familyMember, "desc12", "desc22", "comment", new BigDecimal("2"));
-        Item_v3 item3 = new Item_v3(invoice, category2, tax1, familyMember, "desc13", "desc23", "comment", new BigDecimal("3"));
-        Item_v3 item4 = new Item_v3(invoice, category2, tax2, familyMember, "desc14", "desc24", "comment", new BigDecimal("4"));
+        Item_v3 item1 = new Item_v3(1, invoice, category1, tax1, familyMember, "desc11", "desc21", "comment", new BigDecimal("1"));
+        Item_v3 item2 = new Item_v3(2, invoice, category1, tax2, familyMember, "desc12", "desc22", "comment", new BigDecimal("2"));
+        Item_v3 item3 = new Item_v3(3, invoice, category2, tax1, familyMember, "desc13", "desc23", "comment", new BigDecimal("3"));
+        Item_v3 item4 = new Item_v3(4, invoice, category2, tax2, familyMember, "desc14", "desc24", "comment", new BigDecimal("4"));
 
         invoice.setItems(new ArrayList<Item_v3>(){{
             add(item1);
@@ -279,10 +282,10 @@ public class ItemDAOImplTest_v3 {
         FamilyMember familyMember = new FamilyMember("FM " + randomInt, "family member desc");
         familyMemberDAO.saveOrUpdateFamilyMember(familyMember);
 
-        Item_v3 item1 = new Item_v3(invoice, category1, tax1, familyMember, "desc11", "desc21", "comment", new BigDecimal("1"));
-        Item_v3 item2 = new Item_v3(invoice, category1, tax2, familyMember, "desc12", "desc22", "comment", new BigDecimal("2"));
-        Item_v3 item3 = new Item_v3(invoice, category2, tax1, familyMember, "desc13", "desc23", "comment", new BigDecimal("3"));
-        Item_v3 item4 = new Item_v3(invoice, category2, tax2, familyMember, "desc14", "desc24", "comment", new BigDecimal("4"));
+        Item_v3 item1 = new Item_v3(1, invoice, category1, tax1, familyMember, "desc11", "desc21", "comment", new BigDecimal("1"));
+        Item_v3 item2 = new Item_v3(2, invoice, category1, tax2, familyMember, "desc12", "desc22", "comment", new BigDecimal("2"));
+        Item_v3 item3 = new Item_v3(3, invoice, category2, tax1, familyMember, "desc13", "desc23", "comment", new BigDecimal("3"));
+        Item_v3 item4 = new Item_v3(4, invoice, category2, tax2, familyMember, "desc14", "desc24", "comment", new BigDecimal("4"));
 
         invoice.setItems(new ArrayList<Item_v3>(){{
             add(item1);
