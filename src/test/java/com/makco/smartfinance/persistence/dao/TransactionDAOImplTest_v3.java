@@ -13,8 +13,10 @@ import com.makco.smartfinance.persistence.dao.dao_implementations.TaxDAOImpl_v1F
 import com.makco.smartfinance.persistence.dao.dao_implementations.TransactionDAOImpl_v3ForTest;
 import com.makco.smartfinance.persistence.entity.Account;
 import com.makco.smartfinance.persistence.entity.AccountCredit;
+import com.makco.smartfinance.persistence.entity.AccountDebit;
 import com.makco.smartfinance.persistence.entity.AccountGroup;
 import com.makco.smartfinance.persistence.entity.AccountGroupCredit;
+import com.makco.smartfinance.persistence.entity.AccountGroupDebit;
 import com.makco.smartfinance.persistence.entity.Category;
 import com.makco.smartfinance.persistence.entity.CategoryCredit;
 import com.makco.smartfinance.persistence.entity.CategoryDebit;
@@ -40,8 +42,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-
-import static org.junit.Assert.assertEquals;
 
 /**
  * User: Makar Kalancha
@@ -158,6 +158,42 @@ public class TransactionDAOImplTest_v3 {
         LOG.debug(">>>transactionV3FromDB2 (invoice with left join fetch items): " + transactionV3FromDB2);
         assert(transactionV3FromDB2.getCreatedOn() != null);
         assert(transactionV3FromDB2.getUpdatedOn() != null);
+    }
 
+    @Test
+    public void test_12_saveTransaction_onlyCreditCategories_byDebitAccount() throws Exception {
+        int randomInt = randomWithinRange.getRandom();
+
+        Invoice_v3 invoiceV3_1 = generateInvoiceDebitCredit(randomInt, 1);
+        invoiceDAOImpl_v3ForTest.saveOrUpdateInvoice(invoiceV3_1);
+
+        AccountGroup accountGroup1 = new AccountGroupDebit("AG debit" + randomInt, "desc");
+        Account account1 = new AccountDebit(accountGroup1, "A debit" + randomInt, "desc");
+
+        accountGroupDAOImpl_v1ForTest.saveOrUpdateAccountGroup(accountGroup1);
+        accountDAOImpl_v1ForTest.saveOrUpdateAccount(account1);
+
+        Transaction_v3 transactionV3 = new Transaction_v3(
+                generateTransactionNumber(randomInt),
+                account1,
+                invoiceV3_1,
+                invoiceV3_1.getDateUnit(),
+                "comment" + randomInt,
+                invoiceV3_1.getCreditTotal().subtract(invoiceV3_1.getDebitTotal()),
+                new BigDecimal("0")
+        );
+        transactionDAOImpl_v3ForTest.saveOrUpdateTransaction(transactionV3);
+        assert(transactionV3.getId() != null);
+        Long transactionId = transactionV3.getId();
+
+        Transaction_v3 transactionV3FromDB1 = transactionDAOImpl_v3ForTest.getTransactionById(transactionId);
+        LOG.debug(">>>transactionV3FromDB1 (invoice with lazy items): " + transactionV3FromDB1);
+        assert(transactionV3FromDB1.getCreatedOn() != null);
+        assert(transactionV3FromDB1.getUpdatedOn() != null);
+
+        Transaction_v3 transactionV3FromDB2 = transactionDAOImpl_v3ForTest.getTransactionByIdWithInvoiceItems(transactionId);
+        LOG.debug(">>>transactionV3FromDB2 (invoice with left join fetch items): " + transactionV3FromDB2);
+        assert(transactionV3FromDB2.getCreatedOn() != null);
+        assert(transactionV3FromDB2.getUpdatedOn() != null);
     }
 }
