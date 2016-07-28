@@ -4,6 +4,7 @@ import com.google.common.base.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.Table;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -20,6 +21,7 @@ public class AccountAggregate_v3 implements Serializable {
     @Column(name = "ACCOUNT_GROUP_NAME")
     private String accountGroupName;
 
+    @Id
     @Column(name = "ACCOUNT_ID")
     private Long accountId;
 
@@ -83,5 +85,18 @@ public class AccountAggregate_v3 implements Serializable {
                 getAccountGroupId(),
                 getAccountId()
         );
+    }
+
+    @Override
+    public String toString() {
+        return "AccountAggregate_v3{" +
+                "accountGroupId=" + accountGroupId +
+                ", accountGroupName='" + accountGroupName + '\'' +
+                ", accountId=" + accountId +
+                ", accountName='" + accountName + '\'' +
+                ", type='" + type + '\'' +
+                ", sumDebit=" + sumDebit +
+                ", sumCredit=" + sumCredit +
+                '}';
     }
 }
