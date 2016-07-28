@@ -101,17 +101,17 @@ public class TriggerItemV3Test {
         LOG.debug(mess1);
     }
 
-    public Long insert(Long invoiceId, Long categoryId, Long taxId,
+    public Long insert(Integer orderNumber, Long invoiceId, Long categoryId, Long taxId,
                        Long familyMemberId,
                        String description1, String description2,
                        String comment, BigDecimal grossAmount, BigDecimal netAmount) throws Exception {
         LOG.debug("insert");
         String queryInsert = "INSERT INTO " + Table.Names.ITEM_V3 +
-                " (" + Table.ITEM.INVOICE_ID + ", " + Table.ITEM.CATEGORY_ID + ", " +
+                " (" + Table.ITEM.ORDER_NUMBER + ", " + Table.ITEM.INVOICE_ID + ", " + Table.ITEM.CATEGORY_ID + ", " +
                 Table.ITEM.TAX_ID + ", " + Table.ITEM.FAMILY_MEMBER_ID + ", " + Table.ITEM.DESCRIPTION1 + ", " +
                 Table.ITEM.DESCRIPTION2 + ", " + Table.ITEM.COMMENT + ", " + Table.ITEM.SUB_TOTAL + ", " +
                 Table.ITEM.TOTAL + ") " +
-                "VALUES(" + invoiceId + ", " + categoryId + ", " + taxId + ", " +
+                "VALUES(" + orderNumber + ", " + invoiceId + ", " + categoryId + ", " + taxId + ", " +
                 familyMemberId + ", '" +
                 description1 + "', '" + description2 + "', '" + comment + "', " +
                 grossAmount + ", " + netAmount + ")";
@@ -171,7 +171,7 @@ public class TriggerItemV3Test {
             long familyMemberId = triggerFamilyMemberTest.insert("family member #11", "family member desc");
 
             long idJustInserted = insert(
-                    invoiceId, categoryId, taxId, familyMemberId,
+                    1, invoiceId, categoryId, taxId, familyMemberId,
                     "product desc1", "product desc2", "comment",
                     new BigDecimal("5.0"), new BigDecimal("15.0"));
             LOG.debug("idJustInserted > 0: idJustInserted=" + idJustInserted);
@@ -202,10 +202,8 @@ public class TriggerItemV3Test {
         }
     }
 
-    /*
-    IMPOSSIBLE to test because of trigger
+    //no Item trigger, order number is in equals/hashcode
     @Test(expected=JdbcSQLException.class)
-     */
     //org.h2.jdbc.JdbcSQLException: Unique index or primary key violation: "IDX_UNQ_TM_NVCDRDRNMBR ON TEST.ITEM(INVOICE_ID, ORDER_NUMBER) VALUES (31, 1, 13)"; SQL statement:
     public void testItem_12_insert_duplicate() throws Exception {
         LOG.debug("testItem_11_insert");
@@ -227,11 +225,11 @@ public class TriggerItemV3Test {
         long familyMemberId = triggerFamilyMemberTest.insert("family member #12", "family member desc");
 
         insert(
-                invoiceId, categoryId, taxId, familyMemberId,
+                1, invoiceId, categoryId, taxId, familyMemberId,
                 "product desc1", "product desc2", "comment",
                 new BigDecimal("5.0"), new BigDecimal("15.0"));
         insert(
-                invoiceId, categoryId, taxId, familyMemberId,
+                1, invoiceId, categoryId, taxId, familyMemberId,
                 "product desc1", "product desc2", "comment",
                 new BigDecimal("5.0"), new BigDecimal("15.0"));
     }
@@ -367,11 +365,11 @@ public class TriggerItemV3Test {
             long familyMemberId = triggerFamilyMemberTest.insert("family member #22", "family member desc");
 
             long idJustInserted1 = insert(
-                    invoiceId, categoryId, taxId, familyMemberId,
+                    1, invoiceId, categoryId, taxId, familyMemberId,
                     "product1 desc1", "product1 desc2", "comment",
                     new BigDecimal("5.0"), new BigDecimal("15.0"));
             insert(
-                    invoiceId, categoryId, taxId, familyMemberId,
+                    2, invoiceId, categoryId, taxId, familyMemberId,
                     "product2 desc1", "product2 desc2", "comment",
                     new BigDecimal("10.0"), new BigDecimal("30.0"));
 
@@ -422,15 +420,15 @@ public class TriggerItemV3Test {
 
             long familyMemberId = triggerFamilyMemberTest.insert("family member #23", "family member desc");
 
-            insert(invoiceId, categoryId, taxId, familyMemberId,
+            insert(1, invoiceId, categoryId, taxId, familyMemberId,
                     "product desc11", "product desc21", "comment",
                     new BigDecimal("5.0"), new BigDecimal("15.0"));
 
-            insert(invoiceId, categoryId, taxId, familyMemberId,
+            insert(2, invoiceId, categoryId, taxId, familyMemberId,
                     "product desc12", "product desc22", "comment",
                     new BigDecimal("6.0"), new BigDecimal("26.0"));
 
-            insert(invoiceId, categoryId, taxId, familyMemberId,
+            insert(3, invoiceId, categoryId, taxId, familyMemberId,
                     "product desc13", "product desc23", "comment",
                     new BigDecimal("7.0"), new BigDecimal("37.0"));
 
@@ -492,15 +490,15 @@ public class TriggerItemV3Test {
 
         long familyMemberId = triggerFamilyMemberTest.insert("family member #24", "family member desc");
 
-        long itemId = insert(invoiceId, categoryId, taxId, familyMemberId,
+        long itemId = insert(1, invoiceId, categoryId, taxId, familyMemberId,
                 "product desc11", "product desc21", "comment",
                 new BigDecimal("5.0"), new BigDecimal("15.0"));
 
-        insert(invoiceId, categoryId, taxId, familyMemberId,
+        insert(2, invoiceId, categoryId, taxId, familyMemberId,
                 "product desc12", "product desc22", "comment",
                 new BigDecimal("6.0"), new BigDecimal("26.0"));
 
-        insert(invoiceId, categoryId, taxId, familyMemberId,
+        insert(3, invoiceId, categoryId, taxId, familyMemberId,
                 "product desc13", "product desc23", "comment",
                 new BigDecimal("7.0"), new BigDecimal("37.0"));
 
@@ -654,94 +652,5 @@ public class TriggerItemV3Test {
         assertEquals(SIMPLE_DATE_TIME_FORMAT.parse("2001-02-03 14:05:06"), createdOn);
         Date updatedOn = SIMPLE_DATE_TIME_FORMAT.parse(rowJsonObject.get(Table.ITEM.T_UPDATEDON.toString()).getAsString());
         assertEquals(SIMPLE_DATE_TIME_FORMAT.parse("2006-05-04 03:02:01"), updatedOn);
-    }
-
-
-    @Test
-    /*
-    if there is count instead of max in triggerItemV3
-    Unique index or primary key violation: "IDX_UNQ_TM_NVCDRDRNMBR3 ON TEST.ITEM_V3(INVOICE_ID, ORDER_NUMBER) VALUES (3, 3, 11)"; SQL statement:
-     */
-    public void testItem_51_insertDelete_checkOrderNumber() throws Exception {
-        LOG.debug("testItem_31_delete");
-        String querySelect = "SELECT " + Table.ITEM.ORDER_NUMBER + " FROM " + Table.Names.ITEM_V3 +
-                " WHERE " + Table.ITEM.ID + " = ?";
-        String queryDelete = "DELETE FROM " + Table.Names.ITEM_V3 + " WHERE " +
-                Table.ITEM.ID + " = ?";
-//        String querySelectDeletedRow = "SELECT JSON_ROW FROM _DELETED_ROWS WHERE ID = (SELECT MAX(ID) FROM _DELETED_ROWS WHERE SCHEMA_NAME = 'TEST' AND TABLE_NAME = '" + Table.Names.ITEM_V3 + "')";
-
-        LOG.debug(querySelect);
-        LOG.debug(queryDelete);
-//        LOG.debug(querySelectDeletedRow);
-        ResultSet rs = null;
-        try (
-                PreparedStatement selectPS = dbConnectionResource.getConnection().prepareStatement(querySelect);
-                PreparedStatement deletePS = dbConnectionResource.getConnection().prepareStatement(queryDelete);
-//                PreparedStatement selectDeletedRowsPS = dbConnectionResource.getConnection().prepareStatement(querySelectDeletedRow);
-        ){
-            long dateunitUnitday = TestDateUnitFunctions.insertSelectDate(dbConnectionResource.getConnection(),
-                    Date.from(LocalDate.of(2016, Month.FEBRUARY, 29).atStartOfDay(ZoneId.systemDefault()).toInstant()));
-
-            long organizationId = triggerOrganizationTest.insert("testItem_11_insert", "Organization Description From TableItemTest #testItem_11_insert");
-            long invoiceId = triggerInvoiceTest.insert("Item_11_insert", organizationId,
-                    dateunitUnitday, "invoice comment");
-
-            long categoryGroupId = triggerCategoryGroupTest.insert("D", "debit category group11", "debit category group desc");
-            long categoryId = triggerCategoryTest.insert(categoryGroupId, "D", "debit category", "debit category desc");
-
-            Date startDate = Date.from(LocalDate.of(2008, Month.JANUARY, 1).atStartOfDay(ZoneId.systemDefault()).toInstant());
-            Date endDate = Date.from(LocalDate.of(2010, Month.JANUARY, 1).atStartOfDay(ZoneId.systemDefault()).toInstant());
-            long taxId = triggerTaxTest.insert("tax name11", "tax desc", new BigDecimal("10"), "1+2", startDate, endDate);
-
-            long familyMemberId = triggerFamilyMemberTest.insert("family member #11", "family member desc");
-
-            long itemdId1 = insert(
-                    invoiceId, categoryId, taxId, familyMemberId,
-                    "product desc1", "product desc2", "comment",
-                    new BigDecimal("5.0"), new BigDecimal("15.0"));
-
-            long itemdId2 = insert(
-                    invoiceId, categoryId, taxId, familyMemberId,
-                    "product desc1", "product desc2", "comment",
-                    new BigDecimal("5.0"), new BigDecimal("15.0"));
-
-            LOG.debug("itemdId1 > 0: itemdId1=" + itemdId1);
-            assert (itemdId1 > 0);
-            LOG.debug("itemdId2 > 0: itemdId2=" + itemdId2);
-            assert (itemdId2 > 0);
-
-            selectPS.setLong(1,itemdId1);
-            rs = selectPS.executeQuery();
-            rs.next();
-            int item1Order = rs.getInt(1);
-            LOG.debug("item1Order=" + item1Order);
-            assertEquals(1, item1Order);
-
-            selectPS.setLong(1,itemdId2);
-            rs = selectPS.executeQuery();
-            rs.next();
-            int item2Order = rs.getInt(1);
-            LOG.debug("item2Order=" + item2Order);
-            assertEquals(2, item2Order);
-
-            deletePS.setLong(1, itemdId1);
-            deletePS.executeUpdate();
-
-            long itemdId3_new = insert(
-                    invoiceId, categoryId, taxId, familyMemberId,
-                    "product desc1", "product desc2", "comment",
-                    new BigDecimal("5.0"), new BigDecimal("15.0"));
-            LOG.debug("itemdId3_new > 0: itemdId3_new=" + itemdId3_new);
-            assert (itemdId3_new > 0);
-            selectPS.setLong(1, itemdId3_new);
-            rs = selectPS.executeQuery();
-            rs.next();
-            int item3Order_new = rs.getInt(1);
-            LOG.debug("item3Order_new=" + item3Order_new);
-            assertEquals(3, item3Order_new);
-            //todo fix it should throw exception if count instread of max
-        } finally {
-            if (rs != null) rs.close();
-        }
     }
 }

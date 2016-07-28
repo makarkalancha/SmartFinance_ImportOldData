@@ -30,17 +30,18 @@ public class TriggerItemV3 extends AbstractTrigger {
             .append(" = ?")
             .toString();
 
-    private static final String ITEM_COUNT_BY_INVOICE_ID = new StringBuilder()
-            .append("SELECT MAX(")
-            .append(Table.ITEM.ORDER_NUMBER)
-            .append(") FROM ")
-            .append(SCHEMA_NAME_PLACEHOLDER)
-            .append(".")
-            .append(Table.Names.ITEM_V3)
-            .append(" WHERE ")
-            .append(Table.ITEM.INVOICE_ID)
-            .append(" = ?")
-            .toString();
+    //no Item trigger, order number is in equals/hashcode
+//    private static final String ITEM_COUNT_BY_INVOICE_ID = new StringBuilder()
+//            .append("SELECT MAX(")
+//            .append(Table.ITEM.ORDER_NUMBER)
+//            .append(") FROM ")
+//            .append(SCHEMA_NAME_PLACEHOLDER)
+//            .append(".")
+//            .append(Table.Names.ITEM_V3)
+//            .append(" WHERE ")
+//            .append(Table.ITEM.INVOICE_ID)
+//            .append(" = ?")
+//            .toString();
 
     @Override
     protected String logTriggerName() {
@@ -50,21 +51,21 @@ public class TriggerItemV3 extends AbstractTrigger {
     @Override
     protected void insert(Connection connection, Object[] oldRow, Object[] newRow) throws SQLException {
         String invoiceDateunitQ = INVOICE_DATEUNIT.replace(SCHEMA_NAME_PLACEHOLDER, schemaName);
-        String qtyItemsQ = ITEM_COUNT_BY_INVOICE_ID.replace(SCHEMA_NAME_PLACEHOLDER, schemaName);
+//        String qtyItemsQ = ITEM_COUNT_BY_INVOICE_ID.replace(SCHEMA_NAME_PLACEHOLDER, schemaName);
         ResultSet rs = null;
         try(
                 PreparedStatement invoiceDate = connection.prepareStatement(invoiceDateunitQ);
-                PreparedStatement qtyItems = connection.prepareStatement(qtyItemsQ);
+//                PreparedStatement qtyItems = connection.prepareStatement(qtyItemsQ);
         ) {
             invoiceDate.setLong(1, (Long) newRow[Table.ITEM.INVOICE_ID.getColumnIndex()]);
             rs = invoiceDate.executeQuery();
             rs.next();
             newRow[Table.ITEM.DATEUNIT_UNITDAY.getColumnIndex()] = rs.getLong(1);
 
-            qtyItems.setLong(1, (Long) newRow[Table.ITEM.INVOICE_ID.getColumnIndex()]);
-            rs = qtyItems.executeQuery();
-            rs.next();
-            newRow[Table.ITEM.ORDER_NUMBER.getColumnIndex()] = rs.getInt(1) + 1;
+//            qtyItems.setLong(1, (Long) newRow[Table.ITEM.INVOICE_ID.getColumnIndex()]);
+//            rs = qtyItems.executeQuery();
+//            rs.next();
+//            newRow[Table.ITEM.ORDER_NUMBER.getColumnIndex()] = rs.getInt(1) + 1;
 
             newRow[Table.ITEM.T_CREATEDON.getColumnIndex()] = Timestamp.valueOf(now);
             newRow[Table.ITEM.T_UPDATEDON.getColumnIndex()] = Timestamp.valueOf(now);
