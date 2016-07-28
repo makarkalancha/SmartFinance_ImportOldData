@@ -57,8 +57,8 @@ public class Item_v3 implements Serializable {
     @Column(name = "ID")
     private Long id;
 
-    //generated in TriggerItemV3
-    @Column(name = "ORDER_NUMBER", unique = true, nullable = false, insertable = false, updatable = false)
+    //no Item trigger, order number is in equals/hashcode
+    @Column(name = "ORDER_NUMBER", unique = true, nullable = false)
     @NotNull
     private Integer orderNumber;
 
@@ -169,9 +169,10 @@ public class Item_v3 implements Serializable {
 
     }
 
-    public Item_v3(Invoice_v3 invoice, Category category, Tax tax, FamilyMember familyMember,
+    public Item_v3(Integer orderNumber, Invoice_v3 invoice, Category category, Tax tax, FamilyMember familyMember,
                    String description1, String description2, String comment, BigDecimal subTotal)
             throws Exception{
+        this.orderNumber = orderNumber;
         this.invoice = invoice;
         this.category = category;
         this.tax = tax;
@@ -284,10 +285,10 @@ public class Item_v3 implements Serializable {
         return orderNumber;
     }
 
-    //Item trigger
-//    public void setOrderNumber(Integer orderNumber) {
-//        this.orderNumber = orderNumber;
-//    }
+    //no Item trigger, order number is in equals/hashcode
+    public void setOrderNumber(Integer orderNumber) {
+        this.orderNumber = orderNumber;
+    }
 
     @Override
     public String toString() {
