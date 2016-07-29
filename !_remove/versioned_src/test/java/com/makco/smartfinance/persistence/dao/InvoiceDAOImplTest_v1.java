@@ -539,15 +539,15 @@ public class InvoiceDAOImplTest_v1 {
         Category category13 = new CategoryCredit(categoryGroup1, "C cr1-3-" + random, testName + "category credit 1-3");
 
         CategoryGroup categoryGroup2 = new CategoryGroupCredit("CG cr2-" + random, testName + "category group credit 2");
-        Category category21 = new CategoryCredit(categoryGroup1, "C cr2-1-" + random, testName + "category credit 2-1");
-        Category category22 = new CategoryCredit(categoryGroup1, "C cr2-2-" + random, testName + "category credit 2-2");
-        Category category23 = new CategoryCredit(categoryGroup1, "C cr2-3-" + random, testName + "category credit 2-3");
+        Category category21 = new CategoryCredit(categoryGroup2, "C cr2-1-" + random, testName + "category credit 2-1");
+        Category category22 = new CategoryCredit(categoryGroup2, "C cr2-2-" + random, testName + "category credit 2-2");
+        Category category23 = new CategoryCredit(categoryGroup2, "C cr2-3-" + random, testName + "category credit 2-3");
 
         CategoryGroup categoryGroup3 = new CategoryGroupCredit("CG cr3-" + random, testName + "category group credit 3");
-        Category category31 = new CategoryCredit(categoryGroup1, "C cr3-1-" + random, testName + "category credit 3-1");
-        Category category32 = new CategoryCredit(categoryGroup1, "C cr3-2-" + random, testName + "category credit 3-2");
-        Category category33 = new CategoryCredit(categoryGroup1, "C cr3-3-" + random, testName + "category credit 3-3");
-        Category category34 = new CategoryCredit(categoryGroup1, "C cr3-4-" + random, testName + "category credit 3-4");
+        Category category31 = new CategoryCredit(categoryGroup3, "C cr3-1-" + random, testName + "category credit 3-1");
+        Category category32 = new CategoryCredit(categoryGroup3, "C cr3-2-" + random, testName + "category credit 3-2");
+        Category category33 = new CategoryCredit(categoryGroup3, "C cr3-3-" + random, testName + "category credit 3-3");
+        Category category34 = new CategoryCredit(categoryGroup3, "C cr3-4-" + random, testName + "category credit 3-4");
 
         categoryGroupDAOImplForTest.saveOrUpdateCategoryGroup(categoryGroup1);
         categoryGroupDAOImplForTest.saveOrUpdateCategoryGroup(categoryGroup2);
