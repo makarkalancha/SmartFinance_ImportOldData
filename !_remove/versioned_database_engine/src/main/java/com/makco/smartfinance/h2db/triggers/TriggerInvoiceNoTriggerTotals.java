@@ -14,6 +14,8 @@ import java.util.Date;
  * User: Makar Kalancha
  * Date: 06/06/2016
  * Time: 11:33
+ * \SmartFinance\database_engine\src\main\java\com\makco\smartfinance\h2db\triggers\
+ * v2
  */
 public class TriggerInvoiceNoTriggerTotals extends AbstractTrigger {
 

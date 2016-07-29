@@ -13,6 +13,8 @@ import java.util.Date;
  * User: Makar Kalancha
  * Date: 12/07/2016
  * Time: 11:11
+ * \SmartFinance\database_engine\src\main\java\com\makco\smartfinance\h2db\triggers\
+ * v3
  */
 public class TriggerTransactionV3 extends AbstractTrigger {
     @Override

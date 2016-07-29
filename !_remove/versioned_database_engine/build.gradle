@@ -1,0 +1,53 @@
+plugins {
+//    id "org.flywaydb.flyway" version "4.0"
+    id "org.flywaydb.flyway" version "3.2.1"
+}
+
+//gradle flywayBaseline -i
+//gradle flywayMigrate -i
+flyway {
+    url = 'jdbc:h2:file:~/smart_finance/finance'
+    user = 'root'
+    password = 'root'
+    //http://stackoverflow.com/questions/16115055/flywayinit-doesnt-create-schema-database
+    // the create schema support is an all or nothing thing. If all schemas are missing, they all will be created, otherwise none will be created.
+    schemas = [/*,'FINANCE',*/'TEST'/*, 'FOOBAR'*/]
+    table = '_SCHEMA_VERSION'
+    baselineOnMigrate = true
+}
+
+configurations {
+    h2
+    log4j2api
+    log4j2core
+    testOutput
+}
+
+dependencies {
+    h2 'com.h2database:h2:1.4.191@jar'
+    compile 'com.h2database:h2:1.4.191'
+    log4j2api 'org.apache.logging.log4j:log4j-api:2.5'
+    log4j2core 'org.apache.logging.log4j:log4j-core:2.5'
+    compile 'com.google.code.gson:gson:2.2.4'
+    compile 'org.flywaydb:flyway-core:4.0'
+    testOutput sourceSets.test.output
+}
+
+jar {
+    processResources {
+        from(zipTree(configurations.h2.asPath))
+        from(zipTree(configurations.log4j2api.asPath))
+        files(configurations.log4j2core.asPath.split(";")).each{from(zipTree(it.path))}
+        files(configurations.compile.asPath.split(";")).each{from(zipTree(it.path))}
+    }
+
+    manifest {
+        attributes(
+                'Main-Class': 'org.h2.tools.Server',
+                'Class-Path': 'log4j2.xml ' + configurations.compile.collect { it.getName() }.join(' ')
+        )
+    }
+}
+
+flywayMigrate.dependsOn(flywayClean)
+test.dependsOn(flywayMigrate)

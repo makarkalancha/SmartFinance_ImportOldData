@@ -1,0 +1,31 @@
+--http://viralpatel.net/blogs/hibernate-self-join-annotation-mapping-many-to-many-example/
+CREATE TABLE TAX_CHILD(
+TAX_ID BIGINT NOT NULL,
+CHILD_TAX_ID BIGINT NOT NULL,
+T_CREATEDON TIMESTAMP,
+PRIMARY KEY(TAX_ID, CHILD_TAX_ID),
+FOREIGN KEY (TAX_ID) REFERENCES TAX(ID),
+FOREIGN KEY (CHILD_TAX_ID) REFERENCES TAX(ID)
+);
+CREATE UNIQUE INDEX IF NOT EXISTS IDX_UNQ_TX_DCHLDD ON TAX_CHILD(TAX_ID, CHILD_TAX_ID);
+--The foreign key constraint alone does not provide the index - one must (and should) be created.
+--https://asktom.oracle.com/pls/asktom/f?p=100:11:0::::P11_QUESTION_ID:292016138754
+--table lock
+CREATE INDEX IF NOT EXISTS IDX_TXCHLD_TXD ON TAX_CHILD(TAX_ID);
+CREATE INDEX IF NOT EXISTS IDX_TXCHLD_CHLDTXD ON TAX_CHILD(CHILD_TAX_ID);
+
+CREATE TRIGGER T_TAX_CHILD_INS
+BEFORE INSERT
+ON TAX_CHILD
+FOR EACH ROW
+CALL "com.makco.smartfinance.h2db.triggers.TriggerTaxChild";
+
+CREATE TRIGGER T_TAX_CHILD_DEL
+BEFORE DELETE
+ON TAX_CHILD
+FOR EACH ROW
+CALL "com.makco.smartfinance.h2db.triggers.TriggerTaxChild";
+
+GRANT SELECT, INSERT, UPDATE, DELETE ON
+TAX_CHILD
+TO client;
