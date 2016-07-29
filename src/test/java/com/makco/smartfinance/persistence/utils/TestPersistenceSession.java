@@ -43,11 +43,12 @@ import com.makco.smartfinance.persistence.entity.session.invoice_management.v2.I
 import com.makco.smartfinance.persistence.entity.session.invoice_management.v2.Item_v2;
 import com.makco.smartfinance.persistence.entity.session.invoice_management.v2.Organization_v2;
 import com.makco.smartfinance.persistence.entity.session.invoice_management.v2.Transaction_v2;
-import com.makco.smartfinance.persistence.entity.session.invoice_management.v3.AccountAggregate_v3;
+import com.makco.smartfinance.persistence.entity.session.invoice_management.v3.V_AccountAggregation_v3;
 import com.makco.smartfinance.persistence.entity.session.invoice_management.v3.Invoice_v3;
 import com.makco.smartfinance.persistence.entity.session.invoice_management.v3.Item_v3;
 import com.makco.smartfinance.persistence.entity.session.invoice_management.v3.Organization_v3;
 import com.makco.smartfinance.persistence.entity.session.invoice_management.v3.Transaction_v3;
+import com.makco.smartfinance.persistence.entity.session.invoice_management.v3.V_CumulativeAccountAggregationByDate_v3;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
@@ -95,8 +96,6 @@ public class TestPersistenceSession {
 
     private static Configuration getConfiguration() {
         Configuration cfg = new Configuration();
-
-        cfg.addAnnotatedClass(AccountAggregate_v3.class);
 
         cfg.addAnnotatedClass(Account.class);
         cfg.addAnnotatedClass(AccountCredit.class);
@@ -150,6 +149,9 @@ public class TestPersistenceSession {
         cfg.addAnnotatedClass(Transaction_v1.class);
         cfg.addAnnotatedClass(Transaction_v2.class);
         cfg.addAnnotatedClass(Transaction_v3.class);
+
+        cfg.addAnnotatedClass(V_AccountAggregation_v3.class);
+        cfg.addAnnotatedClass(V_CumulativeAccountAggregationByDate_v3.class);
 
 //        cfg.setProperty("hibernate.connection.driver_class", "org.h2.Driver");
         cfg.setProperty("javax.persistence.jdbc.driver", "org.h2.Driver");

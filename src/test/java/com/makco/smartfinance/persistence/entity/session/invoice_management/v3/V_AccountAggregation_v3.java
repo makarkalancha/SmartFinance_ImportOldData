@@ -13,8 +13,8 @@ import java.math.BigDecimal;
  * Created by Makar Kalancha on 28 Jul 2016 at 14:51.
  */
 @Entity
-@Table(name = "V_ACCOUNT_AGGREGATE")
-public class AccountAggregate_v3 implements Serializable {
+@Table(name = "V_ACC_AGG")
+public class V_AccountAggregation_v3 implements Serializable {
     @Column(name = "ACCOUNT_GROUP_ID")
     private Long accountGroupId;
 
@@ -37,7 +37,7 @@ public class AccountAggregate_v3 implements Serializable {
     @Column(name = "SUM_CREDIT")
     private BigDecimal sumCredit = new BigDecimal("0");
 
-    public AccountAggregate_v3 (){
+    public V_AccountAggregation_v3(){
 
     }
 
@@ -71,8 +71,8 @@ public class AccountAggregate_v3 implements Serializable {
 
     @Override
     public boolean equals(Object other) {
-        if (other instanceof AccountAggregate_v3) {
-            AccountAggregate_v3 that = (AccountAggregate_v3) other;
+        if (other instanceof V_AccountAggregation_v3) {
+            V_AccountAggregation_v3 that = (V_AccountAggregation_v3) other;
             return Objects.equal(getAccountGroupId(), that.getAccountGroupId())
                     && Objects.equal(getAccountId(), that.getAccountId());
         }
