@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence
+        xmlns="http://java.sun.com/xml/ns/persistence"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://java.sun.com/xml/ns/persistence
+                                  http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd"
+        version="1.0"
+        >
+    <persistence-unit name="test" transaction-type="RESOURCE_LOCAL">
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+        <class>com.makco.smartfinance.persistence.entity.Account</class>
+        <class>com.makco.smartfinance.persistence.entity.AccountCredit</class>
+        <class>com.makco.smartfinance.persistence.entity.AccountDebit</class>
+        <class>com.makco.smartfinance.persistence.entity.AccountGroup</class>
+        <class>com.makco.smartfinance.persistence.entity.AccountGroupCredit</class>
+        <class>com.makco.smartfinance.persistence.entity.AccountGroupDebit</class>
+        <class>com.makco.smartfinance.persistence.entity.session.category_management.v1.Category_v1</class>
+        <class>com.makco.smartfinance.persistence.entity.entity_manager.test_entities.CategoryCredit</class>
+        <class>com.makco.smartfinance.persistence.entity.entity_manager.test_entities.CategoryDebit</class>
+        <class>com.makco.smartfinance.persistence.entity.entity_manager.test_entities.EagerCategoryDebit</class>
+        <class>com.makco.smartfinance.persistence.entity.session.category_management.v1.CategoryGroup_v1</class>
+        <class>com.makco.smartfinance.persistence.entity.entity_manager.test_entities.CategoryGroupCredit</class>
+        <class>com.makco.smartfinance.persistence.entity.entity_manager.test_entities.CategoryGroupDebit</class>
+        <class>com.makco.smartfinance.persistence.entity.entity_manager.test_entities.EagerCategoryGroupDebit</class>
+        <class>com.makco.smartfinance.persistence.entity.Currency</class>
+        <class>com.makco.smartfinance.persistence.entity.DateUnit</class>
+        <class>com.makco.smartfinance.persistence.entity.FamilyMember</class>
+        <class>com.makco.smartfinance.persistence.entity.Organization</class>
+        <class>com.makco.smartfinance.persistence.entity.Invoice</class>
+        <class>com.makco.smartfinance.persistence.entity.Item</class>
+        <class>com.makco.smartfinance.persistence.entity.Tax</class>
+        <properties>
+            <!--http://stackoverflow.com/questions/5225700/can-i-have-h2-autocreate-a-schema-in-an-in-memory-database-->
+            <!--http://www.h2database.com/html/grammar.html#set_schema-->
+            <property name="javax.persistence.jdbc.url" value="jdbc:h2:~/smart_finance/finance"/>
+            <!--<property name="javax.persistence.jdbc.url" value="jdbc:h2:~/smart_finance;IFEXISTS=TRUE"/>-->
+            <property name="javax.persistence.jdbc.user" value="root"/>
+            <property name="javax.persistence.jdbc.password" value="root"/>
+            <property name="javax.persistence.jdbc.driver" value="org.h2.Driver"/>
+            <!-- http://antoniogoncalves.org/2014/12/11/generating-database-schemas-with-jpa-2-1/
+            <property name="javax.persistence.sql-load-script-source" value="DB_SCRIPT_CREATE.sql"/>
+            -->
+
+            <property name="hibernate.show_sql" value="true"/>
+            <property name="hibernate.format_sql" value="true"/>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect"/>
+            <property name="hibernate.hbm2ddl.auto" value="validate"/>
+            <!--validate: validate the schema, makes no changes to the database.-->
+            <!--create-drop: drop the schema at the end of the session-->
+            <property name="hibernate.default_schema" value="TEST"/>
+            <!-- in hibernate 5 is by default true-->
+            <property name="hibernate.id.new_generator_mappings" value="true"/>
+
+            <!-- Configuring Connection Pool -->
+            <property name="hibernate.c3p0.min_size" value="5"/>
+            <property name="hibernate.c3p0.max_size" value="20"/>
+            <property name="hibernate.c3p0.timeout" value="500"/>
+            <property name="hibernate.c3p0.max_statements" value="50"/>
+            <property name="hibernate.c3p0.idle_test_period" value="2000"/>
+
+            <!--<property name="hibernate.physical_naming_strategy" value="com.makco.smartfinance.db.entities.MyNamingStrategy"/>-->
+        </properties>
+    </persistence-unit>
+</persistence>

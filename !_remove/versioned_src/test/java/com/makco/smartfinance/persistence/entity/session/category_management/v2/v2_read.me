@@ -1,0 +1,28 @@
+--abstract classes category_group / category - @MappedSuperclass
+
+--classes signature
+-Category_v2
+CategoryCredit_v2 extends Category_v2 implements Comparable<CategoryCredit_v2>
+CategoryDebit_v2 extends Category_v2 implements Comparable<CategoryDebit_v2>
+
+-CategoryGroup_v2<T extends Category_v2>
+CategoryGroupCredit_v2 extends CategoryGroup_v2<CategoryCredit_v2>
+CategoryGroupDebit_v2 extends CategoryGroup_v2<CategoryDebit_v2>
+
+--implementation classes have fields:
+1) CategoryCredit_v2
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "CATEGORY_GROUP_ID", /*referencedColumnName = "ID",*/ nullable = false)
+    private CategoryGroup_v2 categoryGroup;
+2) CategoryDebit_v2
+       @ManyToOne(fetch = FetchType.EAGER)
+       @JoinColumn(name = "CATEGORY_GROUP_ID", /*referencedColumnName = "ID",*/ nullable = false)
+       private CategoryGroup_v2 categoryGroup;
+3) CategoryGroupCredit_v2
+    @OneToMany(mappedBy = "categoryGroup", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @javax.persistence.OrderBy("name")
+    private SortedSet<CategoryCredit_v2> categories = new TreeSet<>();
+4) CategoryGroupDebit_v2
+    @OneToMany(mappedBy = "categoryGroup", cascade = CascadeType.ALL, fetch = FetchType.LAZY)//session
+    @javax.persistence.OrderBy("name")
+    private SortedSet<CategoryDebit_v2> categories = new TreeSet<>();

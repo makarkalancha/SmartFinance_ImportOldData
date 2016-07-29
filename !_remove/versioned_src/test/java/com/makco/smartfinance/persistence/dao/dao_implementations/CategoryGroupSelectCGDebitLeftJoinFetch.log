@@ -1,0 +1,69 @@
+	Search for "Releasing statement [prep".
+	Summary:
+	1 from TEST.CATEGORY_GROUP categorygr0_ left outer join with one of subtypes (in this case C): fetches all category_groups (C,D) and all categories of subtype C
+	2 from TEST.CATEGORY with other subtype (in this case D): fetches left categories of subtype D and matches with category_group from previous query
+	
+	
+	Line 7279: 23:01:49.407 [main] TRACE org.hibernate.resource.jdbc.internal.ResourceRegistryStandardImpl - Releasing statement [prep48: call next value for TEST.SEQ_CATEGORY_GROUP]
+	Line 7303: 23:01:49.520 [main] TRACE org.hibernate.resource.jdbc.internal.ResourceRegistryStandardImpl - Releasing statement [prep49: call next value for TEST.SEQ_CATEGORY]
+	Line 7322: 23:01:49.525 [main] TRACE org.hibernate.resource.jdbc.internal.ResourceRegistryStandardImpl - Releasing statement [prep50: call next value for TEST.SEQ_CATEGORY]
+	Line 7341: 23:01:49.529 [main] TRACE org.hibernate.resource.jdbc.internal.ResourceRegistryStandardImpl - Releasing statement [prep51: call next value for TEST.SEQ_CATEGORY]
+	Line 7401: 23:01:49.681 [main] TRACE org.hibernate.resource.jdbc.internal.ResourceRegistryStandardImpl - Releasing statement [prep52: insert into TEST.CATEGORY_GROUP (DESCRIPTION, NAME, TYPE, ID) values (?, ?, 'D', ?) {1: 'debit category group to select 913410', 2: 'categoryGroup nameAndType 913410', 3: 9}]
+	Line 7435: 23:01:49.698 [main] TRACE org.hibernate.resource.jdbc.internal.ResourceRegistryStandardImpl - Releasing statement [prep54: insert into TEST.CATEGORY (DESCRIPTION, NAME, CATEGORY_GROUP_ID, CATEGORY_GROUP_TYPE, ID) values (?, ?, ?, 'D', ?) {1: 'credit category #2 ''description''', 2: 'cat db same name 2_v913410', 3: 9, 4: 12}]
+	Line 7825: 23:01:50.459 [main] TRACE org.hibernate.resource.jdbc.internal.ResourceRegistryStandardImpl - Releasing statement [prep56: SELECT categorygr0_.ID AS ID2_1_0_,
+       categories1_.ID AS ID2_0_1_,
+       categorygr0_.T_CREATEDON AS T_CREATE3_1_0_,
+       categorygr0_.DESCRIPTION AS DESCRIPT4_1_0_,
+       categorygr0_.NAME AS NAME5_1_0_,
+       categorygr0_.T_UPDATEDON AS T_UPDATE6_1_0_,
+       categorygr0_.TYPE AS TYPE1_1_0_,
+       categories1_.T_CREATEDON AS T_CREATE3_0_1_,
+       categories1_.DESCRIPTION AS DESCRIPT4_0_1_,
+       categories1_.NAME AS NAME5_0_1_,
+       categories1_.T_UPDATEDON AS T_UPDATE6_0_1_,
+       categories1_.CATEGORY_GROUP_ID AS CATEGORY7_0_1_,
+       categories1_.CATEGORY_GROUP_ID AS CATEGORY7_0_0__,
+       categories1_.ID AS ID2_0_0__
+FROM TEST.CATEGORY_GROUP categorygr0_
+LEFT OUTER JOIN TEST.CATEGORY categories1_ ON categorygr0_.ID=categories1_.CATEGORY_GROUP_ID
+AND categories1_.CATEGORY_GROUP_TYPE='C'
+WHERE categorygr0_.TYPE IN ('C',
+                            'D',
+                            'E')
+ORDER BY categories1_.NAME]
+	Line 8044: 23:01:50.520 [main] TRACE org.hibernate.resource.jdbc.internal.ResourceRegistryStandardImpl - Releasing statement [prep58: SELECT categories0_.CATEGORY_GROUP_ID AS CATEGORY7_0_0_,
+       categories0_.ID AS ID2_0_0_,
+       categories0_.ID AS ID2_0_1_,
+       categories0_.T_CREATEDON AS T_CREATE3_0_1_,
+       categories0_.DESCRIPTION AS DESCRIPT4_0_1_,
+       categories0_.NAME AS NAME5_0_1_,
+       categories0_.T_UPDATEDON AS T_UPDATE6_0_1_,
+       categories0_.CATEGORY_GROUP_ID AS CATEGORY7_0_1_
+FROM TEST.CATEGORY categories0_
+WHERE categories0_.CATEGORY_GROUP_TYPE='D'
+  AND categories0_.CATEGORY_GROUP_ID=?
+ORDER BY categories0_.NAME {1: 10}]
+	Line 7934: 23:01:50.498 [main] TRACE org.hibernate.resource.jdbc.internal.ResourceRegistryStandardImpl - Releasing statement [prep57: SELECT categories0_.CATEGORY_GROUP_ID AS CATEGORY7_0_0_,
+       categories0_.ID AS ID2_0_0_,
+       categories0_.ID AS ID2_0_1_,
+       categories0_.T_CREATEDON AS T_CREATE3_0_1_,
+       categories0_.DESCRIPTION AS DESCRIPT4_0_1_,
+       categories0_.NAME AS NAME5_0_1_,
+       categories0_.T_UPDATEDON AS T_UPDATE6_0_1_,
+       categories0_.CATEGORY_GROUP_ID AS CATEGORY7_0_1_
+FROM TEST.CATEGORY categories0_
+WHERE categories0_.CATEGORY_GROUP_TYPE='D'
+  AND categories0_.CATEGORY_GROUP_ID=?
+ORDER BY categories0_.NAME {1: 9}]
+	Line 8044: 23:01:50.520 [main] TRACE org.hibernate.resource.jdbc.internal.ResourceRegistryStandardImpl - Releasing statement [prep58: SELECT categories0_.CATEGORY_GROUP_ID AS CATEGORY7_0_0_,
+       categories0_.ID AS ID2_0_0_,
+       categories0_.ID AS ID2_0_1_,
+       categories0_.T_CREATEDON AS T_CREATE3_0_1_,
+       categories0_.DESCRIPTION AS DESCRIPT4_0_1_,
+       categories0_.NAME AS NAME5_0_1_,
+       categories0_.T_UPDATEDON AS T_UPDATE6_0_1_,
+       categories0_.CATEGORY_GROUP_ID AS CATEGORY7_0_1_
+FROM TEST.CATEGORY categories0_
+WHERE categories0_.CATEGORY_GROUP_TYPE='D'
+  AND categories0_.CATEGORY_GROUP_ID=?
+ORDER BY categories0_.NAME {1: 8}]
