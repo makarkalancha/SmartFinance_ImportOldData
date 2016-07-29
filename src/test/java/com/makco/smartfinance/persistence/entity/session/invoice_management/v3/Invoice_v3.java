@@ -30,7 +30,11 @@ import java.util.List;
 
 /**
  * Created by Makar Kalancha on 2016-07-20
- * v2
+ * v3
+ * is without trigger because otherwise category/account type would be attached also to DataBase project
+ * this is not acceptable
+ *
+ * v1 (trigger) vs v2 (non-trigger)
  * \SmartFinance\src\test\java\com\makco\smartfinance\persistence\entity\session\invoice_management\Invoice_v1_vs_Invoice_v2_benchmark.ods
  * trigger version faster than non-trigger
  *
@@ -43,10 +47,10 @@ import java.util.List;
  * non-trigger->    17millis 760903nano
  */
 @Entity
-@Table(name = "INVOICE_V3",
+@Table(name = "INVOICE",
         uniqueConstraints =
         @UniqueConstraint(
-                name="IDX_UNQ_NVC_NVCNMBR3",
+                name="IDX_UNQ_NVC_NVCNMBR",
                 columnNames = {"INVOICE_NUMBER"}
         )
 )
@@ -58,7 +62,7 @@ public class Invoice_v3 implements Serializable {
             parameters = {
                     @org.hibernate.annotations.Parameter(
                             name = "sequence_name",
-                            value = "SEQ_INVOICE_V3"
+                            value = "SEQ_INVOICE"
                     ),
                     @org.hibernate.annotations.Parameter(
                             name = "initial_value",

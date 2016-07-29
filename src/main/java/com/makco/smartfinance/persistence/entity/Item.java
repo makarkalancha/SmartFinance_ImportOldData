@@ -23,6 +23,7 @@ import java.time.LocalDateTime;
 
 /**
  * Created by Makar Kalancha on 2016-07-14.
+ * v3
  */
 @Entity
 @Table(name = "ITEM",
@@ -52,11 +53,57 @@ public class Item implements Serializable {
     @Column(name = "ID")
     private Long id;
 
-    @Column(name = "ORDER_NUMBER", unique = true)
+    //no Item trigger, order number is in equals/hashcode
+    @Column(name = "ORDER_NUMBER", unique = true, nullable = false)
     @NotNull
     private Integer orderNumber;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+/*
+item cascade:
+-if invoice is deleted -> items are deleted also from DB
+-if item is deleted -> invoice remains in DB
+with recalculated subtotal / total from trigger
+ */
+
+    /*
+    -cascade = CascadeType.ALL:
+    -remove returns null even if ItemDaoImpl remove contains
+    Invoice invoice = item.getInvoice();
+    List<Item> items = new ArrayList<>(invoice.getItems());
+    items.remove(item);
+    invoice.setItems(items);
+    session.saveOrUpdate(invoice);
+
+    -ItemDaoImpl saveUpdate works with this:
+    Invoice invoice = item.getInvoice();
+    List<Item> items = new ArrayList<>(invoice.getItems());
+    invoice.setItems(items);
+    >>>>session.saveOrUpdate(item);<<<< save item
+     */
+//    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+/*
+-cascade = no CascadeType.ALL (at invoice level):
+-remove works
+Invoice invoice = item.getInvoice();
+List<Item> items = new ArrayList<>(invoice.getItems());
+items.remove(item);
+invoice.setItems(items);
+>>>session.saveOrUpdate(invoice);<<< works even without this code
+session.delete(item);//it's enough to delete item
+
+ItemDaoImpl saveUpdate works with this:
+Invoice invoice = item.getInvoice();
+List<Item> items = new ArrayList<>(invoice.getItems());
+invoice.setItems(items);
+session.saveOrUpdate(item);
+
+-ItemDaoImpl saveUpdate works with this:
+Invoice invoice = item.getInvoice();
+List<Item> items = new ArrayList<>(invoice.getItems());
+invoice.setItems(items);
+>>>>session.saveOrUpdate(invoice);<<<< save invoice
+ */
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "INVOICE_ID", referencedColumnName = "ID", nullable = false)
     private Invoice invoice;
 
@@ -73,7 +120,7 @@ public class Item implements Serializable {
     private FamilyMember familyMember;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "DATEUNIT_UNITDAY", referencedColumnName = "UNITDAY", nullable = false)
+    @JoinColumn(name = "DATEUNIT_UNITDAY", referencedColumnName = "UNITDAY", nullable = false, insertable = false, updatable = false)
     private DateUnit dateUnit;
 
     @Column(name = "DESCRIPTION1")
@@ -101,10 +148,10 @@ public class Item implements Serializable {
     private String comment;
 
     @Column(name = "SUB_TOTAL")
-    private BigDecimal subTotal;
+    private BigDecimal subTotal = new BigDecimal("0");
 
     @Column(name = "TOTAL")
-    private BigDecimal total;
+    private BigDecimal total = new BigDecimal("0");
 
     @org.hibernate.annotations.CreationTimestamp
     @Column(name = "T_CREATEDON", insertable = false, updatable = false)
@@ -119,14 +166,13 @@ public class Item implements Serializable {
     }
 
     public Item(Integer orderNumber, Invoice invoice, Category category, Tax tax, FamilyMember familyMember,
-                DateUnit dateUnit, String description1, String description2, String comment, BigDecimal subTotal)
+                   String description1, String description2, String comment, BigDecimal subTotal)
             throws Exception{
         this.orderNumber = orderNumber;
         this.invoice = invoice;
         this.category = category;
         this.tax = tax;
         this.familyMember = familyMember;
-        this.dateUnit = dateUnit;
         this.description1 = description1;
         this.description2 = description2;
         this.comment = comment;
@@ -209,7 +255,7 @@ public class Item implements Serializable {
         this.tax = tax;
     }
 
-    public BigDecimal getTotal() throws Exception {
+    public BigDecimal getTotal() {
         return total;
     }
 
@@ -235,6 +281,7 @@ public class Item implements Serializable {
         return orderNumber;
     }
 
+    //no Item trigger, order number is in equals/hashcode
     public void setOrderNumber(Integer orderNumber) {
         this.orderNumber = orderNumber;
     }

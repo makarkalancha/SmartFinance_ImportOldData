@@ -27,13 +27,13 @@ import java.time.LocalDateTime;
 
 /**
  * Created by Makar Kalancha on 2016-07-18.
- * v2
+ * v3
  */
 @Entity
-@Table(name = "ITEM_V3",
+@Table(name = "ITEM",
         uniqueConstraints =
         @UniqueConstraint(
-                name = "IDX_UNQ_TM_NVCDRDRNMBR3",
+                name = "IDX_UNQ_TM_NVCDRDRNMBR",
                 columnNames = {"INVOICE_ID", "ORDER_NUMBER"}
         )
 )
@@ -45,7 +45,7 @@ public class Item_v3 implements Serializable {
             parameters = {
                     @org.hibernate.annotations.Parameter(
                             name = "sequence_name",
-                            value = "SEQ_ITEM_V3"
+                            value = "SEQ_ITEM"
                     ),
                     @org.hibernate.annotations.Parameter(
                             name = "initial_value",

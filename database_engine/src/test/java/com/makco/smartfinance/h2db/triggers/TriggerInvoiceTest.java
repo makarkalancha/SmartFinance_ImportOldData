@@ -34,6 +34,8 @@ import static org.junit.Assert.assertEquals;
 
 /**
  * Created by Makar Kalancha on 11 Jul 2016.
+ * \SmartFinance\!_remove\versioned_database_engine\src\test\java\com\makco\smartfinance\h2db\triggers
+ * v3
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TriggerInvoiceTest {
@@ -51,16 +53,9 @@ public class TriggerInvoiceTest {
         System.out.println(mess1);
         LOG.debug(mess1);
         //        H2DbUtils.setSchema(dbConnectionResource.getConnection(), "TEST");
-        H2DbUtilsTest.emptyTable(dbConnectionResource.getConnection(), Table.Names.ITEM_V3);
-        H2DbUtilsTest.emptyTable(dbConnectionResource.getConnection(), Table.Names.ITEM_NOTR);
         H2DbUtilsTest.emptyTable(dbConnectionResource.getConnection(), Table.Names.ITEM);
-        H2DbUtilsTest.emptyTable(dbConnectionResource.getConnection(), Table.Names.INVOICE_V3);
-        H2DbUtilsTest.emptyTable(dbConnectionResource.getConnection(), Table.Names.INVOICE_NOTR);
         H2DbUtilsTest.emptyTable(dbConnectionResource.getConnection(), Table.Names.INVOICE);
         H2DbUtilsTest.emptyTable(dbConnectionResource.getConnection(), Table.Names.ORGANIZATION);
-        H2DbUtilsTest.emptyTable(dbConnectionResource.getConnection(), Table.Names.TRANSACTION_V3);
-        H2DbUtilsTest.emptyTable(dbConnectionResource.getConnection(), Table.Names.TRANSACTION_NOTR);
-        H2DbUtilsTest.emptyTable(dbConnectionResource.getConnection(), Table.Names.TRANSACTION);
     }
 
     @AfterClass
@@ -90,7 +85,7 @@ public class TriggerInvoiceTest {
         LOG.debug("insert");
         String queryInsert = "INSERT INTO " + Table.Names.INVOICE +
                 " (" + Table.INVOICE.INVOICE_NUMBER + ", " + Table.INVOICE.ORGANIZATION_ID + ", " + Table.INVOICE.DATEUNIT_UNITDAY + ", " +
-                Table.INVOICE.COMMENT + ", " + Table.INVOICE.SUB_TOTAL + ", " + Table.INVOICE.TOTAL + ") " +
+                Table.INVOICE.COMMENT + ", " + Table.INVOICE.DEBIT_TOTAL + ", " + Table.INVOICE.CREDIT_TOTAL + ") " +
                 "VALUES('" + invoiceNumber + "'," + organizationId + "," + dateunitUnitday + ",'" + comment + "'," + subTotal + "," +
                 total + ")";
         LOG.debug(queryInsert);
@@ -349,8 +344,8 @@ public class TriggerInvoiceTest {
         rowJson.addProperty(Table.INVOICE.INVOICE_NUMBER.toString(), (String) row[1]);
         rowJson.addProperty(Table.INVOICE.ORGANIZATION_ID.toString(), (Long) row[2]);
         rowJson.addProperty(Table.INVOICE.COMMENT.toString(), (String) row[3]);
-        rowJson.addProperty(Table.INVOICE.SUB_TOTAL.toString(), (BigDecimal) row[4]);
-        rowJson.addProperty(Table.INVOICE.TOTAL.toString(), (BigDecimal) row[5]);
+        rowJson.addProperty(Table.INVOICE.DEBIT_TOTAL.toString(), (BigDecimal) row[4]);
+        rowJson.addProperty(Table.INVOICE.CREDIT_TOTAL.toString(), (BigDecimal) row[5]);
         rowJson.addProperty(Table.INVOICE.T_CREATEDON.toString(), SIMPLE_DATE_TIME_FORMAT.format((Date) row[6]));
         rowJson.addProperty(Table.INVOICE.T_UPDATEDON.toString(), SIMPLE_DATE_TIME_FORMAT.format((Date) row[7]));
 
@@ -366,7 +361,7 @@ public class TriggerInvoiceTest {
         JsonObject tableJson = createJsonObject();
         String expectedJsonString = "{\"tableName\":\"TEST.INVOICE\",\"row\":" +
                 "{\"ID\":1,\"INVOICE_NUMBER\":\"20160715114901\",\"ORGANIZATION_ID\":2,\"COMMENT\":\"invoice comment\","+
-                "\"SUB_TOTAL\":2.0,\"TOTAL\":5.0," +
+                "\"DEBIT_TOTAL\":2.0,\"CREDIT_TOTAL\":5.0," +
                 "\"T_CREATEDON\":\"2001-02-03 14:05:06\",\"T_UPDATEDON\":\"2006-05-04 03:02:01\"}}";
 
         LOG.debug("testDeleteToJsonObject.expectedJsonString:" + expectedJsonString);
@@ -400,10 +395,10 @@ public class TriggerInvoiceTest {
         String description = JsonUtils.getNullableFromJsonElementAsString(jsonElementDesc);
         assertEquals("invoice comment", description);
 
-        JsonElement jsonElementSubTotal = rowJsonObject.get(Table.INVOICE.SUB_TOTAL.toString());
+        JsonElement jsonElementSubTotal = rowJsonObject.get(Table.INVOICE.DEBIT_TOTAL.toString());
         BigDecimal subTotal = JsonUtils.getNullableFromJsonElementAsBigDecimal(jsonElementSubTotal);
         assertEquals(new BigDecimal("2.0"), subTotal);
-        JsonElement jsonElementTotal = rowJsonObject.get(Table.INVOICE.TOTAL.toString());
+        JsonElement jsonElementTotal = rowJsonObject.get(Table.INVOICE.CREDIT_TOTAL.toString());
         BigDecimal total = JsonUtils.getNullableFromJsonElementAsBigDecimal(jsonElementTotal);
         assertEquals(new BigDecimal("5.0"), total);
 

@@ -27,10 +27,10 @@ import java.time.LocalDateTime;
  */
 @Entity
 @Table(
-        name = "TRANSACTION_V3",
+        name = "TRANSACTION",
         uniqueConstraints =
         @UniqueConstraint(
-                name = "IDX_UNQ_TRNSCTN_TRNSCTNNMBR3",
+                name = "IDX_UNQ_TRNSCTN_TRNSCTNNMBR",
                 columnNames = {"TRANSACTION_NUMBER"}
         )
 )
@@ -42,7 +42,7 @@ public class Transaction_v3 implements Serializable {
             parameters = {
                     @org.hibernate.annotations.Parameter(
                             name = "sequence_name",
-                            value = "SEQ_TRANSACTION_V3"
+                            value = "SEQ_TRANSACTION"
                     ),
                     @org.hibernate.annotations.Parameter(
                             name = "initial_value",

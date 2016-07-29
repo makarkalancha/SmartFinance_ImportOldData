@@ -34,6 +34,8 @@ import static org.junit.Assert.assertEquals;
 
 /**
  * Created by Makar Kalancha on 12 Jul 2016.
+ * \SmartFinance\!_remove\versioned_database_engine\src\test\java\com\makco\smartfinance\h2db\triggers
+ * v3
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TriggerTransactionTest {
@@ -55,17 +57,10 @@ public class TriggerTransactionTest {
         LOG.debug(mess1);
         //        H2DbUtils.setSchema(dbConnectionResource.getConnection(), "TEST");
         H2DbUtilsTest.emptyTable(dbConnectionResource.getConnection(), Table.Names.TRANSACTION);
-        H2DbUtilsTest.emptyTable(dbConnectionResource.getConnection(), Table.Names.TRANSACTION_V3);
-        H2DbUtilsTest.emptyTable(dbConnectionResource.getConnection(), Table.Names.TRANSACTION_NOTR);
-        H2DbUtilsTest.emptyTable(dbConnectionResource.getConnection(), Table.Names.ITEM_NOTR);
-        H2DbUtilsTest.emptyTable(dbConnectionResource.getConnection(), Table.Names.ITEM_V3);
-        H2DbUtilsTest.emptyTable(dbConnectionResource.getConnection(), Table.Names.ITEM);
-        H2DbUtilsTest.emptyTable(dbConnectionResource.getConnection(), Table.Names.INVOICE_NOTR);
-        H2DbUtilsTest.emptyTable(dbConnectionResource.getConnection(), Table.Names.INVOICE_V3);
-        H2DbUtilsTest.emptyTable(dbConnectionResource.getConnection(), Table.Names.INVOICE);
-
         H2DbUtilsTest.emptyTable(dbConnectionResource.getConnection(), Table.Names.ACCOUNT);
         H2DbUtilsTest.emptyTable(dbConnectionResource.getConnection(), Table.Names.ACCOUNT_GROUP);
+        H2DbUtilsTest.emptyTable(dbConnectionResource.getConnection(), Table.Names.INVOICE);
+        H2DbUtilsTest.emptyTable(dbConnectionResource.getConnection(), Table.Names.ITEM);
         H2DbUtilsTest.emptyTable(dbConnectionResource.getConnection(), Table.Names.ORGANIZATION);
     }
 

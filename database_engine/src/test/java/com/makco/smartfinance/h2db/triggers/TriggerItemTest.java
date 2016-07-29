@@ -36,6 +36,8 @@ import static org.junit.Assert.assertEquals;
 
 /**
  * Created by Makar Kalancha on 11 Jul 2016.
+ * \SmartFinance\!_remove\versioned_database_engine\src\test\java\com\makco\smartfinance\h2db\triggers
+ * v3
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TriggerItemTest {
@@ -58,9 +60,8 @@ public class TriggerItemTest {
         System.out.println(mess1);
         LOG.debug(mess1);
         //        H2DbUtils.setSchema(dbConnectionResource.getConnection(), "TEST");
-        H2DbUtilsTest.emptyTable(dbConnectionResource.getConnection(), Table.Names.ITEM_NOTR);
+        H2DbUtilsTest.emptyTable(dbConnectionResource.getConnection(), Table.Names.TRANSACTION);
         H2DbUtilsTest.emptyTable(dbConnectionResource.getConnection(), Table.Names.ITEM);
-        H2DbUtilsTest.emptyTable(dbConnectionResource.getConnection(), Table.Names.INVOICE_NOTR);
         H2DbUtilsTest.emptyTable(dbConnectionResource.getConnection(), Table.Names.INVOICE);
         H2DbUtilsTest.emptyTable(dbConnectionResource.getConnection(), Table.Names.ORGANIZATION);
         H2DbUtilsTest.emptyTable(dbConnectionResource.getConnection(), Table.Names.FAMILY_MEMBER);
@@ -136,8 +137,8 @@ public class TriggerItemTest {
 
         String queryInvoice = "SELECT " + Table.INVOICE.ID + ", " + Table.INVOICE.DATEUNIT_UNITDAY + " FROM " + Table.Names.INVOICE +
                 " WHERE " + Table.INVOICE.ID + " = ?" +
-                " AND " + Table.INVOICE.SUB_TOTAL + "  = (SELECT SUM(" + Table.ITEM.SUB_TOTAL + ") FROM " + Table.Names.ITEM + " WHERE " + Table.ITEM.INVOICE_ID + " = ? )" +
-                " AND " + Table.INVOICE.TOTAL + "  = (SELECT SUM(" + Table.ITEM.TOTAL + ") FROM " + Table.Names.ITEM + " WHERE " + Table.ITEM.INVOICE_ID + " = ? )";
+                " AND " + Table.INVOICE.DEBIT_TOTAL + "  = (SELECT SUM(" + Table.ITEM.SUB_TOTAL + ") FROM " + Table.Names.ITEM + " WHERE " + Table.ITEM.INVOICE_ID + " = ? )" +
+                " AND " + Table.INVOICE.CREDIT_TOTAL + "  = (SELECT SUM(" + Table.ITEM.TOTAL + ") FROM " + Table.Names.ITEM + " WHERE " + Table.ITEM.INVOICE_ID + " = ? )";
 
         LOG.debug(queryItemDates);
         ResultSet rs = null;
@@ -185,23 +186,15 @@ public class TriggerItemTest {
             selectInvoicePS.setLong(2, invoiceId);
             selectInvoicePS.setLong(3, invoiceId);
             rs = selectInvoicePS.executeQuery();
-            rs.next();
-            long idOfInvoice = rs.getLong(1);
-            long dateunitOfInvoice = rs.getLong(2);
-            LOG.debug("idOfInvoice > 0: idOfInvoice=" + idOfInvoice);
-            LOG.debug("idJustInserted == idOfInvoice: " + (invoiceId == idOfInvoice) +
-                    "; invoiceId=" + invoiceId +
-                    "; idOfInvoice=" + idOfInvoice);
-            assert (idOfInvoice > 0);
-            assert (invoiceId == idOfInvoice);
-            LOG.debug(String.format("dateunit: invoice (from select query)=%s; item=%s", dateunitOfInvoice, dateUnitItemWithDates));
-            assert (dateunitOfInvoice == dateUnitItemWithDates);
+            boolean dataIsAvail= rs.next();
+            assert (!dataIsAvail);
 
         } finally {
             if (rs != null) rs.close();
         }
     }
 
+    //no Item trigger, order number is in equals/hashcode
     @Test(expected=JdbcSQLException.class)
     //org.h2.jdbc.JdbcSQLException: Unique index or primary key violation: "IDX_UNQ_TM_NVCDRDRNMBR ON TEST.ITEM(INVOICE_ID, ORDER_NUMBER) VALUES (31, 1, 13)"; SQL statement:
     public void testItem_12_insert_duplicate() throws Exception {
@@ -297,8 +290,8 @@ public class TriggerItemTest {
                 " AND " + Table.ITEM.T_CREATEDON + " != " + Table.ITEM.T_UPDATEDON;
         String queryInvoice = "SELECT " + Table.INVOICE.ID + " FROM " + Table.Names.INVOICE +
                 " WHERE " + Table.INVOICE.ID + " = ?" +
-                " AND " + Table.INVOICE.SUB_TOTAL + "  = (SELECT SUM(" + Table.ITEM.SUB_TOTAL + ") FROM " + Table.Names.ITEM + " WHERE " + Table.ITEM.INVOICE_ID + " = ? )" +
-                " AND " + Table.INVOICE.TOTAL + "  = (SELECT SUM(" + Table.ITEM.TOTAL + ") FROM " + Table.Names.ITEM + " WHERE " + Table.ITEM.INVOICE_ID + " = ? )";
+                " AND " + Table.INVOICE.DEBIT_TOTAL + "  = (SELECT SUM(" + Table.ITEM.SUB_TOTAL + ") FROM " + Table.Names.ITEM + " WHERE " + Table.ITEM.INVOICE_ID + " = ? )" +
+                " AND " + Table.INVOICE.CREDIT_TOTAL + "  = (SELECT SUM(" + Table.ITEM.TOTAL + ") FROM " + Table.Names.ITEM + " WHERE " + Table.ITEM.INVOICE_ID + " = ? )";
 
         LOG.debug(querySelect);
         LOG.debug(queryDates);
@@ -327,14 +320,8 @@ public class TriggerItemTest {
             selectInvoicePS.setLong(2, invoiceId);
             selectInvoicePS.setLong(3, invoiceId);
             rs = selectInvoicePS.executeQuery();
-            rs.next();
-            long idOfInvoice = rs.getLong(1);
-            LOG.debug("idOfInvoice > 0: idOfInvoice=" + idOfInvoice);
-            LOG.debug("idJustInserted == idOfInvoice: " + (invoiceId == idOfInvoice) +
-                    "; invoiceId=" + invoiceId +
-                    "; idOfInvoice=" + idOfInvoice);
-            assert (idOfInvoice > 0);
-            assert (invoiceId == idOfInvoice);
+            boolean dataIsAvail = rs.next();
+            assert (!dataIsAvail);
         } finally {
             if (rs != null) rs.close();
         }
@@ -343,10 +330,10 @@ public class TriggerItemTest {
     @Test
     public void testItem_22_update_check_invoiceSubtotalTotal() throws Exception {
         LOG.debug("testItem_22_update");
-        String queryInvoice = "SELECT " + Table.INVOICE.ID + "," + Table.INVOICE.SUB_TOTAL + "," + Table.INVOICE.TOTAL + " FROM " + Table.Names.INVOICE +
+        String queryInvoice = "SELECT " + Table.INVOICE.ID + "," + Table.INVOICE.DEBIT_TOTAL + "," + Table.INVOICE.CREDIT_TOTAL + " FROM " + Table.Names.INVOICE +
                 " WHERE " + Table.INVOICE.ID + " = ?" +
-                " AND " + Table.INVOICE.SUB_TOTAL + "  = (SELECT SUM(" + Table.ITEM.SUB_TOTAL + ") FROM " + Table.Names.ITEM + " WHERE " + Table.ITEM.INVOICE_ID + " = ? )" +
-                " AND " + Table.INVOICE.TOTAL + "  = (SELECT SUM(" + Table.ITEM.TOTAL + ") FROM " + Table.Names.ITEM + " WHERE " + Table.ITEM.INVOICE_ID + " = ? )";
+                " AND " + Table.INVOICE.DEBIT_TOTAL + "  = (SELECT SUM(" + Table.ITEM.SUB_TOTAL + ") FROM " + Table.Names.ITEM + " WHERE " + Table.ITEM.INVOICE_ID + " = ? )" +
+                " AND " + Table.INVOICE.CREDIT_TOTAL + "  = (SELECT SUM(" + Table.ITEM.TOTAL + ") FROM " + Table.Names.ITEM + " WHERE " + Table.ITEM.INVOICE_ID + " = ? )";
 
         LOG.debug(queryInvoice);
         ResultSet rs = null;
@@ -383,42 +370,8 @@ public class TriggerItemTest {
             selectInvoicePS.setLong(2, invoiceId);
             selectInvoicePS.setLong(3, invoiceId);
             rs = selectInvoicePS.executeQuery();
-            rs.next();
-            long invoiceIdBefore = rs.getLong(1);
-            BigDecimal subtotalBefore = rs.getBigDecimal(2);
-            BigDecimal totalBefore = rs.getBigDecimal(3);
-            LOG.debug("before delete: invoiceIdBefore=" + invoiceIdBefore);
-            LOG.debug("before delete: invoiceId == invoiceIdBefore: " + (invoiceId == invoiceIdBefore) +
-                    "; invoiceId=" + invoiceId +
-                    "; invoiceIdBefore=" + invoiceIdBefore);
-            assert (invoiceIdBefore > 0);
-            assert (invoiceId == invoiceIdBefore);
-            LOG.debug("before delete: subtotalBefore=" + subtotalBefore);
-            LOG.debug("before delete: totalBefore=" + totalBefore);
-            assert(new BigDecimal("15").compareTo(subtotalBefore) == 0);
-            assert(new BigDecimal("45").compareTo(totalBefore) == 0);
-
-            //check sum after update
-            updateSubtotalAndTotal(idJustInserted1, new BigDecimal("100"), new BigDecimal("233"));
-
-            selectInvoicePS.setLong(1, invoiceId);
-            selectInvoicePS.setLong(2, invoiceId);
-            selectInvoicePS.setLong(3, invoiceId);
-            rs = selectInvoicePS.executeQuery();
-            rs.next();
-            long invoiceIdAfter = rs.getLong(1);
-            BigDecimal subtotalAfter = rs.getBigDecimal(2);
-            BigDecimal totalAfter = rs.getBigDecimal(3);
-            LOG.debug("before delete: invoiceIdAfter=" + invoiceIdAfter);
-            LOG.debug("before delete: invoiceId == invoiceIdAfter: " + (invoiceId == invoiceIdAfter) +
-                    "; invoiceId=" + invoiceId +
-                    "; invoiceIdAfter=" + invoiceIdAfter);
-            assert (invoiceIdAfter > 0);
-            assert (invoiceId == invoiceIdAfter);
-            LOG.debug("before delete: subtotalAfter=" + subtotalAfter);
-            LOG.debug("before delete: totalAfter=" + totalAfter);
-            assert(new BigDecimal("110").compareTo(subtotalAfter) == 0);
-            assert(new BigDecimal("263").compareTo(totalAfter) == 0);
+            boolean dataIsAvail = rs.next();
+            assert (!dataIsAvail);
         } finally {
             if (rs != null) rs.close();
         }
@@ -590,104 +543,6 @@ public class TriggerItemTest {
         }
     }
 
-    @Test
-    public void testItem_32_delete_checkInvoiceSum() throws Exception {
-        LOG.debug("testItem_32_delete");
-        String queryInvoice = "SELECT " + Table.INVOICE.ID + "," + Table.INVOICE.SUB_TOTAL + "," + Table.INVOICE.TOTAL + " FROM " + Table.Names.INVOICE +
-                " WHERE " + Table.INVOICE.ID + " = ?" +
-                " AND " + Table.INVOICE.SUB_TOTAL + "  = (SELECT SUM(" + Table.ITEM.SUB_TOTAL + ") FROM " + Table.Names.ITEM + " WHERE " + Table.ITEM.INVOICE_ID + " = ? )" +
-                " AND " + Table.INVOICE.TOTAL + "  = (SELECT SUM(" + Table.ITEM.TOTAL + ") FROM " + Table.Names.ITEM + " WHERE " + Table.ITEM.INVOICE_ID + " = ? )";
-        String queryDelete = "DELETE FROM " + Table.Names.ITEM + " WHERE " +
-                Table.ITEM.ID + " = ?";
-        String querySelectDeletedRow = "SELECT JSON_ROW FROM _DELETED_ROWS WHERE ID = (SELECT MAX(ID) FROM _DELETED_ROWS WHERE SCHEMA_NAME = 'TEST' AND TABLE_NAME = '" + Table.Names.ITEM + "')";
-
-        LOG.debug(queryDelete);
-        LOG.debug(querySelectDeletedRow);
-        ResultSet rs = null;
-        try (
-                PreparedStatement selectInvoicePS = dbConnectionResource.getConnection().prepareStatement(queryInvoice);
-                PreparedStatement deletePS = dbConnectionResource.getConnection().prepareStatement(queryDelete);
-                PreparedStatement selectDeletedRowsPS = dbConnectionResource.getConnection().prepareStatement(querySelectDeletedRow);
-        ){
-            long dateunitUnitday = TestDateUnitFunctions.insertSelectDate(dbConnectionResource.getConnection(),
-                    Date.from(LocalDate.of(2016, Month.FEBRUARY, 29).atStartOfDay(ZoneId.systemDefault()).toInstant()));
-
-            long organizationId = triggerOrganizationTest.insert("testItem_32_delete", "Organization Description From TableItemTest #testItem_11_insert");
-            long invoiceId = triggerInvoiceTest.insert("Item_32_delete", organizationId,
-                    dateunitUnitday, "invoice comment");
-
-            long categoryGroupId = triggerCategoryGroupTest.insert("D", "debit category group32", "debit category group desc");
-            long categoryId = triggerCategoryTest.insert(categoryGroupId, "D", "debit category", "debit category desc");
-
-            Date startDate = Date.from(LocalDate.of(2008, Month.JANUARY, 1).atStartOfDay(ZoneId.systemDefault()).toInstant());
-            Date endDate = Date.from(LocalDate.of(2010, Month.JANUARY, 1).atStartOfDay(ZoneId.systemDefault()).toInstant());
-            long taxId = triggerTaxTest.insert("tax name32", "tax desc", new BigDecimal("10"), "1+2", startDate, endDate);
-
-            long familyMemberId = triggerFamilyMemberTest.insert("family member #32", "family member desc");
-
-            long idJustInserted1 = insert(
-                    1, invoiceId, categoryId, taxId, familyMemberId,
-                    "product1 desc1", "product1 desc2", "comment",
-                    new BigDecimal("5.0"), new BigDecimal("15.0"));
-            insert(
-                    2, invoiceId, categoryId, taxId, familyMemberId,
-                    "product2 desc1", "product2 desc2", "comment",
-                    new BigDecimal("10.0"), new BigDecimal("30.0"));
-
-            selectInvoicePS.setLong(1, invoiceId);
-            selectInvoicePS.setLong(2, invoiceId);
-            selectInvoicePS.setLong(3, invoiceId);
-            rs = selectInvoicePS.executeQuery();
-            rs.next();
-            long invoiceIdBefore = rs.getLong(1);
-            BigDecimal subtotalBefore = rs.getBigDecimal(2);
-            BigDecimal totalBefore = rs.getBigDecimal(3);
-            LOG.debug("before delete: invoiceIdBefore > 0: invoiceIdBefore=" + invoiceIdBefore);
-            LOG.debug("before delete: idJustInserted == invoiceIdBefore: " + (invoiceId == invoiceIdBefore) +
-                    "; invoiceId=" + invoiceId +
-                    "; invoiceIdBefore=" + invoiceIdBefore);
-            assert (invoiceIdBefore > 0);
-            assert (invoiceId == invoiceIdBefore);
-            LOG.debug("before delete: subtotalBefore=" + subtotalBefore);
-            LOG.debug("before delete: totalBefore=" + totalBefore);
-            assert(new BigDecimal("15").compareTo(subtotalBefore) == 0);
-            assert(new BigDecimal("45").compareTo(totalBefore) == 0);
-
-            deletePS.setLong(1, idJustInserted1);
-            deletePS.executeUpdate();
-
-            rs = selectDeletedRowsPS.executeQuery();
-            rs.next();
-            String jsonRow = rs.getString(1);
-            JsonParser jsonParser = new JsonParser();
-            JsonObject jsonObject = jsonParser.parse(jsonRow).getAsJsonObject();
-            JsonObject rowJsonObject = jsonObject.get(Table.Elements.row.toString()).getAsJsonObject();
-
-            long idFromDeletedRows = rowJsonObject.get(Table.ITEM.ID.toString()).getAsLong();
-            assertEquals(true, idJustInserted1 == idFromDeletedRows);
-
-            selectInvoicePS.setLong(1, invoiceId);
-            selectInvoicePS.setLong(2, invoiceId);
-            selectInvoicePS.setLong(3, invoiceId);
-            rs = selectInvoicePS.executeQuery();
-            rs.next();
-            long invoiceIdAfter = rs.getLong(1);
-            BigDecimal subtotalAfter = rs.getBigDecimal(2);
-            BigDecimal totalAfter = rs.getBigDecimal(3);
-            LOG.debug("after delete: invoiceIdAfter > 0: invoiceIdAfter=" + invoiceIdAfter);
-            LOG.debug("after delete: idJustInserted == invoiceIdAfter: " + (invoiceId == invoiceIdAfter) +
-                    "; invoiceId=" + invoiceId +
-                    "; invoiceIdAfter=" + invoiceIdAfter);
-            assert (invoiceIdAfter > 0);
-            assert (invoiceId == invoiceIdAfter);
-            LOG.debug("after delete: subtotalBefore=" + subtotalAfter);
-            LOG.debug("after delete: totalBefore=" + totalAfter);
-            assert(new BigDecimal("10").compareTo(subtotalAfter) == 0);
-            assert(new BigDecimal("30").compareTo(totalAfter) == 0);
-        } finally {
-            if (rs != null) rs.close();
-        }
-    }
 
     private JsonObject createJsonObject() throws Exception {
         String schemaName = "TEST";

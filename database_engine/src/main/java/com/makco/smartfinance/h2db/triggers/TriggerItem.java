@@ -2,8 +2,6 @@ package com.makco.smartfinance.h2db.triggers;
 
 import com.makco.smartfinance.h2db.utils.JsonUtils;
 import com.makco.smartfinance.h2db.utils.schema_constants.Table;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.math.BigDecimal;
 import java.sql.Connection;
@@ -17,26 +15,11 @@ import java.util.Date;
  * User: Makar Kalancha
  * Date: 06/06/2016
  * Time: 11:33
+ * \SmartFinance\database_engine\src\main\java\com\makco\smartfinance\h2db\triggers\
+ * v3
  */
 public class TriggerItem extends AbstractTrigger {
-    private static final Logger LOG = LogManager.getLogger(TriggerItem.class);
-    private static final String UPDATE_INVOICE = new StringBuilder()
-            .append("UPDATE ")
-            .append(SCHEMA_NAME_PLACEHOLDER)
-            .append(".")
-            .append(Table.Names.INVOICE)
-            .append(" SET ")
-            .append(Table.INVOICE.SUB_TOTAL)
-            .append(" = ")
-            .append(Table.INVOICE.SUB_TOTAL)
-            .append(" + ?, ")
-            .append(Table.INVOICE.TOTAL)
-            .append(" = ")
-            .append(Table.INVOICE.TOTAL)
-            .append(" + ? where ")
-            .append(Table.INVOICE.ID)
-            .append(" = ?")
-            .toString();
+
     private static final String INVOICE_DATEUNIT = new StringBuilder()
             .append("SELECT ")
             .append(Table.INVOICE.DATEUNIT_UNITDAY)
@@ -49,6 +32,19 @@ public class TriggerItem extends AbstractTrigger {
             .append(" = ?")
             .toString();
 
+    //no Item trigger, order number is in equals/hashcode
+//    private static final String ITEM_COUNT_BY_INVOICE_ID = new StringBuilder()
+//            .append("SELECT MAX(")
+//            .append(Table.ITEM.ORDER_NUMBER)
+//            .append(") FROM ")
+//            .append(SCHEMA_NAME_PLACEHOLDER)
+//            .append(".")
+//            .append(Table.Names.ITEM)
+//            .append(" WHERE ")
+//            .append(Table.ITEM.INVOICE_ID)
+//            .append(" = ?")
+//            .toString();
+
     @Override
     protected String logTriggerName() {
         return Table.Names.ITEM.toString();
@@ -56,25 +52,26 @@ public class TriggerItem extends AbstractTrigger {
 
     @Override
     protected void insert(Connection connection, Object[] oldRow, Object[] newRow) throws SQLException {
-        String updateInvoiceQ = UPDATE_INVOICE.replace(SCHEMA_NAME_PLACEHOLDER, schemaName);
         String invoiceDateunitQ = INVOICE_DATEUNIT.replace(SCHEMA_NAME_PLACEHOLDER, schemaName);
+//        String qtyItemsQ = ITEM_COUNT_BY_INVOICE_ID.replace(SCHEMA_NAME_PLACEHOLDER, schemaName);
         ResultSet rs = null;
         try(
-            PreparedStatement updateInvoice = connection.prepareStatement(updateInvoiceQ);
-            PreparedStatement invoiceDate = connection.prepareStatement(invoiceDateunitQ);
+                PreparedStatement invoiceDate = connection.prepareStatement(invoiceDateunitQ);
+//                PreparedStatement qtyItems = connection.prepareStatement(qtyItemsQ);
         ) {
             invoiceDate.setLong(1, (Long) newRow[Table.ITEM.INVOICE_ID.getColumnIndex()]);
             rs = invoiceDate.executeQuery();
             rs.next();
             newRow[Table.ITEM.DATEUNIT_UNITDAY.getColumnIndex()] = rs.getLong(1);
 
+//            qtyItems.setLong(1, (Long) newRow[Table.ITEM.INVOICE_ID.getColumnIndex()]);
+//            rs = qtyItems.executeQuery();
+//            rs.next();
+//            newRow[Table.ITEM.ORDER_NUMBER.getColumnIndex()] = rs.getInt(1) + 1;
+
             newRow[Table.ITEM.T_CREATEDON.getColumnIndex()] = Timestamp.valueOf(now);
             newRow[Table.ITEM.T_UPDATEDON.getColumnIndex()] = Timestamp.valueOf(now);
 
-            updateInvoice.setBigDecimal(1, (BigDecimal) newRow[Table.ITEM.SUB_TOTAL.getColumnIndex()]);
-            updateInvoice.setBigDecimal(2, (BigDecimal) newRow[Table.ITEM.TOTAL.getColumnIndex()]);
-            updateInvoice.setLong(3, (Long) newRow[Table.ITEM.INVOICE_ID.getColumnIndex()]);
-            updateInvoice.execute();
 //            LOG.debug(String.format(">>>>TriggerItem->insert: dateunit=%s, subtotal=%s, total=%s",
 //                    newRow[Table.ITEM.DATEUNIT_UNITDAY.getColumnIndex()],
 //                    newRow[Table.ITEM.SUB_TOTAL.getColumnIndex()],
@@ -89,51 +86,6 @@ public class TriggerItem extends AbstractTrigger {
     @Override
     protected void update(Connection connection, Object[] oldRow, Object[] newRow) throws SQLException {
         newRow[Table.ITEM.T_UPDATEDON.getColumnIndex()] = Timestamp.valueOf(now);
-
-        BigDecimal diffSubtotal = (BigDecimal) newRow[Table.ITEM.SUB_TOTAL.getColumnIndex()];
-        diffSubtotal = diffSubtotal.subtract((BigDecimal) oldRow[Table.ITEM.SUB_TOTAL.getColumnIndex()]);
-
-        BigDecimal diffTotal = (BigDecimal) newRow[Table.ITEM.TOTAL.getColumnIndex()];
-        diffTotal = diffTotal.subtract((BigDecimal) oldRow[Table.ITEM.TOTAL.getColumnIndex()]);
-
-        String updateInvoiceQ = UPDATE_INVOICE.replace(SCHEMA_NAME_PLACEHOLDER, schemaName);
-        try (
-            PreparedStatement preparedStatement = connection.prepareStatement(updateInvoiceQ);
-        ) {
-            preparedStatement.setBigDecimal(1, diffSubtotal);
-            preparedStatement.setBigDecimal(2, diffTotal);
-            preparedStatement.setLong(3, (Long) newRow[Table.ITEM.INVOICE_ID.getColumnIndex()]);
-            preparedStatement.execute();
-
-//            LOG.debug(String.format(">>>>TriggerItem->update: dateunit=%s, subtotal=%s, total=%s",
-//                    newRow[Table.ITEM.DATEUNIT_UNITDAY.getColumnIndex()],
-//                    diffSubtotal,
-//                    diffTotal));
-        }
-
-    }
-
-    @Override
-    protected void delete(Connection connection, Object[] oldRow, Object[] newRow) throws SQLException {
-        super.delete(connection, oldRow, newRow);
-
-        BigDecimal diffSubtotal = ((BigDecimal) oldRow[Table.ITEM.SUB_TOTAL.getColumnIndex()]).negate();
-
-        BigDecimal diffTotal = ((BigDecimal) oldRow[Table.ITEM.TOTAL.getColumnIndex()]).negate();
-
-        String updateInvoiceQ = UPDATE_INVOICE.replace(SCHEMA_NAME_PLACEHOLDER, schemaName);
-        try (
-                PreparedStatement preparedStatement = connection.prepareStatement(updateInvoiceQ);
-        ) {
-            preparedStatement.setBigDecimal(1, diffSubtotal);
-            preparedStatement.setBigDecimal(2, diffTotal);
-            preparedStatement.setLong(3, (Long) oldRow[Table.ITEM.INVOICE_ID.getColumnIndex()]);
-            preparedStatement.execute();
-//            LOG.debug(String.format(">>>>TriggerItem->delete: dateunit=%s, subtotal=%s, total=%s",
-//                    newRow[Table.ITEM.DATEUNIT_UNITDAY.getColumnIndex()],
-//                    diffSubtotal,
-//                    diffTotal));
-        }
     }
 
     @Override

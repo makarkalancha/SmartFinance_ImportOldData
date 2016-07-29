@@ -24,8 +24,9 @@ import java.util.HashSet;
 
 /**
  * Created by Makar Kalancha on 2016-07-14.
+ * v3
  */
-@Entity
+//@Entity
 @Table(
         name = "TRANSACTION",
         uniqueConstraints =
