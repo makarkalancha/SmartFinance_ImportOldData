@@ -72,8 +72,6 @@ public class TransactionDAOImplTest_v3 {
 
     private AccountDAOImpl_v1ForTest accountDAOImpl_v1ForTest = new AccountDAOImpl_v1ForTest();
     private AccountGroupDAOImpl_v1ForTest accountGroupDAOImpl_v1ForTest = new AccountGroupDAOImpl_v1ForTest();
-    private ItemDAOImpl_v3ForTest itemDAOImpl_v3ForTest = new ItemDAOImpl_v3ForTest();
-    private OrganizationDAOImpl_v3ForTest organizationDAOImpl_v3ForTest = new OrganizationDAOImpl_v3ForTest();
     private CategoryGroupDAOImplForTest categoryGroupDAOImplForTest = new CategoryGroupDAOImplForTest();
     private CategoryDAOImplForTest categoryDAOImplForTest = new CategoryDAOImplForTest();
     private TaxDAOImpl_v1ForTest taxDAO = new TaxDAOImpl_v1ForTest();
@@ -82,7 +80,7 @@ public class TransactionDAOImplTest_v3 {
 
     public static final DateTimeFormatter TRANSACTION_NUMBER_FORMAT = DateTimeFormatter.ofPattern("yyyyMMdd");
 
-    private Invoice_v3 generateInvoiceDebitCredit(int randomInt, int multiplicator) throws Exception{
+    public Invoice_v3 generateInvoiceDebitCredit(int randomInt, int multiplicator) throws Exception{
         LocalDate localDate = LocalDate.now().minus(multiplicator, ChronoUnit.DAYS);
         DateUnit dateUnit = new DateUnit(localDate);
         dateUnitDAO.addDateUnit(dateUnit);
@@ -205,117 +203,5 @@ public class TransactionDAOImplTest_v3 {
         LOG.debug(">>>transactionV3FromDB2 (invoice with left join fetch items): " + transactionV3FromDB2);
         assert(transactionV3FromDB2.getCreatedOn() != null);
         assert(transactionV3FromDB2.getUpdatedOn() != null);
-    }
-
-    @Test
-    public void test_51_1_selectAccountAggregation_1() throws Exception {
-        int randomInt1 = randomWithinRange.getRandom();
-        Invoice_v3 invoiceV3_1 = generateInvoiceDebitCredit(randomInt1, 1);
-        invoiceDAOImpl_v3ForTest.saveOrUpdateInvoice(invoiceV3_1);
-        AccountGroup accountGroup1 = new AccountGroupDebit("AG debit" + randomInt1, "desc");
-        Account account1 = new AccountDebit(accountGroup1, "A debit" + randomInt1, "desc");
-        accountGroupDAOImpl_v1ForTest.saveOrUpdateAccountGroup(accountGroup1);
-        accountDAOImpl_v1ForTest.saveOrUpdateAccount(account1);
-        Transaction_v3 transactionV3_1 = new Transaction_v3(
-                generateTransactionNumber(randomInt1),
-                account1,
-                invoiceV3_1,
-                invoiceV3_1.getDateUnit(),
-                "comment" + randomInt1,
-                invoiceV3_1.getCreditTotal().subtract(invoiceV3_1.getDebitTotal()),
-                new BigDecimal("0")
-        );
-        transactionDAOImpl_v3ForTest.saveOrUpdateTransaction(transactionV3_1);
-
-        int randomInt2 = randomWithinRange.getRandom();
-        Invoice_v3 invoiceV3_2 = generateInvoiceDebitCredit(randomInt2, 2);
-        invoiceDAOImpl_v3ForTest.saveOrUpdateInvoice(invoiceV3_2);
-        AccountGroup accountGroup2 = new AccountGroupCredit("AG credit" + randomInt2, "desc");
-        Account account2 = new AccountCredit(accountGroup2, "A credit" + randomInt2, "desc");
-        accountGroupDAOImpl_v1ForTest.saveOrUpdateAccountGroup(accountGroup2);
-        accountDAOImpl_v1ForTest.saveOrUpdateAccount(account2);
-        Transaction_v3 transactionV3_2 = new Transaction_v3(
-                generateTransactionNumber(randomInt2),
-                account2,
-                invoiceV3_2,
-                invoiceV3_2.getDateUnit(),
-                "comment" + randomInt2,
-                new BigDecimal("0"),
-                invoiceV3_2.getCreditTotal().subtract(invoiceV3_2.getDebitTotal())
-        );
-        transactionDAOImpl_v3ForTest.saveOrUpdateTransaction(transactionV3_2);
-
-
-        List<V_AccountAggregation_v3> accountAggregateV3s = accountAggregateDAOImplV3ForTest.accountsAggregate();
-        accountAggregateV3s.forEach(accountAggregateV3 ->
-                LOG.debug(">>>>" + accountAggregateV3)
-        );
-    }
-
-    @Test
-    public void test_52_1_selectCumulativeAccountAggregationByDate() throws Exception {
-        int randomInt1 = randomWithinRange.getRandom();
-        Invoice_v3 invoiceV3_1 = generateInvoiceDebitCredit(randomInt1, 1);
-        invoiceDAOImpl_v3ForTest.saveOrUpdateInvoice(invoiceV3_1);
-        AccountGroup accountGroup1 = new AccountGroupDebit("AG debit" + randomInt1, "desc");
-        Account account1 = new AccountDebit(accountGroup1, "A debit" + randomInt1, "desc");
-        accountGroupDAOImpl_v1ForTest.saveOrUpdateAccountGroup(accountGroup1);
-        accountDAOImpl_v1ForTest.saveOrUpdateAccount(account1);
-        Transaction_v3 transactionV3_1 = new Transaction_v3(
-                generateTransactionNumber(randomInt1),
-                account1,
-                invoiceV3_1,
-                invoiceV3_1.getDateUnit(),
-                "comment" + randomInt1,
-                invoiceV3_1.getDebitTotal(),
-                invoiceV3_1.getCreditTotal()
-        );
-        transactionDAOImpl_v3ForTest.saveOrUpdateTransaction(transactionV3_1);
-
-        int randomInt2 = randomWithinRange.getRandom();
-        Invoice_v3 invoiceV3_2 = generateInvoiceDebitCredit(randomInt2, 2);
-        invoiceDAOImpl_v3ForTest.saveOrUpdateInvoice(invoiceV3_2);
-        AccountGroup accountGroup2 = new AccountGroupCredit("AG credit" + randomInt2, "desc");
-        Account account2 = new AccountCredit(accountGroup2, "A credit" + randomInt2, "desc");
-        accountGroupDAOImpl_v1ForTest.saveOrUpdateAccountGroup(accountGroup2);
-        accountDAOImpl_v1ForTest.saveOrUpdateAccount(account2);
-        Transaction_v3 transactionV3_2 = new Transaction_v3(
-                generateTransactionNumber(randomInt2),
-                account2,
-                invoiceV3_2,
-                invoiceV3_2.getDateUnit(),
-                "comment" + randomInt2,
-                invoiceV3_2.getDebitTotal(),
-                invoiceV3_2.getCreditTotal()
-        );
-        transactionDAOImpl_v3ForTest.saveOrUpdateTransaction(transactionV3_2);
-
-        int randomInt3 = randomWithinRange.getRandom();
-        Invoice_v3 invoiceV3_3 = generateInvoiceDebitCredit(randomInt3, 3);
-        invoiceDAOImpl_v3ForTest.saveOrUpdateInvoice(invoiceV3_3);
-        AccountGroup accountGroup3 = new AccountGroupCredit("AG credit3" + randomInt3, "desc");
-        Account account3 = new AccountCredit(accountGroup3, "A credit3" + randomInt3, "desc");
-        accountGroupDAOImpl_v1ForTest.saveOrUpdateAccountGroup(accountGroup3);
-        accountDAOImpl_v1ForTest.saveOrUpdateAccount(account3);
-        Transaction_v3 transactionV3_3 = new Transaction_v3(
-                generateTransactionNumber(randomInt3),
-                account3,
-                invoiceV3_3,
-                invoiceV3_3.getDateUnit(),
-                "comment" + randomInt3,
-                invoiceV3_3.getDebitTotal(),
-                invoiceV3_3.getCreditTotal()
-        );
-        transactionDAOImpl_v3ForTest.saveOrUpdateTransaction(transactionV3_3);
-
-        List<V_AccountAggregation_v3> accountAggregateV3s = accountAggregateDAOImplV3ForTest.accountsAggregate();
-        accountAggregateV3s.forEach(accountAggregateV3 ->
-                LOG.debug(">>>>" + accountAggregateV3)
-        );
-
-        List<V_CumulativeAccountAggregationByDate_v3> cumulativeAccountAggregateV3s = cumulativeAccountAggregationByDateDAOImpl_v3ForTest.cumulativeAccountsAggregation();
-        cumulativeAccountAggregateV3s.forEach(cumulativeAccountAggregateV3 ->
-                LOG.debug(">>>>" + cumulativeAccountAggregateV3)
-        );
     }
 }
