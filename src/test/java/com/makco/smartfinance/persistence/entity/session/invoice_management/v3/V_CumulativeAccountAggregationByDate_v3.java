@@ -35,12 +35,6 @@ public class V_CumulativeAccountAggregationByDate_v3 implements Serializable {
     @Column(name = "TYPE")
     private String type;
 
-    @Column(name = "DEBIT")
-    private BigDecimal debit = new BigDecimal("0");
-
-    @Column(name = "CREDIT")
-    private BigDecimal credit = new BigDecimal("0");
-
     @Column(name = "CUM_SUM_DEBIT")
     private BigDecimal cumSumDebit = new BigDecimal("0");
 
@@ -67,9 +61,6 @@ public class V_CumulativeAccountAggregationByDate_v3 implements Serializable {
         return accountName;
     }
 
-    public BigDecimal getCredit() {
-        return credit;
-    }
 
     public BigDecimal getCumSumCredit() {
         return cumSumCredit;
@@ -77,10 +68,6 @@ public class V_CumulativeAccountAggregationByDate_v3 implements Serializable {
 
     public BigDecimal getCumSumDebit() {
         return cumSumDebit;
-    }
-
-    public BigDecimal getDebit() {
-        return debit;
     }
 
     public String getType() {
@@ -120,8 +107,6 @@ public class V_CumulativeAccountAggregationByDate_v3 implements Serializable {
                 ", accountId=" + accountId +
                 ", accountName='" + accountName + '\'' +
                 ", type='" + type + '\'' +
-                ", debit=" + debit +
-                ", credit=" + credit +
                 ", cumSumDebit=" + cumSumDebit +
                 ", cumSumCredit=" + cumSumCredit +
                 '}';

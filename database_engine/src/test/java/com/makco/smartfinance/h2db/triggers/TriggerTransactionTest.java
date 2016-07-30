@@ -50,6 +50,8 @@ public class TriggerTransactionTest {
 
     @BeforeClass
     public static void setUpClass() throws Exception {
+//    @Test
+//    public void setUpClass() throws Exception {
         String mess1 = "TriggerTransactionTest: Test->BeforeClass";
         System.out.println(mess1);
         LOG.debug(mess1);
@@ -57,9 +59,10 @@ public class TriggerTransactionTest {
         H2DbUtilsTest.emptyTable(dbConnectionResource.getConnection(), Table.Names.TRANSACTION);
         H2DbUtilsTest.emptyTable(dbConnectionResource.getConnection(), Table.Names.ACCOUNT);
         H2DbUtilsTest.emptyTable(dbConnectionResource.getConnection(), Table.Names.ACCOUNT_GROUP);
-        H2DbUtilsTest.emptyTable(dbConnectionResource.getConnection(), Table.Names.INVOICE);
         H2DbUtilsTest.emptyTable(dbConnectionResource.getConnection(), Table.Names.ITEM);
+        H2DbUtilsTest.emptyTable(dbConnectionResource.getConnection(), Table.Names.INVOICE);
         H2DbUtilsTest.emptyTable(dbConnectionResource.getConnection(), Table.Names.ORGANIZATION);
+        H2DbUtilsTest.emptyTable(dbConnectionResource.getConnection(), Table.Names.DATEUNIT);
     }
 
     @AfterClass
