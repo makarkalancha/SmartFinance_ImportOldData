@@ -1,4 +1,3 @@
---\SmartFinance\database_engine\src\main\resources\db\migration\
 --v3
 CREATE SEQUENCE IF NOT EXISTS SEQ_ITEM;
 CREATE TABLE ITEM(

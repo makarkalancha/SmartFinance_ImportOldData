@@ -34,8 +34,6 @@ import static org.junit.Assert.assertEquals;
 
 /**
  * Created by Makar Kalancha on 12 Jul 2016.
- * \SmartFinance\!_remove\versioned_database_engine\src\test\java\com\makco\smartfinance\h2db\triggers
- * v3
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TriggerTransactionTest {
